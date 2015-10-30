@@ -1,0 +1,67 @@
+/* Button
+------------------------------*/
+.btn {
+	background: $primary;
+	display: inline-block;
+	color: #FFFFFF;
+	letter-spacing: 1.3px;
+	text-transform: uppercase;
+	line-height: 1;
+	text-align: center;
+	padding: 11px 18px 11px 18px;
+	margin: 3px 5px 3px 0px;
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 12px;
+	font-family: $font_heading;
+	@include border-radius(2px);
+	box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+	&:hover {
+		color: #FFFFFF !important;
+		opacity: 0.9 !important;
+		text-decoration: none !important;
+	}
+}
+
+.btn-primary {
+	background: $primary;
+	color: #FFFFFF !important;
+}
+
+.btn-secondary {
+	background: $secondary;
+}
+
+.btn.btn-dark {
+	background: #000000;
+}
+
+.btn.btn-light {
+	background: #FFFFFF;
+	border: 1px solid #DDDDDD;
+	color: #888888;
+	&:hover {
+		background: #ffffff !important;
+		color: #222222 !important;
+		border-color: #bbbbbb;
+	}
+}
+
+.btn.btn-ghost {
+	background: transparent;
+	border: 2px solid #FFFFFF;
+	@include border-radius(3px);
+	box-shadow: none !important;
+	color: #FFFFFF;
+	&:hover {
+		background: #FFFFFF !important;
+		color: #000000 !important;
+		box-shadow: none !important;
+	}
+}
+
+.btn.btn-large {
+	padding: 18px 23px;
+	font-size: 15px;
+}
+

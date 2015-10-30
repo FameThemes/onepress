@@ -1,0 +1,82 @@
+/*
+Theme Name: OnePress
+Theme URI: http://www.famethemes.com/themes/onepress/
+Author: FameThemes
+Author URI: http://www.famethemes.com
+Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design.
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: onepress
+Tags: one-column, two-columns, left-sidebar, right-sidebar, fluid-layout, responsive-layout, custom-menu, featured-images, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, blue, light
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+
+OnePress is based on Underscores http://underscores.me/, (C) 2012-2015 Automattic, Inc.
+Underscores is distributed under the terms of the GNU GPL v2 or later.
+
+Normalizing styles have been helped along thanks to the fine work of
+Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
+*/
+
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+1.0  Reset
+2.0  Document
+3.0  Layout
+4.0  Structure
+5.0  Contents
+6.0  Elements
+7.0  Widgets
+8.0  Sections
+9.0  External Plugins
+
+--------------------------------------------------------------*/
+@import "variables";
+
+/*--------------------------------------------------------------
+1.0 Reset
+--------------------------------------------------------------*/
+@import "reset";
+
+/*--------------------------------------------------------------
+2.0 Document Setup
+--------------------------------------------------------------*/
+@import "document";
+
+/*--------------------------------------------------------------
+3.0 Layout
+--------------------------------------------------------------*/
+@import "layout";
+
+/*--------------------------------------------------------------
+4.0 Structure
+--------------------------------------------------------------*/
+@import "structure";
+
+/*--------------------------------------------------------------
+5.0 Contents
+--------------------------------------------------------------*/
+@import "contents";
+
+/*--------------------------------------------------------------
+6.0 Elements
+--------------------------------------------------------------*/
+@import "elements";
+
+/*--------------------------------------------------------------
+7.0 Widgets
+--------------------------------------------------------------*/
+@import "widgets";
+
+/*--------------------------------------------------------------
+8.0 Sections
+--------------------------------------------------------------*/
+@import "sections";
+
+/*--------------------------------------------------------------
+9.0 External Plugins
+--------------------------------------------------------------*/
+@import "external_plugins";

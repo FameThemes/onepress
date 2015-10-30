@@ -1,0 +1,46 @@
+<?php
+/**
+ * Template part for displaying posts.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
+
+?>
+
+<article id="post-<?php the_ID(); ?>" <?php post_class( array('list-article', 'clearfix') ); ?>>
+	
+	<div class="list-article-thumb">
+		<a href="<?php echo esc_url( get_permalink() ); ?>" title="<?php the_title(); ?>">
+			<?php
+			if ( has_post_thumbnail( ) ) {
+				the_post_thumbnail( 'medium' );
+			} else {
+				echo '<img alt="'. get_the_title() .'" src="'. get_template_directory_uri() . '/assets/images/placholder2.png' .'">';
+			}
+			?>
+		</a>
+	</div>
+	
+	<div class="list-article-content">
+		<div class="list-article-meta">
+			<?php the_category(' / '); ?>
+		</div>
+		<header class="entry-header">
+			<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
+		</header><!-- .entry-header -->
+		<div class="entry-excerpt">
+			<?php
+				the_excerpt();
+			?>
+			<?php
+				wp_link_pages( array(
+					'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'onepress' ),
+					'after'  => '</div>',
+				) );
+			?>
+		</div><!-- .entry-content -->
+	</div>
+
+</article><!-- #post-## -->
