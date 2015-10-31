@@ -2,6 +2,10 @@
 CHANGELOG
 ====================================================================
 
+## 1.0.1
+* Update Hero section.
+* Update version
+
 ## 1.0.0
 
 * Initial release
