@@ -30,20 +30,7 @@ $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax
 					</div>
 				<?php } else { ?>
 				<div class="contact-form grid-sm-6 wow slideInUp">
-					<div id="wpcf7-f1707-o1" class="wpcf7" role="form">
-						<form class="wpcf7-form" method="post" action="">
-							<p>Your Name (required)<br>
-							    <span class="wpcf7-form-control-wrap your-name"><input type="text" aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" size="40" value="" name="your-name"></span> </p>
-							<p>Your Email (required)<br>
-							    <span class="wpcf7-form-control-wrap your-email"><input type="email" aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email" size="40" value="" name="your-email"></span> </p>
-							<p>Subject<br>
-							    <span class="wpcf7-form-control-wrap your-subject"><input type="text" aria-invalid="false" class="wpcf7-form-control wpcf7-text" size="40" value="" name="your-subject"></span> </p>
-							<p>Your Message<br>
-							    <span class="wpcf7-form-control-wrap your-message"><textarea aria-invalid="false" class="wpcf7-form-control wpcf7-textarea" rows="10" cols="40" name="your-message"></textarea></span> </p>
-							<p><input type="submit" class="wpcf7-form-control wpcf7-submit" value="Send"></p>
-						</form>
-					</div>
-					<small><i>This is just a sample form, please install <a target="_blank" href="<?php echo esc_url('https://wordpress.org/plugins/contact-form-7/'); ?>">Contact Form 7</a> plugin and go to <br><strong>Customizer &rarr; Section: Contact &rarr; Section Content</strong> to enable working contact form.</i></small>
+					<small><i>You can install <a target="_blank" href="<?php echo esc_url('https://wordpress.org/plugins/contact-form-7/'); ?>">Contact Form 7</a> plugin and go to <br><strong>Customizer &rarr; Section: Contact &rarr; Section Content</strong> to show a working contact form here.</i></small>
 				</div>
 				<?php } ?>
 			<?php endif; ?>
