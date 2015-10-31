@@ -2,10 +2,6 @@
 CHANGELOG
 ====================================================================
 
-## 1.0.1
-* IMPROVED: Clean header.php
-
-
 ## 1.0.0
 
 * Initial release
