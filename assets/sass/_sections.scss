@@ -46,7 +46,7 @@
 /* Section: Hero
 ------------------------------*/
 .hero-fullscreen-slideshow {
-	height: auto;
+	height: 800px;
 	width: 100%;
 	position: relative;
 	background-color: #000000 !important;
@@ -63,17 +63,16 @@
 	}
 	.container {
 		z-index: 80;
-		// position: relative;
-		// top: 50%;
-	 //  	transform: translateY(-50%);
-	 //  	max-width: 100%;
+		position: relative;
+		top: 50%;
+	  	transform: translateY(-50%);
+	  	max-width: 100%;
 
 	}
 }
 /* Hero Text Style1. */
 .hero-content-style1 {
 	text-align: center;
-	padding: 15% 0px;
 	h2 {
 		color: #FFFFFF;
 		font-size: 35px;

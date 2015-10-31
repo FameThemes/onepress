@@ -23,7 +23,7 @@
 } )();
 
 /**
- * skip-link-focus-fix.js from _s
+ * skip-link-focus-fix.js
  *
  * Helps with accessibility for keyboard only users.
  *
@@ -73,7 +73,7 @@
 } )();
 function res() {
     headerH = jQuery('.site-header').height();
-    //jQuery('.hero-fullscreen-slideshow ').css('height',(w.outerHeight()-headerH+1)+'px');
+    jQuery('.hero-fullscreen-slideshow ').css('height',(w.outerHeight()-headerH+1)+'px');
 }
 
 /**
