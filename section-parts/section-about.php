@@ -12,7 +12,7 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', __('We are 
 			<?php if ( $onepress_about_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_about_subtitle ) . '</h5>'; ?>
 			<?php if ( $onepress_about_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_about_title ) . '</h2>'; ?>
 		</div>
-		
+
 		<div class="grid-row">
 		<?php if ( ! is_active_sidebar( 'section_about' ) ) { ?>
 			<div class="grid-sm-4 wow slideInUp">

@@ -30,7 +30,7 @@ $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax
 					</div>
 				<?php } else { ?>
 				<div class="contact-form grid-sm-6 wow slideInUp">
-					<small><i>You can install <a target="_blank" href="<?php echo esc_url('https://wordpress.org/plugins/contact-form-7/'); ?>">Contact Form 7</a> plugin and go to <br><strong>Customizer &rarr; Section: Contact &rarr; Section Content</strong> to show a working contact form here.</i></small>
+					<small><i>You can install <a target="_blank" href="<?php echo esc_url('https://wordpress.org/plugins/contact-form-7/'); ?>">Contact Form 7</a> plugin and go to <strong>Customizer &rarr; Section: Contact &rarr; Section Content</strong> to show a working contact form here.</i></small>
 				</div>
 				<?php } ?>
 			<?php endif; ?>

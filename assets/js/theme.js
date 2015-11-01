@@ -73,7 +73,7 @@
 } )();
 function res() {
     headerH = jQuery('.site-header').height();
-    jQuery('.hero-fullscreen-slideshow ').css('height',(w.outerHeight()-headerH+1)+'px');
+    jQuery('.hero-slideshow-fullscreen').css('height',(w.outerHeight()-headerH+1)+'px');
 }
 
 /**

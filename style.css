@@ -2104,16 +2104,26 @@ input[type="radio"], input[type="checkbox"] {
   }
 }
 
+.help-message {
+  padding: 10px 20px;
+  background-color: #f8f9f9;
+  border-radius: 2px;
+  border-bottom: 1px solid #f2f2f2;
+  margin-bottom: 20px;
+}
+.help-message p {
+  margin-bottom: 0px;
+}
+
 /* Section: Hero
 ------------------------------*/
-.hero-fullscreen-slideshow {
-  height: 800px;
+.hero-slideshow-wrapper {
   width: 100%;
   position: relative;
   background-color: #000000 !important;
   overflow: hidden;
 }
-.hero-fullscreen-slideshow:after {
+.hero-slideshow-wrapper:after {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -2123,7 +2133,14 @@ input[type="radio"], input[type="checkbox"] {
   display: block;
   content: "";
 }
-.hero-fullscreen-slideshow .container {
+
+.hero-slideshow-normal .container {
+  padding: 10% 0px;
+  position: relative;
+  z-index: 80;
+}
+
+.hero-slideshow-fullscreen .container {
   z-index: 80;
   position: relative;
   top: 50%;

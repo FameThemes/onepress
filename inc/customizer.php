@@ -341,6 +341,54 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+			// Show hero full screen
+			$wp_customize->add_setting( 'onepress_hero_fullscreen',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_checkbox',
+					'default'           => '',
+				)
+			);
+			$wp_customize->add_control( 'onepress_hero_fullscreen',
+				array(
+					'type'        => 'checkbox',
+					'label'       => __('Make hero section full screen', 'onepress'),
+					'section'     => 'onepress_hero_settings',
+					'description' => esc_html__('Check this box to make hero section full screen.', 'onepress'),
+				)
+			);
+
+			// Hero content padding top
+			$wp_customize->add_setting( 'onepress_hero_pdtop',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_text',
+					'default'           => __('10', 'onepress'),
+				)
+			);
+			$wp_customize->add_control( 'onepress_hero_pdtop',
+				array(
+					'label'           => __('Padding Top:', 'onepress'),
+					'section'         => 'onepress_hero_settings',
+					'description'     => 'The hero content padding top in percent (%).',
+					'active_callback' => 'onepress_hero_fullscreen_callback'
+				)
+			);
+
+			// Hero content padding bottom
+			$wp_customize->add_setting( 'onepress_hero_pdbotom',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_text',
+					'default'           => __('10', 'onepress'),
+				)
+			);
+			$wp_customize->add_control( 'onepress_hero_pdbotom',
+				array(
+					'label'           => __('Padding Bottom:', 'onepress'),
+					'section'         => 'onepress_hero_settings',
+					'description'     => 'The hero content padding bottom in percent (%).',
+					'active_callback' => 'onepress_hero_fullscreen_callback'
+				)
+			);
+
 		$wp_customize->add_section( 'onepress_hero_images' ,
 			array(
 				'priority'    => 6,
@@ -1401,6 +1449,14 @@ function onepress_sanitize_file_url( $file_url ) {
 		$output = esc_url( $file_url );
 	}
 	return $output;
+}
+
+function onepress_hero_fullscreen_callback ( $control ) {
+	if ( $control->manager->get_setting('onepress_hero_fullscreen')->value() == '' ) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function onepress_sanitize_number( $input ) {
