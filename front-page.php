@@ -2,9 +2,9 @@
 /**
  * The front page template file.
  *
- * The front-page.php template file is used to render your site’s front page, 
- * whether the front page displays the blog posts index (mentioned above) or a static page. 
- * The front page template takes precedence over the blog posts index (home.php) template. 
+ * The front-page.php template file is used to render your site’s front page,
+ * whether the front page displays the blog posts index (mentioned above) or a static page.
+ * The front page template takes precedence over the blog posts index (home.php) template.
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#front-page-display
  *
@@ -53,7 +53,7 @@ get_header(); ?>
 
 				</main><!-- #main -->
 			</div><!-- #primary -->
-			
+
 			<?php get_sidebar(); ?>
 
 		</div><!--#content-inside -->
@@ -63,7 +63,7 @@ get_header(); ?>
 
 	<div id="content" class="site-content no-border">
 		<div id="content-inside" class="">
-			
+
 			<?php
 			/*
 			 * Section: Hero
@@ -79,11 +79,6 @@ get_header(); ?>
 			 * Section: Services
 			 */
 			get_template_part('section-parts/section', 'services');
-
-			/*
-			 * Section: Projects
-			 */
-			get_template_part('section-parts/section', 'projects');
 
 			/*
 			 * Section: Team
@@ -103,7 +98,7 @@ get_header(); ?>
 
 		</div><!--#content-inside -->
 	</div><!-- #content -->
-	
+
 	<?php } // End custom front page. ?>
 
 <?php get_footer(); ?>
