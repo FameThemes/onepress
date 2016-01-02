@@ -115,13 +115,6 @@ function onepress_widgets_init() {
 		'description'   => __( 'Drag "OnePress: Service Item" widget into this widget area and go to Customizer &rarr; Section: Services to change section title, subtitle and style."', 'onepress' ),
 	) );
 
-	// Sidebar: Project
-	register_sidebar( array(
-		'name'          => esc_html__( 'Section: Project', 'onepress' ),
-		'id'            => 'section_project',
-		'description'   => __( 'Drag "OnePress: Project Item" widget into this widget area and go to Customizer &rarr; Section: Projects to change section title, subtitle and style."', 'onepress' ),
-	) );
-
 	// Sidebar: Team
 	register_sidebar( array(
 		'name'          => esc_html__( 'Section: Team', 'onepress' ),
@@ -163,7 +156,7 @@ if ( ! function_exists( 'onepress_fonts_url' ) ) :
  */
 function onepress_fonts_url() {
     $fonts_url = '';
- 	
+
  	/* Translators: If there are characters in your language that are not
     * supported by Open Sans, translate this to 'off'. Do not translate
     * into your own language.
@@ -175,26 +168,26 @@ function onepress_fonts_url() {
     * into your own language.
     */
     $raleway = _x( 'on', 'Raleway font: on or off', 'onepress' );
- 
+
     if ( 'off' !== $raleway || 'off' !== $open_sans ) {
         $font_families = array();
- 
+
         if ( 'off' !== $raleway ) {
             $font_families[] = 'Raleway:400,500,600,700,300,100,800,900';
         }
- 
+
         if ( 'off' !== $open_sans ) {
             $font_families[] = 'Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic';
         }
- 
+
         $query_args = array(
             'family' => urlencode( implode( '|', $font_families ) ),
             'subset' => urlencode( 'latin,latin-ext' ),
         );
- 
+
         $fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
     }
- 
+
     return esc_url_raw( $fonts_url );
 }
 endif;
@@ -294,7 +287,6 @@ add_action( 'tgmpa_register', 'onepress_register_required_plugins' );
  */
 require get_template_directory() . '/inc/widgets/onepress_about_widget.php';
 require get_template_directory() . '/inc/widgets/onepress_service_widget.php';
-require get_template_directory() . '/inc/widgets/onepress_project_widget.php';
 require get_template_directory() . '/inc/widgets/onepress_team_member_widget.php';
 
 /**

@@ -30,7 +30,6 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', __('We are 
 				<h5>OUR VISION</h5>
 				<p>Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.</p>
 			</div>
-		
 		<?php } else { ?>
 			<?php dynamic_sidebar( 'section_about' ); ?>
 		<?php } ?>

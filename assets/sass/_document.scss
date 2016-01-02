@@ -31,11 +31,11 @@ textarea {
 	font: inherit;
 }
 
-::-moz-selection { 
+::-moz-selection {
 	background: #000000;
 	color: #FFFFFF;
 }
-	
+
 ::selection {
 	background: #000000;
 	color: #FFFFFF;
@@ -271,11 +271,11 @@ table {
     border-spacing: 0;
 }
 
-table > thead > tr > th, 
-table > tbody > tr > th, 
-table > tfoot > tr > th, 
-table > thead > tr > td, 
-table > tbody > tr > td, 
+table > thead > tr > th,
+table > tbody > tr > th,
+table > tfoot > tr > th,
+table > thead > tr > td,
+table > tbody > tr > td,
 table > tfoot > tr > td {
     border: 1px solid $border;
     line-height: 1.42857;
@@ -303,7 +303,7 @@ fieldset{
 }
 
 input[type="reset"],input[type="submit"],input[type="submit"] {
-	
+
 	cursor: pointer;
 	background: $primary;
 	border: none;
@@ -358,35 +358,35 @@ input[type="text"],
 input[type="time"],
 input[type="url"],
 input[type="week"] {
-	padding: 10px; 
-	max-width: 100%; 
-	border: 0px; 
-	font-size: 15px; 
+	padding: 10px;
+	max-width: 100%;
+	border: 0px;
+	font-size: 15px;
 	font-weight: normal;
-	line-height: 22px;  
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset; 
-	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset; 
-	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset; 
-	-o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset; 
-	transition: all 0.2s linear; 
-	-moz-transition: all 0.2s linear; 
-	-webkit-transition: all 0.2s linear; 
+	line-height: 22px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+	-o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+	transition: all 0.2s linear;
+	-moz-transition: all 0.2s linear;
+	-webkit-transition: all 0.2s linear;
 	-o-transition: all 0.2s linear;
 	background-color: #f2f2f2;
     border-bottom: 1px solid #fff;
     box-sizing: border-box;
     color: #000000;
     &:focus {
-    	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset; 
-    	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset; 
-    	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset; 
-    	-o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset; 
-    	transition: all 0.2s linear; 
-    	-moz-transition: all 0.2s linear; 
-    	-webkit-transition: all 0.2s linear; 
+    	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    	-o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    	transition: all 0.2s linear;
+    	-moz-transition: all 0.2s linear;
+    	-webkit-transition: all 0.2s linear;
     	-o-transition: all 0.2s linear;
-    	border-color: #EBEBEB; 
-    	border-bottom: 1px solid #fff !important; 
+    	border-color: #EBEBEB;
+    	border-bottom: 1px solid #fff !important;
     	background: #e9e9e9;
     }
 }
@@ -498,7 +498,3 @@ input[type="radio"],input[type="checkbox"] {
 .hide {
 	display: none;
 }
-
-
-
-

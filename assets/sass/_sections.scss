@@ -4,6 +4,10 @@
 	padding: 70px 0px;
 }
 
+.onepage-section {
+	position: relative;
+}
+
 .section-meta {
 	background-color: $meta;
 }
@@ -52,6 +56,56 @@
 		margin-bottom: 0px;
 	}
 	margin-bottom: 20px;
+}
+
+.admin_helper {
+	position: absolute;
+	left: 50px;
+	top: 0px;
+	z-index: 20;
+	.helper_icon {
+		width: 25px;
+		height: 25px;
+		display: block;
+		background: url('assets/images/admin_helper.png') no-repeat center center;
+		animation: 0.8s ease-in 0s normal none infinite running helper-scale;
+			-moz-animation: 0.8s ease-in 0s normal none infinite running helper-scale;
+				-webkit-animation: 0.8s ease-in 0s normal none infinite running helper-scale;
+		position: relative;
+	}
+	.helper_message {
+		margin-top: 20px;
+		width: 300px;
+		padding: 20px;
+		background: #333333;
+		@include border-radius(3px);
+		color: #cccccc;
+		h4 {
+			color: #FFF;
+		}
+	}
+}
+@keyframes helper-scale {
+	0% {
+	    transform: scale(1);
+	}
+	50% {
+	    transform: scale(0.8);
+	}
+	100% {
+	    transform: scale(1);
+	}
+}
+@keyframes helper-scale {
+	0% {
+	    transform: scale(1);
+	}
+	50% {
+	    transform: scale(0.8);
+	}
+	100% {
+	    transform: scale(1);
+	}
 }
 
 /* Section: Hero

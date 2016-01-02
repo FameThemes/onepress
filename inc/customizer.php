@@ -72,9 +72,9 @@ function onepress_customize_register( $wp_customize ) {
 			    'theme_supports' => '',
 			    'title'          => __( 'Site Options', 'onepress' ),
 			    'description'    => '',
-			) 
+			)
 		);
-		
+
 		/* Global Settings
 		----------------------------------------------------------------------*/
 		$wp_customize->add_section( 'onepress_global_settings' ,
@@ -85,7 +85,7 @@ function onepress_customize_register( $wp_customize ) {
 				'panel'       => 'onepress_options',
 			)
 		);
-		
+
 
 			// Disable Animation
 			$wp_customize->add_setting( 'onepress_animation_disable',
@@ -129,7 +129,7 @@ function onepress_customize_register( $wp_customize ) {
 				'panel'       => 'onepress_options',
 			)
 		);
-		
+
 			// Order & Stlying
 			$wp_customize->add_setting( 'onepress_social_footer_guide',
 				array(
@@ -285,14 +285,14 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
-			
 
-			
+
+
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Hero
     /*------------------------------------------------------------------------*/
-		
+
 	$wp_customize->add_panel( 'onepress_hero_panel' ,
 		array(
 			'priority'    => 26,
@@ -491,7 +491,7 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
-			// Large Text 
+			// Large Text
 			$wp_customize->add_setting( 'onepress_hcl1_largetext',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
@@ -508,7 +508,7 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			));
 
-			// Small Text 
+			// Small Text
 			$wp_customize->add_setting( 'onepress_hcl1_smalltext',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
@@ -557,7 +557,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_btn2_text',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('See Our Works', 'onepress'),
+					'default'           => __('Our Services', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hcl1_btn2_text',
@@ -571,7 +571,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_btn2_link',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => esc_url( home_url( '/' )).__('#projects', 'onepress'),
+					'default'           => esc_url( home_url( '/' )).__('#services', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hcl1_btn2_link',
@@ -1148,7 +1148,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_news_settings_hr',
 			array(
 				'section'     => 'onepress_news_settings',
-				'type'        => 'hr'			
+				'type'        => 'hr'
 			)
 		));
 
@@ -1283,7 +1283,7 @@ function onepress_customize_register( $wp_customize ) {
 			'description' => '',
 			'panel'       => 'onepress_contact',
 		)
-	);	
+	);
 		// Contact form 7 guide.
 		$wp_customize->add_setting( 'onepress_contact_cf7_guide',
 			array(
@@ -1353,7 +1353,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_contact_text_hr',
 			array(
 				'section'     => 'onepress_contact_content',
-				'type'        => 'hr'			
+				'type'        => 'hr'
 			)
 		));
 
