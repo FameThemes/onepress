@@ -162,7 +162,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_twitter',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => 'https://twitter.com/famethemes',
+					'default'           => '#',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_twitter',
@@ -176,7 +176,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_facebook',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => 'https://www.facebook.com/famethemes/',
+					'default'           => '#',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_facebook',
@@ -274,14 +274,14 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_newsletter_mailchimp',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => '//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006',
+					'default'           => '',
 				)
 			);
 			$wp_customize->add_control( 'onepress_newsletter_mailchimp',
 				array(
 					'label'       => __('MailChimp Action URL', 'onepress'),
 					'section'     => 'onepress_newsletter',
-					'description' => 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL.'
+					'description' => 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>'
 				)
 			);
 
@@ -788,168 +788,6 @@ function onepress_customize_register( $wp_customize ) {
 				'section'     => 'onepress_service_content',
 				'type'        => 'custom_message',
 				'description' => __( 'In order to add content for Services section please go to <strong>Customizer &rarr; Widgets &rarr; Section: Services</strong>, click Add a Widget and select <strong>OnePress: Service Item</strong> widget.', 'onepress' )
-			)
-		));
-
-
-	/*------------------------------------------------------------------------*/
-    /*  Section: Projects
-    /*------------------------------------------------------------------------*/
-    $wp_customize->add_panel( 'onepress_projects' ,
-		array(
-			'priority'    => 26,
-			'title'       => __( 'Section: Projects', 'onepress' ),
-			'description' => '',
-		)
-	);
-
-	$wp_customize->add_section( 'onepress_project_settings' ,
-		array(
-			'priority'    => 3,
-			'title'       => __( 'Section Settings', 'onepress' ),
-			'description' => '',
-			'panel'       => 'onepress_projects',
-		)
-	);
-
-		// Show Content
-		$wp_customize->add_setting( 'onepress_project_disable',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_checkbox',
-				'default'           => '',
-			)
-		);
-		$wp_customize->add_control( 'onepress_project_disable',
-			array(
-				'type'        => 'checkbox',
-				'label'       => __('Hide this section?', 'onepress'),
-				'section'     => 'onepress_project_settings',
-				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
-			)
-		);
-		// Section ID
-		$wp_customize->add_setting( 'onepress_project_id',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('projects', 'onepress'),
-			)
-		);
-		$wp_customize->add_control( 'onepress_project_id',
-			array(
-				'label' 		=> __('Section ID:', 'onepress'),
-				'section' 		=> 'onepress_project_settings',
-				'description'   => 'The section id, we will use this for link anchor.'
-			)
-		);
-
-		// Title
-		$wp_customize->add_setting( 'onepress_project_title',
-			array(
-				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Highlight Projects', 'onepress'),
-			)
-		);
-		$wp_customize->add_control( 'onepress_project_title',
-			array(
-				'label' 		=> __('Section Title', 'onepress'),
-				'section' 		=> 'onepress_project_settings',
-				'description'   => '',
-			)
-		);
-
-		// Sub Title
-		$wp_customize->add_setting( 'onepress_project_subtitle',
-			array(
-				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Some of our works', 'onepress'),
-			)
-		);
-		$wp_customize->add_control( 'onepress_project_subtitle',
-			array(
-				'label' 		=> __('Section Subtitle', 'onepress'),
-				'section' 		=> 'onepress_project_settings',
-				'description'   => '',
-			)
-		);
-
-	$wp_customize->add_section( 'onepress_project_content' ,
-		array(
-			'priority'    => 6,
-			'title'       => __( 'Section Content', 'onepress' ),
-			'description' => '',
-			'panel'       => 'onepress_projects',
-		)
-	);
-
-		// Order & Stlying
-		$wp_customize->add_setting( 'onepress_project_content_guide',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_text'
-			)
-		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_project_content_guide',
-			array(
-				'section'     => 'onepress_project_content',
-				'type'        => 'custom_message',
-				'description' => __( 'In order to add projects please go to <strong>Customizer &rarr; Widgets &rarr; Section: Projects</strong>, click Add a Widget and select <strong>OnePress: Project Item</strong> widget.', 'onepress' )
-			)
-		));
-
-	$wp_customize->add_section( 'onepress_project_parallax' ,
-		array(
-			'priority'    => 9,
-			'title'       => __( 'Parallax After This Section', 'onepress' ),
-			'description' => '',
-			'panel'       => 'onepress_projects',
-		)
-	);
-
-		// Show Content
-		$wp_customize->add_setting( 'onepress_project_parallax_disable',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_checkbox',
-				'default'           => '',
-			)
-		);
-		$wp_customize->add_control( 'onepress_project_parallax_disable',
-			array(
-				'type'        => 'checkbox',
-				'label'       => __('Hide this parallax section?', 'onepress'),
-				'section'     => 'onepress_project_parallax',
-				'description' => esc_html__('Check this box to hide this parallax section.', 'onepress'),
-			)
-		);
-
-		$wp_customize->add_setting( 'onepress_project_parallax_image',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_file_url',
-				'default'           => get_template_directory_uri() . '/assets/images/hero1.jpg'
-			)
-		);
-    	$wp_customize->add_control( new WP_Customize_Image_Control(
-            $wp_customize,
-            'onepress_hero_image4',
-				array(
-					'label' 		=> __('Parallax Background Image', 'onepress'),
-					'section' 		=> 'onepress_project_parallax',
-					'description'   => '',
-				)
-			)
-		);
-
-		$wp_customize->add_setting( 'onepress_project_parallax_content',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('<h2>Like our projects? we are just getting started</h2><a class="btn btn-ghost" href="#contact">Contact Us Today</a>', 'onepress'),
-			)
-		);
-		$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
-			$wp_customize,
-			'onepress_project_parallax_content',
-			array(
-				'label' 		=> __('Parallax Content', 'onepress'),
-				'section' 		=> 'onepress_project_parallax',
-				'description'   => '',
 			)
 		));
 

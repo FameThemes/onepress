@@ -26,8 +26,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					</div>
 				</div>
 				<div class="member-info">
-					<h5 class="member-name">Alexander Rios</h5>
-					<span class="member-position">Founder & CEO</span>
+					<h5 class="member-name"><?php esc_html_e( 'Alexander Rios', 'onepress' ) ?></h5>
+					<span class="member-position"><?php esc_html_e( 'Founder & CEO', 'onepress' ) ?></span>
 				</div>
 			</div>
 			<div class="team-member grid-sm-3 wow slideInUp">
@@ -41,8 +41,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					</div>
 				</div>
 				<div class="member-info">
-					<h5 class="member-name">Victoria Stephens</h5>
-					<span class="member-position">Founder & CTO</span>
+					<h5 class="member-name"><?php esc_html_e( 'Victoria Stephens', 'onepress' ) ?></h5>
+					<span class="member-position"><?php esc_html_e( 'Founder & CTO', 'onepress' ) ?></span>
 				</div>
 			</div>
 			<div class="team-member grid-sm-3 wow slideInUp">
@@ -56,8 +56,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					</div>
 				</div>
 				<div class="member-info">
-					<h5 class="member-name">Harry Allen</h5>
-					<span class="member-position">Director Of Production</span>
+					<h5 class="member-name"><?php esc_html_e( 'Harry Allen', 'onepress' ) ?></h5>
+					<span class="member-position"><?php esc_html_e( 'Director Of Production', 'onepress' ) ?></span>
 				</div>
 			</div>
 			<div class="team-member grid-sm-3 wow slideInUp">
@@ -71,8 +71,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					</div>
 				</div>
 				<div class="member-info">
-					<h5 class="member-name">Thomas Wade</h5>
-					<span class="member-position">Senior Developer</span>
+					<h5 class="member-name"><?php esc_html_e( 'Thomas Wade', 'onepress' ) ?></h5>
+					<span class="member-position"><?php esc_html_e( 'Senior Developer', 'onepress' ) ?></span>
 				</div>
 			</div>
 			<div class="team-member grid-sm-3 wow slideInUp">
@@ -86,8 +86,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					</div>
 				</div>
 				<div class="member-info">
-					<h5 class="member-name">Sean Weaver</h5>
-					<span class="member-position">Senior Designer</span>
+					<h5 class="member-name"><?php esc_html_e( 'Sean Weaver', 'onepress' ) ?></h5>
+					<span class="member-position"><?php esc_html_e( 'Senior Designer', 'onepress' ) ?></span>
 				</div>
 			</div>
 			<div class="team-member grid-sm-3 wow slideInUp">
@@ -101,8 +101,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					</div>
 				</div>
 				<div class="member-info">
-					<h5 class="member-name">Peter Mendez</h5>
-					<span class="member-position">Interactive Designer</span>
+					<h5 class="member-name"><?php esc_html_e( 'Peter Mendez', 'onepress' ) ?></h5>
+					<span class="member-position"><?php esc_html_e( 'Interactive Designer', 'onepress' ) ?></span>
 				</div>
 			</div>
 			<div class="team-member grid-sm-3 wow slideInUp">
@@ -116,8 +116,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					</div>
 				</div>
 				<div class="member-info">
-					<h5 class="member-name">George Wells</h5>
-					<span class="member-position"> User Experience</span>
+					<h5 class="member-name"><?php esc_html_e( 'George Wells', 'onepress' ) ?></h5>
+					<span class="member-position"><?php esc_html_e( 'User Experience', 'onepress' ) ?></span>
 				</div>
 			</div>
 			<div class="team-member grid-sm-3 wow slideInUp">
@@ -131,8 +131,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					</div>
 				</div>
 				<div class="member-info">
-					<h5 class="member-name">Jonathan Green</h5>
-					<span class="member-position">Client Engagement</span>
+					<h5 class="member-name"><?php esc_html_e( 'Jonathan Green', 'onepress' ) ?></h5>
+					<span class="member-position"><?php esc_html_e( 'Client Engagement', 'onepress' ) ?></span>
 				</div>
 			</div>
 
