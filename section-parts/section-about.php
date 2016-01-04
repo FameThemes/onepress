@@ -17,18 +17,18 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', __('We are 
 		<?php if ( ! is_active_sidebar( 'section_about' ) ) { ?>
 			<div class="grid-sm-4 wow slideInUp">
 				<div class="about-image"><img src="<?php echo get_template_directory_uri() . '/assets/images/about1.jpg' ?>" alt=""></div>
-				<h5>OUR HISTORY</h5>
-				<p>Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.</p>
+				<h5><?php esc_html_e( 'OUR HISTORY', 'onepress' ) ?></h5>
+				<p><?php esc_html_e( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ) ?></p>
 			</div>
 			<div class="grid-sm-4 wow slideInUp">
 				<div class="about-image"><img src="<?php echo get_template_directory_uri() . '/assets/images/about2.jpg' ?>" alt=""></div>
-				<h5>OUR ACHIEVEMENTS</h5>
-				<p>Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.</p>
+				<h5><?php esc_html_e( 'OUR ACHIEVEMENTS', 'onepress' ) ?></h5>
+				<p><?php esc_html_e( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ) ?></p>
 			</div>
 			<div class="grid-sm-4 wow slideInUp">
 				<div class="about-image"><img src="<?php echo get_template_directory_uri() . '/assets/images/about3.jpg' ?>" alt=""></div>
-				<h5>OUR VISION</h5>
-				<p>Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.</p>
+				<h5><?php esc_html_e( 'OUR VISION', 'onepress' ) ?></h5>
+				<p><?php esc_html_e( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ) ?></p>
 			</div>
 		<?php } else { ?>
 			<?php dynamic_sidebar( 'section_about' ); ?>

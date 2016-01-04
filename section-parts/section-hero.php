@@ -37,7 +37,6 @@ if ( $onepress_hero_fullscreen != '1' ) {
 	<script>
 	jQuery(document).ready(function() {
 		jQuery('.hero-slideshow-wrapper').backstretch([
-				"<?php echo get_template_directory_uri() . '/assets/images/hero5.jpg' ?>",
 				"<?php echo $onepress_hero_image1; ?>",
 				"<?php echo $onepress_hero_image2; ?>",
 				"<?php echo $onepress_hero_image3; ?>",

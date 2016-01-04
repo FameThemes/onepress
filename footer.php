@@ -10,18 +10,18 @@
  */
 $onepress_btt_disable          = get_theme_mod( 'onepress_btt_disable' );
 $onepress_social_footer_title  = get_theme_mod( 'onepress_social_footer_title', __( 'Keep Updated', 'onepress' ) );
-$onepress_social_twitter       = get_theme_mod( 'onepress_social_twitter', 'https://twitter.com/famethemes' );
-$onepress_social_facebook      = get_theme_mod( 'onepress_social_facebook', 'https://www.facebook.com/famethemes/' );
+$onepress_social_twitter       = get_theme_mod( 'onepress_social_twitter', '#' );
+$onepress_social_facebook      = get_theme_mod( 'onepress_social_facebook', '#' );
 $onepress_social_google        = get_theme_mod( 'onepress_social_google', '#' );
 $onepress_social_instagram     = get_theme_mod( 'onepress_social_instagram', '#' );
 $onepress_social_rss           = get_theme_mod( 'onepress_social_instagram', get_bloginfo('rss2_url') );
 $onepress_newsletter_disable   = get_theme_mod( 'onepress_newsletter_disable' );
 $onepress_newsletter_title     = get_theme_mod( 'onepress_newsletter_title', __( 'Join our Newsletter', 'onepress' ) );
-$onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp', '//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006' );
+$onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp', '' );
 ?>
 
 	<footer id="colophon" class="site-footer" role="contentinfo">
-		
+
 		<div class="footer-connect">
 			<div class="container">
 				<div class="grid-row">
@@ -68,7 +68,7 @@ $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp',
 				<?php printf( esc_html__( '%1$s theme by %2$s', 'onepress' ), 'OnePress', '<a href="'. esc_url('http://www.famethemes.com', 'onepress') .'" target="_blank">FameThemes</a>' ); ?>
 			</div>
 		</div><!-- .site-info -->
-		
+
 	</footer><!-- #colophon -->
 </div><!-- #page -->
 
