@@ -148,30 +148,34 @@ var RepeatableCustomize = function (  control  ){
 		if ( typeof control.params.live_title_id !== "undefined" ) {
 
 			//console.log( $( "[data-live-id='"+ control.params.live_title_id+"']").eq(0).val() );
-			var v = $( "[data-live-id='"+ control.params.live_title_id+"']", $context ).eq(0).val();
-			if ( v== '' ){
-				v = '[Untitled]';
-			}
-
-			if ( typeof control.params.title_format !== "undefined" && control.params.title_format !== ''  ) {
-				v = control.params.title_format.replace('[live_title]', v );
-			}
-			$( '.widget-title .live-title', $context ).text( v );
-
-			$context.on( 'keyup', "[data-live-id='"+ control.params.live_title_id+"']", function(){
-				var v = $( this).val();
-				if ( v== '' ){
+			if ( $( "[data-live-id='"+ control.params.live_title_id+"']", $context ).length > 0 ) {
+				var v = $("[data-live-id='" + control.params.live_title_id + "']", $context).eq(0).val();
+				if (v == '') {
 					v = '[Untitled]';
 				}
 
-				if ( typeof control.params.title_format!== "undefined"  && control.params.title_format !== ''  ) {
-					v = control.params.title_format.replace('[live_title]', v );
+				if (typeof control.params.title_format !== "undefined" && control.params.title_format !== '') {
+					v = control.params.title_format.replace('[live_title]', v);
 				}
 
-				$( '.widget-title .live-title', $context ).text( v );
-			} );
+				$('.widget-title .live-title', $context).text(v);
 
-			//$( "[data-live-id='"+ control.params.live_title_id+"']", $context ).trigger( 'keyup' );
+				$context.on('keyup change', "[data-live-id='" + control.params.live_title_id + "']", function () {
+					var v = $(this).val();
+					if (v == '') {
+						v = '[Untitled]';
+					}
+
+					if (typeof control.params.title_format !== "undefined" && control.params.title_format !== '') {
+						v = control.params.title_format.replace('[live_title]', v);
+					}
+
+					$('.widget-title .live-title', $context).text(v);
+				});
+
+				// console.log($("[data-live-id='" + control.params.live_title_id + "']", $context));
+			}
+
 		}
 
 		// Remove item
@@ -318,7 +322,7 @@ var RepeatableCustomize = function (  control  ){
 		ready: function() {
 			var control = this;
 			//console.log( settingValue );
-			new RepeatableCustomize(  control, jQuery );
+			new RepeatableCustomize( control, jQuery );
 
 		}
 	} );

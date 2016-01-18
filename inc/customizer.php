@@ -778,7 +778,7 @@ function onepress_customize_register( $wp_customize ) {
 			'panel'       => 'onepress_services',
 		)
 	);
-
+		remove_theme_mod( 'onepress_services' );
 		// Order & Stlying
 		$wp_customize->add_setting(
 			'onepress_services',
@@ -822,7 +822,7 @@ function onepress_customize_register( $wp_customize ) {
 					'description'   => '',
 					'section'       => 'onepress_service_content',
 					'live_title_id' => 'title', // apply for unput text and textarea only
-					'title_format'  => __('Service: [live_title]', 'onepress'), // [live_title]
+					'title_format'  => __('[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
 
 					'fields'    => array(
@@ -936,10 +936,10 @@ function onepress_customize_register( $wp_customize ) {
 			'panel'       => 'onepress_team',
 		)
 	);
-		// remove_theme_mod( 'onepress_service_team_members' );
+		// remove_theme_mod( 'onepress_team_members' );
 		// Order & Stlying
 		$wp_customize->add_setting(
-			'onepress_service_team_members',
+			'onepress_team_members',
 			array(
 				'default' => json_encode(
 					array(
@@ -1060,7 +1060,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control(
 			new Onepress_Customize_Repeatable_Control(
 				$wp_customize,
-				'onepress_service_team_members',
+				'onepress_team_members',
 				array(
 					'label' 		=> __('Team members', 'onepress'),
 					'description'   => '',

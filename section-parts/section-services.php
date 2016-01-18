@@ -14,77 +14,65 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 		</div>
 		<div class="row">
 
-			<?php if ( ! is_active_sidebar( 'section_service' ) ) { ?>
-				<div class="col-sm-6">
-					<div class="service-item wow slideInUp">
-						<div class="service-image">
-							<i class="fa fa-wikipedia-w fa-5x"></i>
-						</div>
-						<div class="service-content">
-							<h5 class="service-title"><?php esc_html_e( 'Insights & Planning', 'onepress' ) ?></h5>
-							<p><?php esc_html_e( 'Uncovering key insights that inform the planning process and business modeling.', 'onepress' ) ?></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="service-item wow slideInUp">
-						<div class="service-image">
-							<i class="fa fa-gg fa-5x"></i>
-						</div>
-						<div class="service-content">
-							<h5 class="service-title"><?php esc_html_e( 'Usability & User Testing', 'onepress' ) ?></h5>
-							<p><?php esc_html_e( 'A user-first approach to defining interactive experiences and customer experience planning.', 'onepress' ) ?></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="service-item wow slideInUp">
-						<div class="service-image">
-							<i class="fa fa-balance-scale fa-5x"></i>
-						</div>
-						<div class="service-content">
-							<h5 class="service-title"><?php esc_html_e( 'Creative & Design', 'onepress' ) ?></h5>
-							<p><?php esc_html_e( 'Inventing and visualizing through shape, form, type and color.', 'onepress' ) ?></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="service-item wow slideInUp">
-						<div class="service-image">
-							<i class="fa fa-bar-chart fa-5x"></i>
-						</div>
-						<div class="service-content">
-							<h5 class="service-title"><?php esc_html_e( 'Technology & Development', 'onepress' ) ?></h5>
-							<p><?php esc_html_e( 'Enabling user engagement through smart technology solutions.', 'onepress' ) ?></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="service-item wow slideInUp">
-						<div class="service-image">
-							<i class="fa fa-fa fa-object-ungroup fa-5x"></i>
-						</div>
-						<div class="service-content">
-							<h5 class="service-title"><?php esc_html_e( 'Social Media Target', 'onepress' ) ?></h5>
-							<p><?php esc_html_e( 'Building connected brands through social engagement and activation.', 'onepress' ) ?></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="service-item wow slideInUp">
-						<div class="service-image">
-							<i class="fa fa-object-group fa-5x"></i>
-						</div>
-						<div class="service-content">
-							<h5 class="service-title"><?php esc_html_e( 'Content Strategy', 'onepress' ) ?></h5>
-							<p><?php esc_html_e( 'Creating brand value through contextual and relevant distributed content.', 'onepress' ) ?></p>
-						</div>
-					</div>
-				</div>
+			<?php
+			// Check if one ONEPRESS PLUS plugin not installed.
+			if ( ! defined( 'ONEPRESS_PLUS' ) ) {
 
+				$services = get_theme_mod( 'onepress_services', array(
+					array(
+						'title' => __( 'Insights & Planning', 'onepress' ),
+						'icon'  => 'fa-wikipedia-w',
+						'content' => __( 'Uncovering key insights that inform the planning process and business modeling.', 'onepress' )
+					),
+					array(
+						'title' => __( 'Usability & User Testing', 'onepress' ),
+						'icon'  => 'fa-gg',
+						'content' => __( 'A user-first approach to defining interactive experiences and customer experience planning.', 'onepress' )
+					),
+					array(
+						'title' => __( 'Creative & Design', 'onepress' ),
+						'icon'  => 'fa-balance-scale',
+						'content' => __( 'Inventing and visualizing through shape, form, type and color.', 'onepress' )
+					),
+					array(
+						'title' => __( 'Technology & Development', 'onepress' ),
+						'icon'  => 'fa-object-group',
+						'content' => __( 'Enabling user engagement through smart technology solutions.', 'onepress' )
+					),
+
+				) );
+
+				if ( is_string( $services ) ) {
+					$services = json_decode( $services, true );
+				}
+
+				if ( is_array( $services ) ) {
+					foreach( $services as $service ) {
+						$service = wp_parse_args( $service, array(
+							'title' 	=> '',
+							'icon'  	=> '',
+							'content' 	=> ''
+						) );
+						?>
+						<div class="col-sm-6">
+							<div class="service-item wow slideInUp">
+								<div class="service-image">
+									<i class="fa <?php echo esc_attr( $service['icon'] ); ?> fa-5x"></i>
+								</div>
+								<div class="service-content">
+									<h5 class="service-title"><?php echo esc_html( $service['title'] ); ?></h5>
+									<p><?php echo esc_html( $service['content'] ); ?></p>
+								</div>
+							</div>
+						</div>
+					<?php
+					}
+				} ?>
 
 			<?php } else { ?>
-				<?php dynamic_sidebar( 'section_service' ); ?>
+				<?php
+				do_action( 'one_press_theme_section_services' );
+				?>
 			<?php } ?>
 
 		</div>
