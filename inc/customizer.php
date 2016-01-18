@@ -832,17 +832,20 @@ function onepress_customize_register( $wp_customize ) {
 						'title' => array(
 							'title' => __('Title', 'onepress'),
 							'type'  =>'text',
-							'desc'  => ''
+							'desc'  => '',
+							'default' => __( 'Your service title', 'onepress' ),
 						),
 						'icon' => array(
 							'title' => __('Icon', 'onepress'),
 							'type'  =>'text',
 							'desc'  => sprintf( __('Paste your <a target="_blank" href="%1$s">Font Awesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
+							'default' => __( 'gg', 'onepress' ),
 						),
 						'content'  => array(
 							'title' => __('Description', 'onepress'),
 							'desc'  => __('Something about this service', 'onepress'),
 							'type'  =>'textarea',
+							'default' => __( 'Your service description here', 'onepress' ),
 						),
 					),
 
@@ -1076,19 +1079,26 @@ function onepress_customize_register( $wp_customize ) {
 						'name' => array(
 							'title' => __('Name', 'onepress'),
 							'type'  =>'text',
-							'desc'  => ''
+							'desc'  => '',
+							'default'  => __('Member name', 'onepress'),
 						),
 						'position' => array(
 							'title' => __('Position', 'onepress'),
 							'type'  =>'text',
+							'default'  => __('Member Position', 'onepress'),
 						),
 						'image' => array(
 							'title' => __('Avatar', 'onepress'),
 							'type'  =>'media',
+							'default' => array(
+								'url' => get_template_directory_uri().'/assets/images/user_avatar.jpg',
+								'id' => ''
+							)
 						),
 						'facebook' => array(
 							'title' => __('Facebook', 'onepress'),
 							'type'  =>'text',
+							'default'  => '',
 						),
 						'twitter' => array(
 							'title' => __('Twitter', 'onepress'),

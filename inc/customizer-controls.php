@@ -190,6 +190,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                     $args['fields'][ $key ]['value'] = '';
                 }
             }
+
         }
 
         $this->fields = $args['fields'];
