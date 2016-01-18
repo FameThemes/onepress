@@ -25,6 +25,156 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
 
+
+	//$wp_customize->add_panel( 'test_panel_repeatable', array( 'priority' => 5, 'title' => esc_html__( 'Repeatable Panel', 'ctypo' ) ) );
+	$wp_customize->add_section(
+		'test_section_repeatable',
+		// array( 'panel' => 'test_panel_repeatable', 'title' => esc_html__( 'Repeatable Section', 'ctypo' ) )
+		array(  'title' => esc_html__( 'Repeatable Section', 'ctypo' ), 'priority' => 2, )
+	);
+
+	// @todo Better sanitize_callback functions.
+	$wp_customize->add_setting(
+		'new_repeatable_id',
+		array(
+			'default' => json_encode(
+				array(
+					array(
+						'id_name_1' => 'Item 1',
+						'id_name_color' => '#333333',
+						'id_name_2'  => 'la la la',
+						'id_name_3'     => array(
+							'id'=>'2324324',
+							'url'=>'',
+						),
+					),
+
+					array(
+						'id_name_1' => 'Item 2',
+						'id_name_color' => '#333333',
+						'id_name_2'  => 'la la la',
+						'id_name_3'     => array(
+							'id'=>'2324324',
+							'url'=>'',
+						),
+					),
+				)
+			),
+			//'sanitize_callback' => 'sanitize_repeatable_data_field',
+			'sanitize_callback' => 'wentasi_sanitize_repeatable_data_field',
+			'transport' => 'refresh', // refresh or postMessage
+		) );
+
+	$pages = get_pages( );
+
+	$option_pages = array();
+	$option_pages[ 0 ] = __( 'Select Page', 'domain' );
+
+	foreach ( $pages as $p ) {
+		$option_pages[ $p->ID ] =  $p->post_title;
+	}
+
+	$wp_customize->add_control(
+		new Wentasi_Customize_Repeatable_Control(
+			$wp_customize,
+			'new_repeatable_id',
+			array(
+				'label' 		=> __('Repeatable Field', 'wentasi'),
+				'description'   => 'dsadadasdasas',
+				'section'       => 'test_section_repeatable',
+				'live_title_id' => 'id_name_1', // apply for unput text and textarea only
+				'title_format'  => __('Abc: ', 'wentasi'), // [live_title]
+				'max_item'      => 3, // Maximum item can add
+
+				'fields'    => array(
+					'id_name_1' => array(
+						'title'=>'text title',
+						'type'=>'text',
+						//'default' =>'default_value',
+						'desc' =>'this is description text'
+					),
+					'id_name_color' => array(
+						'title'=>'Color',
+						'type'=>'color',
+						//'default' =>'default_value',
+						'desc' =>'this is description text'
+					),
+					'id_name_2'  => array(
+						'title'=>'textarea title',
+						'type'=>'textarea',
+						//'default' =>'default_value',
+						'desc' =>'this is description text'
+
+					),
+					'id_name_3'     => array(
+						'title'=>'media title',
+						'type'=>'media',
+						'default'=> array(
+							'id'=>'',
+							'url'=>'',
+						),
+						'desc' =>'this is description text',
+					),
+					'id_page'    => array(
+						'title'=>'Select Page',
+						'type'=>'select',
+						'multiple'=> false, // false
+						'desc' =>'this is description text',
+						'options' => $option_pages,
+						//'default'=> 'option_1',
+					),
+
+					'id_name_4'    => array(
+						'title'=>'select title',
+						'type'=>'select',
+						'multiple'=> true, // false
+						'desc' =>'this is description text',
+						'options' => array(
+							'option_1' => 'label for option 1',
+							'option_2' => 'label for option 2',
+							'option_3' => 'label for option 3',
+						),
+						//'default'=> 'option_1',
+					),
+					'select_one'    => array(
+						'title'=>'select title',
+						'type'=>'select',
+						'multiple'=> false, // false
+						'desc' =>'this is description text',
+						'options' => array(
+							'option_1' => 'label for option 1',
+							'option_2' => 'label for option 2',
+							'option_3' => 'label for option 3',
+						),
+						//'default'=> 'option_3',
+					),
+					'id_name_5'     => array(
+						'title'=>'radio title',
+						'type'=>'radio',
+						'desc' =>'this is description text',
+						'options' => array(
+							'option_1' => 'label for option 1',
+							'option_2' => 'label for option 2',
+							'option_3' => 'label for option 3',
+						),
+						//'default'=> 'option_1'
+					),
+					'id_name_6'  => array(
+						'title'=>'checkbox title',
+						'desc' =>'this is description text',
+						'type'=>'checkbox',
+						//'value'=> 'option_1'
+					),
+				),
+
+			)
+		)
+	);
+
+
+
+
+
 	/*------------------------------------------------------------------------*/
     /*  Site Identity
     /*------------------------------------------------------------------------*/
@@ -1320,7 +1470,7 @@ function onepress_sanitize_checkbox( $input ) {
 }
 
 function onepress_sanitize_text( $string ) {
-	return wp_kses_post( force_balance_tags( $string ) );
+	return wp_kses_post( balanceTags( $string ) );
 }
 
 function onepress_sanitize_html_input( $string ) {
@@ -1332,6 +1482,6 @@ function onepress_sanitize_html_input( $string ) {
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
 function onepress_customize_preview_js() {
-	wp_enqueue_script( 'onepress_customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-preview' ), '20130508', true );
+	wp_enqueue_script( 'onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array( 'customize-preview' ), '20130508', true );
 }
 add_action( 'customize_preview_init', 'onepress_customize_preview_js' );

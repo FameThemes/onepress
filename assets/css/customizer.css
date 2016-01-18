@@ -1,0 +1,58 @@
+.list-repeatable .sortable-placeholder {
+    height: 42px;
+    display: block;
+}
+.list-repeatable li {
+    margin-bottom: 0px;
+    padding: 5px 0px 5px;
+}
+.list-repeatable .widget {
+    margin-bottom: 0px;
+}
+.list-repeatable  .widget-top:after {
+    clear: both; display: block; content: " ";
+}
+
+.list-repeatable .explained .widget-title-action .widget-action::after{
+    content: "\f142";
+}
+.list-repeatable .widget .widget-inside{
+    display: none;
+}
+.list-repeatable .widget.explained .widget-inside{
+    display: block;
+}
+
+.list-repeatable .item{
+    margin-bottom: 15px;
+}
+.list-repeatable .item:first-child{
+    margin-top: 15px;
+}
+.list-repeatable .item label {
+    display: block;
+    margin-bottom: 10px;
+}
+.list-repeatable .item label.field-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.list-repeatabl input:not([type='radio']),
+.list-repeatabl input:not([type='checkbox']),
+.list-repeatable .item select,
+.list-repeatable .item textarea {
+    width: 100%;
+}
+
+.list-repeatable .item-media .actions , .repeatable-actions{
+    text-align: right;
+    margin-top: 10px;
+}
+
+.list-repeatable .thumbnail-image {
+    margin-bottom: 10px;
+}
+.list-repeatable .thumbnail-image img {
+    width: 100%;
+    height: auto;
+}
