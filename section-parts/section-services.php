@@ -51,6 +51,12 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 						'icon'  	=> '',
 						'content' 	=> ''
 					) );
+
+					$service['icon'] = trim( $service['icon'] );
+					if ( strpos($service['icon'], 'fa-') !== 0 ) {
+						$service['icon'] = 'fa-'.$service['icon'];
+					}
+
 					?>
 					<div class="col-sm-6">
 						<div class="service-item wow slideInUp">
@@ -59,7 +65,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 							</div>
 							<div class="service-content">
 								<h5 class="service-title"><?php echo esc_html( $service['title'] ); ?></h5>
-								<p><?php echo esc_html( $service['content'] ); ?></p>
+								<p><?php echo wp_kses_post( $service['content'] ); ?></p>
 							</div>
 						</div>
 					</div>

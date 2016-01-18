@@ -130,6 +130,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						<div class="member-thumb">
 							<?php if ( $image !='' ) { ?>
 							<img src="<?php echo esc_url( $image );  ?>" alt="">
+							<?php } else { ?>
+								<img src="<?php echo esc_url( get_template_directory_uri().'/assets/images/user_avatar.jpg' );  ?>" alt="">
 							<?php } ?>
 
 							<div class="member-profile">
@@ -152,7 +154,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						</div>
 						<div class="member-info">
 							<h5 class="member-name"><?php echo esc_html( $member['name'] ); ?></h5>
-							<span class="member-position"><?php echo esc_html( $member['position'] ); ?></span>
+							<span class="member-position"><?php echo wp_kses_post( $member['position'] ); ?></span>
 						</div>
 					</div>
 				<?php

@@ -190,6 +190,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                     $args['fields'][ $key ]['value'] = '';
                 }
             }
+
         }
 
         $this->fields = $args['fields'];
@@ -204,11 +205,14 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
             $args['max_item'] = 0;
         }
 
+        if ( ! isset( $args['allow_unlimited'] ) || $args['allow_unlimited'] != false ) {
+            $this->max_item =  apply_filters( 'onepress_reepeatable_max_item', absint( $args['max_item'] ) );
+        }  else {
+            $this->max_item = absint( $args['max_item'] );
+        }
 
-        $this->max_item =  apply_filters( 'onepress_reepeatable_max_item', absint( $args['max_item'] ) );
+
         $this->changeable =  isset(  $args['changeable'] ) && $args['changeable'] == 'no' ? 'no' : 'yes';
-
-
 
 
     }
