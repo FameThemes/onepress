@@ -38,15 +38,15 @@
 				}
 				?>
 			</div><!-- .site-branding -->
-			
+
 			<div class="header-right-wrapper">
 				<a href="#0" id="nav-toggle">Menu<span></span></a>
 				<nav id="site-navigation" class="main-navigation" role="navigation">
-					<ul class="onepress-menu">	
-				   	   <?php wp_nav_menu( array('theme_location' => 'primary', 'container' => '', 'items_wrap' => '%3$s', 'fallback_cb' => 'onepress_primary_menu_fb' ) ); ?>
+					<ul class="onepress-menu">
+				   	   <?php wp_nav_menu( array('theme_location' => 'primary', 'container' => '', 'items_wrap' => '%3$s' ) ); ?>
 				    </ul>
 				</nav><!-- #site-navigation -->
-				
+
 			</div>
 
 		</div>

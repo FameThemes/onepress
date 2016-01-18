@@ -14,7 +14,6 @@
 $show_on_front = get_option( 'show_on_front' );
 get_header(); ?>
 
-	<?php if ( 'page' == get_option( 'show_on_front' ) ) { ?>
 	<div id="content" class="site-content">
 		<div id="content-inside" class="container right-sidebar">
 			<div id="primary" class="content-area">
@@ -58,47 +57,5 @@ get_header(); ?>
 
 		</div><!--#content-inside -->
 	</div><!-- #content -->
-
-	<?php } else {  ?>
-
-	<div id="content" class="site-content no-border">
-		<div id="content-inside" class="">
-
-			<?php
-			/*
-			 * Section: Hero
-			 */
-			get_template_part('section-parts/section', 'hero');
-
-			/*
-			 * Section: About
-			 */
-			get_template_part('section-parts/section', 'about');
-
-			/*
-			 * Section: Services
-			 */
-			get_template_part('section-parts/section', 'services');
-
-			/*
-			 * Section: Team
-			 */
-			get_template_part('section-parts/section', 'team');
-
-			/*
-			 * Section: News
-			 */
-			get_template_part('section-parts/section', 'news');
-
-			/*
-			 * Section: Contact
-			 */
-			get_template_part('section-parts/section', 'contact');
-			?>
-
-		</div><!--#content-inside -->
-	</div><!-- #content -->
-
-	<?php } // End custom front page. ?>
 
 <?php get_footer(); ?>
