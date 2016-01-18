@@ -24,11 +24,11 @@ $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp',
 
 		<div class="footer-connect">
 			<div class="container">
-				<div class="grid-row">
-					<div class="grid-sm-2"></div>
+				<div class="row">
+					<div class="col-sm-2"></div>
 
 					<?php if ( $onepress_newsletter_disable != '1' ) : ?>
-					<div class="grid-sm-4">
+					<div class="col-sm-4">
 						<div class="footer-subscribe">
 							<?php if ( $onepress_newsletter_title != '' ) echo '<h5 class="follow-heading">'. $onepress_newsletter_title .'</h5>'; ?>
 							<form novalidate="" target="_blank" class="" name="mc-embedded-subscribe-form" id="mc-embedded-subscribe-form" method="post" action="<?php if ( $onepress_newsletter_mailchimp != '' ) echo $onepress_newsletter_mailchimp; ?>">
@@ -39,7 +39,7 @@ $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp',
 					</div>
 					<?php endif; ?>
 
-					<div class="<?php if ( $onepress_newsletter_disable == '1' ) { echo 'grid-sm-8'; } else { echo 'grid-sm-4'; } ?>">
+					<div class="<?php if ( $onepress_newsletter_disable == '1' ) { echo 'col-sm-8'; } else { echo 'col-sm-4'; } ?>">
 						<div class="footer-social">
 							<?php
 							if ( $onepress_social_footer_title != '' ) echo '<h5 class="follow-heading">'. $onepress_social_footer_title .'</h5>';
@@ -51,7 +51,7 @@ $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp',
 							?>
 						</div>
 					</div>
-					<div class="grid-sm-2"></div>
+					<div class="col-sm-2"></div>
 				</div>
 			</div>
 		</div>

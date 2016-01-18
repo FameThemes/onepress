@@ -15,8 +15,8 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', __('Read Ou
 			<?php if ( $onepress_news_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_news_title ) . '</h2>'; ?>
 		</div>
 		<div class="section-content">
-			<div class="grid-row">
-				<div class="grid-sm-12">
+			<div class="row">
+				<div class="col-sm-12">
 					<div class="blog-entry wow slideInUp">
 						<?php query_posts('showposts='.$onepress_news_number.''); ?>
 						<?php if ( have_posts() ) : ?>
@@ -40,7 +40,7 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', __('Read Ou
 
 						<?php if ( $onepress_news_more_link != '' ) { ?>
 						<div class="all-news">
-							<a class="btn btn-light" href="<?php echo esc_url($onepress_news_more_link) ?>"><?php if ( $onepress_news_more_text != '' ) echo esc_html( $onepress_news_more_text ); ?></a>
+							<a class="btn btn-theme-primary-outline btn-lg" href="<?php echo esc_url($onepress_news_more_link) ?>"><?php if ( $onepress_news_more_text != '' ) echo esc_html( $onepress_news_more_text ); ?></a>
 						</div>
 						<?php } ?>
 					</div>

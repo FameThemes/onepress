@@ -3,7 +3,7 @@
 /* Section Stuffs
 ------------------------------*/
 .section-padding {
-	padding: 70px 0px;
+	@include rem('padding', 70px 0px);
 }
 
 .onepage-section {
@@ -179,6 +179,7 @@
 		color: #FFFFFF;
 		text-align: center;
 		font-weight: 100;
+		@include rem('margin-bottom', 30px);
 		@include for(medium-screens) {
 			font-size: 18px;
 		}
@@ -186,31 +187,24 @@
 			font-size: 22px;
 		}
 	}
-	// .btn {
-	// 	margin: 16px 10px 0px;
-	// 	border-radius: 0px;
-	// 	@include for(large-screens) {
-	// 		margin: 25px 10px 0px;
-	// 	}
-	// }
-	// .btn.btn-large {
-	// 	padding: 10px 15px;
-	// 	@include for(large-screens) {
-	// 		padding: 18px 23px;
-	// 	}
-	// }
-	// .btn.btn-large.btn-ghost {
-	// 	padding: 10px 15px;
-	// 	@include for(large-screens) {
-	// 		padding: 17px 23px 19px;
-	// 	}
-	// }
-	// .btn.btn-large.btn-primary {
-	// 	padding: 12px 15px;
-	// 	@include for(large-screens) {
-	// 		padding: 20px 23px 20px 23px;
-	// 	}
-	// }
+	.btn {
+		margin: 0px 10px;
+		@include media-breakpoint-down(sm) {
+			display: inline-block;
+			margin: 5px;
+		}
+	}
+
+	.btn-secondary-outline {
+		box-shadow: none;
+		border-color: rgba(255, 255, 255, 0.9);
+		color: rgba(255, 255, 255, 0.9);
+		&:hover {
+			background: #FFF;
+			color: #333;
+		}
+	}
+
 }
 
 /* Text Rotator */
@@ -487,7 +481,7 @@
 	.team-member {
 		padding: 0px 0.5px;
 	}
-	.grid-row {
+	.row {
 		margin-left: -0.5px;
 		margin-right: -0.5px;
 	}
@@ -499,17 +493,7 @@
 
 .team-member {
 	margin-bottom: 20px;
-	width: 100%;
-	@include for(small-screens) {
-		width: 50%;
-		float: left;
-	}
-	@include for(medium-screens) {
-		width: 25%;
-	}
-	@include for(large-screens) {
-		width: 25%;
-	}
+
 
 	.member-thumb {
 		margin-bottom: 20px;

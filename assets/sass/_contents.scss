@@ -35,6 +35,7 @@
 	.entry-header .entry-title {
 		font-size: 22px;
 		line-height: 1.5;
+		font-weight: 600;
 		a:hover{
 			text-decoration: none;
 		}
@@ -45,7 +46,7 @@
 /* Entry Header
 ------------------------------*/
 .entry-header .entry-title {
-	font-weight: 500;
+	font-weight: 600;
 	text-transform: none;
 	letter-spacing: -0.6px;
 	font-family: $font_text;

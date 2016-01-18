@@ -29,8 +29,8 @@ if ( $onepress_hero_fullscreen != '1' ) {
 		<div class="hero-content-style1">
 			<?php if ( $onepress_hcl1_largetext != '' ) echo '<h2 class="hero-large-text">' . wp_kses_post( $onepress_hcl1_largetext ) . '</h2>'; ?>
 			<?php if ( $onepress_hcl1_smalltext != '' ) echo '<p> ' . wp_kses_post( $onepress_hcl1_smalltext ) . '</p>' ?>
-			<?php if ( $onepress_hcl1_btn1_text != '' && $onepress_hcl1_btn1_link != '' ) echo '<a href="' . esc_url($onepress_hcl1_btn1_link) . '" class="btn btn-secondary-outline btn-lg">' . wp_kses_post( $onepress_hcl1_btn1_text ) . '</a>'; ?>
-			<?php if ( $onepress_hcl1_btn2_text != '' && $onepress_hcl1_btn2_link != '' ) echo '<a href="' . esc_url($onepress_hcl1_btn2_link) . '" class="btn btn-secondary btn-lg">' . wp_kses_post( $onepress_hcl1_btn2_text ) . '</a>'; ?>
+			<?php if ( $onepress_hcl1_btn1_text != '' && $onepress_hcl1_btn1_link != '' ) echo '<a href="' . esc_url($onepress_hcl1_btn1_link) . '" class="btn btn-theme-primary btn-lg">' . wp_kses_post( $onepress_hcl1_btn1_text ) . '</a>'; ?>
+			<?php if ( $onepress_hcl1_btn2_text != '' && $onepress_hcl1_btn2_link != '' ) echo '<a href="' . esc_url($onepress_hcl1_btn2_link) . '" class="btn btn-secondary-outline btn-lg">' . wp_kses_post( $onepress_hcl1_btn2_text ) . '</a>'; ?>
 		</div>
 	</div>
 	<?php endif; ?>

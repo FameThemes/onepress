@@ -36,6 +36,7 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 /*--------------------------------------------------------------
 1.0 Reset
 --------------------------------------------------------------*/
+/* Reset already include in bootstrap */
 /*--------------------------------------------------------------
 2.0 Document Setup
 --------------------------------------------------------------*/
@@ -395,7 +396,7 @@ input[type="reset"], input[type="submit"], input[type="submit"] {
 	text-transform: uppercase;
 	line-height: 1;
 	text-align: center;
-	padding: 17px 23px 15px 23px;
+	padding: 15px 23px 15px 23px;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
@@ -642,7 +643,7 @@ input[type="radio"], input[type="checkbox"] {
 
 @media screen and (min-width: 940px) {
 	.sidebar {
-		width: 25.66372%;
+		width: 25.22523%;
 		float: left;
 	}
 }
@@ -657,7 +658,7 @@ input[type="radio"], input[type="checkbox"] {
 		padding-left: 39px;
 		border-left: 1px solid #e9e9e9;
 		margin-right: 1px;
-		width: 74.33628%;
+		width: 74.77477%;
 	}
 	.left-sidebar .sidebar {
 		padding-right: 39px;
@@ -667,121 +668,12 @@ input[type="radio"], input[type="checkbox"] {
 	.right-sidebar .content-area {
 		padding-right: 39px;
 		border-right: 1px solid #e9e9e9;
-		width: 74.33628%;
+		width: 74.77477%;
 	}
 	.right-sidebar .sidebar {
 		padding-left: 39px;
 		border-left: 1px solid #e9e9e9;
 		margin-left: -1px;
-	}
-}
-
-.grid-row {
-	margin-left: -20px;
-	margin-right: -20px;
-}
-
-.grid-row:after {
-	content: "";
-	display: table;
-	clear: both;
-	clear: both;
-}
-
-@media screen and (max-width: 940px) {
-	.grid-row .grid-xs-1, .grid-row .grid-sm-1, .grid-row .grid-md-1, .grid-row .grid-lg-1, .grid-row .grid-xs-2, .grid-row .grid-sm-2, .grid-row .grid-md-2, .grid-row .grid-lg-2, .grid-row .grid-xs-3, .grid-row .grid-sm-3, .grid-row .grid-md-3, .grid-row .grid-lg-3, .grid-row .grid-xs-4, .grid-row .grid-sm-4, .grid-row .grid-md-4, .grid-row .grid-lg-4, .grid-row .grid-xs-5, .grid-row .grid-sm-5, .grid-row .grid-md-5, .grid-row .grid-lg-5, .grid-row .grid-xs-6, .grid-row .grid-sm-6, .grid-row .grid-md-6, .grid-row .grid-lg-6, .grid-row .grid-xs-7, .grid-row .grid-sm-7, .grid-row .grid-md-7, .grid-row .grid-lg-7, .grid-row .grid-xs-8, .grid-row .grid-sm-8, .grid-row .grid-md-8, .grid-row .grid-lg-8, .grid-row .grid-xs-9, .grid-row .grid-sm-9, .grid-row .grid-md-9, .grid-row .grid-lg-9, .grid-row .grid-xs-10, .grid-row .grid-sm-10, .grid-row .grid-md-10, .grid-row .grid-lg-10, .grid-row .grid-xs-11, .grid-row .grid-sm-11, .grid-row .grid-md-11, .grid-row .grid-lg-11, .grid-row .grid-xs-12, .grid-row .grid-sm-12, .grid-row .grid-md-12, .grid-row .grid-lg-12 {
-		margin-bottom: 40px;
-	}
-}
-
-.grid-xs-1, .grid-sm-1, .grid-md-1, .grid-lg-1, .grid-xs-2, .grid-sm-2, .grid-md-2, .grid-lg-2, .grid-xs-3, .grid-sm-3, .grid-md-3, .grid-lg-3, .grid-xs-4, .grid-sm-4, .grid-md-4, .grid-lg-4, .grid-xs-5, .grid-sm-5, .grid-md-5, .grid-lg-5, .grid-xs-6, .grid-sm-6, .grid-md-6, .grid-lg-6, .grid-xs-7, .grid-sm-7, .grid-md-7, .grid-lg-7, .grid-xs-8, .grid-sm-8, .grid-md-8, .grid-lg-8, .grid-xs-9, .grid-sm-9, .grid-md-9, .grid-lg-9, .grid-xs-10, .grid-sm-10, .grid-md-10, .grid-lg-10, .grid-xs-11, .grid-sm-11, .grid-md-11, .grid-lg-11, .grid-xs-12, .grid-sm-12, .grid-md-12, .grid-lg-12 {
-	position: relative;
-	min-height: 1px;
-	padding-left: 20px;
-	padding-right: 20px;
-}
-
-@media (min-width: 768px) {
-	.grid-sm-1, .grid-sm-2, .grid-sm-3, .grid-sm-4, .grid-sm-5, .grid-sm-6, .grid-sm-7, .grid-sm-8, .grid-sm-9, .grid-sm-10, .grid-sm-11, .grid-sm-12 {
-		float: left;
-	}
-	.grid-sm-12 {
-		width: 100%;
-	}
-	.grid-sm-11 {
-		width: 91.66666667%;
-	}
-	.grid-sm-10 {
-		width: 83.33333333%;
-	}
-	.grid-sm-9 {
-		width: 75%;
-	}
-	.grid-sm-8 {
-		width: 66.66666667%;
-	}
-	.grid-sm-7 {
-		width: 58.33333333%;
-	}
-	.grid-sm-6 {
-		width: 50%;
-	}
-	.grid-sm-5 {
-		width: 41.66666667%;
-	}
-	.grid-sm-4 {
-		width: 33.33333333%;
-	}
-	.grid-sm-3 {
-		width: 25%;
-	}
-	.grid-sm-2 {
-		width: 16.66666667%;
-	}
-	.grid-sm-1 {
-		width: 8.33333333%;
-	}
-}
-
-@media (min-width: 992px) {
-	.grid-md-1, .grid-md-2, .grid-md-3, .grid-md-4, .grid-md-5, .grid-md-6, .grid-md-7, .grid-md-8, .grid-md-9, .grid-md-10, .grid-md-11, .grid-md-12 {
-		float: left;
-	}
-	.grid-md-12 {
-		width: 100%;
-	}
-	.grid-md-11 {
-		width: 91.66666667%;
-	}
-	.grid-md-10 {
-		width: 83.33333333%;
-	}
-	.grid-md-9 {
-		width: 75%;
-	}
-	.grid-md-8 {
-		width: 66.66666667%;
-	}
-	.grid-md-7 {
-		width: 58.33333333%;
-	}
-	.grid-md-6 {
-		width: 50%;
-	}
-	.grid-md-5 {
-		width: 41.66666667%;
-	}
-	.grid-md-4 {
-		width: 33.33333333%;
-	}
-	.grid-md-3 {
-		width: 25%;
-	}
-	.grid-md-2 {
-		width: 16.66666667%;
-	}
-	.grid-md-1 {
-		width: 8.33333333%;
 	}
 }
 
@@ -1185,12 +1077,14 @@ input[type="radio"], input[type="checkbox"] {
 
 .site-footer .footer-connect {
 	padding: 90px 0px;
+	padding: 80px 0px;
+	padding:  5rem 0rem;
 	text-align: center;
 }
 
-@media screen and (max-width: 940px) {
-	.site-footer .footer-connect {
-		padding: 20px 0px;
+@media (max-width: 767px) {
+	.site-footer .footer-connect .footer-subscribe {
+		margin-bottom: 40px;
 	}
 }
 
@@ -1297,7 +1191,7 @@ input[type="radio"], input[type="checkbox"] {
 	margin: auto;
 	position: absolute;
 	right: 60px;
-	top: -60px;
+	top: -25px;
 	transition: all 0.2s linear 0s;
 	width: 50px;
 	-webkit-transform: rotate(-45deg);
@@ -1364,6 +1258,7 @@ input[type="radio"], input[type="checkbox"] {
 .search-results .entry-header .entry-title {
 	font-size: 22px;
 	line-height: 1.5;
+	font-weight: 600;
 }
 
 .search-results .entry-header .entry-title a:hover {
@@ -1373,7 +1268,7 @@ input[type="radio"], input[type="checkbox"] {
 /* Entry Header
 ------------------------------*/
 .entry-header .entry-title {
-	font-weight: 500;
+	font-weight: 600;
 	text-transform: none;
 	letter-spacing: -0.6px;
 	font-family: "Open Sans", Helvetica, Arial, sans-serif;
@@ -1760,7 +1655,7 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .full-screen .comments-area {
-	max-width: 1130px;
+	max-width: 1110px;
 	margin: 0 auto;
 }
 
@@ -1769,6 +1664,44 @@ input[type="radio"], input[type="checkbox"] {
 --------------------------------------------------------------*/
 /* Button
 ------------------------------*/
+.btn {
+	text-transform: uppercase;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+	font-size: 13px;
+	font-size: 0.8125rem;
+	font-weight: 600;
+}
+
+.btn-lg {
+	font-size: 17px;
+	font-size: 1.0625rem;
+}
+
+.btn-theme-primary {
+	background: #03c4eb;
+	color: #FFFFFF;
+}
+
+.btn-theme-primary:hover {
+	color: #FFFFFF;
+}
+
+.btn-theme-primary-outline {
+	background-color: transparent;
+	background-image: none;
+	border-color: #03c4eb;
+	color: #03c4eb;
+}
+
+.btn-theme-primary-outline:hover {
+	color: #FFF;
+	background-color: #03c4eb;
+	border-color: #03c4eb;
+}
+
 /*--------------------------------------------------------------
 7.0 Widgets
 --------------------------------------------------------------*/
@@ -1789,6 +1722,14 @@ input[type="radio"], input[type="checkbox"] {
 	padding: 0px;
 }
 
+.sidebar .widget ul:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
 .sidebar .widget a {
 	color: #777777;
 	font-size: 14px;
@@ -1802,20 +1743,14 @@ input[type="radio"], input[type="checkbox"] {
 /* Search
 ------------------------------*/
 .sidebar .widget .search-form .search-field {
-	width: 100%;
-	box-sizing: inherit;
-	-moz-box-sizing: inherit;
-	-webkit-box-sizing: inherit;
-	padding: 8px 15.3846px;
-	text-transform: uppercase;
-	font-size: 10px;
-	letter-spacing: 1px;
+	width: 100% !important;
+	padding: 10px 15px;
+	padding:  0.625rem 0.9375rem;
 }
 
 .sidebar .widget .search-form .search-submit {
-	width: 100%;
-	padding: 12px 23px 10px;
-	margin-top: 10px;
+	padding: 12px 23px 12px;
+	width: 93%;
 }
 
 /* Recent Comment
@@ -1880,6 +1815,7 @@ input[type="radio"], input[type="checkbox"] {
 ------------------------------*/
 .section-padding {
 	padding: 70px 0px;
+	padding:  4.375rem 0rem;
 }
 
 .onepage-section {
@@ -2077,6 +2013,8 @@ input[type="radio"], input[type="checkbox"] {
 	color: #FFFFFF;
 	text-align: center;
 	font-weight: 100;
+	margin-bottom: 30px;
+	margin-bottom: 1.875rem;
 }
 
 @media screen and (min-width: 940px) {
@@ -2089,6 +2027,28 @@ input[type="radio"], input[type="checkbox"] {
 	.hero-content-style1 p {
 		font-size: 22px;
 	}
+}
+
+.hero-content-style1 .btn {
+	margin: 0px 10px;
+}
+
+@media (max-width: 767px) {
+	.hero-content-style1 .btn {
+		display: inline-block;
+		margin: 5px;
+	}
+}
+
+.hero-content-style1 .btn-secondary-outline {
+	box-shadow: none;
+	border-color: rgba(255, 255, 255, 0.9);
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-content-style1 .btn-secondary-outline:hover {
+	background: #FFF;
+	color: #333;
 }
 
 /* Text Rotator */
@@ -2398,7 +2358,7 @@ input[type="radio"], input[type="checkbox"] {
 	padding: 0px 0.5px;
 }
 
-.section-team .grid-row {
+.section-team .row {
 	margin-left: -0.5px;
 	margin-right: -0.5px;
 }
@@ -2412,26 +2372,6 @@ input[type="radio"], input[type="checkbox"] {
 
 .team-member {
 	margin-bottom: 20px;
-	width: 100%;
-}
-
-@media screen and (min-width: 720px) {
-	.team-member {
-		width: 50%;
-		float: left;
-	}
-}
-
-@media screen and (min-width: 940px) {
-	.team-member {
-		width: 25%;
-	}
-}
-
-@media screen and (min-width: 1140px) {
-	.team-member {
-		width: 25%;
-	}
 }
 
 .team-member .member-thumb {

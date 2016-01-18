@@ -21,22 +21,22 @@ $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax
 			<?php if ( $onepress_contact_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_contact_subtitle ) . '</h5>'; ?>
 			<?php if ( $onepress_contact_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_contact_title ) . '</h2>'; ?>
 		</div>
-		<div class="grid-row">
+		<div class="row">
 
 			<?php if ( $onepress_contact_cf7_disable != '1' ) : ?>
 				<?php if ( isset( $onepress_contact_cf7 ) && $onepress_contact_cf7 != '' ) { ?>
-					<div class="contact-form grid-sm-6 wow slideInUp">
+					<div class="contact-form col-sm-6 wow slideInUp">
 						<?php echo do_shortcode( wp_kses_post( $onepress_contact_cf7) ); ?>
 					</div>
 				<?php } else { ?>
-				<div class="contact-form grid-sm-6 wow slideInUp">
+				<div class="contact-form col-sm-6 wow slideInUp">
 					<br>
 					<small><i><?php echo __( 'You can install <a target="_blank" href="<?php echo esc_url(\'https://wordpress.org/plugins/contact-form-7/\'); ?>">Contact Form 7</a> plugin and go to <strong>Customizer &rarr; Section: Contact &rarr; Section Content</strong> to show a working contact form here.', 'onepress' ); ?></i></small>
 				</div>
 				<?php } ?>
 			<?php endif; ?>
 
-			<div class="grid-sm-6 wow slideInUp">
+			<div class="col-sm-6 wow slideInUp">
 				<br>
 				<?php if ( $onepress_contact_text != '' ) echo wp_kses_post( $onepress_contact_text ); ?>
 				<br><br>
