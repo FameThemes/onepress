@@ -62,7 +62,7 @@ class OnePress_Theme_Support extends WP_Customize_Control {
  * @param $setting object $wp_customize
  * @return bool|mixed|string|void
  */
-function wentasi_sanitize_repeatable_data_field( $input , $setting ){
+function onepress_sanitize_repeatable_data_field( $input , $setting ){
     $control = $setting->manager->get_control( $setting->id );
 
     $fields = $control->fields;
@@ -156,7 +156,7 @@ function wentasi_sanitize_repeatable_data_field( $input , $setting ){
  * @since  1.0.0
  * @access public
  */
-class Wentasi_Customize_Repeatable_Control extends WP_Customize_Control {
+class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
     /**
      * The type of customize control being rendered.
@@ -308,7 +308,7 @@ class Wentasi_Customize_Repeatable_Control extends WP_Customize_Control {
                                             <# } #>
 
                                             <# if ( field.desc ) { #>
-                                            <p class="field-desc description">{{ field.desc }}</p>
+                                            <p class="field-desc description">{{{ field.desc }}}</p>
                                             <# } #>
                                         <# } #>
 
@@ -386,8 +386,7 @@ class Wentasi_Customize_Repeatable_Control extends WP_Customize_Control {
                                             </div>
 
                                             <div class="actions">
-                                                <button class="button remove-button " <# if ( field.value.url == '' ){ #> style="display:none"; <# } #> type="button"><?php _e( 'Remove' ) ?></button>
-
+                                                <button class="button remove-button " <# if ( field.value.url === '' ){ #> style="display:none"; <# } #> type="button"><?php _e( 'Remove' ) ?></button>
                                                 <button class="button upload-button" data-add-txt="<?php esc_attr_e( 'Add Image', 'ft' ); ?>" data-change-txt="<?php esc_attr_e( 'Change Image', 'ft' ); ?>" type="button"><# if ( field.value.url == '' ){ #> <?php _e( 'Add Image', 'ft' ); ?> <# } else { #> <?php _e( 'Change Image', 'ft' ); ?> <# } #> </button>
                                                 <div style="clear:both"></div>
                                             </div>

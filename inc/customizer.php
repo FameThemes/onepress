@@ -26,152 +26,6 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
 
 
-	//$wp_customize->add_panel( 'test_panel_repeatable', array( 'priority' => 5, 'title' => esc_html__( 'Repeatable Panel', 'ctypo' ) ) );
-	$wp_customize->add_section(
-		'test_section_repeatable',
-		// array( 'panel' => 'test_panel_repeatable', 'title' => esc_html__( 'Repeatable Section', 'ctypo' ) )
-		array(  'title' => esc_html__( 'Repeatable Section', 'ctypo' ), 'priority' => 2, )
-	);
-
-	// @todo Better sanitize_callback functions.
-	$wp_customize->add_setting(
-		'new_repeatable_id',
-		array(
-			'default' => json_encode(
-				array(
-					array(
-						'id_name_1' => 'Item 1',
-						'id_name_color' => '#333333',
-						'id_name_2'  => 'la la la',
-						'id_name_3'     => array(
-							'id'=>'2324324',
-							'url'=>'',
-						),
-					),
-
-					array(
-						'id_name_1' => 'Item 2',
-						'id_name_color' => '#333333',
-						'id_name_2'  => 'la la la',
-						'id_name_3'     => array(
-							'id'=>'2324324',
-							'url'=>'',
-						),
-					),
-				)
-			),
-			//'sanitize_callback' => 'sanitize_repeatable_data_field',
-			'sanitize_callback' => 'wentasi_sanitize_repeatable_data_field',
-			'transport' => 'refresh', // refresh or postMessage
-		) );
-
-	$pages = get_pages( );
-
-	$option_pages = array();
-	$option_pages[ 0 ] = __( 'Select Page', 'domain' );
-
-	foreach ( $pages as $p ) {
-		$option_pages[ $p->ID ] =  $p->post_title;
-	}
-
-	$wp_customize->add_control(
-		new Wentasi_Customize_Repeatable_Control(
-			$wp_customize,
-			'new_repeatable_id',
-			array(
-				'label' 		=> __('Repeatable Field', 'wentasi'),
-				'description'   => 'dsadadasdasas',
-				'section'       => 'test_section_repeatable',
-				'live_title_id' => 'id_name_1', // apply for unput text and textarea only
-				'title_format'  => __('Abc: ', 'wentasi'), // [live_title]
-				'max_item'      => 3, // Maximum item can add
-
-				'fields'    => array(
-					'id_name_1' => array(
-						'title'=>'text title',
-						'type'=>'text',
-						//'default' =>'default_value',
-						'desc' =>'this is description text'
-					),
-					'id_name_color' => array(
-						'title'=>'Color',
-						'type'=>'color',
-						//'default' =>'default_value',
-						'desc' =>'this is description text'
-					),
-					'id_name_2'  => array(
-						'title'=>'textarea title',
-						'type'=>'textarea',
-						//'default' =>'default_value',
-						'desc' =>'this is description text'
-
-					),
-					'id_name_3'     => array(
-						'title'=>'media title',
-						'type'=>'media',
-						'default'=> array(
-							'id'=>'',
-							'url'=>'',
-						),
-						'desc' =>'this is description text',
-					),
-					'id_page'    => array(
-						'title'=>'Select Page',
-						'type'=>'select',
-						'multiple'=> false, // false
-						'desc' =>'this is description text',
-						'options' => $option_pages,
-						//'default'=> 'option_1',
-					),
-
-					'id_name_4'    => array(
-						'title'=>'select title',
-						'type'=>'select',
-						'multiple'=> true, // false
-						'desc' =>'this is description text',
-						'options' => array(
-							'option_1' => 'label for option 1',
-							'option_2' => 'label for option 2',
-							'option_3' => 'label for option 3',
-						),
-						//'default'=> 'option_1',
-					),
-					'select_one'    => array(
-						'title'=>'select title',
-						'type'=>'select',
-						'multiple'=> false, // false
-						'desc' =>'this is description text',
-						'options' => array(
-							'option_1' => 'label for option 1',
-							'option_2' => 'label for option 2',
-							'option_3' => 'label for option 3',
-						),
-						//'default'=> 'option_3',
-					),
-					'id_name_5'     => array(
-						'title'=>'radio title',
-						'type'=>'radio',
-						'desc' =>'this is description text',
-						'options' => array(
-							'option_1' => 'label for option 1',
-							'option_2' => 'label for option 2',
-							'option_3' => 'label for option 3',
-						),
-						//'default'=> 'option_1'
-					),
-					'id_name_6'  => array(
-						'title'=>'checkbox title',
-						'desc' =>'this is description text',
-						'type'=>'checkbox',
-						//'value'=> 'option_1'
-					),
-				),
-
-			)
-		)
-	);
-
-
 
 
 
@@ -926,18 +780,52 @@ function onepress_customize_register( $wp_customize ) {
 	);
 
 		// Order & Stlying
-		$wp_customize->add_setting( 'onepress_service_content_guide',
+		$wp_customize->add_setting(
+			'onepress_services',
 			array(
-				'sanitize_callback' => 'onepress_sanitize_text'
+				'default' => json_encode(
+					array(
+
+					)
+				),
+				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+				'transport' => 'refresh', // refresh or postMessage
+			) );
+
+
+		$wp_customize->add_control(
+			new Onepress_Customize_Repeatable_Control(
+				$wp_customize,
+				'onepress_services',
+				array(
+					'label' 		=> __('Service content', 'onepress'),
+					'description'   => '',
+					'section'       => 'onepress_service_content',
+					'live_title_id' => 'title', // apply for unput text and textarea only
+					'title_format'  => __('Service: [live_title]', 'onepress'), // [live_title]
+					'max_item'      => 4, // Maximum item can add
+
+					'fields'    => array(
+						'title' => array(
+							'title' => __('Title', 'onepress'),
+							'type'  =>'text',
+							'desc'  => ''
+						),
+						'icon' => array(
+							'title' => __('Icon', 'onepress'),
+							'type'  =>'text',
+							'desc'  => sprintf( __('Paste your <a target="_blank" href="%1$s">fortawesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
+						),
+						'content'  => array(
+							'title' => __('Description', 'onepress'),
+							'desc'  => __('Something about this service', 'onepress'),
+							'type'  =>'textarea',
+						),
+					),
+
+				)
 			)
 		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_service_content_guide',
-			array(
-				'section'     => 'onepress_service_content',
-				'type'        => 'custom_message',
-				'description' => __( 'In order to add content for Services section please go to <strong>Customizer &rarr; Widgets &rarr; Section: Services</strong>, click Add a Widget and select <strong>OnePress: Service Item</strong> widget.', 'onepress' )
-			)
-		));
 
 
 	/*------------------------------------------------------------------------*/
@@ -1030,18 +918,70 @@ function onepress_customize_register( $wp_customize ) {
 	);
 
 		// Order & Stlying
-		$wp_customize->add_setting( 'onepress_team_content_guide',
+		$wp_customize->add_setting(
+			'onepress_service_team_members',
 			array(
-				'sanitize_callback' => 'onepress_sanitize_text'
+				'default' => json_encode(
+					array(
+
+					)
+				),
+				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+				'transport' => 'refresh', // refresh or postMessage
+			) );
+
+
+		$wp_customize->add_control(
+			new Onepress_Customize_Repeatable_Control(
+				$wp_customize,
+				'onepress_service_team_members',
+				array(
+					'label' 		=> __('Team members', 'onepress'),
+					'description'   => '',
+					'section'       => 'onepress_team_content',
+					'live_title_id' => 'title', // apply for unput text and textarea only
+					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
+					'max_item'      => 4, // Maximum item can add
+
+					'fields'    => array(
+						'name' => array(
+							'title' => __('Name', 'onepress'),
+							'type'  =>'text',
+							'desc'  => ''
+						),
+						'position' => array(
+							'title' => __('Position', 'onepress'),
+							'type'  =>'text',
+						),
+						'image' => array(
+							'title' => __('Avatar', 'onepress'),
+							'type'  =>'media',
+						),
+						'facebook' => array(
+							'title' => __('Facebook', 'onepress'),
+							'type'  =>'text',
+						),
+						'twitter' => array(
+							'title' => __('Twitter', 'onepress'),
+							'type'  =>'text',
+						),
+						'google_plus' => array(
+							'title' => __('Google+', 'onepress'),
+							'type'  =>'text',
+						),
+						'youtube' => array(
+							'title' => __('Youtube', 'onepress'),
+							'type'  =>'text',
+						),
+						'linkedin' => array(
+							'title' => __('LinkedIn', 'onepress'),
+							'type'  =>'text',
+						),
+					),
+
+				)
 			)
 		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_team_content_guide',
-			array(
-				'section'     => 'onepress_team_content',
-				'type'        => 'custom_message',
-				'description' => __( 'In order to add team member please go to <strong>Customizer &rarr; Widgets &rarr; Section: Team</strong>, click Add a Widget and select <strong>OnePress: Team Member</strong> widget.', 'onepress' )
-			)
-		));
 
 
 	/*------------------------------------------------------------------------*/
