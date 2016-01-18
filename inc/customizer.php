@@ -1001,7 +1001,7 @@ function onepress_customize_register( $wp_customize ) {
 							'name' 			=> __( 'Sean Weaver', 'onepress' ),
 							'position' 		=> __( 'Senior Designer', 'onepress' ),
 							'image' 		=> array(
-								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg'
+								'url' =>  get_template_directory_uri() . '/assets/images/team5.jpg'
 							),
 							'facebook' 		=> '#',
 							'twitter' 		=> '#',
@@ -1067,7 +1067,7 @@ function onepress_customize_register( $wp_customize ) {
 					'section'       => 'onepress_team_content',
 					'live_title_id' => 'name', // apply for unput text and textarea only
 					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
-					'max_item'      => 8, // Maximum item can add
+					'max_item'      => 6, // Maximum item can add
 
 					'fields'    => array(
 						'name' => array(
