@@ -65,7 +65,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 							</div>
 							<div class="service-content">
 								<h5 class="service-title"><?php echo esc_html( $service['title'] ); ?></h5>
-								<p><?php echo esc_html( $service['content'] ); ?></p>
+								<p><?php echo wp_kses_post( $service['content'] ); ?></p>
 							</div>
 						</div>
 					</div>

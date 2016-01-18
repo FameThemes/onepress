@@ -154,7 +154,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						</div>
 						<div class="member-info">
 							<h5 class="member-name"><?php echo esc_html( $member['name'] ); ?></h5>
-							<span class="member-position"><?php echo esc_html( $member['position'] ); ?></span>
+							<span class="member-position"><?php echo wp_kses_post( $member['position'] ); ?></span>
 						</div>
 					</div>
 				<?php

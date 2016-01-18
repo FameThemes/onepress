@@ -677,18 +677,77 @@ function onepress_customize_register( $wp_customize ) {
 	);
 
 		// Order & Stlying
-		$wp_customize->add_setting( 'onepress_about_content_guide',
+
+		$wp_customize->add_setting(
+			'onepress_about_boxes',
 			array(
-				'sanitize_callback' => 'onepress_sanitize_text'
-			)
-		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_about_content_guide',
-			array(
-				'section'     => 'onepress_about_content',
-				'type'        => 'custom_message',
-				'description' => __( 'In order to add content for About section please go to <strong>Customizer &rarr; Widgets &rarr; Section: About</strong>, click Add a Widget and select <strong>OnePress: About Item</strong> widget.', 'onepress' )
-			)
-		));
+				'default' => json_encode(
+					array(
+						array(
+							'title' => __( 'OUR HISTORY', 'onepress' ),
+							'thumb' 		=> array(
+								'url'=> get_template_directory_uri().'/assets/images/about1.jpg',
+							),
+							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+						),
+
+						array(
+							'title' => __( 'OUR ACHIEVEMENTS', 'onepress' ),
+							'thumb' 		=> array(
+								'url'=> get_template_directory_uri().'/assets/images/about2.jpg',
+							),
+							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+						),
+						array(
+							'title' => __( 'OUR VISION', 'onepress' ),
+							'thumb' 		=> array(
+								'url'=> get_template_directory_uri().'/assets/images/about3.jpg',
+							),
+							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+						),
+
+
+					)
+				),
+				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+				'transport' => 'refresh', // refresh or postMessage
+			) );
+
+
+			$wp_customize->add_control(
+				new Onepress_Customize_Repeatable_Control(
+					$wp_customize,
+					'onepress_about_boxes',
+					array(
+						'label' 		=> __('Content boxes', 'onepress'),
+						'description'   => '',
+						'section'       => 'onepress_about_content',
+						'live_title_id' => 'title', // apply for unput text and textarea only
+						'title_format'  => __('[live_title]', 'onepress'), // [live_title]
+						'max_item'      => 3, // Maximum item can add
+						'allow_unlimited' => false, // Maximum item can add
+
+						'fields'    => array(
+							'title' => array(
+								'title' => __('Title', 'onepress'),
+								'type'  =>'text',
+							),
+							'thumb' => array(
+								'title' => __('Thumbnail', 'onepress'),
+								'type'  =>'media',
+							),
+							'content'  => array(
+								'title' => __('Description', 'onepress'),
+								'type'  =>'textarea',
+
+							),
+						),
+
+					)
+				)
+			);
+
+
 
 
 
@@ -781,7 +840,7 @@ function onepress_customize_register( $wp_customize ) {
 			'panel'       => 'onepress_services',
 		)
 	);
-		// remove_theme_mod( 'onepress_services' );
+
 		// Order & Stlying
 		$wp_customize->add_setting(
 			'onepress_services',
@@ -1028,33 +1087,6 @@ function onepress_customize_register( $wp_customize ) {
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-						/*
-						array(
-							'name' 			=> __( 'George Wells', 'onepress' ),
-							'position' 		=> __( 'User Experience', 'onepress' ),
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/team7.jpg',
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-
-						array(
-							'name' 			=> __( 'Jonathan Green', 'onepress' ),
-							'position' 		=> __( 'Client Engagement', 'onepress' ),
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/team8.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-						*/
 
 					)
 				),
