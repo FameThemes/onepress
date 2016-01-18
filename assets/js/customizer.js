@@ -170,6 +170,8 @@ var RepeatableCustomize = function (  control  ){
 
 				$( '.widget-title .live-title', $context ).text( v );
 			} );
+
+			//$( "[data-live-id='"+ control.params.live_title_id+"']", $context ).trigger( 'keyup' );
 		}
 
 		// Remove item

@@ -787,22 +787,22 @@ function onepress_customize_register( $wp_customize ) {
 					array(
 						array(
 							'title' => __( 'Insights & Planning', 'onepress' ),
-							'icon'  => 'fa fa-wikipedia-w fa-5x',
+							'icon'  => 'fa-wikipedia-w',
 							'content' => __( 'Uncovering key insights that inform the planning process and business modeling.', 'onepress' )
 						),
 						array(
 							'title' => __( 'Usability & User Testing', 'onepress' ),
-							'icon'  => 'fa fa-gg fa-5x',
+							'icon'  => 'fa-gg',
 							'content' => __( 'A user-first approach to defining interactive experiences and customer experience planning.', 'onepress' )
 						),
 						array(
 							'title' => __( 'Creative & Design', 'onepress' ),
-							'icon'  => 'fa fa-balance-scale fa-5x',
+							'icon'  => 'fa-balance-scale',
 							'content' => __( 'Inventing and visualizing through shape, form, type and color.', 'onepress' )
 						),
 						array(
 							'title' => __( 'Technology & Development', 'onepress' ),
-							'icon'  => 'fa fa-wikipedia-w fa-5x',
+							'icon'  => 'fa-wikipedia-w',
 							'content' => __( 'Enabling user engagement through smart technology solutions.', 'onepress' )
 						),
 
@@ -936,7 +936,7 @@ function onepress_customize_register( $wp_customize ) {
 			'panel'       => 'onepress_team',
 		)
 	);
-
+		// remove_theme_mod( 'onepress_service_team_members' );
 		// Order & Stlying
 		$wp_customize->add_setting(
 			'onepress_service_team_members',
@@ -947,7 +947,10 @@ function onepress_customize_register( $wp_customize ) {
 						array(
 							'name' 			=> __( 'Alexander Rios', 'onepress' ),
 							'position' 		=> __( 'Founder & CEO', 'onepress' ),
-							'image' 		=> get_template_directory_uri() . '/assets/images/team1.jpg',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/team1.jpg',
+								'id' => ''
+							),
 							'facebook' 		=> '#',
 							'twitter' 		=> '#',
 							'google_plus' 	=> '#',
@@ -958,7 +961,9 @@ function onepress_customize_register( $wp_customize ) {
 						array(
 							'name' 			=> __( 'Victoria Stephens', 'onepress' ),
 							'position' 		=> __( 'Founder & CTO', 'onepress' ),
-							'image' 		=> get_template_directory_uri() . '/assets/images/team2.jpg',
+							'image' 		=> array(
+								'url'=>get_template_directory_uri() . '/assets/images/team2.jpg'
+							),
 							'facebook' 		=> '#',
 							'twitter' 		=> '#',
 							'google_plus' 	=> '#',
@@ -969,7 +974,9 @@ function onepress_customize_register( $wp_customize ) {
 						array(
 							'name' 			=> __( 'Harry Allen', 'onepress' ),
 							'position' 		=> __( 'Director Of Production', 'onepress' ),
-							'image' 		=> get_template_directory_uri() . '/assets/images/team3.jpg',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/team3.jpg'
+							),
 							'facebook' 		=> '#',
 							'twitter' 		=> '#',
 							'google_plus' 	=> '#',
@@ -980,7 +987,9 @@ function onepress_customize_register( $wp_customize ) {
 						array(
 							'name' 			=> __( 'Thomas Wade', 'onepress' ),
 							'position' 		=> __( 'Senior Developer', 'onepress' ),
-							'image' 		=> get_template_directory_uri() . '/assets/images/team4.jpg',
+							'image' 		=> array(
+								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
+							),
 							'facebook' 		=> '#',
 							'twitter' 		=> '#',
 							'google_plus' 	=> '#',
@@ -991,7 +1000,9 @@ function onepress_customize_register( $wp_customize ) {
 						array(
 							'name' 			=> __( 'Sean Weaver', 'onepress' ),
 							'position' 		=> __( 'Senior Designer', 'onepress' ),
-							'image' 		=> get_template_directory_uri() . '/assets/images/team5.jpg',
+							'image' 		=> array(
+								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg'
+							),
 							'facebook' 		=> '#',
 							'twitter' 		=> '#',
 							'google_plus' 	=> '#',
@@ -1002,18 +1013,22 @@ function onepress_customize_register( $wp_customize ) {
 						array(
 							'name' 			=> __( 'Peter Mendez', 'onepress' ),
 							'position' 		=> __( 'Interactive Designer', 'onepress' ),
-							'image' 		=> get_template_directory_uri() . '/assets/images/team6.jpg',
+							'image' 		=>  array(
+								'url' => get_template_directory_uri() . '/assets/images/team6.jpg'
+							),
 							'facebook' 		=> '#',
 							'twitter' 		=> '#',
 							'google_plus' 	=> '#',
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-
+						/*
 						array(
 							'name' 			=> __( 'George Wells', 'onepress' ),
 							'position' 		=> __( 'User Experience', 'onepress' ),
-							'image' 		=> get_template_directory_uri() . '/assets/images/team7.jpg',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/team7.jpg',
+							),
 							'facebook' 		=> '#',
 							'twitter' 		=> '#',
 							'google_plus' 	=> '#',
@@ -1024,15 +1039,16 @@ function onepress_customize_register( $wp_customize ) {
 						array(
 							'name' 			=> __( 'Jonathan Green', 'onepress' ),
 							'position' 		=> __( 'Client Engagement', 'onepress' ),
-							'image' 		=> get_template_directory_uri() . '/assets/images/team8.jpg',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/team8.jpg'
+							),
 							'facebook' 		=> '#',
 							'twitter' 		=> '#',
 							'google_plus' 	=> '#',
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-
-
+						*/
 
 					)
 				),
@@ -1049,9 +1065,9 @@ function onepress_customize_register( $wp_customize ) {
 					'label' 		=> __('Team members', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_team_content',
-					'live_title_id' => 'title', // apply for unput text and textarea only
+					'live_title_id' => 'name', // apply for unput text and textarea only
 					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
-					'max_item'      => 4, // Maximum item can add
+					'max_item'      => 8, // Maximum item can add
 
 					'fields'    => array(
 						'name' => array(
