@@ -14,7 +14,6 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 		</div>
 		<div class="row">
 			<?php
-			// Check if one ONEPRESS PLUS plugin not installed.
 
 			$services = get_theme_mod( 'onepress_services', array(
 				array(
