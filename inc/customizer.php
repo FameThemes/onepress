@@ -19,8 +19,8 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->remove_section('colors');
 	$wp_customize->remove_section('background_image');
 
-	// Remove default control.
-
+	// Custom WP default control & settings.
+	$wp_customize->get_section('title_tagline')->title = esc_html__('Site Title, Tagline & Logo', 'onepress');
 	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
 	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
@@ -75,7 +75,7 @@ function onepress_customize_register( $wp_customize ) {
 				'priority'       => 22,
 			    'capability'     => 'edit_theme_options',
 			    'theme_supports' => '',
-			    'title'          => __( 'Site Options', 'onepress' ),
+			    'title'          => __( 'Theme Options', 'onepress' ),
 			    'description'    => '',
 			)
 		);
@@ -300,7 +300,7 @@ function onepress_customize_register( $wp_customize ) {
 
 	$wp_customize->add_panel( 'onepress_hero_panel' ,
 		array(
-			'priority'    => 26,
+			'priority'    => 130,
 			'title'       => __( 'Section: Hero', 'onepress' ),
 			'description' => '',
 		)
@@ -591,7 +591,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_about' ,
 		array(
-			'priority'    => 26,
+			'priority'    => 132,
 			'title'       => __( 'Section: About', 'onepress' ),
 			'description' => '',
 		)
@@ -697,7 +697,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_services' ,
 		array(
-			'priority'    => 26,
+			'priority'    => 134,
 			'title'       => __( 'Section: Services', 'onepress' ),
 			'description' => '',
 		)
@@ -856,7 +856,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_team' ,
 		array(
-			'priority'    => 26,
+			'priority'    => 136,
 			'title'       => __( 'Section: Team', 'onepress' ),
 			'description' => '',
 		)
@@ -1118,7 +1118,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_news' ,
 		array(
-			'priority'    => 26,
+			'priority'    => 138,
 			'title'       => __( 'Section: News', 'onepress' ),
 			'description' => '',
 		)
@@ -1255,7 +1255,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_contact' ,
 		array(
-			'priority'    => 26,
+			'priority'    => 140,
 			'title'       => __( 'Section: Contact', 'onepress' ),
 			'description' => '',
 		)
