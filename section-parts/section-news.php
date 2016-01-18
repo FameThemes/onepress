@@ -37,18 +37,16 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', __('Read Ou
 						<?php else : ?>
 							<?php get_template_part( 'template-parts/content', 'none' ); ?>
 						<?php endif; ?>
-						
+
 						<?php if ( $onepress_news_more_link != '' ) { ?>
 						<div class="all-news">
 							<a class="btn btn-light" href="<?php echo esc_url($onepress_news_more_link) ?>"><?php if ( $onepress_news_more_text != '' ) echo esc_html( $onepress_news_more_text ); ?></a>
 						</div>
 						<?php } ?>
-						
-
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 </section>
