@@ -9,40 +9,64 @@ get_header(); ?>
 
 	<div id="content" class="site-content">
 		<main id="main" class="site-main" role="main">
-
             <?php
-			/*
-			 * Section: Hero
-			 */
-			get_template_part('section-parts/section', 'hero');
 
-			/*
-			 * Section: About
-			 */
-			get_template_part('section-parts/section', 'about');
+			$sections = get_theme_mod('onepress_section_order_styling', '');
+			$sections = json_decode( $sections, true );
+			if ( ! is_array( $sections ) ) {
+				$sections = array();
+			}
 
-			/*
-			 * Section: Services
-			 */
-			get_template_part('section-parts/section', 'services');
+			if ( empty( $sections ) ) {
+				$sections = array(
+					array(
+						'title' => __('Hero', 'onepress'),
+						'section_id' => 'hero',
+					),
+					array(
+						'title' => __('About', 'onepress'),
+						'section_id' => 'about',
+					),
+					array(
+						'title' => __('Services', 'onepress'),
+						'section_id' => 'services',
+					),
+					array(
+						'title' => __('Team', 'onepress'),
+						'section_id' => 'team',
+					),
+					array(
+						'title' => __('News', 'onepress'),
+						'section_id' => 'news',
+					),
+					array(
+						'title' => __('Contact', 'onepress'),
+						'section_id' => 'contact',
+					),
+				);
+			}
 
-			/*
-			 * Section: Team
-			 */
-			get_template_part('section-parts/section', 'team');
 
-			/*
-			 * Section: News
-			 */
-			get_template_part('section-parts/section', 'news');
+			if ( ! has_action( 'onepress_frontpage_section_parts' ) ) {
 
-			/*
-			 * Section: Contact
-			 */
-			get_template_part('section-parts/section', 'contact');
+				foreach ( $sections as $index => $section ) {
+
+					$section = wp_parse_args( $section,
+						array(
+							'section_id' => '',
+						)
+					);
+
+					if ( $section['section_id'] != '') {
+						get_template_part( 'section-parts/section', $section['section_id'] );
+					}
+				}
+
+			} else {
+				do_action( 'onepress_frontpage_section_parts', $sections );
+			}
+
 			?>
-
-
 		</main><!-- #main -->
 	</div><!-- #content -->
 

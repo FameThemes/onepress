@@ -15,7 +15,9 @@ var RepeatableCustomize = function (  control  ){
 	if ( ! isNaN( parseInt( control.params.max_item ) ) ) {
 		max_item = parseInt( control.params.max_item );
 	}
-
+	if ( control.params.changeable === 'no' ) {
+		container.addClass( 'no-changeable' );
+	}
 
 	that.getData = function ( ){
 		var f = $( '.form-data', container );

@@ -25,7 +25,10 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
 
-
+	/**
+	 * Hook to add other customize
+	 */
+	do_action( 'onepress_customize_before_register', $wp_customize );
 
 
 
@@ -778,7 +781,7 @@ function onepress_customize_register( $wp_customize ) {
 			'panel'       => 'onepress_services',
 		)
 	);
-		remove_theme_mod( 'onepress_services' );
+		// remove_theme_mod( 'onepress_services' );
 		// Order & Stlying
 		$wp_customize->add_setting(
 			'onepress_services',

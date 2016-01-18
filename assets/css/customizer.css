@@ -1,3 +1,5 @@
+.no-changeable .remove-btn-wrapper { display: none !important; }
+
 .list-repeatable .sortable-placeholder {
     height: 42px;
     display: block;

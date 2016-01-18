@@ -204,7 +204,11 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
             $args['max_item'] = 0;
         }
 
-        $this->max_item =  absint( $args['max_item'] );
+
+        $this->max_item =  apply_filters( 'onepress_reepeatable_max_item', absint( $args['max_item'] ) );
+        $this->changeable =  isset(  $args['changeable'] ) && $args['changeable'] == 'no' ? 'no' : 'yes';
+
+
 
 
     }
@@ -213,7 +217,8 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         parent::to_json();
         $this->json['live_title_id'] = $this->live_title_id;
         $this->json['title_format']  = $this->title_format;
-        $this->json['max_item']     = $this->max_item;
+        $this->json['max_item']      = $this->max_item;
+        $this->json['changeable']    = $this->changeable;
         $this->json['value']         = $this->value();
         $this->json['fields']        = $this->fields;
 
@@ -302,7 +307,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
                                     <div class="item item-{{{ field.type }}} item-{{{ field.id }}}">
 
-                                        <# if ( field.type !== 'checkbox' ) { #>
+                                        <# if ( field.type !== 'checkbox' &&  field.type !== 'hidden' ) { #>
                                             <# if ( field.title ) { #>
                                             <label class="field-label">{{ field.title }}</label>
                                             <# } #>
@@ -313,9 +318,14 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                         <# } #>
 
 
-                                        <# if ( field.type === 'text' ) { #>
 
-                                            <input data-live-id="{{{ field.id }}}" type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
+                                        <# if ( field.type === 'hidden' ) { #>
+
+                                            <input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
+
+                                        <# } else if ( field.type === 'text' ) { #>
+
+                                            <input data-live-id="{{ field.id }}" type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
 
                                         <# } else if ( field.type === 'checkbox' ) { #>
 
@@ -407,7 +417,9 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
                             <div class="widget-control-actions">
                                 <div class="alignleft">
-                                    <a href="#" class="repeat-control-remove" title=""><?php _e( 'Remove', 'ft' ); ?></a> |
+                                    <span class="remove-btn-wrapper">
+                                        <a href="#" class="repeat-control-remove" title=""><?php _e( 'Remove', 'ft' ); ?></a> |
+                                    </span>
                                     <a href="#" class="repeat-control-close"><?php _e( 'Close', 'ft' ); ?></a>
                                 </div>
                                 <br class="clear">

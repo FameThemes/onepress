@@ -12,161 +12,154 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 			<?php if ( $onepress_team_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_team_title ) . '</h2>'; ?>
 		</div>
 		<div class="team-members row">
-
 			<?php
 			// Check if one ONEPRESS PLUS plugin not installed.
-			if ( ! defined( 'ONEPRESS_PLUS' ) ) {
 
-				$members = get_theme_mod( 'onepress_team_members',
+			$members = get_theme_mod( 'onepress_team_members',
+				array(
+
 					array(
-
-						array(
-							'name' 			=> __( 'Alexander Rios', 'onepress' ),
-							'position' 		=> __( 'Founder & CEO', 'onepress' ),
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/team1.jpg',
-								'id' => ''
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
+						'name' 			=> __( 'Alexander Rios', 'onepress' ),
+						'position' 		=> __( 'Founder & CEO', 'onepress' ),
+						'image' 		=> array(
+							'url' => get_template_directory_uri() . '/assets/images/team1.jpg',
+							'id' => ''
 						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
 
-						array(
-							'name' 			=> __( 'Victoria Stephens', 'onepress' ),
-							'position' 		=> __( 'Founder & CTO', 'onepress' ),
-							'image' 		=> array(
-								'url'=>get_template_directory_uri() . '/assets/images/team2.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
+					array(
+						'name' 			=> __( 'Victoria Stephens', 'onepress' ),
+						'position' 		=> __( 'Founder & CTO', 'onepress' ),
+						'image' 		=> array(
+							'url'=>get_template_directory_uri() . '/assets/images/team2.jpg'
 						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
 
-						array(
-							'name' 			=> __( 'Harry Allen', 'onepress' ),
-							'position' 		=> __( 'Director Of Production', 'onepress' ),
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/team3.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
+					array(
+						'name' 			=> __( 'Harry Allen', 'onepress' ),
+						'position' 		=> __( 'Director Of Production', 'onepress' ),
+						'image' 		=> array(
+							'url' => get_template_directory_uri() . '/assets/images/team3.jpg'
 						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
 
-						array(
-							'name' 			=> __( 'Thomas Wade', 'onepress' ),
-							'position' 		=> __( 'Senior Developer', 'onepress' ),
-							'image' 		=> array(
-								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
+					array(
+						'name' 			=> __( 'Thomas Wade', 'onepress' ),
+						'position' 		=> __( 'Senior Developer', 'onepress' ),
+						'image' 		=> array(
+							'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
 						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
 
-						array(
-							'name' 			=> __( 'Sean Weaver', 'onepress' ),
-							'position' 		=> __( 'Senior Designer', 'onepress' ),
-							'image' 		=> array(
-								'url' =>  get_template_directory_uri() . '/assets/images/team5.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
+					array(
+						'name' 			=> __( 'Sean Weaver', 'onepress' ),
+						'position' 		=> __( 'Senior Designer', 'onepress' ),
+						'image' 		=> array(
+							'url' =>  get_template_directory_uri() . '/assets/images/team5.jpg'
 						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
 
-						array(
-							'name' 			=> __( 'Peter Mendez', 'onepress' ),
-							'position' 		=> __( 'Interactive Designer', 'onepress' ),
-							'image' 		=>  array(
-								'url' => get_template_directory_uri() . '/assets/images/team6.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
+					array(
+						'name' 			=> __( 'Peter Mendez', 'onepress' ),
+						'position' 		=> __( 'Interactive Designer', 'onepress' ),
+						'image' 		=>  array(
+							'url' => get_template_directory_uri() . '/assets/images/team6.jpg'
 						),
-					)
-				);
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
+				)
+			);
 
-				if ( is_string( $members ) ) {
-					$members = json_decode( $members, true );
-				}
+			if ( is_string( $members ) ) {
+				$members = json_decode( $members, true );
+			}
 
-				if ( is_array( $members ) && ! empty( $members ) ) {
-					foreach ( $members as $member ) {
-						$member = wp_parse_args( $member,
-							array(
-								'name' 			=> '',
-								'position' 		=> '',
-								'image' 		=>  '',
-								'facebook' 		=> '',
-								'twitter' 		=> '',
-								'google_plus' 	=> '',
-								'youtube' 		=> '',
-								'linkedin' 		=> '',
-							)
-						);
-						$member['image'] = wp_parse_args( $member['image'], array( 'url' => '', 'id' => '' ) );
-						$image = '';
-						if ( $member['image']['id'] != '' ){
-							$image =  wp_get_attachment_url( $member['image']['id'] );
-						}
-						if ( $image == '' && $member['image']['url'] != '' ) {
-							$image = $member['image']['url'];
-						}
-						?>
-						<div class="team-member col-sm-4 wow slideInUp">
-							<div class="member-thumb">
-								<?php if ( $image !='' ) { ?>
-								<img src="<?php echo esc_url( $image );  ?>" alt="">
+			if ( is_array( $members ) && ! empty( $members ) ) {
+				foreach ( $members as $member ) {
+					$member = wp_parse_args( $member,
+						array(
+							'name' 			=> '',
+							'position' 		=> '',
+							'image' 		=>  '',
+							'facebook' 		=> '',
+							'twitter' 		=> '',
+							'google_plus' 	=> '',
+							'youtube' 		=> '',
+							'linkedin' 		=> '',
+						)
+					);
+					$member['image'] = wp_parse_args( $member['image'], array( 'url' => '', 'id' => '' ) );
+					$image = '';
+					if ( $member['image']['id'] != '' ){
+						$image =  wp_get_attachment_url( $member['image']['id'] );
+					}
+					if ( $image == '' && $member['image']['url'] != '' ) {
+						$image = $member['image']['url'];
+					}
+					?>
+					<div class="team-member col-sm-4 wow slideInUp">
+						<div class="member-thumb">
+							<?php if ( $image !='' ) { ?>
+							<img src="<?php echo esc_url( $image );  ?>" alt="">
+							<?php } ?>
+
+							<div class="member-profile">
+								<?php if( $member['twitter'] != '' ){ ?>
+								<a href="<?php echo esc_url( $member['twitter'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
 								<?php } ?>
-
-								<div class="member-profile">
-									<?php if( $member['twitter'] != '' ){ ?>
-									<a href="<?php echo esc_url( $member['twitter'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
-									<?php } ?>
-									<?php if( $member['facebook'] != '' ){ ?>
-									<a href="<?php echo esc_url( $member['facebook'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
-									<?php } ?>
-									<?php if( $member['google_plus'] != '' ){ ?>
-									<a href="<?php echo esc_url( $member['google_plus'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
-									<?php } ?>
-									<?php if( $member['youtube'] != '' ){ ?>
-										<a href="<?php echo esc_url( $member['youtube'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-youtube fa-stack-1x fa-inverse"></i></span></a>
-									<?php } ?>
-									<?php if( $member['linkedin'] != '' ){ ?>
-									<a href="<?php echo esc_url( $member['linkedin'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
-									<?php } ?>
-								</div>
-							</div>
-							<div class="member-info">
-								<h5 class="member-name"><?php echo esc_html( $member['name'] ); ?></h5>
-								<span class="member-position"><?php echo esc_html( $member['position'] ); ?></span>
+								<?php if( $member['facebook'] != '' ){ ?>
+								<a href="<?php echo esc_url( $member['facebook'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
+								<?php } ?>
+								<?php if( $member['google_plus'] != '' ){ ?>
+								<a href="<?php echo esc_url( $member['google_plus'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
+								<?php } ?>
+								<?php if( $member['youtube'] != '' ){ ?>
+									<a href="<?php echo esc_url( $member['youtube'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-youtube fa-stack-1x fa-inverse"></i></span></a>
+								<?php } ?>
+								<?php if( $member['linkedin'] != '' ){ ?>
+								<a href="<?php echo esc_url( $member['linkedin'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
+								<?php } ?>
 							</div>
 						</div>
-					<?php
-					}
-				}
-
-				?>
-			<?php } else { ?>
+						<div class="member-info">
+							<h5 class="member-name"><?php echo esc_html( $member['name'] ); ?></h5>
+							<span class="member-position"><?php echo esc_html( $member['position'] ); ?></span>
+						</div>
+					</div>
 				<?php
-				do_action( 'one_press_theme_section_team' );
-				?>
-			<?php } ?>
+				}
+			}
+
+			?>
 
 		</div>
 	</div>
