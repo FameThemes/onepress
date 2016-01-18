@@ -51,6 +51,12 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 						'icon'  	=> '',
 						'content' 	=> ''
 					) );
+
+					$service['icon'] = trim( $service['icon'] );
+					if ( strpos($service['icon'], 'fa-') !== 0 ) {
+						$service['icon'] = 'fa-'.$service['icon'];
+					}
+
 					?>
 					<div class="col-sm-6">
 						<div class="service-item wow slideInUp">
