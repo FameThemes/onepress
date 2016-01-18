@@ -204,7 +204,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         if ( ! isset( $args['max_item'] ) ) {
             $args['max_item'] = 0;
         }
-        
+
         if ( ! isset( $args['allow_unlimited'] ) || $args['allow_unlimited'] != false ) {
             $this->max_item =  apply_filters( 'onepress_reepeatable_max_item', absint( $args['max_item'] ) );
         }  else {
@@ -213,8 +213,6 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
 
         $this->changeable =  isset(  $args['changeable'] ) && $args['changeable'] == 'no' ? 'no' : 'yes';
-
-
 
 
     }
