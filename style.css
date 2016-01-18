@@ -2136,6 +2136,29 @@ input[type="radio"], input[type="checkbox"] {
 	margin-bottom: 7px;
 }
 
+/* Section: Counter
+------------------------------*/
+.counter_item {
+	text-align: center;
+	margin-bottom: 35px;
+	margin-bottom: 2.1875rem;
+}
+
+.counter_item .counter__number {
+	font-size: 50px;
+	font-size: 3.125rem;
+	font-weight: 800;
+	color: #03c4eb;
+	line-height: 1;
+	font-family: serif, sans-serif;
+	text-transform: uppercase;
+}
+
+.counter_item .counter_title {
+	font-size: 18px;
+	font-size: 1.125rem;
+}
+
 /* Section: Projects
 ------------------------------*/
 .project-wrapper {

@@ -278,6 +278,27 @@
 	}
 }
 
+/* Section: Counter
+------------------------------*/
+.section-counter {
+
+}
+.counter_item {
+	text-align: center;
+	@include rem('margin-bottom', 35px);
+	.counter__number {
+		@include rem('font-size', 50px);
+		font-weight: 800;
+		color: $primary;
+		line-height: 1;
+		font-family: serif, sans-serif;
+		text-transform: uppercase;
+	}
+	.counter_title {
+		@include rem('font-size', 18px);
+	}
+}
+
 /* Section: Projects
 ------------------------------*/
 .section-projects {

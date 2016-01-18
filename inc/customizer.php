@@ -850,6 +850,85 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
+	/*------------------------------------------------------------------------*/
+    /*  Section: Counter
+    /*------------------------------------------------------------------------*/
+	$wp_customize->add_panel( 'onepress_counter' ,
+		array(
+			'priority'    => 134,
+			'title'       => __( 'Section: Counter', 'onepress' ),
+			'description' => '',
+		)
+	);
+
+	$wp_customize->add_section( 'onepress_counter_settings' ,
+		array(
+			'priority'    => 3,
+			'title'       => __( 'Section Settings', 'onepress' ),
+			'description' => '',
+			'panel'       => 'onepress_counter',
+		)
+	);
+		// Show Content
+		$wp_customize->add_setting( 'onepress_counter_disable',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
+				'default'           => '',
+			)
+		);
+		$wp_customize->add_control( 'onepress_counter_disable',
+			array(
+				'type'        => 'checkbox',
+				'label'       => __('Hide this section?', 'onepress'),
+				'section'     => 'onepress_counter_settings',
+				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
+			)
+		);
+
+		// Section ID
+		$wp_customize->add_setting( 'onepress_counter_id',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_text',
+				'default'           => __('counter', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_counter_id',
+			array(
+				'label' 		=> __('Section ID:', 'onepress'),
+				'section' 		=> 'onepress_counter_settings',
+				'description'   => 'The section id, we will use this for link anchor.'
+			)
+		);
+
+		// Title
+		$wp_customize->add_setting( 'onepress_counter_title',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => __('Our Numbers', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_counter_title',
+			array(
+				'label' 		=> __('Section Title', 'onepress'),
+				'section' 		=> 'onepress_counter_settings',
+				'description'   => '',
+			)
+		);
+
+		// Sub Title
+		$wp_customize->add_setting( 'onepress_counter_subtitle',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => __('Some Fun Facts', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_counter_subtitle',
+			array(
+				'label' 		=> __('Section Subtitle', 'onepress'),
+				'section' 		=> 'onepress_counter_settings',
+				'description'   => '',
+			)
+		);
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Team

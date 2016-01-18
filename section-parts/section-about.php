@@ -19,7 +19,6 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', __('We are 
 				<div class="about-image"><img src="<?php echo get_template_directory_uri() . '/assets/images/about1.jpg' ?>" alt=""></div>
 				<h5><?php esc_html_e( 'OUR HISTORY', 'onepress' ) ?></h5>
 				<p><?php esc_html_e( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ) ?></p>
-				<button type="button" class="btn btn-theme-primary-outline">Warning</button>
 			</div>
 			<div class="col-sm-4 wow slideInUp">
 				<div class="about-image"><img src="<?php echo get_template_directory_uri() . '/assets/images/about2.jpg' ?>" alt=""></div>

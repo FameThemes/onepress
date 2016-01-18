@@ -29,6 +29,11 @@ get_header(); ?>
 				get_template_part('section-parts/section', 'services');
 
 				/*
+				 * Section: Counter
+				 */
+				get_template_part('section-parts/section', 'counter');
+
+				/*
 				 * Section: Team
 				 */
 				get_template_part('section-parts/section', 'team');
