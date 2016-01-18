@@ -288,8 +288,7 @@ add_action( 'tgmpa_register', 'onepress_register_required_plugins' );
  * Load theme's custom widgets
  */
 require get_template_directory() . '/inc/widgets/onepress_about_widget.php';
-require get_template_directory() . '/inc/widgets/onepress_service_widget.php';
-require get_template_directory() . '/inc/widgets/onepress_team_member_widget.php';
+
 
 /**
  * Custom template tags for this theme.
