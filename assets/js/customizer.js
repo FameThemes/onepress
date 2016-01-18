@@ -261,7 +261,8 @@ var RepeatableCustomize = function (  control  ){
 
 	$( ".list-repeatable", container ).sortable({
 		handle: ".widget-title",
-		containment: ".customize-control-repeatable",
+		//containment: ".customize-control-repeatable",
+		containment: container,
 		/// placeholder: "sortable-placeholder",
 		update: function( event, ui ) {
 			that.rename();
@@ -296,8 +297,6 @@ var RepeatableCustomize = function (  control  ){
 
 		}
 
-		//console.log( '--------' );
-		//console.log( _templateData );
 	}
 
 	that.newItem();
