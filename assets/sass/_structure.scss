@@ -1,3 +1,5 @@
+// main: style.scss
+
 /* Header
 ------------------------------*/
 .site-header {
@@ -134,7 +136,7 @@
         -webkit-transition: none;
         transition: none;
     }
-    
+
     a {
         color: #333333;
         font-family: $font_heading;
@@ -169,7 +171,7 @@
     li.onepress-current-item > a {
         color: $primary;
     }
-    
+
     ul li.current-menu-item > a {
         color: $primary;
     }
@@ -190,7 +192,7 @@
     > li a.menu-actived {
         color: $primary;
     }
-    
+
 }
 
 // Responsive Mobile Navigation

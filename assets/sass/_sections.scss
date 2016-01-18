@@ -1,3 +1,5 @@
+// main: style.scss
+
 /* Section Stuffs
 ------------------------------*/
 .section-padding {
@@ -184,31 +186,31 @@
 			font-size: 22px;
 		}
 	}
-	.btn {
-		margin: 16px 10px 0px;
-		border-radius: 0px;
-		@include for(large-screens) {
-			margin: 25px 10px 0px;
-		}
-	}
-	.btn.btn-large {
-		padding: 10px 15px;
-		@include for(large-screens) {
-			padding: 18px 23px;
-		}
-	}
-	.btn.btn-large.btn-ghost {
-		padding: 10px 15px;
-		@include for(large-screens) {
-			padding: 17px 23px 19px;
-		}
-	}
-	.btn.btn-large.btn-primary {
-		padding: 12px 15px;
-		@include for(large-screens) {
-			padding: 20px 23px 20px 23px;
-		}
-	}
+	// .btn {
+	// 	margin: 16px 10px 0px;
+	// 	border-radius: 0px;
+	// 	@include for(large-screens) {
+	// 		margin: 25px 10px 0px;
+	// 	}
+	// }
+	// .btn.btn-large {
+	// 	padding: 10px 15px;
+	// 	@include for(large-screens) {
+	// 		padding: 18px 23px;
+	// 	}
+	// }
+	// .btn.btn-large.btn-ghost {
+	// 	padding: 10px 15px;
+	// 	@include for(large-screens) {
+	// 		padding: 17px 23px 19px;
+	// 	}
+	// }
+	// .btn.btn-large.btn-primary {
+	// 	padding: 12px 15px;
+	// 	@include for(large-screens) {
+	// 		padding: 20px 23px 20px 23px;
+	// 	}
+	// }
 }
 
 /* Text Rotator */
@@ -443,8 +445,8 @@
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
-	height: 100%; 
-	width: 100%; 
+	height: 100%;
+	width: 100%;
 	position: absolute;
 	display: block;
 	top: 0;
@@ -452,7 +454,7 @@
 }
 
 .parallax_bg.is-mobile {
-	background-position: 50% 50% !important; 
+	background-position: 50% 50% !important;
 }
 
 .parallax_bg_overlay {
@@ -490,8 +492,9 @@
 		margin-right: -0.5px;
 	}
 }
-.team-members {
-
+.team-members.row {
+	@include rem('margin-left', 0px);
+	@include rem('margin-right', 0px);
 }
 
 .team-member {
@@ -568,7 +571,7 @@
 		font-size: 10px;
 		letter-spacing: 1.3px;
 	}
-	
+
 }
 
 /* Section: News
@@ -580,7 +583,7 @@
 }
 
 .section-news, .archive, .blog {
-	
+
 	.list-article {
 		border-top: 1px solid $border;
 		padding: 25px 0px;
@@ -632,7 +635,7 @@
 	}
 }
 
-.archive .site-main .list-article:first-child, 
+.archive .site-main .list-article:first-child,
 .blog .site-main .list-article:first-of-type {
 	border-top: none;
 	padding-top: 0px;
@@ -697,8 +700,3 @@ div.wpcf7-validation-errors {
 div.wpcf7-response-output {
 	margin: 20px 0px;
 }
-
-
-
-
-

@@ -193,7 +193,6 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-    	/*
     	$wp_customize->add_setting( 'onepress_site_image_logo',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_file_url',
@@ -210,7 +209,6 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			)
 		);
-		*/
 
 	/*------------------------------------------------------------------------*/
     /*  Site Options

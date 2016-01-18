@@ -12,10 +12,10 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 			<?php if ( $onepress_service_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_service_subtitle ) . '</h5>'; ?>
 			<?php if ( $onepress_service_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_service_title ) . '</h2>'; ?>
 		</div>
-		<div class="grid-row">
+		<div class="row">
 
 			<?php if ( ! is_active_sidebar( 'section_service' ) ) { ?>
-				<div class="grid-sm-6">
+				<div class="col-sm-6">
 					<div class="service-item wow slideInUp">
 						<div class="service-image">
 							<i class="fa fa-wikipedia-w fa-5x"></i>
@@ -26,7 +26,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 						</div>
 					</div>
 				</div>
-				<div class="grid-sm-6">
+				<div class="col-sm-6">
 					<div class="service-item wow slideInUp">
 						<div class="service-image">
 							<i class="fa fa-gg fa-5x"></i>
@@ -37,7 +37,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 						</div>
 					</div>
 				</div>
-				<div class="grid-sm-6">
+				<div class="col-sm-6">
 					<div class="service-item wow slideInUp">
 						<div class="service-image">
 							<i class="fa fa-balance-scale fa-5x"></i>
@@ -48,7 +48,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 						</div>
 					</div>
 				</div>
-				<div class="grid-sm-6">
+				<div class="col-sm-6">
 					<div class="service-item wow slideInUp">
 						<div class="service-image">
 							<i class="fa fa-bar-chart fa-5x"></i>
@@ -59,7 +59,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 						</div>
 					</div>
 				</div>
-				<div class="grid-sm-6">
+				<div class="col-sm-6">
 					<div class="service-item wow slideInUp">
 						<div class="service-image">
 							<i class="fa fa-fa fa-object-ungroup fa-5x"></i>
@@ -70,7 +70,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 						</div>
 					</div>
 				</div>
-				<div class="grid-sm-6">
+				<div class="col-sm-6">
 					<div class="service-item wow slideInUp">
 						<div class="service-image">
 							<i class="fa fa-object-group fa-5x"></i>

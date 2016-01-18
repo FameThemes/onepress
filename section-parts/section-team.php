@@ -11,11 +11,11 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 			<?php if ( $onepress_team_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_team_subtitle ) . '</h5>'; ?>
 			<?php if ( $onepress_team_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_team_title ) . '</h2>'; ?>
 		</div>
-		<div class="team-members grid-row">
+		<div class="team-members row">
 
 			<?php if ( ! is_active_sidebar( 'section_team' ) ) { ?>
 
-			<div class="team-member grid-sm-3 wow slideInUp">
+			<div class="team-member col-sm-3 wow slideInUp">
 				<div class="member-thumb">
 					<img src="<?php echo get_template_directory_uri() . '/assets/images/team5.jpg' ?>" alt="">
 					<div class="member-profile">
@@ -30,7 +30,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					<span class="member-position"><?php esc_html_e( 'Founder & CEO', 'onepress' ) ?></span>
 				</div>
 			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
+			<div class="team-member col-sm-3 wow slideInUp">
 				<div class="member-thumb">
 					<img src="<?php echo get_template_directory_uri() . '/assets/images/team3.jpg' ?>" alt="">
 					<div class="member-profile">
@@ -45,7 +45,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					<span class="member-position"><?php esc_html_e( 'Founder & CTO', 'onepress' ) ?></span>
 				</div>
 			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
+			<div class="team-member col-sm-3 wow slideInUp">
 				<div class="member-thumb">
 					<img src="<?php echo get_template_directory_uri() . '/assets/images/team2.jpg' ?>" alt="">
 					<div class="member-profile">
@@ -60,7 +60,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					<span class="member-position"><?php esc_html_e( 'Director Of Production', 'onepress' ) ?></span>
 				</div>
 			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
+			<div class="team-member col-sm-3 wow slideInUp">
 				<div class="member-thumb">
 					<img src="<?php echo get_template_directory_uri() . '/assets/images/team4.jpg' ?>" alt="">
 					<div class="member-profile">
@@ -75,7 +75,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					<span class="member-position"><?php esc_html_e( 'Senior Developer', 'onepress' ) ?></span>
 				</div>
 			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
+			<div class="team-member col-sm-3 wow slideInUp">
 				<div class="member-thumb">
 					<img src="<?php echo get_template_directory_uri() . '/assets/images/team6.jpg' ?>" alt="">
 					<div class="member-profile">
@@ -90,7 +90,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					<span class="member-position"><?php esc_html_e( 'Senior Designer', 'onepress' ) ?></span>
 				</div>
 			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
+			<div class="team-member col-sm-3 wow slideInUp">
 				<div class="member-thumb">
 					<img src="<?php echo get_template_directory_uri() . '/assets/images/team1.jpg' ?>" alt="">
 					<div class="member-profile">
@@ -105,7 +105,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					<span class="member-position"><?php esc_html_e( 'Interactive Designer', 'onepress' ) ?></span>
 				</div>
 			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
+			<div class="team-member col-sm-3 wow slideInUp">
 				<div class="member-thumb">
 					<img src="<?php echo get_template_directory_uri() . '/assets/images/team7.jpg' ?>" alt="">
 					<div class="member-profile">
@@ -120,7 +120,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 					<span class="member-position"><?php esc_html_e( 'User Experience', 'onepress' ) ?></span>
 				</div>
 			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
+			<div class="team-member col-sm-3 wow slideInUp">
 				<div class="member-thumb">
 					<img src="<?php echo get_template_directory_uri() . '/assets/images/team8.jpg' ?>" alt="">
 					<div class="member-profile">

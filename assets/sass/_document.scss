@@ -1,3 +1,5 @@
+// main: style.scss
+
 /*------------------------------
 	2.1 Typography
 ------------------------------*/
@@ -5,6 +7,18 @@ html, body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+}
+
+html {
+	box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    font-size: 16px;
+    @include media-breakpoint-down(md) {
+        font-size: 15px;
+    }
+    @include media-breakpoint-down(sm) {
+        font-size: 14px;
+    }
 }
 
 body {
@@ -19,7 +33,7 @@ body {
 
 body, button, input, select, textarea {
     font-family: $font_text;
-    font-size: 15px;
+    @include rem('font-size', 14px);
     line-height: 1.7;
     color: $text;
 }
@@ -46,6 +60,7 @@ textarea {
 a {
 	color: $primary;
 	text-decoration: none;
+	outline: none;
 	&:hover{
 		text-decoration: none;
 		color: $text;
@@ -66,12 +81,12 @@ h6 {
 	font-family: $font_heading;
 	font-weight: 800;
 	margin-bottom: 15px;
+	@include rem('margin-bottom', 15px);
 	margin-top: 0;
 	text-transform: uppercase;
 	letter-spacing: 2px;
 	@extend .break;
 	color: #333333;
-	line-height: 1.2;
 	& a {
 		color: #333333;
 		text-decoration: none;
@@ -80,9 +95,9 @@ h6 {
 
 h1 {
 	line-height: 1.3;
-	font-size: 33px;
-	@include for(medium-screens) {
-		font-size: 40px;
+	@include rem('font-size', 33px);
+	@include media-breakpoint-up(md) {
+		@include rem('font-size', 40px);
 	}
 	span {
 		font-weight: bold;
@@ -91,32 +106,32 @@ h1 {
 
 h2 {
 	line-height: 1.2;
-	font-size: 25px;
-	@include for(medium-screens) {
-		font-size: 32px;
+	@include rem('font-size', 25px);
+	@include media-breakpoint-up(md) {
+		@include rem('font-size', 32px);
 	}
 }
 
 h3 {
-	font-size: 20px;
+	@include rem('font-size', 20px);
 	font-weight: 700;
 }
 
 h4 {
-	font-size: 17px;
+	@include rem('font-size', 17px);
 	margin-bottom: 12px;
 }
 
 h5 {
 	text-transform: uppercase;
-	font-size: 15px;
+	@include rem('font-size', 15px);
 	font-weight: 700;
 }
 
 h6 {
 	font-weight: 700;
 	text-transform: uppercase;
-	font-size: 12px;
+	@include rem('font-size', 12px);
 	letter-spacing: 1px;
 }
 
@@ -124,7 +139,7 @@ h6 {
 	2.4 Base
 ------------------------------*/
 ul,ol,dl,p,details,address,.vcard,figure,pre,fieldset,table,dt,dd,hr {
-	margin-bottom: 15px;
+	@include rem('margin-bottom', 15px);
 	margin-top: 0;
 }
 p,ul,ol,dl,blockquote {
