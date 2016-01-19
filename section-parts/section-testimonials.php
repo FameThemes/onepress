@@ -21,7 +21,7 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
                         <div class="card-block">
 							<div class="tes_author">
                             	<img src="<?php echo get_template_directory_uri() . '/assets/images/testimonial_1.jpg'; ?>" alt="" />
-								<cite class="tes__name">Kien Trong<div><a href="https://www.famethemes.com">www.famethemes.com</a></div></cite>
+								<cite class="tes__name">Thomas Wade<div><a href="https://www.famethemes.com">www.famethemes.com</a></div></cite>
                             </div>
                             <h4 class="card-title">Design Quality</h4>
                             <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -32,7 +32,7 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
                         <div class="card-block">
 							<div class="tes_author">
                             	<img src="<?php echo get_template_directory_uri() . '/assets/images/testimonial_2.jpg'; ?>" alt="" />
-								<cite class="tes__name">Thomas Wade<div>Google Founder & CEO</div></cite>
+								<cite class="tes__name">Kien Trong<div>FameThemes CEO</div></cite>
                             </div>
                             <h4 class="card-title">Feature Availability</h4>
                             <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
