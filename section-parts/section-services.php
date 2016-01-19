@@ -1,11 +1,11 @@
 <?php
 $onepress_service_id       = get_theme_mod( 'onepress_service_id', __('services', 'onepress') );
-$onepress_service_disable  = get_theme_mod( 'onepress_service_disable' );
+$onepress_service_disable  = get_theme_mod( 'onepress_service_disable' ) == 1 ? true : false;
 $onepress_service_title    = get_theme_mod( 'onepress_service_title', __('Our Services', 'onepress' ));
 $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We help client like you', 'onepress' ));
 ?>
 
-<?php if ( $onepress_service_disable != '1' ) : ?>
+<?php if ( ! $onepress_service_disable  ) : ?>
 <section id="<?php if ( $onepress_service_id != '' ) echo $onepress_service_id; ?>" class="section-padding section-services section-meta onepage-section">
 	<div class="container">
 		<div class="section-title-area">

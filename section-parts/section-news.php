@@ -1,13 +1,13 @@
 <?php
 $onepress_news_id        = get_theme_mod( 'onepress_news_id', __('news', 'onepress') );
-$onepress_news_disable   = get_theme_mod( 'onepress_news_disable' );
+$onepress_news_disable   = get_theme_mod( 'onepress_news_disable' ) == 1 ? true : false;
 $onepress_news_title     = get_theme_mod( 'onepress_news_title', __('Latest News', 'onepress' ));
 $onepress_news_subtitle  = get_theme_mod( 'onepress_news_subtitle', __('The company blog', 'onepress' ));
 $onepress_news_number    = get_theme_mod( 'onepress_news_number', '3' );
 $onepress_news_more_link = get_theme_mod( 'onepress_news_more_link', '#' );
 $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', __('Read Our Blog', 'onepress' ));
 ?>
-<?php if ( $onepress_news_disable != '1' ) : ?>
+<?php if ( ! $onepress_news_disable  ) : ?>
 <section id="<?php if ( $onepress_news_id != '' ) echo $onepress_news_id; ?>" class="section-padding section-news onepage-section">
 	<div class="container">
 		<div class="section-title-area">

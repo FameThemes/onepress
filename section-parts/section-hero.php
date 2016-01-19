@@ -1,6 +1,6 @@
 <?php
 $onepress_hero_id         = get_theme_mod( 'onepress_hero_id', __('hero', 'onepress') );
-$onepress_hero_disable    = get_theme_mod( 'onepress_hero_disable' );
+$onepress_hero_disable    = get_theme_mod( 'onepress_hero_disable' ) == 1 ? true : false ;
 $onepress_hero_fullscreen = get_theme_mod( 'onepress_hero_fullscreen' );
 $onepress_hero_pdtop      = get_theme_mod( 'onepress_hero_pdtop', '10' );
 $onepress_hero_pdbotom    = get_theme_mod( 'onepress_hero_pdbotom', '10' );
@@ -22,7 +22,7 @@ if ( $onepress_hero_fullscreen != '1' ) {
 }
 ?>
 
-<?php if ( $onepress_hero_disable != '1' ) : ?>
+<?php if ( ! $onepress_hero_disable  ) : ?>
 <section id="<?php if ( $onepress_hero_id != '' ) echo $onepress_hero_id; ?>" class="hero-slideshow-wrapper <?php if ( $onepress_hero_fullscreen == 1 ) { echo 'hero-slideshow-fullscreen'; } else { echo 'hero-slideshow-normal'; } ?>">
 	<?php if ( $onepress_hcl1_enable == '1' ) : ?>
 	<div class="container"<?php echo $hero_content_style; ?>>

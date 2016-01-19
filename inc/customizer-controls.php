@@ -53,6 +53,16 @@ class OnePress_Theme_Support extends WP_Customize_Control {
 	}
 }
 
+if ( ! function_exists( 'onepress_sanitize_checkbox' ) ) {
+    function onepress_sanitize_checkbox( $input ) {
+        if ( $input == 1 ) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
+
 
 
 /**
@@ -92,7 +102,7 @@ function onepress_sanitize_repeatable_data_field( $input , $setting ){
                         $data[ $i ][ $id ] = sanitize_hex_color_no_hash( $value );
                         break;
                     case 'checkbox':
-                        $data[ $i ][ $id ] =  wentasi_sanitize_checkbox( $value );
+                        $data[ $i ][ $id ] =  onepress_sanitize_checkbox( $value );
                         break;
                     case 'select':
                         $data[ $i ][ $id ] = '';
@@ -211,9 +221,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
             $this->max_item = absint( $args['max_item'] );
         }
 
-
         $this->changeable =  isset(  $args['changeable'] ) && $args['changeable'] == 'no' ? 'no' : 'yes';
-
 
     }
 

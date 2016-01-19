@@ -1,6 +1,6 @@
 <?php
 $onepress_counter_id       = get_theme_mod( 'onepress_counter_id', __('counter', 'onepress') );
-$onepress_counter_disable  = get_theme_mod( 'onepress_counter_disable' );
+$onepress_counter_disable  = get_theme_mod( 'onepress_counter_disable' ) == 1 ? true : false;
 $onepress_counter_title    = get_theme_mod( 'onepress_counter_title', __('Our Numbers', 'onepress' ));
 $onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', __('Some Fun Facts', 'onepress' ));
 ?>
@@ -101,7 +101,7 @@ $onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', __('Som
 							<?php } ?>
 							<span class="n counter"><?php echo esc_html( $box['number'] ); ?></span>
 							<?php if ( $box['unit_after'] ) { ?>
-								<span class="n-b"><?php echo esc_html( $box['unit_after'] ); ?></span>
+								<span class="n-a"><?php echo esc_html( $box['unit_after'] ); ?></span>
 							<?php } ?>
 						</div>
 						<div class="counter_title"><?php echo esc_html( $box['title'] ); ?></div>

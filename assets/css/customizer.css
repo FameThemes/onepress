@@ -1,4 +1,4 @@
-.no-changeable .remove-btn-wrapper { display: none !important; }
+.no-changeable .remove-btn-wrapper, .no-changeable .repeatable-actions { display: none !important; }
 
 .list-repeatable .sortable-placeholder {
     height: 42px;

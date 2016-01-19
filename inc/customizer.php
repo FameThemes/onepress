@@ -1162,7 +1162,7 @@ function onepress_customize_register( $wp_customize ) {
 			'panel'       => 'onepress_team',
 		)
 	);
-		// remove_theme_mod( 'onepress_team_members' );
+
 		// Order & Stlying
 		$wp_customize->add_setting(
 			'onepress_team_members',
@@ -1681,6 +1681,11 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
+
+		/**
+		 * Hook to add other customize
+		 */
+		do_action( 'onepress_customize_after_register', $wp_customize );
 
 }
 add_action( 'customize_register', 'onepress_customize_register' );

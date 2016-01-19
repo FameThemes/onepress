@@ -1,6 +1,6 @@
 <?php
 $onepress_contact_id            = get_theme_mod( 'onepress_contact_id', __('contact', 'onepress') );
-$onepress_contact_disable       = get_theme_mod( 'onepress_contact_disable' );
+$onepress_contact_disable       = get_theme_mod( 'onepress_contact_disable' ) == 1 ?  true : false;
 $onepress_contact_title         = get_theme_mod( 'onepress_contact_title', __('Get in touch', 'onepress' ));
 $onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', __('Talk with us', 'onepress' ));
 $onepress_contact_cf7           = get_theme_mod( 'onepress_contact_cf7' );
@@ -14,7 +14,7 @@ $onepress_contact_phone         = get_theme_mod( 'onepress_contact_phone', __('1
 $onepress_contact_email         = get_theme_mod( 'onepress_contact_email', __('contact@company.com', 'onepress' ));
 $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax: (123) 123-4567', 'onepress' ));
 ?>
-<?php if ( $onepress_contact_disable != '1' ) : ?>
+<?php if ( ! $onepress_contact_disable  ) : ?>
 <section id="<?php if ( $onepress_contact_id != '' ) echo $onepress_contact_id; ?>" class="section-padding section-contact section-meta onepage-section">
 	<div class="container">
 		<div class="section-title-area">
