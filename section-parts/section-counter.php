@@ -93,7 +93,7 @@ $onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', __('Som
 				}
 				?>
 
-				<div class="<?php echo esc_attr( $class ); ?> wow slideInUp">
+				<div class="<?php echo esc_attr( $class ); ?>">
 					<div class="counter_item">
 						<div class="counter__number">
 							<?php if ( $box['unit_before'] ) { ?>

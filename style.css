@@ -2220,6 +2220,20 @@ input[type="radio"], input[type="checkbox"] {
 	color: rgba(255, 255, 255, 0.65);
 }
 
+.card-theme-primary {
+	background-color: #03c4eb;
+	border-color: #03c4eb;
+}
+
+.card-deck {
+	margin-bottom: 20px;
+	margin-bottom: 1.25rem;
+}
+
+.card-deck-wrapper .card-deck:last-of-type {
+	margin-bottom: 0px;
+}
+
 /* Section: Projects
 ------------------------------*/
 .project-wrapper {
