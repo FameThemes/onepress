@@ -280,7 +280,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         </div>
 
         <div class="repeatable-actions">
-            <span class="button-secondary add-new-repeat-item"><?php _e( 'Add a Item', 'ft' ); ?></span>
+            <span class="button-secondary add-new-repeat-item"><?php _e( 'Add a Item', 'onepress' ); ?></span>
         </div>
 
          <script type="text/html" class="repeatable-js-template">
@@ -300,7 +300,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                         <a class="widget-action" href="#"></a>
                     </div>
                     <div class="widget-title">
-                        <h4 class="live-title"><?php _e( '[Untitled]', 'ft' ); ?></h4>
+                        <h4 class="live-title"><?php _e( '[Untitled]', 'onepress' ); ?></h4>
                     </div>
                 </div>
 
@@ -408,8 +408,8 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                             </div>
 
                                             <div class="actions">
-                                                <button class="button remove-button " <# if ( field.value.url === '' ){ #> style="display:none"; <# } #> type="button"><?php _e( 'Remove', 'ft' ) ?></button>
-                                                <button class="button upload-button" data-add-txt="<?php esc_attr_e( 'Add Image', 'ft' ); ?>" data-change-txt="<?php esc_attr_e( 'Change Image', 'ft' ); ?>" type="button"><# if ( field.value.url == '' ){ #> <?php _e( 'Add Image', 'ft' ); ?> <# } else { #> <?php _e( 'Change Image', 'ft' ); ?> <# } #> </button>
+                                                <button class="button remove-button " <# if ( field.value.url === '' ){ #> style="display:none"; <# } #> type="button"><?php _e( 'Remove', 'onepress' ) ?></button>
+                                                <button class="button upload-button" data-add-txt="<?php esc_attr_e( 'Add Image', 'onepress' ); ?>" data-change-txt="<?php esc_attr_e( 'Change Image', 'onepress' ); ?>" type="button"><# if ( field.value.url == '' ){ #> <?php _e( 'Add Image', 'onepress' ); ?> <# } else { #> <?php _e( 'Change Image', 'onepress' ); ?> <# } #> </button>
                                                 <div style="clear:both"></div>
                                             </div>
 
@@ -430,9 +430,9 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                             <div class="widget-control-actions">
                                 <div class="alignleft">
                                     <span class="remove-btn-wrapper">
-                                        <a href="#" class="repeat-control-remove" title=""><?php _e( 'Remove', 'ft' ); ?></a> |
+                                        <a href="#" class="repeat-control-remove" title=""><?php _e( 'Remove', 'onepress' ); ?></a> |
                                     </span>
-                                    <a href="#" class="repeat-control-close"><?php _e( 'Close', 'ft' ); ?></a>
+                                    <a href="#" class="repeat-control-close"><?php _e( 'Close', 'onepress' ); ?></a>
                                 </div>
                                 <br class="clear">
                             </div>

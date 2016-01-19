@@ -134,7 +134,22 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-			// Order & Stlying
+			// Disable Social
+			$wp_customize->add_setting( 'onepress_social_disable',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_checkbox',
+					'default'           => '1',
+				)
+			);
+			$wp_customize->add_control( 'onepress_social_disable',
+				array(
+					'type'        => 'checkbox',
+					'label'       => __('Hide Footer Social?', 'onepress'),
+					'section'     => 'onepress_social',
+					'description' => esc_html__('Check this box to hide footer social section.', 'onepress')
+				)
+			);
+
 			$wp_customize->add_setting( 'onepress_social_footer_guide',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text'
@@ -166,7 +181,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_twitter',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => '#',
+					'default'           => '',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_twitter',
@@ -180,7 +195,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_facebook',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => '#',
+					'default'           => '',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_facebook',
@@ -194,7 +209,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_google',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => '#',
+					'default'           => '',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_google',
@@ -208,7 +223,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_instagram',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => '#',
+					'default'           => '',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_instagram',
@@ -247,7 +262,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_newsletter_disable',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_checkbox',
-					'default'           => '',
+					'default'           => '1',
 				)
 			);
 			$wp_customize->add_control( 'onepress_newsletter_disable',
@@ -1008,22 +1023,22 @@ function onepress_customize_register( $wp_customize ) {
 					),
 
 					array(
-						'title' => __( 'Line of codes', 'onepress' ),
+						'title' => __( 'Lines of code', 'onepress' ),
 						'number'  => '2569',
 						'unit_before' => '',
 						'unit_after' => 'k'
 					),
 
 					array(
-						'title' => __( 'Coffees', 'onepress' ),
+						'title' => __( 'Cups of coffee', 'onepress' ),
 						'number'  => '984',
 						'unit_before' => '',
-						'unit_after' => 'k'
+						'unit_after' => ''
 					),
 
 					array(
-						'title' => __( 'Feedback', 'onepress' ),
-						'number'  => '198',
+						'title' => __( 'Customer Satisfaction', 'onepress' ),
+						'number'  => '5683',
 						'unit_before' => '',
 						'unit_after' => '',
 					),
@@ -1135,7 +1150,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( 'onepress_testimonial_title',
 			array(
 				'label' 		=> __('Section Title', 'onepress'),
-				'section' 		=> 'onepress_counter_settings',
+				'section' 		=> 'onepress_testimonial_settings',
 				'description'   => '',
 			)
 		);
@@ -1242,6 +1257,7 @@ function onepress_customize_register( $wp_customize ) {
 						'image' => array(
 							'title' => __('Avatar', 'onepress'),
 							'type'  =>'media',
+							'desc'  => 'Suggestion: 100x100px square image.',
 							'default' => array(
 								'url' => get_template_directory_uri().'/assets/images/testimonial_1.jpg',
 								'id' => ''
@@ -1928,7 +1944,6 @@ function onepress_sanitize_text( $string ) {
 function onepress_sanitize_html_input( $string ) {
 	return wp_kses_allowed_html( $string );
 }
-
 
 /**
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.

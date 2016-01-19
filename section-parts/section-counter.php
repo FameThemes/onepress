@@ -32,24 +32,24 @@ $onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', __('Som
 					),
 
 					array(
-						'title' => __( 'Line of codes', 'onepress' ),
+						'title' => __( 'Lines of code', 'onepress' ),
 						'number'  => '2569',
 						'unit_before' => '',
 						'unit_after' => 'k'
 					),
 
 					array(
-						'title' => __( 'Coffees', 'onepress' ),
+						'title' => __( 'Cups of coffee', 'onepress' ),
 						'number'  => '984',
 						'unit_before' => '',
-						'unit_after' => 'k'
+						'unit_after' => ''
 					),
 
 					array(
-						'title' => __( 'Positive feedback', 'onepress' ),
-						'number'  => '98',
+						'title' => __( 'Customer Satisfaction', 'onepress' ),
+						'number'  => '5683',
 						'unit_before' => '',
-						'unit_after' => esc_attr('%')
+						'unit_after' => ''
 					),
 
 				);

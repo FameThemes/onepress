@@ -21,7 +21,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						'name' 			=> __( 'Alexander Rios', 'onepress' ),
 						'position' 		=> __( 'Founder & CEO', 'onepress' ),
 						'image' 		=> array(
-							'url' => get_template_directory_uri() . '/assets/images/team1.jpg',
+							'url' => get_template_directory_uri() . '/assets/images/team4.jpg',
 							'id' => ''
 						),
 						'facebook' 		=> '#',
@@ -31,10 +31,10 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						'linkedin' 		=> '#',
 					),
 					array(
-						'name' 			=> __( 'Victoria Stephens', 'onepress' ),
-						'position' 		=> __( 'Founder & CTO', 'onepress' ),
+						'name' 			=> __( 'Sean Weaver', 'onepress' ),
+						'position' 		=> __( 'Client Engagement', 'onepress' ),
 						'image' 		=> array(
-							'url'=>get_template_directory_uri() . '/assets/images/team2.jpg'
+							'url'=>get_template_directory_uri() . '/assets/images/team5.jpg'
 						),
 						'facebook' 		=> '#',
 						'twitter' 		=> '#',
@@ -43,10 +43,10 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						'linkedin' 		=> '#',
 					),
 					array(
-						'name' 			=> __( 'Harry Allen', 'onepress' ),
+						'name' 			=> __( 'George Wells', 'onepress' ),
 						'position' 		=> __( 'Director Of Production', 'onepress' ),
 						'image' 		=> array(
-							'url' => get_template_directory_uri() . '/assets/images/team3.jpg'
+							'url' => get_template_directory_uri() . '/assets/images/team6.jpg'
 						),
 						'facebook' 		=> '#',
 						'twitter' 		=> '#',
@@ -58,7 +58,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						'name' 			=> __( 'Thomas Wade', 'onepress' ),
 						'position' 		=> __( 'Senior Developer', 'onepress' ),
 						'image' 		=> array(
-							'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
+							'url' =>  get_template_directory_uri() . '/assets/images/team7.jpg',
 						),
 						'facebook' 		=> '#',
 						'twitter' 		=> '#',
