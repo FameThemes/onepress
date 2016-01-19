@@ -30,7 +30,6 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						'youtube' 		=> '#',
 						'linkedin' 		=> '#',
 					),
-
 					array(
 						'name' 			=> __( 'Victoria Stephens', 'onepress' ),
 						'position' 		=> __( 'Founder & CTO', 'onepress' ),
@@ -43,12 +42,23 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						'youtube' 		=> '#',
 						'linkedin' 		=> '#',
 					),
-
 					array(
 						'name' 			=> __( 'Harry Allen', 'onepress' ),
 						'position' 		=> __( 'Director Of Production', 'onepress' ),
 						'image' 		=> array(
 							'url' => get_template_directory_uri() . '/assets/images/team3.jpg'
+						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
+					array(
+						'name' 			=> __( 'Thomas Wade', 'onepress' ),
+						'position' 		=> __( 'Senior Developer', 'onepress' ),
+						'image' 		=> array(
+							'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
 						),
 						'facebook' 		=> '#',
 						'twitter' 		=> '#',
@@ -87,7 +97,7 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						$image = $member['image']['url'];
 					}
 					?>
-					<div class="team-member col-sm-4 wow slideInUp">
+					<div class="team-member col-sm-3 wow slideInUp">
 						<div class="member-thumb">
 							<?php if ( $image !='' ) { ?>
 							<img src="<?php echo esc_url( $image );  ?>" alt="">

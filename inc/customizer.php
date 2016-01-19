@@ -1416,6 +1416,19 @@ function onepress_customize_register( $wp_customize ) {
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
+						array(
+							'name' 			=> __( 'Thomas Wade', 'onepress' ),
+							'position' 		=> __( 'Senior Developer', 'onepress' ),
+							'image' 		=> array(
+								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
+							),
+							'facebook' 		=> '#',
+							'twitter' 		=> '#',
+							'google_plus' 	=> '#',
+							'youtube' 		=> '#',
+							'linkedin' 		=> '#',
+						),
+
 					)
 				),
 				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
