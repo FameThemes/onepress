@@ -560,6 +560,7 @@ input[type="radio"], input[type="checkbox"] {
 ------------------------------*/
 .clear:before,
 .clear:after,
+.tes_author:after,
 .entry-content:before,
 .entry-content:after,
 .comment-content:before,
@@ -575,7 +576,7 @@ input[type="radio"], input[type="checkbox"] {
 	clear: both;
 }
 
-.clear:after,
+.clear:after, .tes_author:after,
 .entry-content:after,
 .comment-content:after,
 .site-header:after,
@@ -1818,8 +1819,21 @@ input[type="radio"], input[type="checkbox"] {
 	padding:  4.375rem 0rem;
 }
 
+.section-padding-lg {
+	padding: 90px 0px;
+	padding:  5.625rem 0rem;
+}
+
 .onepage-section {
 	position: relative;
+}
+
+.section-inverse {
+	background: #222222;
+}
+
+.section-inverse .section-title-area .section-title {
+	color: #FFFFFF;
 }
 
 .section-meta {
@@ -2157,6 +2171,53 @@ input[type="radio"], input[type="checkbox"] {
 .counter_item .counter_title {
 	font-size: 18px;
 	font-size: 1.125rem;
+}
+
+/* Section: Testimonials
+------------------------------*/
+.section-testimonials .card-block {
+	padding: 25px;
+	padding: 1.5625rem;
+}
+
+.section-testimonials .card-text {
+	font-size: 15px;
+	font-size: 0.9375rem;
+}
+
+.tes_author {
+	position: relative;
+	margin-bottom: 25px;
+}
+
+.tes_author img {
+	max-width: 70px;
+	float: left;
+	-webkit-border-radius: 500px;
+	-moz-border-radius: 500px;
+	border-radius: 500px;
+	border: 2px solid #FFF;
+	margin-right: 15px;
+}
+
+.tes_author cite {
+	float: left;
+	margin-top: 10px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.tes_author cite div {
+	font-weight: normal;
+	font-size: 13px;
+}
+
+.card-inverse .tes_author cite {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.card-inverse .tes_author cite div, .card-inverse .tes_author cite a {
+	color: rgba(255, 255, 255, 0.65);
 }
 
 /* Section: Projects
@@ -2608,3 +2669,106 @@ div.wpcf7-response-output {
 /*--------------------------------------------------------------
 9.0 External Plugins
 --------------------------------------------------------------*/
+/* Slick Carousel */
+.slick-slider {
+	position: relative;
+	display: block;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-ms-touch-action: pan-y;
+	touch-action: pan-y;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.slick-list {
+	position: relative;
+	overflow: hidden;
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+
+.slick-list:focus {
+	outline: none;
+}
+
+.slick-list.dragging {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.slick-slider .slick-track,
+.slick-slider .slick-list {
+	-webkit-transform: translate3d(0, 0, 0);
+	-moz-transform: translate3d(0, 0, 0);
+	-ms-transform: translate3d(0, 0, 0);
+	-o-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+}
+
+.slick-track {
+	position: relative;
+	left: 0;
+	top: 0;
+	display: block;
+}
+
+.slick-track:before, .slick-track:after {
+	content: "";
+	display: table;
+}
+
+.slick-track:after {
+	clear: both;
+}
+
+.slick-loading .slick-track {
+	visibility: hidden;
+}
+
+.slick-slide {
+	float: left;
+	height: 100%;
+	min-height: 1px;
+	display: none;
+}
+
+[dir="rtl"] .slick-slide {
+	float: right;
+}
+
+.slick-slide img {
+	display: block;
+}
+
+.slick-slide.slick-loading img {
+	display: none;
+}
+
+.slick-slide.dragging img {
+	pointer-events: none;
+}
+
+.slick-initialized .slick-slide {
+	display: block;
+}
+
+.slick-loading .slick-slide {
+	visibility: hidden;
+}
+
+.slick-vertical .slick-slide {
+	display: block;
+	height: auto;
+	border: 1px solid transparent;
+}
+
+.slick-arrow.slick-hidden {
+	display: none;
+}

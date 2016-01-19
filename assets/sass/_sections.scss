@@ -5,9 +5,21 @@
 .section-padding {
 	@include rem('padding', 70px 0px);
 }
+.section-padding-lg {
+	@include rem('padding', 90px 0px);
+}
 
 .onepage-section {
 	position: relative;
+}
+
+.section-inverse {
+	background: #222222;
+	.section-title-area {
+		.section-title {
+			color: #FFFFFF;
+		}
+	}
 }
 
 .section-meta {
@@ -296,6 +308,49 @@
 	}
 	.counter_title {
 		@include rem('font-size', 18px);
+	}
+}
+
+/* Section: Testimonials
+------------------------------*/
+.section-testimonials {
+	.card-block {
+		@include rem('padding', 25px);
+	}
+	.card-text {
+		@include rem('font-size', 15px);
+	}
+}
+.tes_author {
+	&:after {
+		@extend .clear ;
+	}
+	position: relative;
+	margin-bottom: 25px;
+	img {
+		max-width: 70px;
+		float:left;
+		@include border-radius(500px);
+		border: 2px solid #FFF;
+		margin-right: 15px;
+	}
+	cite {
+		float: left;
+		margin-top: 10px;
+		font-size: 16px;
+		font-weight: bold;
+		div {
+			font-weight: normal;
+			font-size: 13px;
+		}
+	}
+}
+.card-inverse {
+	.tes_author cite {
+		color: rgba(255, 255, 255, 0.9);
+		div, a {
+			color: rgba(255, 255, 255, 0.65);
+		}
 	}
 }
 

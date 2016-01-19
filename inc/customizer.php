@@ -742,6 +742,7 @@ function onepress_customize_register( $wp_customize ) {
 					)
 				)
 			);
+
 	/*------------------------------------------------------------------------*/
     /*  Section: Services
     /*------------------------------------------------------------------------*/
@@ -1073,6 +1074,87 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			)
 		);
+
+	/*------------------------------------------------------------------------*/
+	/*  Section: Testimonials
+	/*------------------------------------------------------------------------*/
+	$wp_customize->add_panel( 'onepress_testimonial' ,
+		array(
+			'priority'    => 134,
+			'title'       => __( 'Section: Testimonial', 'onepress' ),
+			'description' => '',
+		)
+	);
+
+	$wp_customize->add_section( 'onepress_testimonial_settings' ,
+		array(
+			'priority'    => 3,
+			'title'       => __( 'Section Settings', 'onepress' ),
+			'description' => '',
+			'panel'       => 'onepress_testimonial',
+		)
+	);
+		// Show Content
+		$wp_customize->add_setting( 'onepress_testimonial_disable',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
+				'default'           => '',
+			)
+		);
+		$wp_customize->add_control( 'onepress_testimonial_disable',
+			array(
+				'type'        => 'checkbox',
+				'label'       => __('Hide this section?', 'onepress'),
+				'section'     => 'onepress_testimonial_settings',
+				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
+			)
+		);
+
+		// Section ID
+		$wp_customize->add_setting( 'onepress_testimonial_id',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_text',
+				'default'           => __('testimonials', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_testimonial_id',
+			array(
+				'label' 		=> __('Section ID:', 'onepress'),
+				'section' 		=> 'onepress_testimonial_settings',
+				'description'   => 'The section id, we will use this for link anchor.'
+			)
+		);
+
+		// Title
+		$wp_customize->add_setting( 'onepress_testimonial_title',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => __('Testimonials', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_testimonial_title',
+			array(
+				'label' 		=> __('Section Title', 'onepress'),
+				'section' 		=> 'onepress_counter_settings',
+				'description'   => '',
+			)
+		);
+
+		// Sub Title
+		$wp_customize->add_setting( 'onepress_testimonial_subtitle',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => __('You are in good company!', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_testimonial_subtitle',
+			array(
+				'label' 		=> __('Section Subtitle', 'onepress'),
+				'section' 		=> 'onepress_testimonial_settings',
+				'description'   => '',
+			)
+		);
+
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Team

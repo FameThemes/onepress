@@ -34,6 +34,11 @@ get_header(); ?>
 				get_template_part('section-parts/section', 'counter');
 
 				/*
+				 * Section: Testimonials
+				 */
+				get_template_part('section-parts/section', 'testimonials');
+
+				/*
 				 * Section: Team
 				 */
 				get_template_part('section-parts/section', 'team');
