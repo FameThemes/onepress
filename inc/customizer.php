@@ -31,7 +31,6 @@ function onepress_customize_register( $wp_customize ) {
 	do_action( 'onepress_customize_before_register', $wp_customize );
 
 
-
 	/*------------------------------------------------------------------------*/
     /*  Site Identity
     /*------------------------------------------------------------------------*/
@@ -289,9 +288,6 @@ function onepress_customize_register( $wp_customize ) {
 					'description' => 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>'
 				)
 			);
-
-
-
 
 
 	/*------------------------------------------------------------------------*/
@@ -746,11 +742,6 @@ function onepress_customize_register( $wp_customize ) {
 					)
 				)
 			);
-
-
-
-
-
 	/*------------------------------------------------------------------------*/
     /*  Section: Services
     /*------------------------------------------------------------------------*/
@@ -992,7 +983,6 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-
 	$wp_customize->add_section( 'onepress_counter_content' ,
 		array(
 			'priority'    => 6,
@@ -1083,11 +1073,6 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			)
 		);
-
-
-
-
-
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Team
@@ -1184,7 +1169,6 @@ function onepress_customize_register( $wp_customize ) {
 			array(
 				'default' => json_encode(
 					array(
-
 						array(
 							'name' 			=> __( 'Alexander Rios', 'onepress' ),
 							'position' 		=> __( 'Founder & CEO', 'onepress' ),
@@ -1198,7 +1182,6 @@ function onepress_customize_register( $wp_customize ) {
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-
 						array(
 							'name' 			=> __( 'Victoria Stephens', 'onepress' ),
 							'position' 		=> __( 'Founder & CTO', 'onepress' ),
@@ -1211,7 +1194,6 @@ function onepress_customize_register( $wp_customize ) {
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-
 						array(
 							'name' 			=> __( 'Harry Allen', 'onepress' ),
 							'position' 		=> __( 'Director Of Production', 'onepress' ),
@@ -1224,7 +1206,6 @@ function onepress_customize_register( $wp_customize ) {
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-
 						array(
 							'name' 			=> __( 'Thomas Wade', 'onepress' ),
 							'position' 		=> __( 'Senior Developer', 'onepress' ),
@@ -1237,7 +1218,6 @@ function onepress_customize_register( $wp_customize ) {
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-
 						array(
 							'name' 			=> __( 'Sean Weaver', 'onepress' ),
 							'position' 		=> __( 'Senior Designer', 'onepress' ),
@@ -1250,7 +1230,6 @@ function onepress_customize_register( $wp_customize ) {
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-
 						array(
 							'name' 			=> __( 'Peter Mendez', 'onepress' ),
 							'position' 		=> __( 'Interactive Designer', 'onepress' ),
@@ -1263,7 +1242,6 @@ function onepress_customize_register( $wp_customize ) {
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-
 					)
 				),
 				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
@@ -1329,7 +1307,6 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			)
 		);
-
 
 	/*------------------------------------------------------------------------*/
     /*  Section: News
@@ -1704,8 +1681,6 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
-
-
 
 }
 add_action( 'customize_register', 'onepress_customize_register' );
