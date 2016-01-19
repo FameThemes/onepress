@@ -1,6 +1,6 @@
 <?php
 /**
- *Template Name: Home One Page
+ *Template Name: Frontpage
  *
  * @package OnePress
  */

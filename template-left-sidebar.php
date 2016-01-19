@@ -1,14 +1,14 @@
 <?php
 /**
- *Template Name: Left Sidebar Page
+ *Template Name: Left Sidebar
  *
  * @package OnePress
  */
 
 get_header(); ?>
-	
+
 	<div id="content" class="site-content">
-		
+
 		<div class="page-header">
 			<div class="container">
 				<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
@@ -36,7 +36,7 @@ get_header(); ?>
 			</div><!-- #primary -->
 
 			<?php get_sidebar(); ?>
-			
+
 		</div><!--#content-inside -->
 	</div><!-- #content -->
 

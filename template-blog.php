@@ -1,6 +1,6 @@
 <?php
 /**
- *Template Name: Blog Page
+ *Template Name: Blog
  *
  * @package OnePress
  */
@@ -28,7 +28,7 @@ get_header(); ?>
 	                    )
 	                    );
 						if ( $wp_query->have_posts() ) :
-							
+
 							while ( $wp_query->have_posts() ) : $wp_query->the_post();
 
 								get_template_part( 'template-parts/content', 'list' );
@@ -43,13 +43,13 @@ get_header(); ?>
 
 						endif;
 
-						wp_reset_postdata(); 
+						wp_reset_postdata();
 					?>
 					</div>
 
 				</main><!-- #main -->
 			</div><!-- #primary -->
-			
+
 			<?php get_sidebar(); ?>
 
 		</div><!--#content-inside -->
