@@ -13,7 +13,6 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 		</div>
 		<div class="team-members row">
 			<?php
-			// Check if one ONEPRESS PLUS plugin not installed.
 
 			$members = get_theme_mod( 'onepress_team_members',
 				array(

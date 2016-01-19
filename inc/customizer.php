@@ -1095,13 +1095,13 @@ function onepress_customize_register( $wp_customize ) {
 		)
 	);
 		// Show Content
-		$wp_customize->add_setting( 'onepress_testimonial_disable',
+		$wp_customize->add_setting( 'onepress_testimonials_disable',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_checkbox',
 				'default'           => '',
 			)
 		);
-		$wp_customize->add_control( 'onepress_testimonial_disable',
+		$wp_customize->add_control( 'onepress_testimonials_disable',
 			array(
 				'type'        => 'checkbox',
 				'label'       => __('Hide this section?', 'onepress'),
@@ -1154,6 +1154,134 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
+
+
+		// Order & Stlying
+		$wp_customize->add_section( 'onepress_testimonials_content' ,
+			array(
+				'priority'    => 3,
+				'title'       => __( 'Section Content', 'onepress' ),
+				'description' => '',
+				'panel'       => 'onepress_testimonial',
+			)
+		);
+		$wp_customize->add_setting(
+			'onepress_testimonial_boxes',
+			array(
+				'default' => json_encode(
+					array(
+						array(
+							'title' 		=> __( 'Design Quality', 'onepress' ),
+							'name' 			=> __( 'Alexander Rios', 'onepress' ),
+							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+							'style'         => 'theme-primary',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/testimonial_1.jpg',
+								'id'  => ''
+							),
+							'content' 		=> __( 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.', 'onepress' ),
+
+						),
+						array(
+							'title' 		=> __( 'Feature Availability', 'onepress' ),
+							'name' 			=> __( 'Alexander Max', 'onepress' ),
+							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+							'style'         => 'theme-primary',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/testimonial_2.jpg',
+								'id'  => ''
+							),
+							'content' 		=> __( 'This card has supporting text below as a natural lead-in to additional content.', 'onepress' ),
+
+						),
+						array(
+							'title' 		=> __( 'Customizability', 'onepress' ),
+							'name' 			=> __( 'Peter Mendez', 'onepress' ),
+							'subtitle' 		=> __( 'Example Company', 'onepress' ),
+							'style'         => 'theme-primary',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/testimonial_3.jpg',
+								'id'  => ''
+							),
+							'content' 		=> __( 'This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.', 'onepress' ),
+
+						),
+
+					)
+				),
+				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+				'transport' => 'refresh', // refresh or postMessage
+			) );
+
+
+		$wp_customize->add_control(
+			new Onepress_Customize_Repeatable_Control(
+				$wp_customize,
+				'onepress_testimonial_boxes',
+				array(
+					'label' 		=> __('Testimonial', 'onepress'),
+					'description'   => '',
+					'section'       => 'onepress_testimonials_content',
+					'live_title_id' => 'title', // apply for unput text and textarea only
+					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
+					'max_item'      => 3, // Maximum item can add
+
+					'fields'    => array(
+						'title' => array(
+							'title' => __('Title', 'onepress'),
+							'type'  =>'text',
+							'desc'  => '',
+							'default'  => __('Testimonial title', 'onepress'),
+						),
+						'name' => array(
+							'title' => __('Name', 'onepress'),
+							'type'  =>'text',
+							'desc'  => '',
+							'default'  => __('User name', 'onepress'),
+						),
+						'image' => array(
+							'title' => __('Avatar', 'onepress'),
+							'type'  =>'media',
+							'default' => array(
+								'url' => get_template_directory_uri().'/assets/images/user_avatar.jpg',
+								'id' => ''
+							)
+						),
+						'subtitle' => array(
+							'title' => __('Subtitle', 'onepress'),
+							'type'  =>'textarea',
+							'default'  => __('Example Company', 'onepress'),
+						),
+						'content' => array(
+							'title' => __('Content', 'onepress'),
+							'type'  =>'textarea',
+							'default'  => __('Whatever your user say', 'onepress'),
+						),
+
+						'style' => array(
+							'title' => __('Style', 'onepress'),
+							'type'  =>'select',
+							'default'  => 'primary',
+							'options' => array(
+								'theme-primary' => __( 'Theme default', 'onepress' ),
+								'primary' => __( 'Primary', 'onepress' ),
+								'success' => __( 'Success', 'onepress' ),
+								'info' => __( 'Info', 'onepress' ),
+								'warning' => __( 'Warning', 'onepress' ),
+								'danger' => __( 'Danger', 'onepress' ),
+							)
+						),
+
+
+					),
+
+				)
+			)
+		);
+
+
+
+
 
 
 	/*------------------------------------------------------------------------*/
