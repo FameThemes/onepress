@@ -162,7 +162,6 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 			}
 
 			?>
-
 		</div>
 	</div>
 </section>

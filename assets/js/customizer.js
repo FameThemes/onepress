@@ -8,7 +8,8 @@ var RepeatableCustomize = function (  control  ){
 	var $ = jQuery;
 	var container =  control.container;
 	var default_data =  control.params.fields;
-	var values = JSON.parse( control.params.value ) ;
+	 //console.log( control.params.value );
+	 var values = JSON.parse( control.params.value ) ;
 
 	var max_item  = 0; // unlimited
 

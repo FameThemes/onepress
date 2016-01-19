@@ -73,8 +73,6 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 			}
 
 			?>
-
-
 		</div>
 	</div>
 </section>

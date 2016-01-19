@@ -841,7 +841,7 @@ function onepress_customize_register( $wp_customize ) {
 		)
 	);
 
-		// Order & Stlying
+		// Order & Styling
 		$wp_customize->add_setting(
 			'onepress_services',
 			array(
@@ -991,6 +991,103 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
+
+
+	$wp_customize->add_section( 'onepress_counter_content' ,
+		array(
+			'priority'    => 6,
+			'title'       => __( 'Section Content', 'onepress' ),
+			'description' => '',
+			'panel'       => 'onepress_counter',
+		)
+	);
+
+	// Order & Styling
+	$wp_customize->add_setting(
+		'onepress_counter_boxes',
+		array(
+			'default' => json_encode(
+				array(
+
+					array(
+						'title' => __( 'Projects completed', 'onepress' ),
+						'number'  => '268',
+						'unit_before' => '',
+						'unit_after' => ''
+					),
+
+					array(
+						'title' => __( 'Line of codes', 'onepress' ),
+						'number'  => '2569',
+						'unit_before' => '',
+						'unit_after' => 'k'
+					),
+
+					array(
+						'title' => __( 'Coffees', 'onepress' ),
+						'number'  => '984',
+						'unit_before' => '',
+						'unit_after' => 'k'
+					),
+
+					array(
+						'title' => __( 'Feedback', 'onepress' ),
+						'number'  => '198',
+						'unit_before' => '',
+						'unit_after' => '',
+					),
+
+				)
+			),
+			'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+			'transport' => 'refresh', // refresh or postMessage
+		) );
+
+
+		$wp_customize->add_control(
+			new Onepress_Customize_Repeatable_Control(
+				$wp_customize,
+				'onepress_counter_boxes',
+				array(
+					'label' 		=> __('Counter content', 'onepress'),
+					'description'   => '',
+					'section'       => 'onepress_counter_content',
+					'live_title_id' => 'title', // apply for unput text and textarea only
+					'title_format'  => __('[live_title]', 'onepress'), // [live_title]
+					'max_item'      => 4, // Maximum item can add
+
+					'fields'    => array(
+						'title' => array(
+							'title' => __('Title', 'onepress'),
+							'type'  =>'text',
+							'desc'  => '',
+							'default' => __( 'Your counter label', 'onepress' ),
+						),
+						'number' => array(
+							'title' => __('Number', 'onepress'),
+							'type'  =>'text',
+							'default' => 99,
+						),
+						'unit_before'  => array(
+							'title' => __('Before number', 'onepress'),
+							'type'  =>'text',
+							'default' => '',
+						),
+						'unit_after'  => array(
+							'title' => __('After number', 'onepress'),
+							'type'  =>'text',
+							'default' => '',
+						),
+					),
+
+				)
+			)
+		);
+
+
+
+
+
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Team

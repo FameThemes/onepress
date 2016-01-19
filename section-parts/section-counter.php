@@ -14,30 +14,105 @@ $onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', __('Som
 		</div>
 
 		<div class="row">
-			<div class="col-sm-6 col-md-3 wow slideInUp">
-				<div class="counter_item">
-				    <div class="counter__number">268</div>
-                    <div class="counter_title">Projects completed</div>
+			<?php
+
+			$boxes = get_theme_mod( 'onepress_counter_boxes' );
+
+			if ( is_string( $boxes ) ) {
+				$boxes = json_decode( $boxes , true );
+			}
+
+			if ( empty( $boxes ) || ! is_array( $boxes ) ) {
+				$boxes = array(
+					array(
+						'title' => __( 'Projects completed', 'onepress' ),
+						'number'  => '268',
+						'unit_before' => '',
+						'unit_after' => ''
+					),
+
+					array(
+						'title' => __( 'Line of codes', 'onepress' ),
+						'number'  => '2569',
+						'unit_before' => '',
+						'unit_after' => 'k'
+					),
+
+					array(
+						'title' => __( 'Coffees', 'onepress' ),
+						'number'  => '984',
+						'unit_before' => '',
+						'unit_after' => 'k'
+					),
+
+					array(
+						'title' => __( 'Positive feedback', 'onepress' ),
+						'number'  => '98',
+						'unit_before' => '',
+						'unit_after' => esc_attr('%')
+					),
+
+				);
+			}
+
+			$col =  3;
+			$num_col = 4;
+			$n = count( $boxes );
+			if ( $n < 4 ) {
+				switch ( $n ){
+					case 3:
+						$col =  4;
+						$num_col = 3;
+						break;
+					case 2:
+						$col = 6;
+						$num_col = 2;
+						break;
+					default:
+						$col = 12;
+						$num_col = 1;
+				}
+			}
+			$j = 0;
+			foreach ( $boxes as $i => $box ) {
+				$box = wp_parse_args( $box,
+					array(
+						'title' 			=> '',
+						'number' 			=> '',
+						'unit_before' 		=>  '',
+						'unit_after' 		=>  '',
+					)
+				);
+
+				$class = 'col-sm-6 col-md-'.$col;
+				if ( $j >= $num_col ){
+					$j = 1;
+					$class .=' clearleft';
+				} else {
+					$j ++ ;
+				}
+				?>
+
+				<div class="<?php echo esc_attr( $class ); ?> wow slideInUp">
+					<div class="counter_item">
+						<div class="counter__number">
+							<?php if ( $box['unit_before'] ) { ?>
+								<span class="n-b"><?php echo esc_html( $box['unit_before'] ); ?></span>
+							<?php } ?>
+							<span class="n counter"><?php echo esc_html( $box['number'] ); ?></span>
+							<?php if ( $box['unit_after'] ) { ?>
+								<span class="n-b"><?php echo esc_html( $box['unit_after'] ); ?></span>
+							<?php } ?>
+						</div>
+						<div class="counter_title"><?php echo esc_html( $box['title'] ); ?></div>
+					</div>
 				</div>
-			</div>
-            <div class="col-sm-6 col-md-3 wow slideInUp">
-				<div class="counter_item">
-				    <div class="counter__number">2569k</div>
-                    <div class="counter_title">Line of codes</div>
-				</div>
-			</div>
-            <div class="col-sm-6 col-md-3 wow slideInUp">
-				<div class="counter_item">
-				    <div class="counter__number">984</div>
-                    <div class="counter_title">Coffees</div>
-				</div>
-			</div>
-            <div class="col-sm-6 col-md-3 wow slideInUp">
-				<div class="counter_item">
-				    <div class="counter__number">98%</div>
-                    <div class="counter_title">Positive feedback</div>
-				</div>
-			</div>
+
+			<?php
+			} // end foreach
+
+			?>
+
 		</div>
 
 	</div>
