@@ -14,7 +14,6 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
 		</div>
 
         <?php
-
         $testimonials = get_theme_mod( 'onepress_testimonial_boxes', '' );
 
         if ( is_string( $testimonials ) ) {
@@ -27,6 +26,7 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
                     'title' 		=> __( 'Design Quality', 'onepress' ),
                     'name' 			=> __( 'Alexander Rios', 'onepress' ),
                     'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+                    'style'         => 'warning',
                     'image' 		=> array(
                         'url' => get_template_directory_uri() . '/assets/images/testimonial_1.jpg',
                         'id'  => ''
@@ -38,6 +38,7 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
                     'title' 		=> __( 'Feature Availability', 'onepress' ),
                     'name' 			=> __( 'Alexander Max', 'onepress' ),
                     'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+                    'style'         => 'success',
                     'image' 		=> array(
                         'url' => get_template_directory_uri() . '/assets/images/testimonial_2.jpg',
                         'id'  => ''
@@ -49,6 +50,7 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
                     'title' 		=> __( 'Customizability', 'onepress' ),
                     'name' 			=> __( 'Peter Mendez', 'onepress' ),
                     'subtitle' 		=> __( 'Example Company', 'onepress' ),
+                    'style'         => 'theme-primary',
                     'image' 		=> array(
                         'url' => get_template_directory_uri() . '/assets/images/testimonial_3.jpg',
                         'id'  => ''

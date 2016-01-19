@@ -57,44 +57,6 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 						'linkedin' 		=> '#',
 					),
 
-					array(
-						'name' 			=> __( 'Thomas Wade', 'onepress' ),
-						'position' 		=> __( 'Senior Developer', 'onepress' ),
-						'image' 		=> array(
-							'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
-						),
-						'facebook' 		=> '#',
-						'twitter' 		=> '#',
-						'google_plus' 	=> '#',
-						'youtube' 		=> '#',
-						'linkedin' 		=> '#',
-					),
-
-					array(
-						'name' 			=> __( 'Sean Weaver', 'onepress' ),
-						'position' 		=> __( 'Senior Designer', 'onepress' ),
-						'image' 		=> array(
-							'url' =>  get_template_directory_uri() . '/assets/images/team5.jpg'
-						),
-						'facebook' 		=> '#',
-						'twitter' 		=> '#',
-						'google_plus' 	=> '#',
-						'youtube' 		=> '#',
-						'linkedin' 		=> '#',
-					),
-
-					array(
-						'name' 			=> __( 'Peter Mendez', 'onepress' ),
-						'position' 		=> __( 'Interactive Designer', 'onepress' ),
-						'image' 		=>  array(
-							'url' => get_template_directory_uri() . '/assets/images/team6.jpg'
-						),
-						'facebook' 		=> '#',
-						'twitter' 		=> '#',
-						'google_plus' 	=> '#',
-						'youtube' 		=> '#',
-						'linkedin' 		=> '#',
-					),
 				)
 			);
 

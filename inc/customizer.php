@@ -1174,7 +1174,7 @@ function onepress_customize_register( $wp_customize ) {
 							'title' 		=> __( 'Design Quality', 'onepress' ),
 							'name' 			=> __( 'Alexander Rios', 'onepress' ),
 							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
-							'style'         => 'theme-primary',
+							'style'         => 'warning',
 							'image' 		=> array(
 								'url' => get_template_directory_uri() . '/assets/images/testimonial_1.jpg',
 								'id'  => ''
@@ -1186,7 +1186,7 @@ function onepress_customize_register( $wp_customize ) {
 							'title' 		=> __( 'Feature Availability', 'onepress' ),
 							'name' 			=> __( 'Alexander Max', 'onepress' ),
 							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
-							'style'         => 'theme-primary',
+							'style'         => 'success',
 							'image' 		=> array(
 								'url' => get_template_directory_uri() . '/assets/images/testimonial_2.jpg',
 								'id'  => ''
@@ -1416,42 +1416,6 @@ function onepress_customize_register( $wp_customize ) {
 							'youtube' 		=> '#',
 							'linkedin' 		=> '#',
 						),
-						array(
-							'name' 			=> __( 'Thomas Wade', 'onepress' ),
-							'position' 		=> __( 'Senior Developer', 'onepress' ),
-							'image' 		=> array(
-								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-						array(
-							'name' 			=> __( 'Sean Weaver', 'onepress' ),
-							'position' 		=> __( 'Senior Designer', 'onepress' ),
-							'image' 		=> array(
-								'url' =>  get_template_directory_uri() . '/assets/images/team5.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-						array(
-							'name' 			=> __( 'Peter Mendez', 'onepress' ),
-							'position' 		=> __( 'Interactive Designer', 'onepress' ),
-							'image' 		=>  array(
-								'url' => get_template_directory_uri() . '/assets/images/team6.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
 					)
 				),
 				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
@@ -1469,7 +1433,7 @@ function onepress_customize_register( $wp_customize ) {
 					'section'       => 'onepress_team_content',
 					'live_title_id' => 'name', // apply for unput text and textarea only
 					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
-					'max_item'      => 6, // Maximum item can add
+					'max_item'      => 3, // Maximum item can add
 
 					'fields'    => array(
 						'name' => array(
