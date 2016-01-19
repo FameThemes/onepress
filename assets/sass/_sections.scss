@@ -353,6 +353,18 @@
 		}
 	}
 }
+.card-theme-primary {
+	background-color: $primary;
+	border-color: $primary;
+}
+.card-deck {
+	@include rem('margin-bottom', 20px);
+}
+.card-deck-wrapper {
+	.card-deck:last-of-type {
+		margin-bottom: 0px;
+	}
+}
 
 /* Section: Projects
 ------------------------------*/

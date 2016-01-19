@@ -99,7 +99,7 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
                     $image = $testimonial['image']['url'];
                 }
                 if ( $image == '' ){
-                    $image = get_template_directory_uri().'/assets/images/user_avatar.jpg';
+                    $image = get_template_directory_uri().'/assets/images/testimonial_1.jpg';
                 }
 
                 $t = '';

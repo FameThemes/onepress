@@ -1243,7 +1243,7 @@ function onepress_customize_register( $wp_customize ) {
 							'title' => __('Avatar', 'onepress'),
 							'type'  =>'media',
 							'default' => array(
-								'url' => get_template_directory_uri().'/assets/images/user_avatar.jpg',
+								'url' => get_template_directory_uri().'/assets/images/testimonial_1.jpg',
 								'id' => ''
 							)
 						),
