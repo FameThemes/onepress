@@ -11,8 +11,8 @@ OnePress is an outstanding creative and flexible WordPress one page theme well s
 ====================================================================
 SUPPORT
 ====================================================================
-In case you need help, feel free to register an account on our support forum and let us know your issues.
-- Support Forums: http://www.famethemes.com/forums/
+In case you need help, feel free to register an account on our site and let us know your issues.
+- Support Home: https://www.famethemes.com/dashboard/tickets
 
 ====================================================================
 DOCUMENTATION
@@ -64,7 +64,8 @@ DOCUMENTATION
 	For each section, you will need to create a text link menu with anchor point to the ID of the section.
 		http://yourdomain.com/#about
 		http://yourdomain.com/#services
-		http://yourdomain.com/#projects
+		http://yourdomain.com/#counter
+		http://yourdomain.com/#testimonials
 		http://yourdomain.com/#team
 		http://yourdomain.com/#news
 		http://yourdomain.com/#contact
@@ -176,6 +177,14 @@ License: The MIT License (MIT) - https://github.com/MrSaints/Morphext/blob/maste
 - WOWjs
 Source: http://mynameismatthieu.com/WOW/
 License: https://github.com/matthieua/WOW/blob/master/LICENSE-MIT
+
+- Tether
+Source: https://github.com/HubSpot/tether
+License: https://github.com/HubSpot/tether#license MIT LICENSE
+
+- bootstrap
+Source: https://github.com/twbs/bootstrap
+License: https://github.com/twbs/bootstrap/blob/master/LICENSE MIT LICENSE
 
 - jQuery Parallax
 Source: http://www.ianlunn.co.uk/plugins/jquery-parallax/
