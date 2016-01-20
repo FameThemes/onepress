@@ -311,9 +311,10 @@ function onepress_customize_register( $wp_customize ) {
 
 	$wp_customize->add_panel( 'onepress_hero_panel' ,
 		array(
-			'priority'    => 130,
-			'title'       => __( 'Section: Hero', 'onepress' ),
-			'description' => '',
+			'priority'        => 130,
+			'title'           => __( 'Section: Hero', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -603,9 +604,10 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_about' ,
 		array(
-			'priority'    => 132,
-			'title'       => __( 'Section: About', 'onepress' ),
-			'description' => '',
+			'priority'        => 132,
+			'title'           => __( 'Section: About', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -764,9 +766,10 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_services' ,
 		array(
-			'priority'    => 134,
-			'title'       => __( 'Section: Services', 'onepress' ),
-			'description' => '',
+			'priority'        => 134,
+			'title'           => __( 'Section: Services', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -925,9 +928,10 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
 	$wp_customize->add_panel( 'onepress_counter' ,
 		array(
-			'priority'    => 134,
-			'title'       => __( 'Section: Counter', 'onepress' ),
-			'description' => '',
+			'priority'        => 134,
+			'title'           => __( 'Section: Counter', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -1096,9 +1100,10 @@ function onepress_customize_register( $wp_customize ) {
 	/*------------------------------------------------------------------------*/
 	$wp_customize->add_panel( 'onepress_testimonial' ,
 		array(
-			'priority'    => 134,
-			'title'       => __( 'Section: Testimonial', 'onepress' ),
-			'description' => '',
+			'priority'        => 134,
+			'title'           => __( 'Section: Testimonial', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -1306,9 +1311,10 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_team' ,
 		array(
-			'priority'    => 136,
-			'title'       => __( 'Section: Team', 'onepress' ),
-			'description' => '',
+			'priority'        => 136,
+			'title'           => __( 'Section: Team', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -1517,9 +1523,10 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_news' ,
 		array(
-			'priority'    => 138,
-			'title'       => __( 'Section: News', 'onepress' ),
-			'description' => '',
+			'priority'        => 138,
+			'title'           => __( 'Section: News', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -1654,9 +1661,10 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_contact' ,
 		array(
-			'priority'    => 140,
-			'title'       => __( 'Section: Contact', 'onepress' ),
-			'description' => '',
+			'priority'        => 140,
+			'title'           => __( 'Section: Contact', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -1944,6 +1952,10 @@ function onepress_sanitize_text( $string ) {
 
 function onepress_sanitize_html_input( $string ) {
 	return wp_kses_allowed_html( $string );
+}
+
+function onepress_showon_frontpage() {
+	return is_page_template( 'template-frontpage.php' );
 }
 
 /**

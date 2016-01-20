@@ -1,5 +1,5 @@
-	
-	
+
+
 	Thank you for downloading our theme!
 
 
@@ -39,8 +39,11 @@ DOCUMENTATION
 	- Section: Services
 		Change your Services section setting and data.
 
-	- Section: Works
-		Change your Projects section setting and data.
+	- Section: Counter
+		Change your Counter section setting and data.
+
+	- Section: Testimonial
+		Change your Testimonial section setting and data.
 
 	- Section: Our Team
 		Change your Team section setting and data.
@@ -52,7 +55,7 @@ DOCUMENTATION
 		Change your Contact section setting and data.
 
 3. FAQs
-	
+
 	Q: How to set up the blog page?
 	A: First create a page and give it a name ( Note this page will also be the URL of your blog, example "Blog", "News" ...  ), at the right site - Template section select Blog Page and then Save. Now you can access your blog at http://yourdomain.com/blog ( or http://yourdomain.com/news )
 
@@ -107,11 +110,11 @@ License: https://unsplash.com/license (http://creativecommons.org/publicdomain/z
 
 - Pexels images
 License: https://www.pexels.com/photo-license/ (http://creativecommons.org/publicdomain/zero/1.0 - CC0)
-	
+
 	assets/images/project1.jpg
 	https://www.pexels.com/photo/food-vegetables-cucumbers-gherkins-8694/
 
-	assets/images/project2 
+	assets/images/project2
 	https://www.pexels.com/photo/muffin-sweet-bakery-treat-8279/
 
 	assets/images/project3
@@ -181,13 +184,3 @@ License: Dual licensed under the MIT and GPL licenses: https://github.com/IanLun
 - FontAwesome
 Source: https://fortawesome.github.io/Font-Awesome/
 License: GPL - https://fortawesome.github.io/Font-Awesome/license/
-
-
-
-	
-
-
-
-
-
-

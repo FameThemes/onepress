@@ -66,6 +66,9 @@ a {
 		color: $text;
 		text-decoration: underline;
 	}
+	&:active, &:focus {
+		outline: none;
+	}
 }
 
 /*------------------------------
