@@ -5,13 +5,13 @@
  * @package OnePress
  */
 
+
 /**
  * Add postMessage support for site title and description for the Theme Customizer.
  *
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
 function onepress_customize_register( $wp_customize ) {
-
 	// Load custom controls
 	require get_template_directory() . '/inc/customizer-controls.php';
 
@@ -19,11 +19,17 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->remove_section('colors');
 	$wp_customize->remove_section('background_image');
 
-	// Remove default control.
-
+	// Custom WP default control & settings.
+	$wp_customize->get_section('title_tagline')->title = esc_html__('Site Title, Tagline & Logo', 'onepress');
 	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
 	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
+
+	/**
+	 * Hook to add other customize
+	 */
+	do_action( 'onepress_customize_before_register', $wp_customize );
+
 
 	/*------------------------------------------------------------------------*/
     /*  Site Identity
@@ -43,7 +49,6 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-    	/*
     	$wp_customize->add_setting( 'onepress_site_image_logo',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_file_url',
@@ -60,7 +65,6 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			)
 		);
-		*/
 
 	/*------------------------------------------------------------------------*/
     /*  Site Options
@@ -70,7 +74,7 @@ function onepress_customize_register( $wp_customize ) {
 				'priority'       => 22,
 			    'capability'     => 'edit_theme_options',
 			    'theme_supports' => '',
-			    'title'          => __( 'Site Options', 'onepress' ),
+			    'title'          => __( 'Theme Options', 'onepress' ),
 			    'description'    => '',
 			)
 		);
@@ -130,7 +134,22 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-			// Order & Stlying
+			// Disable Social
+			$wp_customize->add_setting( 'onepress_social_disable',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_checkbox',
+					'default'           => '1',
+				)
+			);
+			$wp_customize->add_control( 'onepress_social_disable',
+				array(
+					'type'        => 'checkbox',
+					'label'       => __('Hide Footer Social?', 'onepress'),
+					'section'     => 'onepress_social',
+					'description' => esc_html__('Check this box to hide footer social section.', 'onepress')
+				)
+			);
+
 			$wp_customize->add_setting( 'onepress_social_footer_guide',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text'
@@ -162,7 +181,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_twitter',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => '#',
+					'default'           => '',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_twitter',
@@ -176,7 +195,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_facebook',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => '#',
+					'default'           => '',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_facebook',
@@ -190,7 +209,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_google',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => '#',
+					'default'           => '',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_google',
@@ -204,7 +223,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_social_instagram',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => '#',
+					'default'           => '',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_instagram',
@@ -243,7 +262,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_newsletter_disable',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_checkbox',
-					'default'           => '',
+					'default'           => '1',
 				)
 			);
 			$wp_customize->add_control( 'onepress_newsletter_disable',
@@ -286,18 +305,16 @@ function onepress_customize_register( $wp_customize ) {
 			);
 
 
-
-
-
 	/*------------------------------------------------------------------------*/
     /*  Section: Hero
     /*------------------------------------------------------------------------*/
 
 	$wp_customize->add_panel( 'onepress_hero_panel' ,
 		array(
-			'priority'    => 26,
-			'title'       => __( 'Section: Hero', 'onepress' ),
-			'description' => '',
+			'priority'        => 130,
+			'title'           => __( 'Section: Hero', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -472,6 +489,7 @@ function onepress_customize_register( $wp_customize ) {
 				'title'       => __( 'Hero Content Layout 1', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
+
 			)
 		);
 
@@ -586,9 +604,10 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_about' ,
 		array(
-			'priority'    => 26,
-			'title'       => __( 'Section: About', 'onepress' ),
-			'description' => '',
+			'priority'        => 132,
+			'title'           => __( 'Section: About', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -672,29 +691,85 @@ function onepress_customize_register( $wp_customize ) {
 	);
 
 		// Order & Stlying
-		$wp_customize->add_setting( 'onepress_about_content_guide',
+
+		$wp_customize->add_setting(
+			'onepress_about_boxes',
 			array(
-				'sanitize_callback' => 'onepress_sanitize_text'
-			)
-		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_about_content_guide',
-			array(
-				'section'     => 'onepress_about_content',
-				'type'        => 'custom_message',
-				'description' => __( 'In order to add content for About section please go to <strong>Customizer &rarr; Widgets &rarr; Section: About</strong>, click Add a Widget and select <strong>OnePress: About Item</strong> widget.', 'onepress' )
-			)
-		));
+				'default' => json_encode(
+					array(
+						array(
+							'title' => __( 'OUR HISTORY', 'onepress' ),
+							'thumb' 		=> array(
+								'url'=> get_template_directory_uri().'/assets/images/about1.jpg',
+							),
+							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+						),
+
+						array(
+							'title' => __( 'OUR ACHIEVEMENTS', 'onepress' ),
+							'thumb' 		=> array(
+								'url'=> get_template_directory_uri().'/assets/images/about2.jpg',
+							),
+							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+						),
+						array(
+							'title' => __( 'OUR VISION', 'onepress' ),
+							'thumb' 		=> array(
+								'url'=> get_template_directory_uri().'/assets/images/about3.jpg',
+							),
+							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+						),
 
 
+					)
+				),
+				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+				'transport' => 'refresh', // refresh or postMessage
+			) );
+
+
+			$wp_customize->add_control(
+				new Onepress_Customize_Repeatable_Control(
+					$wp_customize,
+					'onepress_about_boxes',
+					array(
+						'label' 		=> __('Content boxes', 'onepress'),
+						'description'   => '',
+						'section'       => 'onepress_about_content',
+						'live_title_id' => 'title', // apply for unput text and textarea only
+						'title_format'  => __('[live_title]', 'onepress'), // [live_title]
+						'max_item'      => 3, // Maximum item can add
+						'allow_unlimited' => false, // Maximum item can add
+
+						'fields'    => array(
+							'title' => array(
+								'title' => __('Title', 'onepress'),
+								'type'  =>'text',
+							),
+							'thumb' => array(
+								'title' => __('Thumbnail', 'onepress'),
+								'type'  =>'media',
+							),
+							'content'  => array(
+								'title' => __('Description', 'onepress'),
+								'type'  =>'textarea',
+
+							),
+						),
+
+					)
+				)
+			);
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Services
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_services' ,
 		array(
-			'priority'    => 26,
-			'title'       => __( 'Section: Services', 'onepress' ),
-			'description' => '',
+			'priority'        => 134,
+			'title'           => __( 'Section: Services', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -777,19 +852,458 @@ function onepress_customize_register( $wp_customize ) {
 		)
 	);
 
-		// Order & Stlying
-		$wp_customize->add_setting( 'onepress_service_content_guide',
+		// Order & Styling
+		$wp_customize->add_setting(
+			'onepress_services',
 			array(
-				'sanitize_callback' => 'onepress_sanitize_text'
+				'default' => json_encode(
+					array(
+						array(
+							'title' => __( 'Insights & Planning', 'onepress' ),
+							'icon'  => 'fa-wikipedia-w',
+							'content' => __( 'Uncovering key insights that inform the planning process and business modeling.', 'onepress' )
+						),
+						array(
+							'title' => __( 'Usability & User Testing', 'onepress' ),
+							'icon'  => 'fa-gg',
+							'content' => __( 'A user-first approach to defining interactive experiences and customer experience planning.', 'onepress' )
+						),
+						array(
+							'title' => __( 'Creative & Design', 'onepress' ),
+							'icon'  => 'fa-balance-scale',
+							'content' => __( 'Inventing and visualizing through shape, form, type and color.', 'onepress' )
+						),
+						array(
+							'title' => __( 'Technology & Development', 'onepress' ),
+							'icon'  => 'fa-wikipedia-w',
+							'content' => __( 'Enabling user engagement through smart technology solutions.', 'onepress' )
+						),
+
+					)
+				),
+				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+				'transport' => 'refresh', // refresh or postMessage
+			) );
+
+
+		$wp_customize->add_control(
+			new Onepress_Customize_Repeatable_Control(
+				$wp_customize,
+				'onepress_services',
+				array(
+					'label' 		=> __('Service content', 'onepress'),
+					'description'   => '',
+					'section'       => 'onepress_service_content',
+					'live_title_id' => 'title', // apply for unput text and textarea only
+					'title_format'  => __('[live_title]', 'onepress'), // [live_title]
+					'max_item'      => 4, // Maximum item can add
+
+					'fields'    => array(
+						'title' => array(
+							'title' => __('Title', 'onepress'),
+							'type'  =>'text',
+							'desc'  => '',
+							'default' => __( 'Your service title', 'onepress' ),
+						),
+						'icon' => array(
+							'title' => __('Icon', 'onepress'),
+							'type'  =>'text',
+							'desc'  => sprintf( __('Paste your <a target="_blank" href="%1$s">Font Awesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
+							'default' => __( 'gg', 'onepress' ),
+						),
+						'content'  => array(
+							'title' => __('Description', 'onepress'),
+							'desc'  => __('Something about this service', 'onepress'),
+							'type'  =>'textarea',
+							'default' => __( 'Your service description here', 'onepress' ),
+						),
+					),
+
+				)
 			)
 		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_service_content_guide',
+
+	/*------------------------------------------------------------------------*/
+    /*  Section: Counter
+    /*------------------------------------------------------------------------*/
+	$wp_customize->add_panel( 'onepress_counter' ,
+		array(
+			'priority'        => 134,
+			'title'           => __( 'Section: Counter', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
+		)
+	);
+
+	$wp_customize->add_section( 'onepress_counter_settings' ,
+		array(
+			'priority'    => 3,
+			'title'       => __( 'Section Settings', 'onepress' ),
+			'description' => '',
+			'panel'       => 'onepress_counter',
+		)
+	);
+		// Show Content
+		$wp_customize->add_setting( 'onepress_counter_disable',
 			array(
-				'section'     => 'onepress_service_content',
-				'type'        => 'custom_message',
-				'description' => __( 'In order to add content for Services section please go to <strong>Customizer &rarr; Widgets &rarr; Section: Services</strong>, click Add a Widget and select <strong>OnePress: Service Item</strong> widget.', 'onepress' )
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
+				'default'           => '',
 			)
-		));
+		);
+		$wp_customize->add_control( 'onepress_counter_disable',
+			array(
+				'type'        => 'checkbox',
+				'label'       => __('Hide this section?', 'onepress'),
+				'section'     => 'onepress_counter_settings',
+				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
+			)
+		);
+
+		// Section ID
+		$wp_customize->add_setting( 'onepress_counter_id',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_text',
+				'default'           => __('counter', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_counter_id',
+			array(
+				'label' 		=> __('Section ID:', 'onepress'),
+				'section' 		=> 'onepress_counter_settings',
+				'description'   => 'The section id, we will use this for link anchor.'
+			)
+		);
+
+		// Title
+		$wp_customize->add_setting( 'onepress_counter_title',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => __('Our Numbers', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_counter_title',
+			array(
+				'label' 		=> __('Section Title', 'onepress'),
+				'section' 		=> 'onepress_counter_settings',
+				'description'   => '',
+			)
+		);
+
+		// Sub Title
+		$wp_customize->add_setting( 'onepress_counter_subtitle',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => __('Some Fun Facts', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_counter_subtitle',
+			array(
+				'label' 		=> __('Section Subtitle', 'onepress'),
+				'section' 		=> 'onepress_counter_settings',
+				'description'   => '',
+			)
+		);
+
+	$wp_customize->add_section( 'onepress_counter_content' ,
+		array(
+			'priority'    => 6,
+			'title'       => __( 'Section Content', 'onepress' ),
+			'description' => '',
+			'panel'       => 'onepress_counter',
+		)
+	);
+
+	// Order & Styling
+	$wp_customize->add_setting(
+		'onepress_counter_boxes',
+		array(
+			'default' => json_encode(
+				array(
+
+					array(
+						'title' => __( 'Projects completed', 'onepress' ),
+						'number'  => '268',
+						'unit_before' => '',
+						'unit_after' => ''
+					),
+
+					array(
+						'title' => __( 'Lines of code', 'onepress' ),
+						'number'  => '2569',
+						'unit_before' => '',
+						'unit_after' => 'k'
+					),
+
+					array(
+						'title' => __( 'Cups of coffee', 'onepress' ),
+						'number'  => '984',
+						'unit_before' => '',
+						'unit_after' => ''
+					),
+
+					array(
+						'title' => __( 'Customer Satisfaction', 'onepress' ),
+						'number'  => '5683',
+						'unit_before' => '',
+						'unit_after' => '',
+					),
+
+				)
+			),
+			'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+			'transport' => 'refresh', // refresh or postMessage
+		) );
+
+
+		$wp_customize->add_control(
+			new Onepress_Customize_Repeatable_Control(
+				$wp_customize,
+				'onepress_counter_boxes',
+				array(
+					'label' 		=> __('Counter content', 'onepress'),
+					'description'   => '',
+					'section'       => 'onepress_counter_content',
+					'live_title_id' => 'title', // apply for unput text and textarea only
+					'title_format'  => __('[live_title]', 'onepress'), // [live_title]
+					'max_item'      => 4, // Maximum item can add
+
+					'fields'    => array(
+						'title' => array(
+							'title' => __('Title', 'onepress'),
+							'type'  =>'text',
+							'desc'  => '',
+							'default' => __( 'Your counter label', 'onepress' ),
+						),
+						'number' => array(
+							'title' => __('Number', 'onepress'),
+							'type'  =>'text',
+							'default' => 99,
+						),
+						'unit_before'  => array(
+							'title' => __('Before number', 'onepress'),
+							'type'  =>'text',
+							'default' => '',
+						),
+						'unit_after'  => array(
+							'title' => __('After number', 'onepress'),
+							'type'  =>'text',
+							'default' => '',
+						),
+					),
+
+				)
+			)
+		);
+
+	/*------------------------------------------------------------------------*/
+	/*  Section: Testimonials
+	/*------------------------------------------------------------------------*/
+	$wp_customize->add_panel( 'onepress_testimonial' ,
+		array(
+			'priority'        => 134,
+			'title'           => __( 'Section: Testimonial', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
+		)
+	);
+
+	$wp_customize->add_section( 'onepress_testimonial_settings' ,
+		array(
+			'priority'    => 3,
+			'title'       => __( 'Section Settings', 'onepress' ),
+			'description' => '',
+			'panel'       => 'onepress_testimonial',
+		)
+	);
+		// Show Content
+		$wp_customize->add_setting( 'onepress_testimonials_disable',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
+				'default'           => '',
+			)
+		);
+		$wp_customize->add_control( 'onepress_testimonials_disable',
+			array(
+				'type'        => 'checkbox',
+				'label'       => __('Hide this section?', 'onepress'),
+				'section'     => 'onepress_testimonial_settings',
+				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
+			)
+		);
+
+		// Section ID
+		$wp_customize->add_setting( 'onepress_testimonial_id',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_text',
+				'default'           => __('testimonials', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_testimonial_id',
+			array(
+				'label' 		=> __('Section ID:', 'onepress'),
+				'section' 		=> 'onepress_testimonial_settings',
+				'description'   => 'The section id, we will use this for link anchor.'
+			)
+		);
+
+		// Title
+		$wp_customize->add_setting( 'onepress_testimonial_title',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => __('Testimonials', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_testimonial_title',
+			array(
+				'label' 		=> __('Section Title', 'onepress'),
+				'section' 		=> 'onepress_testimonial_settings',
+				'description'   => '',
+			)
+		);
+
+		// Sub Title
+		$wp_customize->add_setting( 'onepress_testimonial_subtitle',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => __('You are in good company!', 'onepress'),
+			)
+		);
+		$wp_customize->add_control( 'onepress_testimonial_subtitle',
+			array(
+				'label' 		=> __('Section Subtitle', 'onepress'),
+				'section' 		=> 'onepress_testimonial_settings',
+				'description'   => '',
+			)
+		);
+
+
+		// Order & Stlying
+		$wp_customize->add_section( 'onepress_testimonials_content' ,
+			array(
+				'priority'    => 3,
+				'title'       => __( 'Section Content', 'onepress' ),
+				'description' => '',
+				'panel'       => 'onepress_testimonial',
+			)
+		);
+		$wp_customize->add_setting(
+			'onepress_testimonial_boxes',
+			array(
+				'default' => json_encode(
+					array(
+						array(
+							'title' 		=> __( 'Design Quality', 'onepress' ),
+							'name' 			=> __( 'Alexander Rios', 'onepress' ),
+							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+							'style'         => 'warning',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/testimonial_1.jpg',
+								'id'  => ''
+							),
+							'content' 		=> __( 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.', 'onepress' ),
+
+						),
+						array(
+							'title' 		=> __( 'Feature Availability', 'onepress' ),
+							'name' 			=> __( 'Alexander Max', 'onepress' ),
+							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+							'style'         => 'success',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/testimonial_2.jpg',
+								'id'  => ''
+							),
+							'content' 		=> __( 'This card has supporting text below as a natural lead-in to additional content.', 'onepress' ),
+
+						),
+						array(
+							'title' 		=> __( 'Customizability', 'onepress' ),
+							'name' 			=> __( 'Peter Mendez', 'onepress' ),
+							'subtitle' 		=> __( 'Example Company', 'onepress' ),
+							'style'         => 'theme-primary',
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/testimonial_3.jpg',
+								'id'  => ''
+							),
+							'content' 		=> __( 'This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.', 'onepress' ),
+
+						),
+
+					)
+				),
+				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+				'transport' => 'refresh', // refresh or postMessage
+			) );
+
+
+		$wp_customize->add_control(
+			new Onepress_Customize_Repeatable_Control(
+				$wp_customize,
+				'onepress_testimonial_boxes',
+				array(
+					'label' 		=> __('Testimonial', 'onepress'),
+					'description'   => '',
+					'section'       => 'onepress_testimonials_content',
+					'live_title_id' => 'title', // apply for unput text and textarea only
+					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
+					'max_item'      => 3, // Maximum item can add
+
+					'fields'    => array(
+						'title' => array(
+							'title' => __('Title', 'onepress'),
+							'type'  =>'text',
+							'desc'  => '',
+							'default'  => __('Testimonial title', 'onepress'),
+						),
+						'name' => array(
+							'title' => __('Name', 'onepress'),
+							'type'  =>'text',
+							'desc'  => '',
+							'default'  => __('User name', 'onepress'),
+						),
+						'image' => array(
+							'title' => __('Avatar', 'onepress'),
+							'type'  =>'media',
+							'desc'  => 'Suggestion: 100x100px square image.',
+							'default' => array(
+								'url' => get_template_directory_uri().'/assets/images/testimonial_1.jpg',
+								'id' => ''
+							)
+						),
+						'subtitle' => array(
+							'title' => __('Subtitle', 'onepress'),
+							'type'  =>'textarea',
+							'default'  => __('Example Company', 'onepress'),
+						),
+						'content' => array(
+							'title' => __('Content', 'onepress'),
+							'type'  =>'textarea',
+							'default'  => __('Whatever your user say', 'onepress'),
+						),
+
+						'style' => array(
+							'title' => __('Style', 'onepress'),
+							'type'  =>'select',
+							'default'  => 'primary',
+							'options' => array(
+								'theme-primary' => __( 'Theme default', 'onepress' ),
+								'primary' => __( 'Primary', 'onepress' ),
+								'success' => __( 'Success', 'onepress' ),
+								'info' => __( 'Info', 'onepress' ),
+								'warning' => __( 'Warning', 'onepress' ),
+								'danger' => __( 'Danger', 'onepress' ),
+							)
+						),
+
+
+					),
+
+				)
+			)
+		);
+
+
+
+
 
 
 	/*------------------------------------------------------------------------*/
@@ -797,9 +1311,10 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_team' ,
 		array(
-			'priority'    => 26,
-			'title'       => __( 'Section: Team', 'onepress' ),
-			'description' => '',
+			'priority'        => 136,
+			'title'           => __( 'Section: Team', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -882,28 +1397,136 @@ function onepress_customize_register( $wp_customize ) {
 	);
 
 		// Order & Stlying
-		$wp_customize->add_setting( 'onepress_team_content_guide',
+		$wp_customize->add_setting(
+			'onepress_team_members',
 			array(
-				'sanitize_callback' => 'onepress_sanitize_text'
+				'default' => json_encode(
+					array(
+						array(
+							'name' 			=> __( 'Alexander Rios', 'onepress' ),
+							'position' 		=> __( 'Founder & CEO', 'onepress' ),
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/team1.jpg',
+								'id' => ''
+							),
+							'facebook' 		=> '#',
+							'twitter' 		=> '#',
+							'google_plus' 	=> '#',
+							'youtube' 		=> '#',
+							'linkedin' 		=> '#',
+						),
+						array(
+							'name' 			=> __( 'Victoria Stephens', 'onepress' ),
+							'position' 		=> __( 'Founder & CTO', 'onepress' ),
+							'image' 		=> array(
+								'url'=>get_template_directory_uri() . '/assets/images/team2.jpg'
+							),
+							'facebook' 		=> '#',
+							'twitter' 		=> '#',
+							'google_plus' 	=> '#',
+							'youtube' 		=> '#',
+							'linkedin' 		=> '#',
+						),
+						array(
+							'name' 			=> __( 'Harry Allen', 'onepress' ),
+							'position' 		=> __( 'Director Of Production', 'onepress' ),
+							'image' 		=> array(
+								'url' => get_template_directory_uri() . '/assets/images/team3.jpg'
+							),
+							'facebook' 		=> '#',
+							'twitter' 		=> '#',
+							'google_plus' 	=> '#',
+							'youtube' 		=> '#',
+							'linkedin' 		=> '#',
+						),
+						array(
+							'name' 			=> __( 'Thomas Wade', 'onepress' ),
+							'position' 		=> __( 'Senior Developer', 'onepress' ),
+							'image' 		=> array(
+								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
+							),
+							'facebook' 		=> '#',
+							'twitter' 		=> '#',
+							'google_plus' 	=> '#',
+							'youtube' 		=> '#',
+							'linkedin' 		=> '#',
+						),
+
+					)
+				),
+				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+				'transport' => 'refresh', // refresh or postMessage
+			) );
+
+
+		$wp_customize->add_control(
+			new Onepress_Customize_Repeatable_Control(
+				$wp_customize,
+				'onepress_team_members',
+				array(
+					'label' 		=> __('Team members', 'onepress'),
+					'description'   => '',
+					'section'       => 'onepress_team_content',
+					'live_title_id' => 'name', // apply for unput text and textarea only
+					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
+					'max_item'      => 3, // Maximum item can add
+
+					'fields'    => array(
+						'name' => array(
+							'title' => __('Name', 'onepress'),
+							'type'  =>'text',
+							'desc'  => '',
+							'default'  => __('Member name', 'onepress'),
+						),
+						'position' => array(
+							'title' => __('Position', 'onepress'),
+							'type'  =>'text',
+							'default'  => __('Member Position', 'onepress'),
+						),
+						'image' => array(
+							'title' => __('Avatar', 'onepress'),
+							'type'  =>'media',
+							'default' => array(
+								'url' => get_template_directory_uri().'/assets/images/user_avatar.jpg',
+								'id' => ''
+							)
+						),
+						'facebook' => array(
+							'title' => __('Facebook', 'onepress'),
+							'type'  =>'text',
+							'default'  => '',
+						),
+						'twitter' => array(
+							'title' => __('Twitter', 'onepress'),
+							'type'  =>'text',
+						),
+						'google_plus' => array(
+							'title' => __('Google+', 'onepress'),
+							'type'  =>'text',
+						),
+						'youtube' => array(
+							'title' => __('Youtube', 'onepress'),
+							'type'  =>'text',
+						),
+						'linkedin' => array(
+							'title' => __('LinkedIn', 'onepress'),
+							'type'  =>'text',
+						),
+					),
+
+				)
 			)
 		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_team_content_guide',
-			array(
-				'section'     => 'onepress_team_content',
-				'type'        => 'custom_message',
-				'description' => __( 'In order to add team member please go to <strong>Customizer &rarr; Widgets &rarr; Section: Team</strong>, click Add a Widget and select <strong>OnePress: Team Member</strong> widget.', 'onepress' )
-			)
-		));
-
 
 	/*------------------------------------------------------------------------*/
     /*  Section: News
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_news' ,
 		array(
-			'priority'    => 26,
-			'title'       => __( 'Section: News', 'onepress' ),
-			'description' => '',
+			'priority'        => 138,
+			'title'           => __( 'Section: News', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -1038,9 +1661,10 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_contact' ,
 		array(
-			'priority'    => 26,
-			'title'       => __( 'Section: Contact', 'onepress' ),
-			'description' => '',
+			'priority'        => 140,
+			'title'           => __( 'Section: Contact', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
 		)
 	);
 
@@ -1270,7 +1894,10 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-
+		/**
+		 * Hook to add other customize
+		 */
+		do_action( 'onepress_customize_after_register', $wp_customize );
 
 }
 add_action( 'customize_register', 'onepress_customize_register' );
@@ -1298,7 +1925,7 @@ function onepress_hero_fullscreen_callback ( $control ) {
 }
 
 function onepress_sanitize_number( $input ) {
-    return force_balance_tags( $input );
+    return balanceTags( $input );
 }
 
 function onepress_sanitize_hex_color( $color ) {
@@ -1320,18 +1947,21 @@ function onepress_sanitize_checkbox( $input ) {
 }
 
 function onepress_sanitize_text( $string ) {
-	return wp_kses_post( force_balance_tags( $string ) );
+	return wp_kses_post( balanceTags( $string ) );
 }
 
 function onepress_sanitize_html_input( $string ) {
 	return wp_kses_allowed_html( $string );
 }
 
+function onepress_showon_frontpage() {
+	return is_page_template( 'template-frontpage.php' );
+}
 
 /**
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
 function onepress_customize_preview_js() {
-	wp_enqueue_script( 'onepress_customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-preview' ), '20130508', true );
+	wp_enqueue_script( 'onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array( 'customize-preview' ), '20130508', true );
 }
 add_action( 'customize_preview_init', 'onepress_customize_preview_js' );

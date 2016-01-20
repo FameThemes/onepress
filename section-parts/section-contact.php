@@ -1,6 +1,6 @@
 <?php
 $onepress_contact_id            = get_theme_mod( 'onepress_contact_id', __('contact', 'onepress') );
-$onepress_contact_disable       = get_theme_mod( 'onepress_contact_disable' );
+$onepress_contact_disable       = get_theme_mod( 'onepress_contact_disable' ) == 1 ?  true : false;
 $onepress_contact_title         = get_theme_mod( 'onepress_contact_title', __('Get in touch', 'onepress' ));
 $onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', __('Talk with us', 'onepress' ));
 $onepress_contact_cf7           = get_theme_mod( 'onepress_contact_cf7' );
@@ -14,29 +14,30 @@ $onepress_contact_phone         = get_theme_mod( 'onepress_contact_phone', __('1
 $onepress_contact_email         = get_theme_mod( 'onepress_contact_email', __('contact@company.com', 'onepress' ));
 $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax: (123) 123-4567', 'onepress' ));
 ?>
-<?php if ( $onepress_contact_disable != '1' ) : ?>
-<section id="<?php if ( $onepress_contact_id != '' ) echo $onepress_contact_id; ?>" class="section-padding section-contact section-meta onepage-section">
+<?php if ( ! $onepress_contact_disable  ) : ?>
+<section id="<?php if ( $onepress_contact_id != '' ) echo $onepress_contact_id; ?>" <?php do_action( 'onpress_section_atts', 'counter' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-padding section-contact section-meta onepage-section', 'contact' ) ); ?>">
+	<?php do_action( 'onepress_section_before_inner', 'contact' ); ?>
 	<div class="container">
 		<div class="section-title-area">
 			<?php if ( $onepress_contact_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_contact_subtitle ) . '</h5>'; ?>
 			<?php if ( $onepress_contact_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_contact_title ) . '</h2>'; ?>
 		</div>
-		<div class="grid-row">
+		<div class="row">
 
 			<?php if ( $onepress_contact_cf7_disable != '1' ) : ?>
 				<?php if ( isset( $onepress_contact_cf7 ) && $onepress_contact_cf7 != '' ) { ?>
-					<div class="contact-form grid-sm-6 wow slideInUp">
+					<div class="contact-form col-sm-6 wow slideInUp">
 						<?php echo do_shortcode( wp_kses_post( $onepress_contact_cf7) ); ?>
 					</div>
 				<?php } else { ?>
-				<div class="contact-form grid-sm-6 wow slideInUp">
+				<div class="contact-form col-sm-6 wow slideInUp">
 					<br>
 					<small><i><?php echo __( 'You can install <a target="_blank" href="<?php echo esc_url(\'https://wordpress.org/plugins/contact-form-7/\'); ?>">Contact Form 7</a> plugin and go to <strong>Customizer &rarr; Section: Contact &rarr; Section Content</strong> to show a working contact form here.', 'onepress' ); ?></i></small>
 				</div>
 				<?php } ?>
 			<?php endif; ?>
 
-			<div class="grid-sm-6 wow slideInUp">
+			<div class="col-sm-6 wow slideInUp">
 				<br>
 				<?php if ( $onepress_contact_text != '' ) echo wp_kses_post( $onepress_contact_text ); ?>
 				<br><br>
@@ -76,5 +77,6 @@ $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax
 			</div>
 		</div>
 	</div>
+	<?php do_action( 'onepress_section_after_inner', 'contact' ); ?>
 </section>
 <?php endif; ?>

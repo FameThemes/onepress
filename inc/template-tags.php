@@ -181,16 +181,3 @@ function onepress_comment( $comment, $args, $depth ) {
     endswitch; // end comment_type check
 }
 endif;
-
-/**
- * Display a default one page menu when the Primary menu is not assign yet.
- */
-function onepress_primary_menu_fb() {
-	?>
-	<li class="menu-item"><a href="<?php echo esc_url( home_url( '/' ) ) ?>#about" title="<?php _e( 'About Us', 'onepress' ) ?>"><?php _e( 'About Us', 'onepress' ) ?></a></li>
-	<li class="menu-item"><a href="<?php echo esc_url( home_url( '/' ) ) ?>#services" title="<?php _e( 'Services', 'onepress' ) ?>"><?php _e( 'Services', 'onepress' ) ?></a></li>
-	<li class="menu-item"><a href="<?php echo esc_url( home_url( '/' ) ) ?>#team" title="<?php _e( 'Our Team', 'onepress' ) ?>"><?php _e( 'Our Team', 'onepress' ) ?></a></li>
-	<li class="menu-item"><a href="<?php echo esc_url( home_url( '/' ) ) ?>#news" title="<?php _e( 'News', 'onepress' ) ?>"><?php _e( 'News', 'onepress' ) ?></a></li>
-	<li class="menu-item"><a href="<?php echo esc_url( home_url( '/' ) ) ?>#contact" title="<?php _e( 'Contact', 'onepress' ) ?>"><?php _e( 'Contact', 'onepress' ) ?></a></li>
-	<?php
-}

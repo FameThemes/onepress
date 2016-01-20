@@ -1,3 +1,5 @@
+// main: style.scss
+
 // normalize.css : https://github.com/necolas/normalize.css
 //--------------------------------------------------------------
 // Prevent iOS text size adjust after orientation change, without disabling user zoom.
@@ -153,7 +155,7 @@ input[type="submit"] {
 }
 
 // Appearance in Safari/Chrome
-input[type="search"] { 
+input[type="search"] {
     -webkit-appearance: textfield;
     -webkit-box-sizing: content-box;
        -moz-box-sizing: content-box;
@@ -183,7 +185,7 @@ input::-moz-focus-inner {
 // Inner spacing ie IE6/7
 button,
 input {
-    line-height: normal; 
+    line-height: normal;
     *overflow: visible;
 }
 
@@ -195,7 +197,7 @@ input[type="radio"] {
 // Apply a natural box layout model to all elements; see http://www.paulirish.com/2012/box-sizing-border-box-ftw/
 *,
 *:before,
-*:after { 
+*:after {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing:    border-box;
 	box-sizing:         border-box;
@@ -226,20 +228,20 @@ th {
     padding: 0;
 }
 
-.clearfix:after { 
-    content: "."; 
-    display: block; 
-    height: 0; 
-    clear: both; 
-    visibility: hidden; 
-} 
-
-.clearfix { 
-    display: inline-block; 
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
 
-.clearfix { 
-    display: block; 
+.clearfix {
+    display: inline-block;
+}
+
+.clearfix {
+    display: block;
 }
 
 .clear {
@@ -258,6 +260,6 @@ th {
     word-wrap: break-word;
 }
 
-.none { 
-    display: none; 
+.none {
+    display: none;
 }

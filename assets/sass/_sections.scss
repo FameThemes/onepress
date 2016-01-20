@@ -1,11 +1,25 @@
+// main: style.scss
+
 /* Section Stuffs
 ------------------------------*/
 .section-padding {
-	padding: 70px 0px;
+	@include rem('padding', 70px 0px);
+}
+.section-padding-lg {
+	@include rem('padding', 90px 0px);
 }
 
 .onepage-section {
 	position: relative;
+}
+
+.section-inverse {
+	background: #222222;
+	.section-title-area {
+		.section-title {
+			color: #FFFFFF;
+		}
+	}
 }
 
 .section-meta {
@@ -177,6 +191,7 @@
 		color: #FFFFFF;
 		text-align: center;
 		font-weight: 100;
+		@include rem('margin-bottom', 30px);
 		@include for(medium-screens) {
 			font-size: 18px;
 		}
@@ -185,30 +200,23 @@
 		}
 	}
 	.btn {
-		margin: 16px 10px 0px;
-		border-radius: 0px;
-		@include for(large-screens) {
-			margin: 25px 10px 0px;
+		margin: 0px 10px;
+		@include media-breakpoint-down(sm) {
+			display: inline-block;
+			margin: 5px;
 		}
 	}
-	.btn.btn-large {
-		padding: 10px 15px;
-		@include for(large-screens) {
-			padding: 18px 23px;
+
+	.btn-secondary-outline {
+		box-shadow: none;
+		border-color: rgba(255, 255, 255, 0.9);
+		color: rgba(255, 255, 255, 0.9);
+		&:hover {
+			background: #FFF;
+			color: #333;
 		}
 	}
-	.btn.btn-large.btn-ghost {
-		padding: 10px 15px;
-		@include for(large-screens) {
-			padding: 17px 23px 19px;
-		}
-	}
-	.btn.btn-large.btn-primary {
-		padding: 12px 15px;
-		@include for(large-screens) {
-			padding: 20px 23px 20px 23px;
-		}
-	}
+
 }
 
 /* Text Rotator */
@@ -279,6 +287,82 @@
 		.service-title {
 			margin-bottom: 7px;
 		}
+	}
+}
+
+/* Section: Counter
+------------------------------*/
+.section-counter {
+
+}
+.counter_item {
+	text-align: center;
+	@include rem('margin-bottom', 35px);
+	.counter__number {
+		@include rem('font-size', 50px);
+		font-weight: 800;
+		color: $primary;
+		line-height: 1;
+		font-family: serif, sans-serif;
+		text-transform: uppercase;
+	}
+	.counter_title {
+		@include rem('font-size', 18px);
+	}
+}
+
+/* Section: Testimonials
+------------------------------*/
+.section-testimonials {
+	.card-block {
+		@include rem('padding', 25px);
+	}
+	.card-text {
+		@include rem('font-size', 15px);
+	}
+}
+.tes_author {
+	&:after {
+		@extend .clear ;
+	}
+	position: relative;
+	margin-bottom: 25px;
+	img {
+		max-width: 70px;
+		float:left;
+		@include border-radius(500px);
+		border: 2px solid #FFF;
+		margin-right: 15px;
+	}
+	cite {
+		float: left;
+		margin-top: 10px;
+		font-size: 16px;
+		font-weight: bold;
+		div {
+			font-weight: normal;
+			font-size: 13px;
+		}
+	}
+}
+.card-inverse {
+	.tes_author cite {
+		color: rgba(255, 255, 255, 0.9);
+		div, a {
+			color: rgba(255, 255, 255, 0.65);
+		}
+	}
+}
+.card-theme-primary {
+	background-color: $primary;
+	border-color: $primary;
+}
+.card-deck {
+	@include rem('margin-bottom', 20px);
+}
+.card-deck-wrapper {
+	.card-deck:last-of-type {
+		margin-bottom: 0px;
 	}
 }
 
@@ -443,8 +527,8 @@
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
-	height: 100%; 
-	width: 100%; 
+	height: 100%;
+	width: 100%;
 	position: absolute;
 	display: block;
 	top: 0;
@@ -452,7 +536,7 @@
 }
 
 .parallax_bg.is-mobile {
-	background-position: 50% 50% !important; 
+	background-position: 50% 50% !important;
 }
 
 .parallax_bg_overlay {
@@ -485,28 +569,19 @@
 	.team-member {
 		padding: 0px 0.5px;
 	}
-	.grid-row {
+	.row {
 		margin-left: -0.5px;
 		margin-right: -0.5px;
 	}
 }
-.team-members {
-
+.team-members.row {
+	@include rem('margin-left', 0px);
+	@include rem('margin-right', 0px);
 }
 
 .team-member {
 	margin-bottom: 20px;
-	width: 100%;
-	@include for(small-screens) {
-		width: 50%;
-		float: left;
-	}
-	@include for(medium-screens) {
-		width: 25%;
-	}
-	@include for(large-screens) {
-		width: 25%;
-	}
+
 
 	.member-thumb {
 		margin-bottom: 20px;
@@ -568,7 +643,7 @@
 		font-size: 10px;
 		letter-spacing: 1.3px;
 	}
-	
+
 }
 
 /* Section: News
@@ -580,7 +655,7 @@
 }
 
 .section-news, .archive, .blog {
-	
+
 	.list-article {
 		border-top: 1px solid $border;
 		padding: 25px 0px;
@@ -632,7 +707,7 @@
 	}
 }
 
-.archive .site-main .list-article:first-child, 
+.archive .site-main .list-article:first-child,
 .blog .site-main .list-article:first-of-type {
 	border-top: none;
 	padding-top: 0px;
@@ -697,8 +772,3 @@ div.wpcf7-validation-errors {
 div.wpcf7-response-output {
 	margin: 20px 0px;
 }
-
-
-
-
-

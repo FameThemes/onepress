@@ -1,3 +1,5 @@
+// main: style.scss
+
 /* Header
 ------------------------------*/
 .site-header {
@@ -134,7 +136,7 @@
         -webkit-transition: none;
         transition: none;
     }
-    
+
     a {
         color: #333333;
         font-family: $font_heading;
@@ -169,7 +171,7 @@
     li.onepress-current-item > a {
         color: $primary;
     }
-    
+
     ul li.current-menu-item > a {
         color: $primary;
     }
@@ -190,7 +192,7 @@
     > li a.menu-actived {
         color: $primary;
     }
-    
+
 }
 
 // Responsive Mobile Navigation
@@ -389,10 +391,16 @@
     }
     .footer-connect {
         padding: 90px 0px;
+		@include rem('padding', 80px 0px);
         text-align: center;
         @include for(screens-medium) {
-            padding: 20px 0px;
+            //@include rem('padding', 40px 0px);
         }
+		@include media-breakpoint-down(sm) {
+			.footer-subscribe {
+				margin-bottom: 40px;
+			}
+		}
         .follow-heading {
             color: #FFFFFF;
             margin-bottom: 20px;
@@ -473,7 +481,7 @@
         margin: auto;
         position: absolute;
         right: 60px;
-        top: -60px;
+        top: -25px;
         transition: all 0.2s linear 0s;
         width: 50px;
         -webkit-transform: rotate(-45deg);

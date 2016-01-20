@@ -1,14 +1,14 @@
 <?php
 /**
- *Template Name: Full Width Page
+ *Template Name: Full Width
  *
  * @package OnePress
  */
 
 get_header(); ?>
-	
+
 	<div id="content" class="site-content">
-		
+
 		<div class="page-header">
 			<div class="container">
 				<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>

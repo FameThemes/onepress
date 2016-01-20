@@ -1,6 +1,6 @@
 <?php
 $onepress_hero_id         = get_theme_mod( 'onepress_hero_id', __('hero', 'onepress') );
-$onepress_hero_disable    = get_theme_mod( 'onepress_hero_disable' );
+$onepress_hero_disable    = get_theme_mod( 'onepress_hero_disable' ) == 1 ? true : false ;
 $onepress_hero_fullscreen = get_theme_mod( 'onepress_hero_fullscreen' );
 $onepress_hero_pdtop      = get_theme_mod( 'onepress_hero_pdtop', '10' );
 $onepress_hero_pdbotom    = get_theme_mod( 'onepress_hero_pdbotom', '10' );
@@ -22,19 +22,20 @@ if ( $onepress_hero_fullscreen != '1' ) {
 }
 ?>
 
-<?php if ( $onepress_hero_disable != '1' ) : ?>
+<?php if ( ! $onepress_hero_disable  ) : ?>
 <section id="<?php if ( $onepress_hero_id != '' ) echo $onepress_hero_id; ?>" class="hero-slideshow-wrapper <?php if ( $onepress_hero_fullscreen == 1 ) { echo 'hero-slideshow-fullscreen'; } else { echo 'hero-slideshow-normal'; } ?>">
 	<?php if ( $onepress_hcl1_enable == '1' ) : ?>
 	<div class="container"<?php echo $hero_content_style; ?>>
 		<div class="hero-content-style1">
 			<?php if ( $onepress_hcl1_largetext != '' ) echo '<h2 class="hero-large-text">' . wp_kses_post( $onepress_hcl1_largetext ) . '</h2>'; ?>
 			<?php if ( $onepress_hcl1_smalltext != '' ) echo '<p> ' . wp_kses_post( $onepress_hcl1_smalltext ) . '</p>' ?>
-			<?php if ( $onepress_hcl1_btn1_text != '' && $onepress_hcl1_btn1_link != '' ) echo '<a href="' . esc_url($onepress_hcl1_btn1_link) . '" class="btn btn-large btn-ghost">' . wp_kses_post( $onepress_hcl1_btn1_text ) . '</a>'; ?>
-			<?php if ( $onepress_hcl1_btn2_text != '' && $onepress_hcl1_btn2_link != '' ) echo '<a href="' . esc_url($onepress_hcl1_btn2_link) . '" class="btn btn-large btn-primary">' . wp_kses_post( $onepress_hcl1_btn2_text ) . '</a>'; ?>
+			<?php if ( $onepress_hcl1_btn1_text != '' && $onepress_hcl1_btn1_link != '' ) echo '<a href="' . esc_url($onepress_hcl1_btn1_link) . '" class="btn btn-theme-primary btn-lg">' . wp_kses_post( $onepress_hcl1_btn1_text ) . '</a>'; ?>
+			<?php if ( $onepress_hcl1_btn2_text != '' && $onepress_hcl1_btn2_link != '' ) echo '<a href="' . esc_url($onepress_hcl1_btn2_link) . '" class="btn btn-secondary-outline btn-lg">' . wp_kses_post( $onepress_hcl1_btn2_text ) . '</a>'; ?>
 		</div>
 	</div>
 	<?php endif; ?>
 	<script>
+
 	jQuery(document).ready(function() {
 		jQuery('.hero-slideshow-wrapper').backstretch([
 				"<?php echo $onepress_hero_image1; ?>",

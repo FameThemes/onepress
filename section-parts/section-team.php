@@ -1,146 +1,141 @@
 <?php
 $onepress_team_id       = get_theme_mod( 'onepress_team_id', __('team', 'onepress') );
-$onepress_team_disable  = get_theme_mod( 'onepress_team_disable' );
+$onepress_team_disable  = get_theme_mod( 'onepress_team_disable' ) ==  1 ? true : false;
 $onepress_team_title    = get_theme_mod( 'onepress_team_title', __('Meet the Talents', 'onepress' ));
 $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are OnePress', 'onepress' ));
 ?>
-<?php if ( $onepress_team_disable != '1' ) : ?>
-<section id="<?php if ( $onepress_team_id != '' ) echo $onepress_team_id; ?>" class="section-padding section-team section-meta onepage-section">
+<?php if ( ! $onepress_team_disable  ) : ?>
+<section id="<?php if ( $onepress_team_id != '' ) echo $onepress_team_id; ?>" <?php do_action( 'onpress_section_atts', 'team' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-padding section-team section-meta onepage-section', 'team' ) ); ?>">
+	<?php do_action( 'onepress_section_before_inner', 'team' ); ?>
 	<div class="container">
 		<div class="section-title-area">
 			<?php if ( $onepress_team_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_team_subtitle ) . '</h5>'; ?>
 			<?php if ( $onepress_team_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_team_title ) . '</h2>'; ?>
 		</div>
-		<div class="team-members grid-row">
+		<div class="team-members row">
+			<?php
 
-			<?php if ( ! is_active_sidebar( 'section_team' ) ) { ?>
+			$members = get_theme_mod( 'onepress_team_members',
+				array(
 
-			<div class="team-member grid-sm-3 wow slideInUp">
-				<div class="member-thumb">
-					<img src="<?php echo get_template_directory_uri() . '/assets/images/team5.jpg' ?>" alt="">
-					<div class="member-profile">
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
-					</div>
-				</div>
-				<div class="member-info">
-					<h5 class="member-name"><?php esc_html_e( 'Alexander Rios', 'onepress' ) ?></h5>
-					<span class="member-position"><?php esc_html_e( 'Founder & CEO', 'onepress' ) ?></span>
-				</div>
-			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
-				<div class="member-thumb">
-					<img src="<?php echo get_template_directory_uri() . '/assets/images/team3.jpg' ?>" alt="">
-					<div class="member-profile">
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
-					</div>
-				</div>
-				<div class="member-info">
-					<h5 class="member-name"><?php esc_html_e( 'Victoria Stephens', 'onepress' ) ?></h5>
-					<span class="member-position"><?php esc_html_e( 'Founder & CTO', 'onepress' ) ?></span>
-				</div>
-			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
-				<div class="member-thumb">
-					<img src="<?php echo get_template_directory_uri() . '/assets/images/team2.jpg' ?>" alt="">
-					<div class="member-profile">
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
-					</div>
-				</div>
-				<div class="member-info">
-					<h5 class="member-name"><?php esc_html_e( 'Harry Allen', 'onepress' ) ?></h5>
-					<span class="member-position"><?php esc_html_e( 'Director Of Production', 'onepress' ) ?></span>
-				</div>
-			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
-				<div class="member-thumb">
-					<img src="<?php echo get_template_directory_uri() . '/assets/images/team4.jpg' ?>" alt="">
-					<div class="member-profile">
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
-					</div>
-				</div>
-				<div class="member-info">
-					<h5 class="member-name"><?php esc_html_e( 'Thomas Wade', 'onepress' ) ?></h5>
-					<span class="member-position"><?php esc_html_e( 'Senior Developer', 'onepress' ) ?></span>
-				</div>
-			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
-				<div class="member-thumb">
-					<img src="<?php echo get_template_directory_uri() . '/assets/images/team6.jpg' ?>" alt="">
-					<div class="member-profile">
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
-					</div>
-				</div>
-				<div class="member-info">
-					<h5 class="member-name"><?php esc_html_e( 'Sean Weaver', 'onepress' ) ?></h5>
-					<span class="member-position"><?php esc_html_e( 'Senior Designer', 'onepress' ) ?></span>
-				</div>
-			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
-				<div class="member-thumb">
-					<img src="<?php echo get_template_directory_uri() . '/assets/images/team1.jpg' ?>" alt="">
-					<div class="member-profile">
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
-					</div>
-				</div>
-				<div class="member-info">
-					<h5 class="member-name"><?php esc_html_e( 'Peter Mendez', 'onepress' ) ?></h5>
-					<span class="member-position"><?php esc_html_e( 'Interactive Designer', 'onepress' ) ?></span>
-				</div>
-			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
-				<div class="member-thumb">
-					<img src="<?php echo get_template_directory_uri() . '/assets/images/team7.jpg' ?>" alt="">
-					<div class="member-profile">
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
-					</div>
-				</div>
-				<div class="member-info">
-					<h5 class="member-name"><?php esc_html_e( 'George Wells', 'onepress' ) ?></h5>
-					<span class="member-position"><?php esc_html_e( 'User Experience', 'onepress' ) ?></span>
-				</div>
-			</div>
-			<div class="team-member grid-sm-3 wow slideInUp">
-				<div class="member-thumb">
-					<img src="<?php echo get_template_directory_uri() . '/assets/images/team8.jpg' ?>" alt="">
-					<div class="member-profile">
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
-						<a href="#"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
-					</div>
-				</div>
-				<div class="member-info">
-					<h5 class="member-name"><?php esc_html_e( 'Jonathan Green', 'onepress' ) ?></h5>
-					<span class="member-position"><?php esc_html_e( 'Client Engagement', 'onepress' ) ?></span>
-				</div>
-			</div>
+					array(
+						'name' 			=> __( 'Alexander Rios', 'onepress' ),
+						'position' 		=> __( 'Founder & CEO', 'onepress' ),
+						'image' 		=> array(
+							'url' => get_template_directory_uri() . '/assets/images/team4.jpg',
+							'id' => ''
+						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
+					array(
+						'name' 			=> __( 'Sean Weaver', 'onepress' ),
+						'position' 		=> __( 'Client Engagement', 'onepress' ),
+						'image' 		=> array(
+							'url'=>get_template_directory_uri() . '/assets/images/team5.jpg'
+						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
+					array(
+						'name' 			=> __( 'George Wells', 'onepress' ),
+						'position' 		=> __( 'Director Of Production', 'onepress' ),
+						'image' 		=> array(
+							'url' => get_template_directory_uri() . '/assets/images/team6.jpg'
+						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
+					array(
+						'name' 			=> __( 'Thomas Wade', 'onepress' ),
+						'position' 		=> __( 'Senior Developer', 'onepress' ),
+						'image' 		=> array(
+							'url' =>  get_template_directory_uri() . '/assets/images/team7.jpg',
+						),
+						'facebook' 		=> '#',
+						'twitter' 		=> '#',
+						'google_plus' 	=> '#',
+						'youtube' 		=> '#',
+						'linkedin' 		=> '#',
+					),
 
-			<?php } else { ?>
-				<?php dynamic_sidebar( 'section_team' ); ?>
-			<?php } ?>
+				)
+			);
 
+			if ( is_string( $members ) ) {
+				$members = json_decode( $members, true );
+			}
+
+			if ( is_array( $members ) && ! empty( $members ) ) {
+				foreach ( $members as $member ) {
+					$member = wp_parse_args( $member,
+						array(
+							'name' 			=> '',
+							'position' 		=> '',
+							'image' 		=>  '',
+							'facebook' 		=> '',
+							'twitter' 		=> '',
+							'google_plus' 	=> '',
+							'youtube' 		=> '',
+							'linkedin' 		=> '',
+						)
+					);
+					$member['image'] = wp_parse_args( $member['image'], array( 'url' => '', 'id' => '' ) );
+					$image = '';
+					if ( $member['image']['id'] != '' ){
+						$image =  wp_get_attachment_url( $member['image']['id'] );
+					}
+					if ( $image == '' && $member['image']['url'] != '' ) {
+						$image = $member['image']['url'];
+					}
+					?>
+					<div class="team-member col-sm-3 wow slideInUp">
+						<div class="member-thumb">
+							<?php if ( $image !='' ) { ?>
+							<img src="<?php echo esc_url( $image );  ?>" alt="">
+							<?php } else { ?>
+								<img src="<?php echo esc_url( get_template_directory_uri().'/assets/images/user_avatar.jpg' );  ?>" alt="">
+							<?php } ?>
+
+							<div class="member-profile">
+								<?php if( $member['twitter'] != '' ){ ?>
+								<a href="<?php echo esc_url( $member['twitter'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></a>
+								<?php } ?>
+								<?php if( $member['facebook'] != '' ){ ?>
+								<a href="<?php echo esc_url( $member['facebook'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></a>
+								<?php } ?>
+								<?php if( $member['google_plus'] != '' ){ ?>
+								<a href="<?php echo esc_url( $member['google_plus'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
+								<?php } ?>
+								<?php if( $member['youtube'] != '' ){ ?>
+									<a href="<?php echo esc_url( $member['youtube'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-youtube fa-stack-1x fa-inverse"></i></span></a>
+								<?php } ?>
+								<?php if( $member['linkedin'] != '' ){ ?>
+								<a href="<?php echo esc_url( $member['linkedin'] ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
+								<?php } ?>
+							</div>
+						</div>
+						<div class="member-info">
+							<h5 class="member-name"><?php echo esc_html( $member['name'] ); ?></h5>
+							<span class="member-position"><?php echo wp_kses_post( $member['position'] ); ?></span>
+						</div>
+					</div>
+				<?php
+				}
+			}
+
+			?>
 		</div>
 	</div>
+	<?php do_action( 'onepress_section_after_inner', 'team' ); ?>
 </section>
 <?php endif; ?>
