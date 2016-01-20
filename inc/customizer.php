@@ -1469,7 +1469,7 @@ function onepress_customize_register( $wp_customize ) {
 					'section'       => 'onepress_team_content',
 					'live_title_id' => 'name', // apply for unput text and textarea only
 					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
-					'max_item'      => 3, // Maximum item can add
+					'max_item'      => 4, // Maximum item can add
 
 					'fields'    => array(
 						'name' => array(
