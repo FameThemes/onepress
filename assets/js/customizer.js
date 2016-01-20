@@ -50,7 +50,7 @@ var RepeatableCustomize = function (  control  ){
 	var frame = wp.media({
 		title: wp.media.view.l10n.addMedia,
 		multiple: false,
-		library: {type: 'image'},
+		//library: {type: 'all' },
 		//button : { text : 'Insert' }
 	});
 
@@ -89,18 +89,20 @@ var RepeatableCustomize = function (  control  ){
 					// Grab our attachment selection and construct a JSON representation of the model.
 					var media_attachment = frame.state().get('selection').first().toJSON();
 					// media_attachment= JSON.stringify(media_attachment);
+					 console.log( media_attachment );
 
 					$( '.image_id', _item ).val(media_attachment.id);
+
 					var preview, img_url;
 					img_url = media_attachment.url;
-
 					$( '.current', _item ).removeClass( 'hide').addClass( 'show' );
-
-					$( '.image_url', _item ).val(img_url);
-					preview = '<img src="' + img_url + '" alt="">';
-					//$(' img', _item).remove();
-					$( '.thumbnail-image', _item ).html( preview );
-					$( '.remove-button', _item).show();
+					$( '.image_url', _item ).val( img_url );
+					if ( media_attachment.type == 'image' ) {
+						preview = '<img src="' + img_url + '" alt="">';
+						//$(' img', _item).remove();
+						$('.thumbnail-image', _item).html(preview);
+					}
+					$('.remove-button', _item).show();
 					$( '.image_id', _item).trigger( 'change' );
 
 					btn.text( btn.attr( 'data-change-txt' ) );

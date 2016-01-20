@@ -392,7 +392,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
                                         <# } else if ( field.type == 'media' ) { #>
 
-                                            <input type="hidden" value="{{ field.value.url }}" data-repeat-name="_items[__i__][{{ field.id }}][url]" class="image_url widefat">
+                                            <input type="text" value="{{ field.value.url }}" data-repeat-name="_items[__i__][{{ field.id }}][url]" class="image_url widefat">
                                             <input type="hidden" value="{{ field.value.id }}" data-repeat-name="_items[__i__][{{ field.id }}][id]" class="image_id widefat">
 
                                             <div class="current <# if ( field.value.url !== '' ){ #> show <# } #>">
@@ -408,8 +408,8 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                             </div>
 
                                             <div class="actions">
-                                                <button class="button remove-button " <# if ( field.value.url === '' ){ #> style="display:none"; <# } #> type="button"><?php _e( 'Remove', 'onepress' ) ?></button>
-                                                <button class="button upload-button" data-add-txt="<?php esc_attr_e( 'Add Image', 'onepress' ); ?>" data-change-txt="<?php esc_attr_e( 'Change Image', 'onepress' ); ?>" type="button"><# if ( field.value.url == '' ){ #> <?php _e( 'Add Image', 'onepress' ); ?> <# } else { #> <?php _e( 'Change Image', 'onepress' ); ?> <# } #> </button>
+                                                <button class="button remove-button " <# if ( ! field.value.url ){ #> style="display:none"; <# } #> type="button"><?php _e( 'Remove', 'onepress' ) ?></button>
+                                                <button class="button upload-button" data-add-txt="<?php esc_attr_e( 'Add', 'onepress' ); ?>" data-change-txt="<?php esc_attr_e( 'Change', 'onepress' ); ?>" type="button"><# if ( ! field.value.url  ){ #> <?php _e( 'Add', 'onepress' ); ?> <# } else { #> <?php _e( 'Change', 'onepress' ); ?> <# } #> </button>
                                                 <div style="clear:both"></div>
                                             </div>
 

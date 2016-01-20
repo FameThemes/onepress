@@ -20,7 +20,7 @@ get_header(); ?>
 				foreach ( $sections as $section ){
 					get_template_part('section-parts/section', $section );
 				}
-				
+
 			} else {
 				do_action( 'onepress_frontpage_section_parts' );
 			}
