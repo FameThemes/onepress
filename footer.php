@@ -10,15 +10,15 @@
  */
 $onepress_btt_disable          = get_theme_mod( 'onepress_btt_disable' );
 $onepress_social_footer_title  = get_theme_mod( 'onepress_social_footer_title', __( 'Keep Updated', 'onepress' ) );
-$onepress_social_twitter       = get_theme_mod( 'onepress_social_twitter', '#' );
-$onepress_social_facebook      = get_theme_mod( 'onepress_social_facebook', '#' );
-$onepress_social_google        = get_theme_mod( 'onepress_social_google', '#' );
-$onepress_social_instagram     = get_theme_mod( 'onepress_social_instagram', '#' );
-$onepress_social_rss           = get_theme_mod( 'onepress_social_instagram', get_bloginfo('rss2_url') );
-$onepress_newsletter_disable   = get_theme_mod( 'onepress_newsletter_disable' );
-$onepress_social_disable 	   = get_theme_mod( 'onepress_social_disable' );
+$onepress_social_twitter       = get_theme_mod( 'onepress_social_twitter' );
+$onepress_social_facebook      = get_theme_mod( 'onepress_social_facebook' );
+$onepress_social_google        = get_theme_mod( 'onepress_social_google' );
+$onepress_social_instagram     = get_theme_mod( 'onepress_social_instagram' );
+$onepress_social_rss           = get_theme_mod( 'onepress_social_rss' );
+$onepress_newsletter_disable   = get_theme_mod( 'onepress_newsletter_disable', '1' );
+$onepress_social_disable 	   = get_theme_mod( 'onepress_social_disable', '1' );
 $onepress_newsletter_title     = get_theme_mod( 'onepress_newsletter_title', __( 'Join our Newsletter', 'onepress' ) );
-$onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp', '' );
+$onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp' );
 ?>
 
 	<footer id="colophon" class="site-footer" role="contentinfo">
@@ -60,7 +60,7 @@ $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp',
 			</div>
 		</div>
 		<?php endif; ?>
-		
+
 		<div class="site-info">
 			<div class="container">
 				<?php if ( $onepress_btt_disable != '1' ) : ?>
