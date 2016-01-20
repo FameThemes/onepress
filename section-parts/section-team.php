@@ -5,7 +5,8 @@ $onepress_team_title    = get_theme_mod( 'onepress_team_title', __('Meet the Tal
 $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are OnePress', 'onepress' ));
 ?>
 <?php if ( ! $onepress_team_disable  ) : ?>
-<section id="<?php if ( $onepress_team_id != '' ) echo $onepress_team_id; ?>" class="section-padding section-team section-meta onepage-section">
+<section id="<?php if ( $onepress_team_id != '' ) echo $onepress_team_id; ?>" <?php do_action( 'onpress_section_atts', 'team' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-padding section-team section-meta onepage-section', 'team' ) ); ?>">
+	<?php do_action( 'onepress_section_before_inner', 'team' ); ?>
 	<div class="container">
 		<div class="section-title-area">
 			<?php if ( $onepress_team_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_team_subtitle ) . '</h5>'; ?>
@@ -135,5 +136,6 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are On
 			?>
 		</div>
 	</div>
+	<?php do_action( 'onepress_section_after_inner', 'team' ); ?>
 </section>
 <?php endif; ?>

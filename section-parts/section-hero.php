@@ -35,6 +35,7 @@ if ( $onepress_hero_fullscreen != '1' ) {
 	</div>
 	<?php endif; ?>
 	<script>
+
 	jQuery(document).ready(function() {
 		jQuery('.hero-slideshow-wrapper').backstretch([
 				"<?php echo $onepress_hero_image1; ?>",

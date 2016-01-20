@@ -15,7 +15,8 @@ $onepress_contact_email         = get_theme_mod( 'onepress_contact_email', __('c
 $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax: (123) 123-4567', 'onepress' ));
 ?>
 <?php if ( ! $onepress_contact_disable  ) : ?>
-<section id="<?php if ( $onepress_contact_id != '' ) echo $onepress_contact_id; ?>" class="section-padding section-contact section-meta onepage-section">
+<section id="<?php if ( $onepress_contact_id != '' ) echo $onepress_contact_id; ?>" <?php do_action( 'onpress_section_atts', 'counter' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-padding section-contact section-meta onepage-section', 'contact' ) ); ?>">
+	<?php do_action( 'onepress_section_before_inner', 'contact' ); ?>
 	<div class="container">
 		<div class="section-title-area">
 			<?php if ( $onepress_contact_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_contact_subtitle ) . '</h5>'; ?>
@@ -76,5 +77,6 @@ $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax
 			</div>
 		</div>
 	</div>
+	<?php do_action( 'onepress_section_after_inner', 'contact' ); ?>
 </section>
 <?php endif; ?>

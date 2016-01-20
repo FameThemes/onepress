@@ -8,7 +8,8 @@ $onepress_news_more_link = get_theme_mod( 'onepress_news_more_link', '#' );
 $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', __('Read Our Blog', 'onepress' ));
 ?>
 <?php if ( ! $onepress_news_disable  ) : ?>
-<section id="<?php if ( $onepress_news_id != '' ) echo $onepress_news_id; ?>" class="section-padding section-news onepage-section">
+<section id="<?php if ( $onepress_news_id != '' ) echo $onepress_news_id; ?>" <?php do_action( 'onpress_section_atts', 'news' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-padding section-news onepage-section', 'news' ) ); ?>">
+	<?php do_action( 'onepress_section_before_inner', 'news' ); ?>
 	<div class="container">
 		<div class="section-title-area">
 			<?php if ( $onepress_news_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_news_subtitle ) . '</h5>'; ?>
@@ -18,7 +19,7 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', __('Read Ou
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="blog-entry wow slideInUp">
-						<?php query_posts('showposts='.$onepress_news_number.''); ?>
+						<?php query_posts('showposts='.$onepress_news_number.'' ); ?>
 						<?php if ( have_posts() ) : ?>
 
 							<?php /* Start the Loop */ ?>
@@ -49,5 +50,11 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', __('Read Ou
 
 		</div>
 	</div>
+	<?php do_action( 'onepress_section_after_inner', 'news' ); ?>
 </section>
-<?php endif; ?>
+<?php endif;
+
+wp_reset_query();
+wp_reset_postdata();
+
+?>

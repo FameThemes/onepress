@@ -256,13 +256,14 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
         wp_enqueue_script( 'theme-customizer' );
         wp_enqueue_style( 'theme-customizer' );
+
     }
 
 
 
     public function render_content() {
-        ?>
 
+        ?>
         <label>
             <?php if ( ! empty( $this->label ) ) : ?>
                 <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
@@ -288,7 +289,6 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         </script>
         <?php
     }
-
 
     public function js_item( ){
 

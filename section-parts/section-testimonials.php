@@ -5,7 +5,8 @@ $onepress_testimonial_title    = get_theme_mod( 'onepress_testimonial_title', __
 $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle', __('You are in good company!', 'onepress' ));
 ?>
 <?php if ( ! $onepress_testimonials_disable  ) : ?>
-<section id="<?php if ( $onepress_testimonial_id != '' ) echo $onepress_testimonial_id; ?>" class="section-padding section-testimonials onepage-section section-inverse section-padding-lg">
+<section id="<?php if ( $onepress_testimonial_id != '' ) echo $onepress_testimonial_id; ?>" <?php do_action( 'onpress_section_atts', 'testimonials' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-padding section-testimonials onepage-section section-inverse section-padding-lg', 'testimonials' ) ); ?>">
+    <?php do_action( 'onepress_section_before_inner', 'testimonials' ); ?>
 	<div class="container">
 
 		<div class="section-title-area">
