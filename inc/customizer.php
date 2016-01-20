@@ -5,13 +5,13 @@
  * @package OnePress
  */
 
+
 /**
  * Add postMessage support for site title and description for the Theme Customizer.
  *
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
 function onepress_customize_register( $wp_customize ) {
-
 	// Load custom controls
 	require get_template_directory() . '/inc/customizer-controls.php';
 
@@ -488,6 +488,7 @@ function onepress_customize_register( $wp_customize ) {
 				'title'       => __( 'Hero Content Layout 1', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
+
 			)
 		);
 
@@ -1916,7 +1917,7 @@ function onepress_hero_fullscreen_callback ( $control ) {
 }
 
 function onepress_sanitize_number( $input ) {
-    return force_balance_tags( $input );
+    return balanceTags( $input );
 }
 
 function onepress_sanitize_hex_color( $color ) {
