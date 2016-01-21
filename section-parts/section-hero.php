@@ -10,11 +10,11 @@ $onepress_hero_image3     = get_theme_mod( 'onepress_hero_image3', get_template_
 $onepress_hero_image4     = get_theme_mod( 'onepress_hero_image4', get_template_directory_uri() . '/assets/images/hero4.jpg' );
 $onepress_hcl1_enable     = get_theme_mod( 'onepress_hcl1_enable', 1 );
 $onepress_hcl1_largetext  = get_theme_mod( 'onepress_hcl1_largetext', __('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress' ));
-$onepress_hcl1_smalltext  = get_theme_mod( 'onepress_hcl1_smalltext', __('An independent digital design studio in <strong>New York City.</strong> <br>We bring creativity and intelligence to the most beloved brands.', 'onepress' ));
-$onepress_hcl1_btn1_text  = get_theme_mod( 'onepress_hcl1_btn1_text', __('More About Us', 'onepress') );
-$onepress_hcl1_btn1_link  = get_theme_mod( 'onepress_hcl1_btn1_link', esc_url( home_url( '/' )).__('#about', 'onepress') );
-$onepress_hcl1_btn2_text  = get_theme_mod( 'onepress_hcl1_btn2_text', __('See Our Works', 'onepress') );
-$onepress_hcl1_btn2_link  = get_theme_mod( 'onepress_hcl1_btn2_link', esc_url( home_url( '/' )).__('#projects', 'onepress') );
+$onepress_hcl1_smalltext  = get_theme_mod( 'onepress_hcl1_smalltext', __('<strong>OnePress</strong> is a creative and flexible WordPress <strong>ONE PAGE</strong> theme well suited<br> for business, portfolio, digital agency, product showcase, freelancers websites', 'onepress') );
+$onepress_hcl1_btn1_text  = get_theme_mod( 'onepress_hcl1_btn1_text', __('Our Services', 'onepress') );
+$onepress_hcl1_btn1_link  = get_theme_mod( 'onepress_hcl1_btn1_link', esc_url( home_url( '/' )).__('#services', 'onepress') );
+$onepress_hcl1_btn2_text  = get_theme_mod( 'onepress_hcl1_btn2_text', __('Get Started', 'onepress') );
+$onepress_hcl1_btn2_link  = get_theme_mod( 'onepress_hcl1_btn2_link', esc_url( home_url( '/' )).__('#contact', 'onepress') );
 
 $hero_content_style = '';
 if ( $onepress_hero_fullscreen != '1' ) {

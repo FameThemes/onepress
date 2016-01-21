@@ -195,6 +195,18 @@ function onepress_fonts_url() {
 }
 endif;
 
+if ( ! function_exists( 'onepress_admin_scripts' ) ) :
+/**
+ * Enqueue scripts for admin page only: Theme info page
+ */
+function onepress_admin_scripts( $hook ) {
+	if ( $hook === 'widgets.php' || $hook === 'appearance_page_ft_onepress'  ) {
+		wp_enqueue_style('onepress-admin-css', get_template_directory_uri() . '/assets/css/admin.css');
+	}
+}
+endif;
+add_action('admin_enqueue_scripts', 'onepress_admin_scripts');
+
 
 if ( ! function_exists( 'onepress_register_required_plugins' ) ) :
 /**
@@ -301,6 +313,11 @@ require get_template_directory() . '/inc/extras.php';
 require get_template_directory() . '/inc/customizer.php';
 
 /**
- * Load JGM class plugin activation.
+ * Load TGM class plugin activation.
  */
 require get_template_directory() . '/inc/tgm-plugin-activation.php';
+
+/**
+ * Add theme info page
+ */
+require get_template_directory() . '/inc/dashboard.php';

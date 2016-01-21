@@ -214,12 +214,21 @@
 		@include for(large-screens) {
 			font-size: 22px;
 		}
+		strong {
+			letter-spacing: -0.6px;
+		}
 	}
 	.btn {
 		margin: 0px 10px;
 		@include media-breakpoint-down(sm) {
 			display: inline-block;
 			margin: 5px;
+		}
+	}
+
+	a, .btn {
+		&:active, &:focus {
+			outline: none;
 		}
 	}
 

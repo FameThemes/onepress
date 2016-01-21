@@ -117,7 +117,7 @@ a:hover {
 	text-decoration: underline;
 }
 
-a:active, a:focus {
+a:active, a:focus, a:hover {
 	outline: none;
 }
 
@@ -1680,6 +1680,10 @@ input[type="radio"], input[type="checkbox"] {
 	font-weight: 600;
 }
 
+.btn:active, .btn:focus {
+	outline: none;
+}
+
 .btn-lg {
 	font-size: 17px;
 	font-size: 1.0625rem;
@@ -2067,6 +2071,10 @@ input[type="radio"], input[type="checkbox"] {
 	}
 }
 
+.hero-content-style1 p strong {
+	letter-spacing: -0.6px;
+}
+
 .hero-content-style1 .btn {
 	margin: 0px 10px;
 }
@@ -2076,6 +2084,10 @@ input[type="radio"], input[type="checkbox"] {
 		display: inline-block;
 		margin: 5px;
 	}
+}
+
+.hero-content-style1 a:active, .hero-content-style1 a:focus, .hero-content-style1 .btn:active, .hero-content-style1 .btn:focus {
+	outline: none;
 }
 
 .hero-content-style1 .btn-secondary-outline {
@@ -2735,40 +2747,68 @@ div.wpcf7-response-output {
 	position: relative;
 	background: transparent !important;
 }
-.parallax-window .parallax-mirror::before{
-	content:  " ";
+
+.parallax-window .parallax-mirror::before {
+	content: " ";
 	position: absolute;
-	top: 0px; left: 0px; right: 0px; bottom: 0px; display: block;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	display: block;
 	z-index: 2;
 }
+
 .video-section {
 	position: relative;
 	z-index: 1;
 	width: 100%;
 	overflow: hidden;
 }
+
 .video-section section {
 	position: relative;
 	z-index: 4;
 	background: transparent;
 }
+
 .onepage-section {
 	position: relative;
 }
+
 .onepage-section:before {
 	position: absolute;
-	top: 0px; left: 0px; right: 0px; bottom: 0px; display: block;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	display: block;
 	content: " ";
 	z-index: 1;
 }
+
 .onepage-section .container {
 	position: relative;
 	z-index: 5;
 }
+
 .video-section .fill-width {
 	position: absolute;
 	bottom: 0px;
 	width: 100%;
 	display: block;
 	z-index: 3;
+}
+
+.gmap_marker {
+	padding: 15px;
+}
+
+.gmap_marker h4 {
+	font-weight: 500;
+	margin-bottom: 0px;
+}
+
+.gmap_marker p {
+	margin: 10px 0px 0px;
 }

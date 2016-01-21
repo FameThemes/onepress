@@ -1,0 +1,99 @@
+/*--------------------------------------------------------------
+	THEME DASHBOARD
+--------------------------------------------------------------*/
+.famethemes-badge {
+	position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #0073aa;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFUAAABVCAYAAAA49ahaAAAAAXNSR0IArs4c6QAAAYpJREFUeAHt2jGKA0EUxFCP8f2vPDM4VKyCDuSsEmHefifNXvf7+fRRBb5qrdhfINTBIYQa6kBgkOxSQx0IDJJdaqgDgUGySw11IDBIdqmhDgQGyS411IHAINmlhjoQGCR/RvN6P0bnhIbxaN/Pf/CXDDXUgcAg2aWGOhAYJLvUUAcCg2SXGupAYJDsUkMdCAySXWqoA4FBsksNdSAwSHapA1Tlkdr4XsbjsPE9jEaXaiiiESpAjBmqoYhGqAAxZqiGIhqhAsSYoRqKaIQKEGOGaiiiESpAjBmqoYhGqAAxZqiGIhqhAsSYoRqKaIQKEGMe80h9yn9jG4/lXapxmmiEChBjhmooohEqQIwZqqGIRqgAMWaohiIaoQLEmKEaimiEChBjhmooohEqQIwZqqGIRqgAMWaohiIaoQLEmMc8UhuPwwaI0ehSDUU0QgWIMUM1FNEIFSDGDNVQRCNUgBgzVEMRjVABYsxQDUU0QgWIMUM1FNEIFSDGDNVQRCNUgBgzVEMRjVABYswHs34UpggOW5wAAAAASUVORK5CYII=') !important;
+    background-position: no-repeat scroll center 24px;
+    background-repeat: no-repeat;
+    background-size: 85px 85px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    color: #78c8e6;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    height: 40px;
+    margin: 5px 0 0;
+    padding-top: 120px;
+    text-align: center;
+    text-rendering: optimizelegibility;
+    width: 150px;
+    text-decoration: none;
+}
+
+.theme_info_wrapper p span {
+	margin-left: 30px;
+}
+
+.theme_info_wrapper a.fame_social {
+	margin-left: 15px;
+}
+
+.theme_info {
+	margin: 50px 0px;
+}
+
+.theme_info_left {
+	width: 39%;
+	margin-right: 4%;
+	float: left;
+}
+
+.theme_info_right {
+	width: 57%;
+	float: left;
+}
+
+.theme_info_right img {
+	width: 100%;
+	box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+}
+
+.theme_info h3 {
+	font-size: 17px;
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
+.theme_info h4 {
+	font-size: 17px;
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
+.theme_info .theme_link {
+	margin-bottom: 30px;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+.clearfix {
+    display: block;
+}
+
+@media screen and (max-width:782px) {
+	.theme_info_left {
+    	width: 100%;
+    	margin-right: none;
+    }
+    .theme_info_right {
+    	width: 100%;
+    }
+}
+
+/*--------------------------------------------------------------
+	x
+--------------------------------------------------------------*/

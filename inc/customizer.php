@@ -530,7 +530,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_smalltext',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('An independent digital design studio in <strong>New York City.</strong> <br>We bring creativity and intelligence to the most beloved brands.', 'onepress'),
+					'default'			=> __('<strong>OnePress</strong> is a creative and flexible WordPress <strong>ONE PAGE</strong> theme well suited<br> for business, portfolio, digital agency, product showcase, freelancers websites', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
@@ -575,7 +575,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_btn2_text',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('Our Services', 'onepress'),
+					'default'           => __('Get Started', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hcl1_btn2_text',
@@ -589,7 +589,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_btn2_link',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => esc_url( home_url( '/' )).__('#services', 'onepress'),
+					'default'           => esc_url( home_url( '/' )).__('#contact', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hcl1_btn2_link',
