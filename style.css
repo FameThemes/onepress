@@ -1828,6 +1828,10 @@ input[type="radio"], input[type="checkbox"] {
 	padding:  5.625rem 0rem;
 }
 
+.section-meta {
+	background-color: #f8f9f9;
+}
+
 .onepage-section {
 	position: relative;
 }
@@ -1848,16 +1852,16 @@ input[type="radio"], input[type="checkbox"] {
 	background: rgba(255, 255, 255, 0.8);
 }
 
-.section-about.section-inverse h1, .section-about.section-inverse h2, .section-about.section-inverse h3, .section-about.section-inverse h5, .section-about.section-inverse h5 {
+.section-inverse {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.section-inverse h1, .section-inverse h2, .section-inverse h3, .section-inverse h4, .section-inverse h5, .section-inverse h6 {
 	color: rgba(255, 255, 255, 0.9);
 }
 
-.section-about.section-inverse p {
-	color: rgba(255, 255, 255, 0.8);
-}
-
-.section-meta {
-	background-color: #f8f9f9;
+.section-inverse p {
+	color: rgba(255, 255, 255, 0.5);
 }
 
 .section-title-area {
@@ -2085,6 +2089,10 @@ input[type="radio"], input[type="checkbox"] {
 	color: #333;
 }
 
+#hero .btn {
+	box-shadow: none;
+}
+
 /* Text Rotator */
 .morphext > .animated {
 	display: inline-block;
@@ -2157,6 +2165,7 @@ input[type="radio"], input[type="checkbox"] {
 .section-services .service-item .service-content p {
 	margin: 0px;
 	font-size: 14px;
+	color: #777777;
 }
 
 @media screen and (max-width: 720px) {
@@ -2168,6 +2177,7 @@ input[type="radio"], input[type="checkbox"] {
 
 .section-services .service-item .service-title {
 	margin-bottom: 7px;
+	color: #333333;
 }
 
 /* Section: Counter
@@ -2648,6 +2658,22 @@ input[type="radio"], input[type="checkbox"] {
 
 .page-template-template-blog .section-news .list-article:last-of-type {
 	border-bottom: none;
+}
+
+.section-news.section-inverse .list-article {
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.section-news.section-inverse .list-article:last-of-type {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.section-news.section-inverse h1 a, .section-news.section-inverse h2 a, .section-news.section-inverse h3 a, .section-news.section-inverse h4 a, .section-news.section-inverse h5 a {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.section-news.section-inverse h1 a:hover, .section-news.section-inverse h2 a:hover, .section-news.section-inverse h3 a:hover, .section-news.section-inverse h4 a:hover, .section-news.section-inverse h5 a:hover {
+	color: #FFF;
 }
 
 /* Section: Contact

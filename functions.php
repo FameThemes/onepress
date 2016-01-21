@@ -43,6 +43,7 @@ function onepress_setup() {
 	 * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
 	 */
 	add_theme_support( 'post-thumbnails' );
+	add_image_size( 'onepress-blog-small', 300, 150, true );
 	add_image_size( 'onepress-small', 480, 300, true );
 	add_image_size( 'onepress-medium', 640, 400, true );
 
