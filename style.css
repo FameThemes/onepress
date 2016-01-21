@@ -132,7 +132,7 @@ h5,
 h6 {
 	clear: both;
 	font-family: "Raleway", Helvetica, Arial, sans-serif;
-	font-weight: 800;
+	font-weight: 700;
 	margin-bottom: 15px;
 	margin-bottom: 15px;
 	margin-bottom: 0.9375rem;
@@ -1263,7 +1263,7 @@ input[type="radio"], input[type="checkbox"] {
 .search-results .entry-header .entry-title {
 	font-size: 22px;
 	line-height: 1.5;
-	font-weight: 600;
+	font-weight: 500;
 }
 
 .search-results .entry-header .entry-title a:hover {
@@ -1273,7 +1273,7 @@ input[type="radio"], input[type="checkbox"] {
 /* Entry Header
 ------------------------------*/
 .entry-header .entry-title {
-	font-weight: 600;
+	font-weight: 500;
 	text-transform: none;
 	letter-spacing: -0.6px;
 	font-family: "Open Sans", Helvetica, Arial, sans-serif;
