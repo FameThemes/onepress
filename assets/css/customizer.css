@@ -24,7 +24,10 @@
 .list-repeatable .widget.explained .widget-inside{
     display: block;
 }
-
+.list-repeatable .wp-picker-holder {
+    position: absolute;
+    z-index: 99;
+}
 .list-repeatable .item{
     margin-bottom: 15px;
 }

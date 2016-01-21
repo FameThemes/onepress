@@ -392,9 +392,14 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
                                         <# } else if ( field.type == 'media' ) { #>
 
-                                            <input type="text" value="{{ field.value.url }}" data-repeat-name="_items[__i__][{{ field.id }}][url]" class="image_url widefat">
+                                            <# if ( !field.media  || field.media == '' || field.media =='image' ) {  #>
+                                                <input type="hidden" value="{{ field.value.url }}" data-repeat-name="_items[__i__][{{ field.id }}][url]" class="image_url widefat">
+                                            <# } else { #>
+                                                <input type="text" value="{{ field.value.url }}" data-repeat-name="_items[__i__][{{ field.id }}][url]" class="image_url widefat">
+                                            <# } #>
                                             <input type="hidden" value="{{ field.value.id }}" data-repeat-name="_items[__i__][{{ field.id }}][id]" class="image_id widefat">
 
+                                            <# if ( !field.media  || field.media == '' || field.media =='image' ) {  #>
                                             <div class="current <# if ( field.value.url !== '' ){ #> show <# } #>">
                                                 <div class="container">
                                                     <div class="attachment-media-view attachment-media-view-image landscape">
@@ -406,10 +411,11 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <# } #>
 
                                             <div class="actions">
                                                 <button class="button remove-button " <# if ( ! field.value.url ){ #> style="display:none"; <# } #> type="button"><?php _e( 'Remove', 'onepress' ) ?></button>
-                                                <button class="button upload-button" data-add-txt="<?php esc_attr_e( 'Add', 'onepress' ); ?>" data-change-txt="<?php esc_attr_e( 'Change', 'onepress' ); ?>" type="button"><# if ( ! field.value.url  ){ #> <?php _e( 'Add', 'onepress' ); ?> <# } else { #> <?php _e( 'Change', 'onepress' ); ?> <# } #> </button>
+                                                <button class="button upload-button" data-media="{{field.media}}" data-add-txt="<?php esc_attr_e( 'Add', 'onepress' ); ?>" data-change-txt="<?php esc_attr_e( 'Change', 'onepress' ); ?>" type="button"><# if ( ! field.value.url  ){ #> <?php _e( 'Add', 'onepress' ); ?> <# } else { #> <?php _e( 'Change', 'onepress' ); ?> <# } #> </button>
                                                 <div style="clear:both"></div>
                                             </div>
 

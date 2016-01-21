@@ -64,6 +64,7 @@ var RepeatableCustomize = function (  control  ){
 	that.handleMedia = function( $context ) {
 		$('.item-media', $context).each( function(){
 
+
 			var _item = $( this );
 			// when remove item
 			$( '.remove-button', _item ).on( 'click', function( e ){
@@ -89,7 +90,7 @@ var RepeatableCustomize = function (  control  ){
 					// Grab our attachment selection and construct a JSON representation of the model.
 					var media_attachment = frame.state().get('selection').first().toJSON();
 					// media_attachment= JSON.stringify(media_attachment);
-					 console.log( media_attachment );
+					// console.log( media_attachment );
 
 					$( '.image_id', _item ).val(media_attachment.id);
 
