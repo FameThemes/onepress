@@ -17,7 +17,7 @@
 			if ( has_post_thumbnail( ) ) {
 				the_post_thumbnail( 'onepress-blog-small' );
 			} else {
-				echo '<img alt="'. the_title_attribute() .'" src="'. get_template_directory_uri() . '/assets/images/placholder2.png' .'">';
+				echo '<img alt="" src="'. get_template_directory_uri() . '/assets/images/placholder2.png' .'">';
 			}
 			?>
 		</a>

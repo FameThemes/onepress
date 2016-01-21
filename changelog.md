@@ -2,6 +2,9 @@
 CHANGELOG
 ====================================================================
 ## 1.0.5
+* Quick fix for the_title_attribute issue.
+
+## 1.0.5
 * Replace custom demo content with lorem content type.
 * Add inverted style for section.
 * Add theme dashboard page.
