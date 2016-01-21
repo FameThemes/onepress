@@ -330,7 +330,6 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                         <# } #>
 
 
-
                                         <# if ( field.type === 'hidden' ) { #>
 
                                             <input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">

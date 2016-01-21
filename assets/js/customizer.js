@@ -20,6 +20,8 @@ var RepeatableCustomize = function (  control  ){
 		container.addClass( 'no-changeable' );
 	}
 
+
+
 	that.getData = function ( ){
 		var f = $( '.form-data', container );
 		var data =  $( 'input, textarea, select', f ).serialize();
@@ -250,6 +252,15 @@ var RepeatableCustomize = function (  control  ){
 		that.rename();
 		that.colorPicker( $context );
 		that.handleMedia( $context );
+
+		//Special check element
+		$( '[data-live-id="section_id"]').each( function(){
+			if ( $( this ).val() === 'map' ) {
+				$context.addClass( 'show-display-field-only' );
+			}
+		} );
+
+
 	};
 
 	$( '.list-repeatable li').each( function(){

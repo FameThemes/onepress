@@ -61,3 +61,12 @@
     width: 100%;
     height: auto;
 }
+
+/* Special element */
+.repeatable-customize-control.show-display-field-only .widget-content .item{
+    display: none;
+}
+.repeatable-customize-control.show-display-field-only .widget-content .item.item-show_section{
+    display: block;
+    margin-top: 15px;
+}
