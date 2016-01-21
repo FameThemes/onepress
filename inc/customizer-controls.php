@@ -388,6 +388,8 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
                                         <# } else if ( field.type == 'color' ) { #>
 
+                                            <# if ( field.value !='' ) { field.value = '#'+field.value ; }  #>
+
                                             <input type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="color-field">
 
                                         <# } else if ( field.type == 'media' ) { #>

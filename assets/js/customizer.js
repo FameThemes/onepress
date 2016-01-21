@@ -64,13 +64,12 @@ var RepeatableCustomize = function (  control  ){
 	that.handleMedia = function( $context ) {
 		$('.item-media', $context).each( function(){
 
-
 			var _item = $( this );
 			// when remove item
 			$( '.remove-button', _item ).on( 'click', function( e ){
 				e.preventDefault();
 
-				$( '.image_id, .image_url', _item).val( '' );
+				$( '.image_id, .image_url', _item ).val( '' );
 				$( '.thumbnail-image', _item ).html( '' );
 
 				$( '.current', _item ).removeClass( 'show' ).addClass( 'hide' );
@@ -78,7 +77,7 @@ var RepeatableCustomize = function (  control  ){
 				$( this).hide();
 
 				$('.upload-button', _item ).text( $('.upload-button', _item ).attr( 'data-add-txt' ) );
-				$( '.image_id', _item).trigger( 'change' );
+				$( '.image_id', _item ).trigger( 'change' );
 
 			} );
 
@@ -101,10 +100,10 @@ var RepeatableCustomize = function (  control  ){
 					if ( media_attachment.type == 'image' ) {
 						preview = '<img src="' + img_url + '" alt="">';
 						//$(' img', _item).remove();
-						$('.thumbnail-image', _item).html(preview);
+						$('.thumbnail-image', _item ).html(preview);
 					}
-					$('.remove-button', _item).show();
-					$( '.image_id', _item).trigger( 'change' );
+					$('.remove-button', _item ).show();
+					$( '.image_id', _item ).trigger( 'change' );
 
 					btn.text( btn.attr( 'data-change-txt' ) );
 
