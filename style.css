@@ -1,10 +1,10 @@
 /*
 Theme Name: OnePress
-Theme URI: http://demo.famethemes.com/onepress
+Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design.
-Version: 1.0.4
+Version: 1.0.5
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -117,7 +117,7 @@ a:hover {
 	text-decoration: underline;
 }
 
-a:active, a:focus {
+a:active, a:focus, a:hover {
 	outline: none;
 }
 
@@ -132,7 +132,7 @@ h5,
 h6 {
 	clear: both;
 	font-family: "Raleway", Helvetica, Arial, sans-serif;
-	font-weight: 800;
+	font-weight: 700;
 	margin-bottom: 15px;
 	margin-bottom: 15px;
 	margin-bottom: 0.9375rem;
@@ -1263,7 +1263,7 @@ input[type="radio"], input[type="checkbox"] {
 .search-results .entry-header .entry-title {
 	font-size: 22px;
 	line-height: 1.5;
-	font-weight: 600;
+	font-weight: 500;
 }
 
 .search-results .entry-header .entry-title a:hover {
@@ -1273,7 +1273,7 @@ input[type="radio"], input[type="checkbox"] {
 /* Entry Header
 ------------------------------*/
 .entry-header .entry-title {
-	font-weight: 600;
+	font-weight: 500;
 	text-transform: none;
 	letter-spacing: -0.6px;
 	font-family: "Open Sans", Helvetica, Arial, sans-serif;
@@ -1680,6 +1680,10 @@ input[type="radio"], input[type="checkbox"] {
 	font-weight: 600;
 }
 
+.btn:active, .btn:focus {
+	outline: none;
+}
+
 .btn-lg {
 	font-size: 17px;
 	font-size: 1.0625rem;
@@ -1828,6 +1832,10 @@ input[type="radio"], input[type="checkbox"] {
 	padding:  5.625rem 0rem;
 }
 
+.section-meta {
+	background-color: #f8f9f9;
+}
+
 .onepage-section {
 	position: relative;
 }
@@ -1837,11 +1845,27 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .section-inverse .section-title-area .section-title {
-	color: #FFFFFF;
+	color: rgba(255, 255, 255, 0.9);
 }
 
-.section-meta {
-	background-color: #f8f9f9;
+.section-inverse .section-title-area .section-subtitle {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.section-inverse .section-title-area .section-subtitle::after {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.section-inverse {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.section-inverse h1, .section-inverse h2, .section-inverse h3, .section-inverse h4, .section-inverse h5, .section-inverse h6 {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.section-inverse p {
+	color: rgba(255, 255, 255, 0.5);
 }
 
 .section-title-area {
@@ -2047,6 +2071,10 @@ input[type="radio"], input[type="checkbox"] {
 	}
 }
 
+.hero-content-style1 p strong {
+	letter-spacing: -0.6px;
+}
+
 .hero-content-style1 .btn {
 	margin: 0px 10px;
 }
@@ -2058,6 +2086,10 @@ input[type="radio"], input[type="checkbox"] {
 	}
 }
 
+.hero-content-style1 a:active, .hero-content-style1 a:focus, .hero-content-style1 .btn:active, .hero-content-style1 .btn:focus {
+	outline: none;
+}
+
 .hero-content-style1 .btn-secondary-outline {
 	box-shadow: none;
 	border-color: rgba(255, 255, 255, 0.9);
@@ -2067,6 +2099,10 @@ input[type="radio"], input[type="checkbox"] {
 .hero-content-style1 .btn-secondary-outline:hover {
 	background: #FFF;
 	color: #333;
+}
+
+#hero .btn {
+	box-shadow: none;
 }
 
 /* Text Rotator */
@@ -2141,6 +2177,7 @@ input[type="radio"], input[type="checkbox"] {
 .section-services .service-item .service-content p {
 	margin: 0px;
 	font-size: 14px;
+	color: #777777;
 }
 
 @media screen and (max-width: 720px) {
@@ -2152,6 +2189,7 @@ input[type="radio"], input[type="checkbox"] {
 
 .section-services .service-item .service-title {
 	margin-bottom: 7px;
+	color: #333333;
 }
 
 /* Section: Counter
@@ -2187,6 +2225,10 @@ input[type="radio"], input[type="checkbox"] {
 .section-testimonials .card-text {
 	font-size: 15px;
 	font-size: 0.9375rem;
+}
+
+.section-testimonials .card-inverse a {
+	color: rgba(255, 255, 255, 0.9);
 }
 
 .tes_author {
@@ -2634,6 +2676,22 @@ input[type="radio"], input[type="checkbox"] {
 	border-bottom: none;
 }
 
+.section-news.section-inverse .list-article {
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.section-news.section-inverse .list-article:last-of-type {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.section-news.section-inverse h1 a, .section-news.section-inverse h2 a, .section-news.section-inverse h3 a, .section-news.section-inverse h4 a, .section-news.section-inverse h5 a {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.section-news.section-inverse h1 a:hover, .section-news.section-inverse h2 a:hover, .section-news.section-inverse h3 a:hover, .section-news.section-inverse h4 a:hover, .section-news.section-inverse h5 a:hover {
+	color: #FFF;
+}
+
 /* Section: Contact
 ------------------------------*/
 .section-contact input, .section-contact textarea {
@@ -2687,3 +2745,74 @@ div.wpcf7-response-output {
 /*--------------------------------------------------------------
 9.0 External Plugins
 --------------------------------------------------------------*/
+/* OnePress Plus */
+.parallax-window section {
+	z-index: 10;
+	position: relative;
+	background: transparent !important;
+}
+
+.parallax-window .parallax-mirror::before {
+	content: " ";
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	display: block;
+	z-index: 2;
+}
+
+.video-section {
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	overflow: hidden;
+}
+
+.video-section section {
+	position: relative;
+	z-index: 4;
+	background: transparent;
+}
+
+.onepage-section {
+	position: relative;
+}
+
+.onepage-section:before {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	display: block;
+	content: " ";
+	z-index: 1;
+}
+
+.onepage-section .container {
+	position: relative;
+	z-index: 5;
+}
+
+.video-section .fill-width {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	display: block;
+	z-index: 3;
+}
+
+.gmap_marker {
+	padding: 15px;
+}
+
+.gmap_marker h4 {
+	font-weight: 500;
+	margin-bottom: 0px;
+}
+
+.gmap_marker p {
+	margin: 10px 0px 0px;
+}

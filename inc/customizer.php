@@ -38,12 +38,12 @@ function onepress_customize_register( $wp_customize ) {
     	$wp_customize->add_setting( 'onepress_site_text_logo',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('OnePress', 'onepress')
+				'default'           => esc_html__('OnePress', 'onepress')
 			)
 		);
     	$wp_customize->add_control( 'onepress_site_text_logo',
 			array(
-				'label' 		=> __('Site Text Logo', 'onepress'),
+				'label' 		=> esc_html__('Site Text Logo', 'onepress'),
 				'section' 		=> 'title_tagline',
 				'description'   => esc_html__('Your site text logo, use when image logo is empty.', 'onepress'),
 			)
@@ -59,7 +59,7 @@ function onepress_customize_register( $wp_customize ) {
             $wp_customize,
             'onepress_site_image_logo',
 				array(
-					'label' 		=> __('Site Image Logo', 'onepress'),
+					'label' 		=> esc_html__('Site Image Logo', 'onepress'),
 					'section' 		=> 'title_tagline',
 					'description'   => esc_html__('Your site image logo', 'onepress'),
 				)
@@ -74,7 +74,7 @@ function onepress_customize_register( $wp_customize ) {
 				'priority'       => 22,
 			    'capability'     => 'edit_theme_options',
 			    'theme_supports' => '',
-			    'title'          => __( 'Theme Options', 'onepress' ),
+			    'title'          => esc_html__( 'Theme Options', 'onepress' ),
 			    'description'    => '',
 			)
 		);
@@ -84,7 +84,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_global_settings' ,
 			array(
 				'priority'    => 3,
-				'title'       => __( 'Global', 'onepress' ),
+				'title'       => esc_html__( 'Global', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_options',
 			)
@@ -101,7 +101,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_animation_disable',
 				array(
 					'type'        => 'checkbox',
-					'label'       => __('Disable animation effect?', 'onepress'),
+					'label'       => esc_html__('Disable animation effect?', 'onepress'),
 					'section'     => 'onepress_global_settings',
 					'description' => esc_html__('Check this box to disable all element animation when scroll.', 'onepress')
 				)
@@ -117,7 +117,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_btt_disable',
 				array(
 					'type'        => 'checkbox',
-					'label'       => __('Hide footer back to top?', 'onepress'),
+					'label'       => esc_html__('Hide footer back to top?', 'onepress'),
 					'section'     => 'onepress_global_settings',
 					'description' => esc_html__('Check this box to hide footer back to top button.', 'onepress')
 				)
@@ -128,7 +128,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_social' ,
 			array(
 				'priority'    => 6,
-				'title'       => __( 'Social Profiles', 'onepress' ),
+				'title'       => esc_html__( 'Social Profiles', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_options',
 			)
@@ -144,7 +144,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_social_disable',
 				array(
 					'type'        => 'checkbox',
-					'label'       => __('Hide Footer Social?', 'onepress'),
+					'label'       => esc_html__('Hide Footer Social?', 'onepress'),
 					'section'     => 'onepress_social',
 					'description' => esc_html__('Check this box to hide footer social section.', 'onepress')
 				)
@@ -159,19 +159,19 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'section'     => 'onepress_social',
 					'type'        => 'custom_message',
-					'description' => __( 'These social profiles setting below will display at the footer of your site.', 'onepress' )
+					'description' => esc_html__( 'These social profiles setting below will display at the footer of your site.', 'onepress' )
 				)
 			));
 			// Footer Social Title
 			$wp_customize->add_setting( 'onepress_social_footer_title',
 				array(
 					'sanitize_callback' => 'sanitize_text_field',
-					'default'           => __( 'Keep Updated', 'onepress' ),
+					'default'           => esc_html__( 'Keep Updated', 'onepress' ),
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_footer_title',
 				array(
-					'label'       => __('Social Footer Title', 'onepress'),
+					'label'       => esc_html__('Social Footer Title', 'onepress'),
 					'section'     => 'onepress_social',
 					'description' => ''
 				)
@@ -186,7 +186,7 @@ function onepress_customize_register( $wp_customize ) {
 			);
 			$wp_customize->add_control( 'onepress_social_twitter',
 				array(
-					'label'       => __('Twitter URL', 'onepress'),
+					'label'       => esc_html__('Twitter URL', 'onepress'),
 					'section'     => 'onepress_social',
 					'description' => ''
 				)
@@ -200,7 +200,7 @@ function onepress_customize_register( $wp_customize ) {
 			);
 			$wp_customize->add_control( 'onepress_social_facebook',
 				array(
-					'label'       => __('Faecbook URL', 'onepress'),
+					'label'       => esc_html__('Faecbook URL', 'onepress'),
 					'section'     => 'onepress_social',
 					'description' => ''
 				)
@@ -214,7 +214,7 @@ function onepress_customize_register( $wp_customize ) {
 			);
 			$wp_customize->add_control( 'onepress_social_google',
 				array(
-					'label'       => __('Google Plus URL', 'onepress'),
+					'label'       => esc_html__('Google Plus URL', 'onepress'),
 					'section'     => 'onepress_social',
 					'description' => ''
 				)
@@ -228,7 +228,7 @@ function onepress_customize_register( $wp_customize ) {
 			);
 			$wp_customize->add_control( 'onepress_social_instagram',
 				array(
-					'label'       => __('Instagram URL', 'onepress'),
+					'label'       => esc_html__('Instagram URL', 'onepress'),
 					'section'     => 'onepress_social',
 					'description' => ''
 				)
@@ -242,7 +242,7 @@ function onepress_customize_register( $wp_customize ) {
 			);
 			$wp_customize->add_control( 'onepress_social_rss',
 				array(
-					'label'       => __('RSS URL', 'onepress'),
+					'label'       => esc_html__('RSS URL', 'onepress'),
 					'section'     => 'onepress_social',
 					'description' => ''
 				)
@@ -253,7 +253,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_newsletter' ,
 			array(
 				'priority'    => 9,
-				'title'       => __( 'Newsletter', 'onepress' ),
+				'title'       => esc_html__( 'Newsletter', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_options',
 			)
@@ -268,7 +268,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_newsletter_disable',
 				array(
 					'type'        => 'checkbox',
-					'label'       => __('Hide Footer Newsletter?', 'onepress'),
+					'label'       => esc_html__('Hide Footer Newsletter?', 'onepress'),
 					'section'     => 'onepress_newsletter',
 					'description' => esc_html__('Check this box to hide footer newsletter form.', 'onepress')
 				)
@@ -278,12 +278,12 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_newsletter_title',
 				array(
 					'sanitize_callback' => 'sanitize_text_field',
-					'default'           => __( 'Join our Newsletter', 'onepress' ),
+					'default'           => esc_html__( 'Join our Newsletter', 'onepress' ),
 				)
 			);
 			$wp_customize->add_control( 'onepress_newsletter_title',
 				array(
-					'label'       => __('Newsletter Form Title', 'onepress'),
+					'label'       => esc_html__('Newsletter Form Title', 'onepress'),
 					'section'     => 'onepress_newsletter',
 					'description' => ''
 				)
@@ -298,7 +298,7 @@ function onepress_customize_register( $wp_customize ) {
 			);
 			$wp_customize->add_control( 'onepress_newsletter_mailchimp',
 				array(
-					'label'       => __('MailChimp Action URL', 'onepress'),
+					'label'       => esc_html__('MailChimp Action URL', 'onepress'),
 					'section'     => 'onepress_newsletter',
 					'description' => 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>'
 				)
@@ -312,7 +312,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_panel( 'onepress_hero_panel' ,
 		array(
 			'priority'        => 130,
-			'title'           => __( 'Section: Hero', 'onepress' ),
+			'title'           => esc_html__( 'Section: Hero', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
 		)
@@ -322,7 +322,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_hero_settings' ,
 			array(
 				'priority'    => 3,
-				'title'       => __( 'Hero Settings', 'onepress' ),
+				'title'       => esc_html__( 'Hero Settings', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 			)
@@ -338,7 +338,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_hero_disable',
 				array(
 					'type'        => 'checkbox',
-					'label'       => __('Hide this section?', 'onepress'),
+					'label'       => esc_html__('Hide this section?', 'onepress'),
 					'section'     => 'onepress_hero_settings',
 					'description' => esc_html__('Check this box to hide this section.', 'onepress'),
 				)
@@ -347,12 +347,12 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hero_id',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('hero', 'onepress'),
+					'default'           => esc_html__('hero', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hero_id',
 				array(
-					'label' 		=> __('Section ID:', 'onepress'),
+					'label' 		=> esc_html__('Section ID:', 'onepress'),
 					'section' 		=> 'onepress_hero_settings',
 					'description'   => 'The section id, we will use this for link anchor.'
 				)
@@ -368,7 +368,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_hero_fullscreen',
 				array(
 					'type'        => 'checkbox',
-					'label'       => __('Make hero section full screen', 'onepress'),
+					'label'       => esc_html__('Make hero section full screen', 'onepress'),
 					'section'     => 'onepress_hero_settings',
 					'description' => esc_html__('Check this box to make hero section full screen.', 'onepress'),
 				)
@@ -378,12 +378,12 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hero_pdtop',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('10', 'onepress'),
+					'default'           => esc_html__('10', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hero_pdtop',
 				array(
-					'label'           => __('Padding Top:', 'onepress'),
+					'label'           => esc_html__('Padding Top:', 'onepress'),
 					'section'         => 'onepress_hero_settings',
 					'description'     => 'The hero content padding top in percent (%).',
 					'active_callback' => 'onepress_hero_fullscreen_callback'
@@ -394,12 +394,12 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hero_pdbotom',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('10', 'onepress'),
+					'default'           => esc_html__('10', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hero_pdbotom',
 				array(
-					'label'           => __('Padding Bottom:', 'onepress'),
+					'label'           => esc_html__('Padding Bottom:', 'onepress'),
 					'section'         => 'onepress_hero_settings',
 					'description'     => 'The hero content padding bottom in percent (%).',
 					'active_callback' => 'onepress_hero_fullscreen_callback'
@@ -409,7 +409,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_hero_images' ,
 			array(
 				'priority'    => 6,
-				'title'       => __( 'Hero Images', 'onepress' ),
+				'title'       => esc_html__( 'Hero Images', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 			)
@@ -425,7 +425,7 @@ function onepress_customize_register( $wp_customize ) {
 	            $wp_customize,
 	            'onepress_hero_image1',
 					array(
-						'label' 		=> __('Hero Image #1', 'onepress'),
+						'label' 		=> esc_html__('Hero Image #1', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 						'description'   => esc_html__('Suggestion size: larger than 1000px, if more than one image uploaded the hero section will become a background slideshow.', 'onepress'),
 					)
@@ -442,7 +442,7 @@ function onepress_customize_register( $wp_customize ) {
 	            $wp_customize,
 	            'onepress_hero_image2',
 					array(
-						'label' 		=> __('Hero Image #2', 'onepress'),
+						'label' 		=> esc_html__('Hero Image #2', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 						'description'   => '',
 					)
@@ -459,7 +459,7 @@ function onepress_customize_register( $wp_customize ) {
 	            $wp_customize,
 	            'onepress_hero_image3',
 					array(
-						'label' 		=> __('Hero Image #3', 'onepress'),
+						'label' 		=> esc_html__('Hero Image #3', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 						'description'   => '',
 					)
@@ -476,7 +476,7 @@ function onepress_customize_register( $wp_customize ) {
 	            $wp_customize,
 	            'onepress_hero_image4',
 					array(
-						'label' 		=> __('Hero Image #4', 'onepress'),
+						'label' 		=> esc_html__('Hero Image #4', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 						'description'   => '',
 					)
@@ -486,7 +486,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_hero_content_layout1' ,
 			array(
 				'priority'    => 9,
-				'title'       => __( 'Hero Content Layout 1', 'onepress' ),
+				'title'       => esc_html__( 'Hero Content Layout 1', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 
@@ -503,7 +503,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_hcl1_enable',
 				array(
 					'type'        => 'checkbox',
-					'label'       => __('Show this content layout', 'onepress'),
+					'label'       => esc_html__('Show this content layout', 'onepress'),
 					'section'     => 'onepress_hero_content_layout1',
 					'description' => esc_html__('Check this box to enable this content layout for hero section.', 'onepress'),
 				)
@@ -513,14 +513,14 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_largetext',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress'),
+					'default'           => wp_kses_post('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
 				$wp_customize,
 				'onepress_hcl1_largetext',
 				array(
-					'label' 		=> __('Large Text', 'onepress'),
+					'label' 		=> esc_html__('Large Text', 'onepress'),
 					'section' 		=> 'onepress_hero_content_layout1',
 					'description'   => esc_html__('Text Rotating Guide: Put your rotate texts separate by "|" into <span class="js-rotating">...</span>, go to Customizer->Site Option->Animate to control rotate animation.', 'onepress'),
 				)
@@ -530,14 +530,14 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_smalltext',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('An independent digital design studio in <strong>New York City.</strong> <br>We bring creativity and intelligence to the most beloved brands.', 'onepress'),
+					'default'			=> wp_kses_post('Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
 				$wp_customize,
 				'onepress_hcl1_smalltext',
 				array(
-					'label' 		=> __('Small Text', 'onepress'),
+					'label' 		=> esc_html__('Small Text', 'onepress'),
 					'section' 		=> 'onepress_hero_content_layout1',
 					'description'   => esc_html__('You can use text rotate slider in this textarea too.', 'onepress'),
 				)
@@ -547,12 +547,12 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_btn1_text',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('More About Us', 'onepress'),
+					'default'           => esc_html__('About Us', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hcl1_btn1_text',
 				array(
-					'label' 		=> __('Button #1 Text', 'onepress'),
+					'label' 		=> esc_html__('Button #1 Text', 'onepress'),
 					'section' 		=> 'onepress_hero_content_layout1'
 				)
 			);
@@ -561,12 +561,12 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_btn1_link',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => esc_url( home_url( '/' )).__('#about', 'onepress'),
+					'default'           => esc_url( home_url( '/' )).esc_html__('#about', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hcl1_btn1_link',
 				array(
-					'label' 		=> __('Button #1 Link', 'onepress'),
+					'label' 		=> esc_html__('Button #1 Link', 'onepress'),
 					'section' 		=> 'onepress_hero_content_layout1'
 				)
 			);
@@ -575,12 +575,12 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_btn2_text',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('Our Services', 'onepress'),
+					'default'           => esc_html__('Get Started', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hcl1_btn2_text',
 				array(
-					'label' 		=> __('Button #2 Text', 'onepress'),
+					'label' 		=> esc_html__('Button #2 Text', 'onepress'),
 					'section' 		=> 'onepress_hero_content_layout1'
 				)
 			);
@@ -589,12 +589,12 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_btn2_link',
 				array(
 					'sanitize_callback' => 'esc_url',
-					'default'           => esc_url( home_url( '/' )).__('#services', 'onepress'),
+					'default'           => esc_url( home_url( '/' )).esc_html__('#contact', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hcl1_btn2_link',
 				array(
-					'label' 		=> __('Button #2 Link', 'onepress'),
+					'label' 		=> esc_html__('Button #2 Link', 'onepress'),
 					'section' 		=> 'onepress_hero_content_layout1'
 				)
 			);
@@ -605,7 +605,7 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_panel( 'onepress_about' ,
 		array(
 			'priority'        => 132,
-			'title'           => __( 'Section: About', 'onepress' ),
+			'title'           => esc_html__( 'Section: About', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
 		)
@@ -614,7 +614,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_about_settings' ,
 		array(
 			'priority'    => 3,
-			'title'       => __( 'Section Settings', 'onepress' ),
+			'title'       => esc_html__( 'Section Settings', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_about',
 		)
@@ -630,7 +630,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( 'onepress_about_disable',
 			array(
 				'type'        => 'checkbox',
-				'label'       => __('Hide this section?', 'onepress'),
+				'label'       => esc_html__('Hide this section?', 'onepress'),
 				'section'     => 'onepress_about_settings',
 				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
 			)
@@ -640,12 +640,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_about_id',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('about', 'onepress'),
+				'default'           => esc_html__('about', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_about_id',
 			array(
-				'label' 		=> __('Section ID:', 'onepress'),
+				'label' 		=> esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_about_settings',
 				'description'   => 'The section id, we will use this for link anchor.'
 			)
@@ -655,12 +655,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_about_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('More About Us', 'onepress'),
+				'default'           => esc_html__('About Us', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_about_title',
 			array(
-				'label' 		=> __('Section Title', 'onepress'),
+				'label' 		=> esc_html__('Section Title', 'onepress'),
 				'section' 		=> 'onepress_about_settings',
 				'description'   => '',
 			)
@@ -670,12 +670,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_about_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('We are a digital studio', 'onepress'),
+				'default'           => esc_html__('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_about_subtitle',
 			array(
-				'label' 		=> __('Section Subtitle', 'onepress'),
+				'label' 		=> esc_html__('Section Subtitle', 'onepress'),
 				'section' 		=> 'onepress_about_settings',
 				'description'   => '',
 			)
@@ -684,7 +684,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_about_content' ,
 		array(
 			'priority'    => 6,
-			'title'       => __( 'Section Content', 'onepress' ),
+			'title'       => esc_html__( 'Section Content', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_about',
 		)
@@ -698,26 +698,26 @@ function onepress_customize_register( $wp_customize ) {
 				'default' => json_encode(
 					array(
 						array(
-							'title' => __( 'OUR HISTORY', 'onepress' ),
+							'title' => wp_kses_post( 'Vestibulum auctor dapibus', 'onepress' ),
 							'thumb' 		=> array(
 								'url'=> get_template_directory_uri().'/assets/images/about1.jpg',
 							),
-							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+							'content' => wp_kses_post( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
 						),
 
 						array(
-							'title' => __( 'OUR ACHIEVEMENTS', 'onepress' ),
+							'title' => wp_kses_post( 'Cras ornare tristique', 'onepress' ),
 							'thumb' 		=> array(
 								'url'=> get_template_directory_uri().'/assets/images/about2.jpg',
 							),
-							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+							'content' => wp_kses_post( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
 						),
 						array(
-							'title' => __( 'OUR VISION', 'onepress' ),
+							'title' => wp_kses_post( 'Vivamus vestibulum nulla', 'onepress' ),
 							'thumb' 		=> array(
 								'url'=> get_template_directory_uri().'/assets/images/about3.jpg',
 							),
-							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+							'content' => wp_kses_post( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
 						),
 
 
@@ -733,25 +733,25 @@ function onepress_customize_register( $wp_customize ) {
 					$wp_customize,
 					'onepress_about_boxes',
 					array(
-						'label' 		=> __('Content boxes', 'onepress'),
+						'label' 		=> esc_html__('Content boxes', 'onepress'),
 						'description'   => '',
 						'section'       => 'onepress_about_content',
 						'live_title_id' => 'title', // apply for unput text and textarea only
-						'title_format'  => __('[live_title]', 'onepress'), // [live_title]
+						'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 						'max_item'      => 3, // Maximum item can add
 						'allow_unlimited' => false, // Maximum item can add
 
 						'fields'    => array(
 							'title' => array(
-								'title' => __('Title', 'onepress'),
+								'title' => esc_html__('Title', 'onepress'),
 								'type'  =>'text',
 							),
 							'thumb' => array(
-								'title' => __('Thumbnail', 'onepress'),
+								'title' => esc_html__('Thumbnail', 'onepress'),
 								'type'  =>'media',
 							),
 							'content'  => array(
-								'title' => __('Description', 'onepress'),
+								'title' => esc_html__('Description', 'onepress'),
 								'type'  =>'textarea',
 
 							),
@@ -767,7 +767,7 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_panel( 'onepress_services' ,
 		array(
 			'priority'        => 134,
-			'title'           => __( 'Section: Services', 'onepress' ),
+			'title'           => esc_html__( 'Section: Services', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
 		)
@@ -776,7 +776,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_service_settings' ,
 		array(
 			'priority'    => 3,
-			'title'       => __( 'Section Settings', 'onepress' ),
+			'title'       => esc_html__( 'Section Settings', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_services',
 		)
@@ -792,7 +792,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( 'onepress_service_disable',
 			array(
 				'type'        => 'checkbox',
-				'label'       => __('Hide this section?', 'onepress'),
+				'label'       => esc_html__('Hide this section?', 'onepress'),
 				'section'     => 'onepress_service_settings',
 				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
 			)
@@ -802,12 +802,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_service_id',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('services', 'onepress'),
+				'default'           => esc_html__('services', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_service_id',
 			array(
-				'label' 		=> __('Section ID:', 'onepress'),
+				'label'     => esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_service_settings',
 				'description'   => 'The section id, we will use this for link anchor.'
 			)
@@ -817,12 +817,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_service_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Our Services', 'onepress'),
+				'default'           => esc_html__('Our Services', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_service_title',
 			array(
-				'label' 		=> __('Section Title', 'onepress'),
+				'label'     => esc_html__('Section Title', 'onepress'),
 				'section' 		=> 'onepress_service_settings',
 				'description'   => '',
 			)
@@ -832,12 +832,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_service_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('We help client like you', 'onepress'),
+				'default'           => esc_html__('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_service_subtitle',
 			array(
-				'label' 		=> __('Section Subtitle', 'onepress'),
+				'label'     => esc_html__('Section Subtitle', 'onepress'),
 				'section' 		=> 'onepress_service_settings',
 				'description'   => '',
 			)
@@ -846,7 +846,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_service_content' ,
 		array(
 			'priority'    => 6,
-			'title'       => __( 'Section Content', 'onepress' ),
+			'title'       => esc_html__( 'Section Content', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_services',
 		)
@@ -859,24 +859,24 @@ function onepress_customize_register( $wp_customize ) {
 				'default' => json_encode(
 					array(
 						array(
-							'title' => __( 'Insights & Planning', 'onepress' ),
+							'title' => esc_html__( 'Service Title #1', 'onepress' ),
 							'icon'  => 'fa-wikipedia-w',
-							'content' => __( 'Uncovering key insights that inform the planning process and business modeling.', 'onepress' )
+							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 						),
 						array(
-							'title' => __( 'Usability & User Testing', 'onepress' ),
+							'title' => esc_html__( 'Service Title #2', 'onepress' ),
 							'icon'  => 'fa-gg',
-							'content' => __( 'A user-first approach to defining interactive experiences and customer experience planning.', 'onepress' )
+							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 						),
 						array(
-							'title' => __( 'Creative & Design', 'onepress' ),
+							'title' => esc_html__( 'Service Title #3', 'onepress' ),
 							'icon'  => 'fa-balance-scale',
-							'content' => __( 'Inventing and visualizing through shape, form, type and color.', 'onepress' )
+							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 						),
 						array(
-							'title' => __( 'Technology & Development', 'onepress' ),
+							'title' => esc_html__( 'Service Title #4', 'onepress' ),
 							'icon'  => 'fa-wikipedia-w',
-							'content' => __( 'Enabling user engagement through smart technology solutions.', 'onepress' )
+							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 						),
 
 					)
@@ -891,31 +891,31 @@ function onepress_customize_register( $wp_customize ) {
 				$wp_customize,
 				'onepress_services',
 				array(
-					'label' 		=> __('Service content', 'onepress'),
+					'label'     	=> esc_html__('Service content', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_service_content',
 					'live_title_id' => 'title', // apply for unput text and textarea only
-					'title_format'  => __('[live_title]', 'onepress'), // [live_title]
+					'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
 
 					'fields'    => array(
 						'title' => array(
-							'title' => __('Title', 'onepress'),
+							'title' => esc_html__('Title', 'onepress'),
 							'type'  =>'text',
 							'desc'  => '',
-							'default' => __( 'Your service title', 'onepress' ),
+							'default' => esc_html__( 'Your service title', 'onepress' ),
 						),
 						'icon' => array(
-							'title' => __('Icon', 'onepress'),
+							'title' => esc_html__('Icon', 'onepress'),
 							'type'  =>'text',
-							'desc'  => sprintf( __('Paste your <a target="_blank" href="%1$s">Font Awesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
-							'default' => __( 'gg', 'onepress' ),
+							'desc'  => sprintf( wp_kses_post('Paste your <a target="_blank" href="%1$s">Font Awesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
+							'default' => esc_html__( 'gg', 'onepress' ),
 						),
 						'content'  => array(
-							'title' => __('Description', 'onepress'),
-							'desc'  => __('Something about this service', 'onepress'),
+							'title' => esc_html__('Description', 'onepress'),
+							'desc'  => esc_html__('Something about this service', 'onepress'),
 							'type'  =>'textarea',
-							'default' => __( 'Your service description here', 'onepress' ),
+							'default' => esc_html__( 'Your service description here', 'onepress' ),
 						),
 					),
 
@@ -929,7 +929,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_panel( 'onepress_counter' ,
 		array(
 			'priority'        => 134,
-			'title'           => __( 'Section: Counter', 'onepress' ),
+			'title'           => esc_html__( 'Section: Counter', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
 		)
@@ -938,7 +938,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_counter_settings' ,
 		array(
 			'priority'    => 3,
-			'title'       => __( 'Section Settings', 'onepress' ),
+			'title'       => esc_html__( 'Section Settings', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_counter',
 		)
@@ -953,7 +953,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( 'onepress_counter_disable',
 			array(
 				'type'        => 'checkbox',
-				'label'       => __('Hide this section?', 'onepress'),
+				'label'       => esc_html__('Hide this section?', 'onepress'),
 				'section'     => 'onepress_counter_settings',
 				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
 			)
@@ -963,12 +963,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_counter_id',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('counter', 'onepress'),
+				'default'           => esc_html__('counter', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_counter_id',
 			array(
-				'label' 		=> __('Section ID:', 'onepress'),
+				'label'     	=> esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_counter_settings',
 				'description'   => 'The section id, we will use this for link anchor.'
 			)
@@ -978,12 +978,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_counter_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Our Numbers', 'onepress'),
+				'default'           => esc_html__('Our Numbers', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_counter_title',
 			array(
-				'label' 		=> __('Section Title', 'onepress'),
+				'label'     	=> esc_html__('Section Title', 'onepress'),
 				'section' 		=> 'onepress_counter_settings',
 				'description'   => '',
 			)
@@ -993,12 +993,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_counter_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Some Fun Facts', 'onepress'),
+				'default'           => esc_html__('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_counter_subtitle',
 			array(
-				'label' 		=> __('Section Subtitle', 'onepress'),
+				'label'     	=> esc_html__('Section Subtitle', 'onepress'),
 				'section' 		=> 'onepress_counter_settings',
 				'description'   => '',
 			)
@@ -1007,7 +1007,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_counter_content' ,
 		array(
 			'priority'    => 6,
-			'title'       => __( 'Section Content', 'onepress' ),
+			'title'       => esc_html__( 'Section Content', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_counter',
 		)
@@ -1021,28 +1021,28 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 
 					array(
-						'title' => __( 'Projects completed', 'onepress' ),
+						'title' => esc_html__( 'Counter Title', 'onepress' ),
 						'number'  => '268',
 						'unit_before' => '',
 						'unit_after' => ''
 					),
 
 					array(
-						'title' => __( 'Lines of code', 'onepress' ),
+						'title' => esc_html__( 'Counter Title', 'onepress' ),
 						'number'  => '2569',
 						'unit_before' => '',
 						'unit_after' => 'k'
 					),
 
 					array(
-						'title' => __( 'Cups of coffee', 'onepress' ),
+						'title' => esc_html__( 'Counter Title', 'onepress' ),
 						'number'  => '984',
 						'unit_before' => '',
 						'unit_after' => ''
 					),
 
 					array(
-						'title' => __( 'Customer Satisfaction', 'onepress' ),
+						'title' => esc_html__( 'Counter Title', 'onepress' ),
 						'number'  => '5683',
 						'unit_before' => '',
 						'unit_after' => '',
@@ -1060,32 +1060,32 @@ function onepress_customize_register( $wp_customize ) {
 				$wp_customize,
 				'onepress_counter_boxes',
 				array(
-					'label' 		=> __('Counter content', 'onepress'),
+					'label'     	=> esc_html__('Counter content', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_counter_content',
 					'live_title_id' => 'title', // apply for unput text and textarea only
-					'title_format'  => __('[live_title]', 'onepress'), // [live_title]
+					'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
 
 					'fields'    => array(
 						'title' => array(
-							'title' => __('Title', 'onepress'),
+							'title' => esc_html__('Title', 'onepress'),
 							'type'  =>'text',
 							'desc'  => '',
-							'default' => __( 'Your counter label', 'onepress' ),
+							'default' => esc_html__( 'Your counter label', 'onepress' ),
 						),
 						'number' => array(
-							'title' => __('Number', 'onepress'),
+							'title' => esc_html__('Number', 'onepress'),
 							'type'  =>'text',
 							'default' => 99,
 						),
 						'unit_before'  => array(
-							'title' => __('Before number', 'onepress'),
+							'title' => esc_html__('Before number', 'onepress'),
 							'type'  =>'text',
 							'default' => '',
 						),
 						'unit_after'  => array(
-							'title' => __('After number', 'onepress'),
+							'title' => esc_html__('After number', 'onepress'),
 							'type'  =>'text',
 							'default' => '',
 						),
@@ -1101,7 +1101,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_panel( 'onepress_testimonial' ,
 		array(
 			'priority'        => 134,
-			'title'           => __( 'Section: Testimonial', 'onepress' ),
+			'title'           => esc_html__( 'Section: Testimonial', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
 		)
@@ -1110,7 +1110,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_testimonial_settings' ,
 		array(
 			'priority'    => 3,
-			'title'       => __( 'Section Settings', 'onepress' ),
+			'title'       => esc_html__( 'Section Settings', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_testimonial',
 		)
@@ -1125,7 +1125,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( 'onepress_testimonials_disable',
 			array(
 				'type'        => 'checkbox',
-				'label'       => __('Hide this section?', 'onepress'),
+				'label'       => esc_html__('Hide this section?', 'onepress'),
 				'section'     => 'onepress_testimonial_settings',
 				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
 			)
@@ -1135,12 +1135,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_testimonial_id',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('testimonials', 'onepress'),
+				'default'           => esc_html__('testimonials', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_testimonial_id',
 			array(
-				'label' 		=> __('Section ID:', 'onepress'),
+				'label'     => esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_testimonial_settings',
 				'description'   => 'The section id, we will use this for link anchor.'
 			)
@@ -1150,12 +1150,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_testimonial_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Testimonials', 'onepress'),
+				'default'           => esc_html__('Testimonials', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_testimonial_title',
 			array(
-				'label' 		=> __('Section Title', 'onepress'),
+				'label'     => esc_html__('Section Title', 'onepress'),
 				'section' 		=> 'onepress_testimonial_settings',
 				'description'   => '',
 			)
@@ -1165,12 +1165,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_testimonial_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('You are in good company!', 'onepress'),
+				'default'           => esc_html__('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_testimonial_subtitle',
 			array(
-				'label' 		=> __('Section Subtitle', 'onepress'),
+				'label'     => esc_html__('Section Subtitle', 'onepress'),
 				'section' 		=> 'onepress_testimonial_settings',
 				'description'   => '',
 			)
@@ -1181,7 +1181,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_testimonials_content' ,
 			array(
 				'priority'    => 3,
-				'title'       => __( 'Section Content', 'onepress' ),
+				'title'       => esc_html__( 'Section Content', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_testimonial',
 			)
@@ -1192,39 +1192,39 @@ function onepress_customize_register( $wp_customize ) {
 				'default' => json_encode(
 					array(
 						array(
-							'title' 		=> __( 'Design Quality', 'onepress' ),
-							'name' 			=> __( 'Alexander Rios', 'onepress' ),
-							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+							'title' 		=> esc_html__( 'Praesent placerat', 'onepress' ),
+							'name' 			=> esc_html__( 'Alexander Rios', 'onepress' ),
+							'subtitle' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
 							'style'         => 'warning',
 							'image' 		=> array(
 								'url' => get_template_directory_uri() . '/assets/images/testimonial_1.jpg',
 								'id'  => ''
 							),
-							'content' 		=> __( 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.', 'onepress' ),
+							'content' 		=> esc_html__( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat.', 'onepress' ),
 
 						),
 						array(
-							'title' 		=> __( 'Feature Availability', 'onepress' ),
-							'name' 			=> __( 'Alexander Max', 'onepress' ),
-							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+							'title' 		=> esc_html__( 'Cras iaculis', 'onepress' ),
+							'name' 			=> esc_html__( 'Alexander Max', 'onepress' ),
+							'subtitle' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
 							'style'         => 'success',
 							'image' 		=> array(
 								'url' => get_template_directory_uri() . '/assets/images/testimonial_2.jpg',
 								'id'  => ''
 							),
-							'content' 		=> __( 'This card has supporting text below as a natural lead-in to additional content.', 'onepress' ),
+							'content' 		=> esc_html__( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue eu vulputate.', 'onepress' ),
 
 						),
 						array(
-							'title' 		=> __( 'Customizability', 'onepress' ),
-							'name' 			=> __( 'Peter Mendez', 'onepress' ),
-							'subtitle' 		=> __( 'Example Company', 'onepress' ),
+							'title' 		=> esc_html__( 'Fusce lobortis', 'onepress' ),
+							'name' 			=> esc_html__( 'Peter Mendez', 'onepress' ),
+							'subtitle' 		=> esc_html__( 'Example Company', 'onepress' ),
 							'style'         => 'theme-primary',
 							'image' 		=> array(
 								'url' => get_template_directory_uri() . '/assets/images/testimonial_3.jpg',
 								'id'  => ''
 							),
-							'content' 		=> __( 'This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.', 'onepress' ),
+							'content' 		=> esc_html__( 'Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna egestas sem.', 'onepress' ),
 
 						),
 
@@ -1240,28 +1240,28 @@ function onepress_customize_register( $wp_customize ) {
 				$wp_customize,
 				'onepress_testimonial_boxes',
 				array(
-					'label' 		=> __('Testimonial', 'onepress'),
+					'label'     => esc_html__('Testimonial', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_testimonials_content',
 					'live_title_id' => 'title', // apply for unput text and textarea only
-					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
+					'title_format'  => esc_html__( '[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 3, // Maximum item can add
 
 					'fields'    => array(
 						'title' => array(
-							'title' => __('Title', 'onepress'),
+							'title' => esc_html__('Title', 'onepress'),
 							'type'  =>'text',
 							'desc'  => '',
-							'default'  => __('Testimonial title', 'onepress'),
+							'default'  => esc_html__('Testimonial title', 'onepress'),
 						),
 						'name' => array(
-							'title' => __('Name', 'onepress'),
+							'title' => esc_html__('Name', 'onepress'),
 							'type'  =>'text',
 							'desc'  => '',
-							'default'  => __('User name', 'onepress'),
+							'default'  => esc_html__('User name', 'onepress'),
 						),
 						'image' => array(
-							'title' => __('Avatar', 'onepress'),
+							'title' => esc_html__('Avatar', 'onepress'),
 							'type'  =>'media',
 							'desc'  => 'Suggestion: 100x100px square image.',
 							'default' => array(
@@ -1270,27 +1270,27 @@ function onepress_customize_register( $wp_customize ) {
 							)
 						),
 						'subtitle' => array(
-							'title' => __('Subtitle', 'onepress'),
+							'title' => esc_html__('Subtitle', 'onepress'),
 							'type'  =>'textarea',
-							'default'  => __('Example Company', 'onepress'),
+							'default'  => esc_html__('Example Company', 'onepress'),
 						),
 						'content' => array(
-							'title' => __('Content', 'onepress'),
+							'title' => esc_html__('Content', 'onepress'),
 							'type'  =>'textarea',
-							'default'  => __('Whatever your user say', 'onepress'),
+							'default'  => esc_html__('Whatever your user say', 'onepress'),
 						),
 
 						'style' => array(
-							'title' => __('Style', 'onepress'),
+							'title' => esc_html__('Style', 'onepress'),
 							'type'  =>'select',
 							'default'  => 'primary',
 							'options' => array(
-								'theme-primary' => __( 'Theme default', 'onepress' ),
-								'primary' => __( 'Primary', 'onepress' ),
-								'success' => __( 'Success', 'onepress' ),
-								'info' => __( 'Info', 'onepress' ),
-								'warning' => __( 'Warning', 'onepress' ),
-								'danger' => __( 'Danger', 'onepress' ),
+								'theme-primary' => esc_html__( 'Theme default', 'onepress' ),
+								'primary' => esc_html__( 'Primary', 'onepress' ),
+								'success' => esc_html__( 'Success', 'onepress' ),
+								'info' => esc_html__( 'Info', 'onepress' ),
+								'warning' => esc_html__( 'Warning', 'onepress' ),
+								'danger' => esc_html__( 'Danger', 'onepress' ),
 							)
 						),
 
@@ -1301,18 +1301,13 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-
-
-
-
-
 	/*------------------------------------------------------------------------*/
     /*  Section: Team
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_team' ,
 		array(
 			'priority'        => 136,
-			'title'           => __( 'Section: Team', 'onepress' ),
+			'title'           => esc_html__( 'Section: Team', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
 		)
@@ -1321,7 +1316,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_team_settings' ,
 		array(
 			'priority'    => 3,
-			'title'       => __( 'Section Settings', 'onepress' ),
+			'title'       => esc_html__( 'Section Settings', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_team',
 		)
@@ -1337,7 +1332,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( 'onepress_team_disable',
 			array(
 				'type'        => 'checkbox',
-				'label'       => __('Hide this section?', 'onepress'),
+				'label'       => esc_html__('Hide this section?', 'onepress'),
 				'section'     => 'onepress_team_settings',
 				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
 			)
@@ -1346,12 +1341,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_team_id',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('team', 'onepress'),
+				'default'           => esc_html__('team', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_team_id',
 			array(
-				'label' 		=> __('Section ID:', 'onepress'),
+				'label'     	=> esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_team_settings',
 				'description'   => 'The section id, we will use this for link anchor.'
 			)
@@ -1361,12 +1356,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_team_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Meet the Talents', 'onepress'),
+				'default'           => esc_html__('Our Team', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_team_title',
 			array(
-				'label' 		=> __('Section Title', 'onepress'),
+				'label'    		=> esc_html__('Section Title', 'onepress'),
 				'section' 		=> 'onepress_team_settings',
 				'description'   => '',
 			)
@@ -1376,12 +1371,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_team_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('We are OnePress', 'onepress'),
+				'default'           => esc_html__('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_team_subtitle',
 			array(
-				'label' 		=> __('Section Subtitle', 'onepress'),
+				'label'     => esc_html__('Section Subtitle', 'onepress'),
 				'section' 		=> 'onepress_team_settings',
 				'description'   => '',
 			)
@@ -1390,7 +1385,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_team_content' ,
 		array(
 			'priority'    => 6,
-			'title'       => __( 'Section Content', 'onepress' ),
+			'title'       => esc_html__( 'Section Content', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_team',
 		)
@@ -1403,8 +1398,8 @@ function onepress_customize_register( $wp_customize ) {
 				'default' => json_encode(
 					array(
 						array(
-							'name' 			=> __( 'Alexander Rios', 'onepress' ),
-							'position' 		=> __( 'Founder & CEO', 'onepress' ),
+							'name' 			=> esc_html__( 'Alexander Rios', 'onepress' ),
+							'position' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
 							'image' 		=> array(
 								'url' => get_template_directory_uri() . '/assets/images/team1.jpg',
 								'id' => ''
@@ -1416,8 +1411,8 @@ function onepress_customize_register( $wp_customize ) {
 							'linkedin' 		=> '#',
 						),
 						array(
-							'name' 			=> __( 'Victoria Stephens', 'onepress' ),
-							'position' 		=> __( 'Founder & CTO', 'onepress' ),
+							'name' 			=> esc_html__( 'Victoria Stephens', 'onepress' ),
+							'position' 		=> esc_html__( 'Founder & CTO', 'onepress' ),
 							'image' 		=> array(
 								'url'=>get_template_directory_uri() . '/assets/images/team2.jpg'
 							),
@@ -1428,8 +1423,8 @@ function onepress_customize_register( $wp_customize ) {
 							'linkedin' 		=> '#',
 						),
 						array(
-							'name' 			=> __( 'Harry Allen', 'onepress' ),
-							'position' 		=> __( 'Director Of Production', 'onepress' ),
+							'name' 			=> esc_html__( 'Harry Allen', 'onepress' ),
+							'position' 		=> esc_html__( 'Director Of Production', 'onepress' ),
 							'image' 		=> array(
 								'url' => get_template_directory_uri() . '/assets/images/team3.jpg'
 							),
@@ -1440,8 +1435,8 @@ function onepress_customize_register( $wp_customize ) {
 							'linkedin' 		=> '#',
 						),
 						array(
-							'name' 			=> __( 'Thomas Wade', 'onepress' ),
-							'position' 		=> __( 'Senior Developer', 'onepress' ),
+							'name' 			=> esc_html__( 'Thomas Wade', 'onepress' ),
+							'position' 		=> esc_html__( 'Senior Developer', 'onepress' ),
 							'image' 		=> array(
 								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
 							),
@@ -1464,27 +1459,27 @@ function onepress_customize_register( $wp_customize ) {
 				$wp_customize,
 				'onepress_team_members',
 				array(
-					'label' 		=> __('Team members', 'onepress'),
+					'label'     => esc_html__('Team members', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_team_content',
 					'live_title_id' => 'name', // apply for unput text and textarea only
-					'title_format'  => __( '[live_title]', 'onepress'), // [live_title]
-					'max_item'      => 3, // Maximum item can add
+					'title_format'  => esc_html__( '[live_title]', 'onepress'), // [live_title]
+					'max_item'      => 4, // Maximum item can add
 
 					'fields'    => array(
 						'name' => array(
-							'title' => __('Name', 'onepress'),
+							'title' => esc_html__('Name', 'onepress'),
 							'type'  =>'text',
 							'desc'  => '',
-							'default'  => __('Member name', 'onepress'),
+							'default'  => esc_html__('Member name', 'onepress'),
 						),
 						'position' => array(
-							'title' => __('Position', 'onepress'),
+							'title' => esc_html__('Position', 'onepress'),
 							'type'  =>'text',
-							'default'  => __('Member Position', 'onepress'),
+							'default'  => esc_html__('Member Position', 'onepress'),
 						),
 						'image' => array(
-							'title' => __('Avatar', 'onepress'),
+							'title' => esc_html__('Avatar', 'onepress'),
 							'type'  =>'media',
 							'default' => array(
 								'url' => get_template_directory_uri().'/assets/images/user_avatar.jpg',
@@ -1492,24 +1487,24 @@ function onepress_customize_register( $wp_customize ) {
 							)
 						),
 						'facebook' => array(
-							'title' => __('Facebook', 'onepress'),
+							'title' => esc_html__('Facebook', 'onepress'),
 							'type'  =>'text',
 							'default'  => '',
 						),
 						'twitter' => array(
-							'title' => __('Twitter', 'onepress'),
+							'title' => esc_html__('Twitter', 'onepress'),
 							'type'  =>'text',
 						),
 						'google_plus' => array(
-							'title' => __('Google+', 'onepress'),
+							'title' => esc_html__('Google+', 'onepress'),
 							'type'  =>'text',
 						),
 						'youtube' => array(
-							'title' => __('Youtube', 'onepress'),
+							'title' => esc_html__('Youtube', 'onepress'),
 							'type'  =>'text',
 						),
 						'linkedin' => array(
-							'title' => __('LinkedIn', 'onepress'),
+							'title' => esc_html__('LinkedIn', 'onepress'),
 							'type'  =>'text',
 						),
 					),
@@ -1524,7 +1519,7 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_panel( 'onepress_news' ,
 		array(
 			'priority'        => 138,
-			'title'           => __( 'Section: News', 'onepress' ),
+			'title'           => esc_html__( 'Section: News', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
 		)
@@ -1533,7 +1528,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_news_settings' ,
 		array(
 			'priority'    => 3,
-			'title'       => __( 'Section Settings', 'onepress' ),
+			'title'       => esc_html__( 'Section Settings', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_news',
 		)
@@ -1549,7 +1544,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( 'onepress_news_disable',
 			array(
 				'type'        => 'checkbox',
-				'label'       => __('Hide this section?', 'onepress'),
+				'label'       => esc_html__('Hide this section?', 'onepress'),
 				'section'     => 'onepress_news_settings',
 				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
 			)
@@ -1559,12 +1554,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_news_id',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('news', 'onepress'),
+				'default'           => esc_html__('news', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_news_id',
 			array(
-				'label' 		=> __('Section ID:', 'onepress'),
+				'label'     => esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_news_settings',
 				'description'   => 'The section id, we will use this for link anchor.'
 			)
@@ -1574,12 +1569,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_news_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Latest News', 'onepress'),
+				'default'           => esc_html__('Latest News', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_news_title',
 			array(
-				'label' 		=> __('Section Title', 'onepress'),
+				'label'     => esc_html__('Section Title', 'onepress'),
 				'section' 		=> 'onepress_news_settings',
 				'description'   => '',
 			)
@@ -1589,12 +1584,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_news_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('The company blog', 'onepress'),
+				'default'           => esc_html__('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_news_subtitle',
 			array(
-				'label' 		=> __('Section Subtitle', 'onepress'),
+				'label'     => esc_html__('Section Subtitle', 'onepress'),
 				'section' 		=> 'onepress_news_settings',
 				'description'   => '',
 			)
@@ -1622,7 +1617,7 @@ function onepress_customize_register( $wp_customize ) {
 		);
 		$wp_customize->add_control( 'onepress_news_number',
 			array(
-				'label' 		=> __('Number of post to show', 'onepress'),
+				'label'     	=> esc_html__('Number of post to show', 'onepress'),
 				'section' 		=> 'onepress_news_settings',
 				'description'   => '',
 			)
@@ -1637,7 +1632,7 @@ function onepress_customize_register( $wp_customize ) {
 		);
 		$wp_customize->add_control( 'onepress_news_more_link',
 			array(
-				'label'       => __('More News button link', 'onepress'),
+				'label'       => esc_html__('More News button link', 'onepress'),
 				'section'     => 'onepress_news_settings',
 				'description' => 'It should be your blog page link.'
 			)
@@ -1645,12 +1640,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_news_more_text',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Read Our Blog', 'onepress'),
+				'default'           => esc_html__('Read Our Blog', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_news_more_text',
 			array(
-				'label' 		=> __('Section Subtitle', 'onepress'),
+				'label'     	=> esc_html__('Section Subtitle', 'onepress'),
 				'section' 		=> 'onepress_news_settings',
 				'description'   => '',
 			)
@@ -1662,7 +1657,7 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_panel( 'onepress_contact' ,
 		array(
 			'priority'        => 140,
-			'title'           => __( 'Section: Contact', 'onepress' ),
+			'title'           => esc_html__( 'Section: Contact', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
 		)
@@ -1671,7 +1666,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_contact_settings' ,
 		array(
 			'priority'    => 3,
-			'title'       => __( 'Section Settings', 'onepress' ),
+			'title'       => esc_html__( 'Section Settings', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_contact',
 		)
@@ -1687,7 +1682,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( 'onepress_contact_disable',
 			array(
 				'type'        => 'checkbox',
-				'label'       => __('Hide this section?', 'onepress'),
+				'label'       => esc_html__('Hide this section?', 'onepress'),
 				'section'     => 'onepress_contact_settings',
 				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
 			)
@@ -1697,12 +1692,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_id',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('contact', 'onepress'),
+				'default'           => esc_html__('contact', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_id',
 			array(
-				'label' 		=> __('Section ID:', 'onepress'),
+				'label'     => esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_contact_settings',
 				'description'   => 'The section id, we will use this for link anchor.'
 			)
@@ -1712,12 +1707,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Get in touch', 'onepress'),
+				'default'           => esc_html__('Get in touch', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_title',
 			array(
-				'label' 		=> __('Section Title', 'onepress'),
+				'label'     => esc_html__('Section Title', 'onepress'),
 				'section' 		=> 'onepress_contact_settings',
 				'description'   => '',
 			)
@@ -1727,12 +1722,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Talk with us', 'onepress'),
+				'default'           => esc_html__('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_subtitle',
 			array(
-				'label' 		=> __('Section Subtitle', 'onepress'),
+				'label'     => esc_html__('Section Subtitle', 'onepress'),
 				'section' 		=> 'onepress_contact_settings',
 				'description'   => '',
 			)
@@ -1741,7 +1736,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'onepress_contact_content' ,
 		array(
 			'priority'    => 6,
-			'title'       => __( 'Section Content', 'onepress' ),
+			'title'       => esc_html__( 'Section Content', 'onepress' ),
 			'description' => '',
 			'panel'       => 'onepress_contact',
 		)
@@ -1756,7 +1751,7 @@ function onepress_customize_register( $wp_customize ) {
 			array(
 				'section'     => 'onepress_contact_content',
 				'type'        => 'custom_message',
-				'description' => __( 'In order to display contact form please install <a target="_blank" href="https://wordpress.org/plugins/contact-form-7/">Contact Form 7</a> plugin and then copy the contact form shortcode and paste it here, the shortcode will be like this <code>[contact-form-7 id="xxxx" title="Example Contact Form"]</code>', 'onepress' )
+				'description' => wp_kses_post( 'In order to display contact form please install <a target="_blank" href="https://wordpress.org/plugins/contact-form-7/">Contact Form 7</a> plugin and then copy the contact form shortcode and paste it here, the shortcode will be like this <code>[contact-form-7 id="xxxx" title="Example Contact Form"]</code>', 'onepress' )
 			)
 		));
 
@@ -1769,7 +1764,7 @@ function onepress_customize_register( $wp_customize ) {
 		);
 		$wp_customize->add_control( 'onepress_contact_cf7',
 			array(
-				'label' 		=> __('Contact Form 7 Shortcode.', 'onepress'),
+				'label'     	=> esc_html__('Contact Form 7 Shortcode.', 'onepress'),
 				'section' 		=> 'onepress_contact_content',
 				'description'   => '',
 			)
@@ -1785,7 +1780,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_control( 'onepress_contact_cf7_disable',
 			array(
 				'type'        => 'checkbox',
-				'label'       => __('Hide contact form completely.', 'onepress'),
+				'label'       => esc_html__('Hide contact form completely.', 'onepress'),
 				'section'     => 'onepress_contact_content',
 				'description' => esc_html__('Check this box to hide contact form.', 'onepress'),
 			)
@@ -1795,7 +1790,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_text',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('<h4>WE ARE ACCEPTING NEW PROJECTS.</h4>
+				'default'           => wp_kses_post('<h4>Donec nec justo eget felis.</h4>
 <p>Dorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>
 <p>Consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>', 'onepress'),
 			)
@@ -1804,7 +1799,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize,
 			'onepress_contact_text',
 			array(
-				'label' 		=> __('Contact Text', 'onepress'),
+				'label'     	=> esc_html__('Contact Text', 'onepress'),
 				'section' 		=> 'onepress_contact_content',
 				'description'   => '',
 			)
@@ -1823,12 +1818,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_address_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Where to meet?', 'onepress'),
+				'default'           => esc_html__('Pulvinar scelerisque', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_address_title',
 			array(
-				'label' 		=> __('Contact Box Title', 'onepress'),
+				'label'     	=> esc_html__('Contact Box Title', 'onepress'),
 				'section' 		=> 'onepress_contact_content',
 				'description'   => '',
 			)
@@ -1838,12 +1833,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_address',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('1 Infinite Loop <br> Cupertino <br> CA 95014 <br> United States', 'onepress'),
+				'default'           => wp_kses_post('1 Infinite Loop <br> Cupertino <br> CA 95014 <br> United States', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_address',
 			array(
-				'label' 		=> __('Address', 'onepress'),
+				'label'     => esc_html__('Address', 'onepress'),
 				'section' 		=> 'onepress_contact_content',
 				'description'   => '',
 			)
@@ -1853,12 +1848,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_phone',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('1.123.456.789', 'onepress'),
+				'default'           => esc_html__('1.123.456.789', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_phone',
 			array(
-				'label' 		=> __('Phone', 'onepress'),
+				'label'     	=> esc_html__('Phone', 'onepress'),
 				'section' 		=> 'onepress_contact_content',
 				'description'   => '',
 			)
@@ -1868,12 +1863,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_email',
 			array(
 				'sanitize_callback' => 'sanitize_email',
-				'default'           => __('contact@company.com', 'onepress'),
+				'default'           => wp_kses_post('contact@company.com', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_email',
 			array(
-				'label' 		=> __('Email', 'onepress'),
+				'label'     	=> esc_html__('Email', 'onepress'),
 				'section' 		=> 'onepress_contact_content',
 				'description'   => '',
 			)
@@ -1883,12 +1878,12 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_fax',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('Fax: (123) 123-4567', 'onepress'),
+				'default'           => wp_kses_post('Fax: (123) 123-4567', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_fax',
 			array(
-				'label' 		=> __('Fax', 'onepress'),
+				'label'     	=> esc_html__('Fax', 'onepress'),
 				'section' 		=> 'onepress_contact_content',
 				'description'   => '',
 			)

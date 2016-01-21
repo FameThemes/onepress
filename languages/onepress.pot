@@ -517,7 +517,7 @@ msgstr ""
 
 #: ../inc/customizer.php:484 ../inc/customizer.php:591 ../section-parts/section-
 #: about.php:4 ../section-parts/section-hero.php:11
-msgid "More About Us"
+msgid "About Us"
 msgstr ""
 
 #: ../inc/customizer.php:489
@@ -563,7 +563,7 @@ msgid "Section Title"
 msgstr ""
 
 #: ../inc/customizer.php:606 ../section-parts/section-about.php:5
-msgid "We are a digital studio"
+msgid "Section subtitle"
 msgstr ""
 
 #: ../inc/customizer.php:611 ../inc/customizer.php:717 ../inc/customizer.php:821 .
@@ -593,7 +593,7 @@ msgid "Our Services"
 msgstr ""
 
 #: ../inc/customizer.php:712 ../section-parts/section-services.php:5
-msgid "We help client like you"
+msgid "Section subtitle"
 msgstr ""
 
 #: ../inc/customizer.php:742
@@ -657,11 +657,11 @@ msgid "team"
 msgstr ""
 
 #: ../inc/customizer.php:963 ../section-parts/section-team.php:4
-msgid "Meet the Talents"
+msgid "Our Team"
 msgstr ""
 
 #: ../inc/customizer.php:978 ../section-parts/section-team.php:5
-msgid "We are OnePress"
+msgid "Section subtitle"
 msgstr ""
 
 #: ../inc/customizer.php:1008
@@ -684,7 +684,7 @@ msgid "Latest News"
 msgstr ""
 
 #: ../inc/customizer.php:1083 ../section-parts/section-news.php:5
-msgid "The company blog"
+msgid "Section subtitle"
 msgstr ""
 
 #: ../inc/customizer.php:1116
@@ -712,7 +712,7 @@ msgid "Get in touch"
 msgstr ""
 
 #: ../inc/customizer.php:1220 ../section-parts/section-contact.php:5
-msgid "Talk with us"
+msgid "Section subtitle"
 msgstr ""
 
 #: ../inc/customizer.php:1249
@@ -738,7 +738,7 @@ msgstr ""
 
 #: ../inc/customizer.php:1288 ../section-parts/section-contact.php:8
 msgid ""
-"<h4>WE ARE ACCEPTING NEW PROJECTS.</h4>\n"
+"<h4>Donec nec justo eget felis.</h4>\n"
 "<p>Dorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse "
 "pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, "
 "diam magna volutpat augue.</p>\n"
@@ -751,7 +751,7 @@ msgid "Contact Text"
 msgstr ""
 
 #: ../inc/customizer.php:1316 ../section-parts/section-contact.php:11
-msgid "Where to meet?"
+msgid "Suspendisse pulvinar scelerisque"
 msgstr ""
 
 #: ../inc/customizer.php:1321

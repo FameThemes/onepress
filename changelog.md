@@ -1,6 +1,12 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.0.5
+* Replace custom demo content with lorem content type.
+* Add inverted style for section.
+* Add theme dashboard page.
+* Escape content before output.
+* Some small bug fixes and style change.
 
 ## 1.0.4
 * New section: Counter, Testimonials

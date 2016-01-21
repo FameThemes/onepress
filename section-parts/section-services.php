@@ -1,12 +1,12 @@
 <?php
-$onepress_service_id       = get_theme_mod( 'onepress_service_id', __('services', 'onepress') );
+$onepress_service_id       = get_theme_mod( 'onepress_service_id', esc_html__('services', 'onepress') );
 $onepress_service_disable  = get_theme_mod( 'onepress_service_disable' ) == 1 ? true : false;
-$onepress_service_title    = get_theme_mod( 'onepress_service_title', __('Our Services', 'onepress' ));
-$onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We help client like you', 'onepress' ));
+$onepress_service_title    = get_theme_mod( 'onepress_service_title', esc_html__('Our Services', 'onepress' ));
+$onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', esc_html__('Section subtitle', 'onepress' ));
 ?>
 
 <?php if ( ! $onepress_service_disable  ) : ?>
-<section id="<?php if ( $onepress_service_id != '' ) echo $onepress_service_id; ?>" <?php do_action( 'onpress_section_atts', 'services' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-padding section-services section-meta onepage-section', 'services' ) ); ?>">
+<section id="<?php if ( $onepress_service_id != '' ) echo $onepress_service_id; ?>" <?php do_action( 'onpress_section_atts', 'services' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-services section-padding section-meta onepage-section', 'services' ) ); ?>">
 	<?php do_action( 'onepress_section_before_inner', 'services' ); ?>
 	<div class="container">
 		<div class="section-title-area">
@@ -18,24 +18,24 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('We 
 
 			$services = get_theme_mod( 'onepress_services', array(
 				array(
-					'title' => __( 'Insights & Planning', 'onepress' ),
+					'title' => esc_html__( 'Service Title #1', 'onepress' ),
 					'icon'  => 'fa-wikipedia-w',
-					'content' => __( 'Uncovering key insights that inform the planning process and business modeling.', 'onepress' )
+					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 				),
 				array(
-					'title' => __( 'Usability & User Testing', 'onepress' ),
+					'title' => esc_html__( 'Service Title #2', 'onepress' ),
 					'icon'  => 'fa-gg',
-					'content' => __( 'A user-first approach to defining interactive experiences and customer experience planning.', 'onepress' )
+					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 				),
 				array(
-					'title' => __( 'Creative & Design', 'onepress' ),
+					'title' => esc_html__( 'Service Title #3', 'onepress' ),
 					'icon'  => 'fa-balance-scale',
-					'content' => __( 'Inventing and visualizing through shape, form, type and color.', 'onepress' )
+					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 				),
 				array(
-					'title' => __( 'Technology & Development', 'onepress' ),
+					'title' => esc_html__( 'Service Title #4', 'onepress' ),
 					'icon'  => 'fa-object-group',
-					'content' => __( 'Enabling user engagement through smart technology solutions.', 'onepress' )
+					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 				),
 
 			) );

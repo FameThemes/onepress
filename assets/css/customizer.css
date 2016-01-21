@@ -24,7 +24,10 @@
 .list-repeatable .widget.explained .widget-inside{
     display: block;
 }
-
+.list-repeatable .wp-picker-holder {
+    position: absolute;
+    z-index: 99;
+}
 .list-repeatable .item{
     margin-bottom: 15px;
 }
@@ -57,4 +60,13 @@
 .list-repeatable .thumbnail-image img {
     width: 100%;
     height: auto;
+}
+
+/* Special element */
+.repeatable-customize-control.show-display-field-only .widget-content .item{
+    display: none;
+}
+.repeatable-customize-control.show-display-field-only .widget-content .item.item-show_section{
+    display: block;
+    margin-top: 15px;
 }

@@ -20,6 +20,8 @@ var RepeatableCustomize = function (  control  ){
 		container.addClass( 'no-changeable' );
 	}
 
+
+
 	that.getData = function ( ){
 		var f = $( '.form-data', container );
 		var data =  $( 'input, textarea, select', f ).serialize();
@@ -50,7 +52,7 @@ var RepeatableCustomize = function (  control  ){
 	var frame = wp.media({
 		title: wp.media.view.l10n.addMedia,
 		multiple: false,
-		library: {type: 'image'},
+		//library: {type: 'all' },
 		//button : { text : 'Insert' }
 	});
 
@@ -69,7 +71,7 @@ var RepeatableCustomize = function (  control  ){
 			$( '.remove-button', _item ).on( 'click', function( e ){
 				e.preventDefault();
 
-				$( '.image_id, .image_url', _item).val( '' );
+				$( '.image_id, .image_url', _item ).val( '' );
 				$( '.thumbnail-image', _item ).html( '' );
 
 				$( '.current', _item ).removeClass( 'show' ).addClass( 'hide' );
@@ -77,7 +79,7 @@ var RepeatableCustomize = function (  control  ){
 				$( this).hide();
 
 				$('.upload-button', _item ).text( $('.upload-button', _item ).attr( 'data-add-txt' ) );
-				$( '.image_id', _item).trigger( 'change' );
+				$( '.image_id', _item ).trigger( 'change' );
 
 			} );
 
@@ -89,19 +91,21 @@ var RepeatableCustomize = function (  control  ){
 					// Grab our attachment selection and construct a JSON representation of the model.
 					var media_attachment = frame.state().get('selection').first().toJSON();
 					// media_attachment= JSON.stringify(media_attachment);
+					// console.log( media_attachment );
 
 					$( '.image_id', _item ).val(media_attachment.id);
+
 					var preview, img_url;
 					img_url = media_attachment.url;
-
 					$( '.current', _item ).removeClass( 'hide').addClass( 'show' );
-
-					$( '.image_url', _item ).val(img_url);
-					preview = '<img src="' + img_url + '" alt="">';
-					//$(' img', _item).remove();
-					$( '.thumbnail-image', _item ).html( preview );
-					$( '.remove-button', _item).show();
-					$( '.image_id', _item).trigger( 'change' );
+					$( '.image_url', _item ).val( img_url );
+					if ( media_attachment.type == 'image' ) {
+						preview = '<img src="' + img_url + '" alt="">';
+						//$(' img', _item).remove();
+						$('.thumbnail-image', _item ).html(preview);
+					}
+					$('.remove-button', _item ).show();
+					$( '.image_id', _item ).trigger( 'change' );
 
 					btn.text( btn.attr( 'data-change-txt' ) );
 
@@ -248,6 +252,15 @@ var RepeatableCustomize = function (  control  ){
 		that.rename();
 		that.colorPicker( $context );
 		that.handleMedia( $context );
+
+		//Special check element
+		$( '[data-live-id="section_id"]').each( function(){
+			if ( $( this ).val() === 'map' ) {
+				$context.addClass( 'show-display-field-only' );
+			}
+		} );
+
+
 	};
 
 	$( '.list-repeatable li').each( function(){

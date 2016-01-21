@@ -13,45 +13,13 @@ get_header(); ?>
 
 			if ( ! has_action( 'onepress_frontpage_section_parts' ) ) {
 
-				/*
-				 * Section: Hero
-				 */
-				get_template_part('section-parts/section', 'hero');
+				$sections = array(
+					'hero', 'about', 'services', 'counter', 'testimonials', 'team', 'news', 'contact'
+				);
 
-				/*
-				 * Section: About
-				 */
-				get_template_part('section-parts/section', 'about');
-
-				/*
-				 * Section: Services
-				 */
-				get_template_part('section-parts/section', 'services');
-
-				/*
-				 * Section: Counter
-				 */
-				get_template_part('section-parts/section', 'counter');
-
-				/*
-				 * Section: Testimonials
-				 */
-				get_template_part('section-parts/section', 'testimonials');
-
-				/*
-				 * Section: Team
-				 */
-				get_template_part('section-parts/section', 'team');
-
-				/*
-				 * Section: News
-				 */
-				get_template_part('section-parts/section', 'news');
-
-				/*
-				 * Section: Contact
-				 */
-				get_template_part('section-parts/section', 'contact');
+				foreach ( $sections as $section ){
+					get_template_part('section-parts/section', $section );
+				}
 
 			} else {
 				do_action( 'onepress_frontpage_section_parts' );

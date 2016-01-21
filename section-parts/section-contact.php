@@ -1,21 +1,21 @@
 <?php
-$onepress_contact_id            = get_theme_mod( 'onepress_contact_id', __('contact', 'onepress') );
+$onepress_contact_id            = get_theme_mod( 'onepress_contact_id', esc_html__('contact', 'onepress') );
 $onepress_contact_disable       = get_theme_mod( 'onepress_contact_disable' ) == 1 ?  true : false;
-$onepress_contact_title         = get_theme_mod( 'onepress_contact_title', __('Get in touch', 'onepress' ));
-$onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', __('Talk with us', 'onepress' ));
+$onepress_contact_title         = get_theme_mod( 'onepress_contact_title', esc_html__('Get in touch', 'onepress' ));
+$onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $onepress_contact_cf7           = get_theme_mod( 'onepress_contact_cf7' );
 $onepress_contact_cf7_disable   = get_theme_mod( 'onepress_contact_cf7_disable' );
-$onepress_contact_text          = get_theme_mod( 'onepress_contact_text', __('<h4>WE ARE ACCEPTING NEW PROJECTS.</h4>
+$onepress_contact_text          = get_theme_mod( 'onepress_contact_text', wp_kses_post('<h4>Donec nec justo eget felis.</h4>
 <p>Dorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>
 <p>Consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>', 'onepress') );
-$onepress_contact_address_title = get_theme_mod( 'onepress_contact_address_title', __('Where to meet?', 'onepress' ));
-$onepress_contact_address       = get_theme_mod( 'onepress_contact_address', __('1 Infinite Loop <br> Cupertino <br> CA 95014 <br> United States', 'onepress' ));
-$onepress_contact_phone         = get_theme_mod( 'onepress_contact_phone', __('1.123.456.789', 'onepress' ));
-$onepress_contact_email         = get_theme_mod( 'onepress_contact_email', __('contact@company.com', 'onepress' ));
-$onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax: (123) 123-4567', 'onepress' ));
+$onepress_contact_address_title = get_theme_mod( 'onepress_contact_address_title', esc_html__('Pulvinar scelerisque', 'onepress' ));
+$onepress_contact_address       = get_theme_mod( 'onepress_contact_address', wp_kses_post('1 Infinite Loop <br> Cupertino <br> CA 95014 <br> United States', 'onepress' ));
+$onepress_contact_phone         = get_theme_mod( 'onepress_contact_phone', esc_html__('1.123.456.789', 'onepress' ));
+$onepress_contact_email         = get_theme_mod( 'onepress_contact_email', esc_html__('contact@company.com', 'onepress' ));
+$onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', esc_html__('Fax: (123) 123-4567', 'onepress' ));
 ?>
 <?php if ( ! $onepress_contact_disable  ) : ?>
-<section id="<?php if ( $onepress_contact_id != '' ) echo $onepress_contact_id; ?>" <?php do_action( 'onpress_section_atts', 'counter' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-padding section-contact section-meta onepage-section', 'contact' ) ); ?>">
+<section id="<?php if ( $onepress_contact_id != '' ) echo $onepress_contact_id; ?>" <?php do_action( 'onpress_section_atts', 'counter' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-contact section-padding  section-meta onepage-section', 'contact' ) ); ?>">
 	<?php do_action( 'onepress_section_before_inner', 'contact' ); ?>
 	<div class="container">
 		<div class="section-title-area">
@@ -32,7 +32,7 @@ $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax
 				<?php } else { ?>
 				<div class="contact-form col-sm-6 wow slideInUp">
 					<br>
-					<small><i><?php echo __( 'You can install <a target="_blank" href="<?php echo esc_url(\'https://wordpress.org/plugins/contact-form-7/\'); ?>">Contact Form 7</a> plugin and go to <strong>Customizer &rarr; Section: Contact &rarr; Section Content</strong> to show a working contact form here.', 'onepress' ); ?></i></small>
+					<small><i><?php printf( esc_html__( 'You can install %1$s plugin and go to Customizer &rarr; Section: Contact &rarr; Section Content to show a working contact form here.', 'onepress' ), '<a href="'. esc_url('https://wordpress.org/plugins/contact-form-7/', 'onepress') .'" target="_blank">Contact Form 7</a>' ); ?></i></small>
 				</div>
 				<?php } ?>
 			<?php endif; ?>

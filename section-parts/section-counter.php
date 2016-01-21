@@ -1,11 +1,11 @@
 <?php
-$onepress_counter_id       = get_theme_mod( 'onepress_counter_id', __('counter', 'onepress') );
+$onepress_counter_id       = get_theme_mod( 'onepress_counter_id', esc_html__('counter', 'onepress') );
 $onepress_counter_disable  = get_theme_mod( 'onepress_counter_disable' ) == 1 ? true : false;
-$onepress_counter_title    = get_theme_mod( 'onepress_counter_title', __('Our Numbers', 'onepress' ));
-$onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', __('Some Fun Facts', 'onepress' ));
+$onepress_counter_title    = get_theme_mod( 'onepress_counter_title', esc_html__('Our Numbers', 'onepress' ));
+$onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', esc_html__('Section subtitle', 'onepress' ));
 ?>
 <?php if ( $onepress_counter_disable != '1' ) : ?>
-<section id="<?php if ( $onepress_counter_id != '' ) echo $onepress_counter_id; ?>" <?php do_action( 'onpress_section_atts', 'counter' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-padding section-counter onepage-section', 'counter' ) ); ?>">
+<section id="<?php if ( $onepress_counter_id != '' ) echo $onepress_counter_id; ?>" <?php do_action( 'onpress_section_atts', 'counter' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-counter section-padding onepage-section', 'counter' ) ); ?>">
 	<?php do_action( 'onepress_section_before_inner', 'counter' ); ?>
 	<div class="container">
 
@@ -26,28 +26,28 @@ $onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', __('Som
 			if ( empty( $boxes ) || ! is_array( $boxes ) ) {
 				$boxes = array(
 					array(
-						'title' => __( 'Projects completed', 'onepress' ),
+						'title' => esc_html__( 'Counter Title', 'onepress' ),
 						'number'  => '268',
 						'unit_before' => '',
 						'unit_after' => ''
 					),
 
 					array(
-						'title' => __( 'Lines of code', 'onepress' ),
+						'title' => esc_html__( 'Counter Title', 'onepress' ),
 						'number'  => '2569',
 						'unit_before' => '',
 						'unit_after' => 'k'
 					),
 
 					array(
-						'title' => __( 'Cups of coffee', 'onepress' ),
+						'title' => esc_html__( 'Counter Title', 'onepress' ),
 						'number'  => '984',
 						'unit_before' => '',
 						'unit_after' => ''
 					),
 
 					array(
-						'title' => __( 'Customer Satisfaction', 'onepress' ),
+						'title' => esc_html__( 'Counter Title', 'onepress' ),
 						'number'  => '5683',
 						'unit_before' => '',
 						'unit_after' => ''

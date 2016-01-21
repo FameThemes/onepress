@@ -49,7 +49,7 @@ class One_Press_Textarea_Custom_Control extends WP_Customize_Control
 
 class OnePress_Theme_Support extends WP_Customize_Control {
 	public function render_content() {
-		echo __( 'Upgrade to <a href="#">OnePress Pro</a> to be able to change the section order and styling!', 'onepress' );
+		echo wp_kses_post( 'Upgrade to <a href="#">OnePress Pro</a> to be able to change the section order and styling!', 'onepress' );
 	}
 }
 
@@ -330,7 +330,6 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                         <# } #>
 
 
-
                                         <# if ( field.type === 'hidden' ) { #>
 
                                             <input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
@@ -388,13 +387,20 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
                                         <# } else if ( field.type == 'color' ) { #>
 
+                                            <# if ( field.value !='' ) { field.value = '#'+field.value ; }  #>
+
                                             <input type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="color-field">
 
                                         <# } else if ( field.type == 'media' ) { #>
 
-                                            <input type="hidden" value="{{ field.value.url }}" data-repeat-name="_items[__i__][{{ field.id }}][url]" class="image_url widefat">
+                                            <# if ( !field.media  || field.media == '' || field.media =='image' ) {  #>
+                                                <input type="hidden" value="{{ field.value.url }}" data-repeat-name="_items[__i__][{{ field.id }}][url]" class="image_url widefat">
+                                            <# } else { #>
+                                                <input type="text" value="{{ field.value.url }}" data-repeat-name="_items[__i__][{{ field.id }}][url]" class="image_url widefat">
+                                            <# } #>
                                             <input type="hidden" value="{{ field.value.id }}" data-repeat-name="_items[__i__][{{ field.id }}][id]" class="image_id widefat">
 
+                                            <# if ( !field.media  || field.media == '' || field.media =='image' ) {  #>
                                             <div class="current <# if ( field.value.url !== '' ){ #> show <# } #>">
                                                 <div class="container">
                                                     <div class="attachment-media-view attachment-media-view-image landscape">
@@ -406,10 +412,11 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <# } #>
 
                                             <div class="actions">
-                                                <button class="button remove-button " <# if ( field.value.url === '' ){ #> style="display:none"; <# } #> type="button"><?php _e( 'Remove', 'onepress' ) ?></button>
-                                                <button class="button upload-button" data-add-txt="<?php esc_attr_e( 'Add Image', 'onepress' ); ?>" data-change-txt="<?php esc_attr_e( 'Change Image', 'onepress' ); ?>" type="button"><# if ( field.value.url == '' ){ #> <?php _e( 'Add Image', 'onepress' ); ?> <# } else { #> <?php _e( 'Change Image', 'onepress' ); ?> <# } #> </button>
+                                                <button class="button remove-button " <# if ( ! field.value.url ){ #> style="display:none"; <# } #> type="button"><?php _e( 'Remove', 'onepress' ) ?></button>
+                                                <button class="button upload-button" data-media="{{field.media}}" data-add-txt="<?php esc_attr_e( 'Add', 'onepress' ); ?>" data-change-txt="<?php esc_attr_e( 'Change', 'onepress' ); ?>" type="button"><# if ( ! field.value.url  ){ #> <?php _e( 'Add', 'onepress' ); ?> <# } else { #> <?php _e( 'Change', 'onepress' ); ?> <# } #> </button>
                                                 <div style="clear:both"></div>
                                             </div>
 
