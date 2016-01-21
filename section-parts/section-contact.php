@@ -2,13 +2,13 @@
 $onepress_contact_id            = get_theme_mod( 'onepress_contact_id', __('contact', 'onepress') );
 $onepress_contact_disable       = get_theme_mod( 'onepress_contact_disable' ) == 1 ?  true : false;
 $onepress_contact_title         = get_theme_mod( 'onepress_contact_title', __('Get in touch', 'onepress' ));
-$onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', __('Talk with us', 'onepress' ));
+$onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', __('Section subtitle', 'onepress' ));
 $onepress_contact_cf7           = get_theme_mod( 'onepress_contact_cf7' );
 $onepress_contact_cf7_disable   = get_theme_mod( 'onepress_contact_cf7_disable' );
-$onepress_contact_text          = get_theme_mod( 'onepress_contact_text', __('<h4>WE ARE ACCEPTING NEW PROJECTS.</h4>
+$onepress_contact_text          = get_theme_mod( 'onepress_contact_text', __('<h4>Donec nec justo eget felis.</h4>
 <p>Dorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>
 <p>Consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>', 'onepress') );
-$onepress_contact_address_title = get_theme_mod( 'onepress_contact_address_title', __('Where to meet?', 'onepress' ));
+$onepress_contact_address_title = get_theme_mod( 'onepress_contact_address_title', __('Pulvinar scelerisque', 'onepress' ));
 $onepress_contact_address       = get_theme_mod( 'onepress_contact_address', __('1 Infinite Loop <br> Cupertino <br> CA 95014 <br> United States', 'onepress' ));
 $onepress_contact_phone         = get_theme_mod( 'onepress_contact_phone', __('1.123.456.789', 'onepress' ));
 $onepress_contact_email         = get_theme_mod( 'onepress_contact_email', __('contact@company.com', 'onepress' ));

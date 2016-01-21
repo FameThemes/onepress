@@ -2,7 +2,7 @@
 $onepress_testimonial_id       = get_theme_mod( 'onepress_testimonial_id', __('testimonials', 'onepress') );
 $onepress_testimonials_disable  = get_theme_mod( 'onepress_testimonials_disable' ) ==  1 ? true : false;
 $onepress_testimonial_title    = get_theme_mod( 'onepress_testimonial_title', __('Testimonials', 'onepress' ));
-$onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle', __('You are in good company!', 'onepress' ));
+$onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle', __('Section subtitle', 'onepress' ));
 ?>
 <?php if ( ! $onepress_testimonials_disable  ) : ?>
 <section id="<?php if ( $onepress_testimonial_id != '' ) echo $onepress_testimonial_id; ?>" <?php do_action( 'onpress_section_atts', 'testimonials' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-testimonials onepage-section section-inverse section-padding section-padding-lg', 'testimonials' ) ); ?>">
@@ -24,7 +24,7 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
         if ( ! is_array( $testimonials ) || empty( $testimonials ) ) {
             $testimonials = array(
                 array(
-                    'title' 		=> __( 'Design Quality', 'onepress' ),
+                    'title' 		=> __( 'Praesent placerat', 'onepress' ),
                     'name' 			=> __( 'Alexander Rios', 'onepress' ),
                     'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
                     'style'         => 'warning',
@@ -32,11 +32,11 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
                         'url' => get_template_directory_uri() . '/assets/images/testimonial_1.jpg',
                         'id'  => ''
                     ),
-                    'content' 		=> __( 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.', 'onepress' ),
+                    'content' 		=> __( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat.', 'onepress' ),
 
                 ),
                 array(
-                    'title' 		=> __( 'Feature Availability', 'onepress' ),
+                    'title' 		=> __( 'Cras iaculis', 'onepress' ),
                     'name' 			=> __( 'Alexander Max', 'onepress' ),
                     'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
                     'style'         => 'success',
@@ -44,11 +44,11 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
                         'url' => get_template_directory_uri() . '/assets/images/testimonial_2.jpg',
                         'id'  => ''
                     ),
-                    'content' 		=> __( 'This card has supporting text below as a natural lead-in to additional content.', 'onepress' ),
+                    'content' 		=> __( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue eu vulputate.', 'onepress' ),
 
                 ),
                 array(
-                    'title' 		=> __( 'Customizability', 'onepress' ),
+                    'title' 		=> __( 'Fusce lobortis', 'onepress' ),
                     'name' 			=> __( 'Peter Mendez', 'onepress' ),
                     'subtitle' 		=> __( 'Example Company', 'onepress' ),
                     'style'         => 'theme-primary',
@@ -56,7 +56,7 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
                         'url' => get_template_directory_uri() . '/assets/images/testimonial_3.jpg',
                         'id'  => ''
                     ),
-                    'content' 		=> __( 'This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.', 'onepress' ),
+                    'content' 		=> __( 'Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna egestas sem.', 'onepress' ),
 
                 ),
             );

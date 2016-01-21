@@ -1,8 +1,8 @@
 <?php
 $onepress_team_id       = get_theme_mod( 'onepress_team_id', __('team', 'onepress') );
 $onepress_team_disable  = get_theme_mod( 'onepress_team_disable' ) ==  1 ? true : false;
-$onepress_team_title    = get_theme_mod( 'onepress_team_title', __('Meet the Talents', 'onepress' ));
-$onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('We are OnePress', 'onepress' ));
+$onepress_team_title    = get_theme_mod( 'onepress_team_title', __('Our Team', 'onepress' ));
+$onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('Section subtitle', 'onepress' ));
 ?>
 <?php if ( ! $onepress_team_disable  ) : ?>
 <section id="<?php if ( $onepress_team_id != '' ) echo $onepress_team_id; ?>" <?php do_action( 'onpress_section_atts', 'team' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-team section-padding section-meta onepage-section', 'team' ) ); ?>">

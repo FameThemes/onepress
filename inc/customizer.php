@@ -530,7 +530,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_smalltext',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'			=> __('<strong>OnePress</strong> is a creative and flexible WordPress <strong>ONE PAGE</strong> theme well suited<br> for business, portfolio, digital agency, product showcase, freelancers websites', 'onepress'),
+					'default'			=> __('Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
@@ -547,7 +547,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting( 'onepress_hcl1_btn1_text',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => __('More About Us', 'onepress'),
+					'default'           => __('About Us', 'onepress'),
 				)
 			);
 			$wp_customize->add_control( 'onepress_hcl1_btn1_text',
@@ -655,7 +655,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_about_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('More About Us', 'onepress'),
+				'default'           => __('About Us', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_about_title',
@@ -670,7 +670,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_about_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('We are a digital studio', 'onepress'),
+				'default'           => __('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_about_subtitle',
@@ -698,7 +698,7 @@ function onepress_customize_register( $wp_customize ) {
 				'default' => json_encode(
 					array(
 						array(
-							'title' => __( 'OUR HISTORY', 'onepress' ),
+							'title' => __( 'Vestibulum auctor dapibus', 'onepress' ),
 							'thumb' 		=> array(
 								'url'=> get_template_directory_uri().'/assets/images/about1.jpg',
 							),
@@ -706,14 +706,14 @@ function onepress_customize_register( $wp_customize ) {
 						),
 
 						array(
-							'title' => __( 'OUR ACHIEVEMENTS', 'onepress' ),
+							'title' => __( 'Cras ornare tristique', 'onepress' ),
 							'thumb' 		=> array(
 								'url'=> get_template_directory_uri().'/assets/images/about2.jpg',
 							),
 							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
 						),
 						array(
-							'title' => __( 'OUR VISION', 'onepress' ),
+							'title' => __( 'Vivamus vestibulum nulla', 'onepress' ),
 							'thumb' 		=> array(
 								'url'=> get_template_directory_uri().'/assets/images/about3.jpg',
 							),
@@ -832,7 +832,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_service_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('We help client like you', 'onepress'),
+				'default'           => __('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_service_subtitle',
@@ -859,24 +859,24 @@ function onepress_customize_register( $wp_customize ) {
 				'default' => json_encode(
 					array(
 						array(
-							'title' => __( 'Insights & Planning', 'onepress' ),
+							'title' => __( 'Service Title #1', 'onepress' ),
 							'icon'  => 'fa-wikipedia-w',
-							'content' => __( 'Uncovering key insights that inform the planning process and business modeling.', 'onepress' )
+							'content' => __( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 						),
 						array(
-							'title' => __( 'Usability & User Testing', 'onepress' ),
+							'title' => __( 'Service Title #2', 'onepress' ),
 							'icon'  => 'fa-gg',
-							'content' => __( 'A user-first approach to defining interactive experiences and customer experience planning.', 'onepress' )
+							'content' => __( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 						),
 						array(
-							'title' => __( 'Creative & Design', 'onepress' ),
+							'title' => __( 'Service Title #3', 'onepress' ),
 							'icon'  => 'fa-balance-scale',
-							'content' => __( 'Inventing and visualizing through shape, form, type and color.', 'onepress' )
+							'content' => __( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 						),
 						array(
-							'title' => __( 'Technology & Development', 'onepress' ),
+							'title' => __( 'Service Title #4', 'onepress' ),
 							'icon'  => 'fa-wikipedia-w',
-							'content' => __( 'Enabling user engagement through smart technology solutions.', 'onepress' )
+							'content' => __( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 						),
 
 					)
@@ -993,7 +993,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_counter_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Some Fun Facts', 'onepress'),
+				'default'           => __('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_counter_subtitle',
@@ -1021,28 +1021,28 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 
 					array(
-						'title' => __( 'Projects completed', 'onepress' ),
+						'title' => __( 'Counter Title', 'onepress' ),
 						'number'  => '268',
 						'unit_before' => '',
 						'unit_after' => ''
 					),
 
 					array(
-						'title' => __( 'Lines of code', 'onepress' ),
+						'title' => __( 'Counter Title', 'onepress' ),
 						'number'  => '2569',
 						'unit_before' => '',
 						'unit_after' => 'k'
 					),
 
 					array(
-						'title' => __( 'Cups of coffee', 'onepress' ),
+						'title' => __( 'Counter Title', 'onepress' ),
 						'number'  => '984',
 						'unit_before' => '',
 						'unit_after' => ''
 					),
 
 					array(
-						'title' => __( 'Customer Satisfaction', 'onepress' ),
+						'title' => __( 'Counter Title', 'onepress' ),
 						'number'  => '5683',
 						'unit_before' => '',
 						'unit_after' => '',
@@ -1165,7 +1165,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_testimonial_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('You are in good company!', 'onepress'),
+				'default'           => __('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_testimonial_subtitle',
@@ -1192,7 +1192,7 @@ function onepress_customize_register( $wp_customize ) {
 				'default' => json_encode(
 					array(
 						array(
-							'title' 		=> __( 'Design Quality', 'onepress' ),
+							'title' 		=> __( 'Praesent placerat', 'onepress' ),
 							'name' 			=> __( 'Alexander Rios', 'onepress' ),
 							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
 							'style'         => 'warning',
@@ -1200,11 +1200,11 @@ function onepress_customize_register( $wp_customize ) {
 								'url' => get_template_directory_uri() . '/assets/images/testimonial_1.jpg',
 								'id'  => ''
 							),
-							'content' 		=> __( 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.', 'onepress' ),
+							'content' 		=> __( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat.', 'onepress' ),
 
 						),
 						array(
-							'title' 		=> __( 'Feature Availability', 'onepress' ),
+							'title' 		=> __( 'Cras iaculis', 'onepress' ),
 							'name' 			=> __( 'Alexander Max', 'onepress' ),
 							'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
 							'style'         => 'success',
@@ -1212,11 +1212,11 @@ function onepress_customize_register( $wp_customize ) {
 								'url' => get_template_directory_uri() . '/assets/images/testimonial_2.jpg',
 								'id'  => ''
 							),
-							'content' 		=> __( 'This card has supporting text below as a natural lead-in to additional content.', 'onepress' ),
+							'content' 		=> __( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue eu vulputate.', 'onepress' ),
 
 						),
 						array(
-							'title' 		=> __( 'Customizability', 'onepress' ),
+							'title' 		=> __( 'Fusce lobortis', 'onepress' ),
 							'name' 			=> __( 'Peter Mendez', 'onepress' ),
 							'subtitle' 		=> __( 'Example Company', 'onepress' ),
 							'style'         => 'theme-primary',
@@ -1224,7 +1224,7 @@ function onepress_customize_register( $wp_customize ) {
 								'url' => get_template_directory_uri() . '/assets/images/testimonial_3.jpg',
 								'id'  => ''
 							),
-							'content' 		=> __( 'This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.', 'onepress' ),
+							'content' 		=> __( 'Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna egestas sem.', 'onepress' ),
 
 						),
 
@@ -1361,7 +1361,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_team_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Meet the Talents', 'onepress'),
+				'default'           => __('Our Team', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_team_title',
@@ -1376,7 +1376,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_team_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('We are OnePress', 'onepress'),
+				'default'           => __('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_team_subtitle',
@@ -1589,7 +1589,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_news_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('The company blog', 'onepress'),
+				'default'           => __('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_news_subtitle',
@@ -1727,7 +1727,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Talk with us', 'onepress'),
+				'default'           => __('Section subtitle', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_subtitle',
@@ -1795,7 +1795,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_text',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => __('<h4>WE ARE ACCEPTING NEW PROJECTS.</h4>
+				'default'           => __('<h4>Donec nec justo eget felis.</h4>
 <p>Dorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>
 <p>Consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>', 'onepress'),
 			)
@@ -1823,7 +1823,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_address_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => __('Where to meet?', 'onepress'),
+				'default'           => __('Pulvinar scelerisque', 'onepress'),
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_address_title',
