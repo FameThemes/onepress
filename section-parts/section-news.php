@@ -41,7 +41,7 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', __('Read Ou
 
 						<?php if ( $onepress_news_more_link != '' ) { ?>
 						<div class="all-news">
-							<a class="btn btn-theme-primary-outline btn-lg" href="<?php echo esc_url($onepress_news_more_link) ?>"><?php if ( $onepress_news_more_text != '' ) echo esc_html( $onepress_news_more_text ); ?></a>
+							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url($onepress_news_more_link) ?>"><?php if ( $onepress_news_more_text != '' ) echo esc_html( $onepress_news_more_text ); ?></a>
 						</div>
 						<?php } ?>
 					</div>

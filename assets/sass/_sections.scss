@@ -28,6 +28,15 @@
 	}
 }
 
+.section-about.section-inverse {
+	h1,h2,h3,h5,h5 {
+		color: rgba(255, 255, 255, 0.9);
+	}
+	p {
+		color: rgba(255, 255, 255, 0.8);
+	}
+}
+
 .section-meta {
 	background-color: $meta;
 }
