@@ -1,11 +1,11 @@
 <?php
-$onepress_news_id        = get_theme_mod( 'onepress_news_id', __('news', 'onepress') );
+$onepress_news_id        = get_theme_mod( 'onepress_news_id', esc_html__('news', 'onepress') );
 $onepress_news_disable   = get_theme_mod( 'onepress_news_disable' ) == 1 ? true : false;
-$onepress_news_title     = get_theme_mod( 'onepress_news_title', __('Latest News', 'onepress' ));
-$onepress_news_subtitle  = get_theme_mod( 'onepress_news_subtitle', __('Section subtitle', 'onepress' ));
+$onepress_news_title     = get_theme_mod( 'onepress_news_title', esc_html__('Latest News', 'onepress' ));
+$onepress_news_subtitle  = get_theme_mod( 'onepress_news_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $onepress_news_number    = get_theme_mod( 'onepress_news_number', '3' );
 $onepress_news_more_link = get_theme_mod( 'onepress_news_more_link', '#' );
-$onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', __('Read Our Blog', 'onepress' ));
+$onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', esc_html__('Read Our Blog', 'onepress' ));
 ?>
 <?php if ( ! $onepress_news_disable  ) : ?>
 <section id="<?php if ( $onepress_news_id != '' ) echo $onepress_news_id; ?>" <?php do_action( 'onpress_section_atts', 'news' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-news section-padding onepage-section', 'news' ) ); ?>">

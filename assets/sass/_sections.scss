@@ -353,6 +353,9 @@
 	.card-text {
 		@include rem('font-size', 15px);
 	}
+	.card-inverse a {
+		color: rgba(255, 255, 255, 0.9);
+	}
 }
 .tes_author {
 	&:after {

@@ -102,27 +102,6 @@ function onepress_widgets_init() {
 		'after_title'   => '</h2>',
 	) );
 
-	// Sidebar: About
-	register_sidebar( array(
-		'name'          => esc_html__( 'Section: About', 'onepress' ),
-		'id'            => 'section_about',
-		'description'   => __( 'Drag "OnePress: About Item" widget into this widget area and go to Customizer &rarr; Section: About to change section title, subtitle and style."', 'onepress' ),
-	) );
-
-	// Sidebar: Services
-	register_sidebar( array(
-		'name'          => esc_html__( 'Section: Services', 'onepress' ),
-		'id'            => 'section_service',
-		'description'   => __( 'Drag "OnePress: Service Item" widget into this widget area and go to Customizer &rarr; Section: Services to change section title, subtitle and style."', 'onepress' ),
-	) );
-
-	// Sidebar: Team
-	register_sidebar( array(
-		'name'          => esc_html__( 'Section: Team', 'onepress' ),
-		'id'            => 'section_team',
-		'description'   => __( 'Drag "OnePress: Team Member" widget into this widget area and go to Customizer &rarr; Section: Team to change section title, subtitle and style."', 'onepress' ),
-	) );
-
 }
 add_action( 'widgets_init', 'onepress_widgets_init' );
 
@@ -263,10 +242,10 @@ function onepress_register_required_plugins() {
 		'message'      => '',                      // Message to output right before the plugins table.
 
 		'strings'      => array(
-			'page_title'                      => __( 'Install Required Plugins', 'onepress' ),
-			'menu_title'                      => __( 'Install Plugins', 'onepress' ),
-			'installing'                      => __( 'Installing Plugin: %s', 'onepress' ), // %s = plugin name.
-			'oops'                            => __( 'Something went wrong with the plugin API.', 'onepress' ),
+			'page_title'                      => esc_html__( 'Install Required Plugins', 'onepress' ),
+			'menu_title'                      => esc_html__( 'Install Plugins', 'onepress' ),
+			'installing'                      => esc_html__( 'Installing Plugin: %s', 'onepress' ), // %s = plugin name.
+			'oops'                            => esc_html__( 'Something went wrong with the plugin API.', 'onepress' ),
 			'notice_can_install_required'     => _n_noop( 'This theme requires the following plugin: %1$s.', 'This theme requires the following plugins: %1$s.', 'onepress' ), // %1$s = plugin name(s).
 			'notice_can_install_recommended'  => _n_noop( 'This theme recommends the following plugin: %1$s.', 'This theme recommends the following plugins: %1$s.', 'onepress' ), // %1$s = plugin name(s).
 			'notice_cannot_install'           => _n_noop( 'Sorry, but you do not have the correct permissions to install the %1$s plugin.', 'Sorry, but you do not have the correct permissions to install the %1$s plugins.', 'onepress' ), // %1$s = plugin name(s).
@@ -279,13 +258,13 @@ function onepress_register_required_plugins() {
 			'install_link'                    => _n_noop( 'Begin installing plugin', 'Begin installing plugins', 'onepress' ),
 			'update_link' 					  => _n_noop( 'Begin updating plugin', 'Begin updating plugins', 'onepress' ),
 			'activate_link'                   => _n_noop( 'Begin activating plugin', 'Begin activating plugins', 'onepress' ),
-			'return'                          => __( 'Return to Required Plugins Installer', 'onepress' ),
-			'plugin_activated'                => __( 'Plugin activated successfully.', 'onepress' ),
-			'activated_successfully'          => __( 'The following plugin was activated successfully:', 'onepress' ),
-			'plugin_already_active'           => __( 'No action taken. Plugin %1$s was already active.', 'onepress' ),  // %1$s = plugin name(s).
-			'plugin_needs_higher_version'     => __( 'Plugin not activated. A higher version of %s is needed for this theme. Please update the plugin.', 'onepress' ),  // %1$s = plugin name(s).
-			'complete'                        => __( 'All plugins installed and activated successfully. %1$s', 'onepress' ), // %s = dashboard link.
-			'contact_admin'                   => __( 'Please contact the administrator of this site for help.', 'onepress' ),
+			'return'                          => esc_html__( 'Return to Required Plugins Installer', 'onepress' ),
+			'plugin_activated'                => esc_html__( 'Plugin activated successfully.', 'onepress' ),
+			'activated_successfully'          => esc_html__( 'The following plugin was activated successfully:', 'onepress' ),
+			'plugin_already_active'           => esc_html__( 'No action taken. Plugin %1$s was already active.', 'onepress' ),  // %1$s = plugin name(s).
+			'plugin_needs_higher_version'     => esc_html__( 'Plugin not activated. A higher version of %s is needed for this theme. Please update the plugin.', 'onepress' ),  // %1$s = plugin name(s).
+			'complete'                        => esc_html__( 'All plugins installed and activated successfully. %1$s', 'onepress' ), // %s = dashboard link.
+			'contact_admin'                   => esc_html__( 'Please contact the administrator of this site for help.', 'onepress' ),
 			'nag_type'                        => 'updated', // Determines admin notice type - can only be 'updated', 'update-nag' or 'error'.
 		),
 

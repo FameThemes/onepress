@@ -49,7 +49,7 @@ class One_Press_Textarea_Custom_Control extends WP_Customize_Control
 
 class OnePress_Theme_Support extends WP_Customize_Control {
 	public function render_content() {
-		echo __( 'Upgrade to <a href="#">OnePress Pro</a> to be able to change the section order and styling!', 'onepress' );
+		echo wp_kses_post( 'Upgrade to <a href="#">OnePress Pro</a> to be able to change the section order and styling!', 'onepress' );
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-$onepress_hero_id         = get_theme_mod( 'onepress_hero_id', __('hero', 'onepress') );
+$onepress_hero_id         = get_theme_mod( 'onepress_hero_id', esc_html__('hero', 'onepress') );
 $onepress_hero_disable    = get_theme_mod( 'onepress_hero_disable' ) == 1 ? true : false ;
 $onepress_hero_fullscreen = get_theme_mod( 'onepress_hero_fullscreen' );
 $onepress_hero_pdtop      = get_theme_mod( 'onepress_hero_pdtop', '10' );
@@ -9,12 +9,12 @@ $onepress_hero_image2     = get_theme_mod( 'onepress_hero_image2', get_template_
 $onepress_hero_image3     = get_theme_mod( 'onepress_hero_image3', get_template_directory_uri() . '/assets/images/hero3.jpg' );
 $onepress_hero_image4     = get_theme_mod( 'onepress_hero_image4', get_template_directory_uri() . '/assets/images/hero4.jpg' );
 $onepress_hcl1_enable     = get_theme_mod( 'onepress_hcl1_enable', 1 );
-$onepress_hcl1_largetext  = get_theme_mod( 'onepress_hcl1_largetext', __('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress' ));
-$onepress_hcl1_smalltext  = get_theme_mod( 'onepress_hcl1_smalltext', __('Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.', 'onepress') );
-$onepress_hcl1_btn1_text  = get_theme_mod( 'onepress_hcl1_btn1_text', __('Our Services', 'onepress') );
-$onepress_hcl1_btn1_link  = get_theme_mod( 'onepress_hcl1_btn1_link', esc_url( home_url( '/' )).__('#services', 'onepress') );
-$onepress_hcl1_btn2_text  = get_theme_mod( 'onepress_hcl1_btn2_text', __('Get Started', 'onepress') );
-$onepress_hcl1_btn2_link  = get_theme_mod( 'onepress_hcl1_btn2_link', esc_url( home_url( '/' )).__('#contact', 'onepress') );
+$onepress_hcl1_largetext  = get_theme_mod( 'onepress_hcl1_largetext', wp_kses_post('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress' ));
+$onepress_hcl1_smalltext  = get_theme_mod( 'onepress_hcl1_smalltext', wp_kses_post('Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.', 'onepress') );
+$onepress_hcl1_btn1_text  = get_theme_mod( 'onepress_hcl1_btn1_text', esc_html__('Our Services', 'onepress') );
+$onepress_hcl1_btn1_link  = get_theme_mod( 'onepress_hcl1_btn1_link', esc_url( home_url( '/' )).esc_html__('#services', 'onepress') );
+$onepress_hcl1_btn2_text  = get_theme_mod( 'onepress_hcl1_btn2_text', esc_html__('Get Started', 'onepress') );
+$onepress_hcl1_btn2_link  = get_theme_mod( 'onepress_hcl1_btn2_link', esc_url( home_url( '/' )).esc_html__('#contact', 'onepress') );
 
 $hero_content_style = '';
 if ( $onepress_hero_fullscreen != '1' ) {

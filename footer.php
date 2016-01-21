@@ -9,7 +9,7 @@
  * @package OnePress
  */
 $onepress_btt_disable          = get_theme_mod( 'onepress_btt_disable' );
-$onepress_social_footer_title  = get_theme_mod( 'onepress_social_footer_title', __( 'Keep Updated', 'onepress' ) );
+$onepress_social_footer_title  = get_theme_mod( 'onepress_social_footer_title', esc_html__( 'Keep Updated', 'onepress' ) );
 $onepress_social_twitter       = get_theme_mod( 'onepress_social_twitter' );
 $onepress_social_facebook      = get_theme_mod( 'onepress_social_facebook' );
 $onepress_social_google        = get_theme_mod( 'onepress_social_google' );
@@ -17,7 +17,7 @@ $onepress_social_instagram     = get_theme_mod( 'onepress_social_instagram' );
 $onepress_social_rss           = get_theme_mod( 'onepress_social_rss' );
 $onepress_newsletter_disable   = get_theme_mod( 'onepress_newsletter_disable', '1' );
 $onepress_social_disable 	   = get_theme_mod( 'onepress_social_disable', '1' );
-$onepress_newsletter_title     = get_theme_mod( 'onepress_newsletter_title', __( 'Join our Newsletter', 'onepress' ) );
+$onepress_newsletter_title     = get_theme_mod( 'onepress_newsletter_title', esc_html__( 'Join our Newsletter', 'onepress' ) );
 $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp' );
 ?>
 
@@ -65,7 +65,7 @@ $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp' 
 			<div class="container">
 				<?php if ( $onepress_btt_disable != '1' ) : ?>
 				<div class="btt">
-					<a class="back-top-top" href="#page" title="<?php echo __( 'Back To Top', 'onepress' ) ?>"><i class="fa fa-angle-double-up wow flash" data-wow-duration="2s"></i></a>
+					<a class="back-top-top" href="#page" title="<?php echo esc_html__( 'Back To Top', 'onepress' ) ?>"><i class="fa fa-angle-double-up wow flash" data-wow-duration="2s"></i></a>
 				</div>
 				<?php endif; ?>
 

@@ -1,8 +1,8 @@
 <?php
-$onepress_service_id       = get_theme_mod( 'onepress_service_id', __('services', 'onepress') );
+$onepress_service_id       = get_theme_mod( 'onepress_service_id', esc_html__('services', 'onepress') );
 $onepress_service_disable  = get_theme_mod( 'onepress_service_disable' ) == 1 ? true : false;
-$onepress_service_title    = get_theme_mod( 'onepress_service_title', __('Our Services', 'onepress' ));
-$onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('Section subtitle', 'onepress' ));
+$onepress_service_title    = get_theme_mod( 'onepress_service_title', esc_html__('Our Services', 'onepress' ));
+$onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', esc_html__('Section subtitle', 'onepress' ));
 ?>
 
 <?php if ( ! $onepress_service_disable  ) : ?>
@@ -18,24 +18,24 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', __('Sec
 
 			$services = get_theme_mod( 'onepress_services', array(
 				array(
-					'title' => __( 'Service Title #1', 'onepress' ),
+					'title' => esc_html__( 'Service Title #1', 'onepress' ),
 					'icon'  => 'fa-wikipedia-w',
-					'content' => __( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
+					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 				),
 				array(
-					'title' => __( 'Service Title #2', 'onepress' ),
+					'title' => esc_html__( 'Service Title #2', 'onepress' ),
 					'icon'  => 'fa-gg',
-					'content' => __( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
+					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 				),
 				array(
-					'title' => __( 'Service Title #3', 'onepress' ),
+					'title' => esc_html__( 'Service Title #3', 'onepress' ),
 					'icon'  => 'fa-balance-scale',
-					'content' => __( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
+					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 				),
 				array(
-					'title' => __( 'Service Title #4', 'onepress' ),
+					'title' => esc_html__( 'Service Title #4', 'onepress' ),
 					'icon'  => 'fa-object-group',
-					'content' => __( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
+					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
 				),
 
 			) );

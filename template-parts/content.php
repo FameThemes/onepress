@@ -12,12 +12,12 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class( array('list-article', 'clearfix') ); ?>>
 
 	<div class="list-article-thumb">
-		<a href="<?php echo esc_url( get_permalink() ); ?>" title="<?php the_title(); ?>">
+		<a href="<?php echo esc_url( get_permalink() ); ?>">
 			<?php
 			if ( has_post_thumbnail( ) ) {
 				the_post_thumbnail( 'onepress-blog-small' );
 			} else {
-				echo '<img alt="'. get_the_title() .'" src="'. get_template_directory_uri() . '/assets/images/placholder2.png' .'">';
+				echo '<img alt="'. the_title_attribute() .'" src="'. get_template_directory_uri() . '/assets/images/placholder2.png' .'">';
 			}
 			?>
 		</a>

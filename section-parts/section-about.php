@@ -1,8 +1,8 @@
 <?php
-$onepress_about_id       = get_theme_mod( 'onepress_about_id', __('about', 'onepress') );
+$onepress_about_id       = get_theme_mod( 'onepress_about_id', esc_html__('about', 'onepress') );
 $onepress_about_disable  = get_theme_mod( 'onepress_about_disable' ) == 1 ? true : false;
-$onepress_about_title    = get_theme_mod( 'onepress_about_title', __('About Us', 'onepress' ));
-$onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', __('Section subtitle', 'onepress' ));
+$onepress_about_title    = get_theme_mod( 'onepress_about_title', esc_html__('About Us', 'onepress' ));
+$onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__('Section subtitle', 'onepress' ));
 ?>
 <?php if ( ! $onepress_about_disable  ) { ?>
 	<section id="<?php if ( $onepress_about_id != '' ) { echo $onepress_about_id; }; ?>" <?php do_action( 'onpress_section_atts', 'about' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-about section-padding onepage-section', 'about' ) ); ?>">
@@ -23,25 +23,25 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', __('Section
 				if ( empty( $boxes ) || ! is_array( $boxes ) ) {
 					$boxes = array(
 						array(
-							'title' => __( 'Vestibulum auctor dapibus', 'onepress' ),
+							'title' => esc_html__( 'Vestibulum auctor dapibus', 'onepress' ),
 							'thumb' 		=> array(
 								'url'=> get_template_directory_uri().'/assets/images/about1.jpg',
 							),
-							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+							'content' => esc_html__( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
 						),
 						array(
-							'title' => __( 'Cras ornare tristique', 'onepress' ),
+							'title' => esc_html__( 'Cras ornare tristique', 'onepress' ),
 							'thumb' 		=> array(
 								'url'=> get_template_directory_uri().'/assets/images/about2.jpg',
 							),
-							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+							'content' => esc_html__( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
 						),
 						array(
-							'title' => __( 'Vivamus vestibulum nulla', 'onepress' ),
+							'title' => esc_html__( 'Vivamus vestibulum nulla', 'onepress' ),
 							'thumb' 		=> array(
 								'url'=> get_template_directory_uri().'/assets/images/about3.jpg',
 							),
-							'content' => __( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
+							'content' => esc_html__( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
 						),
 
 					);

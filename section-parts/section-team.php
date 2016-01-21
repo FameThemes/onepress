@@ -1,8 +1,8 @@
 <?php
-$onepress_team_id       = get_theme_mod( 'onepress_team_id', __('team', 'onepress') );
+$onepress_team_id       = get_theme_mod( 'onepress_team_id', esc_html__('team', 'onepress') );
 $onepress_team_disable  = get_theme_mod( 'onepress_team_disable' ) ==  1 ? true : false;
-$onepress_team_title    = get_theme_mod( 'onepress_team_title', __('Our Team', 'onepress' ));
-$onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('Section subtitle', 'onepress' ));
+$onepress_team_title    = get_theme_mod( 'onepress_team_title', esc_html__('Our Team', 'onepress' ));
+$onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('Section subtitle', 'onepress' ));
 ?>
 <?php if ( ! $onepress_team_disable  ) : ?>
 <section id="<?php if ( $onepress_team_id != '' ) echo $onepress_team_id; ?>" <?php do_action( 'onpress_section_atts', 'team' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-team section-padding section-meta onepage-section', 'team' ) ); ?>">
@@ -19,8 +19,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('Section s
 				array(
 
 					array(
-						'name' 			=> __( 'Alexander Rios', 'onepress' ),
-						'position' 		=> __( 'Founder & CEO', 'onepress' ),
+						'name' 			=> esc_html__( 'Alexander Rios', 'onepress' ),
+						'position' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
 						'image' 		=> array(
 							'url' => get_template_directory_uri() . '/assets/images/team4.jpg',
 							'id' => ''
@@ -32,8 +32,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('Section s
 						'linkedin' 		=> '#',
 					),
 					array(
-						'name' 			=> __( 'Sean Weaver', 'onepress' ),
-						'position' 		=> __( 'Client Engagement', 'onepress' ),
+						'name' 			=> esc_html__( 'Sean Weaver', 'onepress' ),
+						'position' 		=> esc_html__( 'Client Engagement', 'onepress' ),
 						'image' 		=> array(
 							'url'=>get_template_directory_uri() . '/assets/images/team5.jpg'
 						),
@@ -44,8 +44,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('Section s
 						'linkedin' 		=> '#',
 					),
 					array(
-						'name' 			=> __( 'George Wells', 'onepress' ),
-						'position' 		=> __( 'Director Of Production', 'onepress' ),
+						'name' 			=> esc_html__( 'George Wells', 'onepress' ),
+						'position' 		=> esc_html__( 'Director Of Production', 'onepress' ),
 						'image' 		=> array(
 							'url' => get_template_directory_uri() . '/assets/images/team6.jpg'
 						),
@@ -56,8 +56,8 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', __('Section s
 						'linkedin' 		=> '#',
 					),
 					array(
-						'name' 			=> __( 'Thomas Wade', 'onepress' ),
-						'position' 		=> __( 'Senior Developer', 'onepress' ),
+						'name' 			=> esc_html__( 'Thomas Wade', 'onepress' ),
+						'position' 		=> esc_html__( 'Senior Developer', 'onepress' ),
 						'image' 		=> array(
 							'url' =>  get_template_directory_uri() . '/assets/images/team7.jpg',
 						),

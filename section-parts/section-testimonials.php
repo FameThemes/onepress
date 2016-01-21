@@ -1,8 +1,8 @@
 <?php
-$onepress_testimonial_id       = get_theme_mod( 'onepress_testimonial_id', __('testimonials', 'onepress') );
-$onepress_testimonials_disable  = get_theme_mod( 'onepress_testimonials_disable' ) ==  1 ? true : false;
-$onepress_testimonial_title    = get_theme_mod( 'onepress_testimonial_title', __('Testimonials', 'onepress' ));
-$onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle', __('Section subtitle', 'onepress' ));
+$onepress_testimonial_id       = get_theme_mod( 'onepress_testimonial_id', esc_html__('testimonials', 'onepress') );
+$onepress_testimonials_disable = get_theme_mod( 'onepress_testimonials_disable' ) ==  1 ? true : false;
+$onepress_testimonial_title    = get_theme_mod( 'onepress_testimonial_title', esc_html__('Testimonials', 'onepress' ));
+$onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle', esc_html__('Section subtitle', 'onepress' ));
 ?>
 <?php if ( ! $onepress_testimonials_disable  ) : ?>
 <section id="<?php if ( $onepress_testimonial_id != '' ) echo $onepress_testimonial_id; ?>" <?php do_action( 'onpress_section_atts', 'testimonials' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-testimonials onepage-section section-inverse section-padding section-padding-lg', 'testimonials' ) ); ?>">
@@ -24,39 +24,39 @@ $onepress_testimonial_subtitle = get_theme_mod( 'onepress_testimonial_subtitle',
         if ( ! is_array( $testimonials ) || empty( $testimonials ) ) {
             $testimonials = array(
                 array(
-                    'title' 		=> __( 'Praesent placerat', 'onepress' ),
-                    'name' 			=> __( 'Alexander Rios', 'onepress' ),
-                    'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+                    'title' 		=> esc_html__( 'Praesent placerat', 'onepress' ),
+                    'name' 			=> esc_html__( 'Alexander Rios', 'onepress' ),
+                    'subtitle' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
                     'style'         => 'warning',
                     'image' 		=> array(
                         'url' => get_template_directory_uri() . '/assets/images/testimonial_1.jpg',
                         'id'  => ''
                     ),
-                    'content' 		=> __( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat.', 'onepress' ),
+                    'content' 		=> esc_html__( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat.', 'onepress' ),
 
                 ),
                 array(
-                    'title' 		=> __( 'Cras iaculis', 'onepress' ),
-                    'name' 			=> __( 'Alexander Max', 'onepress' ),
-                    'subtitle' 		=> __( 'Founder & CEO', 'onepress' ),
+                    'title' 		=> esc_html__( 'Cras iaculis', 'onepress' ),
+                    'name' 			=> esc_html__( 'Alexander Max', 'onepress' ),
+                    'subtitle' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
                     'style'         => 'success',
                     'image' 		=> array(
                         'url' => get_template_directory_uri() . '/assets/images/testimonial_2.jpg',
                         'id'  => ''
                     ),
-                    'content' 		=> __( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue eu vulputate.', 'onepress' ),
+                    'content' 		=> esc_html__( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue eu vulputate.', 'onepress' ),
 
                 ),
                 array(
-                    'title' 		=> __( 'Fusce lobortis', 'onepress' ),
-                    'name' 			=> __( 'Peter Mendez', 'onepress' ),
-                    'subtitle' 		=> __( 'Example Company', 'onepress' ),
+                    'title' 		=> esc_html__( 'Fusce lobortis', 'onepress' ),
+                    'name' 			=> esc_html__( 'Peter Mendez', 'onepress' ),
+                    'subtitle' 		=> esc_html__( 'Example Company', 'onepress' ),
                     'style'         => 'theme-primary',
                     'image' 		=> array(
                         'url' => get_template_directory_uri() . '/assets/images/testimonial_3.jpg',
                         'id'  => ''
                     ),
-                    'content' 		=> __( 'Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna egestas sem.', 'onepress' ),
+                    'content' 		=> esc_html__( 'Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna egestas sem.', 'onepress' ),
 
                 ),
             );

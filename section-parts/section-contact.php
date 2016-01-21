@@ -1,18 +1,18 @@
 <?php
-$onepress_contact_id            = get_theme_mod( 'onepress_contact_id', __('contact', 'onepress') );
+$onepress_contact_id            = get_theme_mod( 'onepress_contact_id', esc_html__('contact', 'onepress') );
 $onepress_contact_disable       = get_theme_mod( 'onepress_contact_disable' ) == 1 ?  true : false;
-$onepress_contact_title         = get_theme_mod( 'onepress_contact_title', __('Get in touch', 'onepress' ));
-$onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', __('Section subtitle', 'onepress' ));
+$onepress_contact_title         = get_theme_mod( 'onepress_contact_title', esc_html__('Get in touch', 'onepress' ));
+$onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $onepress_contact_cf7           = get_theme_mod( 'onepress_contact_cf7' );
 $onepress_contact_cf7_disable   = get_theme_mod( 'onepress_contact_cf7_disable' );
-$onepress_contact_text          = get_theme_mod( 'onepress_contact_text', __('<h4>Donec nec justo eget felis.</h4>
+$onepress_contact_text          = get_theme_mod( 'onepress_contact_text', wp_kses_post('<h4>Donec nec justo eget felis.</h4>
 <p>Dorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>
 <p>Consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>', 'onepress') );
-$onepress_contact_address_title = get_theme_mod( 'onepress_contact_address_title', __('Pulvinar scelerisque', 'onepress' ));
-$onepress_contact_address       = get_theme_mod( 'onepress_contact_address', __('1 Infinite Loop <br> Cupertino <br> CA 95014 <br> United States', 'onepress' ));
-$onepress_contact_phone         = get_theme_mod( 'onepress_contact_phone', __('1.123.456.789', 'onepress' ));
-$onepress_contact_email         = get_theme_mod( 'onepress_contact_email', __('contact@company.com', 'onepress' ));
-$onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', __('Fax: (123) 123-4567', 'onepress' ));
+$onepress_contact_address_title = get_theme_mod( 'onepress_contact_address_title', esc_html__('Pulvinar scelerisque', 'onepress' ));
+$onepress_contact_address       = get_theme_mod( 'onepress_contact_address', wp_kses_post('1 Infinite Loop <br> Cupertino <br> CA 95014 <br> United States', 'onepress' ));
+$onepress_contact_phone         = get_theme_mod( 'onepress_contact_phone', esc_html__('1.123.456.789', 'onepress' ));
+$onepress_contact_email         = get_theme_mod( 'onepress_contact_email', esc_html__('contact@company.com', 'onepress' ));
+$onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', esc_html__('Fax: (123) 123-4567', 'onepress' ));
 ?>
 <?php if ( ! $onepress_contact_disable  ) : ?>
 <section id="<?php if ( $onepress_contact_id != '' ) echo $onepress_contact_id; ?>" <?php do_action( 'onpress_section_atts', 'counter' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-contact section-padding  section-meta onepage-section', 'contact' ) ); ?>">
