@@ -1837,7 +1837,15 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .section-inverse .section-title-area .section-title {
-	color: #FFFFFF;
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.section-inverse .section-title-area .section-subtitle {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.section-inverse .section-title-area .section-subtitle::after {
+	background: rgba(255, 255, 255, 0.8);
 }
 
 .section-meta {
