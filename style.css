@@ -1840,6 +1840,22 @@ input[type="radio"], input[type="checkbox"] {
 	position: relative;
 }
 
+.onepage-section:before {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	display: block;
+	content: " ";
+	z-index: 1;
+}
+
+.onepage-section .container {
+	position: relative;
+	z-index: 5;
+}
+
 .section-inverse {
 	background: #222222;
 }
@@ -2271,178 +2287,13 @@ input[type="radio"], input[type="checkbox"] {
 	border-color: #03c4eb;
 }
 
-.card-deck {
+.section-testimonials .card-deck {
 	margin-bottom: 20px;
 	margin-bottom: 1.25rem;
 }
 
-.card-deck-wrapper .card-deck:last-of-type {
+.section-testimonials .card-deck-wrapper .card-deck:last-of-type {
 	margin-bottom: 0px;
-}
-
-/* Section: Projects
-------------------------------*/
-.project-wrapper {
-	font-size: 0;
-	max-width: none;
-	margin: 0 auto;
-	position: relative;
-	border-left: 1px solid #e0e0e0;
-}
-
-.project-wrapper .project-item {
-	vertical-align: top;
-	display: inline-block;
-	border-right: 1px solid #e0e0e0;
-	border-bottom: 1px solid #e0e0e0;
-	border-top: 1px solid #e0e0e0;
-	-webkit-transition: height 500ms ease;
-	-o-transition: height 500ms ease;
-	transition: height 500ms ease;
-}
-
-.project-wrapper .project-thumb {
-	overflow: hidden;
-}
-
-.project-wrapper .project-thumb img {
-	transition: all 0.2s linear 0s;
-	-webkit-transition: all 0.2s linear 0s;
-	-o-transition: all 0.2s linear 0s;
-}
-
-.project-wrapper .project-thumb img:hover {
-	transform: scale(1.1, 1.1);
-}
-
-.project-wrapper .project-header {
-	padding: 17px 20px 15px;
-	background: #f8f9f9;
-}
-
-.project-wrapper .project-header .project-small-title {
-	margin-bottom: 5px;
-}
-
-.project-wrapper .project-header .project-meta {
-	font-size: 10px;
-	text-transform: uppercase;
-	letter-spacing: 1.5px;
-	font-weight: 600;
-	color: #AAAAAA;
-}
-
-.project-wrapper .project-trigger {
-	cursor: pointer;
-}
-
-.project-2-column .project-item {
-	width: 50%;
-}
-
-.project-3-column .project-item {
-	width: 33.333333333333%;
-}
-
-.project-4-column .project-item {
-	width: 25%;
-}
-
-@media screen and (max-width: 1140px) {
-	.project-2-column .project-item,
-	.project-3-column .project-item,
-	.project-4-column .project-item {
-		width: 50%;
-	}
-}
-
-@media screen and (max-width: 720px) {
-	.project-2-column .project-item,
-	.project-3-column .project-item,
-	.project-4-column .project-item {
-		width: 100%;
-	}
-}
-
-.project-item.active .project-thumb img {
-	opacity: 0.6;
-	-webkit-transition: all 500ms ease-in-out;
-	-o-transition: all 500ms ease-in-out;
-	transition: all 500ms ease-in-out;
-}
-
-.project-detail {
-	position: absolute;
-	left: 0;
-	right: 0;
-	overflow: hidden;
-	max-height: 0;
-	-webkit-transition: max-height 500ms ease;
-	-o-transition: max-height 500ms ease;
-	transition: max-height 500ms ease;
-}
-
-.project-detail .project-detail-content {
-	font-size: 14px;
-	padding-top: 10px;
-}
-
-.project-detail .project-expander-contents {
-	padding: 40px 20px 100px;
-	background: #f8f9f9;
-	border: 1px solid #e0e0e0;
-	border-left: none;
-}
-
-@media screen and (max-width: 940px) {
-	.project-detail .project-expander-contents {
-		padding: 40px 20px 60px;
-	}
-}
-
-.project-expander-contents {
-	margin: 0 auto;
-	position: relative;
-}
-
-.project-expander-contents div.close {
-	position: absolute;
-	left: 50%;
-	bottom: 30px;
-	margin-left: -16px;
-	font-size: 13px;
-	text-indent: -9999px;
-	width: 32px;
-	height: 32px;
-	cursor: pointer;
-}
-
-.project-expander-contents div.close:before, .project-expander-contents div.close:after {
-	position: absolute;
-	display: inline-block;
-	height: 2px;
-	width: 40px;
-	background: #000000;
-	content: '';
-	right: 0px;
-	top: 15px;
-	cursor: pointer;
-}
-
-.project-expander-contents div.close:before {
-	-webkit-transform: translateX(4px) translateY(-1px) rotate(45deg);
-	-moz-transform: translateX(4px) translateY(-1px) rotate(45deg);
-	-ms-transform: translateX(4px) translateY(-1px) rotate(45deg);
-	-o-transform: translateX(4px) translateY(-1px) rotate(45deg);
-	transform: translateX(4px) translateY(-1px) rotate(45deg);
-}
-
-.project-expander-contents div.close:after {
-	-webkit-transform: translateX(4px) translateY(0px) rotate(-45deg);
-	-moz-transform: translateX(4px) translateY(0px) rotate(-45deg);
-	-ms-transform: translateX(4px) translateY(0px) rotate(-45deg);
-	-o-transform: translateX(4px) translateY(0px) rotate(-45deg);
-	transform: translateX(4px) translateY(0px) rotate(-45deg);
 }
 
 /* Section: Parallax
@@ -2742,10 +2593,8 @@ div.wpcf7-response-output {
 	margin: 20px 0px;
 }
 
-/*--------------------------------------------------------------
-9.0 External Plugins
---------------------------------------------------------------*/
-/* OnePress Plus */
+/* Section: Parallax
+------------------------------*/
 .parallax-window section {
 	z-index: 10;
 	position: relative;
@@ -2763,6 +2612,15 @@ div.wpcf7-response-output {
 	z-index: 2;
 }
 
+/*--------------------------------------------------------------
+9.0 External Plugins
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+10. External Plugins
+--------------------------------------------------------------*/
+/* OnePress Plus General CSS
+------------------------------*/
+/* Video Background */
 .video-section {
 	position: relative;
 	z-index: 1;
@@ -2776,26 +2634,6 @@ div.wpcf7-response-output {
 	background: transparent;
 }
 
-.onepage-section {
-	position: relative;
-}
-
-.onepage-section:before {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	display: block;
-	content: " ";
-	z-index: 1;
-}
-
-.onepage-section .container {
-	position: relative;
-	z-index: 5;
-}
-
 .video-section .fill-width {
 	position: absolute;
 	bottom: 0px;
@@ -2804,6 +2642,8 @@ div.wpcf7-response-output {
 	z-index: 3;
 }
 
+/* OnePress Plus Section: Map
+------------------------------*/
 .gmap_marker {
 	padding: 15px;
 }
@@ -2816,3 +2656,190 @@ div.wpcf7-response-output {
 .gmap_marker p {
 	margin: 10px 0px 0px;
 }
+
+/* OnePress Plus Section: Projects
+--------------------------------*/
+.project-wrapper {
+	font-size: 0;
+	max-width: none;
+	margin: 0 auto;
+	position: relative;
+	border-left: 1px solid #e0e0e0;
+}
+
+.project-wrapper .project-item {
+	vertical-align: top;
+	display: inline-block;
+	border-right: 1px solid #e0e0e0;
+	border-bottom: 1px solid #e0e0e0;
+	border-top: 1px solid #e0e0e0;
+	-webkit-transition: height 500ms ease;
+	-o-transition: height 500ms ease;
+	transition: height 500ms ease;
+}
+
+.project-wrapper .project-thumb {
+	overflow: hidden;
+}
+
+.project-wrapper .project-thumb img {
+	transition: all 0.2s linear 0s;
+	-webkit-transition: all 0.2s linear 0s;
+	-o-transition: all 0.2s linear 0s;
+}
+
+.project-wrapper .project-thumb img:hover {
+	transform: scale(1.1, 1.1);
+}
+
+.project-wrapper .project-header {
+	padding: 17px 20px 15px;
+	background: #f8f9f9;
+}
+
+.project-wrapper .project-header .project-small-title {
+	margin-bottom: 5px;
+}
+
+.project-wrapper .project-header .project-meta {
+	font-size: 10px;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	font-weight: 600;
+	color: #AAAAAA;
+}
+
+.project-wrapper .project-trigger {
+	cursor: pointer;
+}
+
+.project-2-column .project-item {
+	width: 50%;
+}
+
+.project-3-column .project-item {
+	width: 33.333333333333%;
+}
+
+.project-4-column .project-item {
+	width: 25%;
+}
+
+@media screen and (max-width: 1140px) {
+	.project-2-column .project-item,
+	.project-3-column .project-item,
+	.project-4-column .project-item {
+		width: 50%;
+	}
+}
+
+@media screen and (max-width: 720px) {
+	.project-2-column .project-item,
+	.project-3-column .project-item,
+	.project-4-column .project-item {
+		width: 100%;
+	}
+}
+
+.project-item.active .project-thumb img {
+	opacity: 0.6;
+	-webkit-transition: all 500ms ease-in-out;
+	-o-transition: all 500ms ease-in-out;
+	transition: all 500ms ease-in-out;
+}
+
+.project-detail {
+	position: absolute;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	max-height: 0;
+	-webkit-transition: max-height 500ms ease;
+	-o-transition: max-height 500ms ease;
+	transition: max-height 500ms ease;
+}
+
+.project-detail .project-detail-content {
+	font-size: 14px;
+	padding-top: 10px;
+}
+
+.project-detail .project-expander-contents {
+	padding: 40px 20px 100px;
+	background: #f8f9f9;
+	border: 1px solid #e0e0e0;
+	border-left: none;
+}
+
+@media screen and (max-width: 940px) {
+	.project-detail .project-expander-contents {
+		padding: 40px 20px 60px;
+	}
+}
+
+.project-expander-contents {
+	margin: 0 auto;
+	position: relative;
+}
+
+.project-expander-contents div.close {
+	position: absolute;
+	left: 50%;
+	bottom: 30px;
+	margin-left: -16px;
+	font-size: 13px;
+	text-indent: -9999px;
+	width: 32px;
+	height: 32px;
+	cursor: pointer;
+}
+
+.project-expander-contents div.close:before, .project-expander-contents div.close:after {
+	position: absolute;
+	display: inline-block;
+	height: 2px;
+	width: 40px;
+	background: #000000;
+	content: '';
+	right: 0px;
+	top: 15px;
+	cursor: pointer;
+}
+
+.project-expander-contents div.close:before {
+	-webkit-transform: translateX(4px) translateY(-1px) rotate(45deg);
+	-moz-transform: translateX(4px) translateY(-1px) rotate(45deg);
+	-ms-transform: translateX(4px) translateY(-1px) rotate(45deg);
+	-o-transform: translateX(4px) translateY(-1px) rotate(45deg);
+	transform: translateX(4px) translateY(-1px) rotate(45deg);
+}
+
+.project-expander-contents div.close:after {
+	-webkit-transform: translateX(4px) translateY(0px) rotate(-45deg);
+	-moz-transform: translateX(4px) translateY(0px) rotate(-45deg);
+	-ms-transform: translateX(4px) translateY(0px) rotate(-45deg);
+	-o-transform: translateX(4px) translateY(0px) rotate(-45deg);
+	transform: translateX(4px) translateY(0px) rotate(-45deg);
+}
+
+/* OnePress Plus Section: Pricing
+--------------------------------*/
+.pricing {
+	margin-bottom: 20px;
+	margin-bottom: 1.25rem;
+}
+
+.pricing__item {
+	background: #f8f9f9;
+	padding: 25px 30px;
+	padding:  1.5625rem 1.875rem;
+}
+
+.pricing__item.card {
+	border: none;
+}
+
+/* OnePress Plus Section: Call To Action
+--------------------------------*/
+/* OnePress Plus Section: Clients
+--------------------------------*/

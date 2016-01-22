@@ -1,0 +1,213 @@
+// main: style.scss
+
+/* OnePress Plus General CSS
+------------------------------*/
+
+/* Video Background */
+.video-section {
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	overflow: hidden;
+}
+.video-section section {
+	position: relative;
+	z-index: 4;
+	background: transparent;
+}
+.video-section .fill-width {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	display: block;
+	z-index: 3;
+}
+
+
+/* OnePress Plus Section: Map
+------------------------------*/
+.gmap_marker {
+    padding: 15px;
+    h4 {
+        font-weight:500;
+        margin-bottom: 0px;
+    }
+    p {
+        margin: 10px 0px 0px;
+    }
+}
+
+/* OnePress Plus Section: Projects
+--------------------------------*/
+.section-projects {
+
+}
+.project-wrapper {
+	font-size: 0;
+    max-width: none;
+    margin: 0 auto;
+    position: relative;
+    border-left: 1px solid #e0e0e0;
+	.project-item {
+		vertical-align: top;
+		display: inline-block;
+		border-right: 1px solid #e0e0e0;
+		border-bottom: 1px solid #e0e0e0;
+		border-top: 1px solid #e0e0e0;
+		-webkit-transition: height 500ms ease;
+  		-o-transition: height 500ms ease;
+  		transition: height 500ms ease;
+	}
+	.project-thumb {
+		overflow: hidden;
+		img{
+			transition: all 0.2s linear 0s;
+			-webkit-transition: all 0.2s linear 0s;
+			-o-transition: all 0.2s linear 0s;
+			&:hover {
+				transform: scale(1.1,1.1);
+			}
+		}
+	}
+	.project-header {
+		padding: 17px 20px 15px;
+		background: $meta;
+		.project-small-title {
+			margin-bottom: 5px;
+		}
+		.project-meta {
+			font-size: 10px;
+			text-transform: uppercase;
+			letter-spacing: 1.5px;
+			font-weight: 600;
+			color: #AAAAAA;
+		}
+	}
+	.project-trigger {
+		cursor: pointer;
+	}
+}
+
+.project-2-column .project-item{
+	width: 50%;
+}
+.project-3-column .project-item{
+	width: 33.333333333333%;
+}
+.project-4-column .project-item{
+	width: 25%;
+}
+@include for(screens-large) {
+	.project-2-column .project-item,
+	.project-3-column .project-item,
+	.project-4-column .project-item {
+		width: 50%;
+	}
+}
+@include for(screens-small) {
+	.project-2-column .project-item,
+	.project-3-column .project-item,
+	.project-4-column .project-item {
+		width: 100%;
+	}
+}
+
+.project-item.active {
+	.project-thumb img {
+		opacity: 0.6;
+		-webkit-transition: all 500ms ease-in-out;
+		-o-transition: all 500ms ease-in-out;
+		transition: all 500ms ease-in-out;
+	}
+}
+
+.project-detail {
+	position: absolute;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	max-height: 0;
+	-webkit-transition: max-height 500ms ease;
+	-o-transition: max-height 500ms ease;
+	transition: max-height 500ms ease;
+	.project-detail-content {
+		font-size: 14px;
+		padding-top: 10px;
+	}
+	.project-expander-contents {
+		padding: 40px 20px 100px;
+		background: $meta;
+		border: 1px solid #e0e0e0;
+		border-left: none;
+		@include for(screens-medium) {
+			padding: 40px 20px 60px;
+		}
+	}
+}
+.project-expander-contents {
+	margin: 0 auto;
+	position: relative;
+	div.close {
+		position: absolute;
+		left: 50%;
+		bottom: 30px;
+		margin-left: -16px;
+		font-size: 13px;
+		text-indent: -9999px;
+		width: 32px;
+		height: 32px;
+		cursor: pointer;
+		&:before,&:after {
+			position: absolute;
+			display: inline-block;
+			height: 2px;
+			width: 40px;
+			background: #000000;
+			content: '';
+			right: 0px;
+			top: 15px;
+			cursor: pointer;
+		}
+		&:before {
+			-webkit-transform: translateX(4px) translateY(-1px) rotate(45deg);
+	        -moz-transform: translateX(4px) translateY(-1px) rotate(45deg);
+	        -ms-transform: translateX(4px) translateY(-1px) rotate(45deg);
+	        -o-transform: translateX(4px) translateY(-1px) rotate(45deg);
+	        transform: translateX(4px) translateY(-1px) rotate(45deg);
+		}
+		&:after {
+			-webkit-transform: translateX(4px) translateY(0px) rotate(-45deg);
+	        -moz-transform: translateX(4px) translateY(0px) rotate(-45deg);
+	        -ms-transform: translateX(4px) translateY(0px) rotate(-45deg);
+	        -o-transform: translateX(4px) translateY(0px) rotate(-45deg);
+	        transform: translateX(4px) translateY(0px) rotate(-45deg);
+		}
+	}
+}
+
+/* OnePress Plus Section: Pricing
+--------------------------------*/
+.section-pricing {
+
+}
+
+.pricing {
+	@include rem('margin-bottom', 20px);
+}
+
+.pricing__item {
+	background: $meta;
+	@include rem('padding', 25px 30px);
+}
+
+.pricing__item.card {
+	border: none;
+}
+
+
+
+/* OnePress Plus Section: Call To Action
+--------------------------------*/
+
+/* OnePress Plus Section: Clients
+--------------------------------*/
