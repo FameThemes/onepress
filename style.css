@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design.
-Version: 1.0.6
+Version: 1.0.7
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -132,13 +132,11 @@ h5,
 h6 {
 	clear: both;
 	font-family: "Raleway", Helvetica, Arial, sans-serif;
-	font-weight: 700;
+	font-weight: 600;
 	margin-bottom: 15px;
 	margin-bottom: 15px;
 	margin-bottom: 0.9375rem;
 	margin-top: 0;
-	text-transform: uppercase;
-	letter-spacing: 2px;
 	color: #333333;
 }
 
@@ -185,7 +183,7 @@ h2 {
 h3 {
 	font-size: 20px;
 	font-size: 1.25rem;
-	font-weight: 700;
+	font-weight: 600;
 }
 
 h4 {
@@ -1838,6 +1836,7 @@ input[type="radio"], input[type="checkbox"] {
 
 .onepage-section {
 	position: relative;
+	overflow: hidden;
 }
 
 .onepage-section:before {
@@ -1861,7 +1860,7 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .section-inverse .section-title-area .section-title {
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(255, 255, 255, 0.99);
 }
 
 .section-inverse .section-title-area .section-subtitle {
@@ -1895,6 +1894,7 @@ input[type="radio"], input[type="checkbox"] {
 	font-weight: 800;
 	position: relative;
 	margin-bottom: 0px;
+	text-transform: uppercase;
 }
 
 @media screen and (min-width: 940px) {
@@ -1909,91 +1909,15 @@ input[type="radio"], input[type="checkbox"] {
 	font-size: 12px;
 	display: inline-block;
 	position: relative;
-	margin-bottom: 20px;
-}
-
-.section-title-area .section-subtitle:after {
-	content: "";
-	display: block;
-	width: 100%;
-	height: 2px;
-	background: #e9e9e9;
-	position: absolute;
-	bottom: -6px;
+	margin-bottom: 13px;
+	margin-bottom: 0.8125rem;
+	text-transform: uppercase;
+	letter-spacing: 2px;
 }
 
 @media screen and (min-width: 940px) {
 	.section-title-area .section-subtitle {
 		font-size: 14px;
-	}
-}
-
-.help-message {
-	padding: 10px 20px;
-	background-color: #f8f9f9;
-	border-radius: 2px;
-	border-bottom: 1px solid #f2f2f2;
-	margin-bottom: 20px;
-}
-
-.help-message p {
-	margin-bottom: 0px;
-}
-
-.admin_helper {
-	position: absolute;
-	left: 50px;
-	top: 0px;
-	z-index: 20;
-}
-
-.admin_helper .helper_icon {
-	width: 25px;
-	height: 25px;
-	display: block;
-	background: url("assets/images/admin_helper.png") no-repeat center center;
-	animation: 0.8s ease-in 0s normal none infinite running helper-scale;
-	-moz-animation: 0.8s ease-in 0s normal none infinite running helper-scale;
-	-webkit-animation: 0.8s ease-in 0s normal none infinite running helper-scale;
-	position: relative;
-}
-
-.admin_helper .helper_message {
-	margin-top: 20px;
-	width: 300px;
-	padding: 20px;
-	background: #333333;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	color: #cccccc;
-}
-
-.admin_helper .helper_message h4 {
-	color: #FFF;
-}
-
-@keyframes helper-scale {
-	0% {
-		transform: scale(1);
-	}
-	50% {
-		transform: scale(0.8);
-	}
-	100% {
-		transform: scale(1);
-	}
-}
-
-@keyframes helper-scale {
-	0% {
-		transform: scale(1);
-	}
-	50% {
-		transform: scale(0.8);
-	}
-	100% {
-		transform: scale(1);
 	}
 }
 
@@ -2043,6 +1967,7 @@ input[type="radio"], input[type="checkbox"] {
 	line-height: 1.3;
 	text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 	font-weight: 800;
+	text-transform: uppercase;
 }
 
 @media screen and (min-width: 720px) {
@@ -2204,7 +2129,8 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .section-services .service-item .service-title {
-	margin-bottom: 7px;
+	margin-bottom: 10px;
+	margin-bottom: 0.625rem;
 	color: #333333;
 }
 
@@ -2825,22 +2751,100 @@ div.wpcf7-response-output {
 
 /* OnePress Plus Section: Pricing
 --------------------------------*/
-.pricing {
-	margin-bottom: 20px;
-	margin-bottom: 1.25rem;
+.section-pricing.section-inverse .pricing__title {
+	color: #333333;
+}
+
+.section-pricing.section-inverse .pricing__feature-list, .section-pricing.section-inverse .pricing__sentense {
+	color: #777777;
+}
+
+.section-pricing.section-inverse .pricing__item {
+	box-shadow: 0 0 20px rgba(46, 59, 125, 0.23);
 }
 
 .pricing__item {
 	background: #f8f9f9;
-	padding: 25px 30px;
-	padding:  1.5625rem 1.875rem;
+	border: none;
+	border-top: 3px solid #f8f9f9;
+	border-radius: 0px;
+	padding: 35px 35px;
+	padding:  2.1875rem 2.1875rem;
+	position: relative;
+	margin-bottom: 30px;
+	margin-bottom: 1.875rem;
 }
 
-.pricing__item.card {
-	border: none;
+.pricing__item:hover {
+	border-top-color: #03c4eb;
+}
+
+.pricing__item h1, .pricing__item h2, .pricing__item h3, .pricing__item h4 {
+	text-transform: none;
+}
+
+.pricing__title {
+	letter-spacing: -0.2px;
+}
+
+.pricing__price {
+	padding: 15px 0px 15px;
+	padding:  0.9375rem 0rem 0.9375rem;
+	margin-top: 20px;
+	margin-top: 1.25rem;
+	font-size: 40px;
+	font-size: 2.5rem;
+	border-top: 3px solid rgba(139, 144, 157, 0.1);
+	font-weight: bold;
+	font-family: serif,sans-serif;
+	color: #333333;
+}
+
+.pricing__price .pricing__currency {
+	font-size: 18px;
+	vertical-align: super;
+	margin-right: 2px;
+}
+
+.pricing__sentense {
+	border-bottom: 3px solid rgba(139, 144, 157, 0.1);
+	font-weight: bold;
+	padding: 0 0 13px;
+}
+
+.pricing__feature-list {
+	font-style: italic;
+	list-style: outside none none;
+	margin: 0;
+	padding: 0.25em 0 2.5em;
 }
 
 /* OnePress Plus Section: Call To Action
 --------------------------------*/
+@media (max-width: 991px) {
+	.section-cta {
+		text-align: center;
+	}
+	.section-cta .cta-button-area {
+		margin-top: 20px;
+		margin-top: 1.25rem;
+		text-align: center;
+	}
+}
+
+.cta-heading h1, .cta-heading h2, .cta-heading h3 {
+	margin-bottom: 0px;
+}
+
+.cta-heading h2 {
+	font-size: 23px;
+	font-size: 1.4375rem;
+	margin-top: 3px;
+}
+
+.cta-button-area {
+	text-align: right;
+}
+
 /* OnePress Plus Section: Clients
 --------------------------------*/

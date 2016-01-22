@@ -409,7 +409,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_hero_images' ,
 			array(
 				'priority'    => 6,
-				'title'       => esc_html__( 'Hero Images', 'onepress' ),
+				'title'       => esc_html__( 'Hero Background', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 			)

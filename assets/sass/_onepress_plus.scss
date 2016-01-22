@@ -191,23 +191,91 @@
 
 }
 
+.section-pricing.section-inverse {
+	.pricing__title {
+		color: #333333;
+	}
+	.pricing__feature-list, .pricing__sentense {
+		color: $text;
+	}
+	.pricing__item {
+		box-shadow: 0 0 20px rgba(46, 59, 125, 0.23);
+	}
+}
+
 .pricing {
-	@include rem('margin-bottom', 20px);
+
 }
 
 .pricing__item {
 	background: $meta;
-	@include rem('padding', 25px 30px);
-}
-
-.pricing__item.card {
 	border: none;
+	border-top: 3px solid $meta;
+	border-radius: 0px;
+	@include rem('padding', 35px 35px);
+	position: relative;
+	&:hover {
+		border-top-color: $primary;
+	}
+	h1,h2,h3,h4 {
+		text-transform: none;
+	}
+	@include rem('margin-bottom', 30px);
+}
+.pricing__title {
+	letter-spacing: -0.2px;
+}
+.pricing__price {
+	@include rem('padding', 15px 0px 15px);
+	@include rem('margin-top', 20px);
+	@include rem('font-size', 40px);
+	border-top: 3px solid rgba(139, 144, 157, 0.1);
+	font-weight: bold;
+	font-family: serif,sans-serif;
+	color: #333333;
+	.pricing__currency {
+		font-size: 18px;
+		vertical-align: super;
+		margin-right: 2px;
+	}
+}
+.pricing__sentense {
+	border-bottom: 3px solid rgba(139, 144, 157, 0.1);
+    font-weight: bold;
+	padding: 0 0 13px;
+}
+.pricing__feature-list {
+    font-style: italic;
+    list-style: outside none none;
+    margin: 0;
+    padding: 0.25em 0 2.5em;
 }
 
 
 
 /* OnePress Plus Section: Call To Action
 --------------------------------*/
+.section-cta {
+	@include media-breakpoint-down(md) {
+		text-align: center;
+		.cta-button-area {
+			@include rem('margin-top', 20px);
+			text-align: center;
+		}
+	}
+}
+.cta-heading {
+	h1,h2,h3 {
+		margin-bottom: 0px;
+	}
+	h2 {
+		@include rem('font-size', 23px);
+		margin-top: 3px;
+	}
+}
+.cta-button-area {
+	text-align: right;
+}
 
 /* OnePress Plus Section: Clients
 --------------------------------*/

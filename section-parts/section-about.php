@@ -99,7 +99,7 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 						<?php if ( $image != '' ) { ?>
 							<div class="about-image"><img src="<?php echo esc_url( $image ); ?>" alt=""></div>
 						<?php } ?>
-						<h5><?php echo esc_html( $box['title'] ); ?></h5>
+						<h3><?php echo esc_html( $box['title'] ); ?></h3>
 						<p><?php echo wp_kses_post( $box['content'] ); ?></p>
 					</div>
 				<?php

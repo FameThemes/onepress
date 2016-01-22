@@ -2,6 +2,11 @@
 CHANGELOG
 ====================================================================
 ## 1.0.6
+* Fixed the heading font issue.
+* Improvements of section style.
+
+
+## 1.0.6
 * Quick fix for the_title_attribute issue.
 
 ## 1.0.5
