@@ -82,7 +82,12 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 					if ( $image == '' && $box['thumb']['url'] != '' ) {
 						$image = $box['thumb']['url'];
 					}
-					$class = 'col-sm-'.$col;
+					$class = 'col-lg-'.$col;
+					if (  $n == 1 ) {
+						$class .= ' col-sm-12 ';
+					} else {
+						$class .= ' col-sm-6 ';
+					}
 					if ( $j >= $num_col ){
 						$j = 1;
 						$class .=' clearleft';
