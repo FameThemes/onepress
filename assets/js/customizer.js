@@ -254,8 +254,9 @@ var RepeatableCustomize = function (  control  ){
 		that.handleMedia( $context );
 
 		//Special check element
-		$( '[data-live-id="section_id"]').each( function(){
-			if ( $( this ).val() === 'map' ) {
+		$( '[data-live-id="section_id"]', $context ).each( function(){
+			if ( $( this ).val() === 'map' ||  $( this).val() === 'projects' ) {
+				console.log(  $( this).val() );
 				$context.addClass( 'show-display-field-only' );
 			}
 		} );
