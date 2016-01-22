@@ -2634,10 +2634,11 @@ div.wpcf7-response-output {
 	background: transparent;
 }
 
-.video-section .fill-width {
+.video-section video.fill-width {
 	position: absolute;
-	bottom: 0px;
-	width: 100%;
+	bottom: 0px; top: 0px; left: 0px; right: 0px;
+	min-width: 100%;
+	min-height: 100%;
 	display: block;
 	z-index: 3;
 }
