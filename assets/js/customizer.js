@@ -260,7 +260,7 @@ var RepeatableCustomize = function (  control  ){
 		//Special check element
 		$( '[data-live-id="section_id"]', $context ).each( function(){
 			if ( $( this ).val() === 'map' ) {
-				console.log(  $( this).val() );
+				// console.log(  $( this).val() );
 				$context.addClass( 'show-display-field-only' );
 			}
 		} );
