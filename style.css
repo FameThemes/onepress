@@ -2600,9 +2600,9 @@ div.wpcf7-response-output {
 	border-right: 1px solid #e0e0e0;
 	border-bottom: 1px solid #e0e0e0;
 	border-top: 1px solid #e0e0e0;
-	-webkit-transition: height 500ms ease;
-	-o-transition: height 500ms ease;
-	transition: height 500ms ease;
+	-webkit-transition: 200ms ease;
+	-moz-transition: 200ms ease;
+	transition: 200ms ease;
 }
 
 .project-wrapper .project-thumb {
