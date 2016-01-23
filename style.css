@@ -1408,7 +1408,7 @@ input[type="radio"], input[type="checkbox"] {
 
 .wp-caption img[class*="wp-image-"] {
 	display: block;
-	max-width: 98%;
+	max-width: 100%;
 }
 
 .wp-caption .wp-caption-text {
@@ -2560,11 +2560,10 @@ div.wpcf7-response-output {
 	background: transparent;
 }
 
-.video-section video.fill-width {
+.video-section .fill-width {
 	position: absolute;
-	bottom: 0px; top: 0px; left: 0px; right: 0px;
-	min-width: 100%;
-	min-height: 100%;
+	bottom: 0px;
+	width: 100%;
 	display: block;
 	z-index: 3;
 }
@@ -2600,9 +2599,9 @@ div.wpcf7-response-output {
 	border-right: 1px solid #e0e0e0;
 	border-bottom: 1px solid #e0e0e0;
 	border-top: 1px solid #e0e0e0;
-	-webkit-transition: 200ms ease;
-	-moz-transition: 200ms ease;
-	transition: 200ms ease;
+	-webkit-transition: height 500ms ease;
+	-o-transition: height 500ms ease;
+	transition: height 500ms ease;
 }
 
 .project-wrapper .project-thumb {
@@ -2626,6 +2625,7 @@ div.wpcf7-response-output {
 
 .project-wrapper .project-header .project-small-title {
 	margin-bottom: 5px;
+	letter-spacing: 0.4px;
 }
 
 .project-wrapper .project-header .project-meta {
@@ -2719,6 +2719,7 @@ div.wpcf7-response-output {
 	width: 32px;
 	height: 32px;
 	cursor: pointer;
+	opacity: 1;
 }
 
 .project-expander-contents div.close:before, .project-expander-contents div.close:after {
@@ -2747,6 +2748,16 @@ div.wpcf7-response-output {
 	-ms-transform: translateX(4px) translateY(0px) rotate(-45deg);
 	-o-transform: translateX(4px) translateY(0px) rotate(-45deg);
 	transform: translateX(4px) translateY(0px) rotate(-45deg);
+}
+
+.project-content-inside {
+	padding-left: 10px;
+	padding-left: 0.625rem;
+}
+
+.project-detail-title {
+	font-weight: 700;
+	letter-spacing: -0.7px;
 }
 
 /* OnePress Plus Section: Pricing
