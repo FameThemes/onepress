@@ -321,3 +321,17 @@ if ( ! function_exists( 'onepress_get_media_url' ) ) {
 		return $url;
 	}
 }
+
+
+if ( ! function_exists( 'onepress_check_onepage_active' ) ) {
+	function onepress_check_onepage_active(){
+		$front_page = get_option( 'page_on_front' );
+		$activated = false;
+		if ( $front_page > 0 ) {
+			if ( get_post_meta( $front_page, '_wp_page_template', true ) == 'template-frontpage.php' ) {
+				$activated = true;
+			}
+		}
+		return $activated;
+	}
+}

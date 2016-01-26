@@ -9,6 +9,21 @@ function onepress_theme_info() {
 	add_theme_page( sprintf( esc_html__( '%s Dashboard', 'onepress' ), $theme_data->Name ), sprintf( esc_html__('%s Theme', 'onepress'), $theme_data->Name), 'edit_theme_options', 'ft_onepress', 'onepress_theme_info_page');
 }
 
+function onepress_admin_notice() {
+	$is_home_page_active = onepress_check_onepage_active();
+	$number_action =  apply_filters( 'onepress_number_actions', ( ! $is_home_page_active ? 1 : 0 ) );
+	if ( $number_action > 0 ) {
+		?>
+		<div class="updated notice is-dismissible">
+			<p><?php _e('Your theme required settings before use.', 'onpress'); ?></p>
+			<p><a href="<?php echo admin_url( 'themes.php?page=ft_onepress&tab=actions_required' ); ?>" class="button-secondary"><?php _e( 'Goto actions required', 'onpress' ); ?></a></p>
+		</div>
+		<?php
+	}
+}
+add_action( 'admin_notices', 'onepress_admin_notice' );
+
+
 function onepress_theme_info_page() {
 
 	$theme_data = wp_get_theme();
@@ -20,21 +35,34 @@ function onepress_theme_info_page() {
 	} else {
 		$tab = null;
 	}
-	?>
 
+	$is_home_page_active = onepress_check_onepage_active();
+	$number_action =  apply_filters( 'onepress_number_actions', ( ! $is_home_page_active ? 1 : 0 ) );
+
+	?>
 	<div class="wrap about-wrap theme_info_wrapper">
 		<h1><?php printf(esc_html__('Welcome to %1s - Version %2s', 'onepress'), $theme_data->Name, $theme_data->Version ); ?></h1>
 		<div class="about-text"><?php esc_html_e( 'OnePress is a creative and flexible WordPress ONE PAGE theme well suited for business, portfolio, digital agency, product showcase, freelancers websites.', 'onepress' ); ?></div>
 		<a target="_blank" href="<?php echo esc_url('http://www.famethemes.com/?utm_source=theme_dashboard_page&utm_medium=badge_link&utm_campaign=theme_admin'); ?>" class="famethemes-badge wp-badge"><span>FameThemes</span></a>
 		<h2 class="nav-tab-wrapper">
 			<a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php echo $theme_data->Name; ?></a>
-			<a href="?page=ft_onepress&tab=actions_required" class="nav-tab<?php echo $tab == 'actions_required' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Actions Required', 'onepress' ); ?></a>
+			<a href="?page=ft_onepress&tab=actions_required" class="nav-tab<?php echo $tab == 'actions_required' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Actions Required', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
 		</h2>
 
 		<?php if ( is_null($tab) ) { ?>
 		<div class="theme_info info-tab-content">
 			<div class="theme_info_column clearfix">
 				<div class="theme_info_left">
+					<?php if ( ! $is_home_page_active ) {  ?>
+					<div class="theme_link  action-required">
+						<h3><?php esc_html_e( 'Setup your front page', 'onepress' ); ?></h3>
+						<p class="about"><?php printf(esc_html__('%s required you setup your front page as a static page', 'onepress'), $theme_data->Name); ?></p>
+						<p>
+							<a href="<?php echo admin_url('options-reading.php'); ?>" class="button button-primary"><?php esc_html_e('Setup front page', 'onepress'); ?></a>
+						</p>
+					</div>
+					<?php } ?>
+
 					<div class="theme_link">
 						<h3><?php esc_html_e( 'Theme Customizer', 'onepress' ); ?></h3>
 						<p class="about"><?php printf(esc_html__('%s supports the Theme Customizer for all theme settings. Click "Customize" to start customize your site.', 'onepress'), $theme_data->Name); ?></p>
