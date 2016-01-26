@@ -78,6 +78,12 @@ if ( $video_ogv_id ) {
 	$video_ogv = wp_get_attachment_url( $video_mp4_id );
 }
 
+$is_parallax =  get_theme_mod( 'onepress_hero_parallax' ) == 1 && ! empty( $images ) ;
+
+if ( $is_parallax ) {
+	echo '<div id="parallax-hero" class="parallax-hero parallax-window" data-over-scroll-fix="true" data-z-index="1" data-speed="0.3" data-image-src="'.esc_attr( $images[0] ).'" data-parallax="scroll" data-position="center" data-bleed="0">';
+}
+
 
 if ( $video_mp4 || $video_webm || $video_ogv ) {
 	// var_dump( wp_get_attachment_metadata( $video_id ) );
@@ -116,19 +122,27 @@ if ( $video_mp4 || $video_webm || $video_ogv ) {
 				</div>
 			</div>
 		<?php endif; ?>
-		<?php if ( ! empty ($images) && ! ( $video_mp4 || $video_webm || $video_ogv ) ) { ?>
-			<script>
-				jQuery(document).ready(function () {
-					jQuery('.hero-slideshow-wrapper').backstretch(<?php echo json_encode( $images ) ?>, {
-						fade: 750,
-						duration: 5000
+		<?php
+		if ( !$is_parallax ) {
+			if (!empty ($images) && !($video_mp4 || $video_webm || $video_ogv)) { ?>
+				<script>
+					jQuery(document).ready(function () {
+						jQuery('.hero-slideshow-wrapper').backstretch(<?php echo json_encode( $images ) ?>, {
+							fade: 750,
+							duration: 5000
+						});
 					});
-				});
-			</script>
-		<?php } ?>
+				</script>
+			<?php }
+		}
+	?>
 	</section>
 <?php endif;
 
 if ( $video_mp4 || $video_webm || $video_ogv ) {
 	echo '</div>'; // end video bg
+}
+
+if ( $is_parallax ) {
+	echo '</div>'; // end parallax
 }

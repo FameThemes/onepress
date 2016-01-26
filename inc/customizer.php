@@ -467,57 +467,43 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
-			// Video MP4
-			$wp_customize->add_setting( 'onepress_hero_video_mp4',
+			// Overlay color
+			$wp_customize->add_setting( 'onepress_hero_overlay_color',
 				array(
-					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => '',
+					'sanitize_callback' => 'sanitize_hex_color',
+					'default'           => '#000000',
 					'transport' => 'refresh', // refresh or postMessage
 				)
 			);
-	    	$wp_customize->add_control( new WP_Customize_Media_Control(
-	            $wp_customize,
-	            'onepress_hero_video_mp4',
-					array(
-						'label' 		=> esc_html__('Background Video (.MP4)', 'onepress'),
-						'section' 		=> 'onepress_hero_images',
-					)
-				)
-			);
-			// Video webm
-			$wp_customize->add_setting( 'onepress_hero_video_webm',
-				array(
-					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => '',
-					'transport' => 'refresh', // refresh or postMessage
-				)
-			);
-			$wp_customize->add_control( new WP_Customize_Media_Control(
+			$wp_customize->add_control( new WP_Customize_Color_Control(
 					$wp_customize,
-					'onepress_hero_video_webm',
+					'onepress_hero_overlay_color',
 					array(
-						'label' 		=> esc_html__('Background Video(.WEBM)', 'onepress'),
+						'label' 		=> esc_html__('Overlay color', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
+						'priority'      => 130,
 					)
 				)
 			);
-			// Video OGV
-			$wp_customize->add_setting( 'onepress_hero_video_ogv',
+
+			// Overlay Opacity
+			$wp_customize->add_setting( 'onepress_hero_overlay_opacity',
 				array(
-					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => '',
+					'sanitize_callback' => 'sanitize_text_field',
+					'default'           => '0.3',
 					'transport' => 'refresh', // refresh or postMessage
 				)
 			);
-			$wp_customize->add_control( new WP_Customize_Media_Control(
-					$wp_customize,
-					'onepress_hero_video_ogv',
+			$wp_customize->add_control(
+					'onepress_hero_overlay_opacity',
 					array(
-						'label' 		=> esc_html__('Background Video(.OGV)', 'onepress'),
+						'label' 		=> esc_html__('Overlay Opacity', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
+						'description'   => esc_html__('Enter a float number between 0.1 to 0.9', 'onepress'),
+						'priority'      => 130,
 					)
-				)
 			);
+
 
 
 
