@@ -155,11 +155,13 @@ var RepeatableCustomize = function (  control  ){
 
 			return false;
 		} );
+		//console.log(  control.params.title_format );
+		//console.log( control.params.live_title_id );
 
-		if ( typeof control.params.live_title_id !== "undefined" ) {
+		if ( control.params.live_title_id ) {
 
 			//console.log( $( "[data-live-id='"+ control.params.live_title_id+"']").eq(0).val() );
-			if ( $( "[data-live-id='"+ control.params.live_title_id+"']", $context ).length > 0 ) {
+			if ( control.params.live_title_id && $( "[data-live-id='"+ control.params.live_title_id+"']", $context ).length > 0 ) {
 				var v = $("[data-live-id='" + control.params.live_title_id + "']", $context).eq(0).val();
 				if (v == '') {
 					v = '[Untitled]';
@@ -185,8 +187,14 @@ var RepeatableCustomize = function (  control  ){
 				});
 
 				// console.log($("[data-live-id='" + control.params.live_title_id + "']", $context));
+			} else {
+				//console.log(  control.params.title_format );
+				//$('.widget-title .live-title', $context).text( control.params.title_format );
 			}
 
+		} else {
+			//console.log(  control.params.title_format );
+			$('.widget-title .live-title', $context).text( control.params.title_format );
 		}
 
 		// Remove item

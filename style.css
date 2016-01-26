@@ -1933,11 +1933,14 @@ input[type="radio"], input[type="checkbox"] {
 
 /* Section: Hero
 ------------------------------*/
-.hero-slideshow-wrapper {
+.hero-slideshow-wrapper, #main .hero-slideshow-wrapper {
 	width: 100%;
 	position: relative;
-	background-color: #000000 !important;
+	background-color: #000000;
 	overflow: hidden;
+}
+#main .video-section section.hero-slideshow-wrapper {
+	background: transparent;
 }
 
 .hero-slideshow-wrapper:after {

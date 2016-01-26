@@ -409,84 +409,122 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_hero_images' ,
 			array(
 				'priority'    => 6,
-				'title'       => esc_html__( 'Hero Background', 'onepress' ),
+				'title'       => esc_html__( 'Hero Background Media', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 			)
 		);
 
-			$wp_customize->add_setting( 'onepress_hero_image1',
+
+			$wp_customize->add_setting(
+				'onepress_hero_images',
 				array(
-					'sanitize_callback' => 'onepress_sanitize_file_url',
-					'default'           => get_template_directory_uri() . '/assets/images/hero1.jpg'
-				)
-			);
-	    	$wp_customize->add_control( new WP_Customize_Image_Control(
-	            $wp_customize,
-	            'onepress_hero_image1',
+					'default' => json_encode(
+						array(
+							array(
+								'image' 		=> array(
+									'url' => get_template_directory_uri() . '/assets/images/hero1.jpg',
+									'id'  => ''
+								),
+							),
+							array(
+								'image' 		=> array(
+									'url' => get_template_directory_uri() . '/assets/images/hero2.jpg',
+									'id'  => ''
+								),
+							),
+						)
+					),
+					'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+					'transport' => 'refresh', // refresh or postMessage
+				) );
+
+			$wp_customize->add_control(
+				new Onepress_Customize_Repeatable_Control(
+					$wp_customize,
+					'onepress_hero_images',
 					array(
-						'label' 		=> esc_html__('Hero Image #1', 'onepress'),
-						'section' 		=> 'onepress_hero_images',
-						'description'   => esc_html__('Suggestion size: larger than 1000px, if more than one image uploaded the hero section will become a background slideshow.', 'onepress'),
+						'label'     => esc_html__('Background Images', 'onepress'),
+						'description'   => '',
+						'section'       => 'onepress_hero_images',
+						//'live_title_id' => 'title', // apply for unput text and textarea only
+						'title_format'  => esc_html__( 'Background', 'onepress'), // [live_title]
+						'max_item'      => 2, // Maximum item can add
+
+						'fields'    => array(
+							'image' => array(
+								'title' => esc_html__('Background Image', 'onepress'),
+								'type'  =>'media',
+								'default' => array(
+									'url' => get_template_directory_uri().'/assets/images/testimonial_1.jpg',
+									'id' => ''
+								)
+							),
+
+						),
+
 					)
 				)
 			);
 
-			$wp_customize->add_setting( 'onepress_hero_image2',
+			// Video MP4
+			$wp_customize->add_setting( 'onepress_hero_video_mp4',
 				array(
-					'sanitize_callback' => 'onepress_sanitize_file_url',
-					'default'           => get_template_directory_uri() . '/assets/images/hero2.jpg'
+					'sanitize_callback' => 'onepress_sanitize_text',
+					'default'           => '',
+					'transport' => 'refresh', // refresh or postMessage
 				)
 			);
-	    	$wp_customize->add_control( new WP_Customize_Image_Control(
+	    	$wp_customize->add_control( new WP_Customize_Media_Control(
 	            $wp_customize,
-	            'onepress_hero_image2',
+	            'onepress_hero_video_mp4',
 					array(
-						'label' 		=> esc_html__('Hero Image #2', 'onepress'),
+						'label' 		=> esc_html__('Hero Background Video (.MP4)', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
-						'description'   => '',
+					)
+				)
+			);
+			// Video webm
+			$wp_customize->add_setting( 'onepress_hero_video_webm',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_text',
+					'default'           => '',
+					'transport' => 'refresh', // refresh or postMessage
+				)
+			);
+			$wp_customize->add_control( new WP_Customize_Media_Control(
+					$wp_customize,
+					'onepress_hero_video_webm',
+					array(
+						'label' 		=> esc_html__('Hero Background Video(.WEBM)', 'onepress'),
+						'section' 		=> 'onepress_hero_images',
+					)
+				)
+			);
+			// Video OGV
+			$wp_customize->add_setting( 'onepress_hero_video_ogv',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_text',
+					'default'           => '',
+					'transport' => 'refresh', // refresh or postMessage
+				)
+			);
+			$wp_customize->add_control( new WP_Customize_Media_Control(
+					$wp_customize,
+					'onepress_hero_video_ogv',
+					array(
+						'label' 		=> esc_html__('Hero Background Video(.OGV)', 'onepress'),
+						'section' 		=> 'onepress_hero_images',
 					)
 				)
 			);
 
-			$wp_customize->add_setting( 'onepress_hero_image3',
-				array(
-					'sanitize_callback' => 'onepress_sanitize_file_url',
-					'default'           => get_template_directory_uri() . '/assets/images/hero3.jpg'
-				)
-			);
-	    	$wp_customize->add_control( new WP_Customize_Image_Control(
-	            $wp_customize,
-	            'onepress_hero_image3',
-					array(
-						'label' 		=> esc_html__('Hero Image #3', 'onepress'),
-						'section' 		=> 'onepress_hero_images',
-						'description'   => '',
-					)
-				)
-			);
 
-			$wp_customize->add_setting( 'onepress_hero_image4',
-				array(
-					'sanitize_callback' => 'onepress_sanitize_file_url',
-					'default'           => get_template_directory_uri() . '/assets/images/hero4.jpg'
-				)
-			);
-	    	$wp_customize->add_control( new WP_Customize_Image_Control(
-	            $wp_customize,
-	            'onepress_hero_image4',
-					array(
-						'label' 		=> esc_html__('Hero Image #4', 'onepress'),
-						'section' 		=> 'onepress_hero_images',
-						'description'   => '',
-					)
-				)
-			);
 
 		$wp_customize->add_section( 'onepress_hero_content_layout1' ,
 			array(
 				'priority'    => 9,
-				'title'       => esc_html__( 'Hero Content Layout 1', 'onepress' ),
+				'title'       => esc_html__( 'Hero Content Layout', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 
