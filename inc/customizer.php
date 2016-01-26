@@ -446,6 +446,7 @@ function onepress_customize_register( $wp_customize ) {
 					array(
 						'label'     => esc_html__('Background Images', 'onepress'),
 						'description'   => '',
+						'priority'     => 40,
 						'section'       => 'onepress_hero_images',
 						//'live_title_id' => 'title', // apply for unput text and textarea only
 						'title_format'  => esc_html__( 'Background', 'onepress'), // [live_title]
