@@ -479,7 +479,7 @@ function onepress_customize_register( $wp_customize ) {
 	            $wp_customize,
 	            'onepress_hero_video_mp4',
 					array(
-						'label' 		=> esc_html__('Hero Background Video (.MP4)', 'onepress'),
+						'label' 		=> esc_html__('Background Video (.MP4)', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 					)
 				)
@@ -496,7 +496,7 @@ function onepress_customize_register( $wp_customize ) {
 					$wp_customize,
 					'onepress_hero_video_webm',
 					array(
-						'label' 		=> esc_html__('Hero Background Video(.WEBM)', 'onepress'),
+						'label' 		=> esc_html__('Background Video(.WEBM)', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 					)
 				)
@@ -513,7 +513,7 @@ function onepress_customize_register( $wp_customize ) {
 					$wp_customize,
 					'onepress_hero_video_ogv',
 					array(
-						'label' 		=> esc_html__('Hero Background Video(.OGV)', 'onepress'),
+						'label' 		=> esc_html__('Background Video(.OGV)', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 					)
 				)
