@@ -69,9 +69,9 @@ $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp' 
 				</div>
 				<?php endif; ?>
 
-				<?php printf( '&copy; %1$s %2$s', esc_attr( date( 'Y' ) ), esc_attr( get_bloginfo() ) ); ?>
-				<span class="sep"> &middot; </span>
-				<?php printf( esc_html__( '%1$s theme by %2$s', 'onepress' ), 'OnePress', '<a href="'. esc_url('http://www.famethemes.com', 'onepress') .'" target="_blank">FameThemes</a>' ); ?>
+				<?php printf( esc_html__( 'Copyright %1$s %2$s %3$s', 'onepress' ), '&copy;', esc_attr( date( 'Y' ) ), esc_attr( get_bloginfo() ) ); ?>
+				<span class="sep"> &ndash; </span>
+				<?php printf( esc_html__( '%1$s theme by %2$s', 'onepress' ), '<a href="'. esc_url('https://www.famethemes.com/themes/onepress', 'onepress') .'">OnePress</a>', 'FameThemes' ); ?>
 			</div>
 		</div><!-- .site-info -->
 

@@ -1094,6 +1094,7 @@ input[type="radio"], input[type="checkbox"] {
 .site-footer .footer-connect .follow-heading {
 	color: #FFFFFF;
 	margin-bottom: 20px;
+	letter-spacing: 0.8px;
 }
 
 .site-footer .footer-connect .subs_input {
@@ -1181,6 +1182,15 @@ input[type="radio"], input[type="checkbox"] {
 	padding: 35px 0px;
 	background: #222222;
 	font-weight: 500;
+	color: #bbbbbb;
+}
+
+.site-footer .site-info a {
+	color: #dddddd;
+}
+
+.site-footer .site-info a:hover {
+	text-decoration: underline;
 }
 
 .site-footer .btt a {
