@@ -31,7 +31,8 @@ function onepress_theme_info_page() {
 			<a href="?page=ft_onepress&tab=actions_required" class="nav-tab<?php echo $tab == 'actions_required' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Actions Required', 'onepress' ); ?></a>
 		</h2>
 
-		<div class="theme_info">
+		<?php if ( is_null($tab) ) { ?>
+		<div class="theme_info info-tab-content">
 			<div class="theme_info_column clearfix">
 				<div class="theme_info_left">
 					<div class="theme_link">
@@ -62,6 +63,14 @@ function onepress_theme_info_page() {
 				</div>
 			</div>
 		</div>
+		<?php } ?>
+
+		<?php if ( $tab == 'actions_required' ) { ?>
+		<div class="action-required-tab info-tab-content">
+			ss
+		</div>
+		<?php } ?>
+
 	</div> <!-- END .theme_info -->
 
 <?php

@@ -162,6 +162,7 @@ function onepress_customize_register( $wp_customize ) {
 					'description' => esc_html__( 'These social profiles setting below will display at the footer of your site.', 'onepress' )
 				)
 			));
+
 			// Footer Social Title
 			$wp_customize->add_setting( 'onepress_social_footer_title',
 				array(
@@ -877,7 +878,7 @@ function onepress_customize_register( $wp_customize ) {
 		)
 	);
 
-		// Order & Styling
+		// Section service content.
 		$wp_customize->add_setting(
 			'onepress_services',
 			array(

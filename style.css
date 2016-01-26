@@ -2169,71 +2169,6 @@ input[type="radio"], input[type="checkbox"] {
 	font-size: 1.125rem;
 }
 
-/* Section: Testimonials
-------------------------------*/
-.section-testimonials .card-block {
-	padding: 25px;
-	padding: 1.5625rem;
-}
-
-.section-testimonials .card-text {
-	font-size: 15px;
-	font-size: 0.9375rem;
-}
-
-.section-testimonials .card-inverse a {
-	color: rgba(255, 255, 255, 0.9);
-}
-
-.tes_author {
-	position: relative;
-	margin-bottom: 25px;
-}
-
-.tes_author img {
-	max-width: 70px;
-	float: left;
-	-webkit-border-radius: 500px;
-	-moz-border-radius: 500px;
-	border-radius: 500px;
-	border: 2px solid #FFF;
-	margin-right: 15px;
-}
-
-.tes_author cite {
-	float: left;
-	margin-top: 10px;
-	font-size: 16px;
-	font-weight: bold;
-}
-
-.tes_author cite div {
-	font-weight: normal;
-	font-size: 13px;
-}
-
-.card-inverse .tes_author cite {
-	color: rgba(255, 255, 255, 0.9);
-}
-
-.card-inverse .tes_author cite div, .card-inverse .tes_author cite a {
-	color: rgba(255, 255, 255, 0.65);
-}
-
-.card-theme-primary {
-	background-color: #03c4eb;
-	border-color: #03c4eb;
-}
-
-.section-testimonials .card-deck {
-	margin-bottom: 20px;
-	margin-bottom: 1.25rem;
-}
-
-.section-testimonials .card-deck-wrapper .card-deck:last-of-type {
-	margin-bottom: 0px;
-}
-
 /* Section: Parallax
 ------------------------------*/
 .section-has-parallax {
@@ -2867,6 +2802,71 @@ div.wpcf7-response-output {
 
 .cta-button-area {
 	text-align: right;
+}
+
+/* Section: Testimonials
+------------------------------*/
+.section-testimonials .card-block {
+	padding: 25px;
+	padding: 1.5625rem;
+}
+
+.section-testimonials .card-text {
+	font-size: 15px;
+	font-size: 0.9375rem;
+}
+
+.section-testimonials .card-inverse a {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.tes_author {
+	position: relative;
+	margin-bottom: 25px;
+}
+
+.tes_author img {
+	max-width: 70px;
+	float: left;
+	-webkit-border-radius: 500px;
+	-moz-border-radius: 500px;
+	border-radius: 500px;
+	border: 2px solid #FFF;
+	margin-right: 15px;
+}
+
+.tes_author cite {
+	float: left;
+	margin-top: 10px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.tes_author cite div {
+	font-weight: normal;
+	font-size: 13px;
+}
+
+.card-inverse .tes_author cite {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.card-inverse .tes_author cite div, .card-inverse .tes_author cite a {
+	color: rgba(255, 255, 255, 0.65);
+}
+
+.card-theme-primary {
+	background-color: #03c4eb;
+	border-color: #03c4eb;
+}
+
+.section-testimonials .card-deck {
+	margin-bottom: 20px;
+	margin-bottom: 1.25rem;
+}
+
+.section-testimonials .card-deck-wrapper .card-deck:last-of-type {
+	margin-bottom: 0px;
 }
 
 /* OnePress Plus Section: Clients
