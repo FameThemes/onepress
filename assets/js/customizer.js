@@ -20,8 +20,6 @@ var RepeatableCustomize = function (  control  ){
 		container.addClass( 'no-changeable' );
 	}
 
-
-
 	that.getData = function ( ){
 		var f = $( '.form-data', container );
 		var data =  $( 'input, textarea, select', f ).serialize();
@@ -30,10 +28,8 @@ var RepeatableCustomize = function (  control  ){
 	};
 
 	that.rename = function(){
-
 		$( '.list-repeatable li', container ).each( function( index ) {
 			var li =  $( this );
-
 			$( 'input, textarea, select', li ).each( function(){
 				var input = $( this );
 				var name = input.attr( 'data-repeat-name' ) || undefined;
@@ -45,9 +41,6 @@ var RepeatableCustomize = function (  control  ){
 
 		} );
 	};
-
-	//----------------------------
-
 
 	var frame = wp.media({
 		title: wp.media.view.l10n.addMedia,
@@ -64,15 +57,10 @@ var RepeatableCustomize = function (  control  ){
 
 	that.media_current = {};
 	that.media_btn = {};
-
-
-
 	frame.on( 'select', function () {
 		// Grab our attachment selection and construct a JSON representation of the model.
 		var media_attachment = frame.state().get('selection').first().toJSON();
-
 		$( '.image_id', that.media_current  ).val( media_attachment.id );
-
 		var preview, img_url;
 		img_url = media_attachment.url;
 		$( '.current', that.media_current  ).removeClass( 'hide').addClass( 'show' );
@@ -83,30 +71,22 @@ var RepeatableCustomize = function (  control  ){
 		}
 		$('.remove-button', that.media_current  ).show();
 		$( '.image_id', that.media_current  ).trigger( 'change' );
-
 		that.media_btn.text( that.media_btn.attr( 'data-change-txt' ) );
-
 	});
 
 
 	that.handleMedia = function( $context ) {
 		$('.item-media', $context ).each( function(){
-
 			var _item = $( this );
 			// when remove item
 			$( '.remove-button', _item ).on( 'click', function( e ){
 				e.preventDefault();
-
 				$( '.image_id, .image_url', _item ).val( '' );
 				$( '.thumbnail-image', _item ).html( '' );
-
 				$( '.current', _item ).removeClass( 'show' ).addClass( 'hide' );
-
 				$( this).hide();
-
 				$('.upload-button', _item ).text( $('.upload-button', _item ).attr( 'data-add-txt' ) );
 				$( '.image_id', _item ).trigger( 'change' );
-
 			} );
 
 			// when upload item
@@ -114,12 +94,8 @@ var RepeatableCustomize = function (  control  ){
 				e.preventDefault();
 				that.media_current = _item;
 				that.media_btn = $( this );
-
 				frame.open();
-
 			});
-
-
 		} );
 	};
 
@@ -264,7 +240,6 @@ var RepeatableCustomize = function (  control  ){
 		that.rename();
 		that.colorPicker( $context );
 		that.handleMedia( $context );
-
 		//Special check element
 		$( '[data-live-id="section_id"]', $context ).each( function(){
 			if ( $( this ).val() === 'map' ) {
@@ -272,14 +247,11 @@ var RepeatableCustomize = function (  control  ){
 				$context.addClass( 'show-display-field-only' );
 			}
 		} );
-
-
 	};
 
 	$( '.list-repeatable li').each( function(){
 		that.actions( $( this ) );
 	} );
-
 
 	that.updateValue = function(){
 		var data = that.getData();
@@ -340,8 +312,6 @@ var RepeatableCustomize = function (  control  ){
 
 };
 
-
-//------------------------------------------------
 
 ( function( api ) {
 	//console.log( api.controlConstructor );
