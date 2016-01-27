@@ -1935,7 +1935,7 @@ input[type="radio"], input[type="checkbox"] {
 .hero-slideshow-wrapper {
 	width: 100%;
 	position: relative;
-	background-color: #000000 !important;
+	background-color: #000000;
 	overflow: hidden;
 }
 
