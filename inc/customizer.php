@@ -1789,8 +1789,12 @@ add_action( 'customize_preview_init', 'onepress_customize_preview_js' );
 
 add_action( 'customize_controls_enqueue_scripts', 'opneress_customize_js_settings' );
 function opneress_customize_js_settings(){
-	$is_home_page_active = onepress_check_onepage_active();
-	$number_action =  apply_filters( 'onepress_number_actions', ( ! $is_home_page_active ? 1 : 0 ) );
+	$actions = onepress_get_actions_required();
+	$n = array_count_values( $actions );
+	$number_action =  0;
+	if ( $n && isset( $n['active'] ) ) {
+		$number_action = $n['active'];
+	}
 	wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(
 		'number_action' => $number_action,
 		'action_url' => admin_url( 'themes.php?page=ft_onepress&tab=actions_required' )

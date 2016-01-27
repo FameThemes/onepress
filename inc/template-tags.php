@@ -227,3 +227,10 @@ if ( ! function_exists( 'onepress_hero_overlay_css' ) ) {
 
 }
 
+//add_filter( 'body_class', 'opnress_body_class' );
+function opnress_body_class( $classes ){
+	$classes['no-js'] = 'no-js';
+	return $classes;
+}
+
+

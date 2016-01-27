@@ -323,15 +323,40 @@ if ( ! function_exists( 'onepress_get_media_url' ) ) {
 }
 
 
-if ( ! function_exists( 'onepress_check_onepage_active' ) ) {
-	function onepress_check_onepage_active(){
-		$front_page = get_option( 'page_on_front' );
-		$activated = false;
-		if ( $front_page > 0 ) {
-			if ( get_post_meta( $front_page, '_wp_page_template', true ) == 'template-frontpage.php' ) {
-				$activated = true;
+/**
+ * Get theme actions required
+ *
+ * @return array|mixed|void
+ */
+function onepress_get_actions_required( ) {
+
+	$actions = array();
+	$front_page = get_option( 'page_on_front' );
+	$actions['page_on_front'] = 'dismiss';
+	$actions['page_template'] = 'active';
+	if ( $front_page <= 0  ) {
+		$actions['page_on_front'] = 'active';
+		if ( get_post_meta( $front_page, '_wp_page_template', true ) == 'template-frontpage.php' ) {
+			$actions['page_template'] = 'dismiss';
+		}
+	}
+
+	$actions = apply_filters( 'onepress_get_actions_required', $actions );
+	$actions_dismiss =  get_option( 'onpress_actions_dismiss' );
+
+	if (  $actions_dismiss && is_array( $actions_dismiss ) ) {
+		foreach ( $actions_dismiss as $k => $v ) {
+			if ( isset ( $actions[ $k ] ) ) {
+				$actions[ $k ] = 'dismiss';
 			}
 		}
-		return $activated;
 	}
+
+	return $actions;
+}
+
+
+add_action('switch_theme', 'onpress_reset_actions_required');
+function onpress_reset_actions_required () {
+	delete_option('onpress_actions_dismiss');
 }
