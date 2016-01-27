@@ -5,7 +5,7 @@ $onepress_counter_title    = get_theme_mod( 'onepress_counter_title', esc_html__
 $onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', esc_html__('Section subtitle', 'onepress' ));
 ?>
 <?php if ( $onepress_counter_disable != '1' ) : ?>
-<section id="<?php if ( $onepress_counter_id != '' ) echo $onepress_counter_id; ?>" <?php do_action( 'onpress_section_atts', 'counter' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-counter section-padding onepage-section', 'counter' ) ); ?>">
+<section id="<?php if ( $onepress_counter_id != '' ) echo $onepress_counter_id; ?>" <?php do_action( 'onepress_section_atts', 'counter' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-counter section-padding onepage-section', 'counter' ) ); ?>">
 	<?php do_action( 'onepress_section_before_inner', 'counter' ); ?>
 	<div class="container">
 

@@ -5,7 +5,7 @@ $onepress_team_title    = get_theme_mod( 'onepress_team_title', esc_html__('Our 
 $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('Section subtitle', 'onepress' ));
 ?>
 <?php if ( ! $onepress_team_disable  ) : ?>
-<section id="<?php if ( $onepress_team_id != '' ) echo $onepress_team_id; ?>" <?php do_action( 'onpress_section_atts', 'team' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-team section-padding section-meta onepage-section', 'team' ) ); ?>">
+<section id="<?php if ( $onepress_team_id != '' ) echo $onepress_team_id; ?>" <?php do_action( 'onepress_section_atts', 'team' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-team section-padding section-meta onepage-section', 'team' ) ); ?>">
 	<?php do_action( 'onepress_section_before_inner', 'team' ); ?>
 	<div class="container">
 		<div class="section-title-area">

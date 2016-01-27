@@ -303,7 +303,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                         <a class="widget-action" href="#"></a>
                     </div>
                     <div class="widget-title">
-                        <h4 class="live-title"><?php _e( '[Untitled]', 'onepress' ); ?></h4>
+                        <h4 class="live-title"><?php _e( 'Item', 'onepress' ); ?></h4>
                     </div>
                 </div>
 

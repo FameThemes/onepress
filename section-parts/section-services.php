@@ -6,7 +6,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', esc_htm
 ?>
 
 <?php if ( ! $onepress_service_disable  ) : ?>
-<section id="<?php if ( $onepress_service_id != '' ) echo $onepress_service_id; ?>" <?php do_action( 'onpress_section_atts', 'services' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-services section-padding section-meta onepage-section', 'services' ) ); ?>">
+<section id="<?php if ( $onepress_service_id != '' ) echo $onepress_service_id; ?>" <?php do_action( 'onepress_section_atts', 'services' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services' ) ); ?>">
 	<?php do_action( 'onepress_section_before_inner', 'services' ); ?>
 	<div class="container">
 		<div class="section-title-area">
