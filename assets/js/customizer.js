@@ -62,9 +62,35 @@ var RepeatableCustomize = function (  control  ){
 		// console.log(selection);
 	});
 
+	that.media_current = {};
+	that.media_btn = {};
+
+
+
+	frame.on( 'select', function () {
+		// Grab our attachment selection and construct a JSON representation of the model.
+		var media_attachment = frame.state().get('selection').first().toJSON();
+
+		$( '.image_id', that.media_current  ).val( media_attachment.id );
+
+		var preview, img_url;
+		img_url = media_attachment.url;
+		$( '.current', that.media_current  ).removeClass( 'hide').addClass( 'show' );
+		$( '.image_url', that.media_current  ).val( img_url );
+		if ( media_attachment.type == 'image' ) {
+			preview = '<img src="' + img_url + '" alt="">';
+			$('.thumbnail-image', that.media_current  ).html(preview);
+		}
+		$('.remove-button', that.media_current  ).show();
+		$( '.image_id', that.media_current  ).trigger( 'change' );
+
+		that.media_btn.text( that.media_btn.attr( 'data-change-txt' ) );
+
+	});
+
 
 	that.handleMedia = function( $context ) {
-		$('.item-media', $context).each( function(){
+		$('.item-media', $context ).each( function(){
 
 			var _item = $( this );
 			// when remove item
@@ -84,32 +110,10 @@ var RepeatableCustomize = function (  control  ){
 			} );
 
 			// when upload item
-			$('.upload-button', _item ).on('click', function () {
-				var btn = $( this );
-
-				frame.on('select', function () {
-					// Grab our attachment selection and construct a JSON representation of the model.
-					var media_attachment = frame.state().get('selection').first().toJSON();
-					// media_attachment= JSON.stringify(media_attachment);
-					// console.log( media_attachment );
-
-					$( '.image_id', _item ).val(media_attachment.id);
-
-					var preview, img_url;
-					img_url = media_attachment.url;
-					$( '.current', _item ).removeClass( 'hide').addClass( 'show' );
-					$( '.image_url', _item ).val( img_url );
-					if ( media_attachment.type == 'image' ) {
-						preview = '<img src="' + img_url + '" alt="">';
-						//$(' img', _item).remove();
-						$('.thumbnail-image', _item ).html(preview);
-					}
-					$('.remove-button', _item ).show();
-					$( '.image_id', _item ).trigger( 'change' );
-
-					btn.text( btn.attr( 'data-change-txt' ) );
-
-				});
+			$('.upload-button', _item ).on('click', function ( e ) {
+				e.preventDefault();
+				that.media_current = _item;
+				that.media_btn = $( this );
 
 				frame.open();
 
@@ -151,11 +155,13 @@ var RepeatableCustomize = function (  control  ){
 
 			return false;
 		} );
+		//console.log(  control.params.title_format );
+		//console.log( control.params.live_title_id );
 
-		if ( typeof control.params.live_title_id !== "undefined" ) {
+		if ( control.params.live_title_id ) {
 
 			//console.log( $( "[data-live-id='"+ control.params.live_title_id+"']").eq(0).val() );
-			if ( $( "[data-live-id='"+ control.params.live_title_id+"']", $context ).length > 0 ) {
+			if ( control.params.live_title_id && $( "[data-live-id='"+ control.params.live_title_id+"']", $context ).length > 0 ) {
 				var v = $("[data-live-id='" + control.params.live_title_id + "']", $context).eq(0).val();
 				if (v == '') {
 					v = '[Untitled]';
@@ -181,8 +187,14 @@ var RepeatableCustomize = function (  control  ){
 				});
 
 				// console.log($("[data-live-id='" + control.params.live_title_id + "']", $context));
+			} else {
+				//console.log(  control.params.title_format );
+				//$('.widget-title .live-title', $context).text( control.params.title_format );
 			}
 
+		} else {
+			//console.log(  control.params.title_format );
+			$('.widget-title .live-title', $context).text( control.params.title_format );
 		}
 
 		// Remove item
@@ -254,8 +266,9 @@ var RepeatableCustomize = function (  control  ){
 		that.handleMedia( $context );
 
 		//Special check element
-		$( '[data-live-id="section_id"]').each( function(){
+		$( '[data-live-id="section_id"]', $context ).each( function(){
 			if ( $( this ).val() === 'map' ) {
+				// console.log(  $( this).val() );
 				$context.addClass( 'show-display-field-only' );
 			}
 		} );

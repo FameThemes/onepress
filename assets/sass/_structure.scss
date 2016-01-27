@@ -369,7 +369,7 @@
 	.entry-title, .page-title {
 		margin-bottom: 0px;
 		font-size: 22px;
-        font-weight: 700;
+        font-weight: 500;
 	}
     p {
         margin: 6px 0px 0px 0px;
@@ -404,6 +404,7 @@
         .follow-heading {
             color: #FFFFFF;
             margin-bottom: 20px;
+			letter-spacing: 0.8px;
         }
         .subs_input {
             background: #333333;
@@ -469,6 +470,13 @@
         padding: 35px 0px;
         background: #222222;
         font-weight: 500;
+		color: #bbbbbb;
+		a {
+			color: #dddddd;
+			&:hover {
+				text-decoration: underline;
+			}
+		}
     }
     .btt a {
         border-radius: 0px 20px 0 0;

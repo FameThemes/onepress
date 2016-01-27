@@ -181,3 +181,56 @@ function onepress_comment( $comment, $args, $depth ) {
     endswitch; // end comment_type check
 }
 endif;
+
+if ( ! function_exists( 'onepress_hero_overlay_css' ) ) {
+
+	add_action( 'wp_head', 'onepress_hero_overlay_css' );
+	function onepress_hero_overlay_css( ) {
+
+		if ( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ) ) {
+			$o = get_theme_mod( 'onepress_hero_overlay_opacity' , .3 );
+			?>
+			<style type="text/css">
+				#main .video-section section.hero-slideshow-wrapper {
+					background: transparent;
+				}
+
+				.hero-slideshow-wrapper:after {
+					position: absolute;
+					top: 0px;
+					left: 0px;
+					width: 100%;
+					height: 100%;
+					opacity: <?php echo floatval( $o); ?>;
+					background-color: <?php echo get_theme_mod( 'onepress_hero_overlay_color' ); ?>;
+					display: block;
+					content: "";
+				}
+				.parallax-hero .hero-slideshow-wrapper:after {
+					display: none !important;
+				}
+				.parallax-hero .parallax-mirror:after {
+					position: absolute;
+					top: 0px;
+					left: 0px;
+					width: 100%;
+					height: 100%;
+					opacity: <?php echo floatval( $o); ?>;
+					background-color: <?php echo get_theme_mod( 'onepress_hero_overlay_color' ); ?>;
+					display: block;
+					content: "";
+				}
+			</style>
+		<?php
+		}
+	}
+
+}
+
+//add_filter( 'body_class', 'opnress_body_class' );
+function opnress_body_class( $classes ){
+	$classes['no-js'] = 'no-js';
+	return $classes;
+}
+
+

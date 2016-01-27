@@ -12,6 +12,8 @@
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
 function onepress_customize_register( $wp_customize ) {
+
+
 	// Load custom controls
 	require get_template_directory() . '/inc/customizer-controls.php';
 
@@ -162,6 +164,7 @@ function onepress_customize_register( $wp_customize ) {
 					'description' => esc_html__( 'These social profiles setting below will display at the footer of your site.', 'onepress' )
 				)
 			));
+
 			// Footer Social Title
 			$wp_customize->add_setting( 'onepress_social_footer_title',
 				array(
@@ -409,84 +412,109 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_hero_images' ,
 			array(
 				'priority'    => 6,
-				'title'       => esc_html__( 'Hero Images', 'onepress' ),
+				'title'       => esc_html__( 'Hero Background Media', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 			)
 		);
 
-			$wp_customize->add_setting( 'onepress_hero_image1',
+
+			$wp_customize->add_setting(
+				'onepress_hero_images',
 				array(
-					'sanitize_callback' => 'onepress_sanitize_file_url',
-					'default'           => get_template_directory_uri() . '/assets/images/hero1.jpg'
-				)
-			);
-	    	$wp_customize->add_control( new WP_Customize_Image_Control(
-	            $wp_customize,
-	            'onepress_hero_image1',
+					'default' => json_encode(
+						array(
+							array(
+								'image' 		=> array(
+									'url' => get_template_directory_uri() . '/assets/images/hero1.jpg',
+									'id'  => ''
+								),
+							),
+							array(
+								'image' 		=> array(
+									'url' => get_template_directory_uri() . '/assets/images/hero2.jpg',
+									'id'  => ''
+								),
+							),
+						)
+					),
+					'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+					'transport' => 'refresh', // refresh or postMessage
+				) );
+
+			$wp_customize->add_control(
+				new Onepress_Customize_Repeatable_Control(
+					$wp_customize,
+					'onepress_hero_images',
 					array(
-						'label' 		=> esc_html__('Hero Image #1', 'onepress'),
-						'section' 		=> 'onepress_hero_images',
-						'description'   => esc_html__('Suggestion size: larger than 1000px, if more than one image uploaded the hero section will become a background slideshow.', 'onepress'),
+						'label'     => esc_html__('Background Images', 'onepress'),
+						'description'   => '',
+						'priority'     => 40,
+						'section'       => 'onepress_hero_images',
+						//'live_title_id' => 'title', // apply for unput text and textarea only
+						'title_format'  => esc_html__( 'Background', 'onepress'), // [live_title]
+						'max_item'      => 2, // Maximum item can add
+
+						'fields'    => array(
+							'image' => array(
+								'title' => esc_html__('Background Image', 'onepress'),
+								'type'  =>'media',
+								'default' => array(
+									'url' => get_template_directory_uri().'/assets/images/testimonial_1.jpg',
+									'id' => ''
+								)
+							),
+
+						),
+
 					)
 				)
 			);
 
-			$wp_customize->add_setting( 'onepress_hero_image2',
+			// Overlay color
+			$wp_customize->add_setting( 'onepress_hero_overlay_color',
 				array(
-					'sanitize_callback' => 'onepress_sanitize_file_url',
-					'default'           => get_template_directory_uri() . '/assets/images/hero2.jpg'
+					'sanitize_callback' => 'sanitize_hex_color',
+					'default'           => '#000000',
+					'transport' => 'refresh', // refresh or postMessage
 				)
 			);
-	    	$wp_customize->add_control( new WP_Customize_Image_Control(
-	            $wp_customize,
-	            'onepress_hero_image2',
+			$wp_customize->add_control( new WP_Customize_Color_Control(
+					$wp_customize,
+					'onepress_hero_overlay_color',
 					array(
-						'label' 		=> esc_html__('Hero Image #2', 'onepress'),
+						'label' 		=> esc_html__('Overlay color', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
-						'description'   => '',
+						'priority'      => 130,
 					)
 				)
 			);
 
-			$wp_customize->add_setting( 'onepress_hero_image3',
+			// Overlay Opacity
+			$wp_customize->add_setting( 'onepress_hero_overlay_opacity',
 				array(
-					'sanitize_callback' => 'onepress_sanitize_file_url',
-					'default'           => get_template_directory_uri() . '/assets/images/hero3.jpg'
+					'sanitize_callback' => 'sanitize_text_field',
+					'default'           => '0.3',
+					'transport' => 'refresh', // refresh or postMessage
 				)
 			);
-	    	$wp_customize->add_control( new WP_Customize_Image_Control(
-	            $wp_customize,
-	            'onepress_hero_image3',
+			$wp_customize->add_control(
+					'onepress_hero_overlay_opacity',
 					array(
-						'label' 		=> esc_html__('Hero Image #3', 'onepress'),
+						'label' 		=> esc_html__('Overlay Opacity', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
-						'description'   => '',
+						'description'   => esc_html__('Enter a float number between 0.1 to 0.9', 'onepress'),
+						'priority'      => 130,
 					)
-				)
 			);
 
-			$wp_customize->add_setting( 'onepress_hero_image4',
-				array(
-					'sanitize_callback' => 'onepress_sanitize_file_url',
-					'default'           => get_template_directory_uri() . '/assets/images/hero4.jpg'
-				)
-			);
-	    	$wp_customize->add_control( new WP_Customize_Image_Control(
-	            $wp_customize,
-	            'onepress_hero_image4',
-					array(
-						'label' 		=> esc_html__('Hero Image #4', 'onepress'),
-						'section' 		=> 'onepress_hero_images',
-						'description'   => '',
-					)
-				)
-			);
+
+
 
 		$wp_customize->add_section( 'onepress_hero_content_layout1' ,
 			array(
 				'priority'    => 9,
-				'title'       => esc_html__( 'Hero Content Layout 1', 'onepress' ),
+				'title'       => esc_html__( 'Hero Content Layout', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 
@@ -852,7 +880,7 @@ function onepress_customize_register( $wp_customize ) {
 		)
 	);
 
-		// Order & Styling
+		// Section service content.
 		$wp_customize->add_setting(
 			'onepress_services',
 			array(
@@ -1095,211 +1123,7 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-	/*------------------------------------------------------------------------*/
-	/*  Section: Testimonials
-	/*------------------------------------------------------------------------*/
-	$wp_customize->add_panel( 'onepress_testimonial' ,
-		array(
-			'priority'        => 134,
-			'title'           => esc_html__( 'Section: Testimonial', 'onepress' ),
-			'description'     => '',
-			'active_callback' => 'onepress_showon_frontpage'
-		)
-	);
 
-	$wp_customize->add_section( 'onepress_testimonial_settings' ,
-		array(
-			'priority'    => 3,
-			'title'       => esc_html__( 'Section Settings', 'onepress' ),
-			'description' => '',
-			'panel'       => 'onepress_testimonial',
-		)
-	);
-		// Show Content
-		$wp_customize->add_setting( 'onepress_testimonials_disable',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_checkbox',
-				'default'           => '',
-			)
-		);
-		$wp_customize->add_control( 'onepress_testimonials_disable',
-			array(
-				'type'        => 'checkbox',
-				'label'       => esc_html__('Hide this section?', 'onepress'),
-				'section'     => 'onepress_testimonial_settings',
-				'description' => esc_html__('Check this box to hide this section.', 'onepress'),
-			)
-		);
-
-		// Section ID
-		$wp_customize->add_setting( 'onepress_testimonial_id',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => esc_html__('testimonials', 'onepress'),
-			)
-		);
-		$wp_customize->add_control( 'onepress_testimonial_id',
-			array(
-				'label'     => esc_html__('Section ID:', 'onepress'),
-				'section' 		=> 'onepress_testimonial_settings',
-				'description'   => 'The section id, we will use this for link anchor.'
-			)
-		);
-
-		// Title
-		$wp_customize->add_setting( 'onepress_testimonial_title',
-			array(
-				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => esc_html__('Testimonials', 'onepress'),
-			)
-		);
-		$wp_customize->add_control( 'onepress_testimonial_title',
-			array(
-				'label'     => esc_html__('Section Title', 'onepress'),
-				'section' 		=> 'onepress_testimonial_settings',
-				'description'   => '',
-			)
-		);
-
-		// Sub Title
-		$wp_customize->add_setting( 'onepress_testimonial_subtitle',
-			array(
-				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => esc_html__('Section subtitle', 'onepress'),
-			)
-		);
-		$wp_customize->add_control( 'onepress_testimonial_subtitle',
-			array(
-				'label'     => esc_html__('Section Subtitle', 'onepress'),
-				'section' 		=> 'onepress_testimonial_settings',
-				'description'   => '',
-			)
-		);
-
-
-		// Order & Stlying
-		$wp_customize->add_section( 'onepress_testimonials_content' ,
-			array(
-				'priority'    => 3,
-				'title'       => esc_html__( 'Section Content', 'onepress' ),
-				'description' => '',
-				'panel'       => 'onepress_testimonial',
-			)
-		);
-		$wp_customize->add_setting(
-			'onepress_testimonial_boxes',
-			array(
-				'default' => json_encode(
-					array(
-						array(
-							'title' 		=> esc_html__( 'Praesent placerat', 'onepress' ),
-							'name' 			=> esc_html__( 'Alexander Rios', 'onepress' ),
-							'subtitle' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
-							'style'         => 'warning',
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/testimonial_1.jpg',
-								'id'  => ''
-							),
-							'content' 		=> esc_html__( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat.', 'onepress' ),
-
-						),
-						array(
-							'title' 		=> esc_html__( 'Cras iaculis', 'onepress' ),
-							'name' 			=> esc_html__( 'Alexander Max', 'onepress' ),
-							'subtitle' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
-							'style'         => 'success',
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/testimonial_2.jpg',
-								'id'  => ''
-							),
-							'content' 		=> esc_html__( 'Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue eu vulputate.', 'onepress' ),
-
-						),
-						array(
-							'title' 		=> esc_html__( 'Fusce lobortis', 'onepress' ),
-							'name' 			=> esc_html__( 'Peter Mendez', 'onepress' ),
-							'subtitle' 		=> esc_html__( 'Example Company', 'onepress' ),
-							'style'         => 'theme-primary',
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/testimonial_3.jpg',
-								'id'  => ''
-							),
-							'content' 		=> esc_html__( 'Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna egestas sem.', 'onepress' ),
-
-						),
-
-					)
-				),
-				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
-				'transport' => 'refresh', // refresh or postMessage
-			) );
-
-
-		$wp_customize->add_control(
-			new Onepress_Customize_Repeatable_Control(
-				$wp_customize,
-				'onepress_testimonial_boxes',
-				array(
-					'label'     => esc_html__('Testimonial', 'onepress'),
-					'description'   => '',
-					'section'       => 'onepress_testimonials_content',
-					'live_title_id' => 'title', // apply for unput text and textarea only
-					'title_format'  => esc_html__( '[live_title]', 'onepress'), // [live_title]
-					'max_item'      => 3, // Maximum item can add
-
-					'fields'    => array(
-						'title' => array(
-							'title' => esc_html__('Title', 'onepress'),
-							'type'  =>'text',
-							'desc'  => '',
-							'default'  => esc_html__('Testimonial title', 'onepress'),
-						),
-						'name' => array(
-							'title' => esc_html__('Name', 'onepress'),
-							'type'  =>'text',
-							'desc'  => '',
-							'default'  => esc_html__('User name', 'onepress'),
-						),
-						'image' => array(
-							'title' => esc_html__('Avatar', 'onepress'),
-							'type'  =>'media',
-							'desc'  => 'Suggestion: 100x100px square image.',
-							'default' => array(
-								'url' => get_template_directory_uri().'/assets/images/testimonial_1.jpg',
-								'id' => ''
-							)
-						),
-						'subtitle' => array(
-							'title' => esc_html__('Subtitle', 'onepress'),
-							'type'  =>'textarea',
-							'default'  => esc_html__('Example Company', 'onepress'),
-						),
-						'content' => array(
-							'title' => esc_html__('Content', 'onepress'),
-							'type'  =>'textarea',
-							'default'  => esc_html__('Whatever your user say', 'onepress'),
-						),
-
-						'style' => array(
-							'title' => esc_html__('Style', 'onepress'),
-							'type'  =>'select',
-							'default'  => 'primary',
-							'options' => array(
-								'theme-primary' => esc_html__( 'Theme default', 'onepress' ),
-								'primary' => esc_html__( 'Primary', 'onepress' ),
-								'success' => esc_html__( 'Success', 'onepress' ),
-								'info' => esc_html__( 'Info', 'onepress' ),
-								'warning' => esc_html__( 'Warning', 'onepress' ),
-								'danger' => esc_html__( 'Danger', 'onepress' ),
-							)
-						),
-
-
-					),
-
-				)
-			)
-		);
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Team
@@ -1958,5 +1782,6 @@ function onepress_showon_frontpage() {
  */
 function onepress_customize_preview_js() {
 	wp_enqueue_script( 'onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array( 'customize-preview' ), '20130508', true );
+
 }
 add_action( 'customize_preview_init', 'onepress_customize_preview_js' );

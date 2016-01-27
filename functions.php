@@ -300,3 +300,24 @@ require get_template_directory() . '/inc/tgm-plugin-activation.php';
  * Add theme info page
  */
 require get_template_directory() . '/inc/dashboard.php';
+
+/**
+ * Get media from a variable
+ *
+ * @param array $media
+ * @return false|string
+ */
+if ( ! function_exists( 'onepress_get_media_url' ) ) {
+	function onepress_get_media_url($media = array())
+	{
+		$media = wp_parse_args($media, array('url' => '', 'id' => ''));
+		$url = '';
+		if ($media['id'] != '') {
+			$url = wp_get_attachment_url($media['id']);
+		}
+		if ($url == '' && $media['url'] != '') {
+			$url = $media['url'];
+		}
+		return $url;
+	}
+}

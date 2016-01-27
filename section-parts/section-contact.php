@@ -5,7 +5,7 @@ $onepress_contact_title         = get_theme_mod( 'onepress_contact_title', esc_h
 $onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $onepress_contact_cf7           = get_theme_mod( 'onepress_contact_cf7' );
 $onepress_contact_cf7_disable   = get_theme_mod( 'onepress_contact_cf7_disable' );
-$onepress_contact_text          = get_theme_mod( 'onepress_contact_text', wp_kses_post('<h4>Donec nec justo eget felis.</h4>
+$onepress_contact_text          = get_theme_mod( 'onepress_contact_text', wp_kses_post('<h3>Donec nec justo eget felis.</h3>
 <p>Dorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>
 <p>Consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>', 'onepress') );
 $onepress_contact_address_title = get_theme_mod( 'onepress_contact_address_title', esc_html__('Pulvinar scelerisque', 'onepress' ));
@@ -43,7 +43,7 @@ $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax', esc_htm
 				<br><br>
 				<div class="address-box">
 
-					<h4><?php if ( $onepress_contact_address_title != '' ) echo wp_kses_post( $onepress_contact_address_title ); ?></h4>
+					<h3><?php if ( $onepress_contact_address_title != '' ) echo wp_kses_post( $onepress_contact_address_title ); ?></h3>
 
 					<?php if ( $onepress_contact_address != '' ): ?>
 					<div class="address-contact">

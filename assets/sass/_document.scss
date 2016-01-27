@@ -82,12 +82,10 @@ h5,
 h6 {
 	clear: both;
 	font-family: $font_heading;
-	font-weight: 700;
+	font-weight: 600;
 	margin-bottom: 15px;
 	@include rem('margin-bottom', 15px);
 	margin-top: 0;
-	text-transform: uppercase;
-	letter-spacing: 2px;
 	@extend .break;
 	color: #333333;
 	& a {
@@ -117,7 +115,7 @@ h2 {
 
 h3 {
 	@include rem('font-size', 20px);
-	font-weight: 700;
+	font-weight: 600;
 }
 
 h4 {

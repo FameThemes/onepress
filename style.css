@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design.
-Version: 1.0.6
+Version: 1.0.7
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -132,13 +132,11 @@ h5,
 h6 {
 	clear: both;
 	font-family: "Raleway", Helvetica, Arial, sans-serif;
-	font-weight: 700;
+	font-weight: 600;
 	margin-bottom: 15px;
 	margin-bottom: 15px;
 	margin-bottom: 0.9375rem;
 	margin-top: 0;
-	text-transform: uppercase;
-	letter-spacing: 2px;
 	color: #333333;
 }
 
@@ -185,7 +183,7 @@ h2 {
 h3 {
 	font-size: 20px;
 	font-size: 1.25rem;
-	font-weight: 700;
+	font-weight: 600;
 }
 
 h4 {
@@ -564,7 +562,6 @@ input[type="radio"], input[type="checkbox"] {
 ------------------------------*/
 .clear:before,
 .clear:after,
-.tes_author:after,
 .entry-content:before,
 .entry-content:after,
 .comment-content:before,
@@ -580,7 +577,7 @@ input[type="radio"], input[type="checkbox"] {
 	clear: both;
 }
 
-.clear:after, .tes_author:after,
+.clear:after,
 .entry-content:after,
 .comment-content:after,
 .site-header:after,
@@ -1061,7 +1058,7 @@ input[type="radio"], input[type="checkbox"] {
 .page-header .entry-title, .page-header .page-title {
 	margin-bottom: 0px;
 	font-size: 22px;
-	font-weight: 700;
+	font-weight: 500;
 }
 
 .page-header p {
@@ -1096,6 +1093,7 @@ input[type="radio"], input[type="checkbox"] {
 .site-footer .footer-connect .follow-heading {
 	color: #FFFFFF;
 	margin-bottom: 20px;
+	letter-spacing: 0.8px;
 }
 
 .site-footer .footer-connect .subs_input {
@@ -1183,6 +1181,15 @@ input[type="radio"], input[type="checkbox"] {
 	padding: 35px 0px;
 	background: #222222;
 	font-weight: 500;
+	color: #bbbbbb;
+}
+
+.site-footer .site-info a {
+	color: #dddddd;
+}
+
+.site-footer .site-info a:hover {
+	text-decoration: underline;
 }
 
 .site-footer .btt a {
@@ -1410,7 +1417,7 @@ input[type="radio"], input[type="checkbox"] {
 
 .wp-caption img[class*="wp-image-"] {
 	display: block;
-	max-width: 98%;
+	max-width: 100%;
 }
 
 .wp-caption .wp-caption-text {
@@ -1838,6 +1845,23 @@ input[type="radio"], input[type="checkbox"] {
 
 .onepage-section {
 	position: relative;
+	overflow: hidden;
+}
+
+.onepage-section:before {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	display: block;
+	content: " ";
+	z-index: 1;
+}
+
+.onepage-section .container {
+	position: relative;
+	z-index: 5;
 }
 
 .section-inverse {
@@ -1845,7 +1869,7 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .section-inverse .section-title-area .section-title {
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(255, 255, 255, 0.99);
 }
 
 .section-inverse .section-title-area .section-subtitle {
@@ -1879,6 +1903,7 @@ input[type="radio"], input[type="checkbox"] {
 	font-weight: 800;
 	position: relative;
 	margin-bottom: 0px;
+	text-transform: uppercase;
 }
 
 @media screen and (min-width: 940px) {
@@ -1893,91 +1918,15 @@ input[type="radio"], input[type="checkbox"] {
 	font-size: 12px;
 	display: inline-block;
 	position: relative;
-	margin-bottom: 20px;
-}
-
-.section-title-area .section-subtitle:after {
-	content: "";
-	display: block;
-	width: 100%;
-	height: 2px;
-	background: #e9e9e9;
-	position: absolute;
-	bottom: -6px;
+	margin-bottom: 13px;
+	margin-bottom: 0.8125rem;
+	text-transform: uppercase;
+	letter-spacing: 2px;
 }
 
 @media screen and (min-width: 940px) {
 	.section-title-area .section-subtitle {
 		font-size: 14px;
-	}
-}
-
-.help-message {
-	padding: 10px 20px;
-	background-color: #f8f9f9;
-	border-radius: 2px;
-	border-bottom: 1px solid #f2f2f2;
-	margin-bottom: 20px;
-}
-
-.help-message p {
-	margin-bottom: 0px;
-}
-
-.admin_helper {
-	position: absolute;
-	left: 50px;
-	top: 0px;
-	z-index: 20;
-}
-
-.admin_helper .helper_icon {
-	width: 25px;
-	height: 25px;
-	display: block;
-	background: url("assets/images/admin_helper.png") no-repeat center center;
-	animation: 0.8s ease-in 0s normal none infinite running helper-scale;
-	-moz-animation: 0.8s ease-in 0s normal none infinite running helper-scale;
-	-webkit-animation: 0.8s ease-in 0s normal none infinite running helper-scale;
-	position: relative;
-}
-
-.admin_helper .helper_message {
-	margin-top: 20px;
-	width: 300px;
-	padding: 20px;
-	background: #333333;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	color: #cccccc;
-}
-
-.admin_helper .helper_message h4 {
-	color: #FFF;
-}
-
-@keyframes helper-scale {
-	0% {
-		transform: scale(1);
-	}
-	50% {
-		transform: scale(0.8);
-	}
-	100% {
-		transform: scale(1);
-	}
-}
-
-@keyframes helper-scale {
-	0% {
-		transform: scale(1);
-	}
-	50% {
-		transform: scale(0.8);
-	}
-	100% {
-		transform: scale(1);
 	}
 }
 
@@ -2027,6 +1976,7 @@ input[type="radio"], input[type="checkbox"] {
 	line-height: 1.3;
 	text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 	font-weight: 800;
+	text-transform: uppercase;
 }
 
 @media screen and (min-width: 720px) {
@@ -2188,7 +2138,8 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .section-services .service-item .service-title {
-	margin-bottom: 7px;
+	margin-bottom: 10px;
+	margin-bottom: 0.625rem;
 	color: #333333;
 }
 
@@ -2213,236 +2164,6 @@ input[type="radio"], input[type="checkbox"] {
 .counter_item .counter_title {
 	font-size: 18px;
 	font-size: 1.125rem;
-}
-
-/* Section: Testimonials
-------------------------------*/
-.section-testimonials .card-block {
-	padding: 25px;
-	padding: 1.5625rem;
-}
-
-.section-testimonials .card-text {
-	font-size: 15px;
-	font-size: 0.9375rem;
-}
-
-.section-testimonials .card-inverse a {
-	color: rgba(255, 255, 255, 0.9);
-}
-
-.tes_author {
-	position: relative;
-	margin-bottom: 25px;
-}
-
-.tes_author img {
-	max-width: 70px;
-	float: left;
-	-webkit-border-radius: 500px;
-	-moz-border-radius: 500px;
-	border-radius: 500px;
-	border: 2px solid #FFF;
-	margin-right: 15px;
-}
-
-.tes_author cite {
-	float: left;
-	margin-top: 10px;
-	font-size: 16px;
-	font-weight: bold;
-}
-
-.tes_author cite div {
-	font-weight: normal;
-	font-size: 13px;
-}
-
-.card-inverse .tes_author cite {
-	color: rgba(255, 255, 255, 0.9);
-}
-
-.card-inverse .tes_author cite div, .card-inverse .tes_author cite a {
-	color: rgba(255, 255, 255, 0.65);
-}
-
-.card-theme-primary {
-	background-color: #03c4eb;
-	border-color: #03c4eb;
-}
-
-.card-deck {
-	margin-bottom: 20px;
-	margin-bottom: 1.25rem;
-}
-
-.card-deck-wrapper .card-deck:last-of-type {
-	margin-bottom: 0px;
-}
-
-/* Section: Projects
-------------------------------*/
-.project-wrapper {
-	font-size: 0;
-	max-width: none;
-	margin: 0 auto;
-	position: relative;
-	border-left: 1px solid #e0e0e0;
-}
-
-.project-wrapper .project-item {
-	vertical-align: top;
-	display: inline-block;
-	border-right: 1px solid #e0e0e0;
-	border-bottom: 1px solid #e0e0e0;
-	border-top: 1px solid #e0e0e0;
-	-webkit-transition: height 500ms ease;
-	-o-transition: height 500ms ease;
-	transition: height 500ms ease;
-}
-
-.project-wrapper .project-thumb {
-	overflow: hidden;
-}
-
-.project-wrapper .project-thumb img {
-	transition: all 0.2s linear 0s;
-	-webkit-transition: all 0.2s linear 0s;
-	-o-transition: all 0.2s linear 0s;
-}
-
-.project-wrapper .project-thumb img:hover {
-	transform: scale(1.1, 1.1);
-}
-
-.project-wrapper .project-header {
-	padding: 17px 20px 15px;
-	background: #f8f9f9;
-}
-
-.project-wrapper .project-header .project-small-title {
-	margin-bottom: 5px;
-}
-
-.project-wrapper .project-header .project-meta {
-	font-size: 10px;
-	text-transform: uppercase;
-	letter-spacing: 1.5px;
-	font-weight: 600;
-	color: #AAAAAA;
-}
-
-.project-wrapper .project-trigger {
-	cursor: pointer;
-}
-
-.project-2-column .project-item {
-	width: 50%;
-}
-
-.project-3-column .project-item {
-	width: 33.333333333333%;
-}
-
-.project-4-column .project-item {
-	width: 25%;
-}
-
-@media screen and (max-width: 1140px) {
-	.project-2-column .project-item,
-	.project-3-column .project-item,
-	.project-4-column .project-item {
-		width: 50%;
-	}
-}
-
-@media screen and (max-width: 720px) {
-	.project-2-column .project-item,
-	.project-3-column .project-item,
-	.project-4-column .project-item {
-		width: 100%;
-	}
-}
-
-.project-item.active .project-thumb img {
-	opacity: 0.6;
-	-webkit-transition: all 500ms ease-in-out;
-	-o-transition: all 500ms ease-in-out;
-	transition: all 500ms ease-in-out;
-}
-
-.project-detail {
-	position: absolute;
-	left: 0;
-	right: 0;
-	overflow: hidden;
-	max-height: 0;
-	-webkit-transition: max-height 500ms ease;
-	-o-transition: max-height 500ms ease;
-	transition: max-height 500ms ease;
-}
-
-.project-detail .project-detail-content {
-	font-size: 14px;
-	padding-top: 10px;
-}
-
-.project-detail .project-expander-contents {
-	padding: 40px 20px 100px;
-	background: #f8f9f9;
-	border: 1px solid #e0e0e0;
-	border-left: none;
-}
-
-@media screen and (max-width: 940px) {
-	.project-detail .project-expander-contents {
-		padding: 40px 20px 60px;
-	}
-}
-
-.project-expander-contents {
-	margin: 0 auto;
-	position: relative;
-}
-
-.project-expander-contents div.close {
-	position: absolute;
-	left: 50%;
-	bottom: 30px;
-	margin-left: -16px;
-	font-size: 13px;
-	text-indent: -9999px;
-	width: 32px;
-	height: 32px;
-	cursor: pointer;
-}
-
-.project-expander-contents div.close:before, .project-expander-contents div.close:after {
-	position: absolute;
-	display: inline-block;
-	height: 2px;
-	width: 40px;
-	background: #000000;
-	content: '';
-	right: 0px;
-	top: 15px;
-	cursor: pointer;
-}
-
-.project-expander-contents div.close:before {
-	-webkit-transform: translateX(4px) translateY(-1px) rotate(45deg);
-	-moz-transform: translateX(4px) translateY(-1px) rotate(45deg);
-	-ms-transform: translateX(4px) translateY(-1px) rotate(45deg);
-	-o-transform: translateX(4px) translateY(-1px) rotate(45deg);
-	transform: translateX(4px) translateY(-1px) rotate(45deg);
-}
-
-.project-expander-contents div.close:after {
-	-webkit-transform: translateX(4px) translateY(0px) rotate(-45deg);
-	-moz-transform: translateX(4px) translateY(0px) rotate(-45deg);
-	-ms-transform: translateX(4px) translateY(0px) rotate(-45deg);
-	-o-transform: translateX(4px) translateY(0px) rotate(-45deg);
-	transform: translateX(4px) translateY(0px) rotate(-45deg);
 }
 
 /* Section: Parallax
@@ -2742,10 +2463,8 @@ div.wpcf7-response-output {
 	margin: 20px 0px;
 }
 
-/*--------------------------------------------------------------
-9.0 External Plugins
---------------------------------------------------------------*/
-/* OnePress Plus */
+/* Section: Parallax
+------------------------------*/
 .parallax-window section {
 	z-index: 10;
 	position: relative;
@@ -2763,56 +2482,6 @@ div.wpcf7-response-output {
 	z-index: 2;
 }
 
-.video-section {
-	position: relative;
-	z-index: 1;
-	width: 100%;
-	overflow: hidden;
-}
-
-.video-section section {
-	position: relative;
-	z-index: 4;
-	background: transparent;
-}
-
-.onepage-section {
-	position: relative;
-}
-
-.onepage-section:before {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	display: block;
-	content: " ";
-	z-index: 1;
-}
-
-.onepage-section .container {
-	position: relative;
-	z-index: 5;
-}
-
-.video-section .fill-width {
-	position: absolute;
-	bottom: 0px;
-	width: 100%;
-	display: block;
-	z-index: 3;
-}
-
-.gmap_marker {
-	padding: 15px;
-}
-
-.gmap_marker h4 {
-	font-weight: 500;
-	margin-bottom: 0px;
-}
-
-.gmap_marker p {
-	margin: 10px 0px 0px;
-}
+/*--------------------------------------------------------------
+9.0 External Plugins
+--------------------------------------------------------------*/

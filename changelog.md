@@ -1,6 +1,12 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.0.7
+* Fixed the heading font issue.
+* Improvements of section style.
+* Change theme author link to theme link.
+* Remove testimonials section as it should be handle via plugin.
+
 ## 1.0.6
 * Quick fix for the_title_attribute issue.
 
