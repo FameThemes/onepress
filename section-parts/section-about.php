@@ -20,14 +20,12 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 					$boxes = json_decode( $boxes , true );
 				}
 				$page_ids = array();
-				$boxes_settings = array();
 				if ( ! empty( $boxes ) && is_array( $boxes ) ) {
 					foreach ( $boxes as $k => $v ) {
 						if ( isset ( $v['content_page'] ) ) {
 							$v['content_page'] = absint( $v['content_page'] );
 							if ( $v['content_page'] > 0 )  {
-								$page_ids[] =  $v['content_page'];
-								$boxes_settings[ $v['content_page'] ] = wp_parse_args( $v, array( 'enable_link'=> 0, 'hide_title' => 0 ) );
+								$page_ids[ $v['content_page'] ] =  wp_parse_args( $v, array( 'enable_link'=> 0, 'hide_title' => 0 ) );
 							}
 						}
 					}
@@ -53,7 +51,7 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 						}
 					}
 					$j = 0;
-					foreach ( $page_ids as  $post_id ) {
+					foreach ( $page_ids as  $post_id => $settings ) {
 						$post = get_post( $post_id );
 						setup_postdata( $post );
 						$class = 'col-lg-' . $col;
@@ -72,25 +70,25 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 						<div class="<?php echo esc_attr( $class ); ?> wow slideInUp">
 							<?php if ( has_post_thumbnail(  ) ) { ?>
 								<div class="about-image"><?php
-									if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
+									if ( $settings['enable_link'] ) {
 										echo '<a href="'.get_permalink( $post ).'">';
 									}
 									the_post_thumbnail( 'onepress-medium' );
-									if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
+									if ( $settings['enable_link'] ) {
 										echo '</a>';
 									}
 									?></div>
 							<?php } ?>
-							<?php if( ! $boxes_settings[ $post->ID ]['hide_title'] ) { ?>
+							<?php if( ! $settings['hide_title'] ) { ?>
 							<h3><?php
 
-								if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
+								if ( $settings['enable_link'] ) {
 									echo '<a href="'.get_permalink( $post ).'">';
 								}
 
 								the_title();
 
-								if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
+								if ( $settings['enable_link'] ) {
 									echo '</a>';
 								}
 
@@ -100,8 +98,6 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 						</div>
 					<?php
 					} // end foreach
-
-					wp_reset_query();
 					wp_reset_postdata();
 				}// ! empty pages ids
 				?>

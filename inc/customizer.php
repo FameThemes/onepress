@@ -751,7 +751,6 @@ function onepress_customize_register( $wp_customize ) {
 						'max_item'      => 3, // Maximum item can add
 						//'allow_unlimited' => false, // Maximum item can add
 
-
 						'fields'    => array(
 							'content_page'  => array(
 								'title' => esc_html__('Page content', 'onepress'),
@@ -891,10 +890,14 @@ function onepress_customize_register( $wp_customize ) {
 							'desc'  => sprintf( wp_kses_post('Paste your <a target="_blank" href="%1$s">Font Awesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
 							'default' => esc_html__( 'gg', 'onepress' ),
 						),
-						'contentPage'  => array(
+						'content_page'  => array(
 							'title' => esc_html__('Page content', 'onepress'),
 							'type'  =>'select',
 							'options' => $option_pages
+						),
+						'enable_link'  => array(
+							'title' => esc_html__('Enable item link', 'onepress'),
+							'type'  =>'checkbox',
 						),
 					),
 
