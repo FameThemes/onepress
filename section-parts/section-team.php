@@ -60,9 +60,6 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('S
 								<?php if( get_user_meta( $user->ID, 'google_plus', true ) != '' ){ ?>
 								<a href="<?php echo esc_url( get_user_meta( $user->ID, 'google_plus', true ) ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-google-plus fa-stack-1x fa-inverse"></i></span></a>
 								<?php } ?>
-								<?php if(get_user_meta( $user->ID, 'youtube', true ) != '' ){ ?>
-									<a href="<?php echo esc_url( get_user_meta( $user->ID, 'youtube', true ) ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-youtube fa-stack-1x fa-inverse"></i></span></a>
-								<?php } ?>
 								<?php if( get_user_meta( $user->ID, 'linkedin', true ) != '' ){ ?>
 								<a href="<?php echo esc_url( get_user_meta( $user->ID, 'linkedin', true ) ); ?>"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></a>
 								<?php } ?>

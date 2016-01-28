@@ -236,10 +236,8 @@ if ( ! function_exists( 'onepress_contact_methods' ) ) {
 	{
 		$contactmethods['twitter'] 		= __( 'Twitter URL', 'onperess' );
 		$contactmethods['facebook'] 	=   __( 'Facebook URL', 'onperess' );
-		$contactmethods['Youtube'] 		=   __( 'Youtube URL', 'onperess' );
 		$contactmethods['google_plus']  =  __( 'Google+ URL', 'onperess' );
 		$contactmethods['linkedin'] 	=  __( 'LinkedIn URL', 'onperess' );
-		//$contactmethods['pinterest'] 	=  __( 'Pinterest URL', 'onperess' );
 		return $contactmethods;
 	}
 	add_filter( 'user_contactmethods', 'onepress_contact_methods', 10, 1 );
