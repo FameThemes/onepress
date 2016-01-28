@@ -62,7 +62,7 @@ function onepress_customize_register( $wp_customize ) {
     	$wp_customize->add_setting( 'onepress_site_image_logo',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_file_url',
-				'default'           => get_template_directory_uri() . '/assets/images/logo.png'
+				'default'           => ''
 			)
 		);
     	$wp_customize->add_control( new WP_Customize_Image_Control(
@@ -748,7 +748,7 @@ function onepress_customize_register( $wp_customize ) {
 						'section'       => 'onepress_about_content',
 						'live_title_id' => 'title', // apply for unput text and textarea only
 						'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
-						'max_item'      => 3, // Maximum item can add
+						'max_item'      => 6, // Maximum item can add
 						'allow_unlimited' => false, // Maximum item can add
 
 						'fields'    => array(

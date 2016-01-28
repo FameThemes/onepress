@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.0.8
+* Remove default logo from customizer + header.
+* Remove demo content in frontpage template.
+* Change the way customizer handle contents on fronpage template. (https://themes.trac.wordpress.org/ticket/27818#comment:26)
+
 ## 1.0.7
 * Fixed the heading font issue.
 * Improvements of section style.
