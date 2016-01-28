@@ -9,7 +9,13 @@ var RepeatableCustomize = function (  control  ){
 	var container =  control.container;
 	var default_data =  control.params.fields;
 	 //console.log( control.params.value );
-	 var values = JSON.parse( control.params.value ) ;
+	var values;
+	try {
+		 values = JSON.parse( control.params.value ) ;
+	}catch ( e ) {
+		values = {};
+	}
+
 
 	var max_item  = 0; // unlimited
 

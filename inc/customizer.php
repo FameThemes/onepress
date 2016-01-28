@@ -33,6 +33,14 @@ function onepress_customize_register( $wp_customize ) {
 	do_action( 'onepress_customize_before_register', $wp_customize );
 
 
+	$pages  =  get_pages();
+	$option_pages = array();
+	$option_pages[0] = __( 'Select page', 'onepress' );
+	foreach( $pages as $p ){
+		$option_pages[ $p->ID ] = $p->post_title;
+	}
+
+
 	/*------------------------------------------------------------------------*/
     /*  Site Identity
     /*------------------------------------------------------------------------*/
@@ -709,6 +717,7 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
+
 	$wp_customize->add_section( 'onepress_about_content' ,
 		array(
 			'priority'    => 6,
@@ -723,34 +732,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'onepress_about_boxes',
 			array(
-				'default' => json_encode(
-					array(
-						array(
-							'title' => wp_kses_post( 'Vestibulum auctor dapibus', 'onepress' ),
-							'thumb' 		=> array(
-								'url'=> get_template_directory_uri().'/assets/images/about1.jpg',
-							),
-							'content' => wp_kses_post( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
-						),
-
-						array(
-							'title' => wp_kses_post( 'Cras ornare tristique', 'onepress' ),
-							'thumb' 		=> array(
-								'url'=> get_template_directory_uri().'/assets/images/about2.jpg',
-							),
-							'content' => wp_kses_post( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
-						),
-						array(
-							'title' => wp_kses_post( 'Vivamus vestibulum nulla', 'onepress' ),
-							'thumb' 		=> array(
-								'url'=> get_template_directory_uri().'/assets/images/about3.jpg',
-							),
-							'content' => wp_kses_post( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
-						),
-
-
-					)
-				),
+				//'default' => '',
 				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 				'transport' => 'refresh', // refresh or postMessage
 			) );
@@ -770,18 +752,14 @@ function onepress_customize_register( $wp_customize ) {
 						'allow_unlimited' => false, // Maximum item can add
 
 						'fields'    => array(
-							'title' => array(
-								'title' => esc_html__('Title', 'onepress'),
-								'type'  =>'text',
+							'content_page'  => array(
+								'title' => esc_html__('Page content', 'onepress'),
+								'type'  =>'select',
+								'options' => $option_pages
 							),
-							'thumb' => array(
-								'title' => esc_html__('Thumbnail', 'onepress'),
-								'type'  =>'media',
-							),
-							'content'  => array(
-								'title' => esc_html__('Description', 'onepress'),
-								'type'  =>'textarea',
-
+							'enable_link'  => array(
+								'title' => esc_html__('Enable item link', 'onepress'),
+								'type'  =>'checkbox',
 							),
 						),
 

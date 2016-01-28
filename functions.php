@@ -37,6 +37,11 @@ function onepress_setup() {
 	 */
 	add_theme_support( 'title-tag' );
 
+	/**
+	 * Excerpt for page
+	 */
+	add_post_type_support( 'page', 'excerpt' );
+
 	/*
 	 * Enable support for Post Thumbnails on posts and pages.
 	 *

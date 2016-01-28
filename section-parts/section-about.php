@@ -19,91 +19,95 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 				if ( is_string( $boxes ) ) {
 					$boxes = json_decode( $boxes , true );
 				}
-
-				if ( empty( $boxes ) || ! is_array( $boxes ) ) {
-					$boxes = array(
-						array(
-							'title' => esc_html__( 'Vestibulum auctor dapibus', 'onepress' ),
-							'thumb' 		=> array(
-								'url'=> get_template_directory_uri().'/assets/images/about1.jpg',
-							),
-							'content' => esc_html__( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
-						),
-						array(
-							'title' => esc_html__( 'Cras ornare tristique', 'onepress' ),
-							'thumb' 		=> array(
-								'url'=> get_template_directory_uri().'/assets/images/about2.jpg',
-							),
-							'content' => esc_html__( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
-						),
-						array(
-							'title' => esc_html__( 'Vivamus vestibulum nulla', 'onepress' ),
-							'thumb' 		=> array(
-								'url'=> get_template_directory_uri().'/assets/images/about3.jpg',
-							),
-							'content' => esc_html__( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
-						),
-
-					);
-				}
-
-				$col =  3;
-				$num_col = 4;
-				$n = count( $boxes );
-				if ( $n < 4 ) {
-					switch ( $n ){
-						case 3:
-							$col =  4;
-							$num_col = 3;
-							break;
-						case 2:
-							$col = 6;
-							$num_col = 2;
-							break;
-						default:
-							$col = 12;
-							$num_col = 1;
+				$page_ids = array();
+				$boxes_settings = array();
+				if ( ! empty( $boxes ) && is_array( $boxes ) ) {
+					foreach ( $boxes as $k => $v ) {
+						if ( isset ( $v['content_page'] ) ) {
+							$v['content_page'] = absint( $v['content_page'] );
+							$page_ids[] =  $v['content_page'];
+							$boxes_settings[ $v['content_page'] ] = wp_parse_args( $v, array( 'enable_link'=> 0 ) );
+						}
 					}
 				}
-				$j = 0;
-				foreach ( $boxes as $i => $box ) {
-					$box = wp_parse_args( $box,
-						array(
-							'title' 			=> '',
-							'thumb' 		=> '',
-							'content' 		=>  '',
-						)
-					);
-					$box['thumb'] = wp_parse_args( $box['thumb'], array( 'url' => '', 'id' => '' ) );
-					$image = '';
-					if ( $box['thumb']['id'] != '' ){
-						$image =  wp_get_attachment_url( $box['thumb']['id'] );
+
+				if ( ! empty( $page_ids ) ) {
+					global $post;
+					$pages = get_posts( array(
+						'posts_per_page'   => -1,
+						'orderby'          => 'post__in',
+						'include'          => $page_ids,
+						'post_type'        => 'page',
+						'suppress_filters' => true
+					) );
+
+					$col = 3;
+					$num_col = 4;
+					$n = count($pages);
+					if ($n < 4) {
+						switch ($n) {
+							case 3:
+								$col = 4;
+								$num_col = 3;
+								break;
+							case 2:
+								$col = 6;
+								$num_col = 2;
+								break;
+							default:
+								$col = 12;
+								$num_col = 1;
+						}
 					}
-					if ( $image == '' && $box['thumb']['url'] != '' ) {
-						$image = $box['thumb']['url'];
-					}
-					$class = 'col-lg-'.$col;
-					if (  $n == 1 ) {
-						$class .= ' col-sm-12 ';
-					} else {
-						$class .= ' col-sm-6 ';
-					}
-					if ( $j >= $num_col ){
-						$j = 1;
-						$class .=' clearleft';
-					} else {
-						$j ++ ;
-					}
-					?>
-					<div class="<?php echo esc_attr( $class ); ?> wow slideInUp">
-						<?php if ( $image != '' ) { ?>
-							<div class="about-image"><img src="<?php echo esc_url( $image ); ?>" alt=""></div>
-						<?php } ?>
-						<h3><?php echo esc_html( $box['title'] ); ?></h3>
-						<p><?php echo wp_kses_post( $box['content'] ); ?></p>
-					</div>
-				<?php
-				} // end foreach
+					$j = 0;
+					foreach ($pages as $i => $post ) {
+						setup_postdata( $post );
+						$class = 'col-lg-' . $col;
+						if ($n == 1) {
+							$class .= ' col-sm-12 ';
+						} else {
+							$class .= ' col-sm-6 ';
+						}
+						if ($j >= $num_col) {
+							$j = 1;
+							$class .= ' clearleft';
+						} else {
+							$j++;
+						}
+						?>
+						<div class="<?php echo esc_attr($class); ?> wow slideInUp">
+							<?php if ( has_post_thumbnail(  ) ) { ?>
+								<div class="about-image"><?php
+									if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
+										echo '<a href="'.get_permalink( $post ).'">';
+									}
+									the_post_thumbnail( 'onepress-medium' );
+									if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
+										echo '</a>';
+									}
+									?></div>
+							<?php } ?>
+							<h3><?php
+
+								if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
+									echo '<a href="'.get_permalink( $post ).'">';
+								}
+
+								the_title();
+
+								if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
+									echo '</a>';
+								}
+
+								?></h3>
+							<p><?php the_excerpt(); ?></p>
+						</div>
+					<?php
+					} // end foreach
+
+					wp_reset_query();
+					wp_reset_postdata();
+				}// ! empty pages ids
 				?>
 			</div>
 		</div>
