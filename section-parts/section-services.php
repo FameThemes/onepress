@@ -29,7 +29,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', esc_htm
 					if ( isset ( $v['content_page'] ) ) {
 						$v['content_page'] = absint( $v['content_page'] );
 						if ( $v['content_page'] > 0 )  {
-							$page_ids[ $v['content_page'] ] =  wp_parse_args( $v, array(  'icon' => 'gg', 'enable_link' => 0 ) );
+							$page_ids[ ] =  wp_parse_args( $v, array(  'icon' => 'gg', 'enable_link' => 0 ) );
 						}
 					}
 				}
@@ -37,7 +37,8 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', esc_htm
 
 			if ( ! empty( $page_ids ) ) {
 				global $post;
-				foreach( $page_ids as $post_id => $settings ) {
+				foreach( $page_ids as $settings ) {
+					$post_id = $settings['content_page'];
 					$post = get_post ( $post_id );
 					setup_postdata( $post );
 					$settings['icon'] = trim( $settings['icon'] );

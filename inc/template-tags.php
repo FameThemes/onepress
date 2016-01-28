@@ -227,10 +227,21 @@ if ( ! function_exists( 'onepress_hero_overlay_css' ) ) {
 
 }
 
-//add_filter( 'body_class', 'opnress_body_class' );
-function opnress_body_class( $classes ){
-	$classes['no-js'] = 'no-js';
-	return $classes;
-}
 
+if ( ! function_exists( 'onepress_contact_methods' ) ) {
+	/**
+	 * Add social contact for author
+	 */
+	function onepress_contact_methods($contactmethods)
+	{
+		$contactmethods['twitter'] 		= __( 'Twitter URL', 'onperess' );
+		$contactmethods['facebook'] 	=   __( 'Facebook URL', 'onperess' );
+		$contactmethods['Youtube'] 		=   __( 'Youtube URL', 'onperess' );
+		$contactmethods['google_plus']  =  __( 'Google+ URL', 'onperess' );
+		$contactmethods['linkedin'] 	=  __( 'LinkedIn URL', 'onperess' );
+		//$contactmethods['pinterest'] 	=  __( 'Pinterest URL', 'onperess' );
+		return $contactmethods;
+	}
+	add_filter( 'user_contactmethods', 'onepress_contact_methods', 10, 1 );
+}
 

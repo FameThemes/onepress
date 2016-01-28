@@ -357,9 +357,9 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                         <# } else if ( field.type === 'select' ) { #>
 
                                             <# if ( field.multiple ) { #>
-                                                <select multiple="multiple" data-repeat-name="_items[__i__][{{ field.id }}][]">
+                                                <select class="select-multiple" multiple="multiple" data-repeat-name="_items[__i__][{{ field.id }}][]">
                                             <# } else  { #>
-                                                <select data-repeat-name="_items[__i__][{{ field.id }}]">
+                                                <select data-live-id="{{ field.id }}"  class="select-one" data-repeat-name="_items[__i__][{{ field.id }}]">
                                             <# } #>
 
                                                 <# for ( k in field.options ) { #>

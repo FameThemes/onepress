@@ -40,6 +40,16 @@ function onepress_customize_register( $wp_customize ) {
 		$option_pages[ $p->ID ] = $p->post_title;
 	}
 
+	$users = get_users( array(
+		'orderby'      => 'display_name',
+		'order'        => 'ASC',
+		'number'       => '',
+	) );
+
+	$option_users[0] = __( 'Select member', 'onepress' );
+	foreach( $users as $user ){
+		$option_users[ $user->ID ] = $user->display_name;
+	}
 
 	/*------------------------------------------------------------------------*/
     /*  Site Identity
@@ -746,7 +756,7 @@ function onepress_customize_register( $wp_customize ) {
 						'label' 		=> esc_html__('Content boxes', 'onepress'),
 						'description'   => '',
 						'section'       => 'onepress_about_content',
-						'live_title_id' => 'title', // apply for unput text and textarea only
+						'live_title_id' => 'content_page', // apply for unput text and textarea only
 						'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 						'max_item'      => 3, // Maximum item can add
 						//'allow_unlimited' => false, // Maximum item can add
@@ -879,7 +889,7 @@ function onepress_customize_register( $wp_customize ) {
 					'label'     	=> esc_html__('Service content', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_service_content',
-					'live_title_id' => 'title', // apply for unput text and textarea only
+					'live_title_id' => 'content_page', // apply for unput text and textarea only
 					'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
 
@@ -1169,64 +1179,10 @@ function onepress_customize_register( $wp_customize ) {
 		)
 	);
 
-		// Order & Stlying
+		// Team member settings
 		$wp_customize->add_setting(
 			'onepress_team_members',
 			array(
-				'default' => json_encode(
-					array(
-						array(
-							'name' 			=> esc_html__( 'Alexander Rios', 'onepress' ),
-							'position' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/team1.jpg',
-								'id' => ''
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-						array(
-							'name' 			=> esc_html__( 'Victoria Stephens', 'onepress' ),
-							'position' 		=> esc_html__( 'Founder & CTO', 'onepress' ),
-							'image' 		=> array(
-								'url'=>get_template_directory_uri() . '/assets/images/team2.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-						array(
-							'name' 			=> esc_html__( 'Harry Allen', 'onepress' ),
-							'position' 		=> esc_html__( 'Director Of Production', 'onepress' ),
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/team3.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-						array(
-							'name' 			=> esc_html__( 'Thomas Wade', 'onepress' ),
-							'position' 		=> esc_html__( 'Senior Developer', 'onepress' ),
-							'image' 		=> array(
-								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-
-					)
-				),
 				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 				'transport' => 'refresh', // refresh or postMessage
 			) );
@@ -1240,50 +1196,16 @@ function onepress_customize_register( $wp_customize ) {
 					'label'     => esc_html__('Team members', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_team_content',
-					'live_title_id' => 'name', // apply for unput text and textarea only
+					'live_title_id' => 'user_id', // apply for unput text and textarea only
 					'title_format'  => esc_html__( '[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
 
 					'fields'    => array(
-						'name' => array(
-							'title' => esc_html__('Name', 'onepress'),
-							'type'  =>'text',
+						'user_id' => array(
+							'title' => esc_html__('User', 'onepress'),
+							'type'  =>'select',
 							'desc'  => '',
-							'default'  => esc_html__('Member name', 'onepress'),
-						),
-						'position' => array(
-							'title' => esc_html__('Position', 'onepress'),
-							'type'  =>'text',
-							'default'  => esc_html__('Member Position', 'onepress'),
-						),
-						'image' => array(
-							'title' => esc_html__('Avatar', 'onepress'),
-							'type'  =>'media',
-							'default' => array(
-								'url' => get_template_directory_uri().'/assets/images/user_avatar.jpg',
-								'id' => ''
-							)
-						),
-						'facebook' => array(
-							'title' => esc_html__('Facebook', 'onepress'),
-							'type'  =>'text',
-							'default'  => '',
-						),
-						'twitter' => array(
-							'title' => esc_html__('Twitter', 'onepress'),
-							'type'  =>'text',
-						),
-						'google_plus' => array(
-							'title' => esc_html__('Google+', 'onepress'),
-							'type'  =>'text',
-						),
-						'youtube' => array(
-							'title' => esc_html__('Youtube', 'onepress'),
-							'type'  =>'text',
-						),
-						'linkedin' => array(
-							'title' => esc_html__('LinkedIn', 'onepress'),
-							'type'  =>'text',
+							'options' =>  $option_users
 						),
 					),
 

@@ -137,31 +137,42 @@ var RepeatableCustomize = function (  control  ){
 
 			return false;
 		} );
-		//console.log(  control.params.title_format );
-		//console.log( control.params.live_title_id );
 
 		if ( control.params.live_title_id ) {
 
 			//console.log( $( "[data-live-id='"+ control.params.live_title_id+"']").eq(0).val() );
 			if ( control.params.live_title_id && $( "[data-live-id='"+ control.params.live_title_id+"']", $context ).length > 0 ) {
-				var v = $("[data-live-id='" + control.params.live_title_id + "']", $context).eq(0).val();
-				if (v == '') {
+				var v;
+				//console.log( $("[data-live-id='" + control.params.live_title_id + "']", $context).prop("tagName") );
+				if (  $("[data-live-id='" + control.params.live_title_id + "']", $context).is( '.select-one' )  ){
+					v = $("[data-live-id='" + control.params.live_title_id + "']", $context ).find('option:selected').eq(0).text();
+				} else {
+					 v = $("[data-live-id='" + control.params.live_title_id + "']", $context).eq(0).val();
+				}
+
+				if ( v == '' ) {
 					v = 'Item';
 				}
 
 				if (typeof control.params.title_format !== "undefined" && control.params.title_format !== '') {
 					v = control.params.title_format.replace('[live_title]', v);
 				}
-
-				$('.widget-title .live-title', $context).text(v);
+				$('.widget-title .live-title', $context).text( v );
 
 				$context.on('keyup change', "[data-live-id='" + control.params.live_title_id + "']", function () {
-					var v = $(this).val();
+					var v;
+
+					if ( $(this).is( '.select-one' )  ){
+						v = $(this).find('option:selected').eq( 0 ).text();
+					} else {
+						v = $(this).val();
+					}
+
 					if (v == '') {
 						v = '[Untitled]';
 					}
 
-					if (typeof control.params.title_format !== "undefined" && control.params.title_format !== '') {
+					if ( typeof control.params.title_format !== "undefined" && control.params.title_format !== '' ) {
 						v = control.params.title_format.replace('[live_title]', v);
 					}
 

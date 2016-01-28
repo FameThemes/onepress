@@ -25,7 +25,7 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 						if ( isset ( $v['content_page'] ) ) {
 							$v['content_page'] = absint( $v['content_page'] );
 							if ( $v['content_page'] > 0 )  {
-								$page_ids[ $v['content_page'] ] =  wp_parse_args( $v, array( 'enable_link'=> 0, 'hide_title' => 0 ) );
+								$page_ids[ ] =  wp_parse_args( $v, array( 'enable_link'=> 0, 'hide_title' => 0 ) );
 							}
 						}
 					}
@@ -52,6 +52,7 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 					}
 					$j = 0;
 					foreach ( $page_ids as  $post_id => $settings ) {
+						$post_id = $settings['content_page'];
 						$post = get_post( $post_id );
 						setup_postdata( $post );
 						$class = 'col-lg-' . $col;
