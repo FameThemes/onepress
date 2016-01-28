@@ -16,29 +16,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', esc_htm
 		<div class="row">
 			<?php
 
-			$services = get_theme_mod( 'onepress_services', array(
-				array(
-					'title' => esc_html__( 'Service Title #1', 'onepress' ),
-					'icon'  => 'fa-wikipedia-w',
-					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-				),
-				array(
-					'title' => esc_html__( 'Service Title #2', 'onepress' ),
-					'icon'  => 'fa-gg',
-					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-				),
-				array(
-					'title' => esc_html__( 'Service Title #3', 'onepress' ),
-					'icon'  => 'fa-balance-scale',
-					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-				),
-				array(
-					'title' => esc_html__( 'Service Title #4', 'onepress' ),
-					'icon'  => 'fa-object-group',
-					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-				),
-
-			) );
+			$services = get_theme_mod( 'onepress_services' );
 
 			if ( is_string( $services ) ) {
 				$services = json_decode( $services, true );

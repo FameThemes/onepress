@@ -748,14 +748,19 @@ function onepress_customize_register( $wp_customize ) {
 						'section'       => 'onepress_about_content',
 						'live_title_id' => 'title', // apply for unput text and textarea only
 						'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
-						'max_item'      => 6, // Maximum item can add
-						'allow_unlimited' => false, // Maximum item can add
+						'max_item'      => 3, // Maximum item can add
+						//'allow_unlimited' => false, // Maximum item can add
+
 
 						'fields'    => array(
 							'content_page'  => array(
 								'title' => esc_html__('Page content', 'onepress'),
 								'type'  =>'select',
 								'options' => $option_pages
+							),
+							'hide_title'  => array(
+								'title' => esc_html__('Hide item title', 'onepress'),
+								'type'  =>'checkbox',
 							),
 							'enable_link'  => array(
 								'title' => esc_html__('Enable item link', 'onepress'),
@@ -862,31 +867,6 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'onepress_services',
 			array(
-				'default' => json_encode(
-					array(
-						array(
-							'title' => esc_html__( 'Service Title #1', 'onepress' ),
-							'icon'  => 'fa-wikipedia-w',
-							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-						),
-						array(
-							'title' => esc_html__( 'Service Title #2', 'onepress' ),
-							'icon'  => 'fa-gg',
-							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-						),
-						array(
-							'title' => esc_html__( 'Service Title #3', 'onepress' ),
-							'icon'  => 'fa-balance-scale',
-							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-						),
-						array(
-							'title' => esc_html__( 'Service Title #4', 'onepress' ),
-							'icon'  => 'fa-wikipedia-w',
-							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-						),
-
-					)
-				),
 				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 				'transport' => 'refresh', // refresh or postMessage
 			) );
@@ -905,23 +885,16 @@ function onepress_customize_register( $wp_customize ) {
 					'max_item'      => 4, // Maximum item can add
 
 					'fields'    => array(
-						'title' => array(
-							'title' => esc_html__('Title', 'onepress'),
-							'type'  =>'text',
-							'desc'  => '',
-							'default' => esc_html__( 'Your service title', 'onepress' ),
-						),
 						'icon' => array(
-							'title' => esc_html__('Icon', 'onepress'),
+							'title' => esc_html__('Custom icon', 'onepress'),
 							'type'  =>'text',
 							'desc'  => sprintf( wp_kses_post('Paste your <a target="_blank" href="%1$s">Font Awesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
 							'default' => esc_html__( 'gg', 'onepress' ),
 						),
-						'content'  => array(
-							'title' => esc_html__('Description', 'onepress'),
-							'desc'  => esc_html__('Something about this service', 'onepress'),
-							'type'  =>'textarea',
-							'default' => esc_html__( 'Your service description here', 'onepress' ),
+						'contentPage'  => array(
+							'title' => esc_html__('Page content', 'onepress'),
+							'type'  =>'select',
+							'options' => $option_pages
 						),
 					),
 

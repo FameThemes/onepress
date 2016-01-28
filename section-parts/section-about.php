@@ -25,25 +25,18 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 					foreach ( $boxes as $k => $v ) {
 						if ( isset ( $v['content_page'] ) ) {
 							$v['content_page'] = absint( $v['content_page'] );
-							$page_ids[] =  $v['content_page'];
-							$boxes_settings[ $v['content_page'] ] = wp_parse_args( $v, array( 'enable_link'=> 0 ) );
+							if ( $v['content_page'] > 0 )  {
+								$page_ids[] =  $v['content_page'];
+								$boxes_settings[ $v['content_page'] ] = wp_parse_args( $v, array( 'enable_link'=> 0, 'hide_title' => 0 ) );
+							}
 						}
 					}
 				}
 
 				if ( ! empty( $page_ids ) ) {
-					global $post;
-					$pages = get_posts( array(
-						'posts_per_page'   => -1,
-						'orderby'          => 'post__in',
-						'include'          => $page_ids,
-						'post_type'        => 'page',
-						'suppress_filters' => true
-					) );
-
 					$col = 3;
 					$num_col = 4;
-					$n = count($pages);
+					$n = count( $page_ids );
 					if ($n < 4) {
 						switch ($n) {
 							case 3:
@@ -60,7 +53,8 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 						}
 					}
 					$j = 0;
-					foreach ($pages as $i => $post ) {
+					foreach ( $page_ids as  $post_id ) {
+						$post = get_post( $post_id );
 						setup_postdata( $post );
 						$class = 'col-lg-' . $col;
 						if ($n == 1) {
@@ -75,7 +69,7 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 							$j++;
 						}
 						?>
-						<div class="<?php echo esc_attr($class); ?> wow slideInUp">
+						<div class="<?php echo esc_attr( $class ); ?> wow slideInUp">
 							<?php if ( has_post_thumbnail(  ) ) { ?>
 								<div class="about-image"><?php
 									if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
@@ -87,6 +81,7 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 									}
 									?></div>
 							<?php } ?>
+							<?php if( ! $boxes_settings[ $post->ID ]['hide_title'] ) { ?>
 							<h3><?php
 
 								if ( $boxes_settings[ $post->ID ]['enable_link'] ) {
@@ -100,7 +95,8 @@ $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__(
 								}
 
 								?></h3>
-							<p><?php the_excerpt(); ?></p>
+							<?php } ?>
+							<?php the_excerpt(); ?>
 						</div>
 					<?php
 					} // end foreach
