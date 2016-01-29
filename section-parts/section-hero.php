@@ -5,7 +5,6 @@ $onepress_hero_fullscreen = get_theme_mod( 'onepress_hero_fullscreen' );
 $onepress_hero_pdtop      = get_theme_mod( 'onepress_hero_pdtop', '10' );
 $onepress_hero_pdbotom    = get_theme_mod( 'onepress_hero_pdbotom', '10' );
 
-
 $onepress_hcl1_enable     = get_theme_mod( 'onepress_hcl1_enable', 1 );
 $onepress_hcl1_largetext  = get_theme_mod( 'onepress_hcl1_largetext', wp_kses_post('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress' ));
 $onepress_hcl1_smalltext  = get_theme_mod( 'onepress_hcl1_smalltext', wp_kses_post('Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.', 'onepress') );
@@ -18,7 +17,6 @@ $hero_content_style = '';
 if ( $onepress_hero_fullscreen != '1' ) {
 	$hero_content_style = ' style="padding-top: '. $onepress_hero_pdtop .'%; padding-bottom: '. $onepress_hero_pdbotom .'%;"';
 }
-
 
 $_images = get_theme_mod('onepress_hero_images');
 if (is_string($_images)) {
@@ -44,7 +42,7 @@ if (empty($_images) || !is_array($_images)) {
 
 $images = array();
 
-foreach ($_images as $m) {
+foreach ( $_images as $m ) {
 	$m = wp_parse_args($m, array('image' => ''));
 	$_u = onepress_get_media_url($m['image']);
 	if ($_u) {

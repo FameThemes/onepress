@@ -1009,39 +1009,6 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'onepress_counter_boxes',
 		array(
-			'default' => json_encode(
-				array(
-
-					array(
-						'title' => esc_html__( 'Counter Title', 'onepress' ),
-						'number'  => '268',
-						'unit_before' => '',
-						'unit_after' => ''
-					),
-
-					array(
-						'title' => esc_html__( 'Counter Title', 'onepress' ),
-						'number'  => '2569',
-						'unit_before' => '',
-						'unit_after' => 'k'
-					),
-
-					array(
-						'title' => esc_html__( 'Counter Title', 'onepress' ),
-						'number'  => '984',
-						'unit_before' => '',
-						'unit_after' => ''
-					),
-
-					array(
-						'title' => esc_html__( 'Counter Title', 'onepress' ),
-						'number'  => '5683',
-						'unit_before' => '',
-						'unit_after' => '',
-					),
-
-				)
-			),
 			'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 			'transport' => 'refresh', // refresh or postMessage
 		) );
@@ -1490,9 +1457,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_text',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => wp_kses_post('<h4>Donec nec justo eget felis.</h4>
-<p>Dorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>
-<p>Consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
@@ -1518,7 +1483,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_address_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => esc_html__('Pulvinar scelerisque', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_address_title',
@@ -1533,7 +1498,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_address',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => wp_kses_post('1 Infinite Loop <br> Cupertino <br> CA 95014 <br> United States', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_address',
@@ -1548,7 +1513,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_phone',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => esc_html__('1.123.456.789', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_phone',
@@ -1563,7 +1528,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_email',
 			array(
 				'sanitize_callback' => 'sanitize_email',
-				'default'           => wp_kses_post('contact@company.com', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_email',
@@ -1578,7 +1543,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_fax',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => wp_kses_post('Fax: (123) 123-4567', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_fax',
