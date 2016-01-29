@@ -763,7 +763,7 @@ function onepress_customize_register( $wp_customize ) {
 
 						'fields'    => array(
 							'content_page'  => array(
-								'title' => esc_html__('Page content', 'onepress'),
+								'title' => esc_html__('Select a page', 'onepress'),
 								'type'  =>'select',
 								'options' => $option_pages
 							),
@@ -772,7 +772,7 @@ function onepress_customize_register( $wp_customize ) {
 								'type'  =>'checkbox',
 							),
 							'enable_link'  => array(
-								'title' => esc_html__('Enable item link', 'onepress'),
+								'title' => esc_html__('Link to single page', 'onepress'),
 								'type'  =>'checkbox',
 							),
 						),
@@ -901,12 +901,12 @@ function onepress_customize_register( $wp_customize ) {
 							'default' => esc_html__( 'gg', 'onepress' ),
 						),
 						'content_page'  => array(
-							'title' => esc_html__('Page content', 'onepress'),
+							'title' => esc_html__('Select a page', 'onepress'),
 							'type'  =>'select',
 							'options' => $option_pages
 						),
 						'enable_link'  => array(
-							'title' => esc_html__('Enable item link', 'onepress'),
+							'title' => esc_html__('Link to single page', 'onepress'),
 							'type'  =>'checkbox',
 						),
 					),

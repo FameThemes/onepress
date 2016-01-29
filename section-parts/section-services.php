@@ -32,7 +32,7 @@ if ( ! empty( $page_ids ) ) {
                             <div class="col-sm-6 wow slideInUp">
                                 <div class="service-item ">
                                     <?php
-                                    if ( $settings['enable_link'] ) {
+                                    if ( ! empty( $settings['enable_link'] ) ) {
                                         ?>
                                         <a class="service-link" href="<?php the_permalink(); ?>"><span class="screen-reader-text"><?php the_title(); ?></span></a>
                                         <?php
