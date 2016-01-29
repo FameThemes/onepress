@@ -33,6 +33,24 @@ function onepress_customize_register( $wp_customize ) {
 	do_action( 'onepress_customize_before_register', $wp_customize );
 
 
+	$pages  =  get_pages();
+	$option_pages = array();
+	$option_pages[0] = __( 'Select page', 'onepress' );
+	foreach( $pages as $p ){
+		$option_pages[ $p->ID ] = $p->post_title;
+	}
+
+	$users = get_users( array(
+		'orderby'      => 'display_name',
+		'order'        => 'ASC',
+		'number'       => '',
+	) );
+
+	$option_users[0] = __( 'Select member', 'onepress' );
+	foreach( $users as $user ){
+		$option_users[ $user->ID ] = $user->display_name;
+	}
+
 	/*------------------------------------------------------------------------*/
     /*  Site Identity
     /*------------------------------------------------------------------------*/
@@ -54,7 +72,7 @@ function onepress_customize_register( $wp_customize ) {
     	$wp_customize->add_setting( 'onepress_site_image_logo',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_file_url',
-				'default'           => get_template_directory_uri() . '/assets/images/logo.png'
+				'default'           => ''
 			)
 		);
     	$wp_customize->add_control( new WP_Customize_Image_Control(
@@ -709,6 +727,7 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
+
 	$wp_customize->add_section( 'onepress_about_content' ,
 		array(
 			'priority'    => 6,
@@ -723,34 +742,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'onepress_about_boxes',
 			array(
-				'default' => json_encode(
-					array(
-						array(
-							'title' => wp_kses_post( 'Vestibulum auctor dapibus', 'onepress' ),
-							'thumb' 		=> array(
-								'url'=> get_template_directory_uri().'/assets/images/about1.jpg',
-							),
-							'content' => wp_kses_post( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
-						),
-
-						array(
-							'title' => wp_kses_post( 'Cras ornare tristique', 'onepress' ),
-							'thumb' 		=> array(
-								'url'=> get_template_directory_uri().'/assets/images/about2.jpg',
-							),
-							'content' => wp_kses_post( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
-						),
-						array(
-							'title' => wp_kses_post( 'Vivamus vestibulum nulla', 'onepress' ),
-							'thumb' 		=> array(
-								'url'=> get_template_directory_uri().'/assets/images/about3.jpg',
-							),
-							'content' => wp_kses_post( 'Nullam ut tempor eros. Donec faucibus, velit et imperdiet aliquam, lacus velit luctus urna, vitae porttitor orci libero id felis.', 'onepress' ),
-						),
-
-
-					)
-				),
+				//'default' => '',
 				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 				'transport' => 'refresh', // refresh or postMessage
 			) );
@@ -764,24 +756,24 @@ function onepress_customize_register( $wp_customize ) {
 						'label' 		=> esc_html__('Content boxes', 'onepress'),
 						'description'   => '',
 						'section'       => 'onepress_about_content',
-						'live_title_id' => 'title', // apply for unput text and textarea only
+						'live_title_id' => 'content_page', // apply for unput text and textarea only
 						'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 						'max_item'      => 3, // Maximum item can add
-						'allow_unlimited' => false, // Maximum item can add
+						//'allow_unlimited' => false, // Maximum item can add
 
 						'fields'    => array(
-							'title' => array(
-								'title' => esc_html__('Title', 'onepress'),
-								'type'  =>'text',
+							'content_page'  => array(
+								'title' => esc_html__('Select a page', 'onepress'),
+								'type'  =>'select',
+								'options' => $option_pages
 							),
-							'thumb' => array(
-								'title' => esc_html__('Thumbnail', 'onepress'),
-								'type'  =>'media',
+							'hide_title'  => array(
+								'title' => esc_html__('Hide item title', 'onepress'),
+								'type'  =>'checkbox',
 							),
-							'content'  => array(
-								'title' => esc_html__('Description', 'onepress'),
-								'type'  =>'textarea',
-
+							'enable_link'  => array(
+								'title' => esc_html__('Link to single page', 'onepress'),
+								'type'  =>'checkbox',
 							),
 						),
 
@@ -884,31 +876,6 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'onepress_services',
 			array(
-				'default' => json_encode(
-					array(
-						array(
-							'title' => esc_html__( 'Service Title #1', 'onepress' ),
-							'icon'  => 'fa-wikipedia-w',
-							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-						),
-						array(
-							'title' => esc_html__( 'Service Title #2', 'onepress' ),
-							'icon'  => 'fa-gg',
-							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-						),
-						array(
-							'title' => esc_html__( 'Service Title #3', 'onepress' ),
-							'icon'  => 'fa-balance-scale',
-							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-						),
-						array(
-							'title' => esc_html__( 'Service Title #4', 'onepress' ),
-							'icon'  => 'fa-wikipedia-w',
-							'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-						),
-
-					)
-				),
 				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 				'transport' => 'refresh', // refresh or postMessage
 			) );
@@ -922,28 +889,25 @@ function onepress_customize_register( $wp_customize ) {
 					'label'     	=> esc_html__('Service content', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_service_content',
-					'live_title_id' => 'title', // apply for unput text and textarea only
+					'live_title_id' => 'content_page', // apply for unput text and textarea only
 					'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
 
 					'fields'    => array(
-						'title' => array(
-							'title' => esc_html__('Title', 'onepress'),
-							'type'  =>'text',
-							'desc'  => '',
-							'default' => esc_html__( 'Your service title', 'onepress' ),
-						),
 						'icon' => array(
-							'title' => esc_html__('Icon', 'onepress'),
+							'title' => esc_html__('Custom icon', 'onepress'),
 							'type'  =>'text',
 							'desc'  => sprintf( wp_kses_post('Paste your <a target="_blank" href="%1$s">Font Awesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
 							'default' => esc_html__( 'gg', 'onepress' ),
 						),
-						'content'  => array(
-							'title' => esc_html__('Description', 'onepress'),
-							'desc'  => esc_html__('Something about this service', 'onepress'),
-							'type'  =>'textarea',
-							'default' => esc_html__( 'Your service description here', 'onepress' ),
+						'content_page'  => array(
+							'title' => esc_html__('Select a page', 'onepress'),
+							'type'  =>'select',
+							'options' => $option_pages
+						),
+						'enable_link'  => array(
+							'title' => esc_html__('Link to single page', 'onepress'),
+							'type'  =>'checkbox',
 						),
 					),
 
@@ -1045,39 +1009,6 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'onepress_counter_boxes',
 		array(
-			'default' => json_encode(
-				array(
-
-					array(
-						'title' => esc_html__( 'Counter Title', 'onepress' ),
-						'number'  => '268',
-						'unit_before' => '',
-						'unit_after' => ''
-					),
-
-					array(
-						'title' => esc_html__( 'Counter Title', 'onepress' ),
-						'number'  => '2569',
-						'unit_before' => '',
-						'unit_after' => 'k'
-					),
-
-					array(
-						'title' => esc_html__( 'Counter Title', 'onepress' ),
-						'number'  => '984',
-						'unit_before' => '',
-						'unit_after' => ''
-					),
-
-					array(
-						'title' => esc_html__( 'Counter Title', 'onepress' ),
-						'number'  => '5683',
-						'unit_before' => '',
-						'unit_after' => '',
-					),
-
-				)
-			),
 			'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 			'transport' => 'refresh', // refresh or postMessage
 		) );
@@ -1215,64 +1146,10 @@ function onepress_customize_register( $wp_customize ) {
 		)
 	);
 
-		// Order & Stlying
+		// Team member settings
 		$wp_customize->add_setting(
 			'onepress_team_members',
 			array(
-				'default' => json_encode(
-					array(
-						array(
-							'name' 			=> esc_html__( 'Alexander Rios', 'onepress' ),
-							'position' 		=> esc_html__( 'Founder & CEO', 'onepress' ),
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/team1.jpg',
-								'id' => ''
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-						array(
-							'name' 			=> esc_html__( 'Victoria Stephens', 'onepress' ),
-							'position' 		=> esc_html__( 'Founder & CTO', 'onepress' ),
-							'image' 		=> array(
-								'url'=>get_template_directory_uri() . '/assets/images/team2.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-						array(
-							'name' 			=> esc_html__( 'Harry Allen', 'onepress' ),
-							'position' 		=> esc_html__( 'Director Of Production', 'onepress' ),
-							'image' 		=> array(
-								'url' => get_template_directory_uri() . '/assets/images/team3.jpg'
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-						array(
-							'name' 			=> esc_html__( 'Thomas Wade', 'onepress' ),
-							'position' 		=> esc_html__( 'Senior Developer', 'onepress' ),
-							'image' 		=> array(
-								'url' =>  get_template_directory_uri() . '/assets/images/team4.jpg',
-							),
-							'facebook' 		=> '#',
-							'twitter' 		=> '#',
-							'google_plus' 	=> '#',
-							'youtube' 		=> '#',
-							'linkedin' 		=> '#',
-						),
-
-					)
-				),
 				'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 				'transport' => 'refresh', // refresh or postMessage
 			) );
@@ -1286,50 +1163,16 @@ function onepress_customize_register( $wp_customize ) {
 					'label'     => esc_html__('Team members', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_team_content',
-					'live_title_id' => 'name', // apply for unput text and textarea only
+					'live_title_id' => 'user_id', // apply for unput text and textarea only
 					'title_format'  => esc_html__( '[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
 
 					'fields'    => array(
-						'name' => array(
-							'title' => esc_html__('Name', 'onepress'),
-							'type'  =>'text',
+						'user_id' => array(
+							'title' => esc_html__('User', 'onepress'),
+							'type'  =>'select',
 							'desc'  => '',
-							'default'  => esc_html__('Member name', 'onepress'),
-						),
-						'position' => array(
-							'title' => esc_html__('Position', 'onepress'),
-							'type'  =>'text',
-							'default'  => esc_html__('Member Position', 'onepress'),
-						),
-						'image' => array(
-							'title' => esc_html__('Avatar', 'onepress'),
-							'type'  =>'media',
-							'default' => array(
-								'url' => get_template_directory_uri().'/assets/images/user_avatar.jpg',
-								'id' => ''
-							)
-						),
-						'facebook' => array(
-							'title' => esc_html__('Facebook', 'onepress'),
-							'type'  =>'text',
-							'default'  => '',
-						),
-						'twitter' => array(
-							'title' => esc_html__('Twitter', 'onepress'),
-							'type'  =>'text',
-						),
-						'google_plus' => array(
-							'title' => esc_html__('Google+', 'onepress'),
-							'type'  =>'text',
-						),
-						'youtube' => array(
-							'title' => esc_html__('Youtube', 'onepress'),
-							'type'  =>'text',
-						),
-						'linkedin' => array(
-							'title' => esc_html__('LinkedIn', 'onepress'),
-							'type'  =>'text',
+							'options' =>  $option_users
 						),
 					),
 
@@ -1614,9 +1457,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_text',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => wp_kses_post('<h4>Donec nec justo eget felis.</h4>
-<p>Dorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>
-<p>Consectetur adipiscing elit. Suspendisse pulvinar scelerisque dictum. Donec iaculis, diam sit amet suscipit feugiat, diam magna volutpat augue.</p>', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
@@ -1642,7 +1483,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_address_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => esc_html__('Pulvinar scelerisque', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_address_title',
@@ -1657,7 +1498,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_address',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => wp_kses_post('1 Infinite Loop <br> Cupertino <br> CA 95014 <br> United States', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_address',
@@ -1672,7 +1513,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_phone',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => esc_html__('1.123.456.789', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_phone',
@@ -1687,7 +1528,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_email',
 			array(
 				'sanitize_callback' => 'sanitize_email',
-				'default'           => wp_kses_post('contact@company.com', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_email',
@@ -1702,7 +1543,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_setting( 'onepress_contact_fax',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
-				'default'           => wp_kses_post('Fax: (123) 123-4567', 'onepress'),
+				'default'           => '',
 			)
 		);
 		$wp_customize->add_control( 'onepress_contact_fax',

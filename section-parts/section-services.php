@@ -3,79 +3,68 @@ $onepress_service_id       = get_theme_mod( 'onepress_service_id', esc_html__('s
 $onepress_service_disable  = get_theme_mod( 'onepress_service_disable' ) == 1 ? true : false;
 $onepress_service_title    = get_theme_mod( 'onepress_service_title', esc_html__('Our Services', 'onepress' ));
 $onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', esc_html__('Section subtitle', 'onepress' ));
-?>
+// Get data
+$page_ids =  onepress_get_section_services_data();
+if ( ! empty( $page_ids ) ) {
+    ?>
+    <?php if (!$onepress_service_disable) : ?>
+        <section id="<?php if ($onepress_service_id != '') echo $onepress_service_id; ?>" <?php do_action('onepress_section_atts', 'services'); ?>
+                 class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>">
+            <?php do_action('onepress_section_before_inner', 'services'); ?>
+            <div class="container">
+                <div class="section-title-area">
+                    <?php if ($onepress_service_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_service_subtitle) . '</h5>'; ?>
+                    <?php if ($onepress_service_title != '') echo '<h2 class="section-title">' . esc_html($onepress_service_title) . '</h2>'; ?>
+                </div>
+                <div class="row">
+                    <?php
+                    if ( ! empty( $page_ids ) ) {
+                        global $post;
+                        foreach ($page_ids as $settings) {
+                            $post_id = $settings['content_page'];
+                            $post = get_post($post_id);
+                            setup_postdata($post);
+                            $settings['icon'] = trim($settings['icon']);
+                            if ($settings['icon'] != '' && strpos($settings['icon'], 'fa-') !== 0) {
+                                $settings['icon'] = 'fa-' . $settings['icon'];
+                            }
+                            ?>
+                            <div class="col-sm-6 wow slideInUp">
+                                <div class="service-item ">
+                                    <?php
+                                    if ( ! empty( $settings['enable_link'] ) ) {
+                                        ?>
+                                        <a class="service-link" href="<?php the_permalink(); ?>"><span class="screen-reader-text"><?php the_title(); ?></span></a>
+                                        <?php
+                                    }
+                                    ?>
+                                    <?php if ( has_post_thumbnail() ) { ?>
+                                        <div class="service-thumbnail ">
+                                            <?php
+                                            the_post_thumbnail('onepress-medium');
+                                            ?>
+                                        </div>
+                                    <?php } ?>
+                                    <?php if ( $settings['icon'] != '' ) { ?>
+                                        <div class="service-image">
+                                            <i class="fa <?php echo esc_attr($settings['icon']); ?> fa-5x"></i>
+                                        </div>
+                                    <?php } ?>
+                                    <div class="service-content">
+                                        <h4 class="service-title"><?php the_title(); ?></h4>
+                                        <?php the_excerpt(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                        wp_reset_postdata();
+                    }
 
-<?php if ( ! $onepress_service_disable  ) : ?>
-<section id="<?php if ( $onepress_service_id != '' ) echo $onepress_service_id; ?>" <?php do_action( 'onpress_section_atts', 'services' ); ?> class="<?php echo esc_attr( apply_filters( 'onpress_section_class', 'section-services section-padding section-meta onepage-section', 'services' ) ); ?>">
-	<?php do_action( 'onepress_section_before_inner', 'services' ); ?>
-	<div class="container">
-		<div class="section-title-area">
-			<?php if ( $onepress_service_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_service_subtitle ) . '</h5>'; ?>
-			<?php if ( $onepress_service_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_service_title ) . '</h2>'; ?>
-		</div>
-		<div class="row">
-			<?php
-
-			$services = get_theme_mod( 'onepress_services', array(
-				array(
-					'title' => esc_html__( 'Service Title #1', 'onepress' ),
-					'icon'  => 'fa-wikipedia-w',
-					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-				),
-				array(
-					'title' => esc_html__( 'Service Title #2', 'onepress' ),
-					'icon'  => 'fa-gg',
-					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-				),
-				array(
-					'title' => esc_html__( 'Service Title #3', 'onepress' ),
-					'icon'  => 'fa-balance-scale',
-					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-				),
-				array(
-					'title' => esc_html__( 'Service Title #4', 'onepress' ),
-					'icon'  => 'fa-object-group',
-					'content' => esc_html__( 'Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies.', 'onepress' )
-				),
-
-			) );
-
-			if ( is_string( $services ) ) {
-				$services = json_decode( $services, true );
-			}
-
-			if ( is_array( $services ) ) {
-				foreach( $services as $service ) {
-					$service = wp_parse_args( $service, array(
-						'title' 	=> '',
-						'icon'  	=> '',
-						'content' 	=> ''
-					) );
-
-					$service['icon'] = trim( $service['icon'] );
-					if ( strpos($service['icon'], 'fa-') !== 0 ) {
-						$service['icon'] = 'fa-'.$service['icon'];
-					}
-
-					?>
-					<div class="col-sm-6">
-						<div class="service-item wow slideInUp">
-							<div class="service-image">
-								<i class="fa <?php echo esc_attr( $service['icon'] ); ?> fa-5x"></i>
-							</div>
-							<div class="service-content">
-								<h4 class="service-title"><?php echo esc_html( $service['title'] ); ?></h4>
-								<p><?php echo wp_kses_post( $service['content'] ); ?></p>
-							</div>
-						</div>
-					</div>
-				<?php
-				}
-			}
-
-			?>
-		</div>
-	</div>
-	<?php do_action( 'onepress_section_after_inner', 'services' ); ?>
-</section>
-<?php endif; ?>
+                    ?>
+                </div>
+            </div>
+            <?php do_action('onepress_section_after_inner', 'services'); ?>
+        </section>
+    <?php endif;
+}

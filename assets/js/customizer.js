@@ -9,7 +9,13 @@ var RepeatableCustomize = function (  control  ){
 	var container =  control.container;
 	var default_data =  control.params.fields;
 	 //console.log( control.params.value );
-	 var values = JSON.parse( control.params.value ) ;
+	var values;
+	try {
+		 values = JSON.parse( control.params.value ) ;
+	}catch ( e ) {
+		values = {};
+	}
+
 
 	var max_item  = 0; // unlimited
 
@@ -20,8 +26,6 @@ var RepeatableCustomize = function (  control  ){
 		container.addClass( 'no-changeable' );
 	}
 
-
-
 	that.getData = function ( ){
 		var f = $( '.form-data', container );
 		var data =  $( 'input, textarea, select', f ).serialize();
@@ -30,10 +34,8 @@ var RepeatableCustomize = function (  control  ){
 	};
 
 	that.rename = function(){
-
 		$( '.list-repeatable li', container ).each( function( index ) {
 			var li =  $( this );
-
 			$( 'input, textarea, select', li ).each( function(){
 				var input = $( this );
 				var name = input.attr( 'data-repeat-name' ) || undefined;
@@ -45,9 +47,6 @@ var RepeatableCustomize = function (  control  ){
 
 		} );
 	};
-
-	//----------------------------
-
 
 	var frame = wp.media({
 		title: wp.media.view.l10n.addMedia,
@@ -64,15 +63,10 @@ var RepeatableCustomize = function (  control  ){
 
 	that.media_current = {};
 	that.media_btn = {};
-
-
-
 	frame.on( 'select', function () {
 		// Grab our attachment selection and construct a JSON representation of the model.
 		var media_attachment = frame.state().get('selection').first().toJSON();
-
 		$( '.image_id', that.media_current  ).val( media_attachment.id );
-
 		var preview, img_url;
 		img_url = media_attachment.url;
 		$( '.current', that.media_current  ).removeClass( 'hide').addClass( 'show' );
@@ -83,30 +77,22 @@ var RepeatableCustomize = function (  control  ){
 		}
 		$('.remove-button', that.media_current  ).show();
 		$( '.image_id', that.media_current  ).trigger( 'change' );
-
 		that.media_btn.text( that.media_btn.attr( 'data-change-txt' ) );
-
 	});
 
 
 	that.handleMedia = function( $context ) {
 		$('.item-media', $context ).each( function(){
-
 			var _item = $( this );
 			// when remove item
 			$( '.remove-button', _item ).on( 'click', function( e ){
 				e.preventDefault();
-
 				$( '.image_id, .image_url', _item ).val( '' );
 				$( '.thumbnail-image', _item ).html( '' );
-
 				$( '.current', _item ).removeClass( 'show' ).addClass( 'hide' );
-
 				$( this).hide();
-
 				$('.upload-button', _item ).text( $('.upload-button', _item ).attr( 'data-add-txt' ) );
 				$( '.image_id', _item ).trigger( 'change' );
-
 			} );
 
 			// when upload item
@@ -114,12 +100,8 @@ var RepeatableCustomize = function (  control  ){
 				e.preventDefault();
 				that.media_current = _item;
 				that.media_btn = $( this );
-
 				frame.open();
-
 			});
-
-
 		} );
 	};
 
@@ -155,31 +137,42 @@ var RepeatableCustomize = function (  control  ){
 
 			return false;
 		} );
-		//console.log(  control.params.title_format );
-		//console.log( control.params.live_title_id );
 
 		if ( control.params.live_title_id ) {
 
 			//console.log( $( "[data-live-id='"+ control.params.live_title_id+"']").eq(0).val() );
 			if ( control.params.live_title_id && $( "[data-live-id='"+ control.params.live_title_id+"']", $context ).length > 0 ) {
-				var v = $("[data-live-id='" + control.params.live_title_id + "']", $context).eq(0).val();
-				if (v == '') {
-					v = '[Untitled]';
+				var v;
+				//console.log( $("[data-live-id='" + control.params.live_title_id + "']", $context).prop("tagName") );
+				if (  $("[data-live-id='" + control.params.live_title_id + "']", $context).is( '.select-one' )  ){
+					v = $("[data-live-id='" + control.params.live_title_id + "']", $context ).find('option:selected').eq(0).text();
+				} else {
+					 v = $("[data-live-id='" + control.params.live_title_id + "']", $context).eq(0).val();
+				}
+
+				if ( v == '' ) {
+					v = 'Item';
 				}
 
 				if (typeof control.params.title_format !== "undefined" && control.params.title_format !== '') {
 					v = control.params.title_format.replace('[live_title]', v);
 				}
-
-				$('.widget-title .live-title', $context).text(v);
+				$('.widget-title .live-title', $context).text( v );
 
 				$context.on('keyup change', "[data-live-id='" + control.params.live_title_id + "']", function () {
-					var v = $(this).val();
+					var v;
+
+					if ( $(this).is( '.select-one' )  ){
+						v = $(this).find('option:selected').eq( 0 ).text();
+					} else {
+						v = $(this).val();
+					}
+
 					if (v == '') {
 						v = '[Untitled]';
 					}
 
-					if (typeof control.params.title_format !== "undefined" && control.params.title_format !== '') {
+					if ( typeof control.params.title_format !== "undefined" && control.params.title_format !== '' ) {
 						v = control.params.title_format.replace('[live_title]', v);
 					}
 
@@ -194,7 +187,7 @@ var RepeatableCustomize = function (  control  ){
 
 		} else {
 			//console.log(  control.params.title_format );
-			$('.widget-title .live-title', $context).text( control.params.title_format );
+			//$('.widget-title .live-title', $context).text( control.params.title_format );
 		}
 
 		// Remove item
@@ -264,7 +257,6 @@ var RepeatableCustomize = function (  control  ){
 		that.rename();
 		that.colorPicker( $context );
 		that.handleMedia( $context );
-
 		//Special check element
 		$( '[data-live-id="section_id"]', $context ).each( function(){
 			if ( $( this ).val() === 'map' ) {
@@ -272,14 +264,11 @@ var RepeatableCustomize = function (  control  ){
 				$context.addClass( 'show-display-field-only' );
 			}
 		} );
-
-
 	};
 
 	$( '.list-repeatable li').each( function(){
 		that.actions( $( this ) );
 	} );
-
 
 	that.updateValue = function(){
 		var data = that.getData();
@@ -340,8 +329,6 @@ var RepeatableCustomize = function (  control  ){
 
 };
 
-
-//------------------------------------------------
 
 ( function( api ) {
 	//console.log( api.controlConstructor );

@@ -227,10 +227,131 @@ if ( ! function_exists( 'onepress_hero_overlay_css' ) ) {
 
 }
 
-//add_filter( 'body_class', 'opnress_body_class' );
-function opnress_body_class( $classes ){
-	$classes['no-js'] = 'no-js';
-	return $classes;
+
+/**
+ * Get About data
+ *
+ * @return array
+ */
+function onepress_get_section_about_data(){
+    $boxes = get_theme_mod( 'onepress_about_boxes' );
+    if ( is_string( $boxes ) ) {
+        $boxes = json_decode( $boxes , true );
+    }
+    $page_ids = array();
+    if ( ! empty( $boxes ) && is_array( $boxes ) ) {
+        foreach ( $boxes as $k => $v ) {
+            if ( isset ( $v['content_page'] ) ) {
+                $v['content_page'] = absint( $v['content_page'] );
+                if ( $v['content_page'] > 0 )  {
+                    $page_ids[ ] =  wp_parse_args( $v, array( 'enable_link'=> 0, 'hide_title' => 0 ) );
+                }
+            }
+        }
+    }
+
+    if ( empty( $page_ids ) ) {
+        $current_pos_id = get_the_ID();
+        $args = array(
+            'posts_per_page'   => 3,
+            'orderby'          => 'date',
+            'order'            => 'DESC',
+            'exclude'          => $current_pos_id,
+            'post_type'        => 'page',
+        );
+        $posts_array = get_posts( $args );
+        foreach ( $posts_array as $p ) {
+            $page_ids[] =  array( 'content_page' => $p->ID , 'enable_link'=> 0, 'hide_title' => 0 );
+        }
+    }
+    return $page_ids;
 }
 
+/**
+ * Get counter data
+ *
+ * @return array
+ */
+function onepress_get_section_counter_data(){
+    $boxes = get_theme_mod( 'onepress_counter_boxes' );
+    if ( is_string( $boxes ) ) {
+        $boxes = json_decode( $boxes , true );
+    }
+    if ( empty( $boxes ) || ! is_array( $boxes ) ) {
+        $boxes = array();
+    }
+    return $boxes;
+}
 
+/**
+ * Get services data
+ * @return array
+ */
+function onepress_get_section_services_data(){
+    $services = get_theme_mod( 'onepress_services' );
+    if ( is_string( $services ) ) {
+        $services = json_decode( $services, true );
+    }
+    $page_ids = array();
+    if ( ! empty( $services ) && is_array( $services ) ) {
+        foreach ( $services as $k => $v ) {
+            if ( isset ( $v['content_page'] ) ) {
+                $v['content_page'] = absint( $v['content_page'] );
+                if ( $v['content_page'] > 0 )  {
+                    $page_ids[ ] =  wp_parse_args( $v, array(  'icon' => 'gg', 'enable_link' => 0 ) );
+                }
+            }
+        }
+    }
+    // if still empty data then get some page for demo
+    if ( empty( $page_ids ) ) {
+        $current_pos_id = get_the_ID();
+        $args = array(
+            'posts_per_page'   => 4,
+            'orderby'          => 'date',
+            'order'            => 'DESC',
+            'exclude'          => $current_pos_id,
+            'post_type'        => 'page',
+        );
+        $posts_array = get_posts( $args );
+        foreach ( $posts_array as $p ) {
+            $page_ids[] =  array( 'content_page' => $p->ID , 'icon'=> 'gg', 'hide_title' => 0 );
+        }
+    }
+    return $page_ids;
+}
+
+/**
+ * Get team members
+ *
+ * @return array
+ */
+function onepress_get_section_team_data(){
+    $members = get_theme_mod( 'onepress_team_members' );
+    if ( is_string( $members ) ) {
+        $members = json_decode( $members, true );
+    }
+
+    $user_ids = array();
+    if ( ! empty( $members ) && is_array( $members ) ) {
+        foreach ( $members as $k => $v ) {
+            if ( isset ( $v['user_id'] ) ) {
+                $v['user_id'] = absint( $v['user_id'] );
+                if ( $v['user_id'] > 0 )  {
+                    $user_ids[ ] =  $v;
+                }
+            }
+        }
+    }
+
+    if ( empty ( $user_ids ) ) {
+        $args = array(
+            'number'       => 4,
+        );
+        $users = get_users( $args );
+        foreach ( $users as $u ) {
+            $user_ids[] =array( 'user_id' => $u->ID );
+        }
+    }
+    return $user_ids;
+}
