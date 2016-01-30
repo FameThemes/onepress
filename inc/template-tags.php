@@ -315,7 +315,7 @@ function onepress_get_section_services_data(){
         );
         $posts_array = get_posts( $args );
         foreach ( $posts_array as $p ) {
-            $page_ids[] =  array( 'content_page' => $p->ID , 'icon'=> 'gg', 'hide_title' => 0 );
+            $page_ids[] =  array( 'content_page' => $p->ID , 'icon'=> 'gg', 'enable_link' => 0 );
         }
     }
     return $page_ids;
