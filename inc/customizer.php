@@ -55,20 +55,6 @@ function onepress_customize_register( $wp_customize ) {
     /*  Site Identity
     /*------------------------------------------------------------------------*/
 
-    	$wp_customize->add_setting( 'onepress_site_text_logo',
-			array(
-				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => esc_html__('OnePress', 'onepress')
-			)
-		);
-    	$wp_customize->add_control( 'onepress_site_text_logo',
-			array(
-				'label' 		=> esc_html__('Site Text Logo', 'onepress'),
-				'section' 		=> 'title_tagline',
-				'description'   => esc_html__('Your site text logo, use when image logo is empty.', 'onepress'),
-			)
-		);
-
     	$wp_customize->add_setting( 'onepress_site_image_logo',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_file_url',
