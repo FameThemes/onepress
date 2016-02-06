@@ -440,22 +440,6 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting(
 				'onepress_hero_images',
 				array(
-					'default' => json_encode(
-						array(
-							array(
-								'image' 		=> array(
-									'url' => get_template_directory_uri() . '/assets/images/hero1.jpg',
-									'id'  => ''
-								),
-							),
-							array(
-								'image' 		=> array(
-									'url' => get_template_directory_uri() . '/assets/images/hero2.jpg',
-									'id'  => ''
-								),
-							),
-						)
-					),
 					'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 					'transport' => 'refresh', // refresh or postMessage
 				) );
