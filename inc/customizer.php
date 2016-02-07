@@ -439,7 +439,6 @@ function onepress_customize_register( $wp_customize ) {
 						'description'   => '',
 						'priority'     => 40,
 						'section'       => 'onepress_hero_images',
-						//'live_title_id' => 'title', // apply for unput text and textarea only
 						'title_format'  => esc_html__( 'Background', 'onepress'), // [live_title]
 						'max_item'      => 2, // Maximum item can add
 
@@ -448,7 +447,7 @@ function onepress_customize_register( $wp_customize ) {
 								'title' => esc_html__('Background Image', 'onepress'),
 								'type'  =>'media',
 								'default' => array(
-									'url' => get_template_directory_uri().'/assets/images/testimonial_1.jpg',
+									'url' => get_template_directory_uri().'/assets/images/hero5.jpg',
 									'id' => ''
 								)
 							),

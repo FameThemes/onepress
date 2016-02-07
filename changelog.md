@@ -1,6 +1,10 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.0.9
+* Remove logo text customizer option.
+* Remove Hero section default data.
+
 ## 1.0.8
 * Remove default logo from customizer + header.
 * Remove demo content in frontpage template.

@@ -27,7 +27,7 @@
 		<div class="container">
 			<div class="site-branding">
 				<?php
-				$site_text_logo  = $site_text_logo =  get_bloginfo( 'name' );
+				$site_text_logo =  get_bloginfo( 'name' );
 				$site_image_logo = get_theme_mod( 'onepress_site_image_logo' );
 				if ( ( isset($site_text_logo) && $site_text_logo != "" ) || ( isset( $site_image_logo ) && $site_image_logo != "" ) ) {
 					if ( isset($site_image_logo) && $site_image_logo != "" ) {
