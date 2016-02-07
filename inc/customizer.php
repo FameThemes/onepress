@@ -55,20 +55,6 @@ function onepress_customize_register( $wp_customize ) {
     /*  Site Identity
     /*------------------------------------------------------------------------*/
 
-    	$wp_customize->add_setting( 'onepress_site_text_logo',
-			array(
-				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => esc_html__('OnePress', 'onepress')
-			)
-		);
-    	$wp_customize->add_control( 'onepress_site_text_logo',
-			array(
-				'label' 		=> esc_html__('Site Text Logo', 'onepress'),
-				'section' 		=> 'title_tagline',
-				'description'   => esc_html__('Your site text logo, use when image logo is empty.', 'onepress'),
-			)
-		);
-
     	$wp_customize->add_setting( 'onepress_site_image_logo',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_file_url',
@@ -440,22 +426,6 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_setting(
 				'onepress_hero_images',
 				array(
-					'default' => json_encode(
-						array(
-							array(
-								'image' 		=> array(
-									'url' => get_template_directory_uri() . '/assets/images/hero1.jpg',
-									'id'  => ''
-								),
-							),
-							array(
-								'image' 		=> array(
-									'url' => get_template_directory_uri() . '/assets/images/hero2.jpg',
-									'id'  => ''
-								),
-							),
-						)
-					),
 					'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 					'transport' => 'refresh', // refresh or postMessage
 				) );
@@ -469,7 +439,6 @@ function onepress_customize_register( $wp_customize ) {
 						'description'   => '',
 						'priority'     => 40,
 						'section'       => 'onepress_hero_images',
-						//'live_title_id' => 'title', // apply for unput text and textarea only
 						'title_format'  => esc_html__( 'Background', 'onepress'), // [live_title]
 						'max_item'      => 2, // Maximum item can add
 
@@ -478,7 +447,7 @@ function onepress_customize_register( $wp_customize ) {
 								'title' => esc_html__('Background Image', 'onepress'),
 								'type'  =>'media',
 								'default' => array(
-									'url' => get_template_directory_uri().'/assets/images/testimonial_1.jpg',
+									'url' => get_template_directory_uri().'/assets/images/hero5.jpg',
 									'id' => ''
 								)
 							),

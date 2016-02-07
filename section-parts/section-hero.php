@@ -24,20 +24,7 @@ if (is_string($_images)) {
 }
 
 if (empty($_images) || !is_array($_images)) {
-	$_images = array(
-		array(
-			'image' => array(
-				'url' => get_template_directory_uri() . '/assets/images/hero1.jpg',
-				'id' => ''
-			),
-		),
-		array(
-			'image' => array(
-				'url' => get_template_directory_uri() . '/assets/images/hero2.jpg',
-				'id' => ''
-			),
-		),
-	);
+    $_images = array();
 }
 
 $images = array();
@@ -51,7 +38,7 @@ foreach ( $_images as $m ) {
 }
 
 ?>
-<?php if (!$onepress_hero_disable) : ?>
+<?php if ( ! $onepress_hero_disable && ! empty ( $_images ) ) : ?>
 	<section id="<?php if ($onepress_hero_id != '') echo $onepress_hero_id; ?>" class="hero-slideshow-wrapper <?php if ($onepress_hero_fullscreen == 1) {
 		echo 'hero-slideshow-fullscreen';
 	} else {

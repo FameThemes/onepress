@@ -27,7 +27,7 @@
 		<div class="container">
 			<div class="site-branding">
 				<?php
-				$site_text_logo  = get_theme_mod( 'onepress_site_text_logo', esc_html__('OnePress', 'onepress') );
+				$site_text_logo =  get_bloginfo( 'name' );
 				$site_image_logo = get_theme_mod( 'onepress_site_image_logo' );
 				if ( ( isset($site_text_logo) && $site_text_logo != "" ) || ( isset( $site_image_logo ) && $site_image_logo != "" ) ) {
 					if ( isset($site_image_logo) && $site_image_logo != "" ) {
@@ -48,7 +48,7 @@
 			</div><!-- .site-branding -->
 
 			<div class="header-right-wrapper">
-				<a href="#0" id="nav-toggle">Menu<span></span></a>
+				<a href="#0" id="nav-toggle"><?php _e( 'Menu', 'onepress' ); ?><span></span></a>
 				<nav id="site-navigation" class="main-navigation" role="navigation">
 					<ul class="onepress-menu">
 				   	   <?php wp_nav_menu( array('theme_location' => 'primary', 'container' => '', 'items_wrap' => '%3$s' ) ); ?>
