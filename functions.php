@@ -130,8 +130,11 @@ function onepress_scripts() {
 	}
 
 	// Animation from settings
-	$onepress_disable_animation = array( 'onepress_disable_animation' => get_theme_mod( 'onepress_animation_disable' ) );
-	wp_localize_script('jquery','onepress_js_settings', $onepress_disable_animation);
+	$onepress_js_settings = array( 
+		'onepress_disable_animation' => get_theme_mod( 'onepress_animation_disable' ),
+		'onepress_disable_sticky_header' => get_theme_mod( 'onepress_sticky_header_disable' )
+	);
+	wp_localize_script('jquery','onepress_js_settings', $onepress_js_settings);
 
 }
 add_action( 'wp_enqueue_scripts', 'onepress_scripts' );

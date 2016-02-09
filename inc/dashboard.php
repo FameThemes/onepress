@@ -137,11 +137,10 @@ function onepress_theme_info_page() {
                     <?php if ( $actions['page_template'] == 'active' ) {  ?>
                         <div class="theme_link  action-required">
                             <a  title="<?php  esc_attr_e( 'Dismiss', 'onepress' ); ?>" class="dismiss" href="<?php echo add_query_arg( array( 'onepress_action_dismiss' => 'page_template' ), $current_action_link ); ?>"><span class="dashicons dashicons-dismiss"></span></a>
-                            <h3><?php esc_html_e( 'Select the template "Frontpage" for that selected page."', 'onepress' ); ?></h3>
+                            <h3><?php esc_html_e( 'Set your homepage page template to "Frontpage".', 'onepress' ); ?></h3>
 
                             <div class="about">
-                                <p><?php _e( 'Select the template "Frontpage" for that selected page.', 'onepress' ); ?></p>
-
+                                <p><?php esc_html_e( 'In order to change homepage section contents, you will need to set template "Frontpage" for your homepage.', 'onepress' ); ?></p>
                             </div>
                             <p>
                                 <?php
@@ -155,11 +154,7 @@ function onepress_theme_info_page() {
 
                                 if ( $front_page > 0 && get_post_meta( $front_page, '_wp_page_template', true ) != 'template-frontpage.php' ) {
                                     ?>
-                                    <a href="<?php echo get_edit_post_link( $front_page ); ?>" class="button"><?php esc_html_e('Setup frontpage', 'onepress'); ?></a>
-                                    <?php
-                                } else {
-                                    ?>
-                                    <a href="<?php echo admin_url( 'post-new.php?post_type=page' ); ?>" class="button"><?php esc_html_e('Create frontpage', 'onepress'); ?></a>
+                                    <a href="<?php echo get_edit_post_link( $front_page ); ?>" class="button"><?php esc_html_e('Change homepage page template', 'onepress'); ?></a>
                                     <?php
                                 }
                                 ?>
@@ -178,4 +173,3 @@ function onepress_theme_info_page() {
     </div> <!-- END .theme_info -->
     <?php
 }
-

@@ -4,13 +4,15 @@
 ------------------------------*/
 .site-header {
 	line-height: 75px;
-    position: fixed;
+    position: relative;
     width: 100%;
     background: #FFFFFF;
     z-index: 50;
     border-bottom: 1px solid $border;
 }
-
+.sticky-header .site-header {
+	position: fixed;
+}
 
 .site-branding {
 	float: left;
@@ -355,8 +357,8 @@
 /* Content
 ------------------------------*/
 .site-content {
-	border-top: 1px solid $border;
-    padding-top: 74px;
+	//border-top: 1px solid $border;
+    //padding-top: 74px;
 }
 .site-content.no-border {
 	border-top: none;

@@ -97,6 +97,22 @@ function onepress_customize_register( $wp_customize ) {
 		);
 
 
+			// Disable Sticky Header
+			$wp_customize->add_setting( 'onepress_sticky_header_disable',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_checkbox',
+					'default'           => '',
+				)
+			);
+			$wp_customize->add_control( 'onepress_sticky_header_disable',
+				array(
+					'type'        => 'checkbox',
+					'label'       => esc_html__('Disable Sticky Header?', 'onepress'),
+					'section'     => 'onepress_global_settings',
+					'description' => esc_html__('Check this box to disable sticky header when scroll.', 'onepress')
+				)
+			);
+
 			// Disable Animation
 			$wp_customize->add_setting( 'onepress_animation_disable',
 				array(
@@ -470,7 +486,7 @@ function onepress_customize_register( $wp_customize ) {
 					$wp_customize,
 					'onepress_hero_overlay_color',
 					array(
-						'label' 		=> esc_html__('Overlay color', 'onepress'),
+						'label' 		=> esc_html__('Background Overlay Color', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 						'priority'      => 130,
 					)
@@ -488,7 +504,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control(
 					'onepress_hero_overlay_opacity',
 					array(
-						'label' 		=> esc_html__('Overlay Opacity', 'onepress'),
+						'label' 		=> esc_html__('Background Overlay Opacity', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 						'description'   => esc_html__('Enter a float number between 0.1 to 0.9', 'onepress'),
 						'priority'      => 130,
@@ -501,7 +517,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_hero_content_layout1' ,
 			array(
 				'priority'    => 9,
-				'title'       => esc_html__( 'Hero Content Layout', 'onepress' ),
+				'title'       => esc_html__( 'Hero Content Layout #1', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 
