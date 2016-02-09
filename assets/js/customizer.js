@@ -343,3 +343,12 @@ var RepeatableCustomize = function (  control  ){
 	} );
 
 } )( wp.customize );
+
+
+jQuery( window ).ready( function( $ ){
+    if ( typeof onepress_customizer_settings !== "undefined" ) {
+        if (onepress_customizer_settings.number_action > 0) {
+            $('.control-section-themes h3.accordion-section-title').append('<a class="theme-action-count" href="' + onepress_customizer_settings.action_url + '">' + onepress_customizer_settings.number_action + '</a>');
+        }
+    }
+} );
