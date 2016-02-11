@@ -1626,8 +1626,6 @@ function opneress_customize_js_settings(){
         $number_action = $n['active'];
     }
 
-    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-
     wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(
         'number_action' => $number_action,
         'is_plus_activated' => class_exists( 'OnePress_PLus' ) ? 'y' : 'n',
