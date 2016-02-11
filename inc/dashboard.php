@@ -80,6 +80,7 @@ function onepress_theme_info_page() {
         <h2 class="nav-tab-wrapper">
             <a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php echo $theme_data->Name; ?></a>
             <a href="?page=ft_onepress&tab=actions_required" class="nav-tab<?php echo $tab == 'actions_required' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Actions Required', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
+            <?php do_action( 'onepress_admin_more_tabs' ); ?>
         </h2>
 
         <?php if ( is_null( $tab ) ) { ?>
@@ -161,14 +162,15 @@ function onepress_theme_info_page() {
                             </p>
                         </div>
                     <?php } ?>
-
-                    <?php do_action( 'onepress_required_action_details', $actions ); ?>
+                    <?php do_action( 'onepress_more_required_details', $actions ); ?>
                 <?php  } else { ?>
                     <h3><?php  printf( __( 'Keep update with %s', 'onepress' ) , $theme_data->Name ); ?></h3>
                     <p><?php _e( 'Hooray! There are no required actions for you right now.', 'onepress' ); ?></p>
                 <?php } ?>
             </div>
         <?php } ?>
+
+        <?php do_action( 'onepress_more_tabs_details', $actions ); ?>
 
     </div> <!-- END .theme_info -->
     <?php
