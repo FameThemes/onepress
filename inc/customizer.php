@@ -1630,7 +1630,7 @@ function opneress_customize_js_settings(){
 
     wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(
         'number_action' => $number_action,
-        'is_plus_activated' => is_plugin_active( 'onepress-plus/onepress-plus.php' ) ? 'y' : 'n',
+        'is_plus_activated' => class_exists( 'OnePress_PLus' ) ? 'y' : 'n',
         'action_url' => admin_url( 'themes.php?page=ft_onepress&tab=actions_required' )
     ) );
 }
