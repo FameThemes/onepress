@@ -97,6 +97,22 @@ function onepress_customize_register( $wp_customize ) {
 		);
 
 
+			// Disable Sticky Header
+			$wp_customize->add_setting( 'onepress_sticky_header_disable',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_checkbox',
+					'default'           => '',
+				)
+			);
+			$wp_customize->add_control( 'onepress_sticky_header_disable',
+				array(
+					'type'        => 'checkbox',
+					'label'       => esc_html__('Disable Sticky Header?', 'onepress'),
+					'section'     => 'onepress_global_settings',
+					'description' => esc_html__('Check this box to disable sticky header when scroll.', 'onepress')
+				)
+			);
+
 			// Disable Animation
 			$wp_customize->add_setting( 'onepress_animation_disable',
 				array(
@@ -311,6 +327,32 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+	/*------------------------------------------------------------------------*/
+    /*  Section: Order & Styling
+    /*------------------------------------------------------------------------*/
+	$wp_customize->add_section( 'onepress_order_styling' ,
+		array(
+			'priority'        => 129,
+			'title'           => esc_html__( 'Section Order & Styling', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
+		)
+	);
+		// Plus message
+		$wp_customize->add_setting( 'onepress_order_styling_message',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_text',
+			)
+		);
+		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_order_styling_message',
+			array(
+				'section'     => 'onepress_news_settings',
+				'type'        => 'custom_message',
+				'section'     => 'onepress_order_styling',
+				'description' => wp_kses_post( ' Check out <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus version</a> for full control over <strong>section order</strong> and <strong>section styling</strong>! ', 'onepress' )
+			)
+		));
+
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Hero
@@ -470,7 +512,7 @@ function onepress_customize_register( $wp_customize ) {
 					$wp_customize,
 					'onepress_hero_overlay_color',
 					array(
-						'label' 		=> esc_html__('Overlay color', 'onepress'),
+						'label' 		=> esc_html__('Background Overlay Color', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 						'priority'      => 130,
 					)
@@ -488,7 +530,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control(
 					'onepress_hero_overlay_opacity',
 					array(
-						'label' 		=> esc_html__('Overlay Opacity', 'onepress'),
+						'label' 		=> esc_html__('Background Overlay Opacity', 'onepress'),
 						'section' 		=> 'onepress_hero_images',
 						'description'   => esc_html__('Enter a float number between 0.1 to 0.9', 'onepress'),
 						'priority'      => 130,
@@ -501,7 +543,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_hero_content_layout1' ,
 			array(
 				'priority'    => 9,
-				'title'       => esc_html__( 'Hero Content Layout', 'onepress' ),
+				'title'       => esc_html__( 'Hero Content Layout #1', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 
@@ -1595,3 +1637,24 @@ function onepress_customize_preview_js() {
 
 }
 add_action( 'customize_preview_init', 'onepress_customize_preview_js' );
+
+
+
+add_action( 'customize_controls_enqueue_scripts', 'opneress_customize_js_settings' );
+function opneress_customize_js_settings(){
+    if ( ! function_exists( 'onepress_get_actions_required' ) ) {
+        return;
+    }
+    $actions = onepress_get_actions_required();
+    $n = array_count_values( $actions );
+    $number_action =  0;
+    if ( $n && isset( $n['active'] ) ) {
+        $number_action = $n['active'];
+    }
+
+    wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(
+        'number_action' => $number_action,
+        'is_plus_activated' => class_exists( 'OnePress_PLus' ) ? 'y' : 'n',
+        'action_url' => admin_url( 'themes.php?page=ft_onepress&tab=actions_required' )
+    ) );
+}

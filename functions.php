@@ -118,8 +118,7 @@ function onepress_scripts() {
 	wp_enqueue_style( 'onepress-animate', get_template_directory_uri() .'/assets/css/animate.min.css', array(), '1.0.0' );
 	wp_enqueue_style( 'onepress-fa', get_template_directory_uri() .'/assets/css/font-awesome.min.css', array(), '4.4.0' );
 	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', array(), '4.0.0' );
-	wp_enqueue_style( 'onepress-style', get_stylesheet_uri() );
-
+    wp_enqueue_style( 'onepress-style', get_template_directory_uri().'/style.css' );
 
 	wp_enqueue_script('jquery');
 	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array(), '1.0.0', true );
@@ -130,8 +129,11 @@ function onepress_scripts() {
 	}
 
 	// Animation from settings
-	$onepress_disable_animation = array( 'onepress_disable_animation' => get_theme_mod( 'onepress_animation_disable' ) );
-	wp_localize_script('jquery','onepress_js_settings', $onepress_disable_animation);
+	$onepress_js_settings = array( 
+		'onepress_disable_animation' => get_theme_mod( 'onepress_animation_disable' ),
+		'onepress_disable_sticky_header' => get_theme_mod( 'onepress_sticky_header_disable' )
+	);
+	wp_localize_script('jquery','onepress_js_settings', $onepress_js_settings);
 
 }
 add_action( 'wp_enqueue_scripts', 'onepress_scripts' );
@@ -325,4 +327,50 @@ if ( ! function_exists( 'onepress_get_media_url' ) ) {
 		}
 		return $url;
 	}
+}
+
+
+
+
+/**
+ * Get theme actions required
+ *
+ * @return array|mixed|void
+ */
+function onepress_get_actions_required( ) {
+
+    $actions = array();
+    $front_page = get_option( 'page_on_front' );
+    $actions['page_on_front'] = 'dismiss';
+    $actions['page_template'] = 'dismiss';
+    if ( $front_page <= 0  ) {
+        $actions['page_on_front'] = 'active';
+        $actions['page_template'] = 'active';
+
+    } else {
+        if ( get_post_meta( $front_page, '_wp_page_template', true ) == 'template-frontpage.php' ) {
+            $actions['page_template'] = 'dismiss';
+        } else {
+            $actions['page_template'] = 'active';
+        }
+    }
+
+    $actions = apply_filters( 'onepress_get_actions_required', $actions );
+    $actions_dismiss =  get_option( 'onepress_actions_dismiss' );
+
+    if (  $actions_dismiss && is_array( $actions_dismiss ) ) {
+        foreach ( $actions_dismiss as $k => $v ) {
+            if ( isset ( $actions[ $k ] ) ) {
+                $actions[ $k ] = 'dismiss';
+            }
+        }
+    }
+
+    return $actions;
+}
+
+
+add_action('switch_theme', 'onepress_reset_actions_required');
+function onepress_reset_actions_required () {
+    delete_option('onepress_actions_dismiss');
 }

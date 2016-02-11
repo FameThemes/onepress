@@ -77,7 +77,7 @@ function res() {
 }
 
 /**
- * Text rotator 
+ * Text rotator
  */
 ( function() {
     jQuery(".js-rotating").Morphext({
@@ -131,7 +131,7 @@ function res() {
         jQuery('.section-has-parallax').each(function() {
             var $this = jQuery(this);
             var bg    = $this.find('.parallax_bg');
-            
+
             jQuery(bg).css('backgroundImage', 'url(' + $this.data('bg') + ')');
 
             if (testMobile == null) {
@@ -166,13 +166,32 @@ function res() {
     }
 })();
 
+/**
+ * Sticky header when scroll.
+ */
+( function() {
+    if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
+        var header_height = jQuery('.site-header').height();
+        var sticky_header = jQuery('.sticky-header');
+        var p_to_top     = sticky_header.position().top;
+
+        if ( sticky_header.length > 0 ) {
+            jQuery('.site-content').css( 'padding-top', header_height );
+        }
+    }
+})();
+
 /*
 * Smooth scroll for navigation and other elements
 */
 ( function() {
 
     // Get the header height and wpadminbar height if enable.
-    var h = jQuery('#wpadminbar').height() + jQuery('.site-header').height();
+    if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
+        var h = jQuery('#wpadminbar').height() + jQuery('.site-header').height();
+    } else {
+        var h = jQuery('#wpadminbar').height();
+    }
 
     // Navigation click to section.
     jQuery('.home #site-navigation li a[href*=#]').on('click', function(event){
@@ -228,7 +247,3 @@ jQuery( document ).ready( function( $ ){
         time: 1000
     });
 } );
-
-
-
-

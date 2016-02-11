@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.1.0
+* Fixed `site-content` padding top issue.
+* New option: Disable sticky header on scroll
+* Add required actions tab in theme dashboard.
+
 ## 1.0.9
 * Remove logo text customizer option.
 * Remove Hero section default data.

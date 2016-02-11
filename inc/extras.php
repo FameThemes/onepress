@@ -19,6 +19,11 @@ function onepress_body_classes( $classes ) {
 		$classes[] = 'group-blog';
 	}
 
+	$onepress_sticky_header = get_theme_mod( 'onepress_sticky_header_disable' );
+	if ( $onepress_sticky_header == '' ) {
+		$classes[] = 'sticky-header';
+	}
+
 	return $classes;
 }
 add_filter( 'body_class', 'onepress_body_classes' );
