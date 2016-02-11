@@ -5,8 +5,8 @@
 
 add_action('admin_menu', 'onepress_theme_info');
 function onepress_theme_info() {
-    $theme_data = wp_get_theme();
-    add_theme_page( sprintf( esc_html__( '%s Dashboard', 'onepress' ), $theme_data->Name ), sprintf( esc_html__('%s Theme', 'onepress'), $theme_data->Name), 'edit_theme_options', 'ft_onepress', 'onepress_theme_info_page');
+    $theme_data = wp_get_theme('onepress');
+    add_theme_page( esc_html__( 'OnePress Dashboard', 'onepress' ), esc_html__('OnePress Theme', 'onepress'), 'edit_theme_options', 'ft_onepress', 'onepress_theme_info_page');
 }
 
 /**
@@ -46,7 +46,7 @@ add_action( 'load-themes.php',  'onepress_one_activation_admin_notice'  );
 
 function onepress_theme_info_page() {
 
-    $theme_data = wp_get_theme();
+    $theme_data = wp_get_theme('onepress');
 
     if ( isset( $_GET['onepress_action_dismiss'] ) ) {
         $actions_dismiss =  get_option( 'onepress_actions_dismiss' );
@@ -74,11 +74,11 @@ function onepress_theme_info_page() {
     $current_action_link =  admin_url( 'themes.php?page=ft_onepress&tab=actions_required' );
     ?>
     <div class="wrap about-wrap theme_info_wrapper">
-        <h1><?php printf(esc_html__('Welcome to %1s - Version %2s', 'onepress'), $theme_data->Name, $theme_data->Version ); ?></h1>
+        <h1><?php printf(esc_html__('Welcome to OnePress - Version %1s', 'onepress'), $theme_data->Version ); ?></h1>
         <div class="about-text"><?php esc_html_e( 'OnePress is a creative and flexible WordPress ONE PAGE theme well suited for business, portfolio, digital agency, product showcase, freelancers websites.', 'onepress' ); ?></div>
         <a target="_blank" href="<?php echo esc_url('http://www.famethemes.com/?utm_source=theme_dashboard_page&utm_medium=badge_link&utm_campaign=theme_admin'); ?>" class="famethemes-badge wp-badge"><span>FameThemes</span></a>
         <h2 class="nav-tab-wrapper">
-            <a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php echo $theme_data->Name; ?></a>
+            <a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'OnePress', 'onepress' ) ?></a>
             <a href="?page=ft_onepress&tab=actions_required" class="nav-tab<?php echo $tab == 'actions_required' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Actions Required', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
             <?php do_action( 'onepress_admin_more_tabs' ); ?>
         </h2>

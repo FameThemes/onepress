@@ -327,6 +327,32 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+	/*------------------------------------------------------------------------*/
+    /*  Section: Hero
+    /*------------------------------------------------------------------------*/
+	$wp_customize->add_section( 'onepress_order_styling' ,
+		array(
+			'priority'        => 129,
+			'title'           => esc_html__( 'Section Order & Styling', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
+		)
+	);
+		// Plus message
+		$wp_customize->add_setting( 'onepress_order_styling_message',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_text',
+			)
+		);
+		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_order_styling_message',
+			array(
+				'section'     => 'onepress_news_settings',
+				'type'        => 'custom_message',
+				'section'     => 'onepress_order_styling',
+				'description' => wp_kses_post( ' Check out <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus version</a> for full control over the frontpage SECTIONS ORDER and SECTION STYLING! ', 'onepress' )
+			)
+		));
+
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Hero
