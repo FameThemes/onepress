@@ -1625,8 +1625,12 @@ function opneress_customize_js_settings(){
     if ( $n && isset( $n['active'] ) ) {
         $number_action = $n['active'];
     }
+
+    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
     wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(
         'number_action' => $number_action,
+        'is_plus_activated' => is_plugin_active( 'onepress-plus/onepress-plus.php' ) ? 'y' : 'n',
         'action_url' => admin_url( 'themes.php?page=ft_onepress&tab=actions_required' )
     ) );
 }
