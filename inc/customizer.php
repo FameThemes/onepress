@@ -349,7 +349,7 @@ function onepress_customize_register( $wp_customize ) {
 				'section'     => 'onepress_news_settings',
 				'type'        => 'custom_message',
 				'section'     => 'onepress_order_styling',
-				'description' => wp_kses_post( ' Check out <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus version</a> for full control over the frontpage SECTIONS ORDER and SECTION STYLING! ', 'onepress' )
+				'description' => wp_kses_post( ' Check out <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus version</a> for full control over <strong>section order</strong> and <strong>section styling</strong>! ', 'onepress' )
 			)
 		));
 
