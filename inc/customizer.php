@@ -328,7 +328,7 @@ function onepress_customize_register( $wp_customize ) {
 			);
 
 	/*------------------------------------------------------------------------*/
-    /*  Section: Hero
+    /*  Section: Order & Styling
     /*------------------------------------------------------------------------*/
 	$wp_customize->add_section( 'onepress_order_styling' ,
 		array(
