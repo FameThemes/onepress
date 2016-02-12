@@ -657,6 +657,18 @@ function onepress_customize_register( $wp_customize ) {
 			);
 
 	/*------------------------------------------------------------------------*/
+	/*  Section: Video Popup
+	/*------------------------------------------------------------------------*/
+	$wp_customize->add_panel( 'onepress_videolightbox' ,
+		array(
+			'priority'        => 132,
+			'title'           => esc_html__( 'Section: Video Lightbox', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
+		)
+	);
+
+	/*------------------------------------------------------------------------*/
     /*  Section: About
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_about' ,

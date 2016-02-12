@@ -247,3 +247,22 @@ jQuery( document ).ready( function( $ ){
         time: 1000
     });
 } );
+
+/**
+ * Call magnificPopup when use
+ */
+( function() {
+
+    jQuery('.popup-video').magnificPopup({
+        //disableOn: 700,
+        type: 'iframe',
+        mainClass: 'mfp-fade',
+        removalDelay: 160,
+        preloader: false,
+        fixedContentPos: false,
+        zoom: {
+            enabled:true
+        }
+    });
+
+})();
