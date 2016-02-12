@@ -697,13 +697,14 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'onepress_videolightbox_id',
         array(
             'sanitize_callback' => 'onepress_sanitize_text',
+            'default'           => 'videolightbox',
         )
     );
     $wp_customize->add_control( 'onepress_videolightbox_id',
         array(
             'label' 		=> esc_html__('Section ID:', 'onepress'),
             'section' 		=> 'onepress_videolightbox_settings',
-            'description'   => 'The section id, we will use this for link anchor.'
+            'description'   => esc_html__('The section id, we will use this for link anchor.', 'onepress' )
         )
     );
 
@@ -751,7 +752,7 @@ function onepress_customize_register( $wp_customize ) {
         $wp_customize,
         'onepress_videolightbox_image',
         array(
-            'label' 		=> __('Background image', 'onepress'),
+            'label' 		=> esc_html__('Background image', 'onepress'),
             'section' 		=> 'onepress_videolightbox_settings',
         )
     ));
@@ -851,7 +852,6 @@ function onepress_customize_register( $wp_customize ) {
 	);
 
 		// Order & Stlying
-
 		$wp_customize->add_setting(
 			'onepress_about_boxes',
 			array(
