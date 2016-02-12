@@ -35,7 +35,7 @@ if ( ! empty( $user_ids ) ) {
                                 <div class="team-member col-sm-3 wow slideInUp">
                                     <div class="member-thumb">
                                         <img src="<?php echo esc_url( $image ); ?>" alt="">
-                                        <?php do_action('onepress_section_team_member_media', $user_id ) ?>
+                                        <?php do_action( 'onepress_section_team_member_media', $member ); ?>
                                     </div>
                                     <div class="member-info">
                                         <h5 class="member-name"><?php echo esc_html( $data->post_title ); ?></h5>

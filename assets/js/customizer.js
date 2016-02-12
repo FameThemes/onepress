@@ -96,7 +96,7 @@ var RepeatableCustomize = function (  control  ){
 			} );
 
 			// when upload item
-			$('.upload-button', _item ).on('click', function ( e ) {
+			$('.upload-button, .attachment-media-view', _item ).on('click', function ( e ) {
 				e.preventDefault();
 				that.media_current = _item;
 				that.media_btn = $( this );
@@ -306,7 +306,6 @@ var RepeatableCustomize = function (  control  ){
 					}
 				}
 			}
-
 
 			var $html = $( that.template( _templateData ) );
 			$( '.list-repeatable', container ).append( $html );
