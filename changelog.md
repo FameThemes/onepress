@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.1.2
+* Improve customize control.
+
 ## 1.1.1
 * Replace Team Member content from user meta data to media meta data.
 * New: Video Lightbox section.
