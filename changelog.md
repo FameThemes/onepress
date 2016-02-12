@@ -4,6 +4,7 @@ CHANGELOG
 ## 1.1.1
 * Replace Team Member content from user meta data to media meta data.
 * New: Video Lightbox section.
+* Small bug fixes and style improvement.
 
 ## 1.1.0
 * Fixed `site-content` padding top issue.

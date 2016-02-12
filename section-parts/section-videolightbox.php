@@ -31,4 +31,3 @@ if ( ! $disable && ( $video || $heading ) ) {
     </div>
     <?php } ?>
 <?php  }
-
