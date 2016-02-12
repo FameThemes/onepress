@@ -331,27 +331,8 @@ function onepress_get_section_team_data(){
     if ( is_string( $members ) ) {
         $members = json_decode( $members, true );
     }
-
-    $user_ids = array();
-    if ( ! empty( $members ) && is_array( $members ) ) {
-        foreach ( $members as $k => $v ) {
-            if ( isset ( $v['user_id'] ) ) {
-                $v['user_id'] = absint( $v['user_id'] );
-                if ( $v['user_id'] > 0 )  {
-                    $user_ids[ ] =  $v;
-                }
-            }
-        }
+    if ( ! is_array( $members ) ) {
+        $members = array();
     }
-
-    if ( empty ( $user_ids ) ) {
-        $args = array(
-            'number'       => 4,
-        );
-        $users = get_users( $args );
-        foreach ( $users as $u ) {
-            $user_ids[] =array( 'user_id' => $u->ID );
-        }
-    }
-    return $user_ids;
+    return $members;
 }

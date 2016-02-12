@@ -1174,16 +1174,14 @@ function onepress_customize_register( $wp_customize ) {
 					'label'     => esc_html__('Team members', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_team_content',
-					'live_title_id' => 'user_id', // apply for unput text and textarea only
+					//'live_title_id' => 'user_id', // apply for unput text and textarea only
 					'title_format'  => esc_html__( '[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
-
 					'fields'    => array(
 						'user_id' => array(
-							'title' => esc_html__('User', 'onepress'),
-							'type'  =>'select',
+							'title' => esc_html__('User media', 'onepress'),
+							'type'  =>'media',
 							'desc'  => '',
-							'options' =>  $option_users
 						),
 					),
 

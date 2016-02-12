@@ -32,7 +32,7 @@ $images = array();
 foreach ( $_images as $m ) {
 	$m = wp_parse_args($m, array('image' => ''));
 	$_u = onepress_get_media_url($m['image']);
-	if ($_u) {
+	if ( $_u ) {
 		$images[] = $_u;
 	}
 }
