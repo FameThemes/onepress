@@ -657,6 +657,109 @@ function onepress_customize_register( $wp_customize ) {
 			);
 
 	/*------------------------------------------------------------------------*/
+	/*  Section: Video Popup
+	/*------------------------------------------------------------------------*/
+	$wp_customize->add_panel( 'onepress_videolightbox' ,
+		array(
+			'priority'        => 132,
+			'title'           => esc_html__( 'Section: Video Lightbox', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
+		)
+	);
+
+    $wp_customize->add_section( 'onepress_videolightbox_settings' ,
+        array(
+            'priority'    => 3,
+            'title'       => esc_html__( 'Section Settings', 'onepress' ),
+            'description' => '',
+            'panel'       => 'onepress_videolightbox',
+        )
+    );
+
+    // Show Content
+    $wp_customize->add_setting( 'onepress_videolightbox_disable',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_checkbox',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_videolightbox_disable',
+        array(
+            'type'        => 'checkbox',
+            'label'       => esc_html__('Hide this section?', 'onepress'),
+            'section'     => 'onepress_videolightbox_settings',
+            'description' => esc_html__('Check this box to hide this section.', 'onepress'),
+        )
+    );
+
+    // Section ID
+    $wp_customize->add_setting( 'onepress_videolightbox_id',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_text',
+            'default'           => 'videolightbox',
+        )
+    );
+    $wp_customize->add_control( 'onepress_videolightbox_id',
+        array(
+            'label' 		=> esc_html__('Section ID:', 'onepress'),
+            'section' 		=> 'onepress_videolightbox_settings',
+            'description'   => esc_html__('The section id, we will use this for link anchor.', 'onepress' )
+        )
+    );
+
+    // Title
+    $wp_customize->add_setting( 'onepress_videolightbox_title',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_text',
+            'default'           => '',
+        )
+    );
+
+    $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+        $wp_customize,
+        'onepress_videolightbox_title',
+        array(
+            'label'     	=>  esc_html__('Section heading', 'onepress'),
+            'section' 		=> 'onepress_videolightbox_settings',
+            'description'   => '',
+        )
+    ));
+
+    // Video URL
+    $wp_customize->add_setting( 'onepress_videolightbox_url',
+        array(
+            'sanitize_callback' => 'esc_url_raw',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_videolightbox_url',
+        array(
+            'label' 		=> esc_html__('Video url', 'onepress'),
+            'section' 		=> 'onepress_videolightbox_settings',
+            'description'   =>  esc_html__('Paste Youtube or Vimeo url here', 'onepress'),
+        )
+    );
+
+    // Parallax image
+    $wp_customize->add_setting( 'onepress_videolightbox_image',
+        array(
+            'sanitize_callback' => 'esc_url_raw',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( new WP_Customize_Image_Control(
+        $wp_customize,
+        'onepress_videolightbox_image',
+        array(
+            'label' 		=> esc_html__('Background image', 'onepress'),
+            'section' 		=> 'onepress_videolightbox_settings',
+        )
+    ));
+
+
+
+	/*------------------------------------------------------------------------*/
     /*  Section: About
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_about' ,
@@ -749,7 +852,6 @@ function onepress_customize_register( $wp_customize ) {
 	);
 
 		// Order & Stlying
-
 		$wp_customize->add_setting(
 			'onepress_about_boxes',
 			array(
@@ -1174,16 +1276,14 @@ function onepress_customize_register( $wp_customize ) {
 					'label'     => esc_html__('Team members', 'onepress'),
 					'description'   => '',
 					'section'       => 'onepress_team_content',
-					'live_title_id' => 'user_id', // apply for unput text and textarea only
+					//'live_title_id' => 'user_id', // apply for unput text and textarea only
 					'title_format'  => esc_html__( '[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
-
 					'fields'    => array(
 						'user_id' => array(
-							'title' => esc_html__('User', 'onepress'),
-							'type'  =>'select',
+							'title' => esc_html__('User media', 'onepress'),
+							'type'  =>'media',
 							'desc'  => '',
-							'options' =>  $option_users
 						),
 					),
 

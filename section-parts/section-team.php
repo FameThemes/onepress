@@ -20,28 +20,30 @@ if ( ! empty( $user_ids ) ) {
                     <?php
                     if (!empty($user_ids)) {
                         foreach ($user_ids as $member) {
-                            $user = get_user_by('id', $member['user_id']);
-                            if (!$user || is_wp_error($user)) {
-                                continue;
+                            $member = wp_parse_args( $member, array(
+                                'user_id'  =>array(),
+                            ));
+                            $user_id = wp_parse_args( $member['user_id'],array(
+                                'id' => '',
+                             ) );
+
+                            $image_attributes = wp_get_attachment_image_src( $user_id['id'], 'onepress-small' );
+                            if ( $image_attributes ) {
+                                $image = $image_attributes[0];
+                                $data = get_post( $user_id['id'] );
+                                ?>
+                                <div class="team-member col-sm-3 wow slideInUp">
+                                    <div class="member-thumb">
+                                        <img src="<?php echo esc_url( $image ); ?>" alt="">
+                                        <?php do_action( 'onepress_section_team_member_media', $member ); ?>
+                                    </div>
+                                    <div class="member-info">
+                                        <h5 class="member-name"><?php echo esc_html( $data->post_title ); ?></h5>
+                                        <span class="member-position"><?php echo esc_html( $data->post_content ); ?></span>
+                                    </div>
+                                </div>
+                                <?php
                             }
-
-                            $image = get_avatar($user->user_email, 300);
-
-                            ?>
-                            <div class="team-member col-sm-3 wow slideInUp">
-                                <div class="member-thumb">
-                                    <?php
-                                    if ($image != '') {
-                                        echo apply_filters('onepress_team_member_avatar', $image, $user);
-                                    } ?>
-                                   <?php do_action( 'onepress_section_team_member_media',  $user ) ?>
-                                </div>
-                                <div class="member-info">
-                                    <h5 class="member-name"><?php echo esc_html($user->display_name); ?></h5>
-                                    <span class="member-position"><?php echo get_user_meta($user->ID, 'description', true); ?></span>
-                                </div>
-                            </div>
-                            <?php
                         }
                     }
 

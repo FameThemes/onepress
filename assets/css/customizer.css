@@ -82,6 +82,14 @@
 .repeatable-customize-control.show-display-field-only .widget-content .item{
     display: none;
 }
+.section-videolightbox .item-bg_video,
+.section-videolightbox .item-bg_video,
+.section-videolightbox .item-bg_video_webm,
+.section-videolightbox .item-enable_parallax,
+.section-videolightbox .item-bg_video_ogv{
+    display: none;
+}
+
 .repeatable-customize-control.show-display-field-only .widget-content .item.item-show_section{
     display: block;
     margin-top: 15px;
@@ -99,3 +107,4 @@
     color: #ffffff;
     padding: 0px 5px;
 }
+

@@ -96,7 +96,7 @@ var RepeatableCustomize = function (  control  ){
 			} );
 
 			// when upload item
-			$('.upload-button', _item ).on('click', function ( e ) {
+			$('.upload-button, .attachment-media-view', _item ).on('click', function ( e ) {
 				e.preventDefault();
 				that.media_current = _item;
 				that.media_btn = $( this );
@@ -259,6 +259,7 @@ var RepeatableCustomize = function (  control  ){
 		that.handleMedia( $context );
 		//Special check element
 		$( '[data-live-id="section_id"]', $context ).each( function(){
+            $context.addClass( 'section-'+$( this ).val() );
 			if ( $( this ).val() === 'map' ) {
 				// console.log(  $( this).val() );
 				$context.addClass( 'show-display-field-only' );
@@ -306,7 +307,6 @@ var RepeatableCustomize = function (  control  ){
 					}
 				}
 			}
-
 
 			var $html = $( that.template( _templateData ) );
 			$( '.list-repeatable', container ).append( $html );

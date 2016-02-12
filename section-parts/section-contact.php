@@ -12,7 +12,7 @@ $onepress_contact_phone         = get_theme_mod( 'onepress_contact_phone' );
 $onepress_contact_email         = get_theme_mod( 'onepress_contact_email' );
 $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax' );
 
-if ( $onepress_contact_text || $onepress_contact_address_title || $onepress_contact_phone || $onepress_contact_email || $onepress_contact_fax ) {
+if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_address_title || $onepress_contact_phone || $onepress_contact_email || $onepress_contact_fax ) {
     ?>
     <?php if (!$onepress_contact_disable) : ?>
         <section id="<?php if ($onepress_contact_id != '') echo $onepress_contact_id; ?>" <?php do_action('onepress_section_atts', 'counter'); ?>
