@@ -22,5 +22,5 @@ if ( ! $disable && ( $video ) ) {
         <?php do_action('onepress_section_after_inner', 'videolightbox'); ?>
     </section>
 </div>
-<?php  }
-
+<?php
+}
