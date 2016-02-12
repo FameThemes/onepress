@@ -259,6 +259,7 @@ var RepeatableCustomize = function (  control  ){
 		that.handleMedia( $context );
 		//Special check element
 		$( '[data-live-id="section_id"]', $context ).each( function(){
+            $context.addClass( 'section-'+$( this ).val() );
 			if ( $( this ).val() === 'map' ) {
 				// console.log(  $( this).val() );
 				$context.addClass( 'show-display-field-only' );
