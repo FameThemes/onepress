@@ -1,7 +1,6 @@
 <?php
 
 
-
 /*-----------------------------------------------------------------------------------*/
 /*  OnePress Customizer Controls
 /*-----------------------------------------------------------------------------------*/
@@ -185,6 +184,8 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
     public $fields = array();
     public $live_title_id = null;
     public $title_format = null;
+    public $defined_values = null;
+    public $id_key = null;
 
 
     public function __construct( $manager, $id, $args = array() )
@@ -208,6 +209,8 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
         $this->fields = $args['fields'];
         $this->live_title_id = isset( $args['live_title_id'] ) ? $args['live_title_id'] : false;
+        $this->defined_values = isset( $args['defined_values'] ) ? $args['defined_values'] : false;
+        $this->id_key = isset( $args['id_key'] ) ? $args['id_key'] : false;
         if ( isset( $args['title_format'] ) && $args['title_format'] != '' ) {
             $this->title_format = $args['title_format'];
         } else {
@@ -228,13 +231,52 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
     }
 
+    public function merge_data( $array, $array_2 ){
+        if ( ! $this->id_key ) {
+            return $array;
+        }
+
+        if ( ! is_array( $array ) ) {
+            $array =  array();
+        }
+
+        if ( ! is_array( $array_2 ) ) {
+            $array_2 =  array();
+        }
+
+        $new_array = array();
+        foreach ( $array as $k => $a ) {
+            if ( is_array( $a ) && isset ( $a[ $this->id_key ]  ) ) {
+                $new_array[ $a[ $this->id_key ] ] = $a;
+            }
+        }
+
+        foreach ( $array_2 as $k => $a ) {
+            if ( is_array( $a ) && isset ( $a[ $this->id_key ]  ) ) {
+                if ( ! isset ( $new_array[ $this->id_key ] ) ) {
+                    $new_array[ $a[ $this->id_key ] ] = $a;
+                }
+            }
+        }
+        return array_values( $new_array );
+    }
+
     public function to_json() {
         parent::to_json();
+        $value = $this->value();
+        if ( empty ( $value ) ){
+            $value = json_encode( $this->defined_values );
+        } elseif ( is_array( $this->defined_values ) && ! empty ( $this->defined_values ) ) {
+            $value = json_decode( $value, true );
+            $value = $this->merge_data( $value, $this->defined_values );
+            $value = json_encode( $value );
+        }
+
         $this->json['live_title_id'] = $this->live_title_id;
         $this->json['title_format']  = $this->title_format;
         $this->json['max_item']      = $this->max_item;
         $this->json['changeable']    = $this->changeable;
-        $this->json['value']         = $this->value();
+        $this->json['value']         = $value;
         $this->json['fields']        = $this->fields;
 
     }

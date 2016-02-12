@@ -15,8 +15,6 @@ var RepeatableCustomize = function (  control  ){
 	}catch ( e ) {
 		values = {};
 	}
-
-
 	var max_item  = 0; // unlimited
 
 	if ( ! isNaN( parseInt( control.params.max_item ) ) ) {
