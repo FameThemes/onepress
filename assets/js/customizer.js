@@ -299,7 +299,7 @@ var RepeatableCustomize = function (  control  ){
 			_values = values[i];
 			if ( values[i] ) {
 				for ( var j in _values ) {
-					if ( _values.hasOwnProperty( j ) && _values.hasOwnProperty( j ) ) {
+					if ( _templateData.hasOwnProperty( j ) && _values.hasOwnProperty( j ) ) {
 						// console.log( _values[j] );
 						_templateData[ j ].value = _values[j];
 					}
