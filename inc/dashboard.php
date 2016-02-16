@@ -104,9 +104,9 @@ function onepress_theme_info_page() {
                         </div>
                         <div class="theme_link">
                             <h3><?php esc_html_e( 'Having Trouble, Need Support?', 'onepress' ); ?></h3>
-                            <p class="about"><?php printf(esc_html__('Support for %s WordPress theme is conducted through the WordPress free theme support forum.', 'onepress'), $theme_data->Name); ?></p>
+                            <p class="about"><?php printf(esc_html__('Support for %s WordPress theme is conducted through FameThemes support ticket system.', 'onepress'), $theme_data->Name); ?></p>
                             <p>
-                                <a href="<?php echo esc_url('https://wordpress.org/support/theme/onepress' ); ?>" target="_blank" class="button button-secondary"><?php echo sprintf( esc_html('Go To %s Support Forum', 'onepress'), $theme_data->Name); ?></a>
+                                <a href="<?php echo esc_url('https://www.famethemes.com/dashboard/tickets/' ); ?>" target="_blank" class="button button-secondary"><?php echo sprintf( esc_html('Create a support ticket', 'onepress'), $theme_data->Name); ?></a>
                             </p>
                         </div>
                     </div>
