@@ -2,7 +2,9 @@
 CHANGELOG
 ====================================================================
 ## 1.1.3
-* 
+* Fixed hide video media bg bug
+* Fixed sometime customizer show js error.
+* Change support ticket url.
 
 ## 1.1.2
 * Improve customize control.
