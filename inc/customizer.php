@@ -915,7 +915,6 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
-
             // About content source
             $wp_customize->add_setting( 'onepress_about_content_source',
                 array(
@@ -936,7 +935,6 @@ function onepress_customize_register( $wp_customize ) {
                     ),
                 )
             );
-
 
     /*------------------------------------------------------------------------*/
     /*  Section: Services
@@ -1294,6 +1292,28 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
+
+        // Team layout
+        $wp_customize->add_setting( 'onepress_team_layout',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default'           => '3',
+            )
+        );
+
+        $wp_customize->add_control( 'onepress_team_layout',
+            array(
+                'label' 		=> esc_html__('Team Layout Setting', 'onepress'),
+                'section' 		=> 'onepress_team_settings',
+                'description'   => '',
+                'type'          => 'select',
+                'choices'       => array(
+                    '3' => esc_html__( '4 Columns', 'onepress' ),
+                    '4' => esc_html__( '3 Columns', 'onepress' ),
+                    '6' => esc_html__( '2 Columns', 'onepress' ),
+                ),
+            )
+        );
 
 	$wp_customize->add_section( 'onepress_team_content' ,
 		array(
