@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.1.4
+* Add parallax for hero section
+
 ## 1.1.3
 * Add hook `onepress_dashboard_theme_links` to theme dashboard.
 * Fixed hide video media bg bug
