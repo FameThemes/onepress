@@ -186,6 +186,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
     public $title_format = null;
     public $defined_values = null;
     public $id_key = null;
+    public $limited_msg = null;
 
 
     public function __construct( $manager, $id, $args = array() )
@@ -215,6 +216,12 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
             $this->title_format = $args['title_format'];
         } else {
             $this->title_format = '';
+        }
+
+        if ( isset( $args['limited_msg'] ) && $args['limited_msg'] != '' ) {
+            $this->limited_msg = $args['limited_msg'];
+        } else {
+            $this->limited_msg = '';
         }
 
         if ( ! isset( $args['max_item'] ) ) {
@@ -275,6 +282,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         $this->json['live_title_id'] = $this->live_title_id;
         $this->json['title_format']  = $this->title_format;
         $this->json['max_item']      = $this->max_item;
+        $this->json['limited_msg']   = $this->limited_msg;
         $this->json['changeable']    = $this->changeable;
         $this->json['value']         = $value;
         $this->json['fields']        = $this->fields;

@@ -95,7 +95,6 @@ if ( ! empty( $page_ids ) ) {
                                     the_content();
                                 }
 
-
                                 ?>
                             </div>
                             <?php
