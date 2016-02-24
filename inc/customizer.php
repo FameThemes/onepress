@@ -519,6 +519,26 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+
+            // Parallax
+            $wp_customize->add_setting( 'onepress_hero_parallax',
+                array(
+                    'sanitize_callback' => 'onepress_sanitize_checkbox',
+                    'default'           => 0,
+                    'transport' => 'refresh', // refresh or postMessage
+                )
+            );
+            $wp_customize->add_control(
+                'onepress_hero_parallax',
+                array(
+                    'label' 		=> esc_html__('Enable parallax( Apply for first BG image only. )', 'onepress'),
+                    'section' 		=> 'onepress_hero_images',
+                    'type' 		   => 'checkbox',
+                    'priority'      => 50,
+                    'description' => esc_html__('Check this box to enable parallax for section', 'onepress'),
+                )
+            );
+
 			// Overlay Opacity
 			$wp_customize->add_setting( 'onepress_hero_overlay_opacity',
 				array(
