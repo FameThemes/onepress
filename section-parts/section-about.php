@@ -5,6 +5,7 @@ $onepress_about_title    = get_theme_mod( 'onepress_about_title', esc_html__('Ab
 $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__('Section subtitle', 'onepress' ));
 // Get data
 $page_ids =  onepress_get_section_about_data();
+$content_source = get_theme_mod( 'onepress_about_content_source' );
 if ( ! empty( $page_ids ) ) {
     ?>
     <?php if (!$onepress_about_disable) { ?>
@@ -87,7 +88,15 @@ if ( ! empty( $page_ids ) ) {
 
                                         ?></h3>
                                 <?php } ?>
-                                <?php the_excerpt(); ?>
+                                <?php
+                                if ( $content_source == 'excerpt' ) {
+                                    the_excerpt();
+                                } else {
+                                    the_content();
+                                }
+
+
+                                ?>
                             </div>
                             <?php
                         } // end foreach

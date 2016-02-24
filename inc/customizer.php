@@ -914,7 +914,30 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
-	/*------------------------------------------------------------------------*/
+
+            // About content source
+            $wp_customize->add_setting( 'onepress_about_content_source',
+                array(
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'default'           => 'content',
+                )
+            );
+
+            $wp_customize->add_control( 'onepress_about_content_source',
+                array(
+                    'label' 		=> esc_html__('Item content source', 'onepress'),
+                    'section' 		=> 'onepress_about_content',
+                    'description'   => '',
+                    'type'          => 'select',
+                    'choices'       => array(
+                        'content' => esc_html__( 'Content', 'onepress' ),
+                        'excerpt' => esc_html__( 'Excerpt', 'onepress' ),
+                    ),
+                )
+            );
+
+
+    /*------------------------------------------------------------------------*/
     /*  Section: Services
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_services' ,
