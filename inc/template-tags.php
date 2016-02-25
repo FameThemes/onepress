@@ -185,6 +185,10 @@ endif;
 if ( ! function_exists( 'onepress_hero_overlay_css' ) ) {
 
 	add_action( 'wp_head', 'onepress_hero_overlay_css' );
+    /**
+     * Add custom css to header
+     *
+     */
 	function onepress_hero_overlay_css( ) {
 
 		if ( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ) ) {
@@ -194,7 +198,6 @@ if ( ! function_exists( 'onepress_hero_overlay_css' ) ) {
 				#main .video-section section.hero-slideshow-wrapper {
 					background: transparent;
 				}
-
 				.hero-slideshow-wrapper:after {
 					position: absolute;
 					top: 0px;
@@ -220,6 +223,21 @@ if ( ! function_exists( 'onepress_hero_overlay_css' ) ) {
 					display: block;
 					content: "";
 				}
+                .parallax-hero .hero-slideshow-wrapper:after {
+                    display: none !important;
+                }
+                .parallax-hero .parallax-mirror:after {
+                    position: absolute;
+                    top: 0px;
+                    left: 0px;
+                    width: 100%;
+                    height: 100%;
+                    opacity: <?php echo floatval( $o); ?>;
+                    background-color: <?php echo get_theme_mod( 'onepress_hero_overlay_color' ); ?>;
+                    display: block;
+                    content: "";
+                }
+
 			</style>
 		<?php
 		}
@@ -339,6 +357,7 @@ function onepress_get_section_team_data(){
 
 /**
  * Add Copyright and Credit text to footer
+ * @since 1.1.3
  */
 function onepress_footer_site_info(){
     ?>
