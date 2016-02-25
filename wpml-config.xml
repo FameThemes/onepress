@@ -84,6 +84,7 @@
             <key name='onepress_contact_phone' />
             <key name='onepress_contact_email' />
             <key name='onepress_contact_fax' />
+            <key name='onepress_footer_copyright_text' />
         </key>
     </admin-texts>
 </wpml-config>
