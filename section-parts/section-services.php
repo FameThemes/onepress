@@ -1,8 +1,8 @@
 <?php
-$onepress_service_id       = get_theme_mod( 'onepress_service_id', esc_html__('services', 'onepress') );
-$onepress_service_disable  = get_theme_mod( 'onepress_service_disable' ) == 1 ? true : false;
-$onepress_service_title    = get_theme_mod( 'onepress_service_title', esc_html__('Our Services', 'onepress' ));
-$onepress_service_subtitle = get_theme_mod( 'onepress_service_subtitle', esc_html__('Section subtitle', 'onepress' ));
+$onepress_service_id       = get_theme_mod( 'onepress_services_id', esc_html__('services', 'onepress') );
+$onepress_service_disable  = get_theme_mod( 'onepress_services_disable' ) == 1 ? true : false;
+$onepress_service_title    = get_theme_mod( 'onepress_services_title', esc_html__('Our Services', 'onepress' ));
+$onepress_service_subtitle = get_theme_mod( 'onepress_services_subtitle', esc_html__('Section subtitle', 'onepress' ));
 // Get data
 $page_ids =  onepress_get_section_services_data();
 if ( ! empty( $page_ids ) ) {

@@ -958,13 +958,13 @@ function onepress_customize_register( $wp_customize ) {
 	);
 
 		// Show Content
-		$wp_customize->add_setting( 'onepress_service_disable',
+		$wp_customize->add_setting( 'onepress_services_disable',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_checkbox',
 				'default'           => '',
 			)
 		);
-		$wp_customize->add_control( 'onepress_service_disable',
+		$wp_customize->add_control( 'onepress_services_disable',
 			array(
 				'type'        => 'checkbox',
 				'label'       => esc_html__('Hide this section?', 'onepress'),
@@ -974,13 +974,13 @@ function onepress_customize_register( $wp_customize ) {
 		);
 
 		// Section ID
-		$wp_customize->add_setting( 'onepress_service_id',
+		$wp_customize->add_setting( 'onepress_services_id',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
 				'default'           => esc_html__('services', 'onepress'),
 			)
 		);
-		$wp_customize->add_control( 'onepress_service_id',
+		$wp_customize->add_control( 'onepress_services_id',
 			array(
 				'label'     => esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_service_settings',
@@ -989,13 +989,13 @@ function onepress_customize_register( $wp_customize ) {
 		);
 
 		// Title
-		$wp_customize->add_setting( 'onepress_service_title',
+		$wp_customize->add_setting( 'onepress_services_title',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
 				'default'           => esc_html__('Our Services', 'onepress'),
 			)
 		);
-		$wp_customize->add_control( 'onepress_service_title',
+		$wp_customize->add_control( 'onepress_services_title',
 			array(
 				'label'     => esc_html__('Section Title', 'onepress'),
 				'section' 		=> 'onepress_service_settings',
@@ -1004,13 +1004,13 @@ function onepress_customize_register( $wp_customize ) {
 		);
 
 		// Sub Title
-		$wp_customize->add_setting( 'onepress_service_subtitle',
+		$wp_customize->add_setting( 'onepress_services_subtitle',
 			array(
 				'sanitize_callback' => 'sanitize_text_field',
 				'default'           => esc_html__('Section subtitle', 'onepress'),
 			)
 		);
-		$wp_customize->add_control( 'onepress_service_subtitle',
+		$wp_customize->add_control( 'onepress_services_subtitle',
 			array(
 				'label'     => esc_html__('Section Subtitle', 'onepress'),
 				'section' 		=> 'onepress_service_settings',
