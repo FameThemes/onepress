@@ -336,3 +336,15 @@ function onepress_get_section_team_data(){
     }
     return $members;
 }
+
+/**
+ * Add Copyright and Credit text to footer
+ */
+function onepress_footer_site_info(){
+    ?>
+    <?php printf( esc_html__( 'Copyright %1$s %2$s %3$s', 'onepress' ), '&copy;', esc_attr( date( 'Y' ) ), esc_attr( get_bloginfo() ) ); ?>
+    <span class="sep"> &ndash; </span>
+    <?php printf( esc_html__( '%1$s theme by %2$s', 'onepress' ), '<a href="'. esc_url('https://www.famethemes.com/themes/onepress', 'onepress') .'">OnePress</a>', 'FameThemes' ); ?>
+    <?php
+}
+add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
