@@ -237,30 +237,105 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 display: block;
                 content: "";
             }
-            <?php if ( $primary != '' ) { ?>
-            a, .screen-reader-text:hover, .screen-reader-text:active, .screen-reader-text:focus, .header-social a, .onepress-menu a:hover,
-            .onepress-menu ul li a:hover, .onepress-menu li.onepress-current-item > a, .onepress-menu ul li.current-menu-item > a, .onepress-menu > li a.menu-actived,
-            .onepress-menu.onepress-menu-mobile li.onepress-current-item > a, .site-footer a, .site-footer .footer-social a:hover, .site-footer .btt a:hover,
-            .highlight, #comments .comment .comment-wrapper .comment-meta .comment-time:hover, #comments .comment .comment-wrapper .comment-meta .comment-reply-link:hover, #comments .comment .comment-wrapper .comment-meta .comment-edit-link:hover,
-            .btn-theme-primary-outline, .sidebar .widget a:hover, .section-services .service-item .service-image i, .counter_item .counter__number,
-            .team-member .member-thumb .member-profile a:hover
-            {
-                color: #<?php echo $primary; ?>;
-            }
-            input[type="reset"], input[type="submit"], input[type="submit"], .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .card-theme-primary
-            {
-                background: #<?php echo $primary; ?>;
-            }
-            .btn-theme-primary-outline, .btn-theme-primary-outline:hover, .pricing__item:hover, .card-theme-primary, .entry-content blockquote
-            {
-                border-color : #<?php echo $primary; ?>;
-            }
-            <?php } ?>
             <?php
+            /**
+             * Theme Color
+             */
+            if ( $primary != '' ) { ?>
+                a, .screen-reader-text:hover, .screen-reader-text:active, .screen-reader-text:focus, .header-social a, .onepress-menu a:hover,
+                .onepress-menu ul li a:hover, .onepress-menu li.onepress-current-item > a, .onepress-menu ul li.current-menu-item > a, .onepress-menu > li a.menu-actived,
+                .onepress-menu.onepress-menu-mobile li.onepress-current-item > a, .site-footer a, .site-footer .footer-social a:hover, .site-footer .btt a:hover,
+                .highlight, #comments .comment .comment-wrapper .comment-meta .comment-time:hover, #comments .comment .comment-wrapper .comment-meta .comment-reply-link:hover, #comments .comment .comment-wrapper .comment-meta .comment-edit-link:hover,
+                .btn-theme-primary-outline, .sidebar .widget a:hover, .section-services .service-item .service-image i, .counter_item .counter__number,
+                .team-member .member-thumb .member-profile a:hover
+                {
+                    color: #<?php echo $primary; ?>;
+                }
+                input[type="reset"], input[type="submit"], input[type="submit"], .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .card-theme-primary
+                {
+                    background: #<?php echo $primary; ?>;
+                }
+                .btn-theme-primary-outline, .btn-theme-primary-outline:hover, .pricing__item:hover, .card-theme-primary, .entry-content blockquote
+                {
+                    border-color : #<?php echo $primary; ?>;
+                }
+            <?php
+            } // End $primary
+
+            /**
+             * Header background
+             */
+            $header_bg_color =  get_theme_mod( 'onepress_header_bg_color' );
+            if ( $header_bg_color ) {
+                ?>
+                .site-header {
+                    background: #<?php echo $header_bg_color; ?>;
+                    border-bottom: 0px none;
+                }
+                <?php
+            } // END $header_bg_color
+
+            /**
+             * Menu color
+             */
+            $menu_color =  get_theme_mod( 'onepress_menu_color' );
+            if ( $menu_color ) {
+                ?>
+                .onepress-menu > li > a {
+                    color: #<?php echo $menu_color; ?>;
+                }
+                <?php
+            } // END $menu_color
+
+            /**
+             * Menu hover color
+             */
+            $menu_hover_color =  get_theme_mod( 'onepress_menu_hover_color' );
+            if ( $menu_hover_color ) {
+                ?>
+                .onepress-menu > li > a:hover,
+                .onepress-menu > li.current-menu-item > a{
+                    color: #<?php echo $menu_hover_color; ?>;
+                }
+            <?php
+            } // END $menu_hover_color
+
+            /**
+             * Menu background color
+             */
+            $menu_bg=  get_theme_mod( 'onepress_menu_bg_color' );
+            if ( $menu_bg ) {
+                ?>
+                .onepress-menu > li:last-child > a {
+                    padding-right: 17px;
+                }
+                .onepress-menu > li > a {
+                    background: #<?php echo $menu_bg; ?>;
+                }
+            <?php
+            } // END $menu_bg
+
+            /**
+             * Menu hover background color
+             */
+            $menu_hover_bg =  get_theme_mod( 'onepress_menu_hover_bg_color' );
+            if ( $menu_bg ) {
+                ?>
+                .onepress-menu > li:last-child > a {
+                    padding-right: 17px;
+                }
+                .onepress-menu > li > a:hover,
+                .onepress-menu > li.current-menu-item > a
+                {
+                    background: #<?php echo $menu_hover_bg; ?>;
+                }
+            <?php
+            } // END $menu_hover_bg
+
+
         $css = ob_get_clean();
 
-
-        if( trim( $css ) === "") {
+        if ( trim( $css ) == "" ) {
             return ;
         }
         $css = preg_replace(

@@ -166,6 +166,112 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			));
 
+
+		/* Header
+		----------------------------------------------------------------------*/
+		$wp_customize->add_section( 'onepress_header_settings' ,
+			array(
+				'priority'    => 5,
+				'title'       => esc_html__( 'Header', 'onepress' ),
+				'description' => '',
+				'panel'       => 'onepress_options',
+			)
+		);
+		// Header BG Color
+		$wp_customize->add_setting( 'onepress_header_bg_color',
+			array(
+				'sanitize_callback' => 'sanitize_hex_color_no_hash',
+				'sanitize_js_callback' => 'maybe_hash_hex_color',
+				'default' => ''
+			) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_header_bg_color',
+			array(
+				'label'       => esc_html__( 'Background Color', 'onepress' ),
+				'section'     => 'onepress_header_settings',
+				'description' => '',
+			)
+		));
+
+		// Header BG Color
+		$wp_customize->add_setting( 'onepress_header_bg_color',
+			array(
+				'sanitize_callback' => 'sanitize_hex_color_no_hash',
+				'sanitize_js_callback' => 'maybe_hash_hex_color',
+				'default' => ''
+			) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_header_bg_color',
+			array(
+				'label'       => esc_html__( 'Background Color', 'onepress' ),
+				'section'     => 'onepress_header_settings',
+				'description' => '',
+
+			)
+		));
+
+		// Header Menu Color
+		$wp_customize->add_setting( 'onepress_menu_color',
+			array(
+				'sanitize_callback' => 'sanitize_hex_color_no_hash',
+				'sanitize_js_callback' => 'maybe_hash_hex_color',
+				'default' => ''
+			) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_menu_color',
+			array(
+				'label'       => esc_html__( 'Menu Color', 'onepress' ),
+				'section'     => 'onepress_header_settings',
+				'description' => '',
+			)
+		));
+
+		// Header Menu Hover Color
+		$wp_customize->add_setting( 'onepress_menu_hover_color',
+			array(
+				'sanitize_callback' => 'sanitize_hex_color_no_hash',
+				'sanitize_js_callback' => 'maybe_hash_hex_color',
+				'default' => ''
+			) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_menu_hover_color',
+			array(
+				'label'       => esc_html__( 'Menu Hover/Active Color', 'onepress' ),
+				'section'     => 'onepress_header_settings',
+				'description' => '',
+
+			)
+		));
+
+		// Header Menu BG Color
+		$wp_customize->add_setting( 'onepress_menu_bg_color',
+			array(
+				'sanitize_callback' => 'sanitize_hex_color_no_hash',
+				'sanitize_js_callback' => 'maybe_hash_hex_color',
+				'default' => ''
+			) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_menu_bg_color',
+			array(
+				'label'       => esc_html__( 'Menu Background Color', 'onepress' ),
+				'section'     => 'onepress_header_settings',
+				'description' => '',
+
+			)
+		));
+
+		// Header Menu Hover BG Color
+		$wp_customize->add_setting( 'onepress_menu_hover_bg_color',
+			array(
+				'sanitize_callback' => 'sanitize_hex_color_no_hash',
+				'sanitize_js_callback' => 'maybe_hash_hex_color',
+				'default' => ''
+			) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_menu_hover_bg_color',
+			array(
+				'label'       => esc_html__( 'Menu Hover/Active Background Color', 'onepress' ),
+				'section'     => 'onepress_header_settings',
+				'description' => '',
+			)
+		));
+
+
+
 		/* Social Settings
 		----------------------------------------------------------------------*/
 		$wp_customize->add_section( 'onepress_social' ,
