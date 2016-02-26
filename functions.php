@@ -117,7 +117,7 @@ function onepress_scripts() {
 	wp_enqueue_style( 'onepress-fonts', onepress_fonts_url(), array(), null );
 	wp_enqueue_style( 'onepress-animate', get_template_directory_uri() .'/assets/css/animate.min.css', array(), '1.0.0' );
 	wp_enqueue_style( 'onepress-fa', get_template_directory_uri() .'/assets/css/font-awesome.min.css', array(), '4.4.0' );
-	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', array(), '4.0.0' );
+	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', false, '4.0.0' );
     wp_enqueue_style( 'onepress-style', get_template_directory_uri().'/style.css' );
 
 	wp_enqueue_script('jquery');
@@ -129,9 +129,10 @@ function onepress_scripts() {
 	}
 
 	// Animation from settings
-	$onepress_js_settings = array( 
-		'onepress_disable_animation' => get_theme_mod( 'onepress_animation_disable' ),
-		'onepress_disable_sticky_header' => get_theme_mod( 'onepress_sticky_header_disable' )
+	$onepress_js_settings = array(
+		'onepress_disable_animation'     => get_theme_mod( 'onepress_animation_disable' ),
+		'onepress_disable_sticky_header' => get_theme_mod( 'onepress_sticky_header_disable' ),
+		'onepress_vertical_align_menu'   => get_theme_mod( 'onepress_vertical_align_menu' )
 	);
 	wp_localize_script('jquery','onepress_js_settings', $onepress_js_settings);
 

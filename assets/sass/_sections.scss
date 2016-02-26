@@ -93,6 +93,10 @@
 		}
 	}
 }
+.section-desc {
+	@include rem('font-size', 20px);
+	@include rem('margin-top', 40px);
+}
 
 /* Section: Hero
 ------------------------------*/

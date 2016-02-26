@@ -37,6 +37,12 @@ foreach ( $_images as $m ) {
 	}
 }
 
+$is_parallax =  get_theme_mod( 'onepress_hero_parallax' ) == 1 && ! empty( $images ) ;
+
+if ( $is_parallax ) {
+    echo '<div id="parallax-hero" class="parallax-hero parallax-window" data-over-scroll-fix="true" data-z-index="1" data-speed="0.3" data-image-src="'.esc_attr( $images[0] ).'" data-parallax="scroll" data-position="center" data-bleed="0">';
+}
+
 ?>
 <?php if ( ! $onepress_hero_disable && ! empty ( $_images ) ) : ?>
 	<section id="<?php if ($onepress_hero_id != '') echo $onepress_hero_id; ?>" class="hero-slideshow-wrapper <?php if ($onepress_hero_fullscreen == 1) {
@@ -56,7 +62,7 @@ foreach ( $_images as $m ) {
 		<?php endif; ?>
 		<?php
 
-		if ( ! empty ( $images) ) {
+		if ( ! empty ( $images) && ! $is_parallax ) {
 			?>
 			<script>
 				jQuery(document).ready(function () {
@@ -71,4 +77,8 @@ foreach ( $_images as $m ) {
 	?>
 	</section>
 <?php endif;
+
+if ( $is_parallax ) {
+    echo '</div>'; // end parallax
+}
 

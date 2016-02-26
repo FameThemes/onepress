@@ -3,7 +3,7 @@ $onepress_team_id       = get_theme_mod( 'onepress_team_id', esc_html__('team', 
 $onepress_team_disable  = get_theme_mod( 'onepress_team_disable' ) ==  1 ? true : false;
 $onepress_team_title    = get_theme_mod( 'onepress_team_title', esc_html__('Our Team', 'onepress' ));
 $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('Section subtitle', 'onepress' ));
-
+$layout = intval( get_theme_mod( 'onepress_team_layout', 3 ) );
 $user_ids = onepress_get_section_team_data();
 if ( ! empty( $user_ids ) ) {
     ?>
@@ -19,6 +19,7 @@ if ( ! empty( $user_ids ) ) {
                 <div class="team-members row">
                     <?php
                     if (!empty($user_ids)) {
+                        $n = 0;
                         foreach ($user_ids as $member) {
                             $member = wp_parse_args( $member, array(
                                 'user_id'  =>array(),
@@ -31,8 +32,9 @@ if ( ! empty( $user_ids ) ) {
                             if ( $image_attributes ) {
                                 $image = $image_attributes[0];
                                 $data = get_post( $user_id['id'] );
+                                $n ++ ;
                                 ?>
-                                <div class="team-member col-sm-3 wow slideInUp">
+                                <div class="team-member col-md-<?php echo esc_attr( $layout ); ?> col-sm-6 wow slideInUp">
                                     <div class="member-thumb">
                                         <img src="<?php echo esc_url( $image ); ?>" alt="">
                                         <?php do_action( 'onepress_section_team_member_media', $member ); ?>
@@ -43,6 +45,7 @@ if ( ! empty( $user_ids ) ) {
                                     </div>
                                 </div>
                                 <?php
+
                             }
                         }
                     }

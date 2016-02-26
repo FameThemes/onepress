@@ -16,10 +16,12 @@ var RepeatableCustomize = function (  control  ){
 		values = {};
 	}
 	var max_item  = 0; // unlimited
+    var limited_mg = control.params.limited_msg || '';
 
 	if ( ! isNaN( parseInt( control.params.max_item ) ) ) {
 		max_item = parseInt( control.params.max_item );
 	}
+
 	if ( control.params.changeable === 'no' ) {
 		container.addClass( 'no-changeable' );
 	}
@@ -201,11 +203,23 @@ var RepeatableCustomize = function (  control  ){
 
 	that._check_max_item = function(){
 		var n = $( '.list-repeatable > li.repeatable-customize-control', control.container).length;
-		// console.log( n );
+		 //console.log( n );
 		if ( n>= max_item ) {
 			$( '.repeatable-actions', control.container ).hide();
+            if ( $( '.limited-msg', control.container).length <= 0 ) {
+                if ( limited_mg !== '' ) {
+                    var msg = $( '<p class="limited-msg"/>' );
+                    msg.html( limited_mg );
+                    msg.insertAfter( $( '.repeatable-actions', control.container ) );
+                    msg.show();
+                }
+            } else {
+                $( '.limited-msg', control.container ).show();
+            }
+
 		} else {
 			$( '.repeatable-actions', control.container ).show();
+			$( '.limited-msg', control.container ).hide();
 		}
 		//console.log( max_item );
 	};
@@ -257,7 +271,8 @@ var RepeatableCustomize = function (  control  ){
 		that.handleMedia( $context );
 		//Special check element
 		$( '[data-live-id="section_id"]', $context ).each( function(){
-            $context.addClass( 'section-'+$( this ).val() );
+           // $context.addClass( 'section-'+$( this ).val() );
+            $( this).closest( '.repeatable-customize-control').addClass( 'section-'+$( this ).val() );
 			if ( $( this ).val() === 'map' ) {
 				// console.log(  $( this).val() );
 				$context.addClass( 'show-display-field-only' );
@@ -299,7 +314,7 @@ var RepeatableCustomize = function (  control  ){
 			_values = values[i];
 			if ( values[i] ) {
 				for ( var j in _values ) {
-					if ( _values.hasOwnProperty( j ) && _values.hasOwnProperty( j ) ) {
+					if ( _templateData.hasOwnProperty( j ) && _values.hasOwnProperty( j ) ) {
 						// console.log( _values[j] );
 						_templateData[ j ].value = _values[j];
 					}

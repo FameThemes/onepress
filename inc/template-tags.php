@@ -182,47 +182,201 @@ function onepress_comment( $comment, $args, $depth ) {
 }
 endif;
 
-if ( ! function_exists( 'onepress_hero_overlay_css' ) ) {
+if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
+	add_action( 'wp_enqueue_scripts', 'onepress_custom_inline_style', 100 );
+    /**
+     * Add custom css to header
+     *
+     */
+	function onepress_custom_inline_style( ) {
 
-	add_action( 'wp_head', 'onepress_hero_overlay_css' );
-	function onepress_hero_overlay_css( ) {
+            /**
+             *  Custom hero section css
+             */
+            $hero_bg_color = get_theme_mod( 'onepress_hero_overlay_color', '#000000' );
+			$hero_opacity = floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) );
+            ob_start();
+            ?>
+            #main .video-section section.hero-slideshow-wrapper {
+                background: transparent;
+            }
+            .hero-slideshow-wrapper:after {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                opacity: <?php echo $hero_opacity; ?>;
+                background-color: <?php echo $hero_bg_color; ?>;
+                display: block;
+                content: "";
+            }
+            .parallax-hero .hero-slideshow-wrapper:after {
+                display: none !important;
+            }
+            .parallax-hero .parallax-mirror:after {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                opacity: <?php echo $hero_opacity; ?>;
+                background-color: <?php echo $hero_bg_color; ?>;
+                display: block;
+                content: "";
+            }
+            .parallax-hero .hero-slideshow-wrapper:after {
+                display: none !important;
+            }
+            .parallax-hero .parallax-mirror:after {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                opacity: <?php echo $hero_opacity; ?>;
+                background-color: <?php echo $hero_bg_color; ?>;
+                display: block;
+                content: "";
+            }
+            <?php
+            /**
+             * Theme Color
+             */
+            $primary   = get_theme_mod( 'onepress_primary_color' );
+            if ( $primary != '' ) { ?>
+                a, .screen-reader-text:hover, .screen-reader-text:active, .screen-reader-text:focus, .header-social a, .onepress-menu a:hover,
+                .onepress-menu ul li a:hover, .onepress-menu li.onepress-current-item > a, .onepress-menu ul li.current-menu-item > a, .onepress-menu > li a.menu-actived,
+                .onepress-menu.onepress-menu-mobile li.onepress-current-item > a, .site-footer a, .site-footer .footer-social a:hover, .site-footer .btt a:hover,
+                .highlight, #comments .comment .comment-wrapper .comment-meta .comment-time:hover, #comments .comment .comment-wrapper .comment-meta .comment-reply-link:hover, #comments .comment .comment-wrapper .comment-meta .comment-edit-link:hover,
+                .btn-theme-primary-outline, .sidebar .widget a:hover, .section-services .service-item .service-image i, .counter_item .counter__number,
+                .team-member .member-thumb .member-profile a:hover
+                {
+                    color: #<?php echo $primary; ?>;
+                }
+                input[type="reset"], input[type="submit"], input[type="submit"], .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .card-theme-primary
+                {
+                    background: #<?php echo $primary; ?>;
+                }
+                .btn-theme-primary-outline, .btn-theme-primary-outline:hover, .pricing__item:hover, .card-theme-primary, .entry-content blockquote
+                {
+                    border-color : #<?php echo $primary; ?>;
+                }
+            <?php
+            } // End $primary
 
-		if ( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ) ) {
-			$o = get_theme_mod( 'onepress_hero_overlay_opacity' , .3 );
-			?>
-			<style type="text/css">
-				#main .video-section section.hero-slideshow-wrapper {
-					background: transparent;
-				}
+            /**
+             * Header background
+             */
+            $header_bg_color =  get_theme_mod( 'onepress_header_bg_color' );
+            if ( $header_bg_color ) {
+                ?>
+                .site-header {
+                    background: #<?php echo $header_bg_color; ?>;
+                    border-bottom: 0px none;
+                }
+                <?php
+            } // END $header_bg_color
 
-				.hero-slideshow-wrapper:after {
-					position: absolute;
-					top: 0px;
-					left: 0px;
-					width: 100%;
-					height: 100%;
-					opacity: <?php echo floatval( $o); ?>;
-					background-color: <?php echo get_theme_mod( 'onepress_hero_overlay_color' ); ?>;
-					display: block;
-					content: "";
+            /**
+             * Menu color
+             */
+            $menu_color =  get_theme_mod( 'onepress_menu_color' );
+            if ( $menu_color ) {
+                ?>
+                .onepress-menu > li > a {
+                    color: #<?php echo $menu_color; ?>;
+                }
+                <?php
+            } // END $menu_color
+
+            /**
+             * Menu hover color
+             */
+            $menu_hover_color =  get_theme_mod( 'onepress_menu_hover_color' );
+            if ( $menu_hover_color ) {
+                ?>
+                .onepress-menu > li > a:hover,
+                .onepress-menu > li.onepress-current-item > a{
+                    color: #<?php echo $menu_hover_color; ?>;
+					-webkit-transition: all 0.5s ease-in-out;
+					-moz-transition: all 0.5s ease-in-out;
+					-o-transition: all 0.5s ease-in-out;
+					transition: all 0.5s ease-in-out;
+                }
+            <?php
+            } // END $menu_hover_color
+
+            /**
+             * Menu hover background color
+             */
+            $menu_hover_bg =  get_theme_mod( 'onepress_menu_hover_bg_color' );
+            if ( $menu_hover_bg ) {
+                ?>
+				@media screen and (min-width: 1140px) {
+	                .onepress-menu > li:last-child > a {
+	                    padding-right: 17px;
+	                }
+	                .onepress-menu > li > a:hover,
+	                .onepress-menu > li.onepress-current-item > a
+	                {
+	                    background: #<?php echo $menu_hover_bg; ?>;
+						-webkit-transition: all 0.5s ease-in-out;
+						-moz-transition: all 0.5s ease-in-out;
+						-o-transition: all 0.5s ease-in-out;
+						transition: all 0.5s ease-in-out;
+	                }
 				}
-				.parallax-hero .hero-slideshow-wrapper:after {
-					display: none !important;
+            <?php
+            } // END $menu_hover_bg
+
+			/**
+             * Reponsive Mobie button color
+             */
+            $menu_button_color =  get_theme_mod( 'onepress_menu_toggle_button_color' );
+            if ( $menu_button_color ) {
+                ?>
+				#nav-toggle span, #nav-toggle span::before, #nav-toggle span::after,
+				#nav-toggle.nav-is-visible span::before, #nav-toggle.nav-is-visible span::after {
+					background: #<?php echo $menu_button_color; ?>;
 				}
-				.parallax-hero .parallax-mirror:after {
-					position: absolute;
-					top: 0px;
-					left: 0px;
-					width: 100%;
-					height: 100%;
-					opacity: <?php echo floatval( $o); ?>;
-					background-color: <?php echo get_theme_mod( 'onepress_hero_overlay_color' ); ?>;
-					display: block;
-					content: "";
+            <?php
+            }
+
+			/**
+             * Site Title
+             */
+            $onepress_logo_text_color =  get_theme_mod( 'onepress_logo_text_color' );
+            if ( $onepress_logo_text_color ) {
+                ?>
+				.site-branding .site-title, .site-branding .site-text-logo {
+					color: #<?php echo $onepress_logo_text_color; ?>;
 				}
-			</style>
-		<?php
-		}
+            <?php
+            }
+
+
+        $css = ob_get_clean();
+
+        if ( trim( $css ) == "" ) {
+            return ;
+        }
+        $css = preg_replace(
+            array(
+                // Remove comment(s)
+                '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
+                // Remove unused white-space(s)
+                '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~+]|\s*+-(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
+            ),
+            array(
+                '$1',
+                '$1$2$3$4$5$6$7',
+            ),
+            $css
+        );
+
+        wp_add_inline_style( 'onepress-style', $css );
+
 	}
 
 }
@@ -336,3 +490,16 @@ function onepress_get_section_team_data(){
     }
     return $members;
 }
+
+/**
+ * Add Copyright and Credit text to footer
+ * @since 1.1.3
+ */
+function onepress_footer_site_info(){
+    ?>
+    <?php printf( esc_html__( 'Copyright %1$s %2$s %3$s', 'onepress' ), '&copy;', esc_attr( date( 'Y' ) ), esc_attr( get_bloginfo() ) ); ?>
+    <span class="sep"> &ndash; </span>
+    <?php printf( esc_html__( '%1$s theme by %2$s', 'onepress' ), '<a href="'. esc_url('https://www.famethemes.com/themes/onepress', 'onepress') .'">OnePress</a>', 'FameThemes' ); ?>
+    <?php
+}
+add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );

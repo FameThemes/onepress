@@ -68,11 +68,14 @@ $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp' 
 					<a class="back-top-top" href="#page" title="<?php echo esc_html__( 'Back To Top', 'onepress' ) ?>"><i class="fa fa-angle-double-up wow flash" data-wow-duration="2s"></i></a>
 				</div>
 				<?php endif; ?>
-
-				<?php printf( esc_html__( 'Copyright %1$s %2$s %3$s', 'onepress' ), '&copy;', esc_attr( date( 'Y' ) ), esc_attr( get_bloginfo() ) ); ?>
-				<span class="sep"> &ndash; </span>
-				<?php printf( esc_html__( '%1$s theme by %2$s', 'onepress' ), '<a href="'. esc_url('https://www.famethemes.com/themes/onepress', 'onepress') .'">OnePress</a>', 'FameThemes' ); ?>
-			</div>
+                <?php
+                /**
+                 * hooked onepress_footer_site_info
+                 * @see onepress_footer_site_info
+                 */
+                do_action( 'onepress_footer_site_info' );
+                ?>
+            </div>
 		</div><!-- .site-info -->
 
 	</footer><!-- #colophon -->

@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design. The theme overall is an elegant and classic one, a fine example of Bootstrap 4 WordPress theme. (Live preview : http://www.famethemes.com/preview/?theme=OnePress)
-Version: 1.1.2
+Version: 1.1.3
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -894,6 +894,10 @@ input[type="radio"], input[type="checkbox"] {
 	color: #03c4eb;
 }
 
+.onepress-menu .nav-toggle-subarrow {
+	display: none;
+}
+
 #nav-toggle {
 	display: none;
 	margin-left: 15px;
@@ -920,46 +924,69 @@ input[type="radio"], input[type="checkbox"] {
 	.onepress-menu.onepress-menu-mobile > li > a {
 		padding: 12px 20px;
 	}
+	.onepress-menu.onepress-menu-mobile li:hover ul {
+		display: none;
+	}
 	.onepress-menu.onepress-menu-mobile ul {
 		box-shadow: none;
 		padding-bottom: 0;
-		position: static !important;
-		display: none !important;
+		border: none;
+		position: relative;
 	}
 	.onepress-menu.onepress-menu-mobile ul li:last-child {
 		border-bottom: none;
 	}
 	.onepress-menu.onepress-menu-mobile ul li a {
 		padding: 12px 35px;
+		border-top: none;
 	}
 	.onepress-menu.onepress-menu-mobile ul li a:hover {
 		background: transparent;
 	}
 	.onepress-menu.onepress-menu-mobile ul li li a {
 		padding: 12px 70px;
+		border-top: none;
 	}
 	.onepress-menu.onepress-menu-mobile ul li li li a {
 		padding: 12px 105px;
+	}
+	.onepress-menu.onepress-menu-mobile ul ul {
+		left: 0px;
 	}
 	.onepress-menu.onepress-menu-mobile li {
 		line-height: 20px;
 		background: #FFFFFF;
 		border-top: 1px solid #e9e9e9;
-		width: 50% !important;
+		width: 100% !important;
 	}
 	.onepress-menu.onepress-menu-mobile li.onepress-current-item > a {
 		color: #03c4eb;
 	}
 	.onepress-menu.onepress-menu-mobile a {
 		color: #777777;
-		border-right: 1px solid #e9e9e9;
-		text-align: center;
 	}
 	.onepress-menu.onepress-menu-mobile a:hover {
 		color: #000000;
 	}
 	.onepress-menu.onepress-menu-mobile .nav-toggle-subarrow {
-		display: none;
+		display: block;
+		color: #999999;
+		border-left: 1px solid #e9e9e9;
+		font-weight: normal;
+		position: absolute;
+		top: 0;
+		right: 0;
+		cursor: pointer;
+		text-align: center;
+		padding: 11px 20px;
+		z-index: 10;
+		font-size: 22px;
+	}
+	.onepress-menu.onepress-menu-mobile .nav-toggle-dropdown > .nav-toggle-subarrow .fa-angle-down:before {
+		content: "\f106" !important;
+	}
+	.onepress-menu.onepress-menu-mobile .nav-toggle-dropdown > ul {
+		display: block !important;
 	}
 	#nav-toggle {
 		display: block;
@@ -1939,6 +1966,13 @@ input[type="radio"], input[type="checkbox"] {
 	.section-title-area .section-subtitle {
 		font-size: 14px;
 	}
+}
+
+.section-desc {
+	font-size: 20px;
+	font-size: 1.25rem;
+	margin-top: 40px;
+	margin-top: 2.5rem;
 }
 
 /* Section: Hero
