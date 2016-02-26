@@ -531,11 +531,11 @@ function onepress_customize_register( $wp_customize ) {
             $wp_customize->add_control(
                 'onepress_hero_parallax',
                 array(
-                    'label' 		=> esc_html__('Enable parallax( Apply for first BG image only. )', 'onepress'),
+                    'label' 		=> esc_html__('Enable parallax effect (apply for first BG image only)', 'onepress'),
                     'section' 		=> 'onepress_hero_images',
                     'type' 		   => 'checkbox',
                     'priority'      => 50,
-                    'description' => esc_html__('Check this box to enable parallax for section', 'onepress'),
+                    'description' => '',
                 )
             );
 
@@ -556,6 +556,21 @@ function onepress_customize_register( $wp_customize ) {
 						'priority'      => 130,
 					)
 			);
+
+			// Background Video
+			$wp_customize->add_setting( 'onepress_hero_videobackground_upsell',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_text',
+				)
+			);
+			$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_hero_videobackground_upsell',
+				array(
+					'section'     => 'onepress_hero_images',
+					'type'        => 'custom_message',
+					'description' => wp_kses_post( 'Want to add <strong>background video</strong> for hero section? Upgrade to <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version.', 'onepress' ),
+					'priority'    => 131,
+				)
+			));
 
 
 
@@ -872,8 +887,8 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize,
 			'onepress_about_desc',
 			array(
-				'label' 		=> esc_html__('Section Description', 'onepress'),
-				'section' 		=> 'onepress_about_settings',
+				'label' 		=> esc_html__('About Section Description', 'onepress'),
+				'section' 		=> 'onepress_about_content',
 				'description'   => '',
 			)
 		));
