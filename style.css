@@ -1941,6 +1941,13 @@ input[type="radio"], input[type="checkbox"] {
 	}
 }
 
+.section-desc {
+	font-size: 20px;
+	font-size: 1.25rem;
+	margin-top: 40px;
+	margin-top: 2.5rem;
+}
+
 /* Section: Hero
 ------------------------------*/
 .hero-slideshow-wrapper {

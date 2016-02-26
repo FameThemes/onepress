@@ -3,6 +3,7 @@ $onepress_about_id       = get_theme_mod( 'onepress_about_id', esc_html__('about
 $onepress_about_disable  = get_theme_mod( 'onepress_about_disable' ) == 1 ? true : false;
 $onepress_about_title    = get_theme_mod( 'onepress_about_title', esc_html__('About Us', 'onepress' ));
 $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__('Section subtitle', 'onepress' ));
+$onepress_about_desc     = get_theme_mod( 'onepress_about_desc');
 // Get data
 $page_ids =  onepress_get_section_about_data();
 $content_source = get_theme_mod( 'onepress_about_content_source' );
@@ -20,6 +21,9 @@ if ( ! empty( $page_ids ) ) {
                     } ?>
                     <?php if ($onepress_about_title != '') {
                         echo '<h2 class="section-title">' . esc_html($onepress_about_title) . '</h2>';
+                    } ?>
+                    <?php if ($onepress_about_desc != '') {
+                        echo '<div class="section-desc">' . wp_kses_post($onepress_about_desc) . '</div>';
                     } ?>
                 </div>
                 <div class="row">
