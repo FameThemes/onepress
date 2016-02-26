@@ -297,26 +297,15 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             if ( $menu_hover_color ) {
                 ?>
                 .onepress-menu > li > a:hover,
-                .onepress-menu > li.current-menu-item > a{
+                .onepress-menu > li.onepress-current-item > a{
                     color: #<?php echo $menu_hover_color; ?>;
+					-webkit-transition: all 0.5s ease-in-out;
+					-moz-transition: all 0.5s ease-in-out;
+					-o-transition: all 0.5s ease-in-out;
+					transition: all 0.5s ease-in-out;
                 }
             <?php
             } // END $menu_hover_color
-
-            /**
-             * Menu background color
-             */
-            $menu_bg=  get_theme_mod( 'onepress_menu_bg_color' );
-            if ( $menu_bg ) {
-                ?>
-                .onepress-menu > li:last-child > a {
-                    padding-right: 17px;
-                }
-                .onepress-menu > li > a {
-                    background: #<?php echo $menu_bg; ?>;
-                }
-            <?php
-            } // END $menu_bg
 
             /**
              * Menu hover background color
@@ -324,16 +313,47 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $menu_hover_bg =  get_theme_mod( 'onepress_menu_hover_bg_color' );
             if ( $menu_hover_bg ) {
                 ?>
-                .onepress-menu > li:last-child > a {
-                    padding-right: 17px;
-                }
-                .onepress-menu > li > a:hover,
-                .onepress-menu > li.current-menu-item > a
-                {
-                    background: #<?php echo $menu_hover_bg; ?>;
-                }
+				@media screen and (min-width: 1140px) {
+	                .onepress-menu > li:last-child > a {
+	                    padding-right: 17px;
+	                }
+	                .onepress-menu > li > a:hover,
+	                .onepress-menu > li.onepress-current-item > a
+	                {
+	                    background: #<?php echo $menu_hover_bg; ?>;
+						-webkit-transition: all 0.5s ease-in-out;
+						-moz-transition: all 0.5s ease-in-out;
+						-o-transition: all 0.5s ease-in-out;
+						transition: all 0.5s ease-in-out;
+	                }
+				}
             <?php
             } // END $menu_hover_bg
+
+			/**
+             * Reponsive Mobie button color
+             */
+            $menu_button_color =  get_theme_mod( 'onepress_menu_toggle_button_color' );
+            if ( $menu_button_color ) {
+                ?>
+				#nav-toggle span, #nav-toggle span::before, #nav-toggle span::after,
+				#nav-toggle.nav-is-visible span::before, #nav-toggle.nav-is-visible span::after {
+					background: #<?php echo $menu_button_color; ?>;
+				}
+            <?php
+            }
+
+			/**
+             * Site Title
+             */
+            $onepress_logo_text_color =  get_theme_mod( 'onepress_logo_text_color' );
+            if ( $onepress_logo_text_color ) {
+                ?>
+				.site-branding .site-title, .site-branding .site-text-logo {
+					color: #<?php echo $onepress_logo_text_color; ?>;
+				}
+            <?php
+            }
 
 
         $css = ob_get_clean();

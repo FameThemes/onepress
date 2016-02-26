@@ -201,10 +201,25 @@ function onepress_customize_register( $wp_customize ) {
 			) );
 		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_header_bg_color',
 			array(
-				'label'       => esc_html__( 'Background Color', 'onepress' ),
+				'label'       => esc_html__( 'Header BG Color', 'onepress' ),
 				'section'     => 'onepress_header_settings',
 				'description' => '',
 
+			)
+		));
+
+		// Site Title Color
+		$wp_customize->add_setting( 'onepress_logo_text_color',
+			array(
+				'sanitize_callback' => 'sanitize_hex_color_no_hash',
+				'sanitize_js_callback' => 'maybe_hash_hex_color',
+				'default' => ''
+			) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_logo_text_color',
+			array(
+				'label'       => esc_html__( 'Site Title Color', 'onepress' ),
+				'section'     => 'onepress_header_settings',
+				'description' => esc_html__( 'Only set if you don\'t use an image logo.', 'onepress' ),
 			)
 		));
 
@@ -217,7 +232,7 @@ function onepress_customize_register( $wp_customize ) {
 			) );
 		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_menu_color',
 			array(
-				'label'       => esc_html__( 'Menu Color', 'onepress' ),
+				'label'       => esc_html__( 'Menu Link Color', 'onepress' ),
 				'section'     => 'onepress_header_settings',
 				'description' => '',
 			)
@@ -232,23 +247,7 @@ function onepress_customize_register( $wp_customize ) {
 			) );
 		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_menu_hover_color',
 			array(
-				'label'       => esc_html__( 'Menu Hover/Active Color', 'onepress' ),
-				'section'     => 'onepress_header_settings',
-				'description' => '',
-
-			)
-		));
-
-		// Header Menu BG Color
-		$wp_customize->add_setting( 'onepress_menu_bg_color',
-			array(
-				'sanitize_callback' => 'sanitize_hex_color_no_hash',
-				'sanitize_js_callback' => 'maybe_hash_hex_color',
-				'default' => ''
-			) );
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_menu_bg_color',
-			array(
-				'label'       => esc_html__( 'Menu Background Color', 'onepress' ),
+				'label'       => esc_html__( 'Menu Link Hover/Active Color', 'onepress' ),
 				'section'     => 'onepress_header_settings',
 				'description' => '',
 
@@ -264,11 +263,28 @@ function onepress_customize_register( $wp_customize ) {
 			) );
 		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_menu_hover_bg_color',
 			array(
-				'label'       => esc_html__( 'Menu Hover/Active Background Color', 'onepress' ),
+				'label'       => esc_html__( 'Menu Link Hover/Active BG Color', 'onepress' ),
 				'section'     => 'onepress_header_settings',
 				'description' => '',
 			)
 		));
+
+		// Reponsive Mobie button color
+		$wp_customize->add_setting( 'onepress_menu_toggle_button_color',
+			array(
+				'sanitize_callback' => 'sanitize_hex_color_no_hash',
+				'sanitize_js_callback' => 'maybe_hash_hex_color',
+				'default' => ''
+			) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_menu_toggle_button_color',
+			array(
+				'label'       => esc_html__( 'Responsive Menu Button Color', 'onepress' ),
+				'section'     => 'onepress_header_settings',
+				'description' => '',
+			)
+		));
+
+
 
 
 

@@ -3,16 +3,16 @@
  */
 ( function() {
 
-    jQuery('.onepress-menu li.menu-item-has-children').each( function() {
-        jQuery(this).prepend('<div class="nav-toggle-subarrow"></div>');
-    });
-
     jQuery('#nav-toggle').on('click', function(event){
         event.preventDefault();
         jQuery('#nav-toggle').toggleClass('nav-is-visible');
         jQuery('.main-navigation .onepress-menu').toggleClass("onepress-menu-mobile");
         jQuery('.header-widget').toggleClass("header-widget-mobile");
     });
+
+    jQuery('.onepress-menu li.menu-item-has-children, .onepress-menu li.page_item_has_children').each( function() {
+		jQuery(this).prepend('<div class="nav-toggle-subarrow"><i class="fa fa-angle-down"></i></div>');
+	});
 
     jQuery('.nav-toggle-subarrow, .nav-toggle-subarrow .nav-toggle-subarrow').click(
         function () {

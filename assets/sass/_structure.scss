@@ -194,7 +194,9 @@
     > li a.menu-actived {
         color: $primary;
     }
-
+	.nav-toggle-subarrow {
+		display: none;
+	}
 }
 
 // Responsive Mobile Navigation
@@ -222,26 +224,34 @@
         > li > a {
             padding: 12px 20px;
         }
+		li:hover ul {
+			display: none;
+		}
         ul {
             box-shadow: none;
             padding-bottom: 0;
-            position:static!important;
-            display: none!important;
+			border: none;
+            position: relative;
             li:last-child {
                 border-bottom: none;
             }
             li a {
                 padding: 12px 35px;
+				border-top: none;
                 &:hover {
                     background: transparent;
                 }
             }
             li li a {
                 padding: 12px 70px;
+				border-top: none;
             }
             li li li a {
                 padding: 12px 105px;
             }
+			ul {
+				left: 0px;
+			}
         }
         > li > a {
             //padding-left: 20px;
@@ -250,7 +260,7 @@
             line-height: 20px;
             background: #FFFFFF;
             border-top: 1px solid $border;
-            width: 50%!important;
+            width: 100% !important;
         }
         // li.current-menu-item {
         //     > a {
@@ -268,16 +278,35 @@
             &:hover {
                 color: #000000;
             }
-            border-right: 1px solid $border;
-            text-align: center;
         }
-        .nav-toggle-subarrow{
-            display: none;
-        }
+		.nav-toggle-subarrow {
+	        display: block;
+	        color: #999999;
+	        border-left: 1px solid $border;
+	        font-weight: normal;
+	        position: absolute;
+	        top: 0;
+	        right: 0;
+	        cursor: pointer;
+	        text-align: center;
+	        padding: 11px 20px;
+	        z-index: 10;
+	        font-size: 22px;
+	    }
+	    .nav-toggle-dropdown > .nav-toggle-subarrow .fa-angle-down:before {
+	        content:"\f106" !important;
+	    }
+	    .nav-toggle-dropdown > ul{
+	        display: block !important;
+	    }
+
+
     }
     #nav-toggle {
         display: block;
     }
+
+
 }
 
 // Mobile Navigation Toggle
