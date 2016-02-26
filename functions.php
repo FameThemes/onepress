@@ -117,33 +117,8 @@ function onepress_scripts() {
 	wp_enqueue_style( 'onepress-fonts', onepress_fonts_url(), array(), null );
 	wp_enqueue_style( 'onepress-animate', get_template_directory_uri() .'/assets/css/animate.min.css', array(), '1.0.0' );
 	wp_enqueue_style( 'onepress-fa', get_template_directory_uri() .'/assets/css/font-awesome.min.css', array(), '4.4.0' );
-	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', array(), '4.0.0' );
+	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', false, '4.0.0' );
     wp_enqueue_style( 'onepress-style', get_template_directory_uri().'/style.css' );
-
-
-	// Add extra styling to the theme.
-	$primary   = get_theme_mod( 'onepress_primary_color', '#03c4eb' );
-	$custom_css = "
-		a, .screen-reader-text:hover, .screen-reader-text:active, .screen-reader-text:focus, .header-social a, .onepress-menu a:hover,
-		.onepress-menu ul li a:hover, .onepress-menu li.onepress-current-item > a, .onepress-menu ul li.current-menu-item > a, .onepress-menu > li a.menu-actived,
-		.onepress-menu.onepress-menu-mobile li.onepress-current-item > a, .site-footer a, .site-footer .footer-social a:hover, .site-footer .btt a:hover,
-		.highlight, #comments .comment .comment-wrapper .comment-meta .comment-time:hover, #comments .comment .comment-wrapper .comment-meta .comment-reply-link:hover, #comments .comment .comment-wrapper .comment-meta .comment-edit-link:hover,
-		.btn-theme-primary-outline, .sidebar .widget a:hover, .section-services .service-item .service-image i, .counter_item .counter__number,
-		.team-member .member-thumb .member-profile a:hover
-		{
-			color: #{$primary};
-		}
-		input[type=\"reset\"], input[type=\"submit\"], input[type=\"submit\"], .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .card-theme-primary
-		{
-			background: #{$primary};
-		}
-		.btn-theme-primary-outline, .btn-theme-primary-outline:hover, .pricing__item:hover, .card-theme-primary, .entry-content blockquote
-		{
-			border-color : #{$primary};
-		}
-	";
-	wp_add_inline_style( 'onepress-style', $custom_css );
-
 
 	wp_enqueue_script('jquery');
 	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array(), '1.0.0', true );

@@ -182,65 +182,103 @@ function onepress_comment( $comment, $args, $depth ) {
 }
 endif;
 
-if ( ! function_exists( 'onepress_hero_overlay_css' ) ) {
-
-	add_action( 'wp_head', 'onepress_hero_overlay_css' );
+if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
+	add_action( 'wp_enqueue_scripts', 'onepress_custom_inline_style', 100 );
     /**
      * Add custom css to header
      *
      */
-	function onepress_hero_overlay_css( ) {
+	function onepress_custom_inline_style( ) {
 
-		if ( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ) ) {
-			$o = get_theme_mod( 'onepress_hero_overlay_opacity' , .3 );
-			?>
-			<style type="text/css">
-				#main .video-section section.hero-slideshow-wrapper {
-					background: transparent;
-				}
-				.hero-slideshow-wrapper:after {
-					position: absolute;
-					top: 0px;
-					left: 0px;
-					width: 100%;
-					height: 100%;
-					opacity: <?php echo floatval( $o); ?>;
-					background-color: <?php echo get_theme_mod( 'onepress_hero_overlay_color' ); ?>;
-					display: block;
-					content: "";
-				}
-				.parallax-hero .hero-slideshow-wrapper:after {
-					display: none !important;
-				}
-				.parallax-hero .parallax-mirror:after {
-					position: absolute;
-					top: 0px;
-					left: 0px;
-					width: 100%;
-					height: 100%;
-					opacity: <?php echo floatval( $o); ?>;
-					background-color: <?php echo get_theme_mod( 'onepress_hero_overlay_color' ); ?>;
-					display: block;
-					content: "";
-				}
-                .parallax-hero .hero-slideshow-wrapper:after {
-                    display: none !important;
-                }
-                .parallax-hero .parallax-mirror:after {
-                    position: absolute;
-                    top: 0px;
-                    left: 0px;
-                    width: 100%;
-                    height: 100%;
-                    opacity: <?php echo floatval( $o); ?>;
-                    background-color: <?php echo get_theme_mod( 'onepress_hero_overlay_color' ); ?>;
-                    display: block;
-                    content: "";
-                }
+            $primary   = get_theme_mod( 'onepress_primary_color', '#03c4eb' );
+            $hero_bg_color = get_theme_mod( 'onepress_hero_overlay_color', '#000000' );
+			$hero_opacity = floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) );
+            ob_start();
+            ?>
+            #main .video-section section.hero-slideshow-wrapper {
+                background: transparent;
+            }
+            .hero-slideshow-wrapper:after {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                opacity: <?php echo $hero_opacity; ?>;
+                background-color: <?php echo $hero_bg_color; ?>;
+                display: block;
+                content: "";
+            }
+            .parallax-hero .hero-slideshow-wrapper:after {
+                display: none !important;
+            }
+            .parallax-hero .parallax-mirror:after {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                opacity: <?php echo $hero_opacity; ?>;
+                background-color: <?php echo $hero_bg_color; ?>;
+                display: block;
+                content: "";
+            }
+            .parallax-hero .hero-slideshow-wrapper:after {
+                display: none !important;
+            }
+            .parallax-hero .parallax-mirror:after {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                opacity: <?php echo $hero_opacity; ?>;
+                background-color: <?php echo $hero_bg_color; ?>;
+                display: block;
+                content: "";
+            }
+            <?php if ( $primary != '' ) { ?>
+            a, .screen-reader-text:hover, .screen-reader-text:active, .screen-reader-text:focus, .header-social a, .onepress-menu a:hover,
+            .onepress-menu ul li a:hover, .onepress-menu li.onepress-current-item > a, .onepress-menu ul li.current-menu-item > a, .onepress-menu > li a.menu-actived,
+            .onepress-menu.onepress-menu-mobile li.onepress-current-item > a, .site-footer a, .site-footer .footer-social a:hover, .site-footer .btt a:hover,
+            .highlight, #comments .comment .comment-wrapper .comment-meta .comment-time:hover, #comments .comment .comment-wrapper .comment-meta .comment-reply-link:hover, #comments .comment .comment-wrapper .comment-meta .comment-edit-link:hover,
+            .btn-theme-primary-outline, .sidebar .widget a:hover, .section-services .service-item .service-image i, .counter_item .counter__number,
+            .team-member .member-thumb .member-profile a:hover
+            {
+                color: #<?php echo $primary; ?>;
+            }
+            input[type="reset"], input[type="submit"], input[type="submit"], .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .card-theme-primary
+            {
+                background: #<?php echo $primary; ?>;
+            }
+            .btn-theme-primary-outline, .btn-theme-primary-outline:hover, .pricing__item:hover, .card-theme-primary, .entry-content blockquote
+            {
+                border-color : #<?php echo $primary; ?>;
+            }
+            <?php } ?>
+            <?php
+        $css = ob_get_clean();
 
-			</style>
-		<?php
-		}
+
+        if( trim( $css ) === "") {
+            return ;
+        }
+        $css = preg_replace(
+            array(
+                // Remove comment(s)
+                '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
+                // Remove unused white-space(s)
+                '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~+]|\s*+-(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
+            ),
+            array(
+                '$1',
+                '$1$2$3$4$5$6$7',
+            ),
+            $css
+        );
+
+        wp_add_inline_style( 'onepress-style', $css );
+
 	}
 
 }
