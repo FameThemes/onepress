@@ -322,7 +322,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
              * Menu hover background color
              */
             $menu_hover_bg =  get_theme_mod( 'onepress_menu_hover_bg_color' );
-            if ( $menu_bg ) {
+            if ( $menu_hover_bg ) {
                 ?>
                 .onepress-menu > li:last-child > a {
                     padding-right: 17px;
