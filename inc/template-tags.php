@@ -190,7 +190,9 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
      */
 	function onepress_custom_inline_style( ) {
 
-            $primary   = get_theme_mod( 'onepress_primary_color', '#03c4eb' );
+            /**
+             *  Custom hero section css
+             */
             $hero_bg_color = get_theme_mod( 'onepress_hero_overlay_color', '#000000' );
 			$hero_opacity = floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) );
             ob_start();
@@ -241,6 +243,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              * Theme Color
              */
+            $primary   = get_theme_mod( 'onepress_primary_color' );
             if ( $primary != '' ) { ?>
                 a, .screen-reader-text:hover, .screen-reader-text:active, .screen-reader-text:focus, .header-social a, .onepress-menu a:hover,
                 .onepress-menu ul li a:hover, .onepress-menu li.onepress-current-item > a, .onepress-menu ul li.current-menu-item > a, .onepress-menu > li a.menu-actived,
