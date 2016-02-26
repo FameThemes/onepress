@@ -924,7 +924,7 @@ function onepress_customize_register( $wp_customize ) {
 						'live_title_id' => 'content_page', // apply for unput text and textarea only
 						'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 						'max_item'      => 3, // Maximum item can add
-                        'limited_msg' 	=> wp_kses_post( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to change the section order and styling!', 'onepress' ),
+                        'limited_msg' 	=> wp_kses_post( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ),
 						//'allow_unlimited' => false, // Maximum item can add
 
 						'fields'    => array(
@@ -1079,7 +1079,7 @@ function onepress_customize_register( $wp_customize ) {
 					'live_title_id' => 'content_page', // apply for unput text and textarea only
 					'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
-                    'limited_msg'   => esc_html__('Upgrade to OnePress Plus to add more Service items and unlock more premium features.', 'onepress'),
+                    'limited_msg' 	=> wp_kses_post( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ),
 
 					'fields'    => array(
 						'icon' => array(
@@ -1213,7 +1213,7 @@ function onepress_customize_register( $wp_customize ) {
 					'live_title_id' => 'title', // apply for unput text and textarea only
 					'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
-                    'limited_msg'   => esc_html__('Upgrade to OnePress Plus to add more Counter items and unlock more premium features.', 'onepress'),
+                    'limited_msg' 	=> wp_kses_post( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ),
                     'fields'    => array(
 						'title' => array(
 							'title' => esc_html__('Title', 'onepress'),
@@ -1241,8 +1241,6 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			)
 		);
-
-
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Team
@@ -1376,7 +1374,7 @@ function onepress_customize_register( $wp_customize ) {
 					//'live_title_id' => 'user_id', // apply for unput text and textarea only
 					'title_format'  => esc_html__( '[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
-                    'limited_msg'   => esc_html__('Upgrade to OnePress Plus to add more Team items and unlock more premium features.', 'onepress'),
+                    'limited_msg' 	=> wp_kses_post( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ),
                     'fields'    => array(
 						'user_id' => array(
 							'title' => esc_html__('User media', 'onepress'),
