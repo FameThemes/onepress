@@ -240,6 +240,9 @@ function res() {
 
     // Smooth scroll animation
     function smoothScroll(urlhash) {
+        if ( urlhash.length <= 0 ) {
+            return false;
+        }
         jQuery("html, body").animate({
             scrollTop: (jQuery(urlhash).offset().top - h) + "px"
         }, {
