@@ -150,7 +150,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_colors_settings' ,
 			array(
 				'priority'    => 4,
-				'title'       => esc_html__( 'Colors', 'onepress' ),
+				'title'       => esc_html__( 'Site Colors', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_options',
 			)
@@ -177,6 +177,7 @@ function onepress_customize_register( $wp_customize ) {
 				'panel'       => 'onepress_options',
 			)
 		);
+
 		// Header BG Color
 		$wp_customize->add_setting( 'onepress_header_bg_color',
 			array(
@@ -192,21 +193,6 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		));
 
-		// Header BG Color
-		$wp_customize->add_setting( 'onepress_header_bg_color',
-			array(
-				'sanitize_callback' => 'sanitize_hex_color_no_hash',
-				'sanitize_js_callback' => 'maybe_hash_hex_color',
-				'default' => ''
-			) );
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_header_bg_color',
-			array(
-				'label'       => esc_html__( 'Header BG Color', 'onepress' ),
-				'section'     => 'onepress_header_settings',
-				'description' => '',
-
-			)
-		));
 
 		// Site Title Color
 		$wp_customize->add_setting( 'onepress_logo_text_color',
@@ -284,7 +270,21 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		));
 
-
+		// Vertical align menu
+		$wp_customize->add_setting( 'onepress_vertical_align_menu',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
+				'default'           => '',
+			)
+		);
+		$wp_customize->add_control( 'onepress_vertical_align_menu',
+			array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__('Center vertical align for menu', 'onepress'),
+				'section'     => 'onepress_header_settings',
+				'description' => esc_html__('If you use logo and your logo is too tall, check this box to auto vertical align menu.', 'onepress')
+			)
+		);
 
 
 

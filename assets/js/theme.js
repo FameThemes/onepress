@@ -167,6 +167,16 @@ function res() {
 })();
 
 /**
+ * Center vertical align for navigation.
+ */
+( function() {
+    if ( onepress_js_settings.onepress_vertical_align_menu == '1' ) {
+        var header_height = jQuery('.site-header').height();
+        jQuery('.site-header .onepress-menu').css( 'line-height', header_height + "px" );
+    }
+})();
+
+/**
  * Sticky header when scroll.
  */
 ( function() {

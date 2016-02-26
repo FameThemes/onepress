@@ -130,8 +130,9 @@ function onepress_scripts() {
 
 	// Animation from settings
 	$onepress_js_settings = array(
-		'onepress_disable_animation' => get_theme_mod( 'onepress_animation_disable' ),
-		'onepress_disable_sticky_header' => get_theme_mod( 'onepress_sticky_header_disable' )
+		'onepress_disable_animation'     => get_theme_mod( 'onepress_animation_disable' ),
+		'onepress_disable_sticky_header' => get_theme_mod( 'onepress_sticky_header_disable' ),
+		'onepress_vertical_align_menu'   => get_theme_mod( 'onepress_vertical_align_menu' )
 	);
 	wp_localize_script('jquery','onepress_js_settings', $onepress_js_settings);
 
