@@ -287,7 +287,6 @@ function onepress_customize_register( $wp_customize ) {
 		);
 
 
-
 		/* Social Settings
 		----------------------------------------------------------------------*/
 		$wp_customize->add_section( 'onepress_social' ,
