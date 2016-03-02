@@ -238,33 +238,34 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
     }
 
-    public function merge_data( $array, $array_2 ){
+    public function merge_data( $array_value, $array_default ){
         if ( ! $this->id_key ) {
-            return $array;
+            return $array_value;
         }
 
-        if ( ! is_array( $array ) ) {
-            $array =  array();
+        if ( ! is_array( $array_value ) ) {
+            $array_value =  array();
         }
 
-        if ( ! is_array( $array_2 ) ) {
-            $array_2 =  array();
+        if ( ! is_array( $array_default ) ) {
+            $array_default =  array();
         }
 
         $new_array = array();
-        foreach ( $array as $k => $a ) {
+        foreach ( $array_value as $k => $a ) {
             if ( is_array( $a ) && isset ( $a[ $this->id_key ]  ) ) {
                 $new_array[ $a[ $this->id_key ] ] = $a;
             }
         }
 
-        foreach ( $array_2 as $k => $a ) {
+        foreach ( $array_default as $k => $a ) {
             if ( is_array( $a ) && isset ( $a[ $this->id_key ]  ) ) {
-                if ( ! isset ( $new_array[ $this->id_key ] ) ) {
+                if ( ! isset ( $new_array[ $a[ $this->id_key ] ] ) ) {
                     $new_array[ $a[ $this->id_key ] ] = $a;
                 }
             }
         }
+
         return array_values( $new_array );
     }
 
