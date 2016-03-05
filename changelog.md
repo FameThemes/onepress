@@ -11,6 +11,8 @@ CHANGELOG
 * Fixed hide video media bg bug
 * Fixed sometime customizer show js error.
 * Change support ticket url.
+* Add site primary color settings.
+* Add Header styling.
 
 ## 1.1.2
 * Improve customize control.
