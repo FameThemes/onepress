@@ -35,7 +35,7 @@ $onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp' 
 							<?php if ( $onepress_newsletter_title != '' ) echo '<h5 class="follow-heading">'. $onepress_newsletter_title .'</h5>'; ?>
 							<form novalidate="" target="_blank" class="" name="mc-embedded-subscribe-form" id="mc-embedded-subscribe-form" method="post" action="<?php if ( $onepress_newsletter_mailchimp != '' ) echo $onepress_newsletter_mailchimp; ?>">
 								<input type="text" placeholder="<?php esc_attr_e( 'Enter your e-mail address', 'onepress' ); ?>" id="mce-EMAIL" class="subs_input" name="EMAIL" value="">
-								<input type="submit" class="subs-button" value="Subscribe" name="subscribe">
+								<input type="submit" class="subs-button" value="<?php esc_attr_e( 'Subscribe', 'onepress' ); ?>" name="subscribe">
 							 </form>
 						</div>
 					</div>
