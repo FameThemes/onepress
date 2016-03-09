@@ -75,6 +75,11 @@ function onepress_setup() {
 	 * This theme styles the visual editor to resemble the theme style.
 	 */
 	add_editor_style( array( 'assets/css/editor-style.css', onepress_fonts_url() ) );
+
+	/*
+	 * WooCommerce support.
+	 */
+	add_theme_support( 'woocommerce' );
 }
 endif; // onepress_setup
 add_action( 'after_setup_theme', 'onepress_setup' );

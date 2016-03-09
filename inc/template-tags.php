@@ -254,7 +254,8 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 {
                     color: #<?php echo $primary; ?>;
                 }
-                input[type="reset"], input[type="submit"], input[type="submit"], .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .card-theme-primary
+                input[type="reset"], input[type="submit"], input[type="submit"], .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .card-theme-primary,
+				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt
                 {
                     background: #<?php echo $primary; ?>;
                 }
