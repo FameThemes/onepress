@@ -1523,6 +1523,11 @@ function onepress_customize_register( $wp_customize ) {
 							'type'  =>'media',
 							'desc'  => '',
 						),
+                        'link' => array(
+                            'title' => esc_html__('Custom Link', 'onepress'),
+                            'type'  =>'text',
+                            'desc'  => '',
+                        ),
 					),
 
 				)
