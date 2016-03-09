@@ -1029,8 +1029,8 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize,
 			'onepress_about_desc',
 			array(
-				'label' 		=> esc_html__('About Section Description', 'onepress'),
-				'section' 		=> 'onepress_about_content',
+				'label' 		=> esc_html__('Section Description', 'onepress'),
+				'section' 		=> 'onepress_about_settings',
 				'description'   => '',
 			)
 		));
