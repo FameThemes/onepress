@@ -1918,6 +1918,22 @@ input[type="radio"], input[type="checkbox"] {
 	background: rgba(255, 255, 255, 0.8);
 }
 
+.section-inverse-extended {
+	background: #333333;
+}
+
+.section-inverse-extended .section-title-area .section-title {
+	color: rgba(255, 255, 255, 0.99);
+}
+
+.section-inverse-extended .section-title-area .section-subtitle {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.section-inverse-extended .section-title-area .section-subtitle::after {
+	background: rgba(255, 255, 255, 0.8);
+}
+
 .section-inverse {
 	color: rgba(255, 255, 255, 0.5);
 }
@@ -2103,6 +2119,42 @@ input[type="radio"], input[type="checkbox"] {
 /* Text Rotator */
 .morphext > .animated {
 	display: inline-block;
+}
+
+/* Section: Features
+------------------------------*/
+.icon-background-default {
+	color: #03c4eb;
+}
+
+.feature-item {
+	text-align: center;
+}
+
+.feature-item .feature-icon {
+	color: #fff;
+}
+
+.feature-item .fa-5x {
+	font-size: 4em;
+}
+
+.feature-item:hover .icon-background-default {
+	color: #333333;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+	transform: scale(1.1);
+	-webkit-transform: scale(1.1);
+	-moz-transform: scale(1.1);
+	-ms-transform: scale(1.1);
+	transform: scale(1.1);
+}
+
+.feature-media {
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 /* Section: About Us
