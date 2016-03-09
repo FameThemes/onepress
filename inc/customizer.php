@@ -1192,6 +1192,24 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
+        // Description
+        $wp_customize->add_setting( 'onepress_services_desc',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_text',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+            $wp_customize,
+            'onepress_services_desc',
+            array(
+                'label' 		=> esc_html__('Section Description', 'onepress'),
+                'section' 		=> 'onepress_service_settings',
+                'description'   => '',
+            )
+        ));
+
+
 	$wp_customize->add_section( 'onepress_service_content' ,
 		array(
 			'priority'    => 6,
@@ -1325,6 +1343,23 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
+
+        // Description
+        $wp_customize->add_setting( 'onepress_counter_desc',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_text',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+            $wp_customize,
+            'onepress_counter_desc',
+            array(
+                'label' 		=> esc_html__('Section Description', 'onepress'),
+                'section' 		=> 'onepress_counter_settings',
+                'description'   => '',
+            )
+        ));
 
 	$wp_customize->add_section( 'onepress_counter_content' ,
 		array(
@@ -1464,6 +1499,23 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
+
+        // Description
+        $wp_customize->add_setting( 'onepress_team_desc',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_text',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+            $wp_customize,
+            'onepress_team_desc',
+            array(
+                'label' 		=> esc_html__('Section Description', 'onepress'),
+                'section' 		=> 'onepress_team_settings',
+                'description'   => '',
+            )
+        ));
 
         // Team layout
         $wp_customize->add_setting( 'onepress_team_layout',
@@ -1616,6 +1668,23 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
+        // Description
+        $wp_customize->add_setting( 'onepress_news_desc',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_text',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+            $wp_customize,
+            'onepress_news_desc',
+            array(
+                'label' 		=> esc_html__('Section Description', 'onepress'),
+                'section' 		=> 'onepress_news_settings',
+                'description'   => '',
+            )
+        ));
+
 		// hr
 		$wp_customize->add_setting( 'onepress_news_settings_hr',
 			array(
@@ -1753,6 +1822,24 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
+
+        // Description
+        $wp_customize->add_setting( 'onepress_contact_desc',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_text',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+            $wp_customize,
+            'onepress_contact_desc',
+            array(
+                'label' 		=> esc_html__('Section Description', 'onepress'),
+                'section' 		=> 'onepress_contact_settings',
+                'description'   => '',
+            )
+        ));
+
 
 	$wp_customize->add_section( 'onepress_contact_content' ,
 		array(

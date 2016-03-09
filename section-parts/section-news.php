@@ -14,7 +14,10 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', esc_html__(
 		<div class="section-title-area">
 			<?php if ( $onepress_news_subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $onepress_news_subtitle ) . '</h5>'; ?>
 			<?php if ( $onepress_news_title != '' ) echo '<h2 class="section-title">' . esc_html( $onepress_news_title ) . '</h2>'; ?>
-		</div>
+            <?php if ( $desc = get_theme_mod( 'onepress_news_desc' ) ) {
+                echo '<div class="section-desc">' . wp_kses_post( $desc ) . '</div>';
+            } ?>
+        </div>
 		<div class="section-content">
 			<div class="row">
 				<div class="col-sm-12">

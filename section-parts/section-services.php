@@ -15,6 +15,9 @@ if ( ! empty( $page_ids ) ) {
                 <div class="section-title-area">
                     <?php if ($onepress_service_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_service_subtitle) . '</h5>'; ?>
                     <?php if ($onepress_service_title != '') echo '<h2 class="section-title">' . esc_html($onepress_service_title) . '</h2>'; ?>
+                    <?php if ( $desc = get_theme_mod( 'onepress_services_desc' ) ) {
+                        echo '<div class="section-desc">' . wp_kses_post( $desc ) . '</div>';
+                    } ?>
                 </div>
                 <div class="row">
                     <?php
