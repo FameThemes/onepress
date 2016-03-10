@@ -342,76 +342,46 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
-			// Twitter
-			$wp_customize->add_setting( 'onepress_social_twitter',
-				array(
-					'sanitize_callback' => 'esc_url',
-					'default'           => '',
-				)
-			);
-			$wp_customize->add_control( 'onepress_social_twitter',
-				array(
-					'label'       => esc_html__('Twitter URL', 'onepress'),
-					'section'     => 'onepress_social',
-					'description' => ''
-				)
-			);
-			// Facebook
-			$wp_customize->add_setting( 'onepress_social_facebook',
-				array(
-					'sanitize_callback' => 'esc_url',
-					'default'           => '',
-				)
-			);
-			$wp_customize->add_control( 'onepress_social_facebook',
-				array(
-					'label'       => esc_html__('Faecbook URL', 'onepress'),
-					'section'     => 'onepress_social',
-					'description' => ''
-				)
-			);
-			// Facebook
-			$wp_customize->add_setting( 'onepress_social_google',
-				array(
-					'sanitize_callback' => 'esc_url',
-					'default'           => '',
-				)
-			);
-			$wp_customize->add_control( 'onepress_social_google',
-				array(
-					'label'       => esc_html__('Google Plus URL', 'onepress'),
-					'section'     => 'onepress_social',
-					'description' => ''
-				)
-			);
-			// Instagram
-			$wp_customize->add_setting( 'onepress_social_instagram',
-				array(
-					'sanitize_callback' => 'esc_url',
-					'default'           => '',
-				)
-			);
-			$wp_customize->add_control( 'onepress_social_instagram',
-				array(
-					'label'       => esc_html__('Instagram URL', 'onepress'),
-					'section'     => 'onepress_social',
-					'description' => ''
-				)
-			);
-			// RSS
-			$wp_customize->add_setting( 'onepress_social_rss',
-				array(
-					'sanitize_callback' => 'esc_url',
-					'default'           => get_bloginfo('rss2_url'),
-				)
-			);
-			$wp_customize->add_control( 'onepress_social_rss',
-				array(
-					'label'       => esc_html__('RSS URL', 'onepress'),
-					'section'     => 'onepress_social',
-					'description' => ''
-				)
-			);
+           // Socials
+            $wp_customize->add_setting(
+                'onepress_social_profiles',
+                array(
+                    //'default' => '',
+                    'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
+                    'transport' => 'refresh', // refresh or postMessage
+            ) );
+
+            $wp_customize->add_control(
+                new Onepress_Customize_Repeatable_Control(
+                    $wp_customize,
+                    'onepress_social_profiles',
+                    array(
+                        'label' 		=> esc_html__('Socials', 'onepress'),
+                        'description'   => '',
+                        'section'       => 'onepress_social',
+                        'live_title_id' => 'network', // apply for unput text and textarea only
+                        'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
+                        'max_item'      => 5, // Maximum item can add
+                        'limited_msg' 	=> wp_kses_post( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ),
+                        'fields'    => array(
+                            'network'  => array(
+                                'title' => esc_html__('Social network', 'onepress'),
+                                'type'  =>'text',
+                            ),
+                            'icon'  => array(
+                                'title' => esc_html__('Icon', 'onepress'),
+                                'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
+                                'type'  =>'text',
+                            ),
+                            'link'  => array(
+                                'title' => esc_html__('URL', 'onepress'),
+                                'type'  =>'text',
+                            ),
+                        ),
+
+                    )
+                )
+            );
 
 		/* Newsletter Settings
 		----------------------------------------------------------------------*/

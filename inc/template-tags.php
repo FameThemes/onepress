@@ -494,7 +494,9 @@ function onepress_get_section_team_data(){
 
 
 /**
- * Get services data
+ * Get features data
+ *
+ * @since 1.1.4
  * @return array
  */
 function onepress_get_features_data(){
@@ -510,6 +512,52 @@ function onepress_get_features_data(){
                 'desc' => '',
                 'link' => '',
             ) );
+
+            //Get/Set social icons
+            $array[ $k ]['icon'] = trim( $array[ $k ]['icon'] );
+            if ($array[ $k ]['icon'] != '' && strpos($array[ $k ]['icon'], 'fa-') !== 0) {
+                $array[ $k ]['icon'] = 'fa-' . $array[ $k ]['icon'];
+            }
+        }
+    }
+    return $array;
+}
+
+/**
+ * Get social profiles
+ *
+ * @since 1.1.4
+ * @return bool|array
+ */
+function onepress_get_social_profiles(){
+    $array = get_theme_mod( 'onepress_social_profiles' );
+    if ( is_string( $array ) ) {
+        $array = json_decode( $array, true );
+    }
+    if ( ! empty( $array ) && is_array( $array ) ) {
+        foreach ( $array as $k => $v ) {
+            $array[ $k ] =  wp_parse_args( $v, array(
+                'network'   => '',
+                'icon'      => '',
+                'link'      => '',
+            ) );
+
+            //Get/Set social icons
+            // If icon isset
+            $icons =  array();
+            $array[ $k ]['icon'] = trim( $array[ $k ]['icon'] );
+            if ($array[ $k ]['icon'] != '' && strpos($array[ $k ]['icon'], 'fa-') !== 0) {
+                $icons[ 'fa-' . $array[ $k ]['icon'] ] = 'fa-' . $array[ $k ]['icon'];
+            }else {
+                $icons[ $array[ $k ]['icon'] ] = $array[ $k ]['icon'];
+            }
+            $network = ( $array[ $k ]['network'] ) ?  sanitize_title( $array[ $k ]['network'] ) : false ;
+            if ( $network ) {
+                $icons[ 'fa-'.$network  ] = 'fa-'.$network;
+            }
+
+            $array[ $k ]['icon']  = join( ' ', $icons );
+
         }
     }
     return $array;
