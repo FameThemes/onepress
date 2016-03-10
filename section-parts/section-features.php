@@ -21,7 +21,7 @@ if ( !$disable && !empty( $data ) ) {
         <div class="section-content">
             <div class="row">
             <?php
-            $layout = intval( get_theme_mod( 'onepress_service_layout', 3 ) );
+            $layout = intval( get_theme_mod( 'onepress_features_layout', 3 ) );
             foreach ( $data as $k => $f ) {
                 $f['icon'] = trim( $f['icon'] );
                 if ($f['icon'] != '' && strpos($f['icon'], 'fa-') !== 0) {

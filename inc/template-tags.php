@@ -7,66 +7,227 @@
  * @package OnePress
  */
 
-if ( ! function_exists( 'onepress_posted_on' ) ) :
-/**
- * Prints HTML with meta information for the current post-date/time and author.
- */
-function onepress_posted_on() {
-	$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
-	if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-		$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated hide" datetime="%3$s">%4$s</time>';
-	}
+add_action( 'onepress_site_start', 'onepress_site_header' );
+if ( ! function_exists( 'onepress_site_header' ) ) {
+    /**
+     * Display site header
+     */
+    function onepress_site_header(){
+        ?>
+        <header id="masthead" class="site-header" role="banner">
+            <div class="container">
+                <div class="site-branding">
+                    <?php
+                    $site_text_logo = get_bloginfo('name');
+                    $site_image_logo = get_theme_mod('onepress_site_image_logo');
+                    if ((isset($site_text_logo) && $site_text_logo != "") || (isset($site_image_logo) && $site_image_logo != "")) {
+                        if (isset($site_image_logo) && $site_image_logo != "") {
+                            echo '<a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
+                            echo '<img src="' . $site_image_logo . '" alt="' . get_bloginfo('title') . '">';
+                            echo '</a>';
+                        } elseif (isset($site_text_logo) && $site_text_logo != "") {
+                            echo '<a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . $site_text_logo . '</a>';
+                        }
+                    } else {
+                        if (is_front_page() && is_home()) :
+                            echo '<h1 class="site-title"><a href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
+                        else :
+                            echo '<p class="site-title"><a href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
+                        endif;
+                    }
+                    ?>
+                </div>
+                <!-- .site-branding -->
 
-	$time_string = sprintf( $time_string,
-		esc_attr( get_the_date( 'c' ) ),
-		esc_html( get_the_date() ),
-		esc_attr( get_the_modified_date( 'c' ) ),
-		esc_html( get_the_modified_date() )
-	);
-
-	$posted_on = sprintf(
-		esc_html_x( 'Posted on %s', 'post date', 'onepress' ),
-		'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
-	);
-
-	$byline = sprintf(
-		esc_html_x( 'by %s', 'post author', 'onepress' ),
-		'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
-	);
-
-	echo '<span class="posted-on">' . $posted_on . '</span><span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
-
+                <div class="header-right-wrapper">
+                    <a href="#0" id="nav-toggle"><?php _e('Menu', 'onepress'); ?><span></span></a>
+                    <nav id="site-navigation" class="main-navigation" role="navigation">
+                        <ul class="onepress-menu">
+                            <?php wp_nav_menu(array('theme_location' => 'primary', 'container' => '', 'items_wrap' => '%3$s')); ?>
+                        </ul>
+                    </nav>
+                    <!-- #site-navigation -->
+                </div>
+            </div>
+        </header><!-- #masthead -->
+        <?php
+    }
 }
-endif;
 
-if ( ! function_exists( 'onepress_entry_footer' ) ) :
-/**
- * Prints HTML with meta information for the categories, tags and comments.
- */
-function onepress_entry_footer() {
-	// Hide category and tag text for pages.
-	if ( 'post' === get_post_type() ) {
-		/* translators: used between list items, there is a space after the comma */
-		$categories_list = get_the_category_list( esc_html__( ', ', 'onepress' ) );
-		if ( $categories_list && onepress_categorized_blog() ) {
-			printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', 'onepress' ) . '</span>', $categories_list ); // WPCS: XSS OK.
-		}
+add_action( 'onepress_site_end', 'onepress_site_footer' );
+if ( ! function_exists( 'onepress_site_footer' ) ) {
+    /**
+     * Display site footer
+     */
+    function onepress_site_footer()
+    {
+        ?>
+        <footer id="colophon" class="site-footer" role="contentinfo">
+            <?php
+            $onepress_btt_disable = get_theme_mod('onepress_btt_disable');
+            $onepress_social_footer_title = get_theme_mod('onepress_social_footer_title', esc_html__('Keep Updated', 'onepress'));
 
-		/* translators: used between list items, there is a space after the comma */
-		$tags_list = get_the_tag_list( '', esc_html__( ', ', 'onepress' ) );
-		if ( $tags_list ) {
-			printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', 'onepress' ) . '</span>', $tags_list ); // WPCS: XSS OK.
-		}
-	}
+            $onepress_newsletter_disable = get_theme_mod('onepress_newsletter_disable', '1');
+            $onepress_social_disable = get_theme_mod('onepress_social_disable', '1');
+            $onepress_newsletter_title = get_theme_mod('onepress_newsletter_title', esc_html__('Join our Newsletter', 'onepress'));
+            $onepress_newsletter_mailchimp = get_theme_mod('onepress_newsletter_mailchimp');
 
-	if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
-		echo '<span class="comments-link">';
-		comments_popup_link( esc_html__( 'Leave a comment', 'onepress' ), esc_html__( '1 Comment', 'onepress' ), esc_html__( '% Comments', 'onepress' ) );
-		echo '</span>';
-	}
+            if ($onepress_newsletter_disable != '1' || $onepress_social_disable != '1') : ?>
+                <div class="footer-connect">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-2"></div>
+                            <?php if ($onepress_newsletter_disable != '1') : ?>
+                                <div class="col-sm-4">
+                                    <div class="footer-subscribe">
+                                        <?php if ($onepress_newsletter_title != '') echo '<h5 class="follow-heading">' . $onepress_newsletter_title . '</h5>'; ?>
+                                        <form novalidate="" target="_blank" class="" name="mc-embedded-subscribe-form" id="mc-embedded-subscribe-form" method="post"
+                                              action="<?php if ($onepress_newsletter_mailchimp != '') echo $onepress_newsletter_mailchimp; ?>">
+                                            <input type="text" placeholder="<?php esc_attr_e('Enter your e-mail address', 'onepress'); ?>" id="mce-EMAIL" class="subs_input" name="EMAIL" value="">
+                                            <input type="submit" class="subs-button" value="<?php esc_attr_e('Subscribe', 'onepress'); ?>" name="subscribe">
+                                        </form>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
 
+                            <div class="<?php if ($onepress_newsletter_disable == '1') {
+                                echo 'col-sm-8';
+                            } else {
+                                echo 'col-sm-4';
+                            } ?>">
+                                <?php
+                                if ($onepress_social_disable != '1') {
+                                    ?>
+                                    <div class="footer-social">
+                                        <?php
+                                        if ($onepress_social_footer_title != '') echo '<h5 class="follow-heading">' . $onepress_social_footer_title . '</h5>';
+
+                                        $socials = onepress_get_social_profiles();
+                                        /**
+                                         * New Socials profiles
+                                         *
+                                         * @since 1.1.4
+                                         */
+                                        if (!empty($socials)) {
+                                            foreach ($socials as $s) {
+                                                if ($s['icon'] != '') {
+                                                    echo '<a target="_blank" href="' . $s['link'] . '" title="' . esc_attr($s['network']) . '"><i class="fa ' . esc_attr($s['icon']) . '"></i></a>';
+                                                }
+                                            }
+                                        } else {
+                                            /**
+                                             * Deprecated
+                                             * @since 1.1.4
+                                             */
+                                            $twitter = get_theme_mod('onepress_social_twitter');
+                                            $facebook = get_theme_mod('onepress_social_facebook');
+                                            $google = get_theme_mod('onepress_social_google');
+                                            $instagram = get_theme_mod('onepress_social_instagram');
+                                            $rss = get_theme_mod('onepress_social_rss');
+
+                                            if ($twitter != '') echo '<a target="_blank" href="' . $twitter . '" title="Twitter"><i class="fa fa-twitter"></i></a>';
+                                            if ($facebook != '') echo '<a target="_blank" href="' . $facebook . '" title="Facebook"><i class="fa fa-facebook"></i></a>';
+                                            if ($google != '') echo '<a target="_blank" href="' . $google . '" title="Google Plus"><i class="fa fa-google-plus"></i></a>';
+                                            if ($instagram != '') echo '<a target="_blank" href="' . $instagram . '" title="Instagram"><i class="fa fa-instagram"></i></a>';
+                                            if ($rss != '') echo '<a target="_blank" href="' . $rss . '"><i class="fa fa-rss"></i></a>';
+                                        }
+                                        ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <div class="col-sm-2"></div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <div class="site-info">
+                <div class="container">
+                    <?php if ($onepress_btt_disable != '1') : ?>
+                        <div class="btt">
+                            <a class="back-top-top" href="#page" title="<?php echo esc_html__('Back To Top', 'onepress') ?>"><i class="fa fa-angle-double-up wow flash" data-wow-duration="2s"></i></a>
+                        </div>
+                    <?php endif; ?>
+                    <?php
+                    /**
+                     * hooked onepress_footer_site_info
+                     * @see onepress_footer_site_info
+                     */
+                    do_action('onepress_footer_site_info');
+                    ?>
+                </div>
+            </div>
+            <!-- .site-info -->
+
+        </footer><!-- #colophon -->
+        <?php
+    }
 }
-endif;
+
+
+
+if ( ! function_exists( 'onepress_posted_on' ) ) {
+    /**
+     * Prints HTML with meta information for the current post-date/time and author.
+     */
+    function onepress_posted_on()
+    {
+        $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+        if (get_the_time('U') !== get_the_modified_time('U')) {
+            $time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated hide" datetime="%3$s">%4$s</time>';
+        }
+
+        $time_string = sprintf($time_string,
+            esc_attr(get_the_date('c')),
+            esc_html(get_the_date()),
+            esc_attr(get_the_modified_date('c')),
+            esc_html(get_the_modified_date())
+        );
+
+        $posted_on = sprintf(
+            esc_html_x('Posted on %s', 'post date', 'onepress'),
+            '<a href="' . esc_url(get_permalink()) . '" rel="bookmark">' . $time_string . '</a>'
+        );
+
+        $byline = sprintf(
+            esc_html_x('by %s', 'post author', 'onepress'),
+            '<span class="author vcard"><a class="url fn n" href="' . esc_url(get_author_posts_url(get_the_author_meta('ID'))) . '">' . esc_html(get_the_author()) . '</a></span>'
+        );
+
+        echo '<span class="posted-on">' . $posted_on . '</span><span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
+
+    }
+}
+
+if ( ! function_exists( 'onepress_entry_footer' ) ) {
+    /**
+     * Prints HTML with meta information for the categories, tags and comments.
+     */
+    function onepress_entry_footer()
+    {
+        // Hide category and tag text for pages.
+        if ('post' === get_post_type()) {
+            /* translators: used between list items, there is a space after the comma */
+            $categories_list = get_the_category_list(esc_html__(', ', 'onepress'));
+            if ($categories_list && onepress_categorized_blog()) {
+                printf('<span class="cat-links">' . esc_html__('Posted in %1$s', 'onepress') . '</span>', $categories_list); // WPCS: XSS OK.
+            }
+
+            /* translators: used between list items, there is a space after the comma */
+            $tags_list = get_the_tag_list('', esc_html__(', ', 'onepress'));
+            if ($tags_list) {
+                printf('<span class="tags-links">' . esc_html__('Tagged %1$s', 'onepress') . '</span>', $tags_list); // WPCS: XSS OK.
+            }
+        }
+
+        if (!is_single() && !post_password_required() && (comments_open() || get_comments_number())) {
+            echo '<span class="comments-link">';
+            comments_popup_link(esc_html__('Leave a comment', 'onepress'), esc_html__('1 Comment', 'onepress'), esc_html__('% Comments', 'onepress'));
+            echo '</span>';
+        }
+
+    }
+}
 
 /**
  * Returns true if a blog has more than 1 category.
@@ -182,8 +343,8 @@ function onepress_comment( $comment, $args, $depth ) {
 }
 endif;
 
+add_action( 'wp_enqueue_scripts', 'onepress_custom_inline_style', 100 );
 if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
-	add_action( 'wp_enqueue_scripts', 'onepress_custom_inline_style', 100 );
     /**
      * Add custom css to header
      *
@@ -355,8 +516,6 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				}
             <?php
             }
-
-
         $css = ob_get_clean();
 
         if ( trim( $css ) == "" ) {
@@ -377,201 +536,219 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
         );
 
         wp_add_inline_style( 'onepress-style', $css );
-
 	}
 
 }
 
-
-/**
- * Get About data
- *
- * @return array
- */
-function onepress_get_section_about_data(){
-    $boxes = get_theme_mod( 'onepress_about_boxes' );
-    if ( is_string( $boxes ) ) {
-        $boxes = json_decode( $boxes , true );
-    }
-    $page_ids = array();
-    if ( ! empty( $boxes ) && is_array( $boxes ) ) {
-        foreach ( $boxes as $k => $v ) {
-            if ( isset ( $v['content_page'] ) ) {
-                $v['content_page'] = absint( $v['content_page'] );
-                if ( $v['content_page'] > 0 )  {
-                    $page_ids[ ] =  wp_parse_args( $v, array( 'enable_link'=> 0, 'hide_title' => 0 ) );
+if ( ! function_exists( 'onepress_get_section_about_data' ) ) {
+    /**
+     * Get About data
+     *
+     * @return array
+     */
+    function onepress_get_section_about_data()
+    {
+        $boxes = get_theme_mod('onepress_about_boxes');
+        if (is_string($boxes)) {
+            $boxes = json_decode($boxes, true);
+        }
+        $page_ids = array();
+        if (!empty($boxes) && is_array($boxes)) {
+            foreach ($boxes as $k => $v) {
+                if (isset ($v['content_page'])) {
+                    $v['content_page'] = absint($v['content_page']);
+                    if ($v['content_page'] > 0) {
+                        $page_ids[] = wp_parse_args($v, array('enable_link' => 0, 'hide_title' => 0));
+                    }
                 }
             }
         }
-    }
 
-    if ( empty( $page_ids ) ) {
-        $current_pos_id = get_the_ID();
-        $args = array(
-            'posts_per_page'   => 3,
-            'orderby'          => 'date',
-            'order'            => 'DESC',
-            'exclude'          => $current_pos_id,
-            'post_type'        => 'page',
-        );
-        $posts_array = get_posts( $args );
-        foreach ( $posts_array as $p ) {
-            $page_ids[] =  array( 'content_page' => $p->ID , 'enable_link'=> 0, 'hide_title' => 0 );
+        if (empty($page_ids)) {
+            $current_pos_id = get_the_ID();
+            $args = array(
+                'posts_per_page' => 3,
+                'orderby' => 'date',
+                'order' => 'DESC',
+                'exclude' => $current_pos_id,
+                'post_type' => 'page',
+            );
+            $posts_array = get_posts($args);
+            foreach ($posts_array as $p) {
+                $page_ids[] = array('content_page' => $p->ID, 'enable_link' => 0, 'hide_title' => 0);
+            }
         }
+        return $page_ids;
     }
-    return $page_ids;
 }
 
-/**
- * Get counter data
- *
- * @return array
- */
-function onepress_get_section_counter_data(){
-    $boxes = get_theme_mod( 'onepress_counter_boxes' );
-    if ( is_string( $boxes ) ) {
-        $boxes = json_decode( $boxes , true );
+if ( ! function_exists( 'onepress_get_section_counter_data' ) ) {
+    /**
+     * Get counter data
+     *
+     * @return array
+     */
+    function onepress_get_section_counter_data()
+    {
+        $boxes = get_theme_mod('onepress_counter_boxes');
+        if (is_string($boxes)) {
+            $boxes = json_decode($boxes, true);
+        }
+        if (empty($boxes) || !is_array($boxes)) {
+            $boxes = array();
+        }
+        return $boxes;
     }
-    if ( empty( $boxes ) || ! is_array( $boxes ) ) {
-        $boxes = array();
-    }
-    return $boxes;
 }
 
-/**
- * Get services data
- * @return array
- */
-function onepress_get_section_services_data(){
-    $services = get_theme_mod( 'onepress_services' );
-    if ( is_string( $services ) ) {
-        $services = json_decode( $services, true );
-    }
-    $page_ids = array();
-    if ( ! empty( $services ) && is_array( $services ) ) {
-        foreach ( $services as $k => $v ) {
-            if ( isset ( $v['content_page'] ) ) {
-                $v['content_page'] = absint( $v['content_page'] );
-                if ( $v['content_page'] > 0 )  {
-                    $page_ids[ ] =  wp_parse_args( $v, array(  'icon' => 'gg', 'enable_link' => 0 ) );
+if ( ! function_exists( 'onepress_get_section_services_data' ) ) {
+    /**
+     * Get services data
+     * @return array
+     */
+    function onepress_get_section_services_data()
+    {
+        $services = get_theme_mod('onepress_services');
+        if (is_string($services)) {
+            $services = json_decode($services, true);
+        }
+        $page_ids = array();
+        if (!empty($services) && is_array($services)) {
+            foreach ($services as $k => $v) {
+                if (isset ($v['content_page'])) {
+                    $v['content_page'] = absint($v['content_page']);
+                    if ($v['content_page'] > 0) {
+                        $page_ids[] = wp_parse_args($v, array('icon' => 'gg', 'enable_link' => 0));
+                    }
                 }
             }
         }
-    }
-    // if still empty data then get some page for demo
-    if ( empty( $page_ids ) ) {
-        $current_pos_id = get_the_ID();
-        $args = array(
-            'posts_per_page'   => 4,
-            'orderby'          => 'date',
-            'order'            => 'DESC',
-            'exclude'          => $current_pos_id,
-            'post_type'        => 'page',
-        );
-        $posts_array = get_posts( $args );
-        foreach ( $posts_array as $p ) {
-            $page_ids[] =  array( 'content_page' => $p->ID , 'icon'=> 'gg', 'enable_link' => 0 );
-        }
-    }
-    return $page_ids;
-}
-
-/**
- * Get team members
- *
- * @return array
- */
-function onepress_get_section_team_data(){
-    $members = get_theme_mod( 'onepress_team_members' );
-    if ( is_string( $members ) ) {
-        $members = json_decode( $members, true );
-    }
-    if ( ! is_array( $members ) ) {
-        $members = array();
-    }
-    return $members;
-}
-
-
-/**
- * Get features data
- *
- * @since 1.1.4
- * @return array
- */
-function onepress_get_features_data(){
-    $array = get_theme_mod( 'onepress_features_boxes' );
-    if ( is_string( $array ) ) {
-        $array = json_decode( $array, true );
-    }
-    if ( ! empty( $array ) && is_array( $array ) ) {
-        foreach ( $array as $k => $v ) {
-            $array[ $k ] =  wp_parse_args( $v, array(
-                'icon' => 'gg',
-                'title' => '',
-                'desc' => '',
-                'link' => '',
-            ) );
-
-            //Get/Set social icons
-            $array[ $k ]['icon'] = trim( $array[ $k ]['icon'] );
-            if ($array[ $k ]['icon'] != '' && strpos($array[ $k ]['icon'], 'fa-') !== 0) {
-                $array[ $k ]['icon'] = 'fa-' . $array[ $k ]['icon'];
+        // if still empty data then get some page for demo
+        if (empty($page_ids)) {
+            $current_pos_id = get_the_ID();
+            $args = array(
+                'posts_per_page' => 4,
+                'orderby' => 'date',
+                'order' => 'DESC',
+                'exclude' => $current_pos_id,
+                'post_type' => 'page',
+            );
+            $posts_array = get_posts($args);
+            foreach ($posts_array as $p) {
+                $page_ids[] = array('content_page' => $p->ID, 'icon' => 'gg', 'enable_link' => 0);
             }
         }
+        return $page_ids;
     }
-    return $array;
 }
 
-/**
- * Get social profiles
- *
- * @since 1.1.4
- * @return bool|array
- */
-function onepress_get_social_profiles(){
-    $array = get_theme_mod( 'onepress_social_profiles' );
-    if ( is_string( $array ) ) {
-        $array = json_decode( $array, true );
-    }
-    if ( ! empty( $array ) && is_array( $array ) ) {
-        foreach ( $array as $k => $v ) {
-            $array[ $k ] =  wp_parse_args( $v, array(
-                'network'   => '',
-                'icon'      => '',
-                'link'      => '',
-            ) );
-
-            //Get/Set social icons
-            // If icon isset
-            $icons =  array();
-            $array[ $k ]['icon'] = trim( $array[ $k ]['icon'] );
-            if ($array[ $k ]['icon'] != '' && strpos($array[ $k ]['icon'], 'fa-') !== 0) {
-                $icons[ 'fa-' . $array[ $k ]['icon'] ] = 'fa-' . $array[ $k ]['icon'];
-            }else {
-                $icons[ $array[ $k ]['icon'] ] = $array[ $k ]['icon'];
-            }
-            $network = ( $array[ $k ]['network'] ) ?  sanitize_title( $array[ $k ]['network'] ) : false ;
-            if ( $network ) {
-                $icons[ 'fa-'.$network  ] = 'fa-'.$network;
-            }
-
-            $array[ $k ]['icon']  = join( ' ', $icons );
-
+if ( ! function_exists( 'onepress_get_section_team_data' ) ) {
+    /**
+     * Get team members
+     *
+     * @return array
+     */
+    function onepress_get_section_team_data()
+    {
+        $members = get_theme_mod('onepress_team_members');
+        if (is_string($members)) {
+            $members = json_decode($members, true);
         }
+        if (!is_array($members)) {
+            $members = array();
+        }
+        return $members;
     }
-    return $array;
 }
 
-/**
- * Add Copyright and Credit text to footer
- * @since 1.1.3
- */
-function onepress_footer_site_info(){
-    ?>
-    <?php printf( esc_html__( 'Copyright %1$s %2$s %3$s', 'onepress' ), '&copy;', esc_attr( date( 'Y' ) ), esc_attr( get_bloginfo() ) ); ?>
-    <span class="sep"> &ndash; </span>
-    <?php printf( esc_html__( '%1$s theme by %2$s', 'onepress' ), '<a href="'. esc_url('https://www.famethemes.com/themes/onepress', 'onepress') .'">OnePress</a>', 'FameThemes' ); ?>
-    <?php
+if ( ! function_exists( 'onepress_get_features_data' ) ) {
+    /**
+     * Get features data
+     *
+     * @since 1.1.4
+     * @return array
+     */
+    function onepress_get_features_data()
+    {
+        $array = get_theme_mod('onepress_features_boxes');
+        if (is_string($array)) {
+            $array = json_decode($array, true);
+        }
+        if (!empty($array) && is_array($array)) {
+            foreach ($array as $k => $v) {
+                $array[$k] = wp_parse_args($v, array(
+                    'icon' => 'gg',
+                    'title' => '',
+                    'desc' => '',
+                    'link' => '',
+                ));
+
+                //Get/Set social icons
+                $array[$k]['icon'] = trim($array[$k]['icon']);
+                if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa-') !== 0) {
+                    $array[$k]['icon'] = 'fa-' . $array[$k]['icon'];
+                }
+            }
+        }
+        return $array;
+    }
+}
+
+if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
+    /**
+     * Get social profiles
+     *
+     * @since 1.1.4
+     * @return bool|array
+     */
+    function onepress_get_social_profiles()
+    {
+        $array = get_theme_mod('onepress_social_profiles');
+        if (is_string($array)) {
+            $array = json_decode($array, true);
+        }
+        if (!empty($array) && is_array($array)) {
+            foreach ($array as $k => $v) {
+                $array[$k] = wp_parse_args($v, array(
+                    'network' => '',
+                    'icon' => '',
+                    'link' => '',
+                ));
+
+                //Get/Set social icons
+                // If icon isset
+                $icons = array();
+                $array[$k]['icon'] = trim($array[$k]['icon']);
+                if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa-') !== 0) {
+                    $icons['fa-' . $array[$k]['icon']] = 'fa-' . $array[$k]['icon'];
+                } else {
+                    $icons[$array[$k]['icon']] = $array[$k]['icon'];
+                }
+                $network = ($array[$k]['network']) ? sanitize_title($array[$k]['network']) : false;
+                if ($network) {
+                    $icons['fa-' . $network] = 'fa-' . $network;
+                }
+
+                $array[$k]['icon'] = join(' ', $icons);
+
+            }
+        }
+        return $array;
+    }
+}
+
+if ( ! function_exists( 'onepress_footer_site_info' ) ) {
+    /**
+     * Add Copyright and Credit text to footer
+     * @since 1.1.3
+     */
+    function onepress_footer_site_info()
+    {
+        ?>
+        <?php printf(esc_html__('Copyright %1$s %2$s %3$s', 'onepress'), '&copy;', esc_attr(date('Y')), esc_attr(get_bloginfo())); ?>
+        <span class="sep"> &ndash; </span>
+        <?php printf(esc_html__('%1$s theme by %2$s', 'onepress'), '<a href="' . esc_url('https://www.famethemes.com/themes/onepress', 'onepress') . '">OnePress</a>', 'FameThemes'); ?>
+        <?php
+    }
 }
 add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
