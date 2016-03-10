@@ -492,6 +492,29 @@ function onepress_get_section_team_data(){
     return $members;
 }
 
+
+/**
+ * Get services data
+ * @return array
+ */
+function onepress_get_features_data(){
+    $array = get_theme_mod( 'onepress_features_boxes' );
+    if ( is_string( $array ) ) {
+        $array = json_decode( $array, true );
+    }
+    if ( ! empty( $array ) && is_array( $array ) ) {
+        foreach ( $array as $k => $v ) {
+            $array[ $k ] =  wp_parse_args( $v, array(
+                'icon' => 'gg',
+                'title' => '',
+                'desc' => '',
+                'link' => '',
+            ) );
+        }
+    }
+    return $array;
+}
+
 /**
  * Add Copyright and Credit text to footer
  * @since 1.1.3

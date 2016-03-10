@@ -95,6 +95,10 @@
             <key name='onepress_testimonial_desc' />
             <key name='onepress_pricing_desc' />
 
+            <key name='onepress_features_title' />
+            <key name='onepress_features_subtitle' />
+            <key name='onepress_features_desc' />
+            <key name='onepress_features_boxes' />
 
         </key>
     </admin-texts>
