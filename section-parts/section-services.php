@@ -6,6 +6,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_services_subtitle', esc_ht
 // Get data
 $page_ids =  onepress_get_section_services_data();
 if ( ! empty( $page_ids ) ) {
+    $layout = intval( get_theme_mod( 'onepress_service_layout', 6 ) );
     ?>
     <?php if (!$onepress_service_disable) : ?>
         <section id="<?php if ($onepress_service_id != '') echo $onepress_service_id; ?>" <?php do_action('onepress_section_atts', 'services'); ?>
@@ -32,7 +33,7 @@ if ( ! empty( $page_ids ) ) {
                                 $settings['icon'] = 'fa-' . $settings['icon'];
                             }
                             ?>
-                            <div class="col-sm-6 wow slideInUp">
+                            <div class="col-sm-12 col-md-6 col-lg-<?php echo esc_attr( $layout ); ?> wow slideInUp">
                                 <div class="service-item ">
                                     <?php
                                     if ( ! empty( $settings['enable_link'] ) ) {

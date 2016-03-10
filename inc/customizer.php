@@ -1210,6 +1210,29 @@ function onepress_customize_register( $wp_customize ) {
         ));
 
 
+        // Services layout
+        $wp_customize->add_setting( 'onepress_service_layout',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default'           => '6',
+            )
+        );
+
+        $wp_customize->add_control( 'onepress_service_layout',
+            array(
+                'label' 		=> esc_html__('Services Layout Setting', 'onepress'),
+                'section' 		=> 'onepress_service_settings',
+                'description'   => '',
+                'type'          => 'select',
+                'choices'       => array(
+                    '3' => esc_html__( '4 Columns', 'onepress' ),
+                    '4' => esc_html__( '3 Columns', 'onepress' ),
+                    '6' => esc_html__( '2 Columns', 'onepress' ),
+                ),
+            )
+    );
+
+
 	$wp_customize->add_section( 'onepress_service_content' ,
 		array(
 			'priority'    => 6,
