@@ -9,9 +9,20 @@
     background: #FFFFFF;
     z-index: 50;
     border-bottom: 1px solid $border;
+
+		-webkit-transition: all 2s; 
+    transition: all .2s;
 }
-.sticky-header .site-header {
-	position: fixed;
+.side-header-wrapper {
+		display: block;
+}
+
+.sticky-header #page > .site-header, .sticky-header .header-fixed {
+		position: fixed;
+}
+.sticky-header .header-fixed {
+		top: 0px;
+		left: 0px;
 }
 
 .site-branding {
