@@ -200,9 +200,10 @@ function res() {
 
             $( document ).scroll(function(){
                 var header_fixed = $('.site-header').eq(0);
+                var header_parent = header_fixed.parent();
                 var header_h = header_fixed.height() || 0;
                 $( '.side-header-wrapper').height( header_h );
-                p_to_top    = header_fixed.position().top;
+                p_to_top    = header_parent.position().top;
                 var topbar = $( '#wpadminbar').height() || 0;
 
                 if( $( document ).scrollTop() > p_to_top ) {
