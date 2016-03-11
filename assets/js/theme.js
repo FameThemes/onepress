@@ -205,6 +205,12 @@ function res() {
                 $( '.side-header-wrapper').height( header_h );
                 p_to_top    = header_parent.position().top;
                 var topbar = $( '#wpadminbar').height() || 0;
+                if (  topbar > 0 ) {
+                    var  topbar_pos = $( '#wpadminbar').css( 'position' );
+                    if ( 'fixed' !== topbar_pos ) {
+                        topbar = 0;
+                    }
+                }
 
                 if( $( document ).scrollTop() > p_to_top ) {
                     header_fixed.addClass('header-fixed');
