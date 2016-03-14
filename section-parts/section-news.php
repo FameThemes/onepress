@@ -22,13 +22,18 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', esc_html__(
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="blog-entry wow slideInUp">
-						<?php query_posts('showposts='.$onepress_news_number.'' ); ?>
-						<?php if ( have_posts() ) : ?>
+						<?php
+						$query = new WP_Query(
+							array(
+								'posts_per_page' => $onepress_news_number
+							)
+						);
+						?>
+						<?php if ( $query->have_posts() ) : ?>
 
 							<?php /* Start the Loop */ ?>
-							<?php while ( have_posts() ) : the_post(); ?>
+							<?php while ( $query->have_posts() ) : $query->the_post(); ?>
 								<?php
-
 									/*
 									 * Include the Post-Format-specific template for the content.
 									 * If you want to override this in a child theme, then include a file
@@ -47,6 +52,7 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', esc_html__(
 							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url($onepress_news_more_link) ?>"><?php if ( $onepress_news_more_text != '' ) echo esc_html( $onepress_news_more_text ); ?></a>
 						</div>
 						<?php } ?>
+
 					</div>
 				</div>
 			</div>
@@ -56,6 +62,5 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', esc_html__(
 	<?php do_action( 'onepress_section_after_inner', 'news' ); ?>
 </section>
 <?php endif;
-wp_reset_query();
 wp_reset_postdata();
 
