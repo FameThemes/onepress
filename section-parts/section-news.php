@@ -62,5 +62,5 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', esc_html__(
 	<?php do_action( 'onepress_section_after_inner', 'news' ); ?>
 </section>
 <?php endif;
-wp_reset_postdata();
+wp_reset_query();
 
