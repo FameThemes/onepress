@@ -12,7 +12,9 @@
     border-radius: 10px;
     z-index: 26;
 }
-
+.item-hidden, .tem-add_by {
+    display: none;
+}
 
 .no-changeable .remove-btn-wrapper, .no-changeable .repeatable-actions { display: none !important; }
 

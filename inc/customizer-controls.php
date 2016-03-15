@@ -382,6 +382,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         }
 
         $this->changeable =  isset(  $args['changeable'] ) && $args['changeable'] == 'no' ? 'no' : 'yes';
+        $this->default_empty_title =  isset(  $args['default_empty_title'] ) && $args['default_empty_title'] != '' ? $args['default_empty_title'] : esc_html__( 'Item', 'onepress' );
 
     }
 
@@ -432,6 +433,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         $this->json['max_item']      = $this->max_item;
         $this->json['limited_msg']   = $this->limited_msg;
         $this->json['changeable']    = $this->changeable;
+        $this->json['default_empty_title']    = $this->default_empty_title;
         $this->json['value']         = $value;
         $this->json['fields']        = $this->fields;
 
@@ -546,7 +548,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                         <#
                                     }
                                     #>
-                                        <# if ( field.type !== 'checkbox' &&  field.type !== 'hidden' ) { #>
+                                        <# if ( field.type !== 'checkbox' ) { #>
                                             <# if ( field.title ) { #>
                                             <label class="field-label">{{ field.title }}</label>
                                             <# } #>
@@ -558,13 +560,11 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
 
                                         <# if ( field.type === 'hidden' ) { #>
-
                                             <input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
-
+                                        <# } else if ( field.type === 'add_by' ) { #>
+                                            <input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="add_by">
                                         <# } else if ( field.type === 'text' ) { #>
-
                                             <input data-live-id="{{ field.id }}" type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
-
                                         <# } else if ( field.type === 'checkbox' ) { #>
 
                                             <# if ( field.title ) { #>

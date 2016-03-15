@@ -766,7 +766,7 @@
 			}
 
 			if ( control.params.changeable === 'no' ) {
-				control.container.addClass( 'no-changeable' );
+				// control.container.addClass( 'no-changeable' );
 			}
 
 			/**
@@ -940,13 +940,28 @@
 			 * @param $context
 			 */
 			control.actions = function( $context ){
-
 				if ( control.params.live_title_id ) {
 
-					//console.log( $( "[data-live-id='"+ control.params.live_title_id+"']").eq(0).val() );
+					if( ! $context.attr( 'data-title-format' ) ) {
+						$context.attr( 'data-title-format', control.params.title_format );
+					}
+
+					var format = $context.attr( 'data-title-format' ) || '';
+					// custom for special ID
+					if ( control.id === 'onepress_section_order_styling' ) {
+						if ( $context.find( 'input.add_by').val() !== 'click' ) {
+							format = '[live_title]';
+							$context.addClass( 'no-changeable' );
+						} else {
+							$context.find( '.item-title').removeClass( 'item-hidden ' );
+							$context.find( '.item-title input[type="hidden"]').attr( 'type', 'text' );
+						}
+					}
+
+					// Live title
 					if ( control.params.live_title_id && $( "[data-live-id='"+ control.params.live_title_id+"']", $context ).length > 0 ) {
-						var v;
-						//console.log( $("[data-live-id='" + control.params.live_title_id + "']", $context).prop("tagName") );
+						var v = '';
+
 						if (  $("[data-live-id='" + control.params.live_title_id + "']", $context).is( '.select-one' )  ){
 							v = $("[data-live-id='" + control.params.live_title_id + "']", $context ).find('option:selected').eq(0).text();
 						} else {
@@ -954,16 +969,26 @@
 						}
 
 						if ( v == '' ) {
-							v = 'Item';
+							v = control.params.default_empty_title;
 						}
 
-						if (typeof control.params.title_format !== "undefined" && control.params.title_format !== '') {
-							v = control.params.title_format.replace('[live_title]', v);
+						if ( format !== '') {
+							v = format.replace('[live_title]', v);
 						}
+
+
 						$('.widget-title .live-title', $context).text( v );
 
 						$context.on('keyup change', "[data-live-id='" + control.params.live_title_id + "']", function () {
-							var v;
+							var v = '';
+
+							var format = $context.attr( 'data-title-format' ) || '';
+							// custom for special ID
+							if ( control.id === 'onepress_section_order_styling' ) {
+								if ( $context.find( 'input.add_by').val() !== 'click' ) {
+									format = '[live_title]';
+								}
+							}
 
 							if ( $(this).is( '.select-one' )  ){
 								v = $(this).find('option:selected').eq( 0 ).text();
@@ -972,11 +997,11 @@
 							}
 
 							if (v == '') {
-								v = '[Untitled]';
+								v = control.params.default_empty_title;
 							}
 
-							if ( typeof control.params.title_format !== "undefined" && control.params.title_format !== '' ) {
-								v = control.params.title_format.replace('[live_title]', v);
+							if ( format !== '' ) {
+								v = format.replace('[live_title]', v);
 							}
 
 							$('.widget-title .live-title', $context).text(v);
@@ -1050,7 +1075,6 @@
 			control.template = control.repeaterTemplate();
 
 
-
 			/**
 			 * Init item events
 			 *
@@ -1077,11 +1101,6 @@
 				} );
 
 			};
-
-			$( '.list-repeatable li').each( function(){
-				control.actions( $( this ) );
-			} );
-
 
 			/**
 			 * Drag to sort items
@@ -1130,6 +1149,7 @@
 			control.container.on( 'click', '.add-new-repeat-item', function(){
 				var $html = $( control.template( default_data ) );
 				$( '.list-repeatable', control.container ).append( $html );
+				$html.find( 'input.add_by').val( 'click' );
 				control.intItem( $html );
 				control.actions( $html );
 				control.updateValue();
