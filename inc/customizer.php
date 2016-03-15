@@ -1137,7 +1137,7 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'onepress_features_title',
         array(
             'sanitize_callback' => 'sanitize_text_field',
-            'default'           => esc_html__('Features Us', 'onepress'),
+            'default'           => esc_html__('Features', 'onepress'),
         )
     );
     $wp_customize->add_control( 'onepress_features_title',

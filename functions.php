@@ -313,4 +313,3 @@ require get_template_directory() . '/inc/tgm-plugin-activation.php';
  * Add theme info page
  */
 require get_template_directory() . '/inc/dashboard.php';
-
