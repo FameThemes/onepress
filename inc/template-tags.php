@@ -300,7 +300,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 .onepress-menu.onepress-menu-mobile li.onepress-current-item > a, .site-footer a, .site-footer .footer-social a:hover, .site-footer .btt a:hover,
                 .highlight, #comments .comment .comment-wrapper .comment-meta .comment-time:hover, #comments .comment .comment-wrapper .comment-meta .comment-reply-link:hover, #comments .comment .comment-wrapper .comment-meta .comment-edit-link:hover,
                 .btn-theme-primary-outline, .sidebar .widget a:hover, .section-services .service-item .service-image i, .counter_item .counter__number,
-                .team-member .member-thumb .member-profile a:hover
+                .team-member .member-thumb .member-profile a:hover, .icon-background-default
                 {
                     color: #<?php echo $primary; ?>;
                 }
