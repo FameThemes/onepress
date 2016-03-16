@@ -65,6 +65,32 @@ if ( ! function_exists( 'onepress_sanitize_checkbox' ) ) {
     }
 }
 
+function onepress_sanitize_color_alpha( $color ){
+    $color = str_replace( '#', '', $color );
+    if ( '' === $color ){
+        return '';
+    }
+
+    // 3 or 6 hex digits, or the empty string.
+    if ( preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', '#' . $color ) ) {
+        // convert to rgb
+        $colour = $color;
+        if ( strlen( $colour ) == 6 ) {
+            list( $r, $g, $b ) = array( $colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5] );
+        } elseif ( strlen( $colour ) == 3 ) {
+            list( $r, $g, $b ) = array( $colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2] );
+        } else {
+            return false;
+        }
+        $r = hexdec( $r );
+        $g = hexdec( $g );
+        $b = hexdec( $b );
+        return 'rgba('.join( ',', array( 'r' => $r, 'g' => $g, 'b' => $b, 'a' => 1 ) ).')';
+
+    }
+
+    return strpos( trim( $color ), 'rgb' ) !== false ?  $color : false;
+}
 
 
 /**
@@ -102,6 +128,9 @@ function onepress_sanitize_repeatable_data_field( $input , $setting ){
                         break;
                     case 'color':
                         $data[ $i ][ $id ] = sanitize_hex_color_no_hash( $value );
+                        break;
+                    case 'coloralpha':
+                        $data[ $i ][ $id ] = onepress_sanitize_color_alpha( $value );
                         break;
                     case 'checkbox':
                         $data[ $i ][ $id ] =  onepress_sanitize_checkbox( $value );
@@ -616,7 +645,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
                                             <# if ( field.value !='' ) { field.value = '#'+field.value ; }  #>
 
-                                            <input data-live-id="{{ field.id }}"  type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="color-field c-{{ field.type }}">
+                                            <input data-live-id="{{ field.id }}" data-show-opacity="true" type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="color-field c-{{ field.type }} alpha-color-control">
 
                                         <# } else if ( field.type == 'media' ) { #>
 

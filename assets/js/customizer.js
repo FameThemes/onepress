@@ -71,7 +71,7 @@
 
 		// Set the value of the input.
 		$input.val( color );
-		$input.trigger( 'change' );
+		$input.trigger( 'color_change' );
 
 		// Update the background color of the color picker.
 		colorPicker.toggler.css({
@@ -126,6 +126,8 @@
 
 			// Get a clean starting value for the option.
 			startingColor = $input.val().replace( /\s+/g, '' );
+			//startingColor = $input.val().replace( '#', '' );
+			//console.log( startingColor );
 
 			// If we don't yet have a value, use the default color.
 			if ( '' == startingColor ) {
@@ -158,6 +160,7 @@
 
 					// Always show the background color of the opacity slider at 100% opacity.
 					$transparency.css( 'background-color', ui.color.toString( 'no-alpha' ) );
+					$input.trigger( 'color_change' );
 				},
 				palettes: palette // Use the passed in palette.
 			};
@@ -273,6 +276,7 @@
 
 				},
 			});
+
 		}
 
 	});
@@ -659,9 +663,13 @@
 			var settings = {};
 			settings.editing_area = $textarea;
 			settings.container = $textarea.closest( '.item-editor' );
-			settings.editing_area.uniqueId();
-			settings.editing_id = settings.editing_area.attr( 'id' ) || '';
-			settings.editor_id = 'wpe-for-'+settings.editing_id;
+
+			//settings.editing_area.uniqueId();
+			// settings.editing_id = settings.editing_area.attr( 'id' ) || '';
+			 settings.editing_id = 'editor-' + Math.random().toString(36).substr(2, 9);
+			 $textarea.attr( 'id', settings.editing_id );
+
+			settings.editor_id = 'wpef-'+settings.editing_id;
 			settings.preview = $( '<div id="preview-'+settings.editing_id+'" class="wp-js-editor-preview"></div>');
 			settings.editing_editor = $( '<div id="wrap-'+settings.editing_id+'" class="modal-wp-js-editor"><textarea id="'+settings.editor_id+'"></textarea></div>');
 			var content = settings.editing_area.val();
@@ -912,6 +920,7 @@
 			control.colorPicker =  function( $context ){
 				// Add Color Picker to all inputs that have 'color-field' class
 
+
 				$('.c-color', $context).wpColorPicker( {
 					change: function(event, ui){
 						control.updateValue();
@@ -921,16 +930,22 @@
 					},
 				});
 
+				$('.c-coloralpha', $context ).each( function(){
+						var input = $( this);
+						var c = input.val();
+						c = c.replace( '#', '' );
+						input.removeAttr( 'value');
+						input.prop( 'value', c );
+						input.alphaColorPicker( {
+							change: function(event, ui){
+								control.updateValue();
+							},
+							clear: function(event, ui){
+								control.updateValue();
+							},
+						});
+				} );
 
-				$('.c-coloralpha', $context).alphaColorPicker( {
-					//change: function(event, ui){
-					//	control.updateValue();
-					//},
-
-					clear: function(event, ui){
-						control.updateValue();
-					},
-				});
 
 			};
 
@@ -955,6 +970,9 @@
 						} else {
 							$context.find( '.item-title').removeClass( 'item-hidden ' );
 							$context.find( '.item-title input[type="hidden"]').attr( 'type', 'text' );
+
+							$context.find( '.item-section_id').removeClass( 'item-hidden ' );
+							$context.find( '.item-section_id input[type="hidden"]').attr( 'type', 'text' );
 						}
 					}
 
@@ -1096,7 +1114,7 @@
 					}
 				} );
 				// Setup editor
-				$( '.item-editor textarea').each( function(){
+				$( '.item-editor textarea', $context ).each( function(){
 					control.editor( $( this ) );
 				} );
 
@@ -1159,7 +1177,7 @@
 			/**
 			 * Update repeater data when any events fire.
 			 */
-			$( '.list-repeatable', control.container ).on( 'keyup change', 'input, select, textarea', function( e ) {
+			$( '.list-repeatable', control.container ).on( 'keyup change color_change', 'input, select, textarea', function( e ) {
 				control.updateValue();
 			});
 
