@@ -8,10 +8,15 @@
     width: 100%;
     background: #FFFFFF;
     z-index: 50;
-    border-bottom: 1px solid $border;
+    //border-bottom: 1px solid $border;
 }
+
 .side-header-wrapper {
-		display: block;
+	display: block;
+}
+
+.site-header.header-fixed {
+	box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
 }
 
 .sticky-header #page > .site-header, .sticky-header .header-fixed {
@@ -394,16 +399,22 @@
 /* Content
 ------------------------------*/
 .site-content {
-	//border-top: 1px solid $border;
+	border-top: 1px solid $border;
+	margin-top: -1px;
     //padding-top: 74px;
 }
+.blog .site-content,
+.single .site-content {
+	margin-top: 0;
+}
+
 .site-content.no-border {
 	border-top: none;
 }
 
 .page-header {
 	padding: 30px 0px;
-    //border-top: 1px solid $border;
+    border-top: 1px solid $border;
 	background: #f8f9f9;
 	border-bottom: 1px solid $border;
 	.entry-title, .page-title {
