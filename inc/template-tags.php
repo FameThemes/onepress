@@ -232,11 +232,55 @@ function onepress_comment( $comment, $args, $depth ) {
 }
 endif;
 
+if ( ! function_exists( 'onepress_hex_to_rgba' ) ) {
+    /**
+     * Convert hex color to rgba color
+     *
+     * @since 1.1.5
+     *
+     * @param $color
+     * @param int $alpha
+     * @return bool|string
+     */
+    function onepress_hex_to_rgba( $color, $alpha = 1)
+    {
+        $color = str_replace('#', '', $color);
+        if ('' === $color) {
+            return '';
+        }
+
+        if ( strpos(trim($color), 'rgb') !== false ) {
+            return $color;
+        }
+
+        // 3 or 6 hex digits, or the empty string.
+        if (preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', '#' . $color)) {
+            // convert to rgb
+            $colour = $color;
+            if (strlen($colour) == 6) {
+                list($r, $g, $b) = array($colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5]);
+            } elseif (strlen($colour) == 3) {
+                list($r, $g, $b) = array($colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2]);
+            } else {
+                return false;
+            }
+            $r = hexdec($r);
+            $g = hexdec($g);
+            $b = hexdec($b);
+            return 'rgba(' . join(',', array('r' => $r, 'g' => $g, 'b' => $b, 'a' => $alpha ) ) . ')';
+        }
+
+        return false;
+
+    }
+}
+
 add_action( 'wp_enqueue_scripts', 'onepress_custom_inline_style', 100 );
 if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
     /**
      * Add custom css to header
      *
+     * @change 1.1.5
      */
 	function onepress_custom_inline_style( ) {
 
@@ -244,7 +288,10 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
              *  Custom hero section css
              */
             $hero_bg_color = get_theme_mod( 'onepress_hero_overlay_color', '#000000' );
-			$hero_opacity = floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) );
+
+            // Deprecate form v 1.1.5
+            $hero_bg_color = onepress_hex_to_rgba( $hero_bg_color, get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) );
+
             ob_start();
             ?>
             #main .video-section section.hero-slideshow-wrapper {
@@ -256,7 +303,6 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 left: 0px;
                 width: 100%;
                 height: 100%;
-                opacity: <?php echo $hero_opacity; ?>;
                 background-color: <?php echo $hero_bg_color; ?>;
                 display: block;
                 content: "";
@@ -270,7 +316,6 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 left: 0px;
                 width: 100%;
                 height: 100%;
-                opacity: <?php echo $hero_opacity; ?>;
                 background-color: <?php echo $hero_bg_color; ?>;
                 display: block;
                 content: "";
@@ -284,7 +329,6 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 left: 0px;
                 width: 100%;
                 height: 100%;
-                opacity: <?php echo $hero_opacity; ?>;
                 background-color: <?php echo $hero_bg_color; ?>;
                 display: block;
                 content: "";

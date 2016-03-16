@@ -615,12 +615,12 @@ function onepress_customize_register( $wp_customize ) {
 			// Overlay color
 			$wp_customize->add_setting( 'onepress_hero_overlay_color',
 				array(
-					'sanitize_callback' => 'sanitize_hex_color',
-					'default'           => '#000000',
+					'sanitize_callback' => 'onepress_sanitize_color_alpha',
+					'default'           => 'rgba(0,0,0,.3)',
 					'transport' => 'refresh', // refresh or postMessage
 				)
 			);
-			$wp_customize->add_control( new WP_Customize_Color_Control(
+			$wp_customize->add_control( new OnePress_Alpha_Color_Control(
 					$wp_customize,
 					'onepress_hero_overlay_color',
 					array(
@@ -652,6 +652,7 @@ function onepress_customize_register( $wp_customize ) {
             );
 
 			// Overlay Opacity
+			/*
 			$wp_customize->add_setting( 'onepress_hero_overlay_opacity',
 				array(
 					'sanitize_callback' => 'sanitize_text_field',
@@ -668,6 +669,7 @@ function onepress_customize_register( $wp_customize ) {
 						'priority'      => 130,
 					)
 			);
+			*/
 
 			// Background Video
 			$wp_customize->add_setting( 'onepress_hero_videobackground_upsell',

@@ -188,7 +188,7 @@
  * Sticky header when scroll.
  */
 ( function( $ ) {
-    
+
     if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
         var p_to_top;
         $('.site-header').eq(0).wrap( '<div class="side-header-wrapper">' );
