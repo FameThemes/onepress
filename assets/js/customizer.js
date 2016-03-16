@@ -743,7 +743,7 @@
 					settings.editing_editor.width( '' );
 					settings.theme.resizeTo('100%', height- ( tb_h + 150 ) );
 				}
-			}
+			};
 
 
 			settings._init();
@@ -1202,7 +1202,6 @@
 
 
 
-
 jQuery( window ).ready( function( $ ){
     if ( typeof onepress_customizer_settings !== "undefined" ) {
         if (onepress_customizer_settings.number_action > 0) {
@@ -1213,5 +1212,6 @@ jQuery( window ).ready( function( $ ){
             $( '#accordion-section-onepress_order_styling > .accordion-section-title').append( '<span class="onepress-notice">Plus</span>' );
         }
     }
+
 
 } );
