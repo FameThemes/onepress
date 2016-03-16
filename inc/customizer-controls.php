@@ -489,7 +489,6 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         wp_enqueue_script( 'onepress-customizer' );
         wp_enqueue_style( 'onepress-customizer' );
 
-
         if ( ! class_exists( '_WP_Editors' ) ) {
             require(ABSPATH . WPINC . '/class-wp-editor.php');
         }

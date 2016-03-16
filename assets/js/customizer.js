@@ -962,17 +962,10 @@
 					}
 
 					var format = $context.attr( 'data-title-format' ) || '';
-					// custom for special ID
+					// Custom for special ID
 					if ( control.id === 'onepress_section_order_styling' ) {
 						if ( $context.find( 'input.add_by').val() !== 'click' ) {
 							format = '[live_title]';
-							$context.addClass( 'no-changeable' );
-						} else {
-							$context.find( '.item-title').removeClass( 'item-hidden ' );
-							$context.find( '.item-title input[type="hidden"]').attr( 'type', 'text' );
-
-							$context.find( '.item-section_id').removeClass( 'item-hidden ' );
-							$context.find( '.item-section_id input[type="hidden"]').attr( 'type', 'text' );
 						}
 					}
 
@@ -1099,7 +1092,6 @@
 			 * @param $context
 			 */
 			control.intItem = function( $context ){
-
 				control.rename();
 				control.conditionize( $context );
 				control.colorPicker( $context );
@@ -1113,6 +1105,25 @@
 						$context.addClass( 'show-display-field-only' );
 					}
 				} );
+
+
+				// Custom for special ID
+				if ( control.id === 'onepress_section_order_styling' ) {
+					if ( $context.find( 'input.add_by').val() !== 'click' ) {
+						$context.addClass( 'no-changeable' );
+						$( '.item-editor textarea', $context).addClass( 'editor-added' );
+
+					} else {
+						$context.find( '.item-title').removeClass( 'item-hidden ' );
+						$context.find( '.item-title input[type="hidden"]').attr( 'type', 'text' );
+
+						$context.find( '.item-section_id').removeClass( 'item-hidden ' );
+						$context.find( '.item-section_id input[type="hidden"]').attr( 'type', 'text' );
+					}
+				}
+
+
+
 				// Setup editor
 				$( '.item-editor textarea', $context ).each( function(){
 					control.editor( $( this ) );
