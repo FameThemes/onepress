@@ -760,3 +760,64 @@ button {
     padding: 9px 14px;
     font-weight: bold;
 }
+
+/* Breadcrumbs
+------------------------------*/
+.breadcrumbs {
+    font-size: 10px;
+    padding: 15px 0px;
+    border-bottom: 1px solid $border;
+    color: #858585;
+    @include for(small-screens) {
+        font-size: 12px;
+    }
+    i {
+        margin: 0px 6px;
+    }
+    a {
+        text-decoration: none;
+        color: $text;
+        font-weight: 600;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    span {
+        margin-right: 20px;
+        position: relative;
+        @include for(small-screens) {
+            margin-right: 40px;
+        }
+        span {
+            margin-right: 0;
+        }
+    }
+    a:before {
+        border-bottom: 6px solid transparent;
+        border-left: 6px solid rgba(0, 0, 0, 0.2);
+        border-top: 6px solid transparent;
+        content: "";
+        display: inline-block;
+        position: absolute;
+        right: -11px;
+        top: 2px;
+        @include for(small-screens) {
+            right: -23px;
+            top: 3px;
+        }
+    }
+    a:after {
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid #ffffff;
+        border-top: 5px solid transparent;
+        content: "";
+        display: inline-block;
+        position: absolute;
+        right: -10px;
+        top: 3px;
+        @include for(small-screens) {
+            right: -22px;
+            top: 4px;
+        }
+    }
+}

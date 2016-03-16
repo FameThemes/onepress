@@ -10,6 +10,9 @@
 get_header(); ?>
 
 	<div id="content" class="site-content">
+
+		<?php echo onepress_breadcrumb(); ?>
+
 		<div id="content-inside" class="container right-sidebar">
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">
@@ -34,5 +37,5 @@ get_header(); ?>
 
 		</div><!--#content-inside -->
 	</div><!-- #content -->
-	
+
 <?php get_footer(); ?>

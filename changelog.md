@@ -3,6 +3,8 @@ CHANGELOG
 ====================================================================
 
 ## 1.1.5
+* New: WooCommerce compatibility.
+* New: BreadCrumb NavXT compatibility.
 * New section: Features.
 * Unlimited footer social icons.
 * Update readme.txt and declare theme copyright.

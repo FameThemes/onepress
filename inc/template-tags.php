@@ -641,3 +641,19 @@ if ( ! function_exists( 'onepress_footer_site_info' ) ) {
     }
 }
 add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
+
+
+/**
+ * Breadcrumb NavXT Compatibility.
+ */
+function onepress_breadcrumb() {
+	if ( function_exists('bcn_display') ) {
+        ?>
+        <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+            <div class="container">
+                <?php bcn_display(); ?>
+            </div>
+        </div>
+        <?php
+	}
+}
