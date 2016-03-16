@@ -24,6 +24,23 @@ if ( ! empty( $page_ids ) ) {
                     <?php
                     if ( ! empty( $page_ids ) ) {
                         global $post;
+
+                        $columns = 2;
+                        switch ( $layout ) {
+                            case 12:
+                                $columns =  1;
+                                break;
+                            case 6:
+                                $columns =  2;
+                                break;
+                            case 4:
+                                $columns =  3;
+                                break;
+                            case 3:
+                                $columns =  4;
+                                break;
+                        }
+                        $j = 0;
                         foreach ($page_ids as $settings) {
                             $post_id = $settings['content_page'];
                             $post = get_post($post_id);
@@ -32,8 +49,16 @@ if ( ! empty( $page_ids ) ) {
                             if ($settings['icon'] != '' && strpos($settings['icon'], 'fa-') !== 0) {
                                 $settings['icon'] = 'fa-' . $settings['icon'];
                             }
+                            $classes = 'col-sm-12 col-md-6 col-lg-'.$layout;
+                            if ($j >= $columns) {
+                                $j = 1;
+                                $classes .= ' clearleft';
+                            } else {
+                                $j++;
+                            }
+
                             ?>
-                            <div class="col-sm-12 col-md-6 col-lg-<?php echo esc_attr( $layout ); ?> wow slideInUp">
+                            <div class="<?php echo esc_attr( $classes ); ?> wow slideInUp">
                                 <div class="service-item ">
                                     <?php
                                     if ( ! empty( $settings['enable_link'] ) ) {
