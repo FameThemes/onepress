@@ -1,6 +1,14 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+
+## 1.1.5
+* New section: Features.
+* Unlimited footer social icons.
+* Update readme.txt and declare theme copyright.
+* Switch from `query_posts` to WP_Query.
+* Add more template hook for child theme.
+
 ## 1.1.4
 * Fix a bug merge data incorrect for customizer.
 

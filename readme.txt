@@ -1,6 +1,6 @@
 === OnePress ===
 
-Contributors: famethemes,congthien, kientrong
+Contributors: famethemes, congthien, kientrong
 Tags: one-column, two-columns, left-sidebar, right-sidebar, fluid-layout, responsive-layout, custom-menu, featured-images, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, blue, light
 Tested up to: 4.4.2
 Stable tag: 1.1.4
