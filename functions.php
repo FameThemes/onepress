@@ -313,11 +313,3 @@ require get_template_directory() . '/inc/tgm-plugin-activation.php';
  * Add theme info page
  */
 require get_template_directory() . '/inc/dashboard.php';
-
-// function __test(  ){
-//     if ( is_page_template( 'template-frontpage.php' ) ) {
-//         remove_action( 'onepress_site_start', 'onepress_site_header' );
-//         add_action( 'onepress_after_section_hero', 'onepress_site_header' );
-//     }
-// }
-// add_action( 'wp', '__test' );
