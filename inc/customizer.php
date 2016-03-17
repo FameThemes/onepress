@@ -287,6 +287,24 @@ function onepress_customize_register( $wp_customize ) {
 		);
 
 
+		// Header Transparent
+		$wp_customize->add_setting( 'onepress_header_transparent',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
+				'default'           => '',
+				'active_callback'   => 'onepress_showon_frontpage'
+			)
+		);
+		$wp_customize->add_control( 'onepress_header_transparent',
+			array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__('Header Transparent', 'onepress'),
+				'section'     => 'onepress_header_settings',
+				'description' => esc_html__('Apply for front page template only.', 'onepress')
+			)
+		);
+
+
 		/* Social Settings
 		----------------------------------------------------------------------*/
 		$wp_customize->add_section( 'onepress_social' ,

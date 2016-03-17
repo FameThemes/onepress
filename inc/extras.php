@@ -22,7 +22,15 @@ function onepress_body_classes( $classes ) {
 	$onepress_sticky_header = get_theme_mod( 'onepress_sticky_header_disable' );
 	if ( $onepress_sticky_header == '' ) {
 		$classes[] = 'sticky-header';
-	}
+	} else {
+        $classes[] = 'no-sticky-header';
+    }
+    // onepress_header_transparent
+    if ( is_front_page() && is_page_template( 'template-frontpage.php' ) ) {
+        if ( get_theme_mod( 'onepress_header_transparent' ) ) {
+            $classes[] = 'header-transparent';
+        }
+    }
 
 	return $classes;
 }

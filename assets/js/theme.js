@@ -192,8 +192,11 @@
     if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
         var p_to_top;
         $('.site-header').eq(0).wrap( '<div class="site-header-wrapper">' );
+        var is_transparent = $( 'body').hasClass( 'header-transparent' );
+        $wrap =  $( '.site-header-wrapper');
+        $wrap.addClass( 'no-scroll' );
 
-        $( document ).scroll(function(){
+        $( document ).scroll( function(){
             var header_fixed = $('.site-header').eq(0);
             var header_parent = header_fixed.parent();
             var header_h = header_fixed.height() || 0;
@@ -208,9 +211,12 @@
             }
 
             if( $( document ).scrollTop() > p_to_top ) {
-                $( '.site-header-wrapper').height( header_h );
-                $( '.site-header-wrapper').addClass( 'is-fixed' );
-                
+                if ( ! is_transparent){
+                    $wrap.height( header_h );
+                }
+
+                $wrap.addClass( 'is-fixed').removeClass( 'no-scroll' );
+
                 header_fixed.addClass('header-fixed');
                 header_fixed.css( 'top', topbar+'px' );
                 header_fixed.stop().animate({},400);
@@ -218,12 +224,12 @@
                 header_fixed.removeClass('header-fixed');
                 header_fixed.css( 'top', 'auto' );
                 header_fixed.stop().animate({},400);
-
-                $( '.site-header-wrapper').height( '' );
-                $( '.site-header-wrapper').removeClass( 'is-fixed' );
+                if ( ! is_transparent ) {
+                    $wrap.height('');
+                }
+                $wrap.removeClass( 'is-fixed' ).addClass( 'no-scroll' );
             }
         });
-
 
     }
 
