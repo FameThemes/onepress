@@ -694,7 +694,6 @@ input[type="radio"], input[type="checkbox"] {
 	width: 100%;
 	background: #FFFFFF;
 	z-index: 99;
-	border-bottom: 1px solid #e9e9e9;
 	-webkit-transition: all 1s ease-out;
 	/* Safari */
 	transition: all .5s ease-out;
@@ -707,13 +706,15 @@ input[type="radio"], input[type="checkbox"] {
 .header-transparent .no-scroll .site-header {
 	background: transparent;
 	position: fixed;
-	border-bottom-color: transparent;
 }
 
 .no-sticky-header.page-template-template-frontpage.header-transparent .site-header {
 	background: transparent;
-	border-bottom-color: transparent;
 	position: absolute;
+}
+
+.site-header.header-fixed {
+	box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
 }
 
 .sticky-header #page > .site-header, .sticky-header .header-fixed {

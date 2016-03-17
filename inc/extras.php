@@ -29,7 +29,7 @@ function onepress_body_classes( $classes ) {
     if ( is_front_page() && is_page_template( 'template-frontpage.php' ) ) {
         if ( get_theme_mod( 'onepress_header_transparent' ) ) {
             $classes[] = 'header-transparent';
-        } 
+        }
     }
 
 	return $classes;
