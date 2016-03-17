@@ -35,9 +35,9 @@ if ( !$disable && !empty( $data ) ) {
                             <i class="fa fa-circle fa-stack-2x icon-background-default"></i>
                             <i class="feature-icon fa <?php echo esc_attr( $f['icon'] ); ?> fa-stack-1x"></i>
                         </span>
-                        <?php if ( $f['link'] )  { ?></a><? } ?>
+                        <?php if ( $f['link'] )  { ?></a><?php } ?>
                     </div>
-                    <h4><?php if ( $f['link'] ) { ?><a href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?><?php echo esc_html( $f['title'] ); ?><?php if ( $f['link'] )  { ?></a><? } ?></h4>
+                    <h4><?php if ( $f['link'] ) { ?><a href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?><?php echo esc_html( $f['title'] ); ?><?php if ( $f['link'] )  { ?></a><?php } ?></h4>
                     <p><?php echo esc_html( $f['desc'] ); ?></p>
                 </div>
             <?php
