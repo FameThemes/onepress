@@ -314,6 +314,8 @@ require get_template_directory() . '/inc/tgm-plugin-activation.php';
  */
 require get_template_directory() . '/inc/dashboard.php';
 
+
+
 // function __test(  ){
 //     if ( is_page_template( 'template-frontpage.php' ) ) {
 //         remove_action( 'onepress_site_start', 'onepress_site_header' );

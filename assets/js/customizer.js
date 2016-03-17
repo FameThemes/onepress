@@ -318,8 +318,12 @@
 				$wrap.removeClass( 'html-active').addClass( 'tmce-active' );
 
 				tmceInit.init_instance_callback = function( editor ){
-					//switchEditors.go( new_id, 'tmce' );
+
 					if (  typeof settings === 'object' ) {
+						if ( typeof settings.mod === 'string' ){
+							//console.log( settings.mod  );
+							switchEditors.go( id, settings.mod );
+						}
 						// editor.theme.resizeTo('100%', 500);
 						if( typeof settings.init_instance_callback === "function" ) {
 							settings.init_instance_callback( editor );
@@ -397,6 +401,7 @@
 				sync_id: "", // sync to another text area
 				tinymce: {}, // tinymce setting
 				qtag:    {}, // quick tag settings
+				mod:    '', // quick tag settings
 				init_instance_callback: function(){} // quick tag settings
 			}, options );
 		} else{
@@ -413,6 +418,9 @@
 			}
 
 			if ( 'remove' !== options ) {
+				if ( options.mod === '' ){
+					options.mod = edit_area.attr( 'data-editor-mod' ) || '';
+				}
 				window._wpEditorBackUp = window._wpEditorBackUp || {};
 				window._wpEditorBackUp[ id ] =  edit_area;
 				window._wpEditor.init( id, edit_area.val(), options );
@@ -1212,6 +1220,22 @@ jQuery( window ).ready( function( $ ){
             $( '#accordion-section-onepress_order_styling > .accordion-section-title').append( '<span class="onepress-notice">Plus</span>' );
         }
     }
+
+	/**
+	 * For Hero layout content settings
+	 */
+	$( 'select[data-customize-setting-link="onepress_hero_layout"]').on( 'change on_custom_load', function(){
+		var v = $( this).val() || '';
+		if ( v=== '1' ){
+			$( '#customize-control-onepress_hcl1_btn1_text, #customize-control-onepress_hcl1_btn1_link, #customize-control-onepress_hcl1_btn2_text, #customize-control-onepress_hcl1_btn2_link').show();
+
+		} else {
+			$( '#customize-control-onepress_hcl1_btn1_text, #customize-control-onepress_hcl1_btn1_link, #customize-control-onepress_hcl1_btn2_text, #customize-control-onepress_hcl1_btn2_link').hide();
+		}
+
+	} );
+
+	$( 'select[data-customize-setting-link="onepress_hero_layout"]').trigger( 'on_custom_load' );
 
 
 } );

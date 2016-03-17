@@ -692,7 +692,7 @@ function onepress_customize_register( $wp_customize ) {
 		$wp_customize->add_section( 'onepress_hero_content_layout1' ,
 			array(
 				'priority'    => 9,
-				'title'       => esc_html__( 'Hero Content Layout #1', 'onepress' ),
+				'title'       => esc_html__( 'Hero Content Layout', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_hero_panel',
 
@@ -715,95 +715,120 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
-			// Large Text
-			$wp_customize->add_setting( 'onepress_hcl1_largetext',
+
+			// Hero Layout
+			$wp_customize->add_setting( 'onepress_hero_layout',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => wp_kses_post('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress'),
+					'default'           => '1',
 				)
 			);
-			$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
-				$wp_customize,
-				'onepress_hcl1_largetext',
+			$wp_customize->add_control( 'onepress_hero_layout',
 				array(
-					'label' 		=> esc_html__('Large Text', 'onepress'),
+					'label' 		=> esc_html__('Display Layout', 'onepress'),
 					'section' 		=> 'onepress_hero_content_layout1',
-					'description'   => esc_html__('Text Rotating Guide: Put your rotate texts separate by "|" into <span class="js-rotating">...</span>, go to Customizer->Site Option->Animate to control rotate animation.', 'onepress'),
+					'description'   => '',
+					'type'          => 'select',
+					'choices'       => array(
+						'1' => esc_html__('Layout 1', 'onepress' ),
+						'2' => esc_html__('Layout 2', 'onepress' ),
+					),
 				)
-			));
+			);
+			// For Hero layout ------------------------
 
-			// Small Text
-			$wp_customize->add_setting( 'onepress_hcl1_smalltext',
-				array(
-					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'			=> wp_kses_post('Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.', 'onepress'),
-				)
-			);
-			$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
-				$wp_customize,
-				'onepress_hcl1_smalltext',
-				array(
-					'label' 		=> esc_html__('Small Text', 'onepress'),
-					'section' 		=> 'onepress_hero_content_layout1',
-					'description'   => esc_html__('You can use text rotate slider in this textarea too.', 'onepress'),
-				)
-			));
+				// Large Text
+				$wp_customize->add_setting( 'onepress_hcl1_largetext',
+					array(
+						'sanitize_callback' => 'onepress_sanitize_text',
+						'mod' 				=> 'html',
+						'default'           => wp_kses_post('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress'),
+					)
+				);
+				$wp_customize->add_control( new OnePress_Editor_Custom_Control(
+					$wp_customize,
+					'onepress_hcl1_largetext',
+					array(
+						'label' 		=> esc_html__('Large Text', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1',
+						'description'   => esc_html__('Text Rotating Guide: Put your rotate texts separate by "|" into <span class="js-rotating">...</span>, go to Customizer->Site Option->Animate to control rotate animation.', 'onepress'),
+					)
+				));
 
-			// Button #1 Text
-			$wp_customize->add_setting( 'onepress_hcl1_btn1_text',
-				array(
-					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => esc_html__('About Us', 'onepress'),
-				)
-			);
-			$wp_customize->add_control( 'onepress_hcl1_btn1_text',
-				array(
-					'label' 		=> esc_html__('Button #1 Text', 'onepress'),
-					'section' 		=> 'onepress_hero_content_layout1'
-				)
-			);
+				// Small Text
+				$wp_customize->add_setting( 'onepress_hcl1_smalltext',
+					array(
+						'sanitize_callback' => 'onepress_sanitize_text',
+						'default'			=> wp_kses_post('Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.', 'onepress'),
+					)
+				);
+				$wp_customize->add_control( new OnePress_Editor_Custom_Control(
+					$wp_customize,
+					'onepress_hcl1_smalltext',
+					array(
+						'label' 		=> esc_html__('Small Text', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1',
+						'mod' 				=> 'html',
+						'description'   => esc_html__('You can use text rotate slider in this textarea too.', 'onepress'),
+					)
+				));
 
-			// Button #1 Link
-			$wp_customize->add_setting( 'onepress_hcl1_btn1_link',
-				array(
-					'sanitize_callback' => 'esc_url',
-					'default'           => esc_url( home_url( '/' )).esc_html__('#about', 'onepress'),
-				)
-			);
-			$wp_customize->add_control( 'onepress_hcl1_btn1_link',
-				array(
-					'label' 		=> esc_html__('Button #1 Link', 'onepress'),
-					'section' 		=> 'onepress_hero_content_layout1'
-				)
-			);
+				// Button #1 Text
+				$wp_customize->add_setting( 'onepress_hcl1_btn1_text',
+					array(
+						'sanitize_callback' => 'onepress_sanitize_text',
+						'default'           => esc_html__('About Us', 'onepress'),
+					)
+				);
+				$wp_customize->add_control( 'onepress_hcl1_btn1_text',
+					array(
+						'label' 		=> esc_html__('Button #1 Text', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1'
+					)
+				);
 
-			// Button #2 Text
-			$wp_customize->add_setting( 'onepress_hcl1_btn2_text',
-				array(
-					'sanitize_callback' => 'onepress_sanitize_text',
-					'default'           => esc_html__('Get Started', 'onepress'),
-				)
-			);
-			$wp_customize->add_control( 'onepress_hcl1_btn2_text',
-				array(
-					'label' 		=> esc_html__('Button #2 Text', 'onepress'),
-					'section' 		=> 'onepress_hero_content_layout1'
-				)
-			);
+				// Button #1 Link
+				$wp_customize->add_setting( 'onepress_hcl1_btn1_link',
+					array(
+						'sanitize_callback' => 'esc_url',
+						'default'           => esc_url( home_url( '/' )).esc_html__('#about', 'onepress'),
+					)
+				);
+				$wp_customize->add_control( 'onepress_hcl1_btn1_link',
+					array(
+						'label' 		=> esc_html__('Button #1 Link', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1'
+					)
+				);
 
-			// Button #2 Link
-			$wp_customize->add_setting( 'onepress_hcl1_btn2_link',
-				array(
-					'sanitize_callback' => 'esc_url',
-					'default'           => esc_url( home_url( '/' )).esc_html__('#contact', 'onepress'),
-				)
-			);
-			$wp_customize->add_control( 'onepress_hcl1_btn2_link',
-				array(
-					'label' 		=> esc_html__('Button #2 Link', 'onepress'),
-					'section' 		=> 'onepress_hero_content_layout1'
-				)
-			);
+				// Button #2 Text
+				$wp_customize->add_setting( 'onepress_hcl1_btn2_text',
+					array(
+						'sanitize_callback' => 'onepress_sanitize_text',
+						'default'           => esc_html__('Get Started', 'onepress'),
+					)
+				);
+				$wp_customize->add_control( 'onepress_hcl1_btn2_text',
+					array(
+						'label' 		=> esc_html__('Button #2 Text', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1'
+					)
+				);
+
+				// Button #2 Link
+				$wp_customize->add_setting( 'onepress_hcl1_btn2_link',
+					array(
+						'sanitize_callback' => 'esc_url',
+						'default'           => esc_url( home_url( '/' )).esc_html__('#contact', 'onepress'),
+					)
+				);
+				$wp_customize->add_control( 'onepress_hcl1_btn2_link',
+					array(
+						'label' 		=> esc_html__('Button #2 Link', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1'
+					)
+				);
+			// END For Hero layout ------------------------
 
 	/*------------------------------------------------------------------------*/
 	/*  Section: Video Popup
@@ -2212,6 +2237,13 @@ function onepress_sanitize_file_url( $file_url ) {
 	return $output;
 }
 
+
+/**
+ * Conditional to show more hero settings
+ *
+ * @param $control
+ * @return bool
+ */
 function onepress_hero_fullscreen_callback ( $control ) {
 	if ( $control->manager->get_setting('onepress_hero_fullscreen')->value() == '' ) {
         return true;
@@ -2219,6 +2251,10 @@ function onepress_hero_fullscreen_callback ( $control ) {
         return false;
     }
 }
+
+
+
+
 
 function onepress_sanitize_number( $input ) {
     return balanceTags( $input );
