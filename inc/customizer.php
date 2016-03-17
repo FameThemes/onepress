@@ -688,7 +688,6 @@ function onepress_customize_register( $wp_customize ) {
 
 
 
-
 		$wp_customize->add_section( 'onepress_hero_content_layout1' ,
 			array(
 				'priority'    => 9,
@@ -698,7 +697,6 @@ function onepress_customize_register( $wp_customize ) {
 
 			)
 		);
-
 
 			// Hero Layout
 			$wp_customize->add_setting( 'onepress_hero_layout',
@@ -812,6 +810,47 @@ function onepress_customize_register( $wp_customize ) {
 						'section' 		=> 'onepress_hero_content_layout1'
 					)
 				);
+
+
+				/* Layout 2 ---- */
+
+				// Layout 22 content text
+				$wp_customize->add_setting( 'onepress_hcl2_content',
+					array(
+						'sanitize_callback' => 'onepress_sanitize_text',
+						'mod' 				=> 'html',
+						'default'           =>  '',
+					)
+				);
+				$wp_customize->add_control( new OnePress_Editor_Custom_Control(
+					$wp_customize,
+					'onepress_hcl2_content',
+					array(
+						'label' 		=> esc_html__('Content Text', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1',
+						'description'   => '',
+					)
+				));
+
+				// Layout 2 image
+				$wp_customize->add_setting( 'onepress_hcl2_image',
+					array(
+						'sanitize_callback' => 'onepress_sanitize_text',
+						'mod' 				=> 'html',
+						'default'           =>  '',
+					)
+				);
+				$wp_customize->add_control( new WP_Customize_Image_Control(
+					$wp_customize,
+					'onepress_hcl2_image',
+					array(
+						'label' 		=> esc_html__('Image', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1',
+						'description'   => '',
+					)
+				));
+
+
 			// END For Hero layout ------------------------
 
 	/*------------------------------------------------------------------------*/
@@ -2235,9 +2274,6 @@ function onepress_hero_fullscreen_callback ( $control ) {
         return false;
     }
 }
-
-
-
 
 
 function onepress_sanitize_number( $input ) {

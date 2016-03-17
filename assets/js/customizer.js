@@ -1237,12 +1237,9 @@ jQuery( window ).ready( function( $ ){
 	 */
 	$( 'select[data-customize-setting-link="onepress_hero_layout"]').on( 'change on_custom_load', function(){
 		var v = $( this).val() || '';
-		if ( v=== '1' ){
-			$( '#customize-control-onepress_hcl1_btn1_text, #customize-control-onepress_hcl1_btn1_link, #customize-control-onepress_hcl1_btn2_text, #customize-control-onepress_hcl1_btn2_link').show();
 
-		} else {
-			$( '#customize-control-onepress_hcl1_btn1_text, #customize-control-onepress_hcl1_btn1_link, #customize-control-onepress_hcl1_btn2_text, #customize-control-onepress_hcl1_btn2_link').hide();
-		}
+		$( "li[id^='customize-control-onepress_hcl']").hide();
+		$( "li[id^='customize-control-onepress_hcl"+v+"']").show();
 
 	} );
 
