@@ -190,13 +190,13 @@
 ( function( $ ) {
 
     if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
+        var is_top_header = $( '#page > .site-header').length ?  true : false;
         var p_to_top;
         $('.site-header').eq(0).wrap( '<div class="site-header-wrapper">' );
         var is_transparent = $( 'body').hasClass( 'header-transparent' );
         $wrap =  $( '.site-header-wrapper');
         $wrap.addClass( 'no-scroll' );
 
-        var is_top_header = $( '#page > .site-header').length ?  true : false;
         if (! is_top_header ) {
             $( 'body').removeClass( 'header-transparent' );
         }
