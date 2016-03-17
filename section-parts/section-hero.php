@@ -50,13 +50,18 @@ if ( $is_parallax ) {
 	} else {
 		echo 'hero-slideshow-normal';
 	} ?>">
-		<?php if ($onepress_hcl1_enable == '1') : ?>
+		<?php if ($onepress_hcl1_enable == '1') :
+
+			$layout = get_theme_mod( 'onepress_hero_layout', 1 );
+			?>
 			<div class="container"<?php echo $hero_content_style; ?>>
-				<div class="hero-content-style1">
+				<div class="hero-content-style<?php echo esc_attr( $layout ); ?>">
 					<?php if ($onepress_hcl1_largetext != '') echo '<h2 class="hero-large-text">' . wp_kses_post($onepress_hcl1_largetext) . '</h2>'; ?>
 					<?php if ($onepress_hcl1_smalltext != '') echo '<p> ' . wp_kses_post($onepress_hcl1_smalltext) . '</p>' ?>
-					<?php if ($onepress_hcl1_btn1_text != '' && $onepress_hcl1_btn1_link != '') echo '<a href="' . esc_url($onepress_hcl1_btn1_link) . '" class="btn btn-theme-primary btn-lg">' . wp_kses_post($onepress_hcl1_btn1_text) . '</a>'; ?>
-					<?php if ($onepress_hcl1_btn2_text != '' && $onepress_hcl1_btn2_link != '') echo '<a href="' . esc_url($onepress_hcl1_btn2_link) . '" class="btn btn-secondary-outline btn-lg">' . wp_kses_post($onepress_hcl1_btn2_text) . '</a>'; ?>
+					<?php if ( $layout == 1 ) { ?>
+						<?php if ($onepress_hcl1_btn1_text != '' && $onepress_hcl1_btn1_link != '') echo '<a href="' . esc_url($onepress_hcl1_btn1_link) . '" class="btn btn-theme-primary btn-lg">' . wp_kses_post($onepress_hcl1_btn1_text) . '</a>'; ?>
+						<?php if ($onepress_hcl1_btn2_text != '' && $onepress_hcl1_btn2_link != '') echo '<a href="' . esc_url($onepress_hcl1_btn2_link) . '" class="btn btn-secondary-outline btn-lg">' . wp_kses_post($onepress_hcl1_btn2_text) . '</a>'; ?>
+					<?php } ?>
 				</div>
 			</div>
 		<?php endif; ?>
