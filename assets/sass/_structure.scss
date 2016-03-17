@@ -4,19 +4,23 @@
 ------------------------------*/
 .site-header {
 	line-height: 75px;
-    position: relative;
-    width: 100%;
-    background: #FFFFFF;
-    z-index: 50;
-    //border-bottom: 1px solid $border;
+  position: relative;
+  width: 100%;
+  background: #FFFFFF;
+  z-index: 99;
+  border-bottom: 1px solid $border;
+	-webkit-transition: all 1s ease-out; /* Safari */
+  transition: all .5s ease-out;
+}
+.site-header-wrapper {
+		display: block;
 }
 
-.side-header-wrapper {
-	display: block;
-}
-
-.site-header.header-fixed {
-	box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
+.header-transparent .no-scroll .site-header,
+.no-sticky-header.page-template-template-frontpage .site-header{
+  background: transparent;
+  position: fixed;
+  border-bottom-color: transparent;
 }
 
 .sticky-header #page > .site-header, .sticky-header .header-fixed {
