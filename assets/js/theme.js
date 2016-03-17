@@ -196,6 +196,11 @@
         $wrap =  $( '.site-header-wrapper');
         $wrap.addClass( 'no-scroll' );
 
+        var is_top_header = $( '#page > .site-header').length ?  true : false;
+        if (! is_top_header ) {
+            $( 'body').removeClass( 'header-transparent' );
+        }
+
         $( document ).scroll( function(){
             var header_fixed = $('.site-header').eq(0);
             var header_parent = header_fixed.parent();
