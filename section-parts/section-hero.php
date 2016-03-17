@@ -5,7 +5,6 @@ $onepress_hero_fullscreen = get_theme_mod( 'onepress_hero_fullscreen' );
 $onepress_hero_pdtop      = get_theme_mod( 'onepress_hero_pdtop', '10' );
 $onepress_hero_pdbotom    = get_theme_mod( 'onepress_hero_pdbotom', '10' );
 
-$onepress_hcl1_enable     = get_theme_mod( 'onepress_hcl1_enable', 1 );
 $onepress_hcl1_largetext  = get_theme_mod( 'onepress_hcl1_largetext', wp_kses_post('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress' ));
 $onepress_hcl1_smalltext  = get_theme_mod( 'onepress_hcl1_smalltext', wp_kses_post('Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.', 'onepress') );
 $onepress_hcl1_btn1_text  = get_theme_mod( 'onepress_hcl1_btn1_text', esc_html__('Our Services', 'onepress') );
@@ -50,21 +49,20 @@ if ( $is_parallax ) {
 	} else {
 		echo 'hero-slideshow-normal';
 	} ?>">
-		<?php if ($onepress_hcl1_enable == '1') :
-
-			$layout = get_theme_mod( 'onepress_hero_layout', 1 );
-			?>
-			<div class="container"<?php echo $hero_content_style; ?>>
-				<div class="hero-content-style<?php echo esc_attr( $layout ); ?>">
-					<?php if ($onepress_hcl1_largetext != '') echo '<h2 class="hero-large-text">' . wp_kses_post($onepress_hcl1_largetext) . '</h2>'; ?>
-					<?php if ($onepress_hcl1_smalltext != '') echo '<p> ' . wp_kses_post($onepress_hcl1_smalltext) . '</p>' ?>
-					<?php if ( $layout == 1 ) { ?>
-						<?php if ($onepress_hcl1_btn1_text != '' && $onepress_hcl1_btn1_link != '') echo '<a href="' . esc_url($onepress_hcl1_btn1_link) . '" class="btn btn-theme-primary btn-lg">' . wp_kses_post($onepress_hcl1_btn1_text) . '</a>'; ?>
-						<?php if ($onepress_hcl1_btn2_text != '' && $onepress_hcl1_btn2_link != '') echo '<a href="' . esc_url($onepress_hcl1_btn2_link) . '" class="btn btn-secondary-outline btn-lg">' . wp_kses_post($onepress_hcl1_btn2_text) . '</a>'; ?>
-					<?php } ?>
-				</div>
+		<?php
+		$layout = get_theme_mod( 'onepress_hero_layout', 1 );
+		?>
+		<div class="container"<?php echo $hero_content_style; ?>>
+			<div class="hero-content-style<?php echo esc_attr( $layout ); ?>">
+				<?php if ($onepress_hcl1_largetext != '') echo '<h2 class="hero-large-text">' . wp_kses_post($onepress_hcl1_largetext) . '</h2>'; ?>
+				<?php if ($onepress_hcl1_smalltext != '') echo '<p> ' . wp_kses_post($onepress_hcl1_smalltext) . '</p>' ?>
+				<?php if ( $layout == 1 ) { ?>
+					<?php if ($onepress_hcl1_btn1_text != '' && $onepress_hcl1_btn1_link != '') echo '<a href="' . esc_url($onepress_hcl1_btn1_link) . '" class="btn btn-theme-primary btn-lg">' . wp_kses_post($onepress_hcl1_btn1_text) . '</a>'; ?>
+					<?php if ($onepress_hcl1_btn2_text != '' && $onepress_hcl1_btn2_link != '') echo '<a href="' . esc_url($onepress_hcl1_btn2_link) . '" class="btn btn-secondary-outline btn-lg">' . wp_kses_post($onepress_hcl1_btn2_text) . '</a>'; ?>
+				<?php } ?>
 			</div>
-		<?php endif; ?>
+		</div>
+
 		<?php
 
 		if ( ! empty ( $images) && ! $is_parallax ) {

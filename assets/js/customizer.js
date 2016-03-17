@@ -339,6 +339,17 @@
 									settings.sync_id.val( editor.getContent() ).trigger('change');
 								});
 							}
+
+							$( 'textarea#'+id ).on( 'keyup change', function(){
+								var v =  $( this).val();
+								if ( typeof settings.sync_id === 'string' ) {
+									$('#' + settings.sync_id).val( v ).trigger('change');
+								} else {
+									settings.sync_id.val( v ).trigger('change');
+								}
+							} );
+
+
 						}
 					}
 				};

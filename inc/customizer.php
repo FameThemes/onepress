@@ -699,22 +699,6 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-			// Show Content
-			$wp_customize->add_setting( 'onepress_hcl1_enable',
-				array(
-					'sanitize_callback' => 'onepress_sanitize_checkbox',
-					'default'           => 1,
-				)
-			);
-			$wp_customize->add_control( 'onepress_hcl1_enable',
-				array(
-					'type'        => 'checkbox',
-					'label'       => esc_html__('Show this content layout', 'onepress'),
-					'section'     => 'onepress_hero_content_layout1',
-					'description' => esc_html__('Check this box to enable this content layout for hero section.', 'onepress'),
-				)
-			);
-
 
 			// Hero Layout
 			$wp_customize->add_setting( 'onepress_hero_layout',
