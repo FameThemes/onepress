@@ -704,11 +704,16 @@ input[type="radio"], input[type="checkbox"] {
 	display: block;
 }
 
-.header-transparent .no-scroll .site-header,
-.no-sticky-header.page-template-template-frontpage .site-header {
+.header-transparent .no-scroll .site-header {
 	background: transparent;
 	position: fixed;
 	border-bottom-color: transparent;
+}
+
+.no-sticky-header.page-template-template-frontpage.header-transparent .site-header {
+	background: transparent;
+	border-bottom-color: transparent;
+	position: absolute;
 }
 
 .sticky-header #page > .site-header, .sticky-header .header-fixed {
