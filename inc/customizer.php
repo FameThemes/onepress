@@ -837,7 +837,7 @@ function onepress_customize_register( $wp_customize ) {
 					array(
 						'sanitize_callback' => 'onepress_sanitize_text',
 						'mod' 				=> 'html',
-						'default'           =>  '',
+						'default'           =>  wp_kses_post( '<h1>Business Website'."\n".'Made Simple.</h1>'."\n".'We provide creative solutions to clients around the world,'."\n".'creating things that get attention and meaningful.'."\n\n".'<a class="btn btn-secondary-outline btn-lg" href="#">Get Started</a>' ),
 					)
 				);
 				$wp_customize->add_control( new OnePress_Editor_Custom_Control(
@@ -855,7 +855,7 @@ function onepress_customize_register( $wp_customize ) {
 					array(
 						'sanitize_callback' => 'onepress_sanitize_text',
 						'mod' 				=> 'html',
-						'default'           =>  '',
+						'default'           =>  get_template_directory_uri().'/assets/images/onepress_responsive.png',
 					)
 				);
 				$wp_customize->add_control( new WP_Customize_Image_Control(

@@ -55,7 +55,7 @@ if ( $is_parallax ) {
 				<div class="container"<?php echo $hero_content_style; ?>>
 					<div class="hero__content hero-content-style<?php echo esc_attr( $layout ); ?>">
 						<div class="col-md-12 col-lg-6">
-							<?php if ( $hcl2_content ) { echo '<div class="hcl2-content">'.wp_kses_post( $hcl2_content ).'</div>' ; }; ?>
+							<?php if ( $hcl2_content ) { echo '<div class="hcl2-content">'.apply_filters( 'the_content', wp_kses_post( $hcl2_content ) ).'</div>' ; }; ?>
 						</div>
 						<div class="col-md-12 col-lg-6">
 							<?php if ( $hcl2_image ) { echo '<img class="hcl2-image" src="'.esc_url( $hcl2_image ).'" alt="">' ; }; ?>

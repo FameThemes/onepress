@@ -10,6 +10,12 @@ CHANGELOG
 * Update readme.txt and declare theme copyright.
 * Switch from `query_posts` to WP_Query.
 * Add more template hook for child theme.
+* Add transparent header.
+* Fixed issue broken layout on Services section.
+* Add editor customizer control.
+* Add color alpha customizer control.
+* Improve repeater customizer control.
+* Add custom link for member on team section.
 
 ## 1.1.4
 * Fix a bug merge data incorrect for customizer.
