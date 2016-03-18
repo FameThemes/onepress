@@ -320,7 +320,7 @@
 				tmceInit.init_instance_callback = function( editor ){
 
 					if (  typeof settings === 'object' ) {
-						if ( typeof settings.mod === 'string' ){
+						if ( typeof settings.mod === 'string' && settings.mod === 'html' ){
 							//console.log( settings.mod  );
 							switchEditors.go( id, settings.mod );
 						}
@@ -367,6 +367,16 @@
 				}
 
 				if ( typeof quicktags !== 'undefined' ) {
+
+					/**
+					 * Reset quicktags
+					 * This is crazy condition
+					 * Maybe this is a bug ?
+					 * see wp-includes/js/quicktags.js line 252
+					 */
+					if( QTags.instances['0'] ) {
+						QTags.instances['0'] =  false;
+					}
 					quicktags( qtInit );
 					if ( ! window.wpActiveEditor ) {
 						window.wpActiveEditor = id;
@@ -429,9 +439,10 @@
 			}
 
 			if ( 'remove' !== options ) {
-				if ( options.mod === '' ){
+				if ( ! options.mod  ){
 					options.mod = edit_area.attr( 'data-editor-mod' ) || '';
 				}
+
 				window._wpEditorBackUp = window._wpEditorBackUp || {};
 				window._wpEditorBackUp[ id ] =  edit_area;
 				window._wpEditor.init( id, edit_area.val(), options );
@@ -486,7 +497,7 @@
 			var control = this;
 			$( 'body .wp-full-overlay').append( control.editing_editor );
 
-			$( 'textarea',  control.editing_editor ).wp_js_editor( {
+			$( 'textarea',  control.editing_editor).attr(  'data-editor-mod', ( control.editing_area.attr( 'data-editor-mod' ) || '' ) ) .wp_js_editor( {
 				sync_id: control.editing_area,
 				init_instance_callback: function( editor ){
 					var w =  $( '#wp-'+control.editor_id+ '-wrap' );
@@ -683,9 +694,9 @@
 			settings.editing_area = $textarea;
 			settings.container = $textarea.closest( '.item-editor' );
 
-			//settings.editing_area.uniqueId();
-			// settings.editing_id = settings.editing_area.attr( 'id' ) || '';
-			 settings.editing_id = 'editor-' + Math.random().toString(36).substr(2, 9);
+			 settings.editing_area.uniqueId();
+			 settings.editing_id = settings.editing_area.attr( 'id' ) || '';
+			 // settings.editing_id = 'editor-' + Math.random().toString(36).substr(2, 9);
 			 $textarea.attr( 'id', settings.editing_id );
 
 			settings.editor_id = 'wpef-'+settings.editing_id;
@@ -1140,8 +1151,6 @@
 						$context.find( '.item-section_id input[type="hidden"]').attr( 'type', 'text' );
 					}
 				}
-
-
 
 				// Setup editor
 				$( '.item-editor textarea', $context ).each( function(){
