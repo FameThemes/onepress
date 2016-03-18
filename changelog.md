@@ -4,6 +4,7 @@ CHANGELOG
 = 1.1.6 =
 * Update hero section template
 * Fix a bug missing quicktags tool bar for editor control.
+* Add breadcrumb for archive page
 
 
 ## 1.1.5
