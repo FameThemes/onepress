@@ -1,6 +1,10 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+= 1.1.6 =
+* Update hero section template
+* Fix a bug missing quicktags tool bar for editor control.
+
 
 ## 1.1.5
 * New: WooCommerce compatibility.
