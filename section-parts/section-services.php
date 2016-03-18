@@ -6,6 +6,7 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_services_subtitle', esc_ht
 // Get data
 $page_ids =  onepress_get_section_services_data();
 if ( ! empty( $page_ids ) ) {
+    $layout = intval( get_theme_mod( 'onepress_service_layout', 6 ) );
     ?>
     <?php if (!$onepress_service_disable) : ?>
         <section id="<?php if ($onepress_service_id != '') echo $onepress_service_id; ?>" <?php do_action('onepress_section_atts', 'services'); ?>
@@ -15,11 +16,31 @@ if ( ! empty( $page_ids ) ) {
                 <div class="section-title-area">
                     <?php if ($onepress_service_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_service_subtitle) . '</h5>'; ?>
                     <?php if ($onepress_service_title != '') echo '<h2 class="section-title">' . esc_html($onepress_service_title) . '</h2>'; ?>
+                    <?php if ( $desc = get_theme_mod( 'onepress_services_desc' ) ) {
+                        echo '<div class="section-desc">' . wp_kses_post( $desc ) . '</div>';
+                    } ?>
                 </div>
                 <div class="row">
                     <?php
                     if ( ! empty( $page_ids ) ) {
                         global $post;
+
+                        $columns = 2;
+                        switch ( $layout ) {
+                            case 12:
+                                $columns =  1;
+                                break;
+                            case 6:
+                                $columns =  2;
+                                break;
+                            case 4:
+                                $columns =  3;
+                                break;
+                            case 3:
+                                $columns =  4;
+                                break;
+                        }
+                        $j = 0;
                         foreach ($page_ids as $settings) {
                             $post_id = $settings['content_page'];
                             $post = get_post($post_id);
@@ -28,8 +49,16 @@ if ( ! empty( $page_ids ) ) {
                             if ($settings['icon'] != '' && strpos($settings['icon'], 'fa-') !== 0) {
                                 $settings['icon'] = 'fa-' . $settings['icon'];
                             }
+                            $classes = 'col-sm-12 col-md-6 col-lg-'.$layout;
+                            if ($j >= $columns) {
+                                $j = 1;
+                                $classes .= ' clearleft';
+                            } else {
+                                $j++;
+                            }
+
                             ?>
-                            <div class="col-sm-6 wow slideInUp">
+                            <div class="<?php echo esc_attr( $classes ); ?> wow slideInUp">
                                 <div class="service-item ">
                                     <?php
                                     if ( ! empty( $settings['enable_link'] ) ) {

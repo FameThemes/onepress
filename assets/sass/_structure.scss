@@ -4,14 +4,48 @@
 ------------------------------*/
 .site-header {
 	line-height: 75px;
-    position: relative;
-    width: 100%;
-    background: #FFFFFF;
-    z-index: 50;
-    border-bottom: 1px solid $border;
+	position: relative;
+	width: 100%;
+	background: #FFFFFF;
+	z-index: 99;
+	-webkit-transition: all 1s ease-out; /* Safari */
+	transition: all .5s ease-out;
 }
-.sticky-header .site-header {
+.site-header-wrapper {
+	display: block;
+}
+
+.header-transparent .no-scroll .site-header{
+	background: transparent;
 	position: fixed;
+}
+@include for(large-screens) {
+	.header-transparent .no-scroll .site-header {
+		.onepress-menu > li > a {
+			color: rgba(255, 255, 255, 0.9);
+		}
+	}
+}
+
+.no-sticky-header.page-template-template-frontpage.header-transparent .site-header{
+	background: transparent;
+	position: absolute;
+}
+
+.site-header.header-fixed {
+	box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
+}
+
+.sticky-header #page > .site-header, .sticky-header .header-fixed {
+	position: fixed;
+}
+.sticky-header .header-fixed {
+	top: 0px;
+	left: 0px;
+}
+
+.header-transparent .hero-slideshow-fullscreen .hero__content {
+	@include rem('padding-top', 50px);
 }
 
 .site-branding {
@@ -386,21 +420,30 @@
 /* Content
 ------------------------------*/
 .site-content {
-	//border-top: 1px solid $border;
+	border-top: 1px solid $border;
+	margin-top: -1px;
     //padding-top: 74px;
 }
+.blog .site-content,
+.single-post .site-content {
+	margin-top: 0;
+}
+
 .site-content.no-border {
 	border-top: none;
 }
 
 .page-header {
-	padding: 25px 0px;
-    //border-top: 1px solid $border;
+	padding: 30px 0px;
+    border-top: 1px solid $border;
+	background: #f8f9f9;
 	border-bottom: 1px solid $border;
 	.entry-title, .page-title {
 		margin-bottom: 0px;
-		font-size: 22px;
-        font-weight: 500;
+		font-size: 24px;
+        font-weight: 600;
+		letter-spacing: 1px;
+		text-transform: uppercase;
 	}
     p {
         margin: 6px 0px 0px 0px;

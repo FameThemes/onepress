@@ -46,6 +46,21 @@
 	}
 }
 
+.section-inverse-extended {
+	background: #333333;
+	.section-title-area {
+		.section-title {
+			color: rgba(255, 255, 255, 0.99);
+		}
+		.section-subtitle {
+			color: rgba(255, 255, 255, 0.7);
+		}
+		.section-subtitle::after {
+			background: rgba(255, 255, 255, 0.8);
+		}
+	}
+}
+
 .section-inverse {
 	color: rgba(255, 255, 255, 0.5);
 	h1,h2,h3,h4,h5,h6 {
@@ -132,8 +147,54 @@
 		position: relative;
 		top: 50%;
 	  	transform: translateY(-50%);
-	  	max-width: 100%;
 
+	}
+}
+
+.hero__content {
+	color: #FFF;
+	text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	@include rem('font-size', 18px);
+	font-weight: 300;
+	h1, h2, h3, h4, h5, h6 {
+		color: #FFF;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+	}
+	a.btn {
+		@include rem('margin', 10px 10px 20px 0px);
+	}
+	p {
+		@include rem('margin-bottom', 20px);
+	}
+	.btn-secondary-outline {
+		box-shadow: none;
+		border-color: rgba(255, 255, 255, 0.9);
+		color: rgba(255, 255, 255, 0.9);
+		&:hover {
+			background: #FFF;
+			color: #333;
+		}
+	}
+}
+
+/* Hero Content Style 2. */
+.hero-content-style2 {
+	h1 {
+		font-weight: 800;
+		@include rem('font-size', 50px);
+		letter-spacing: 3px;
+	}
+	.hcl2-content {
+		@include rem('padding', 50px 0px);
+	}
+	.hcl2-image  {
+		text-align: right;
+	}
+	.hcl2-content, .hcl2-image {
+		@include media-breakpoint-down(lg) {
+			text-align: center;
+		}
 	}
 }
 
@@ -180,26 +241,14 @@
 		}
 	}
 	.btn {
-		margin: 0px 10px;
 		@include media-breakpoint-down(sm) {
 			display: inline-block;
-			margin: 5px;
 		}
 	}
 
 	a, .btn {
 		&:active, &:focus {
 			outline: none;
-		}
-	}
-
-	.btn-secondary-outline {
-		box-shadow: none;
-		border-color: rgba(255, 255, 255, 0.9);
-		color: rgba(255, 255, 255, 0.9);
-		&:hover {
-			background: #FFF;
-			color: #333;
 		}
 	}
 
@@ -214,6 +263,39 @@
 /* Text Rotator */
 .morphext > .animated {
     display: inline-block;
+}
+
+/* Section: Features
+------------------------------*/
+.icon-background-default {
+    color: #03c4eb;
+}
+.feature-item {
+	text-align: center;
+	.feature-icon {
+		color: #fff;
+	}
+	.fa-5x {
+		font-size: 4em;
+	}
+	&:hover {
+		.icon-background-default {
+		    color: #333333;
+			-webkit-transition: all 0.5s ease-in-out;
+			-moz-transition: all 0.5s ease-in-out;
+			-o-transition: all 0.5s ease-in-out;
+			transition: all 0.5s ease-in-out;
+			transform: scale(1.1);
+			-webkit-transform: scale(1.1);
+			-moz-transform: scale(1.1);
+			-ms-transform: scale(1.1);
+			transform: scale(1.1);
+		}
+	}
+}
+.feature-media {
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 /* Section: About Us

@@ -1,84 +1,44 @@
+=== OnePress ===
 
+Contributors: famethemes, congthien, kientrong
+Tags: one-column, two-columns, left-sidebar, right-sidebar, fluid-layout, responsive-layout, custom-menu, featured-images, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, blue, light
+Tested up to: 4.4.2
+Stable tag: 1.1.4
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-	Thank you for downloading our theme!
+OnePress Theme, Copyright 2015 FameThemes
+OnePress is distributed under the terms of the GNU GPL
 
-
-====================================================================
-Description
-====================================================================
+== Description ==
 OnePress is an outstanding creative and flexible WordPress one page theme well suited for business, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design.
 
-====================================================================
-SUPPORT
-====================================================================
-In case you need help, feel free to register an account on our site and let us know your issues.
-- Support Home: https://www.famethemes.com/dashboard/tickets
+== Installation ==
 
-====================================================================
-DOCUMENTATION
-====================================================================
+1. In your admin panel, go to Appearance > Themes and click the Add New button.
+2. Click Upload and Choose File, then select the theme's .zip file. Click Install Now.
+3. Click Activate to use your new theme right away.
 
-1. Install the theme: To Install OnePress Theme, Put the "OnePress" directory in your wp-content/themes directory and Activate the Theme from Wordpress Admin Panel.
+== Frequently Asked Questions ==
 
-2. Theme Options: OnePress supports the Theme Customizer for all theme settings. Go to Appearance > Customize to start customize your site
+= How to set up the blog page? =
+First create a page and give it a name ( Note this page will also be the URL of your blog, example "Blog", "News" ...  ), at the right site - Template section select Blog Page and then Save. Now you can access your blog at http://yourdomain.com/blog ( or http://yourdomain.com/news )
 
-	- Site Identity:
-		Change your site title, tagline, text logo, site icon.
+= How to set up the one page menu like the demo? =
+There are 6 section available in the free version: About, Services, Works (Projects), Team, News, Contact.
+For each section, you will need to create a text link menu with anchor point to the ID of the section.
+	http://yourdomain.com/#about
+	http://yourdomain.com/#services
+	http://yourdomain.com/#counter
+	http://yourdomain.com/#team
+	http://yourdomain.com/#news
+	http://yourdomain.com/#contact
+You can also change the section ID by going to Customizer -> Section: About ( for example. ) -> Section Settings -> Section ID.
 
-	- Site Options:
-		Change global setting such as : Site element animation, footer back to top button.
-		Add or change your social profile that display at the footer of your site.
-		Change Newsletter setting.
+= How to change the copyright message in the footer? =
+Because it's free theme, the theme designer copyright is needed, or you can change it by copy footer.php from parent theme to your child theme folder and start edit it. ( So if won't get replace in future theme update. )
 
-	- Section: Hero
-		Change your Hero section setting and data.
-
-	- Section: About
-		Change your About section setting and data.
-
-	- Section: Services
-		Change your Services section setting and data.
-
-	- Section: Counter
-		Change your Counter section setting and data.
-
-	- Section: Testimonial
-		Change your Testimonial section setting and data.
-
-	- Section: Our Team
-		Change your Team section setting and data.
-
-	- Section: News
-		Change your News section setting and data.
-
-	- Section: Contact
-		Change your Contact section setting and data.
-
-3. FAQs
-
-	Q: How to set up the blog page?
-	A: First create a page and give it a name ( Note this page will also be the URL of your blog, example "Blog", "News" ...  ), at the right site - Template section select Blog Page and then Save. Now you can access your blog at http://yourdomain.com/blog ( or http://yourdomain.com/news )
-
-	Q: How to set up the one page menu like the demo?
-	A: There are 6 section available in the free version: About, Services, Works (Projects), Team, News, Contact.
-	For each section, you will need to create a text link menu with anchor point to the ID of the section.
-		http://yourdomain.com/#about
-		http://yourdomain.com/#services
-		http://yourdomain.com/#counter
-		http://yourdomain.com/#testimonials
-		http://yourdomain.com/#team
-		http://yourdomain.com/#news
-		http://yourdomain.com/#contact
-	You can also change the section ID by going to Customizer -> Section: About ( for example. ) -> Section Settings -> Section ID.
-
-	Q: How to change the copyright message in the footer?
-	A: Because it's free theme, the theme designer copyright is needed, or you can change it by copy footer.php from parent theme
-	to your child theme folder and start edit it. ( So if won't get replace in future theme update. )
-
-
-====================================================================
-LICENSES
-====================================================================
+== Credits ==
 
 - Underscores
 Based on Underscores http://underscores.me/, (C) 2012-2015 Automattic, Inc., [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)

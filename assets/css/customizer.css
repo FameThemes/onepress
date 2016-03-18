@@ -12,7 +12,9 @@
     border-radius: 10px;
     z-index: 26;
 }
-
+.item-hidden, .tem-add_by {
+    display: none;
+}
 
 .no-changeable .remove-btn-wrapper, .no-changeable .repeatable-actions { display: none !important; }
 
@@ -107,4 +109,236 @@
     color: #ffffff;
     padding: 0px 5px;
 }
+
+/* Editor customize */
+body .wp-full-overlay{
+    z-index: 9999;
+}
+
+.wp-js-editor-active textarea{
+    display: none;
+}
+.wp-js-editor-preview {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) inset;
+    color: #32373c;
+    outline: 0 none;
+    transition: border-color 50ms ease-in-out 0s;
+    min-height: 150px;
+    display: block;
+    padding: 2px 6px;
+}
+.wp-js-editor-preview.wpe-focus {
+    border-color: #5b9dd9;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) inset;
+}
+.wp-js-editor-preview {
+    cursor: pointer;
+}
+.wp-js-editor-preview img {
+    max-width: 100%;
+    height: auto;
+}
+.modal-wp-js-editor * {
+    box-sizing: border-box;
+}
+.modal-wp-js-editor {
+    width: 550px;
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    height: 100%;
+    background: #EEEEEE;
+    padding: 15px;
+    border-right: 1px solid #ddd;
+
+    box-sizing: border-box;
+
+    -webkit-transition: all .5s; /* Safari */
+    transition: all .5s;
+
+    -ms-transform: translateX(-100%); /* IE 9 */
+    -webkit-transform: translateX(-100%); /* Safari */
+    transform: translateX(-100%);
+}
+.modal-wp-js-editor.wpe-active {
+    -ms-transform: translateX(0); /* IE 9 */
+    -webkit-transform: translateX(0); /* Safari */
+    transform: translateX(0);
+}
+
+.modal-wp-js-editor textarea {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.wp-switch-editor.close-wp-editor {
+    color: #e34113;
+}
+
+@media (max-width: 700px) {
+    .modal-wp-js-editor {
+        left: 0px;
+        z-index: 99999;
+        top: 130px;
+        bottom: 0px;
+        height: auto;
+        display: block;
+        right:0px;
+        width: auto;
+        border-top: 1px solid #ddd;
+        border-right: 0 none !important;
+
+        -ms-transform: translateX(0); /* IE 9 */
+        -webkit-transform: translateX(0); /* Safari */
+        transform: translateX(0);
+
+        -ms-transform: translateY(100%); /* IE 9 */
+        -webkit-transform: translateY(100%); /* Safari */
+        transform: translateY(100%);
+
+    }
+    .modal-wp-js-editor.wpe-active {
+        -ms-transform: translateY(0); /* IE 9 */
+        -webkit-transform: translateY(0); /* Safari */
+        transform: translateY(0);
+
+    }
+
+}
+
+
+/* COLOR PICKER ALPHA */
+
+/**
+ * Alpha Color Picker CSS
+ */
+
+.customize-control-alpha-color .wp-picker-container .iris-picker {
+    border-bottom:none;
+}
+
+.customize-control-alpha-color .wp-picker-container {
+    max-width: 257px;
+}
+
+.customize-control-alpha-color .wp-picker-open + .wp-picker-input-wrap {
+    width: 100%;
+}
+
+.customize-control-alpha-color .wp-picker-input-wrap input[type="text"].wp-color-picker.alpha-color-control {
+    float: left;
+    width: 195px;
+}
+
+.customize-control-alpha-color .wp-picker-input-wrap .button {
+    margin-left: 0;
+    float: right;
+}
+
+.wp-picker-container .wp-picker-open ~ .wp-picker-holder .alpha-color-picker-container {
+    display: block;
+}
+
+.alpha-color-picker-container {
+    border: 1px solid #dfdfdf;
+    border-top: none;
+    display: none;
+    background: #FFF;
+    padding: 0 11px 10px;
+    position: relative;
+}
+
+.alpha-color-picker-container .ui-widget-content,
+.alpha-color-picker-container .ui-widget-header,
+.alpha-color-picker-wrap .ui-state-focus {
+    background: transparent;
+    border: none;
+}
+
+.alpha-color-picker-wrap a.iris-square-value:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.alpha-color-picker-container .ui-slider {
+    position: relative;
+    z-index: 1;
+    height: 24px;
+    text-align: center;
+    margin: 0 auto;
+    width: 88%;
+    width: calc( 100% - 28px );
+}
+
+.alpha-color-picker-container .ui-slider-handle,
+.alpha-color-picker-container .ui-widget-content .ui-state-default {
+    color: #777;
+    background-color: #FFF;
+    text-shadow: 0 1px 0 #FFF;
+    text-decoration: none;
+    position: absolute;
+    z-index: 2;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    border: 1px solid #aaa;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-top: -2px;
+    top: 0;
+    height: 26px;
+    width: 26px;
+    cursor: ew-resize;
+    font-size: 0;
+    padding: 0;
+    line-height: 27px;
+    margin-left: -14px;
+}
+
+.alpha-color-picker-container .ui-slider-handle.show-opacity {
+    font-size: 12px;
+}
+
+.alpha-color-picker-container .click-zone {
+    width: 14px;
+    height: 24px;
+    display: block;
+    position: absolute;
+    left: 10px;
+}
+
+.alpha-color-picker-container .max-click-zone {
+    right: 10px;
+    left: auto;
+}
+
+.alpha-color-picker-container .transparency {
+    height: 24px;
+    width: 100%;
+    background-color: #FFF;
+    background-image: url(../images/transparency-grid.png);
+    box-shadow: 0 0 5px rgba(0,0,0,0.4) inset;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    padding: 0;
+    margin-top: -24px;
+}
+
+@media only screen and (max-width: 782px) {
+    .customize-control-alpha-color .wp-picker-input-wrap input[type="text"].wp-color-picker.alpha-color-control {
+        width: 184px;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    .customize-control-alpha-color .wp-picker-input-wrap input[type="text"].wp-color-picker.alpha-color-control {
+        width: 172px;
+        height: 33px;
+    }
+}
+
 

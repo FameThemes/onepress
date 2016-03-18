@@ -13,14 +13,16 @@
  */
 
 get_header(); ?>
-	
+
 	<div id="content" class="site-content">
-		
+
 		<div class="page-header">
 			<div class="container">
 				<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 			</div>
 		</div>
+
+		<?php echo onepress_breadcrumb(); ?>
 
 		<div id="content-inside" class="container right-sidebar">
 			<div id="primary" class="content-area">
@@ -43,7 +45,7 @@ get_header(); ?>
 			</div><!-- #primary -->
 
 			<?php get_sidebar(); ?>
-			
+
 		</div><!--#content-inside -->
 	</div><!-- #content -->
 

@@ -75,6 +75,11 @@ function onepress_setup() {
 	 * This theme styles the visual editor to resemble the theme style.
 	 */
 	add_editor_style( array( 'assets/css/editor-style.css', onepress_fonts_url() ) );
+
+	/*
+	 * WooCommerce support.
+	 */
+	add_theme_support( 'woocommerce' );
 }
 endif; // onepress_setup
 add_action( 'after_setup_theme', 'onepress_setup' );
@@ -308,70 +313,3 @@ require get_template_directory() . '/inc/tgm-plugin-activation.php';
  * Add theme info page
  */
 require get_template_directory() . '/inc/dashboard.php';
-
-/**
- * Get media from a variable
- *
- * @param array $media
- * @return false|string
- */
-if ( ! function_exists( 'onepress_get_media_url' ) ) {
-	function onepress_get_media_url($media = array())
-	{
-		$media = wp_parse_args($media, array('url' => '', 'id' => ''));
-		$url = '';
-		if ($media['id'] != '') {
-			$url = wp_get_attachment_url($media['id']);
-		}
-		if ($url == '' && $media['url'] != '') {
-			$url = $media['url'];
-		}
-		return $url;
-	}
-}
-
-
-
-
-/**
- * Get theme actions required
- *
- * @return array|mixed|void
- */
-function onepress_get_actions_required( ) {
-
-    $actions = array();
-    $front_page = get_option( 'page_on_front' );
-    $actions['page_on_front'] = 'dismiss';
-    $actions['page_template'] = 'dismiss';
-    if ( $front_page <= 0  ) {
-        $actions['page_on_front'] = 'active';
-        $actions['page_template'] = 'active';
-
-    } else {
-        if ( get_post_meta( $front_page, '_wp_page_template', true ) == 'template-frontpage.php' ) {
-            $actions['page_template'] = 'dismiss';
-        } else {
-            $actions['page_template'] = 'active';
-        }
-    }
-
-    $actions = apply_filters( 'onepress_get_actions_required', $actions );
-    $actions_dismiss =  get_option( 'onepress_actions_dismiss' );
-
-    if (  $actions_dismiss && is_array( $actions_dismiss ) ) {
-        foreach ( $actions_dismiss as $k => $v ) {
-            if ( isset ( $actions[ $k ] ) ) {
-                $actions[ $k ] = 'dismiss';
-            }
-        }
-    }
-
-    return $actions;
-}
-
-
-add_action('switch_theme', 'onepress_reset_actions_required');
-function onepress_reset_actions_required () {
-    delete_option('onepress_actions_dismiss');
-}

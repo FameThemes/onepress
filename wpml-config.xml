@@ -85,6 +85,21 @@
             <key name='onepress_contact_email' />
             <key name='onepress_contact_fax' />
             <key name='onepress_footer_copyright_text' />
+
+            <key name='onepress_counter_desc' />
+            <key name='onepress_services_desc' />
+            <key name='onepress_team_desc' />
+            <key name='onepress_news_desc' />
+            <key name='onepress_contact_desc' />
+            <key name='onepress_projects_desc' />
+            <key name='onepress_testimonial_desc' />
+            <key name='onepress_pricing_desc' />
+
+            <key name='onepress_features_title' />
+            <key name='onepress_features_subtitle' />
+            <key name='onepress_features_desc' />
+            <key name='onepress_features_boxes' />
+
         </key>
     </admin-texts>
 </wpml-config>

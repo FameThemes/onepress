@@ -15,6 +15,9 @@ if ( ! empty( $user_ids ) ) {
                 <div class="section-title-area">
                     <?php if ($onepress_team_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_team_subtitle) . '</h5>'; ?>
                     <?php if ($onepress_team_title != '') echo '<h2 class="section-title">' . esc_html($onepress_team_title) . '</h2>'; ?>
+                    <?php if ( $desc = get_theme_mod( 'onepress_team_desc' ) ) {
+                        echo '<div class="section-desc">' . wp_kses_post( $desc ) . '</div>';
+                    } ?>
                 </div>
                 <div class="team-members row">
                     <?php
@@ -24,6 +27,8 @@ if ( ! empty( $user_ids ) ) {
                             $member = wp_parse_args( $member, array(
                                 'user_id'  =>array(),
                             ));
+
+                            $link = isset( $member['link'] ) ?  $member['link'] : '';
                             $user_id = wp_parse_args( $member['user_id'],array(
                                 'id' => '',
                              ) );
@@ -36,11 +41,17 @@ if ( ! empty( $user_ids ) ) {
                                 ?>
                                 <div class="team-member col-md-<?php echo esc_attr( $layout ); ?> col-sm-6 wow slideInUp">
                                     <div class="member-thumb">
+                                        <?php if ( $link ) { ?>
+                                            <a href="<?php echo esc_url( $link ); ?>">
+                                        <?php } ?>
                                         <img src="<?php echo esc_url( $image ); ?>" alt="">
+                                        <?php if ( $link ) { ?>
+                                            </a>
+                                        <?php } ?>
                                         <?php do_action( 'onepress_section_team_member_media', $member ); ?>
                                     </div>
                                     <div class="member-info">
-                                        <h5 class="member-name"><?php echo esc_html( $data->post_title ); ?></h5>
+                                        <h5 class="member-name"><?php if ( $link ) { ?><a href="<?php echo esc_url( $link ); ?>"><?php } ?><?php echo esc_html( $data->post_title ); ?><?php if ( $link ) { ?></a><?php } ?></h5>
                                         <span class="member-position"><?php echo esc_html( $data->post_content ); ?></span>
                                     </div>
                                 </div>

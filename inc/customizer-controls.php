@@ -65,6 +65,32 @@ if ( ! function_exists( 'onepress_sanitize_checkbox' ) ) {
     }
 }
 
+function onepress_sanitize_color_alpha( $color ){
+    $color = str_replace( '#', '', $color );
+    if ( '' === $color ){
+        return '';
+    }
+
+    // 3 or 6 hex digits, or the empty string.
+    if ( preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', '#' . $color ) ) {
+        // convert to rgb
+        $colour = $color;
+        if ( strlen( $colour ) == 6 ) {
+            list( $r, $g, $b ) = array( $colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5] );
+        } elseif ( strlen( $colour ) == 3 ) {
+            list( $r, $g, $b ) = array( $colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2] );
+        } else {
+            return false;
+        }
+        $r = hexdec( $r );
+        $g = hexdec( $g );
+        $b = hexdec( $b );
+        return 'rgba('.join( ',', array( 'r' => $r, 'g' => $g, 'b' => $b, 'a' => 1 ) ).')';
+
+    }
+
+    return strpos( trim( $color ), 'rgb' ) !== false ?  $color : false;
+}
 
 
 /**
@@ -102,6 +128,9 @@ function onepress_sanitize_repeatable_data_field( $input , $setting ){
                         break;
                     case 'color':
                         $data[ $i ][ $id ] = sanitize_hex_color_no_hash( $value );
+                        break;
+                    case 'coloralpha':
+                        $data[ $i ][ $id ] = onepress_sanitize_color_alpha( $value );
                         break;
                     case 'checkbox':
                         $data[ $i ][ $id ] =  onepress_sanitize_checkbox( $value );
@@ -162,8 +191,166 @@ function onepress_sanitize_repeatable_data_field( $input , $setting ){
 }
 
 
+class OnePress_Editor_Custom_Control extends WP_Customize_Control
+{
+    /**
+     * The type of customize control being rendered.
+     *
+     * @since  1.0.0
+     * @access public
+     * @var    string
+     */
+    public $type = 'wp_editor';
+
+    /**
+     * Add support for palettes to be passed in.
+     *
+     * Supported palette values are true, false, or an array of RGBa and Hex colors.
+     */
+    public $mod;
+
+    /**
+     * Enqueue scripts/styles.
+     *
+     * @since  1.0.0
+     * @access public
+     * @return void
+     */
+    public function enqueue() {
+        wp_enqueue_script( 'wp-color-picker' );
+        wp_register_script( 'onepress-customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-controls', 'wp-color-picker' ) );
+        wp_register_style( 'onepress-customizer',  get_template_directory_uri() . '/assets/css/customizer.css' );
+
+        wp_enqueue_script( 'onepress-customizer' );
+        wp_enqueue_style( 'onepress-customizer' );
+
+
+        if ( ! class_exists( '_WP_Editors' ) ) {
+            require(ABSPATH . WPINC . '/class-wp-editor.php');
+        }
+
+        add_action( 'customize_controls_print_footer_scripts', array( __CLASS__, 'enqueue_editor' ),  2 );
+        add_action( 'customize_controls_print_footer_scripts', array( '_WP_Editors', 'editor_js' ), 50 );
+        add_action( 'customize_controls_print_footer_scripts', array( '_WP_Editors', 'enqueue_scripts' ), 1 );
+    }
+
+    public  static function enqueue_editor(){
+        if( ! isset( $GLOBALS['__wp_mce_editor__'] ) || ! $GLOBALS['__wp_mce_editor__'] ) {
+            $GLOBALS['__wp_mce_editor__'] = true;
+            ?>
+            <script id="_wp-mce-editor-tpl" type="text/html">
+                <?php wp_editor('', '__wp_mce_editor__'); ?>
+            </script>
+            <?php
+        }
+    }
+    public function render_content() {
+        $this->mod = strtolower( $this->mod );
+        if( ! $this->mod = 'html' ) {
+            $this->mod = 'tmce';
+        }
+        ?>
+        <div class="wp-js-editor">
+            <label>
+                <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+            </label>
+            <textarea class="wp-js-editor-textarea large-text" data-editor-mod="<?php echo esc_attr( $this->mod ); ?>" cols="20" rows="5" <?php $this->link(); ?>><?php echo esc_textarea( $this->value() ); ?></textarea>
+            <p class="description"><?php echo $this->description ?></p>
+        </div>
+    <?php
+    }
+}
+
 /**
- * Typography control class.
+ * Alpha Color Picker Customizer Control
+ *
+ * This control adds a second slider for opacity to the stock WordPress color picker,
+ * and it includes logic to seamlessly convert between RGBa and Hex color values as
+ * opacity is added to or removed from a color.
+ *
+ * This Alpha Color Picker is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this Alpha Color Picker. If not, see <http://www.gnu.org/licenses/>.
+ */
+class OnePress_Alpha_Color_Control extends WP_Customize_Control {
+
+    /**
+     * Official control name.
+     */
+    public $type = 'alpha-color';
+
+    /**
+     * Add support for palettes to be passed in.
+     *
+     * Supported palette values are true, false, or an array of RGBa and Hex colors.
+     */
+    public $palette;
+
+    /**
+     * Add support for showing the opacity value on the slider handle.
+     */
+    public $show_opacity;
+
+    /**
+     * Enqueue scripts and styles.
+     *
+     * Ideally these would get registered and given proper paths before this control object
+     * gets initialized, then we could simply enqueue them here, but for completeness as a
+     * stand alone class we'll register and enqueue them here.
+     */
+    public function enqueue() {
+        wp_enqueue_script( 'wp-color-picker' );
+        wp_register_script( 'onepress-customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-controls', 'wp-color-picker' ) );
+        wp_register_style( 'onepress-customizer',  get_template_directory_uri() . '/assets/css/customizer.css' );
+
+        wp_enqueue_script( 'onepress-customizer' );
+        wp_enqueue_style( 'onepress-customizer' );
+    }
+
+    /**
+     * Render the control.
+     */
+    public function render_content() {
+
+        // Process the palette
+        if ( is_array( $this->palette ) ) {
+            $palette = implode( '|', $this->palette );
+        } else {
+            // Default to true.
+            $palette = ( false === $this->palette || 'false' === $this->palette ) ? 'false' : 'true';
+        }
+
+        // Support passing show_opacity as string or boolean. Default to true.
+        $show_opacity = ( false === $this->show_opacity || 'false' === $this->show_opacity ) ? 'false' : 'true';
+
+        // Begin the output. ?>
+        <label>
+            <?php // Output the label and description if they were passed in.
+            if ( isset( $this->label ) && '' !== $this->label ) {
+                echo '<span class="customize-control-title">' . sanitize_text_field( $this->label ) . '</span>';
+            }
+            if ( isset( $this->description ) && '' !== $this->description ) {
+                echo '<span class="description customize-control-description">' . sanitize_text_field( $this->description ) . '</span>';
+            } ?>
+            <input class="alpha-color-control" type="text" data-show-opacity="<?php echo $show_opacity; ?>" data-palette="<?php echo esc_attr( $palette ); ?>" data-default-color="<?php echo esc_attr( $this->settings['default']->default ); ?>" <?php $this->link(); ?>  />
+        </label>
+    <?php
+    }
+}
+
+
+
+/**
+ * Repeatable control class.
  *
  * @since  1.0.0
  * @access public
@@ -235,6 +422,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         }
 
         $this->changeable =  isset(  $args['changeable'] ) && $args['changeable'] == 'no' ? 'no' : 'yes';
+        $this->default_empty_title =  isset(  $args['default_empty_title'] ) && $args['default_empty_title'] != '' ? $args['default_empty_title'] : esc_html__( 'Item', 'onepress' );
 
     }
 
@@ -285,6 +473,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         $this->json['max_item']      = $this->max_item;
         $this->json['limited_msg']   = $this->limited_msg;
         $this->json['changeable']    = $this->changeable;
+        $this->json['default_empty_title']    = $this->default_empty_title;
         $this->json['value']         = $value;
         $this->json['fields']        = $this->fields;
 
@@ -305,15 +494,32 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         wp_enqueue_script( 'wp-color-picker' );
         wp_enqueue_style( 'wp-color-picker' );
 
-        wp_register_script( 'theme-customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-controls' ) );
-        wp_register_style( 'theme-customizer',  get_template_directory_uri() . '/assets/css/customizer.css' );
+        wp_register_script( 'onepress-customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-controls', 'wp-color-picker' ) );
+        wp_register_style( 'onepress-customizer',  get_template_directory_uri() . '/assets/css/customizer.css' );
 
-        wp_enqueue_script( 'theme-customizer' );
-        wp_enqueue_style( 'theme-customizer' );
+        wp_enqueue_script( 'onepress-customizer' );
+        wp_enqueue_style( 'onepress-customizer' );
+
+        if ( ! class_exists( '_WP_Editors' ) ) {
+            require(ABSPATH . WPINC . '/class-wp-editor.php');
+        }
+
+        add_action( 'customize_controls_print_footer_scripts', array( __CLASS__, 'enqueue_editor' ),  2 );
+        add_action( 'customize_controls_print_footer_scripts', array( '_WP_Editors', 'editor_js' ), 50 );
+        add_action( 'customize_controls_print_footer_scripts', array( '_WP_Editors', 'enqueue_scripts' ), 1 );
 
     }
 
-
+    public  static function enqueue_editor(){
+        if( ! isset( $GLOBALS['__wp_mce_editor__'] ) || ! $GLOBALS['__wp_mce_editor__'] ) {
+            $GLOBALS['__wp_mce_editor__'] = true;
+            ?>
+            <script id="_wp-mce-editor-tpl" type="text/html">
+                <?php wp_editor('', '__wp_mce_editor__'); ?>
+            </script>
+        <?php
+        }
+    }
 
     public function render_content() {
 
@@ -359,10 +565,9 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                 </div>
 
                 <div class="widget-inside">
-
                     <div class="form">
                         <div class="widget-content">
-
+                            <# var cond_v; #>
                             <# for ( i in data ) { #>
                                 <# if ( ! data.hasOwnProperty( i ) ) continue; #>
                                 <# field = data[i]; #>
@@ -371,9 +576,18 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
                                 <# if ( field.type ){ #>
 
-                                    <div class="item item-{{{ field.type }}} item-{{{ field.id }}}">
-
-                                        <# if ( field.type !== 'checkbox' &&  field.type !== 'hidden' ) { #>
+                                    <#
+                                    if ( field.required  && field.required.length >= 3 ) {
+                                        #>
+                                        <div class="conditionize item item-{{ field.type }} item-{{ field.id }}" data-cond-option="{{ field.required[0] }}" data-cond-operator="{{ field.required[1] }}" data-cond-value="{{ field.required[2] }}" >
+                                        <#
+                                    } else {
+                                        #>
+                                        <div class="item item-{{ field.type }} item-{{ field.id }}" >
+                                        <#
+                                    }
+                                    #>
+                                        <# if ( field.type !== 'checkbox' ) { #>
                                             <# if ( field.title ) { #>
                                             <label class="field-label">{{ field.title }}</label>
                                             <# } #>
@@ -385,18 +599,16 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
 
                                         <# if ( field.type === 'hidden' ) { #>
-
                                             <input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
-
+                                        <# } else if ( field.type === 'add_by' ) { #>
+                                            <input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="add_by">
                                         <# } else if ( field.type === 'text' ) { #>
-
                                             <input data-live-id="{{ field.id }}" type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
-
                                         <# } else if ( field.type === 'checkbox' ) { #>
 
                                             <# if ( field.title ) { #>
                                                 <label class="checkbox-label">
-                                                    <input type="checkbox" <# if ( field.value ) { #> checked="checked" <# } #> value="1" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
+                                                    <input data-live-id="{{ field.id }}" type="checkbox" <# if ( field.value ) { #> checked="checked" <# } #> value="1" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
                                                     {{ field.title }}</label>
                                             <# } #>
 
@@ -408,7 +620,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                         <# } else if ( field.type === 'select' ) { #>
 
                                             <# if ( field.multiple ) { #>
-                                                <select class="select-multiple" multiple="multiple" data-repeat-name="_items[__i__][{{ field.id }}][]">
+                                                <select data-live-id="{{ field.id }}"  class="select-multiple" multiple="multiple" data-repeat-name="_items[__i__][{{ field.id }}][]">
                                             <# } else  { #>
                                                 <select data-live-id="{{ field.id }}"  class="select-one" data-repeat-name="_items[__i__][{{ field.id }}]">
                                             <# } #>
@@ -432,18 +644,18 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                                 <# if ( field.options.hasOwnProperty( k ) ) { #>
 
                                                     <label>
-                                                        <input type="radio" <# if ( field.value == k ) { #> checked="checked" <# } #> value="{{ k }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="widefat">
+                                                        <input data-live-id="{{ field.id }}"  type="radio" <# if ( field.value == k ) { #> checked="checked" <# } #> value="{{ k }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="widefat">
                                                         {{ field.options[k] }}
                                                     </label>
 
                                                 <# } #>
                                             <# } #>
 
-                                        <# } else if ( field.type == 'color' ) { #>
+                                        <# } else if ( field.type == 'color' || field.type == 'coloralpha'  ) { #>
 
                                             <# if ( field.value !='' ) { field.value = '#'+field.value ; }  #>
 
-                                            <input type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="color-field">
+                                            <input data-live-id="{{ field.id }}" data-show-opacity="true" type="text" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="color-field c-{{ field.type }} alpha-color-control">
 
                                         <# } else if ( field.type == 'media' ) { #>
 
@@ -452,7 +664,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                             <# } else { #>
                                                 <input type="text" value="{{ field.value.url }}" data-repeat-name="_items[__i__][{{ field.id }}][url]" class="image_url widefat">
                                             <# } #>
-                                            <input type="hidden" value="{{ field.value.id }}" data-repeat-name="_items[__i__][{{ field.id }}][id]" class="image_id widefat">
+                                            <input type="hidden" data-live-id="{{ field.id }}"  value="{{ field.value.id }}" data-repeat-name="_items[__i__][{{ field.id }}][id]" class="image_id widefat">
 
                                             <# if ( !field.media  || field.media == '' || field.media =='image' ) {  #>
                                             <div class="current <# if ( field.value.url !== '' ){ #> show <# } #>">
@@ -474,8 +686,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                                 <div style="clear:both"></div>
                                             </div>
 
-
-                                        <# } else if ( field.type == 'textarea' ) { #>
+                                        <# } else if ( field.type == 'textarea' || field.type == 'editor' ) { #>
 
                                             <textarea data-live-id="{{{ field.id }}}" data-repeat-name="_items[__i__][{{ field.id }}]">{{ field.value }}</textarea>
 

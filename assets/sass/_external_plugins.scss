@@ -690,3 +690,134 @@ button {
     }
   }
 }
+
+/* WooCommerce support */
+
+.woocommerce-page {
+    .site-main .page-title {
+        display: none;
+    }
+}
+
+.woocommerce-result-count {
+    font-style: italic;
+}
+
+.woocommerce .woocommerce-ordering, .woocommerce .woocommerce-result-count {
+    margin-bottom: 1.5em;
+}
+
+.woocommerce-ordering {
+    select {
+        padding: 7px;
+        margin-top: -10px;
+    }
+}
+
+.woocommerce ul.products li.product h3 {
+    @include rem('font-size', 18px);
+    margin-bottom: 7px;
+}
+
+.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt {
+    background-color: $primary;
+    @include rem('padding', 10px 20px);
+    color: #FFF;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    @include rem('font-size', 13px);
+    border-radius: 2px;
+    &:hover {
+        background: #222222;
+        color: #FFF;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        -o-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out;
+    }
+}
+
+.woocommerce table.shop_table {
+    border-collapse: collapse;
+}
+
+.woocommerce .quantity .qty {
+    padding: 5px;
+}
+.woocommerce span.onsale {
+    padding: inherit;
+}
+
+.related.products h2, #tab-description h2 {
+    @include rem('font-size', 17px);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.woocommerce nav.woocommerce-pagination ul li a, .woocommerce nav.woocommerce-pagination ul li span {
+    padding: 9px 14px;
+    font-weight: bold;
+}
+
+/* Breadcrumbs
+------------------------------*/
+.breadcrumbs {
+    font-size: 10px;
+    padding: 15px 0px;
+    border-bottom: 1px solid $border;
+    color: #858585;
+    @include for(small-screens) {
+        font-size: 12px;
+    }
+    i {
+        margin: 0px 6px;
+    }
+    a {
+        text-decoration: none;
+        color: $text;
+        font-weight: 600;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    span {
+        margin-right: 20px;
+        position: relative;
+        @include for(small-screens) {
+            margin-right: 40px;
+        }
+        span {
+            margin-right: 0;
+        }
+    }
+    a:before {
+        border-bottom: 6px solid transparent;
+        border-left: 6px solid rgba(0, 0, 0, 0.2);
+        border-top: 6px solid transparent;
+        content: "";
+        display: inline-block;
+        position: absolute;
+        right: -11px;
+        top: 2px;
+        @include for(small-screens) {
+            right: -23px;
+            top: 3px;
+        }
+    }
+    a:after {
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid #ffffff;
+        border-top: 5px solid transparent;
+        content: "";
+        display: inline-block;
+        position: absolute;
+        right: -10px;
+        top: 3px;
+        @include for(small-screens) {
+            right: -22px;
+            top: 4px;
+        }
+    }
+}
