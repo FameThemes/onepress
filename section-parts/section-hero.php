@@ -49,8 +49,8 @@ if ( $is_parallax ) {
 
 		switch( $layout ) {
 			case 2:
-				$hcl2_content =  get_theme_mod( 'onepress_hcl2_content' );
-				$hcl2_image   =  get_theme_mod( 'onepress_hcl2_image' );
+				$hcl2_content =  get_theme_mod( 'onepress_hcl2_content', wp_kses_post( '<h1>Business Website'."\n".'Made Simple.</h1>'."\n".'We provide creative solutions to clients around the world,'."\n".'creating things that get attention and meaningful.'."\n\n".'<a class="btn btn-secondary-outline btn-lg" href="#">Get Started</a>' ) );
+				$hcl2_image   =  get_theme_mod( 'onepress_hcl2_image', get_template_directory_uri().'/assets/images/onepress_responsive.png' );
 				?>
 				<div class="container"<?php echo $hero_content_style; ?>>
 					<div class="hero__content hero-content-style<?php echo esc_attr( $layout ); ?>">
