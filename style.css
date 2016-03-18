@@ -541,13 +541,13 @@ input[type="radio"], input[type="checkbox"] {
 .alignleft {
 	display: inline;
 	float: left;
-	margin-right: 1.5em;
+	margin-right: 3.5em;
 }
 
 .alignright {
 	display: inline;
 	float: right;
-	margin-left: 1.5em;
+	margin-left: 3.5em;
 }
 
 .aligncenter {
@@ -708,6 +708,12 @@ input[type="radio"], input[type="checkbox"] {
 	position: fixed;
 }
 
+@media screen and (min-width: 1140px) {
+	.header-transparent .no-scroll .site-header .onepress-menu > li > a {
+		color: rgba(255, 255, 255, 0.9);
+	}
+}
+
 .no-sticky-header.page-template-template-frontpage.header-transparent .site-header {
 	background: transparent;
 	position: absolute;
@@ -724,6 +730,11 @@ input[type="radio"], input[type="checkbox"] {
 .sticky-header .header-fixed {
 	top: 0px;
 	left: 0px;
+}
+
+.header-transparent .hero-slideshow-fullscreen .hero__content {
+	padding-top: 50px;
+	padding-top: 3.125rem;
 }
 
 .site-branding {
@@ -2061,7 +2072,64 @@ input[type="radio"], input[type="checkbox"] {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
-	max-width: 100%;
+}
+
+.hero__content {
+	color: #FFF;
+	text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	font-size: 18px;
+	font-size: 1.125rem;
+	font-weight: 300;
+}
+
+.hero__content h1, .hero__content h2, .hero__content h3, .hero__content h4, .hero__content h5, .hero__content h6 {
+	color: #FFF;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+}
+
+.hero__content a.btn {
+	margin: 10px 10px 20px 0px;
+	margin:  0.625rem 0.625rem 1.25rem 0rem;
+}
+
+.hero__content p {
+	margin-bottom: 20px;
+	margin-bottom: 1.25rem;
+}
+
+.hero__content .btn-secondary-outline {
+	box-shadow: none;
+	border-color: rgba(255, 255, 255, 0.9);
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.hero__content .btn-secondary-outline:hover {
+	background: #FFF;
+	color: #333;
+}
+
+/* Hero Content Style 2. */
+.hero-content-style2 h1 {
+	font-weight: 800;
+	font-size: 50px;
+	font-size: 3.125rem;
+	letter-spacing: 3px;
+}
+
+.hero-content-style2 .hcl2-content {
+	padding: 50px 0px;
+	padding:  3.125rem 0rem;
+}
+
+.hero-content-style2 .hcl2-image {
+	text-align: right;
+}
+
+@media (max-width: 1199px) {
+	.hero-content-style2 .hcl2-content, .hero-content-style2 .hcl2-image {
+		text-align: center;
+	}
 }
 
 /* Hero Text Style1. */
@@ -2125,30 +2193,14 @@ input[type="radio"], input[type="checkbox"] {
 	letter-spacing: -0.6px;
 }
 
-.hero-content-style1 .btn {
-	margin: 0px 10px;
-}
-
 @media (max-width: 767px) {
 	.hero-content-style1 .btn {
 		display: inline-block;
-		margin: 5px;
 	}
 }
 
 .hero-content-style1 a:active, .hero-content-style1 a:focus, .hero-content-style1 .btn:active, .hero-content-style1 .btn:focus {
 	outline: none;
-}
-
-.hero-content-style1 .btn-secondary-outline {
-	box-shadow: none;
-	border-color: rgba(255, 255, 255, 0.9);
-	color: rgba(255, 255, 255, 0.9);
-}
-
-.hero-content-style1 .btn-secondary-outline:hover {
-	background: #FFF;
-	color: #333;
 }
 
 #hero .btn {

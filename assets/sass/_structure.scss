@@ -19,9 +19,16 @@
 	background: transparent;
 	position: fixed;
 }
+@include for(large-screens) {
+	.header-transparent .no-scroll .site-header {
+		.onepress-menu > li > a {
+			color: rgba(255, 255, 255, 0.9);
+		}
+	}
+}
 
 .no-sticky-header.page-template-template-frontpage.header-transparent .site-header{
-  background: transparent;
+	background: transparent;
 	position: absolute;
 }
 
@@ -30,11 +37,15 @@
 }
 
 .sticky-header #page > .site-header, .sticky-header .header-fixed {
-		position: fixed;
+	position: fixed;
 }
 .sticky-header .header-fixed {
-		top: 0px;
-		left: 0px;
+	top: 0px;
+	left: 0px;
+}
+
+.header-transparent .hero-slideshow-fullscreen .hero__content {
+	@include rem('padding-top', 50px);
 }
 
 .site-branding {
