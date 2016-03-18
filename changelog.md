@@ -16,6 +16,8 @@ CHANGELOG
 * Add color alpha customizer control.
 * Improve repeater customizer control.
 * Add custom link for member on team section.
+* Add a hero layout content.
+
 
 ## 1.1.4
 * Fix a bug merge data incorrect for customizer.
