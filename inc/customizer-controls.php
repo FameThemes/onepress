@@ -541,7 +541,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         </div>
 
         <div class="repeatable-actions">
-            <span class="button-secondary add-new-repeat-item"><?php _e( 'Add a Item', 'onepress' ); ?></span>
+            <span class="button-secondary add-new-repeat-item"><?php _e( 'Add an item', 'onepress' ); ?></span>
         </div>
 
          <script type="text/html" class="repeatable-js-template">
