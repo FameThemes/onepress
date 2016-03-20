@@ -183,6 +183,14 @@ function onepress_sanitize_repeatable_data_field( $input , $setting ){
                 $data[ $i ][ $id ] = wp_kses_post( $value );
             }
 
+            if ( count( $data[ $i ] ) !=  count( $fields ) ) {
+                foreach ( $fields as $k => $f ){
+                    if ( ! isset( $data[ $i ][ $k ] ) ) {
+                        $data[ $i ][ $k ] = '';
+                    }
+                }
+            }
+
         }
 
     }
