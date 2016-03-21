@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+= 1.1.7 =
+* Change "Add a item" to "Add an item"
+* Fix checkbox in repeater control always checked.
+
+
 = 1.1.6 =
 * Update hero section template
 * Fix a bug missing quicktags tool bar for editor control.
