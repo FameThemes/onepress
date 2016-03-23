@@ -600,6 +600,14 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 					'transport' => 'refresh', // refresh or postMessage
+					'default' => json_encode( array(
+						array(
+							'image'=> array(
+								'url' => get_template_directory_uri().'/assets/images/hero5.jpg',
+								'id' => ''
+							)
+						)
+					) )
 				) );
 
 			$wp_customize->add_control(

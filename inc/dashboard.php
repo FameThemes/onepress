@@ -21,7 +21,7 @@ function onepress_theme_info() {
     } else {
         $menu_title = esc_html__('OnePress Theme', 'onepress');
     }
-    
+
     add_theme_page( esc_html__( 'OnePress Dashboard', 'onepress' ), $menu_title, 'edit_theme_options', 'ft_onepress', 'onepress_theme_info_page');
 }
 

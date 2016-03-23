@@ -18,7 +18,7 @@ if (is_string($_images)) {
 }
 
 if (empty($_images) || !is_array($_images)) {
-    $_images = array();
+    $_images = array(  );
 }
 
 $images = array();
@@ -31,6 +31,10 @@ foreach ( $_images as $m ) {
 	}
 }
 
+if ( empty( $images ) ){
+	$images = array( get_template_directory_uri().'/assets/images/hero5.jpg' );
+}
+
 $is_parallax =  get_theme_mod( 'onepress_hero_parallax' ) == 1 && ! empty( $images ) ;
 
 if ( $is_parallax ) {
@@ -38,7 +42,7 @@ if ( $is_parallax ) {
 }
 
 ?>
-<?php if ( ! $onepress_hero_disable && ! empty ( $_images ) ) : ?>
+<?php if ( ! $onepress_hero_disable && ! empty ( $images ) ) : ?>
 	<section id="<?php if ($onepress_hero_id != '') echo $onepress_hero_id; ?>" class="hero-slideshow-wrapper <?php if ($onepress_hero_fullscreen == 1) {
 		echo 'hero-slideshow-fullscreen';
 	} else {
