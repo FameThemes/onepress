@@ -65,6 +65,19 @@ if ( ! function_exists( 'onepress_sanitize_checkbox' ) ) {
     }
 }
 
+/**
+ * Sanitize CSS code
+ *
+ * @param $string
+ * @return string
+ */
+function onepress_sanitize_css($string) {
+    $string = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $string );
+    $string = strip_tags($string);
+    return trim( $string );
+}
+
+
 function onepress_sanitize_color_alpha( $color ){
     $color = str_replace( '#', '', $color );
     if ( '' === $color ){

@@ -457,6 +457,39 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+
+			/* Custom CSS Settings
+			----------------------------------------------------------------------*/
+			$wp_customize->add_section(
+				'onepress_custom_code',
+				array(
+					'title'       => __( 'Custom CSS', 'onepress' ),
+					'panel'       => 'onepress_options',
+				)
+			);
+
+
+			$wp_customize->add_setting(
+				'onepress_custom_css',
+				array(
+					'default'              => '',
+					'capability'           => 'edit_themes',
+					'sanitize_callback'    => 'onepress_sanitize_css',
+					'type' 				   => 'option',
+				)
+			);
+
+			$wp_customize->add_control(
+				'onepress_custom_css',
+				array(
+					'label'    => __( 'Custom CSS', 'onepress' ),
+					'section'  => 'onepress_custom_code',
+					'type'     => 'textarea'
+				)
+			);
+
+
+
 	/*------------------------------------------------------------------------*/
     /*  Section: Order & Styling
     /*------------------------------------------------------------------------*/
