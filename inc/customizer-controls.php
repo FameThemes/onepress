@@ -448,6 +448,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
     }
 
     public function merge_data( $array_value, $array_default ){
+
         if ( ! $this->id_key ) {
             return $array_value;
         }
@@ -462,9 +463,15 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
         $new_array = array();
         foreach ( $array_value as $k => $a ) {
-            if ( is_array( $a ) && isset ( $a[ $this->id_key ]  ) ) {
-                $new_array[ $a[ $this->id_key ] ] = $a;
+
+            if ( is_array( $a ) ) {
+                if ( isset ( $a[ $this->id_key ]  ) && $a[ $this->id_key ] != '' ) {
+                    $new_array[ $a[ $this->id_key ] ] = $a;
+                } else {
+                    $new_array[ $k ] = $a;
+                }
             }
+
         }
 
         foreach ( $array_default as $k => $a ) {
@@ -496,6 +503,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         $this->json['changeable']    = $this->changeable;
         $this->json['default_empty_title']    = $this->default_empty_title;
         $this->json['value']         = $value;
+        $this->json['id_key']        = $this->id_key;
         $this->json['fields']        = $this->fields;
 
     }

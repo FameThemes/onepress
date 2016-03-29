@@ -789,13 +789,17 @@
 
 			//var container =  control.container;
 			var default_data =  control.params.fields;
-			//console.log( control.params.value );
+
 			var values;
 			try {
 				values = JSON.parse( control.params.value ) ;
 			}catch ( e ) {
 				values = {};
 			}
+			//if ( control.id == 'onepress_section_order_styling' ){
+				//console.log( values );
+			//}
+
 			var max_item  = 0; // unlimited
 			var limited_mg = control.params.limited_msg || '';
 
@@ -1206,7 +1210,13 @@
 			control.container.on( 'click', '.add-new-repeat-item', function(){
 				var $html = $( control.template( default_data ) );
 				$( '.list-repeatable', control.container ).append( $html );
+
+				// add unique ID for section if id_key is set
+				if ( control.params.id_key !== '' ){
+					$html.find( '.item-'+control.params.id_key).find( 'input').val( 'sid'+( new Date().getTime() ) );
+				}
 				$html.find( 'input.add_by').val( 'click' );
+
 				control.intItem( $html );
 				control.actions( $html );
 				control.updateValue();
