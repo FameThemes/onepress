@@ -6,19 +6,22 @@ $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('S
 $layout = intval( get_theme_mod( 'onepress_team_layout', 3 ) );
 $user_ids = onepress_get_section_team_data();
 if ( ! empty( $user_ids ) ) {
+    $desc = get_theme_mod( 'onepress_team_desc' );
     ?>
     <?php if ( ! $onepress_team_disable ) : ?>
         <section id="<?php if ($onepress_team_id != '') echo $onepress_team_id; ?>" <?php do_action('onepress_section_atts', 'team'); ?>
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-team section-padding section-meta onepage-section', 'team')); ?>">
             <?php do_action('onepress_section_before_inner', 'team'); ?>
             <div class="container">
+                <?php if ( $onepress_team_title || $onepress_team_subtitle || $desc ){ ?>
                 <div class="section-title-area">
                     <?php if ($onepress_team_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_team_subtitle) . '</h5>'; ?>
                     <?php if ($onepress_team_title != '') echo '<h2 class="section-title">' . esc_html($onepress_team_title) . '</h2>'; ?>
-                    <?php if ( $desc = get_theme_mod( 'onepress_team_desc' ) ) {
+                    <?php if ( $desc ) {
                         echo '<div class="section-desc">' . wp_kses_post( $desc ) . '</div>';
                     } ?>
                 </div>
+                <?php } ?>
                 <div class="team-members row">
                     <?php
                     if (!empty($user_ids)) {

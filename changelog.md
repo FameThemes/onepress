@@ -7,6 +7,7 @@ CHANGELOG
 * Fix a bug lost custom section styling if section id not set.
 * Add custom css code in customizer.
 * Add action notification bubble in menu.
+* Add condition to check section heading area.
 
 ## 1.1.7
 * Change "Add a item" to "Add an item"
