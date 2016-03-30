@@ -471,7 +471,6 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                     $new_array[ $k ] = $a;
                 }
             }
-
         }
 
         foreach ( $array_default as $k => $a ) {
