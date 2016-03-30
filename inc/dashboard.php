@@ -5,9 +5,26 @@
 
 add_action('admin_menu', 'onepress_theme_info');
 function onepress_theme_info() {
-    $theme_data = wp_get_theme('onepress');
-    add_theme_page( esc_html__( 'OnePress Dashboard', 'onepress' ), esc_html__('OnePress Theme', 'onepress'), 'edit_theme_options', 'ft_onepress', 'onepress_theme_info_page');
+    //$theme_data = wp_get_theme('onepress');
+
+    $actions = onepress_get_actions_required();
+    $n = array_count_values( $actions );
+    $number_count =  0;
+    if ( $n && isset( $n['active'] ) ) {
+        $number_count = $n['active'];
+    }
+
+    if ( $number_count > 0 ){
+        $update_label = sprintf( _n( '%1$s action required', '%1$s actions required', $number_count, 'onepress' ), $number_count );
+        $count = "<span class='update-plugins count-".esc_attr( $number_count )."' title='".esc_attr( $update_label )."'><span class='update-count'>" . number_format_i18n($number_count) . "</span></span>";
+        $menu_title = sprintf( esc_html__('OnePress Theme %s', 'onepress'), $count );
+    } else {
+        $menu_title = esc_html__('OnePress Theme', 'onepress');
+    }
+
+    add_theme_page( esc_html__( 'OnePress Dashboard', 'onepress' ), $menu_title, 'edit_theme_options', 'ft_onepress', 'onepress_theme_info_page');
 }
+
 
 /**
  * Add admin notice when active theme, just show one timetruongsa@200811

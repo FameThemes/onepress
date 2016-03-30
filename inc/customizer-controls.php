@@ -65,6 +65,19 @@ if ( ! function_exists( 'onepress_sanitize_checkbox' ) ) {
     }
 }
 
+/**
+ * Sanitize CSS code
+ *
+ * @param $string
+ * @return string
+ */
+function onepress_sanitize_css($string) {
+    $string = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $string );
+    $string = strip_tags($string);
+    return trim( $string );
+}
+
+
 function onepress_sanitize_color_alpha( $color ){
     $color = str_replace( '#', '', $color );
     if ( '' === $color ){
@@ -435,6 +448,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
     }
 
     public function merge_data( $array_value, $array_default ){
+
         if ( ! $this->id_key ) {
             return $array_value;
         }
@@ -449,8 +463,13 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
         $new_array = array();
         foreach ( $array_value as $k => $a ) {
-            if ( is_array( $a ) && isset ( $a[ $this->id_key ]  ) ) {
-                $new_array[ $a[ $this->id_key ] ] = $a;
+
+            if ( is_array( $a ) ) {
+                if ( isset ( $a[ $this->id_key ]  ) && $a[ $this->id_key ] != '' ) {
+                    $new_array[ $a[ $this->id_key ] ] = $a;
+                } else {
+                    $new_array[ $k ] = $a;
+                }
             }
         }
 
@@ -483,6 +502,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
         $this->json['changeable']    = $this->changeable;
         $this->json['default_empty_title']    = $this->default_empty_title;
         $this->json['value']         = $value;
+        $this->json['id_key']        = $this->id_key;
         $this->json['fields']        = $this->fields;
 
     }

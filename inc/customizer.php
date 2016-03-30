@@ -457,6 +457,39 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+
+			/* Custom CSS Settings
+			----------------------------------------------------------------------*/
+			$wp_customize->add_section(
+				'onepress_custom_code',
+				array(
+					'title'       => __( 'Custom CSS', 'onepress' ),
+					'panel'       => 'onepress_options',
+				)
+			);
+
+
+			$wp_customize->add_setting(
+				'onepress_custom_css',
+				array(
+					'default'              => '',
+					'capability'           => 'edit_themes',
+					'sanitize_callback'    => 'onepress_sanitize_css',
+					'type' 				   => 'option',
+				)
+			);
+
+			$wp_customize->add_control(
+				'onepress_custom_css',
+				array(
+					'label'    => __( 'Custom CSS', 'onepress' ),
+					'section'  => 'onepress_custom_code',
+					'type'     => 'textarea'
+				)
+			);
+
+
+
 	/*------------------------------------------------------------------------*/
     /*  Section: Order & Styling
     /*------------------------------------------------------------------------*/
@@ -600,6 +633,14 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 					'transport' => 'refresh', // refresh or postMessage
+					'default' => json_encode( array(
+						array(
+							'image'=> array(
+								'url' => get_template_directory_uri().'/assets/images/hero5.jpg',
+								'id' => ''
+							)
+						)
+					) )
 				) );
 
 			$wp_customize->add_control(
@@ -931,7 +972,7 @@ function onepress_customize_register( $wp_customize ) {
         )
     );
 
-    $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+    $wp_customize->add_control( new OnePress_Editor_Custom_Control(
         $wp_customize,
         'onepress_videolightbox_title',
         array(
@@ -1063,7 +1104,7 @@ function onepress_customize_register( $wp_customize ) {
 				'default'           => '',
 			)
 		);
-		$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+		$wp_customize->add_control( new OnePress_Editor_Custom_Control(
 			$wp_customize,
 			'onepress_about_desc',
 			array(
@@ -1238,7 +1279,7 @@ function onepress_customize_register( $wp_customize ) {
             'default'           => '',
         )
     );
-    $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+    $wp_customize->add_control( new OnePress_Editor_Custom_Control(
         $wp_customize,
         'onepress_features_desc',
         array(
@@ -1437,7 +1478,7 @@ function onepress_customize_register( $wp_customize ) {
                 'default'           => '',
             )
         );
-        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+        $wp_customize->add_control( new OnePress_Editor_Custom_Control(
             $wp_customize,
             'onepress_services_desc',
             array(
@@ -1612,7 +1653,7 @@ function onepress_customize_register( $wp_customize ) {
                 'default'           => '',
             )
         );
-        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+        $wp_customize->add_control( new OnePress_Editor_Custom_Control(
             $wp_customize,
             'onepress_counter_desc',
             array(
@@ -1768,7 +1809,7 @@ function onepress_customize_register( $wp_customize ) {
                 'default'           => '',
             )
         );
-        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+        $wp_customize->add_control( new OnePress_Editor_Custom_Control(
             $wp_customize,
             'onepress_team_desc',
             array(
@@ -1936,7 +1977,7 @@ function onepress_customize_register( $wp_customize ) {
                 'default'           => '',
             )
         );
-        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+        $wp_customize->add_control( new OnePress_Editor_Custom_Control(
             $wp_customize,
             'onepress_news_desc',
             array(
@@ -2091,7 +2132,7 @@ function onepress_customize_register( $wp_customize ) {
                 'default'           => '',
             )
         );
-        $wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+        $wp_customize->add_control( new OnePress_Editor_Custom_Control(
             $wp_customize,
             'onepress_contact_desc',
             array(
@@ -2162,7 +2203,7 @@ function onepress_customize_register( $wp_customize ) {
 				'default'           => '',
 			)
 		);
-		$wp_customize->add_control( new One_Press_Textarea_Custom_Control(
+		$wp_customize->add_control( new OnePress_Editor_Custom_Control(
 			$wp_customize,
 			'onepress_contact_text',
 			array(

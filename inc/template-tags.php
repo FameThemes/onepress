@@ -468,6 +468,11 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $css
         );
 
+        $custom = get_option( 'onepress_custom_css' );
+        if ( $custom ){
+            $css.= "\n/* --- Begin custom CSS --- */\n". $custom."\n/* --- End custom CSS --- */\n";
+        }
+
         wp_add_inline_style( 'onepress-style', $css );
 	}
 

@@ -7,19 +7,22 @@ $onepress_service_subtitle = get_theme_mod( 'onepress_services_subtitle', esc_ht
 $page_ids =  onepress_get_section_services_data();
 if ( ! empty( $page_ids ) ) {
     $layout = intval( get_theme_mod( 'onepress_service_layout', 6 ) );
+    $desc = get_theme_mod( 'onepress_services_desc' );
     ?>
     <?php if (!$onepress_service_disable) : ?>
         <section id="<?php if ($onepress_service_id != '') echo $onepress_service_id; ?>" <?php do_action('onepress_section_atts', 'services'); ?>
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>">
             <?php do_action('onepress_section_before_inner', 'services'); ?>
             <div class="container">
+                <?php if ( $onepress_service_title ||  $onepress_service_subtitle || $desc ){ ?>
                 <div class="section-title-area">
                     <?php if ($onepress_service_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_service_subtitle) . '</h5>'; ?>
                     <?php if ($onepress_service_title != '') echo '<h2 class="section-title">' . esc_html($onepress_service_title) . '</h2>'; ?>
-                    <?php if ( $desc = get_theme_mod( 'onepress_services_desc' ) ) {
+                    <?php if ( $desc ) {
                         echo '<div class="section-desc">' . wp_kses_post( $desc ) . '</div>';
                     } ?>
                 </div>
+                <?php } ?>
                 <div class="row">
                     <?php
                     if ( ! empty( $page_ids ) ) {

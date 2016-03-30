@@ -15,6 +15,7 @@ if ( ! empty( $page_ids ) ) {
         }; ?>" <?php do_action('onepress_section_atts', 'about'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-about section-padding onepage-section', 'about')); ?>">
             <?php do_action('onepress_section_before_inner', 'about'); ?>
             <div class="container">
+                <?php if ( $onepress_about_title || $onepress_about_subtitle || $onepress_about_desc ){ ?>
                 <div class="section-title-area">
                     <?php if ($onepress_about_subtitle != '') {
                         echo '<h5 class="section-subtitle">' . esc_html($onepress_about_subtitle) . '</h5>';
@@ -26,6 +27,7 @@ if ( ! empty( $page_ids ) ) {
                         echo '<div class="section-desc">' . wp_kses_post($onepress_about_desc) . '</div>';
                     } ?>
                 </div>
+                <?php } ?>
                 <div class="row">
                     <?php
                     if (!empty($page_ids)) {

@@ -1,12 +1,20 @@
 ====================================================================
 CHANGELOG
 ====================================================================
-= 1.1.7 =
+## 1.1.8
+* Update pot file.
+* Change text area to JS Editor control.
+* Fix a bug lost custom section styling if section id not set.
+* Add custom css code in customizer.
+* Add action notification bubble in menu.
+* Add condition to check section heading area.
+
+## 1.1.7
 * Change "Add a item" to "Add an item"
 * Fix checkbox in repeater control always checked.
 
 
-= 1.1.6 =
+## 1.1.6
 * Update hero section template
 * Fix a bug missing quicktags tool bar for editor control.
 * Add breadcrumb for archive page
