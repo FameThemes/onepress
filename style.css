@@ -2243,6 +2243,12 @@ input[type="radio"], input[type="checkbox"] {
 	transform: scale(1.1);
 }
 
+@media screen and (min-width: 940px) {
+	.feature-item.col-lg-3:nth-child(4n+1), .feature-item.col-lg-4:nth-child(3n+1), .feature-item.col-lg-6:nth-child(2n+1) {
+		clear: left;
+	}
+}
+
 .feature-media {
 	text-align: center;
 	margin-bottom: 20px;
