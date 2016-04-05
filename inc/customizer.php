@@ -5,7 +5,6 @@
  * @package OnePress
  */
 
-
 /**
  * Add postMessage support for site title and description for the Theme Customizer.
  *
@@ -13,13 +12,12 @@
  */
 function onepress_customize_register( $wp_customize ) {
 
-
-	// Load custom controls
+	// Load custom controls.
 	require get_template_directory() . '/inc/customizer-controls.php';
 
-	// Remove default sections
-	$wp_customize->remove_section('colors');
-	$wp_customize->remove_section('background_image');
+	// Remove default sections.
+	$wp_customize->remove_section( 'colors' );
+	$wp_customize->remove_section( 'background_image' );
 
 	// Custom WP default control & settings.
 	$wp_customize->get_section( 'title_tagline' )->title = esc_html__('Site Title, Tagline & Logo', 'onepress');
@@ -52,7 +50,7 @@ function onepress_customize_register( $wp_customize ) {
 	}
 
 	/*------------------------------------------------------------------------*/
-    /*  Site Identity
+    /*  Site Identity.
     /*------------------------------------------------------------------------*/
 
     	$wp_customize->add_setting( 'onepress_site_image_logo',
