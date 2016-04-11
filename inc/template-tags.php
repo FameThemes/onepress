@@ -501,7 +501,7 @@ if ( ! function_exists( 'onepress_get_section_about_data' ) ) {
                 }
             }
         }
-        
+
         return $page_ids;
     }
 }
@@ -548,20 +548,6 @@ if ( ! function_exists( 'onepress_get_section_services_data' ) ) {
             }
         }
         // if still empty data then get some page for demo
-        if (empty($page_ids)) {
-            $current_pos_id = get_the_ID();
-            $args = array(
-                'posts_per_page' => 4,
-                'orderby' => 'date',
-                'order' => 'DESC',
-                'exclude' => $current_pos_id,
-                'post_type' => 'page',
-            );
-            $posts_array = get_posts($args);
-            foreach ($posts_array as $p) {
-                $page_ids[] = array('content_page' => $p->ID, 'icon' => 'gg', 'enable_link' => 0);
-            }
-        }
         return $page_ids;
     }
 }
