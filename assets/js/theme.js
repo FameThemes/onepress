@@ -88,8 +88,7 @@
  * Text rotator
  */
 ( function() {
-    console.log( onepress_js_settings );
-
+   
     jQuery(".js-rotating").Morphext({
         // The [in] animation type. Refer to Animate.css for a list of available animations.
         animation: onepress_js_settings.hero_animation,
