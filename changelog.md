@@ -1,6 +1,13 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.1.9
+* Add Hero options settings
+* Remove default service data.
+* Remove default about data.
+* Fix feature items break layout.
+
+
 ## 1.1.8
 * Update pot file.
 * Change text area to JS Editor control.
