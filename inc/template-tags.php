@@ -542,7 +542,12 @@ if ( ! function_exists( 'onepress_get_section_services_data' ) ) {
                 if (isset ($v['content_page'])) {
                     $v['content_page'] = absint($v['content_page']);
                     if ($v['content_page'] > 0) {
-                        $page_ids[] = wp_parse_args($v, array('icon' => 'gg', 'enable_link' => 0));
+                        $page_ids[] = wp_parse_args($v, array(
+                            'icon_type' => 'icon',
+                            'image' => '',
+                            'icon' => 'gg',
+                            'enable_link' => 0
+                        ));
                     }
                 }
             }

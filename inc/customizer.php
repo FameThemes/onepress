@@ -1351,7 +1351,7 @@ function onepress_customize_register( $wp_customize ) {
         )
     ));
 
-    // Services layout
+    // Features layout
     $wp_customize->add_setting( 'onepress_features_layout',
         array(
             'sanitize_callback' => 'sanitize_text_field',
@@ -1409,11 +1409,26 @@ function onepress_customize_register( $wp_customize ) {
                         'title' => esc_html__('Title', 'onepress'),
                         'type'  =>'text',
                     ),
+					'icon_type'  => array(
+						'title' => esc_html__('Custom icon', 'onepress'),
+						'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
+						'type'  =>'select',
+						'options' => array(
+							'icon' => esc_html__('Icon', 'onepress'),
+							'image' => esc_html__('image', 'onepress'),
+						),
+					),
                     'icon'  => array(
                         'title' => esc_html__('Icon', 'onepress'),
                         'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
                         'type'  =>'text',
+						'required' => array( 'icon_type', '=', 'icon' ),
                     ),
+					'image'  => array(
+						'title' => esc_html__('Image', 'onepress'),
+						'type'  =>'media',
+						'required' => array( 'icon_type', '=', 'image' ),
+					),
                     'desc'  => array(
                         'title' => esc_html__('Description', 'onepress'),
                         'type'  =>'textarea',
@@ -1606,12 +1621,27 @@ function onepress_customize_register( $wp_customize ) {
                     'limited_msg' 	=> wp_kses_post( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ),
 
 					'fields'    => array(
-						'icon' => array(
+						'icon_type'  => array(
 							'title' => esc_html__('Custom icon', 'onepress'),
-							'type'  =>'text',
-							'desc'  => sprintf( wp_kses_post('Paste your <a target="_blank" href="%1$s">Font Awesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
-							'default' => esc_html__( 'gg', 'onepress' ),
+							'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
+							'type'  =>'select',
+							'options' => array(
+								'icon' => esc_html__('Icon', 'onepress'),
+								'image' => esc_html__('image', 'onepress'),
+							),
 						),
+						'icon'  => array(
+							'title' => esc_html__('Icon', 'onepress'),
+							'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
+							'type'  =>'text',
+							'required' => array( 'icon_type', '=', 'icon' ),
+						),
+						'image'  => array(
+							'title' => esc_html__('Image', 'onepress'),
+							'type'  =>'media',
+							'required' => array( 'icon_type', '=', 'image' ),
+						),
+
 						'content_page'  => array(
 							'title' => esc_html__('Select a page', 'onepress'),
 							'type'  =>'select',

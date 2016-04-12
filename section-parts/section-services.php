@@ -49,9 +49,22 @@ if ( ! empty( $page_ids ) ) {
                             $post = get_post($post_id);
                             setup_postdata($post);
                             $settings['icon'] = trim($settings['icon']);
-                            if ($settings['icon'] != '' && strpos($settings['icon'], 'fa-') !== 0) {
-                                $settings['icon'] = 'fa-' . $settings['icon'];
+
+                            $media = '';
+
+                            if ( $settings['icon_type'] = 'image' && $settings['image'] ){
+                                $url = onepress_get_media_url( $settings['image'] );
+                                if ( $url ) {
+                                    $media = '<div class="icon-image service-thumbnail"><img src="'.esc_url( $url ).'" alt=""></div>';
+                                }
+                            } else if ( $settings['icon'] ) {
+                                $settings['icon'] = trim( $settings['icon'] );
+                                if ($settings['icon'] != '' && strpos($settings['icon'], 'fa-') !== 0) {
+                                    $settings['icon'] = 'fa-' . $settings['icon'];
+                                }
+                                $media = '<span class="fa-stack fa-5x"><i class="fa fa-circle fa-stack-2x icon-background-default"></i> <i class="feature-icon fa '.esc_attr( $settings['icon'] ).' fa-stack-1x"></i></span>';
                             }
+
                             $classes = 'col-sm-12 col-md-6 col-lg-'.$layout;
                             if ($j >= $columns) {
                                 $j = 1;
@@ -77,11 +90,9 @@ if ( ! empty( $page_ids ) ) {
                                             ?>
                                         </div>
                                     <?php } ?>
-                                    <?php if ( $settings['icon'] != '' ) { ?>
-                                        <div class="service-image">
-                                            <i class="fa <?php echo esc_attr($settings['icon']); ?> fa-5x"></i>
-                                        </div>
-                                    <?php } ?>
+                                    <?php if ( $media != '' ) {
+                                        echo $media;
+                                    } ?>
                                     <div class="service-content">
                                         <h4 class="service-title"><?php the_title(); ?></h4>
                                         <?php the_excerpt(); ?>
