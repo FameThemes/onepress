@@ -6,6 +6,7 @@ CHANGELOG
 * Remove default service data.
 * Remove default about data.
 * Fix feature items break layout.
+* Add Features/Services item image.
 
 
 ## 1.1.8
