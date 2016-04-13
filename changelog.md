@@ -7,7 +7,8 @@ CHANGELOG
 * Remove default about data.
 * Fix feature items break layout.
 * Add Features/Services item image.
-
+* Add Features/Services item image.
+* Add Support feature description HTM
 
 ## 1.1.8
 * Update pot file.
