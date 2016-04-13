@@ -1431,7 +1431,7 @@ function onepress_customize_register( $wp_customize ) {
 					),
                     'desc'  => array(
                         'title' => esc_html__('Description', 'onepress'),
-                        'type'  =>'textarea',
+                        'type'  =>'editor',
                     ),
                     'link'  => array(
                         'title' => esc_html__('Custom Link', 'onepress'),
