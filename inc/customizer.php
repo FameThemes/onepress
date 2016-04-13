@@ -5,7 +5,6 @@
  * @package OnePress
  */
 
-
 /**
  * Add postMessage support for site title and description for the Theme Customizer.
  *
@@ -13,13 +12,12 @@
  */
 function onepress_customize_register( $wp_customize ) {
 
-
-	// Load custom controls
+	// Load custom controls.
 	require get_template_directory() . '/inc/customizer-controls.php';
 
-	// Remove default sections
-	$wp_customize->remove_section('colors');
-	$wp_customize->remove_section('background_image');
+	// Remove default sections.
+	$wp_customize->remove_section( 'colors' );
+	$wp_customize->remove_section( 'background_image' );
 
 	// Custom WP default control & settings.
 	$wp_customize->get_section( 'title_tagline' )->title = esc_html__('Site Title, Tagline & Logo', 'onepress');
@@ -52,7 +50,7 @@ function onepress_customize_register( $wp_customize ) {
 	}
 
 	/*------------------------------------------------------------------------*/
-    /*  Site Identity
+    /*  Site Identity.
     /*------------------------------------------------------------------------*/
 
     	$wp_customize->add_setting( 'onepress_site_image_logo',
@@ -454,6 +452,70 @@ function onepress_customize_register( $wp_customize ) {
 					'label'       => esc_html__('MailChimp Action URL', 'onepress'),
 					'section'     => 'onepress_newsletter',
 					'description' => 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>'
+				)
+			);
+
+			/* Hero options
+			----------------------------------------------------------------------*/
+			$wp_customize->add_section(
+				'onepress_hero_options',
+				array(
+					'title'       => __( 'Hero Options', 'onepress' ),
+					'panel'       => 'onepress_options',
+				)
+			);
+
+
+			$wp_customize->add_setting(
+				'onepress_hero_option_animation',
+				array(
+					'default'              => 'flipInX',
+					'capability'           => 'edit_themes',
+					'sanitize_callback'    => 'sanitize_text_field',
+				)
+			);
+
+			/**
+			 * @see https://github.com/daneden/animate.css
+			 */
+
+			$animations_css = 'bounce flash pulse rubberBand shake headShake swing tada wobble jello bounceIn bounceInDown bounceInLeft bounceInRight bounceInUp bounceOut bounceOutDown bounceOutLeft bounceOutRight bounceOutUp fadeIn fadeInDown fadeInDownBig fadeInLeft fadeInLeftBig fadeInRight fadeInRightBig fadeInUp fadeInUpBig fadeOut fadeOutDown fadeOutDownBig fadeOutLeft fadeOutLeftBig fadeOutRight fadeOutRightBig fadeOutUp fadeOutUpBig flipInX flipInY flipOutX flipOutY lightSpeedIn lightSpeedOut rotateIn rotateInDownLeft rotateInDownRight rotateInUpLeft rotateInUpRight rotateOut rotateOutDownLeft rotateOutDownRight rotateOutUpLeft rotateOutUpRight hinge rollIn rollOut zoomIn zoomInDown zoomInLeft zoomInRight zoomInUp zoomOut zoomOutDown zoomOutLeft zoomOutRight zoomOutUp slideInDown slideInLeft slideInRight slideInUp slideOutDown slideOutLeft slideOutRight slideOutUp';
+
+			$animations_css = explode( ' ', $animations_css );
+			$animations = array();
+			foreach ( $animations_css as $v ) {
+				$v =  trim( $v );
+				if ( $v ){
+					$animations[ $v ]= $v;
+				}
+
+			}
+
+			$wp_customize->add_control(
+				'onepress_hero_option_animation',
+				array(
+					'label'    => __( 'Text animation', 'onepress' ),
+					'section'  => 'onepress_hero_options',
+					'type'     => 'select',
+					'choices' => $animations,
+				)
+			);
+
+
+			$wp_customize->add_setting(
+				'onepress_hero_option_speed',
+				array(
+					'default'              => '5000',
+					'sanitize_callback'    => 'sanitize_text_field',
+				)
+			);
+
+			$wp_customize->add_control(
+				'onepress_hero_option_speed',
+				array(
+					'label'    => __( 'Speed', 'onepress' ),
+					'description' => 'The delay between the changing of each phrase in milliseconds.',
+					'section'  => 'onepress_hero_options',
 				)
 			);
 
@@ -1289,7 +1351,7 @@ function onepress_customize_register( $wp_customize ) {
         )
     ));
 
-    // Services layout
+    // Features layout
     $wp_customize->add_setting( 'onepress_features_layout',
         array(
             'sanitize_callback' => 'sanitize_text_field',
@@ -1347,14 +1409,29 @@ function onepress_customize_register( $wp_customize ) {
                         'title' => esc_html__('Title', 'onepress'),
                         'type'  =>'text',
                     ),
+					'icon_type'  => array(
+						'title' => esc_html__('Custom icon', 'onepress'),
+						'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
+						'type'  =>'select',
+						'options' => array(
+							'icon' => esc_html__('Icon', 'onepress'),
+							'image' => esc_html__('image', 'onepress'),
+						),
+					),
                     'icon'  => array(
                         'title' => esc_html__('Icon', 'onepress'),
                         'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
                         'type'  =>'text',
+						'required' => array( 'icon_type', '=', 'icon' ),
                     ),
+					'image'  => array(
+						'title' => esc_html__('Image', 'onepress'),
+						'type'  =>'media',
+						'required' => array( 'icon_type', '=', 'image' ),
+					),
                     'desc'  => array(
                         'title' => esc_html__('Description', 'onepress'),
-                        'type'  =>'textarea',
+                        'type'  =>'editor',
                     ),
                     'link'  => array(
                         'title' => esc_html__('Custom Link', 'onepress'),
@@ -1544,12 +1621,27 @@ function onepress_customize_register( $wp_customize ) {
                     'limited_msg' 	=> wp_kses_post( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ),
 
 					'fields'    => array(
-						'icon' => array(
+						'icon_type'  => array(
 							'title' => esc_html__('Custom icon', 'onepress'),
-							'type'  =>'text',
-							'desc'  => sprintf( wp_kses_post('Paste your <a target="_blank" href="%1$s">Font Awesome</a> icon class name here.', 'onepress'), 'http://fortawesome.github.io/Font-Awesome/icons/' ),
-							'default' => esc_html__( 'gg', 'onepress' ),
+							'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
+							'type'  =>'select',
+							'options' => array(
+								'icon' => esc_html__('Icon', 'onepress'),
+								'image' => esc_html__('image', 'onepress'),
+							),
 						),
+						'icon'  => array(
+							'title' => esc_html__('Icon', 'onepress'),
+							'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
+							'type'  =>'text',
+							'required' => array( 'icon_type', '=', 'icon' ),
+						),
+						'image'  => array(
+							'title' => esc_html__('Image', 'onepress'),
+							'type'  =>'media',
+							'required' => array( 'icon_type', '=', 'image' ),
+						),
+
 						'content_page'  => array(
 							'title' => esc_html__('Select a page', 'onepress'),
 							'type'  =>'select',

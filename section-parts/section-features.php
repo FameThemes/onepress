@@ -26,22 +26,37 @@ if ( !$disable && !empty( $data ) ) {
             <?php
             $layout = intval( get_theme_mod( 'onepress_features_layout', 3 ) );
             foreach ( $data as $k => $f ) {
-                $f['icon'] = trim( $f['icon'] );
-                if ($f['icon'] != '' && strpos($f['icon'], 'fa-') !== 0) {
-                    $f['icon'] = 'fa-' . $f['icon'];
+                $media = '';
+                $f =  wp_parse_args( $f, array(
+                    'icon_type' => 'icon',
+                    'icon' => 'gg',
+                    'image' => '',
+                    'link' => '',
+                    'title' => '',
+                    'desc' => '',
+                ) );
+                if ( $f['icon_type'] == 'image' && $f['image'] ){
+                    $url = onepress_get_media_url( $f['image'] );
+                    if ( $url ) {
+                        $media = '<span class="icon-image"><img src="'.esc_url( $url ).'" alt=""></span>';
+                    }
+                } else if ( $f['icon'] ) {
+                    $f['icon'] = trim( $f['icon'] );
+                    if ($f['icon'] != '' && strpos($f['icon'], 'fa-') !== 0) {
+                        $f['icon'] = 'fa-' . $f['icon'];
+                    }
+                    $media = '<span class="fa-stack fa-5x"><i class="fa fa-circle fa-stack-2x icon-background-default"></i> <i class="feature-icon fa '.esc_attr( $f['icon'] ).' fa-stack-1x"></i></span>';
                 }
+
                 ?>
                 <div class="feature-item col-lg-<?php echo esc_attr( $layout ); ?> col-md-6 wow slideInUp">
                     <div class="feature-media">
                         <?php if ( $f['link'] ) { ?><a href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?>
-                        <span class="fa-stack fa-5x">
-                            <i class="fa fa-circle fa-stack-2x icon-background-default"></i>
-                            <i class="feature-icon fa <?php echo esc_attr( $f['icon'] ); ?> fa-stack-1x"></i>
-                        </span>
+                        <?php echo $media; ?>
                         <?php if ( $f['link'] )  { ?></a><?php } ?>
                     </div>
                     <h4><?php if ( $f['link'] ) { ?><a href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?><?php echo esc_html( $f['title'] ); ?><?php if ( $f['link'] )  { ?></a><?php } ?></h4>
-                    <p><?php echo esc_html( $f['desc'] ); ?></p>
+                    <div><?php echo wp_kses_post( $f['desc'] ); ?></div>
                 </div>
             <?php
             }// end loop featues
