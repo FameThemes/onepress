@@ -35,7 +35,7 @@ if ( !$disable && !empty( $data ) ) {
                     'title' => '',
                     'desc' => '',
                 ) );
-                if ( $f['icon_type'] = 'image' && $f['image'] ){
+                if ( $f['icon_type'] == 'image' && $f['image'] ){
                     $url = onepress_get_media_url( $f['image'] );
                     if ( $url ) {
                         $media = '<span class="icon-image"><img src="'.esc_url( $url ).'" alt=""></span>';

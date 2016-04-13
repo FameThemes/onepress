@@ -52,7 +52,7 @@ if ( ! empty( $page_ids ) ) {
 
                             $media = '';
 
-                            if ( $settings['icon_type'] = 'image' && $settings['image'] ){
+                            if ( $settings['icon_type'] == 'image' && $settings['image'] ){
                                 $url = onepress_get_media_url( $settings['image'] );
                                 if ( $url ) {
                                     $media = '<div class="icon-image service-thumbnail"><img src="'.esc_url( $url ).'" alt=""></div>';
