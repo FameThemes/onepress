@@ -258,7 +258,7 @@
     }
 
     // Navigation click to section.
-    jQuery('.home #site-navigation li a[href*="#"]').on('click', function(event){
+    jQuery('.home #site-navigation li a[href*=#]').on('click', function(event){
         event.preventDefault();
         smoothScroll(jQuery(this.hash));
     });
@@ -287,7 +287,7 @@
     });
 
     // Other scroll to elements
-    jQuery('#hero a[href*="#"]:not([href="#"]), .parallax-content a[href*="#"]:not([href="#"]), .back-top-top').on('click', function(event){
+    jQuery('#hero a[href*=#]:not([href=#]), .parallax-content a[href*=#]:not([href=#]), .back-top-top').on('click', function(event){
         event.preventDefault();
         smoothScroll(jQuery(this.hash));
     });
