@@ -2646,6 +2646,7 @@ input[type="radio"], input[type="checkbox"] {
 	display: block;
 	padding-left: 45px;
 	font-style: italic;
+	line-height: 2;
 }
 
 .section-contact .address-contact .fa-inverse {
