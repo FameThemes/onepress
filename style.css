@@ -2300,8 +2300,8 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .section-services .service-item .service-image img {
-	max-width: 75px;
-	border-radius: 1000px;
+	max-width: 120px;
+	height: auto;
 }
 
 .section-services .service-item .service-image i {
