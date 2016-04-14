@@ -1,6 +1,10 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.2.0
+* Fixed JS syntax error for WP 4.5.
+* Fixed fa icon and text alignment in address area.
+
 ## 1.1.9
 * Add Hero options settings
 * Remove default service data.
