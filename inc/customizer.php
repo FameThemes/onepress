@@ -93,8 +93,7 @@ function onepress_customize_register( $wp_customize ) {
 				'panel'       => 'onepress_options',
 			)
 		);
-
-
+	
 			// Disable Sticky Header
 			$wp_customize->add_setting( 'onepress_sticky_header_disable',
 				array(
@@ -451,7 +450,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'label'       => esc_html__('MailChimp Action URL', 'onepress'),
 					'section'     => 'onepress_newsletter',
-					'description' => 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>'
+					'description' => __( 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>', 'onepress' )
 				)
 			);
 
@@ -514,7 +513,7 @@ function onepress_customize_register( $wp_customize ) {
 				'onepress_hero_option_speed',
 				array(
 					'label'    => __( 'Speed', 'onepress' ),
-					'description' => 'The delay between the changing of each phrase in milliseconds.',
+					'description' => esc_html__( 'The delay between the changing of each phrase in milliseconds.', 'onepress' ),
 					'section'  => 'onepress_hero_options',
 				)
 			);
@@ -574,7 +573,7 @@ function onepress_customize_register( $wp_customize ) {
 				'section'     => 'onepress_news_settings',
 				'type'        => 'custom_message',
 				'section'     => 'onepress_order_styling',
-				'description' => wp_kses_post( ' Check out <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus version</a> for full control over <strong>section order</strong> and <strong>section styling</strong>! ', 'onepress' )
+				'description' => wp_kses_post( 'Check out <a target="_blank" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus version</a> for full control over <strong>section order</strong> and <strong>section styling</strong>! ', 'onepress' )
 			)
 		));
 
@@ -628,7 +627,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'label' 		=> esc_html__('Section ID:', 'onepress'),
 					'section' 		=> 'onepress_hero_settings',
-					'description'   => 'The section id, we will use this for link anchor.'
+					'description'   => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
 				)
 			);
 
@@ -659,7 +658,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'label'           => esc_html__('Padding Top:', 'onepress'),
 					'section'         => 'onepress_hero_settings',
-					'description'     => 'The hero content padding top in percent (%).',
+					'description'     => esc_html__( 'The hero content padding top in percent (%).', 'onepress' ),
 					'active_callback' => 'onepress_hero_fullscreen_callback'
 				)
 			);
@@ -675,7 +674,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'label'           => esc_html__('Padding Bottom:', 'onepress'),
 					'section'         => 'onepress_hero_settings',
-					'description'     => 'The hero content padding bottom in percent (%).',
+					'description'     => esc_html__( 'The hero content padding bottom in percent (%).', 'onepress' ),
 					'active_callback' => 'onepress_hero_fullscreen_callback'
 				)
 			);
@@ -1125,7 +1124,7 @@ function onepress_customize_register( $wp_customize ) {
 			array(
 				'label' 		=> esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_about_settings',
-				'description'   => 'The section id, we will use this for link anchor.'
+				'description'   => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
 			)
 		);
 
@@ -1300,7 +1299,7 @@ function onepress_customize_register( $wp_customize ) {
         array(
             'label' 		=> esc_html__('Section ID:', 'onepress'),
             'section' 		=> 'onepress_features_settings',
-            'description'   => 'The section id, we will use this for link anchor.'
+            'description'   => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
         )
     );
 
@@ -1704,7 +1703,7 @@ function onepress_customize_register( $wp_customize ) {
 			array(
 				'label'     	=> esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_counter_settings',
-				'description'   => 'The section id, we will use this for link anchor.'
+				'description'   => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
 			)
 		);
 
@@ -2028,7 +2027,7 @@ function onepress_customize_register( $wp_customize ) {
 			array(
 				'label'     => esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_news_settings',
-				'description'   => 'The section id, we will use this for link anchor.'
+				'description'   => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
 			)
 		);
 
@@ -2118,7 +2117,7 @@ function onepress_customize_register( $wp_customize ) {
 			array(
 				'label'       => esc_html__('More News button link', 'onepress'),
 				'section'     => 'onepress_news_settings',
-				'description' => 'It should be your blog page link.'
+				'description' => esc_html__(  'It should be your blog page link.', 'onepress' )
 			)
 		);
 		$wp_customize->add_setting( 'onepress_news_more_text',
@@ -2183,7 +2182,7 @@ function onepress_customize_register( $wp_customize ) {
 			array(
 				'label'     => esc_html__('Section ID:', 'onepress'),
 				'section' 		=> 'onepress_contact_settings',
-				'description'   => 'The section id, we will use this for link anchor.'
+				'description'   => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
 			)
 		);
 
