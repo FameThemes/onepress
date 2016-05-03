@@ -3,6 +3,7 @@ CHANGELOG
 ====================================================================
 ## 1.2.1
 * Improve menu scroll.
+* Fix translation issues.
 
 ## 1.2.0
 * Fixed JS syntax error for WP 4.5.

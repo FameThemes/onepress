@@ -2128,7 +2128,7 @@ function onepress_customize_register( $wp_customize ) {
 		);
 		$wp_customize->add_control( 'onepress_news_more_text',
 			array(
-				'label'     	=> esc_html__('Section Subtitle', 'onepress'),
+				'label'     	=> esc_html__('More News Button Text', 'onepress'),
 				'section' 		=> 'onepress_news_settings',
 				'description'   => '',
 			)
