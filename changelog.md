@@ -4,7 +4,6 @@ CHANGELOG
 ## 1.2.1
 * Improve menu scroll.
 * Fix translation issues.
-* Change smooth scroll for hero.
 
 ## 1.2.0
 * Fixed JS syntax error for WP 4.5.

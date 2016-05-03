@@ -289,7 +289,7 @@
     });
 
     // Other scroll to elements
-    jQuery('.hero-slideshow-wrapper a[href*="#"]:not([href="#"]), .parallax-content a[href*="#"]:not([href="#"]), .back-top-top').on('click', function(event){
+    jQuery('#hero a[href*="#"]:not([href="#"]), .parallax-content a[href*="#"]:not([href="#"]), .back-top-top').on('click', function(event){
         event.preventDefault();
         smoothScroll(jQuery(this.hash));
     });
