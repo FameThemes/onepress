@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.2.1
+* Improve menu scroll.
+
 ## 1.2.0
 * Fixed JS syntax error for WP 4.5.
 * Fixed fa icon and text alignment in address area.

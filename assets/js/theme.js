@@ -267,15 +267,17 @@
     jQuery(window).scroll(function() {
         var currentNode = null;
         jQuery('.onepage-section').each(function(){
-            var currentId = jQuery(this).attr('id');
+            var currentId = jQuery(this).attr('id') || '';
 
-            if(jQuery('#'+currentId).length>0 ) {
-                if(jQuery(window).scrollTop() >= jQuery('#'+currentId).offset().top - h-10) {
-                    currentNode = currentId;
-                }
+            if(jQuery(window).scrollTop() >= jQuery(this).offset().top - h-10) {
+                currentNode = currentId;
             }
+
         });
-        jQuery('#site-navigation li').removeClass('onepress-current-item').find('a[href$="#'+currentNode+'"]').parent().addClass('onepress-current-item');
+        jQuery('#site-navigation li').removeClass('onepress-current-item');
+        if ( currentNode ) {
+            jQuery('#site-navigation li').find('a[href$="#' + currentNode + '"]').parent().addClass('onepress-current-item');
+        }
     });
 
     // Move to the right section on page load.
