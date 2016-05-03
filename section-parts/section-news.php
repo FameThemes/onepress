@@ -11,8 +11,10 @@ $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', esc_html__(
 
 $desc = get_theme_mod( 'onepress_news_desc' );
 ?>
+<?php if ( ! onepress_is_selective_refresh() ){ ?>
 <section id="<?php if ( $onepress_news_id != '' ) echo $onepress_news_id; ?>" <?php do_action( 'onepress_section_atts', 'news' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-news section-padding onepage-section', 'news' ) ); ?>">
-	<?php do_action( 'onepress_section_before_inner', 'news' ); ?>
+<?php } ?>
+    <?php do_action( 'onepress_section_before_inner', 'news' ); ?>
 	<div class="container">
 		<?php if ( $onepress_news_title ||  $onepress_news_subtitle ||  $desc ) { ?>
 		<div class="section-title-area">
@@ -65,7 +67,9 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 		</div>
 	</div>
 	<?php do_action( 'onepress_section_after_inner', 'news' ); ?>
+<?php if ( ! onepress_is_selective_refresh() ){ ?>
 </section>
+<?php } ?>
 <?php endif;
 wp_reset_query();
 

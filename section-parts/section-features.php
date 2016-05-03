@@ -8,8 +8,10 @@ $data  = onepress_get_features_data();
 if ( !$disable && !empty( $data ) ) {
     $desc = get_theme_mod( 'onepress_features_desc' );
 ?>
+<?php if ( ! onepress_is_selective_refresh() ){ ?>
 <section id="<?php if ( $id != '') echo $id; ?>" <?php do_action('onepress_section_atts', 'features'); ?>
          class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-features section-padding section-meta onepage-section', 'features')); ?>">
+<?php } ?>
     <?php do_action('onepress_section_before_inner', 'features'); ?>
     <div class="container">
         <?php if ( $title ||  $subtitle || $desc ){ ?>
@@ -66,5 +68,8 @@ if ( !$disable && !empty( $data ) ) {
         </div>
     </div>
     <?php do_action('onepress_section_after_inner', 'features'); ?>
+
+<?php if ( ! onepress_is_selective_refresh() ){ ?>
 </section>
+<?php } ?>
 <?php } ?>

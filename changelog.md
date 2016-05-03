@@ -5,8 +5,8 @@ CHANGELOG
 * Improve menu scroll.
 * Fix translation issues.
 * Change smooth scroll for hero.
-* Support custom logo fow WP 4.5
-* Add an option to change footer background color.
+* Support custom logo for WP 4.5
+* Add options to change footer background color.
 
 ## 1.2.0
 * Fixed JS syntax error for WP 4.5.

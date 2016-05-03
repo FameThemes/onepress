@@ -91,7 +91,7 @@ if ( ! function_exists( 'onepress_setup' ) ) :
             'width'       => 160,
             'flex-height' => true,
             'flex-width'  => true,
-            //'header-text' => array( 'site-title',  ), // 'site-description'
+            //'header-text' => array( 'site-title',  'site-description' ), //
         ) );
 	}
 endif;

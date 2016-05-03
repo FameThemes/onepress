@@ -73,6 +73,38 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
         */
+        $is_old_logo = get_theme_mod( 'onepress_site_image_logo' );
+
+        $wp_customize->add_setting( 'onepress_hide_sitetitle',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_checkbox',
+                'default'           => $is_old_logo ? 1: 0,
+            )
+        );
+        $wp_customize->add_control(
+            'onepress_hide_sitetitle',
+            array(
+                'label' 		=> esc_html__('Hide site title', 'onepress'),
+                'section' 		=> 'title_tagline',
+                'type'          => 'checkbox',
+            )
+        );
+
+        $wp_customize->add_setting( 'onepress_hide_tagline',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_checkbox',
+                'default'           => $is_old_logo ? 1: 0,
+            )
+        );
+        $wp_customize->add_control(
+            'onepress_hide_tagline',
+            array(
+                'label' 		=> esc_html__('Hide site tagline', 'onepress'),
+                'section' 		=> 'title_tagline',
+                'type'          => 'checkbox',
+
+            )
+        );
 
 	/*------------------------------------------------------------------------*/
     /*  Site Options
@@ -2423,6 +2455,10 @@ function onepress_customize_register( $wp_customize ) {
 
 }
 add_action( 'customize_register', 'onepress_customize_register' );
+/**
+ * Selective refresh
+ */
+require get_template_directory() . '/inc/customizer-selective-refresh.php';
 
 
 /*------------------------------------------------------------------------*/

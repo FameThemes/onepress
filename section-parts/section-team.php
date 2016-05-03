@@ -9,8 +9,10 @@ if ( ! empty( $user_ids ) ) {
     $desc = get_theme_mod( 'onepress_team_desc' );
     ?>
     <?php if ( ! $onepress_team_disable ) : ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         <section id="<?php if ($onepress_team_id != '') echo $onepress_team_id; ?>" <?php do_action('onepress_section_atts', 'team'); ?>
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-team section-padding section-meta onepage-section', 'team')); ?>">
+        <?php } ?>
             <?php do_action('onepress_section_before_inner', 'team'); ?>
             <div class="container">
                 <?php if ( $onepress_team_title || $onepress_team_subtitle || $desc ){ ?>
@@ -68,6 +70,8 @@ if ( ! empty( $user_ids ) ) {
                 </div>
             </div>
             <?php do_action('onepress_section_after_inner', 'team'); ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         </section>
+        <?php } ?>
     <?php endif;
 }

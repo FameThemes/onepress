@@ -10,9 +10,12 @@ $content_source = get_theme_mod( 'onepress_about_content_source' );
 if ( ! empty( $page_ids ) ) {
     ?>
     <?php if (!$onepress_about_disable) { ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         <section id="<?php if ($onepress_about_id != '') {
             echo $onepress_about_id;
         }; ?>" <?php do_action('onepress_section_atts', 'about'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-about section-padding onepage-section', 'about')); ?>">
+        <?php } ?>
+
             <?php do_action('onepress_section_before_inner', 'about'); ?>
             <div class="container">
                 <?php if ( $onepress_about_title || $onepress_about_subtitle || $onepress_about_desc ){ ?>
@@ -30,10 +33,10 @@ if ( ! empty( $page_ids ) ) {
                 <?php } ?>
                 <div class="row">
                     <?php
-                    if (!empty($page_ids)) {
+                    if ( ! empty ( $page_ids ) ) {
                         $col = 3;
                         $num_col = 4;
-                        $n = count($page_ids);
+                        $n = count( $page_ids );
                         if ($n < 4) {
                             switch ($n) {
                                 case 3:
@@ -50,10 +53,11 @@ if ( ! empty( $page_ids ) ) {
                             }
                         }
                         $j = 0;
-                        foreach ($page_ids as $post_id => $settings) {
+                        global $post;
+                        foreach ( $page_ids as $post_id => $settings ) {
                             $post_id = $settings['content_page'];
-                            $post = get_post($post_id);
-                            setup_postdata($post);
+                            $post = get_post( $post_id );
+                            setup_postdata( $post );
                             $class = 'col-lg-' . $col;
                             if ($n == 1) {
                                 $class .= ' col-sm-12 ';
@@ -111,6 +115,8 @@ if ( ! empty( $page_ids ) ) {
                 </div>
             </div>
             <?php do_action('onepress_section_after_inner', 'about'); ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         </section>
+        <?php } ?>
     <?php }
 }

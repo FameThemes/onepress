@@ -7,6 +7,50 @@
  * @package OnePress
  */
 
+/**
+ * Display header brand
+ * @since 1.2.1
+ */
+function onepress_site_logo(){
+    $is_old_logo = false;
+    $is_wp_4_5   =  function_exists( 'the_custom_logo' );
+    $html = '';
+    if ( $is_wp_4_5 && has_custom_logo() ) {
+        the_custom_logo();
+    } else {
+        $site_image_logo = get_theme_mod( 'onepress_site_image_logo' );
+        /**
+         *  Fallback OnePress 1.2.0 and WordPress < 4.5
+         */
+        if ( $site_image_logo != "" ) {
+            $is_old_logo = true;
+            $html .= '<a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
+            $html .= '<img src="' . $site_image_logo . '" alt="' . get_bloginfo('title') . '">';
+            $html .= '</a>';
+        }
+    }
+
+    $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle', $is_old_logo ? 1: 0 );
+    $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', $is_old_logo ? 1: 0 );
+
+    if ( ! $hide_sitetile ) {
+        if ( is_front_page() && is_home() ) {
+            $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
+        } else {
+            $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
+        }
+    }
+
+    if ( ! $hide_tagline ) {
+        $description = get_bloginfo( 'description', 'display' );
+        if ( $description || is_customize_preview() ) {
+            $html .= '<p class="site-description">'.$description.'</p>';
+        }
+    }
+
+    echo $html;
+}
+
 add_action( 'onepress_site_start', 'onepress_site_header' );
 if ( ! function_exists( 'onepress_site_header' ) ) {
     /**
@@ -18,28 +62,7 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
             <div class="container">
                 <div class="site-branding">
                     <?php
-
-                    $is_wp_4_5 =  function_exists( 'the_custom_logo' );
-                    if ( $is_wp_4_5 && has_custom_logo() ) {
-                        the_custom_logo();
-                    } else {
-                        $site_image_logo = get_theme_mod('onepress_site_image_logo');
-                        /**
-                         *  Fallback OnePress 1.2.0 and WordPress < 4.5
-                         */
-                        if ( $site_image_logo != "" ) {
-                            echo '<a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
-                            echo '<img src="' . $site_image_logo . '" alt="' . get_bloginfo('title') . '">';
-                            echo '</a>';
-                        } else {
-                            if (is_front_page() && is_home()) :
-                                echo '<h1 class="site-title"><a href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
-                            else :
-                                echo '<p class="site-title"><a href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
-                            endif;
-                        }
-
-                    }
+                    onepress_site_logo();
                     ?>
                 </div>
                 <!-- .site-branding -->
@@ -720,4 +743,11 @@ function onepress_breadcrumb() {
         </div>
         <?php
 	}
+}
+
+if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
+    function onepress_is_selective_refresh()
+    {
+        return isset($GLOBALS['onepress_is_selective_refresh']) && $GLOBALS['onepress_is_selective_refresh'] ? true : false;
+    }
 }
