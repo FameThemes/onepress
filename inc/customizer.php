@@ -167,6 +167,30 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			));
 
+            // Footer BG Color
+            $wp_customize->add_setting( 'onepress_footer_bg', array('sanitize_callback' => 'sanitize_hex_color_no_hash', 'sanitize_js_callback' => 'maybe_hash_hex_color', 'default' => '' ) );
+            $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_bg',
+                array(
+                    'label'       => esc_html__( 'Footer Background', 'onepress' ),
+                    'section'     => 'onepress_colors_settings',
+                    'description' => '',
+                    'priority'    => 1
+                )
+            ));
+
+            // Footer Widgets Color
+            $wp_customize->add_setting( 'onepress_footer_info_bg', array('sanitize_callback' => 'sanitize_hex_color_no_hash', 'sanitize_js_callback' => 'maybe_hash_hex_color', 'default' => '' ) );
+            $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_info_bg',
+                array(
+                    'label'       => esc_html__( 'Footer Info Background', 'onepress' ),
+                    'section'     => 'onepress_colors_settings',
+                    'description' => '',
+                    'priority'    => 1
+                )
+            ));
+
+
+
 
 		/* Header
 		----------------------------------------------------------------------*/

@@ -485,7 +485,7 @@
             color: #cccccc;
             border-bottom: none;
             box-shadow: none;
-            padding: 12px 15px 13px;
+            padding: 12px 15px 12px;
             border-radius: 2px;
             width: 60%;
             font-size: 13px;
@@ -578,6 +578,7 @@
             -moz-transform: rotate(45deg);
             -ms-transform: rotate(45deg);
             -o-transform: rotate(45deg);
+			margin-left: 3px;
         }
         @include for(screens-medium) {
             right: 0;
