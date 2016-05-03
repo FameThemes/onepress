@@ -462,8 +462,11 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                     background-color: #<?php echo $onepress_footer_bg; ?>;
                 }
                 .site-footer .footer-connect .subs_input {
-                    background-color: rgba( 255, 255, 255, .3 );
+                    background-color: rgba( 255, 255, 255, 0.3 );
                     color: #fff;
+                }
+                .site-footer .footer-connect .follow-heading {
+                    color: rgba(255, 255, 255, 0.9);
                 }
                 <?php
             }
@@ -473,6 +476,12 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 ?>
                 .site-footer .site-info, .site-footer .btt a{
                     background-color: #<?php echo $onepress_footer_info_bg; ?>;
+                }
+                .site-footer .site-info {
+                    color: rgba(255, 255, 255, 0.7);
+                }
+                .site-footer .btt a, .site-footer .site-info a {
+                    color: rgba(255, 255, 255, 0.9);
                 }
                 <?php
             }
