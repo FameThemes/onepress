@@ -80,6 +80,19 @@ if ( ! function_exists( 'onepress_setup' ) ) :
 		 * WooCommerce support.
 		 */
 		add_theme_support( 'woocommerce' );
+
+        /**
+         * Add theme Support custom logo
+         * @since WP 4.5
+         * @sin 1.2.1
+         */
+        add_theme_support( 'custom-logo', array(
+            'height'      => 36,
+            'width'       => 160,
+            'flex-height' => true,
+            'flex-width'  => true,
+            //'header-text' => array( 'site-title',  ), // 'site-description'
+        ) );
 	}
 endif;
 add_action( 'after_setup_theme', 'onepress_setup' );

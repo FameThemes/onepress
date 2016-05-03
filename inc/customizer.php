@@ -52,7 +52,10 @@ function onepress_customize_register( $wp_customize ) {
 	/*------------------------------------------------------------------------*/
     /*  Site Identity.
     /*------------------------------------------------------------------------*/
-
+        /*
+         * @deprecated 1.2.0
+         */
+        /*
     	$wp_customize->add_setting( 'onepress_site_image_logo',
 			array(
 				'sanitize_callback' => 'onepress_sanitize_file_url',
@@ -69,6 +72,7 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			)
 		);
+        */
 
 	/*------------------------------------------------------------------------*/
     /*  Site Options
