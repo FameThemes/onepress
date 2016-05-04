@@ -2482,8 +2482,54 @@ input[type="radio"], input[type="checkbox"] {
 	margin-right: 0rem;
 }
 
+@media screen and (min-width: 940px) {
+	.team-members.row.team-layout-4 .team-member {
+		width: 25%;
+	}
+	.team-members.row.team-layout-4 .team-member:nth-child(4n+1) {
+		clear: left;
+	}
+	.team-members.row.team-layout-3 .team-member {
+		width: 33.33333%;
+	}
+	.team-members.row.team-layout-3 .team-member:nth-child(3n+1) {
+		clear: left;
+	}
+	.team-members.row.team-layout-2 .team-member {
+		width: 50%;
+	}
+	.team-members.row.team-layout-2 .team-member:nth-child(2n+1) {
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 940px) {
+	.team-members.row .team-member {
+		width: 50%;
+	}
+	.team-members.row .team-member:nth-child(2n+1) {
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 720px) {
+	.team-members.row .team-member {
+		width: 50%;
+	}
+	.team-members.row .team-member:nth-child(2n+1) {
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 576px) {
+	.team-members.row .team-member {
+		width: 100%;
+	}
+}
+
 .team-member {
 	margin-bottom: 20px;
+	float: left;
 }
 
 .team-member .member-thumb {

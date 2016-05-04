@@ -27,11 +27,12 @@ if ( ! empty( $user_ids ) ) {
                     } ?>
                 </div>
                 <?php } ?>
-                <div class="team-members row">
+                <div class="team-members row team-layout-<?php echo esc_attr( $layout ); ?>">
                     <?php
-                    if (!empty($user_ids)) {
+                    if ( ! empty( $user_ids ) ) {
                         $n = 0;
-                        foreach ($user_ids as $member) {
+
+                        foreach ( $user_ids as $member ) {
                             $member = wp_parse_args( $member, array(
                                 'user_id'  =>array(),
                             ));
@@ -47,7 +48,7 @@ if ( ! empty( $user_ids ) ) {
                                 $data = get_post( $user_id['id'] );
                                 $n ++ ;
                                 ?>
-                                <div class="team-member col-md-<?php echo esc_attr( $layout ); ?> col-sm-6 wow slideInUp">
+                                <div class="team-member wow slideInUp">
                                     <div class="member-thumb">
                                         <?php if ( $link ) { ?>
                                             <a href="<?php echo esc_url( $link ); ?>">
@@ -64,9 +65,9 @@ if ( ! empty( $user_ids ) ) {
                                     </div>
                                 </div>
                                 <?php
-
                             }
-                        }
+
+                        } // end foreach
                     }
 
                     ?>

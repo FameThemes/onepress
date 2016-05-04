@@ -159,6 +159,19 @@ function onepress_customizer_partials( $wp_customize ) {
                 'onepress_about_content_source',
             ),
         ),
+
+        // Section team
+        array(
+            'id' => 'team',
+            'selector' => '.section-team',
+            'settings' => array(
+                'onepress_team_members',
+                'onepress_team_title',
+                'onepress_team_subtitle',
+                'onepress_team_desc',
+                'onepress_team_layout',
+            ),
+        ),
     );
 
     $selective_refresh_keys = apply_filters( 'onepress_customizer_partials_selective_refresh_keys', $selective_refresh_keys );

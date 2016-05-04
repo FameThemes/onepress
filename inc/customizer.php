@@ -2030,7 +2030,7 @@ function onepress_customize_register( $wp_customize ) {
         $wp_customize->add_setting( 'onepress_team_layout',
             array(
                 'sanitize_callback' => 'sanitize_text_field',
-                'default'           => '3',
+                'default'           => '4',
             )
         );
 
@@ -2041,9 +2041,9 @@ function onepress_customize_register( $wp_customize ) {
                 'description'   => '',
                 'type'          => 'select',
                 'choices'       => array(
-                    '3' => esc_html__( '4 Columns', 'onepress' ),
-                    '4' => esc_html__( '3 Columns', 'onepress' ),
-                    '6' => esc_html__( '2 Columns', 'onepress' ),
+                    '4' => esc_html__( '4 Columns', 'onepress' ),
+                    '3' => esc_html__( '3 Columns', 'onepress' ),
+                    '2' => esc_html__( '2 Columns', 'onepress' ),
                 ),
             )
         );
