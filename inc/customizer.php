@@ -756,7 +756,6 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-
 			$wp_customize->add_setting(
 				'onepress_hero_images',
 				array(
@@ -970,6 +969,30 @@ function onepress_customize_register( $wp_customize ) {
 						'section' 		=> 'onepress_hero_content_layout1'
 					)
 				);
+                // Button #1 Style
+				$wp_customize->add_setting( 'onepress_hcl1_btn1_style',
+					array(
+						'sanitize_callback' => 'onepress_sanitize_text',
+						'default'           => 'btn-theme-primary',
+					)
+				);
+				$wp_customize->add_control( 'onepress_hcl1_btn1_style',
+					array(
+						'label' 		=> esc_html__('Button #1 style', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1',
+                        'type'          => 'select',
+                        'choices' => array(
+                                'btn-theme-primary' => esc_html__('Button Primary', 'onepress'),
+                                'btn-secondary-outline' => esc_html__('Button Secondary', 'onepress'),
+                                'btn-default' => esc_html__('Button', 'onepress'),
+                                'btn-primary' => esc_html__('Primary', 'onepress'),
+                                'btn-success' => esc_html__('Success', 'onepress'),
+                                'btn-info' => esc_html__('Info', 'onepress'),
+                                'btn-warning' => esc_html__('Warning', 'onepress'),
+                                'btn-danger' => esc_html__('Danger', 'onepress'),
+                        )
+					)
+				);
 
 				// Button #2 Text
 				$wp_customize->add_setting( 'onepress_hcl1_btn2_text',
@@ -998,6 +1021,31 @@ function onepress_customize_register( $wp_customize ) {
 						'section' 		=> 'onepress_hero_content_layout1'
 					)
 				);
+
+                // Button #1 Style
+                $wp_customize->add_setting( 'onepress_hcl1_btn2_style',
+                    array(
+                        'sanitize_callback' => 'onepress_sanitize_text',
+                        'default'           => 'btn-secondary-outline',
+                    )
+                );
+                $wp_customize->add_control( 'onepress_hcl1_btn2_style',
+                    array(
+                        'label' 		=> esc_html__('Button #1 style', 'onepress'),
+                        'section' 		=> 'onepress_hero_content_layout1',
+                        'type'          => 'select',
+                        'choices' => array(
+                            'btn-theme-primary' => esc_html__('Button Primary', 'onepress'),
+                            'btn-secondary-outline' => esc_html__('Button Secondary', 'onepress'),
+                            'btn-default' => esc_html__('Button', 'onepress'),
+                            'btn-primary' => esc_html__('Primary', 'onepress'),
+                            'btn-success' => esc_html__('Success', 'onepress'),
+                            'btn-info' => esc_html__('Info', 'onepress'),
+                            'btn-warning' => esc_html__('Warning', 'onepress'),
+                            'btn-danger' => esc_html__('Danger', 'onepress'),
+                        )
+                    )
+                );
 
 
 				/* Layout 2 ---- */

@@ -190,5 +190,6 @@ function onepress_customizer_partials( $wp_customize ) {
         'render_callback' => 'onepress_site_logo',
     ) );
 
+
 }
 add_action( 'customize_register', 'onepress_customizer_partials', 50 );
