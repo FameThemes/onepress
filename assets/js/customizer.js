@@ -355,6 +355,9 @@
 					}
 				};
 
+                //console.log( tmceInit );
+                tmceInit.plugins = tmceInit.plugins.replace('fullscreen,', '');
+
 				tinyMCEPreInit.mceInit[ id ] = tmceInit;
 
 				qtInit.id = id;
@@ -502,6 +505,7 @@
 				sync_id: control.editing_area,
 				init_instance_callback: function( editor ){
 					var w =  $( '#wp-'+control.editor_id+ '-wrap' );
+                    $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor fullscreen-wp-editor"  type="button"><span class="dashicons"></span></button>' );
                     $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor preview-wp-editor"  type="button"><span class="dashicons dashicons-visibility"></span></button>' );
                     $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor close-wp-editor"  type="button"><span class="dashicons dashicons-no-alt"></span></button>' );
                     w.on( 'click', '.close-wp-editor', function( e ) {
@@ -513,6 +517,13 @@
                         w.closest( '.modal-wp-js-editor').css( { opacity: 0 } );
                     }, function(){
                         w.closest( '.modal-wp-js-editor').css( { opacity: 1 } );
+                    } );
+                    w.on( 'click', '.fullscreen-wp-editor', function( e ) {
+                        e.preventDefault();
+                        w.closest( '.modal-wp-js-editor').toggleClass( 'fullscreen' );
+                        setTimeout( function(){
+                            $( window ).resize();
+                        }, 600 );
                     } );
 				}
 			} );
@@ -722,6 +733,7 @@
 					sync_id: settings.editing_area,
 					init_instance_callback: function (editor) {
 						var w = $('#wp-' + settings.editor_id + '-wrap');
+                        $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor fullscreen-wp-editor"  type="button"><span class="dashicons"></span></button>' );
                         $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor preview-wp-editor"  type="button"><span class="dashicons dashicons-visibility"></span></button>' );
 						$('.wp-editor-tabs', w).append('<button class="wp-switch-editor close-wp-editor"  type="button"><span class="dashicons dashicons-no-alt"></span></button>');
 						w.on('click', '.close-wp-editor', function (e) {
@@ -734,6 +746,13 @@
                             w.closest( '.modal-wp-js-editor').css( { opacity: 0 } );
                         }, function(){
                             w.closest( '.modal-wp-js-editor').css( { opacity: 1 } );
+                        } );
+                        w.on( 'click', '.fullscreen-wp-editor', function( e ) {
+                            e.preventDefault();
+                            w.closest( '.modal-wp-js-editor').toggleClass( 'fullscreen' );
+                            setTimeout( function(){
+                                $( window ).resize();
+                            }, 600 );
                         } );
 					}
 				});

@@ -68,6 +68,20 @@
             text-decoration: none;
         }
 	}
+	.site-title {
+		display: inline-block;
+	}
+	.site-image-logo {
+		display: block;
+
+	}
+	.site-description {
+		font-size: 12px;
+	    line-height: 14px;
+	    margin-bottom: 0;
+		position: relative;
+		top: -23px;
+	}
 }
 
 .header-social {

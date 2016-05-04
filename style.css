@@ -758,6 +758,22 @@ input[type="radio"], input[type="checkbox"] {
 	text-decoration: none;
 }
 
+.site-branding .site-title {
+	display: inline-block;
+}
+
+.site-branding .site-image-logo {
+	display: block;
+}
+
+.site-branding .site-description {
+	font-size: 12px;
+	line-height: 14px;
+	margin-bottom: 0;
+	position: relative;
+	top: -23px;
+}
+
 .header-social {
 	margin-left: 0px;
 	float: right;

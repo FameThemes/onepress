@@ -154,7 +154,7 @@ body .wp-full-overlay{
     max-height: 100%;
     background: #EEEEEE;
     padding: 15px;
-    border-right: 1px solid #ddd;
+    border-top: 1px solid #ddd;
     box-sizing: border-box;
     -webkit-transition: all .5s; /* Safari */
     transition: all .5s;
@@ -162,6 +162,15 @@ body .wp-full-overlay{
     -ms-transform: translateY(100%); /* IE 9 */
     -webkit-transform: translateY(100%); /* Safari */
     transform: translateY(100%);
+}
+.modal-wp-js-editor .fullscreen-wp-editor span:before {
+    content: "\f211";
+}
+.modal-wp-js-editor.fullscreen .fullscreen-wp-editor span:before {
+    content: "\f506";
+}
+.modal-wp-js-editor.fullscreen {
+    height: 100%;
 }
 .modal-wp-js-editor .wp-editor-wrap {
     height: 100%;
