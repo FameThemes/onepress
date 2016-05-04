@@ -6,7 +6,7 @@
  * Contains handlers to make Theme Customizer preview reload changes asynchronously.
  */
 
-( function( $ ) {
+( function( $ , api ) {
 
     /*
     // Site title and description.
@@ -15,12 +15,18 @@
             $( '.site-title a' ).text( to );
         } );
     } );
-    wp.customize( 'blogdescription', function( value ) {
-        value.bind( function( to ) {
-            $( '.site-description' ).text( to );
-        } );
-    } );
     */
+    
+    /**
+     * Handle rendering of partials.
+     *
+     * @param {api.selectiveRefresh.Placement} placement
+     */
+    api.selectiveRefresh.bind( 'partial-content-rendered', function( placement ) {
+       //console.log( placement );
+        $( window ).resize();
+    } );
+
 
 
     // Header text color.
@@ -40,4 +46,5 @@
             }
         } );
     } );
-} )( jQuery );
+} )( jQuery , wp.customize );
+

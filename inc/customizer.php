@@ -2528,10 +2528,12 @@ function onepress_showon_frontpage() {
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
 function onepress_customize_preview_js() {
-	wp_enqueue_script( 'onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array( 'customize-preview' ), '20130508', true );
+    // wp_enqueue_script( 'customize-preview' );
+	//wp_enqueue_script( 'onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array( 'customize-preview' ), '20130508', true );
+	wp_enqueue_script( 'onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array( 'customize-preview', 'customize-selective-refresh' ), false, true );
 
 }
-add_action( 'customize_preview_init', 'onepress_customize_preview_js' );
+add_action( 'customize_preview_init', 'onepress_customize_preview_js', 65 );
 
 
 
