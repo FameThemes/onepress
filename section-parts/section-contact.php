@@ -12,6 +12,10 @@ $onepress_contact_phone         = get_theme_mod( 'onepress_contact_phone' );
 $onepress_contact_email         = get_theme_mod( 'onepress_contact_email' );
 $onepress_contact_fax           = get_theme_mod( 'onepress_contact_fax' );
 
+if ( onepress_is_selective_refresh() ) {
+    $onepress_contact_disable = false;
+}
+
 if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_address_title || $onepress_contact_phone || $onepress_contact_email || $onepress_contact_fax ) {
     $desc = get_theme_mod( 'onepress_contact_desc' );
     ?>

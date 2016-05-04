@@ -5,6 +5,9 @@ $onepress_team_title    = get_theme_mod( 'onepress_team_title', esc_html__('Our 
 $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $layout = intval( get_theme_mod( 'onepress_team_layout', 3 ) );
 $user_ids = onepress_get_section_team_data();
+if ( onepress_is_selective_refresh() ) {
+    $onepress_team_disable = false;
+}
 if ( ! empty( $user_ids ) ) {
     $desc = get_theme_mod( 'onepress_team_desc' );
     ?>

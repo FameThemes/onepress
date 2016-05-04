@@ -3,7 +3,9 @@ $id       = get_theme_mod( 'onepress_features_id', esc_html__('features', 'onepr
 $disable  = get_theme_mod( 'onepress_features_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_features_title', esc_html__('Features', 'onepress' ));
 $subtitle = get_theme_mod( 'onepress_features_subtitle', esc_html__('Why choose Us', 'onepress' ));
-
+if ( onepress_is_selective_refresh() ) {
+    $disable = false;
+}
 $data  = onepress_get_features_data();
 if ( !$disable && !empty( $data ) ) {
     $desc = get_theme_mod( 'onepress_features_desc' );

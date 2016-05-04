@@ -3,7 +3,9 @@ $id       = get_theme_mod( 'onepress_videolightbox_id', 'videolightbox' );
 $disable  = get_theme_mod( 'onepress_videolightbox_disable' ) == 1 ? true : false;
 $heading  = get_theme_mod( 'onepress_videolightbox_title' );
 $video    = get_theme_mod( 'onepress_videolightbox_url' );
-
+if ( onepress_is_selective_refresh() ) {
+    $disable = false;
+}
 if ( ( ! $disable && ( $video || $heading ) )  || onepress_is_selective_refresh() ) {
 
     $image    = get_theme_mod( 'onepress_videolightbox_image' );

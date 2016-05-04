@@ -8,25 +8,41 @@
 
 ( function( $ , api ) {
 
-    /*
-    // Site title and description.
-    wp.customize( 'blogname', function( value ) {
+
+    // Site footer bg
+    wp.customize( 'onepress_footer_bg', function( value ) {
         value.bind( function( to ) {
-            $( '.site-title a' ).text( to );
+            $( '.site-footer' ).css( {
+                'background': to
+            } );
         } );
     } );
-    */
-    
+
+    // Site footer info bg
+    wp.customize( 'onepress_footer_info_bg', function( value ) {
+        value.bind( function( to ) {
+            $( '.site-footer .site-info, .site-footer .btt a' ).css( {
+                'background': to
+            } );
+
+            $( '.site-footer .site-info').css( {
+                color: 'rgba(255, 255, 255, 0.7)',
+            } );
+            $( '.site-footer .btt a, .site-footer .site-info a').css( {
+                color: 'rgba(255, 255, 255, 0.9)',
+            } );
+        } );
+    } );
+
+
     /**
      * Handle rendering of partials.
      *
      * @param {api.selectiveRefresh.Placement} placement
      */
     api.selectiveRefresh.bind( 'partial-content-rendered', function( placement ) {
-       //console.log( placement );
         $( window ).resize();
     } );
-
 
 
     // Header text color.
@@ -46,5 +62,7 @@
             }
         } );
     } );
+
+
 } )( jQuery , wp.customize );
 

@@ -200,24 +200,32 @@ function onepress_customize_register( $wp_customize ) {
 			));
 
             // Footer BG Color
-            $wp_customize->add_setting( 'onepress_footer_bg', array('sanitize_callback' => 'sanitize_hex_color_no_hash', 'sanitize_js_callback' => 'maybe_hash_hex_color', 'default' => '' ) );
+            $wp_customize->add_setting( 'onepress_footer_bg', array(
+                'sanitize_callback' => 'sanitize_hex_color_no_hash',
+                'sanitize_js_callback' => 'maybe_hash_hex_color',
+                'default' => '',
+                'transport' => 'postMessage'
+            ) );
             $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_bg',
                 array(
                     'label'       => esc_html__( 'Footer Background', 'onepress' ),
                     'section'     => 'onepress_colors_settings',
                     'description' => '',
-                    'priority'    => 1
                 )
             ));
 
             // Footer Widgets Color
-            $wp_customize->add_setting( 'onepress_footer_info_bg', array('sanitize_callback' => 'sanitize_hex_color_no_hash', 'sanitize_js_callback' => 'maybe_hash_hex_color', 'default' => '' ) );
+            $wp_customize->add_setting( 'onepress_footer_info_bg', array(
+                'sanitize_callback' => 'sanitize_hex_color_no_hash',
+                'sanitize_js_callback' => 'maybe_hash_hex_color',
+                'default' => '',
+                'transport' => 'postMessage'
+            ) );
             $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_info_bg',
                 array(
                     'label'       => esc_html__( 'Footer Info Background', 'onepress' ),
                     'section'     => 'onepress_colors_settings',
                     'description' => '',
-                    'priority'    => 1
                 )
             ));
 
@@ -2528,10 +2536,7 @@ function onepress_showon_frontpage() {
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
 function onepress_customize_preview_js() {
-    // wp_enqueue_script( 'customize-preview' );
-	//wp_enqueue_script( 'onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array( 'customize-preview' ), '20130508', true );
-	wp_enqueue_script( 'onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array( 'customize-preview', 'customize-selective-refresh' ), false, true );
-
+    wp_enqueue_script( 'onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array( 'customize-preview', 'customize-selective-refresh' ), false, true );
 }
 add_action( 'customize_preview_init', 'onepress_customize_preview_js', 65 );
 

@@ -5,7 +5,9 @@ $onepress_hero_fullscreen = get_theme_mod( 'onepress_hero_fullscreen' );
 $onepress_hero_pdtop      = get_theme_mod( 'onepress_hero_pdtop', '10' );
 $onepress_hero_pdbotom    = get_theme_mod( 'onepress_hero_pdbotom', '10' );
 
-
+if ( onepress_is_selective_refresh() ) {
+    $onepress_hero_disable = false;
+}
 
 $hero_content_style = '';
 if ( $onepress_hero_fullscreen != '1' ) {

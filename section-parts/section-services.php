@@ -5,6 +5,9 @@ $onepress_service_title    = get_theme_mod( 'onepress_services_title', esc_html_
 $onepress_service_subtitle = get_theme_mod( 'onepress_services_subtitle', esc_html__('Section subtitle', 'onepress' ));
 // Get data
 $page_ids =  onepress_get_section_services_data();
+if ( onepress_is_selective_refresh() ) {
+    $onepress_service_disable = false;
+}
 if ( ! empty( $page_ids ) ) {
     $layout = intval( get_theme_mod( 'onepress_service_layout', 6 ) );
     $desc = get_theme_mod( 'onepress_services_desc' );

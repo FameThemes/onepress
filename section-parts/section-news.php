@@ -6,6 +6,9 @@ $onepress_news_subtitle  = get_theme_mod( 'onepress_news_subtitle', esc_html__('
 $onepress_news_number    = get_theme_mod( 'onepress_news_number', '3' );
 $onepress_news_more_link = get_theme_mod( 'onepress_news_more_link', '#' );
 $onepress_news_more_text = get_theme_mod( 'onepress_news_more_text', esc_html__('Read Our Blog', 'onepress' ));
+if ( onepress_is_selective_refresh() ) {
+    $onepress_news_disable = false;
+}
 ?>
 <?php if ( ! $onepress_news_disable  ) :
 

@@ -4,6 +4,9 @@ $onepress_about_disable  = get_theme_mod( 'onepress_about_disable' ) == 1 ? true
 $onepress_about_title    = get_theme_mod( 'onepress_about_title', esc_html__('About Us', 'onepress' ));
 $onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $onepress_about_desc     = get_theme_mod( 'onepress_about_desc');
+if ( onepress_is_selective_refresh() ) {
+    $onepress_about_disable = false;
+}
 // Get data
 $page_ids =  onepress_get_section_about_data();
 $content_source = get_theme_mod( 'onepress_about_content_source' );

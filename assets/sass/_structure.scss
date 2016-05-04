@@ -75,12 +75,28 @@
 		display: block;
 
 	}
-	.site-description {
-		font-size: 12px;
-	    line-height: 14px;
-	    margin-bottom: 0;
-		position: relative;
-		top: -23px;
+	.site-logo-div {
+		line-height: 75px;
+	}
+
+	.no-logo-img.has-desc, .has-logo-img{
+		line-height: 60px;
+		.site-title {
+			margin-top: -5px;
+			position: relative;
+		}
+		.site-description {
+			font-size: 12px;
+		    line-height: 14px;
+		    margin-bottom: 0;
+			position: relative;
+			top: -15px;
+		}
+	}
+}
+.home.header-transparent .no-scroll {
+	.site-brand-inner, .site-text-logo {
+		color: #fff;
 	}
 }
 
@@ -495,7 +511,7 @@
 			letter-spacing: 0.8px;
         }
         .subs_input {
-            background: #333333;
+			background-color: rgba(255, 255, 255, .145);
             color: #cccccc;
             border-bottom: none;
             box-shadow: none;

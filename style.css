@@ -766,12 +766,29 @@ input[type="radio"], input[type="checkbox"] {
 	display: block;
 }
 
-.site-branding .site-description {
+.site-branding .site-logo-div {
+	line-height: 75px;
+}
+
+.site-branding .no-logo-img.has-desc, .site-branding .has-logo-img {
+	line-height: 60px;
+}
+
+.site-branding .no-logo-img.has-desc .site-title, .site-branding .has-logo-img .site-title {
+	margin-top: -5px;
+	position: relative;
+}
+
+.site-branding .no-logo-img.has-desc .site-description, .site-branding .has-logo-img .site-description {
 	font-size: 12px;
 	line-height: 14px;
 	margin-bottom: 0;
 	position: relative;
-	top: -23px;
+	top: -15px;
+}
+
+.home.header-transparent .no-scroll .site-brand-inner, .home.header-transparent .no-scroll .site-text-logo {
+	color: #fff;
 }
 
 .header-social {
@@ -1192,7 +1209,7 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .site-footer .footer-connect .subs_input {
-	background: #333333;
+	background-color: rgba(255, 255, 255, 0.145);
 	color: #cccccc;
 	border-bottom: none;
 	box-shadow: none;

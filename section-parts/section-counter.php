@@ -3,6 +3,9 @@ $onepress_counter_id       = get_theme_mod( 'onepress_counter_id', esc_html__('c
 $onepress_counter_disable  = get_theme_mod( 'onepress_counter_disable' ) == 1 ? true : false;
 $onepress_counter_title    = get_theme_mod( 'onepress_counter_title', esc_html__('Our Numbers', 'onepress' ));
 $onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', esc_html__('Section subtitle', 'onepress' ));
+if ( onepress_is_selective_refresh() ) {
+    $onepress_counter_disable = false;
+}
 
 // Get counter data
 $boxes = onepress_get_section_counter_data();

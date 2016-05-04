@@ -14,19 +14,26 @@
 function onepress_site_logo(){
     $is_old_logo = false;
     $is_wp_4_5   =  function_exists( 'the_custom_logo' );
-    $html = '';
+    $classes = array();
+    $html = '' ;
+    $classes['logo'] = 'no-logo-img';
     if ( $is_wp_4_5 && has_custom_logo() ) {
-        the_custom_logo();
+        $classes['logo'] = 'has-logo-img';
+        $html .= '<div class="site-logo-div">';
+        $html .= get_custom_logo();
+        $html .= '</div>';
     } else {
         $site_image_logo = get_theme_mod( 'onepress_site_image_logo' );
+        $site_image_logo = '';
         /**
          *  Fallback OnePress 1.2.0 and WordPress < 4.5
          */
         if ( $site_image_logo != "" ) {
             $is_old_logo = true;
-            $html .= '<a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
+            $classese['logo'] = 'has-logo-img';
+            $html .= '<div class="site-logo-div"><a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
             $html .= '<img src="' . $site_image_logo . '" alt="' . get_bloginfo('title') . '">';
-            $html .= '</a>';
+            $html .= '</a></div>';
         }
     }
 
@@ -34,6 +41,7 @@ function onepress_site_logo(){
     $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', $is_old_logo ? 1: 0 );
 
     if ( ! $hide_sitetile ) {
+        $classes['title'] = 'has-title';
         if ( is_front_page() && is_home() ) {
             $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
         } else {
@@ -44,11 +52,13 @@ function onepress_site_logo(){
     if ( ! $hide_tagline ) {
         $description = get_bloginfo( 'description', 'display' );
         if ( $description || is_customize_preview() ) {
+            $classes['desc'] = 'has-desc';
             $html .= '<p class="site-description">'.$description.'</p>';
         }
+    } else {
+        $classes['desc'] = 'no-desc';
     }
-
-    echo $html;
+    echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
 }
 
 add_action( 'onepress_site_start', 'onepress_site_header' );
@@ -61,9 +71,9 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
         <header id="masthead" class="site-header" role="banner">
             <div class="container">
                 <div class="site-branding">
-                    <?php
-                    onepress_site_logo();
-                    ?>
+                <?php
+                onepress_site_logo();
+                ?>
                 </div>
                 <!-- .site-branding -->
 
@@ -483,10 +493,6 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 ?>
                 .site-footer {
                     background-color: #<?php echo $onepress_footer_bg; ?>;
-                }
-                .site-footer .footer-connect .subs_input {
-                    background-color: rgba( 255, 255, 255, 0.3 );
-                    color: #fff;
                 }
                 .site-footer .footer-connect .follow-heading {
                     color: rgba(255, 255, 255, 0.9);
