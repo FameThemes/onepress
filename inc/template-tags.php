@@ -24,7 +24,6 @@ function onepress_site_logo(){
         $html .= '</div>';
     } else {
         $site_image_logo = get_theme_mod( 'onepress_site_image_logo' );
-        $site_image_logo = '';
         /**
          *  Fallback OnePress 1.2.0 and WordPress < 4.5
          */
