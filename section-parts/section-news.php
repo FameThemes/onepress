@@ -35,7 +35,8 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 						<?php
 						$query = new WP_Query(
 							array(
-								'posts_per_page' => $onepress_news_number
+								'posts_per_page' => $onepress_news_number,
+								'suppress_filters' => 0,
 							)
 						);
 						?>
