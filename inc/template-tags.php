@@ -344,7 +344,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 display: block;
                 content: "";
             }
-            .parallax-hero .hero-slideshow-wrapper:after {
+            .body-desktop .parallax-hero .hero-slideshow-wrapper:after {
                 display: none !important;
             }
             .parallax-hero .parallax-mirror:after {
@@ -358,7 +358,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 content: "";
             }
             .parallax-hero .hero-slideshow-wrapper:after {
-
+                display: none !important;
             }
             .parallax-hero .parallax-mirror:after {
                 position: absolute;

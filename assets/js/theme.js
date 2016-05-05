@@ -136,6 +136,11 @@
         };
 
         var testMobile = isMobile.any();
+        if (testMobile == null) {
+            jQuery( 'body' ).addClass( 'body-desktop') .removeClass( 'body-mobile' );
+        } else {
+            jQuery( 'body' ).addClass( 'body-mobile' ).removeClass( 'body-desktop' );
+        }
 
         jQuery('.section-has-parallax').each(function() {
             var $this = jQuery(this);
@@ -147,8 +152,7 @@
                 jQuery(bg).addClass('not-mobile');
                 jQuery(bg).removeClass('is-mobile');
                 jQuery(bg).parallax('50%', 0.4);
-            }
-            else {
+            } else {
                 //jQuery(bg).css('backgroundAttachment', 'inherit');
                 jQuery(bg).removeClass('not-mobile');
                 jQuery(bg).addClass('is-mobile');
