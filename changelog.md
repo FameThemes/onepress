@@ -12,7 +12,7 @@ CHANGELOG
 * Add style option for Heroe buttons.
 * Fix team member layouts.
 * Update string translation.
-
+* Fix Background overlay color of hero section is missing on mobile.
 
 ## 1.2.0
 * Fixed JS syntax error for WP 4.5.
