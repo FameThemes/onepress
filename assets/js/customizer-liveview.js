@@ -64,5 +64,17 @@
     } );
 
 
+    // Site footer widgets
+    wp.customize( 'onepress_btt_disable', function( value ) {
+        value.bind( function( to ) {
+            if ( to === true || to == 'true' ) {
+                $( '.site-footer .btt ' ).hide();
+            } else {
+                $( '.site-footer .btt ' ).show();
+            }
+        } );
+    } );
+    
+
 } )( jQuery , wp.customize );
 

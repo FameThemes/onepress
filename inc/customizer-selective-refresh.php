@@ -203,6 +203,29 @@ function onepress_customizer_partials( $wp_customize ) {
         'render_callback' => 'onepress_site_logo',
     ) );
 
+    // Footer social heading
+    $wp_customize->selective_refresh->add_partial( 'onepress_social_footer_title', array(
+        'selector' => '.footer-social .follow-heading',
+        'settings' => array( 'onepress_social_footer_title' ),
+        'render_callback' =>  function(){
+            return get_theme_mod( 'onepress_social_footer_title' );
+        },
+    ) );
+    // Footer social icons
+    $wp_customize->selective_refresh->add_partial( 'onepress_social_profiles', array(
+        'selector' => '.footer-social .footer-social-icons',
+        'settings' => array( 'onepress_social_profiles' ),
+        'render_callback' =>  'onepress_get_social_profiles',
+    ) );
 
+    // Footer New letter heading
+    $wp_customize->selective_refresh->add_partial( 'onepress_newsletter_title', array(
+        'selector' => '.footer-subscribe .follow-heading',
+        'settings' => array( 'onepress_newsletter_title' ),
+        'render_callback' =>  function(){
+            return get_theme_mod( 'onepress_newsletter_title' );
+        },
+    ) );
+    
 }
 add_action( 'customize_register', 'onepress_customizer_partials', 50 );

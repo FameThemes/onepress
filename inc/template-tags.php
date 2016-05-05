@@ -358,7 +358,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 content: "";
             }
             .parallax-hero .hero-slideshow-wrapper:after {
-                display: none !important;
+
             }
             .parallax-hero .parallax-mirror:after {
                 position: absolute;
@@ -688,6 +688,7 @@ if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
         if (is_string($array)) {
             $array = json_decode($array, true);
         }
+        $html = '';
         if (!empty($array) && is_array($array)) {
             foreach ($array as $k => $v) {
                 $array[$k] = wp_parse_args($v, array(
@@ -714,7 +715,14 @@ if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
 
             }
         }
-        return $array;
+
+        foreach ( (array) $array as $s) {
+            if ($s['icon'] != '') {
+                $html .= '<a target="_blank" href="' . $s['link'] . '" title="' . esc_attr($s['network']) . '"><i class="fa ' . esc_attr($s['icon']) . '"></i></a>';
+            }
+        }
+
+        return $html;
     }
 }
 
@@ -756,3 +764,6 @@ if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
         return isset($GLOBALS['onepress_is_selective_refresh']) && $GLOBALS['onepress_is_selective_refresh'] ? true : false;
     }
 }
+
+
+

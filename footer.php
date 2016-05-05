@@ -19,7 +19,7 @@
         $onepress_newsletter_title = get_theme_mod('onepress_newsletter_title', esc_html__('Join our Newsletter', 'onepress'));
         $onepress_newsletter_mailchimp = get_theme_mod('onepress_newsletter_mailchimp');
 
-        if ($onepress_newsletter_disable != '1' || $onepress_social_disable != '1') : ?>
+        if ( $onepress_newsletter_disable != '1' || $onepress_social_disable != '1' ) : ?>
             <div class="footer-connect">
                 <div class="container">
                     <div class="row">
@@ -37,7 +37,7 @@
                             </div>
                         <?php endif; ?>
 
-                        <div class="<?php if ($onepress_newsletter_disable == '1') {
+                        <div class="<?php if ( $onepress_newsletter_disable == '1' ) {
                             echo 'col-sm-8';
                         } else {
                             echo 'col-sm-4';
@@ -54,13 +54,11 @@
                                      * New Socials profiles
                                      *
                                      * @since 1.1.4
+                                     * @change 1.2.1
                                      */
-                                    if (!empty($socials)) {
-                                        foreach ($socials as $s) {
-                                            if ($s['icon'] != '') {
-                                                echo '<a target="_blank" href="' . $s['link'] . '" title="' . esc_attr($s['network']) . '"><i class="fa ' . esc_attr($s['icon']) . '"></i></a>';
-                                            }
-                                        }
+                                    echo '<div class="footer-social-icons">';
+                                    if ( $socials ) {
+                                        echo $socials;
                                     } else {
                                         /**
                                          * Deprecated
@@ -78,6 +76,7 @@
                                         if ($instagram != '') echo '<a target="_blank" href="' . $instagram . '" title="Instagram"><i class="fa fa-instagram"></i></a>';
                                         if ($rss != '') echo '<a target="_blank" href="' . $rss . '"><i class="fa fa-rss"></i></a>';
                                     }
+                                    echo '</div>';
                                     ?>
                                 </div>
                             <?php } ?>

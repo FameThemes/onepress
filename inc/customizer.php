@@ -167,6 +167,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'sanitize_callback' => 'onepress_sanitize_checkbox',
 					'default'           => '',
+					'transport'			=> 'postMessage'
 				)
 			);
 			$wp_customize->add_control( 'onepress_btt_disable',
@@ -415,6 +416,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'sanitize_callback' => 'sanitize_text_field',
 					'default'           => esc_html__( 'Keep Updated', 'onepress' ),
+					'transport'			=> 'postMessage',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_footer_title',
@@ -431,7 +433,7 @@ function onepress_customize_register( $wp_customize ) {
                 array(
                     //'default' => '',
                     'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
-                    'transport' => 'refresh', // refresh or postMessage
+                    'transport' => 'postMessage', // refresh or postMessage
             ) );
 
             $wp_customize->add_control(
@@ -497,6 +499,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'sanitize_callback' => 'sanitize_text_field',
 					'default'           => esc_html__( 'Join our Newsletter', 'onepress' ),
+                    'transport'         => 'postMessage', // refresh or postMessage
 				)
 			);
 			$wp_customize->add_control( 'onepress_newsletter_title',
@@ -512,6 +515,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'sanitize_callback' => 'esc_url',
 					'default'           => '',
+                    'transport'         => 'postMessage', // refresh or postMessage
 				)
 			);
 			$wp_customize->add_control( 'onepress_newsletter_mailchimp',
@@ -616,7 +620,6 @@ function onepress_customize_register( $wp_customize ) {
 					'type'     => 'textarea'
 				)
 			);
-
 
 
 	/*------------------------------------------------------------------------*/
