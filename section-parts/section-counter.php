@@ -3,6 +3,9 @@ $onepress_counter_id       = get_theme_mod( 'onepress_counter_id', esc_html__('c
 $onepress_counter_disable  = get_theme_mod( 'onepress_counter_disable' ) == 1 ? true : false;
 $onepress_counter_title    = get_theme_mod( 'onepress_counter_title', esc_html__('Our Numbers', 'onepress' ));
 $onepress_counter_subtitle = get_theme_mod( 'onepress_counter_subtitle', esc_html__('Section subtitle', 'onepress' ));
+if ( onepress_is_selective_refresh() ) {
+    $onepress_counter_disable = false;
+}
 
 // Get counter data
 $boxes = onepress_get_section_counter_data();
@@ -10,8 +13,10 @@ if ( ! empty ( $boxes ) ) {
     $desc = get_theme_mod( 'onepress_counter_desc' );
     ?>
     <?php if ($onepress_counter_disable != '1') : ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         <section id="<?php if ($onepress_counter_id != '') echo $onepress_counter_id; ?>" <?php do_action('onepress_section_atts', 'counter'); ?>
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-counter section-padding onepage-section', 'counter')); ?>">
+        <?php } ?>
             <?php do_action('onepress_section_before_inner', 'counter'); ?>
             <div class="container">
                 <?php if ( $onepress_counter_title || $onepress_counter_subtitle || $desc ){ ?>
@@ -85,6 +90,8 @@ if ( ! empty ( $boxes ) ) {
                 </div>
             </div>
             <?php do_action('onepress_section_after_inner', 'counter'); ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         </section>
+        <?php } ?>
     <?php endif;
 }

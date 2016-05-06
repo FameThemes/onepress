@@ -1,6 +1,19 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.2.1
+* Improve menu scroll.
+* Fix translation issues.
+* Change smooth scroll for hero.
+* Support custom logo for WP 4.5
+* Add options to change footer background color.
+* Add customizer selective refresh.
+* Improve customizer editor.
+* Add style option for Heroe buttons.
+* Fix team member layouts.
+* Update string translation.
+* Fix Background overlay color of hero section is missing on mobile.
+
 ## 1.2.0
 * Fixed JS syntax error for WP 4.5.
 * Fixed fa icon and text alignment in address area.

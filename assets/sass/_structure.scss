@@ -68,6 +68,36 @@
             text-decoration: none;
         }
 	}
+	.site-title {
+		display: inline-block;
+	}
+	.site-image-logo {
+		display: block;
+
+	}
+	.site-logo-div {
+		line-height: 75px;
+	}
+
+	.no-logo-img.has-desc, .has-logo-img{
+		line-height: 60px;
+		.site-title {
+			margin-top: -5px;
+			position: relative;
+		}
+		.site-description {
+			font-size: 12px;
+		    line-height: 14px;
+		    margin-bottom: 0;
+			position: relative;
+			top: -15px;
+		}
+	}
+}
+.home.header-transparent .no-scroll {
+	.site-brand-inner, .site-text-logo {
+		color: #fff;
+	}
 }
 
 .header-social {
@@ -481,11 +511,11 @@
 			letter-spacing: 0.8px;
         }
         .subs_input {
-            background: #333333;
+			background-color: rgba(255, 255, 255, .145);
             color: #cccccc;
             border-bottom: none;
             box-shadow: none;
-            padding: 12px 15px 13px;
+            padding: 12px 15px 12px;
             border-radius: 2px;
             width: 60%;
             font-size: 13px;
@@ -578,6 +608,7 @@
             -moz-transform: rotate(45deg);
             -ms-transform: rotate(45deg);
             -o-transform: rotate(45deg);
+			margin-left: 3px;
         }
         @include for(screens-medium) {
             right: 0;

@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design. The theme overall is an elegant and classic one, a fine example of Bootstrap 4 WordPress theme which compatibility with latest version of WooCommerce. (Live preview : http://www.famethemes.com/preview/?theme=OnePress)
-Version: 1.2.0
+Version: 1.2.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -758,6 +758,39 @@ input[type="radio"], input[type="checkbox"] {
 	text-decoration: none;
 }
 
+.site-branding .site-title {
+	display: inline-block;
+}
+
+.site-branding .site-image-logo {
+	display: block;
+}
+
+.site-branding .site-logo-div {
+	line-height: 75px;
+}
+
+.site-branding .no-logo-img.has-desc, .site-branding .has-logo-img {
+	line-height: 60px;
+}
+
+.site-branding .no-logo-img.has-desc .site-title, .site-branding .has-logo-img .site-title {
+	margin-top: -5px;
+	position: relative;
+}
+
+.site-branding .no-logo-img.has-desc .site-description, .site-branding .has-logo-img .site-description {
+	font-size: 12px;
+	line-height: 14px;
+	margin-bottom: 0;
+	position: relative;
+	top: -15px;
+}
+
+.home.header-transparent .no-scroll .site-brand-inner, .home.header-transparent .no-scroll .site-text-logo {
+	color: #fff;
+}
+
 .header-social {
 	margin-left: 0px;
 	float: right;
@@ -1176,11 +1209,11 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .site-footer .footer-connect .subs_input {
-	background: #333333;
+	background-color: rgba(255, 255, 255, 0.145);
 	color: #cccccc;
 	border-bottom: none;
 	box-shadow: none;
-	padding: 12px 15px 13px;
+	padding: 12px 15px 12px;
 	border-radius: 2px;
 	width: 60%;
 	font-size: 13px;
@@ -1300,6 +1333,7 @@ input[type="radio"], input[type="checkbox"] {
 	-moz-transform: rotate(45deg);
 	-ms-transform: rotate(45deg);
 	-o-transform: rotate(45deg);
+	margin-left: 3px;
 }
 
 @media screen and (max-width: 940px) {
@@ -2448,8 +2482,54 @@ input[type="radio"], input[type="checkbox"] {
 	margin-right: 0rem;
 }
 
+@media screen and (min-width: 940px) {
+	.team-members.row.team-layout-4 .team-member {
+		width: 25%;
+	}
+	.team-members.row.team-layout-4 .team-member:nth-child(4n+1) {
+		clear: left;
+	}
+	.team-members.row.team-layout-3 .team-member {
+		width: 33.33333%;
+	}
+	.team-members.row.team-layout-3 .team-member:nth-child(3n+1) {
+		clear: left;
+	}
+	.team-members.row.team-layout-2 .team-member {
+		width: 50%;
+	}
+	.team-members.row.team-layout-2 .team-member:nth-child(2n+1) {
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 940px) {
+	.team-members.row .team-member {
+		width: 50%;
+	}
+	.team-members.row .team-member:nth-child(2n+1) {
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 720px) {
+	.team-members.row .team-member {
+		width: 50%;
+	}
+	.team-members.row .team-member:nth-child(2n+1) {
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 576px) {
+	.team-members.row .team-member {
+		width: 100%;
+	}
+}
+
 .team-member {
 	margin-bottom: 20px;
+	float: left;
 }
 
 .team-member .member-thumb {

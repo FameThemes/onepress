@@ -7,6 +7,59 @@
  * @package OnePress
  */
 
+/**
+ * Display header brand
+ * @since 1.2.1
+ */
+function onepress_site_logo(){
+    $is_old_logo = false;
+    $is_wp_4_5   =  function_exists( 'the_custom_logo' );
+    $classes = array();
+    $html = '' ;
+    $classes['logo'] = 'no-logo-img';
+    if ( $is_wp_4_5 && has_custom_logo() ) {
+        $classes['logo'] = 'has-logo-img';
+        $html .= '<div class="site-logo-div">';
+        $html .= get_custom_logo();
+        $html .= '</div>';
+    } else {
+        $site_image_logo = get_theme_mod( 'onepress_site_image_logo' );
+        /**
+         *  Fallback OnePress 1.2.0 and WordPress < 4.5
+         */
+        if ( $site_image_logo != "" ) {
+            $is_old_logo = true;
+            $classese['logo'] = 'has-logo-img';
+            $html .= '<div class="site-logo-div"><a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
+            $html .= '<img src="' . $site_image_logo . '" alt="' . get_bloginfo('title') . '">';
+            $html .= '</a></div>';
+        }
+    }
+
+    $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle', $is_old_logo ? 1: 0 );
+    $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', $is_old_logo ? 1: 0 );
+
+    if ( ! $hide_sitetile ) {
+        $classes['title'] = 'has-title';
+        if ( is_front_page() && is_home() ) {
+            $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
+        } else {
+            $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
+        }
+    }
+
+    if ( ! $hide_tagline ) {
+        $description = get_bloginfo( 'description', 'display' );
+        if ( $description || is_customize_preview() ) {
+            $classes['desc'] = 'has-desc';
+            $html .= '<p class="site-description">'.$description.'</p>';
+        }
+    } else {
+        $classes['desc'] = 'no-desc';
+    }
+    echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
+}
+
 add_action( 'onepress_site_start', 'onepress_site_header' );
 if ( ! function_exists( 'onepress_site_header' ) ) {
     /**
@@ -17,25 +70,9 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
         <header id="masthead" class="site-header" role="banner">
             <div class="container">
                 <div class="site-branding">
-                    <?php
-                    $site_text_logo = get_bloginfo('name');
-                    $site_image_logo = get_theme_mod('onepress_site_image_logo');
-                    if ((isset($site_text_logo) && $site_text_logo != "") || (isset($site_image_logo) && $site_image_logo != "")) {
-                        if (isset($site_image_logo) && $site_image_logo != "") {
-                            echo '<a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
-                            echo '<img src="' . $site_image_logo . '" alt="' . get_bloginfo('title') . '">';
-                            echo '</a>';
-                        } elseif (isset($site_text_logo) && $site_text_logo != "") {
-                            echo '<a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . $site_text_logo . '</a>';
-                        }
-                    } else {
-                        if (is_front_page() && is_home()) :
-                            echo '<h1 class="site-title"><a href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
-                        else :
-                            echo '<p class="site-title"><a href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
-                        endif;
-                    }
-                    ?>
+                <?php
+                onepress_site_logo();
+                ?>
                 </div>
                 <!-- .site-branding -->
 
@@ -307,7 +344,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 display: block;
                 content: "";
             }
-            .parallax-hero .hero-slideshow-wrapper:after {
+            .body-desktop .parallax-hero .hero-slideshow-wrapper:after {
                 display: none !important;
             }
             .parallax-hero .parallax-mirror:after {
@@ -449,6 +486,35 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				}
             <?php
             }
+
+            $onepress_footer_bg = get_theme_mod( 'onepress_footer_bg' );
+            if ( $onepress_footer_bg ) {
+                ?>
+                .site-footer {
+                    background-color: #<?php echo $onepress_footer_bg; ?>;
+                }
+                .site-footer .footer-connect .follow-heading {
+                    color: rgba(255, 255, 255, 0.9);
+                }
+                <?php
+            }
+
+            $onepress_footer_info_bg = get_theme_mod( 'onepress_footer_info_bg' );
+            if ( $onepress_footer_info_bg ) {
+                ?>
+                .site-footer .site-info, .site-footer .btt a{
+                    background-color: #<?php echo $onepress_footer_info_bg; ?>;
+                }
+                .site-footer .site-info {
+                    color: rgba(255, 255, 255, 0.7);
+                }
+                .site-footer .btt a, .site-footer .site-info a {
+                    color: rgba(255, 255, 255, 0.9);
+                }
+                <?php
+            }
+
+
         $css = ob_get_clean();
 
         if ( trim( $css ) == "" ) {
@@ -622,6 +688,7 @@ if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
         if (is_string($array)) {
             $array = json_decode($array, true);
         }
+        $html = '';
         if (!empty($array) && is_array($array)) {
             foreach ($array as $k => $v) {
                 $array[$k] = wp_parse_args($v, array(
@@ -648,7 +715,14 @@ if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
 
             }
         }
-        return $array;
+
+        foreach ( (array) $array as $s) {
+            if ($s['icon'] != '') {
+                $html .= '<a target="_blank" href="' . $s['link'] . '" title="' . esc_attr($s['network']) . '"><i class="fa ' . esc_attr($s['icon']) . '"></i></a>';
+            }
+        }
+
+        return $html;
     }
 }
 
@@ -683,3 +757,13 @@ function onepress_breadcrumb() {
         <?php
 	}
 }
+
+if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
+    function onepress_is_selective_refresh()
+    {
+        return isset($GLOBALS['onepress_is_selective_refresh']) && $GLOBALS['onepress_is_selective_refresh'] ? true : false;
+    }
+}
+
+
+

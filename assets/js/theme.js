@@ -136,6 +136,11 @@
         };
 
         var testMobile = isMobile.any();
+        if (testMobile == null) {
+            jQuery( 'body' ).addClass( 'body-desktop') .removeClass( 'body-mobile' );
+        } else {
+            jQuery( 'body' ).addClass( 'body-mobile' ).removeClass( 'body-desktop' );
+        }
 
         jQuery('.section-has-parallax').each(function() {
             var $this = jQuery(this);
@@ -147,8 +152,7 @@
                 jQuery(bg).addClass('not-mobile');
                 jQuery(bg).removeClass('is-mobile');
                 jQuery(bg).parallax('50%', 0.4);
-            }
-            else {
+            } else {
                 //jQuery(bg).css('backgroundAttachment', 'inherit');
                 jQuery(bg).removeClass('not-mobile');
                 jQuery(bg).addClass('is-mobile');
@@ -267,15 +271,17 @@
     jQuery(window).scroll(function() {
         var currentNode = null;
         jQuery('.onepage-section').each(function(){
-            var currentId = jQuery(this).attr('id');
+            var currentId = jQuery(this).attr('id') || '';
 
-            if(jQuery('#'+currentId).length>0 ) {
-                if(jQuery(window).scrollTop() >= jQuery('#'+currentId).offset().top - h-10) {
-                    currentNode = currentId;
-                }
+            if(jQuery(window).scrollTop() >= jQuery(this).offset().top - h-10) {
+                currentNode = currentId;
             }
+
         });
-        jQuery('#site-navigation li').removeClass('onepress-current-item').find('a[href$="#'+currentNode+'"]').parent().addClass('onepress-current-item');
+        jQuery('#site-navigation li').removeClass('onepress-current-item');
+        if ( currentNode ) {
+            jQuery('#site-navigation li').find('a[href$="#' + currentNode + '"]').parent().addClass('onepress-current-item');
+        }
     });
 
     // Move to the right section on page load.
@@ -287,7 +293,7 @@
     });
 
     // Other scroll to elements
-    jQuery('#hero a[href*="#"]:not([href="#"]), .parallax-content a[href*="#"]:not([href="#"]), .back-top-top').on('click', function(event){
+    jQuery('.hero-slideshow-wrapper a[href*="#"]:not([href="#"]), .parallax-content a[href*="#"]:not([href="#"]), .back-top-top').on('click', function(event){
         event.preventDefault();
         smoothScroll(jQuery(this.hash));
     });

@@ -29,7 +29,7 @@ get_header(); ?>
                     /**
                      * Load section template part
                      */
-					get_template_part('section-parts/section', $section );
+					get_template_part( 'section-parts/section', $section );
 
                     /**
                      * Hook after section

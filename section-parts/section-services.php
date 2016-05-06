@@ -5,13 +5,18 @@ $onepress_service_title    = get_theme_mod( 'onepress_services_title', esc_html_
 $onepress_service_subtitle = get_theme_mod( 'onepress_services_subtitle', esc_html__('Section subtitle', 'onepress' ));
 // Get data
 $page_ids =  onepress_get_section_services_data();
+if ( onepress_is_selective_refresh() ) {
+    $onepress_service_disable = false;
+}
 if ( ! empty( $page_ids ) ) {
     $layout = intval( get_theme_mod( 'onepress_service_layout', 6 ) );
     $desc = get_theme_mod( 'onepress_services_desc' );
     ?>
     <?php if (!$onepress_service_disable) : ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         <section id="<?php if ($onepress_service_id != '') echo $onepress_service_id; ?>" <?php do_action('onepress_section_atts', 'services'); ?>
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>">
+        <?php } ?>
             <?php do_action('onepress_section_before_inner', 'services'); ?>
             <div class="container">
                 <?php if ( $onepress_service_title ||  $onepress_service_subtitle || $desc ){ ?>
@@ -46,6 +51,7 @@ if ( ! empty( $page_ids ) ) {
                         $j = 0;
                         foreach ($page_ids as $settings) {
                             $post_id = $settings['content_page'];
+                            $post_id = apply_filters( 'wpml_object_id', $post_id, 'page', true );
                             $post = get_post($post_id);
                             setup_postdata($post);
                             $settings['icon'] = trim($settings['icon']);
@@ -108,6 +114,8 @@ if ( ! empty( $page_ids ) ) {
                 </div>
             </div>
             <?php do_action('onepress_section_after_inner', 'services'); ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         </section>
+        <?php } ?>
     <?php endif;
 }

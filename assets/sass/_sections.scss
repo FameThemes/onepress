@@ -478,11 +478,63 @@
 .team-members.row {
 	@include rem('margin-left', 0px);
 	@include rem('margin-right', 0px);
+
+	@include for ( medium-screens  ) {
+		&.team-layout-4 {
+			.team-member {
+				width: ( 100%/4 );
+			}
+			.team-member:nth-child(4n+1) {
+				clear: left;
+			}
+		}
+		&.team-layout-3 {
+			.team-member {
+				width: ( 100%/3 );
+			}
+			.team-member:nth-child(3n+1) {
+				clear: left;
+			}
+		}
+		&.team-layout-2 {
+			.team-member {
+				width: ( 100%/2 );
+			}
+			.team-member:nth-child(2n+1) {
+				clear: left;
+			}
+		}
+	}
+
+	@include for( screens-medium ) {
+		.team-member {
+			width: ( 100%/2 );
+		}
+		.team-member:nth-child(2n+1) {
+			clear: left;
+		}
+	}
+
+	@include for( screens-small ) {
+		.team-member {
+			width: ( 100%/2 );
+		}
+		.team-member:nth-child(2n+1) {
+			clear: left;
+		}
+	}
+
+	@include for( screens-tiny ) {
+		.team-member {
+			width: 100%;
+		}
+	}
+	
 }
 
 .team-member {
 	margin-bottom: 20px;
-
+	float: left;
 
 	.member-thumb {
 		margin-bottom: 20px;

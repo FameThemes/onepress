@@ -4,13 +4,21 @@ $onepress_team_disable  = get_theme_mod( 'onepress_team_disable' ) ==  1 ? true 
 $onepress_team_title    = get_theme_mod( 'onepress_team_title', esc_html__('Our Team', 'onepress' ));
 $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $layout = intval( get_theme_mod( 'onepress_team_layout', 3 ) );
+if ( $layout <= 0 ){
+    $layout = 3;
+}
 $user_ids = onepress_get_section_team_data();
+if ( onepress_is_selective_refresh() ) {
+    $onepress_team_disable = false;
+}
 if ( ! empty( $user_ids ) ) {
     $desc = get_theme_mod( 'onepress_team_desc' );
     ?>
     <?php if ( ! $onepress_team_disable ) : ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         <section id="<?php if ($onepress_team_id != '') echo $onepress_team_id; ?>" <?php do_action('onepress_section_atts', 'team'); ?>
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-team section-padding section-meta onepage-section', 'team')); ?>">
+        <?php } ?>
             <?php do_action('onepress_section_before_inner', 'team'); ?>
             <div class="container">
                 <?php if ( $onepress_team_title || $onepress_team_subtitle || $desc ){ ?>
@@ -22,11 +30,12 @@ if ( ! empty( $user_ids ) ) {
                     } ?>
                 </div>
                 <?php } ?>
-                <div class="team-members row">
+                <div class="team-members row team-layout-<?php echo intval( 12 / $layout  ); ?>">
                     <?php
-                    if (!empty($user_ids)) {
+                    if ( ! empty( $user_ids ) ) {
                         $n = 0;
-                        foreach ($user_ids as $member) {
+
+                        foreach ( $user_ids as $member ) {
                             $member = wp_parse_args( $member, array(
                                 'user_id'  =>array(),
                             ));
@@ -42,7 +51,7 @@ if ( ! empty( $user_ids ) ) {
                                 $data = get_post( $user_id['id'] );
                                 $n ++ ;
                                 ?>
-                                <div class="team-member col-md-<?php echo esc_attr( $layout ); ?> col-sm-6 wow slideInUp">
+                                <div class="team-member wow slideInUp">
                                     <div class="member-thumb">
                                         <?php if ( $link ) { ?>
                                             <a href="<?php echo esc_url( $link ); ?>">
@@ -59,15 +68,17 @@ if ( ! empty( $user_ids ) ) {
                                     </div>
                                 </div>
                                 <?php
-
                             }
-                        }
+
+                        } // end foreach
                     }
 
                     ?>
                 </div>
             </div>
             <?php do_action('onepress_section_after_inner', 'team'); ?>
+        <?php if ( ! onepress_is_selective_refresh() ){ ?>
         </section>
+        <?php } ?>
     <?php endif;
 }
