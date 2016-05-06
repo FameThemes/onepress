@@ -4,6 +4,9 @@ $onepress_team_disable  = get_theme_mod( 'onepress_team_disable' ) ==  1 ? true 
 $onepress_team_title    = get_theme_mod( 'onepress_team_title', esc_html__('Our Team', 'onepress' ));
 $onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $layout = intval( get_theme_mod( 'onepress_team_layout', 3 ) );
+if ( $layout <= 0 ){
+    $layout = 3;
+}
 $user_ids = onepress_get_section_team_data();
 if ( onepress_is_selective_refresh() ) {
     $onepress_team_disable = false;
@@ -27,7 +30,7 @@ if ( ! empty( $user_ids ) ) {
                     } ?>
                 </div>
                 <?php } ?>
-                <div class="team-members row team-layout-<?php echo esc_attr( $layout ); ?>">
+                <div class="team-members row team-layout-<?php echo intval( 12 / $layout  ); ?>">
                     <?php
                     if ( ! empty( $user_ids ) ) {
                         $n = 0;
