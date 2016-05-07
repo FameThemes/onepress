@@ -333,11 +333,15 @@
 						if (settings.sync_id !== '') {
 							if (typeof settings.sync_id === 'string') {
 								editor.on('keyup change', function (e) {
-									$('#' + settings.sync_id).val(editor.getContent() ).trigger('change');
+									var html = editor.getContent( { format: 'raw' } );
+									html = _wpEditor.removep( html );
+									$('#' + settings.sync_id).val( html ).trigger('change');
 								});
 							} else {
 								editor.on('keyup change', function (e) {
-									settings.sync_id.val( editor.getContent() ).trigger('change');
+									var html = editor.getContent( { format: 'raw' } );
+									html = _wpEditor.removep( html );
+									settings.sync_id.val( html ).trigger('change');
 								});
 							}
 
@@ -355,10 +359,11 @@
 					}
 				};
 
+
                 //console.log( tmceInit );
                 tmceInit.plugins = tmceInit.plugins.replace('fullscreen,', '');
-
 				tinyMCEPreInit.mceInit[ id ] = tmceInit;
+				//console.log( tmceInit );
 
 				qtInit.id = id;
 				tinyMCEPreInit.qtInit[ id ] = qtInit;
@@ -391,6 +396,14 @@
 			}
 		},
 
+		/**
+		 * Replace paragraphs with double line breaks
+		 * @see wp-admin/js/editor.js
+		 */
+		removep: function ( html ) {
+			return window.switchEditors._wp_Nop( html );
+		},
+
 		sync: function(){
 			//
 		},
@@ -399,7 +412,8 @@
 			var content = '';
 			var editor = false;
 			if ( editor = tinymce.get(id) ) {
-				content = editor.getContent();
+				content = editor.getContent( { format: 'raw' } );
+				content = _wpEditor.removep( content );
 				editor.remove();
 			} else {
 				content = $( '#'+id ).val();
@@ -478,7 +492,7 @@
 			var content = control.editing_area.val();
 			// Load default value
 			$( 'textarea', control.editing_editor).val( content );
-			control.preview.html( content );
+			control.preview.html( window.switchEditors._wp_Autop( content ) );
 
 			$( 'body' ).on( 'click', '#customize-controls, .customize-section-back', function( e ) {
 				if ( ! $( e.target ).is( control.preview ) ) {
@@ -715,7 +729,7 @@
 			var content = settings.editing_area.val();
 			// Load default value
 			$( 'textarea', settings.editing_editor).val( content );
-			settings.preview.html( content );
+			settings.preview.html( window.switchEditors._wp_Autop( content ) );
 
 			$( 'body' ).on( 'click', '#customize-controls, .customize-section-back', function( e ) {
 				if ( ! $( e.target ).is( settings.preview ) ) {
