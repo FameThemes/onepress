@@ -542,7 +542,7 @@
 				}
 			} );
 			control.editing_area.on( 'change', function() {
-				control.preview.html( $( this).val() );
+				control.preview.html( window.switchEditors._wp_Autop( $( this).val() )  );
 			});
 
 			control.preview.on( 'click', function( e ){
@@ -771,7 +771,7 @@
 					}
 				});
 				settings.editing_area.on('change', function () {
-					settings.preview.html($(this).val());
+					settings.preview.html( window.switchEditors._wp_Autop( $( this).val() )  );
 				});
 
 				settings.preview.on('click', function (e) {
