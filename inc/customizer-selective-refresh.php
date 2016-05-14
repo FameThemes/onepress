@@ -183,13 +183,10 @@ function onepress_customizer_partials( $wp_customize ) {
             }
         }
 
-        $tpl = 'section-parts/section-'.$section['id'].'.php';
-        $wp_customize->selective_refresh->add_partial( 'section_'.$section['id'] , array(
+        $wp_customize->selective_refresh->add_partial( 'section-'.$section['id'] , array(
             'selector' => $section['selector'],
             'settings' => $section['settings'],
-            'render_callback' => function () use ( $tpl ) {
-                return onepress_get_customizer_section_content( $tpl );
-            },
+            'render_callback' => 'onepress_selective_refresh_render_section_content',
         ));
     }
 
@@ -229,3 +226,20 @@ function onepress_customizer_partials( $wp_customize ) {
     
 }
 add_action( 'customize_register', 'onepress_customizer_partials', 50 );
+
+
+
+/**
+ * Selective render content
+ *
+ * @param $partial
+ * @param array $container_context
+ */
+function onepress_selective_refresh_render_section_content( $partial, $container_context = array() ) {
+    $tpl = 'section-parts/'.$partial->id.'.php';
+    $GLOBALS['onepress_is_selective_refresh'] = true;
+    $file = onepress_customizer_load_template( $tpl );
+    if ( $file ) {
+        include $file;
+    }
+}
