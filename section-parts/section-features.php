@@ -49,7 +49,7 @@ if ( !$disable && !empty( $data ) ) {
                 }
 
                 ?>
-                <div class="feature-item col-lg-<?php echo esc_attr( $layout ); ?> col-md-6 wow slideInUp">
+                <div class="feature-item col-lg-<?php echo esc_attr( $layout ); ?> col-sm-6 wow slideInUp">
                     <div class="feature-media">
                         <?php if ( $f['link'] ) { ?><a href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?>
                         <?php echo $media; ?>
