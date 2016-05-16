@@ -5,7 +5,8 @@ CHANGELOG
 * Update selective refresh render callback.
 * Remove capability for hero animation settings.
 * Use Shortcode within section description.
-
+* Fix a bug can't auto embed code.
+* Update editor preview.
 
 ## 1.2.1
 * Improve menu scroll.
