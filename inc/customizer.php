@@ -541,7 +541,6 @@ function onepress_customize_register( $wp_customize ) {
 				'onepress_hero_option_animation',
 				array(
 					'default'              => 'flipInX',
-					'capability'           => 'edit_themes',
 					'sanitize_callback'    => 'sanitize_text_field',
 				)
 			);
