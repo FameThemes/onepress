@@ -183,13 +183,10 @@ function onepress_customizer_partials( $wp_customize ) {
             }
         }
 
-        $tpl = 'section-parts/section-'.$section['id'].'.php';
-        $wp_customize->selective_refresh->add_partial( 'section_'.$section['id'] , array(
+        $wp_customize->selective_refresh->add_partial( 'section-'.$section['id'] , array(
             'selector' => $section['selector'],
             'settings' => $section['settings'],
-            'render_callback' => function () use ( $tpl ) {
-                return onepress_get_customizer_section_content( $tpl );
-            },
+            'render_callback' => 'onepress_selective_refresh_render_section_content',
         ));
     }
 
@@ -207,9 +204,7 @@ function onepress_customizer_partials( $wp_customize ) {
     $wp_customize->selective_refresh->add_partial( 'onepress_social_footer_title', array(
         'selector' => '.footer-social .follow-heading',
         'settings' => array( 'onepress_social_footer_title' ),
-        'render_callback' =>  function(){
-            return get_theme_mod( 'onepress_social_footer_title' );
-        },
+        'render_callback' => 'onepress_selective_refresh_social_footer_title',
     ) );
     // Footer social icons
     $wp_customize->selective_refresh->add_partial( 'onepress_social_profiles', array(
@@ -222,10 +217,33 @@ function onepress_customizer_partials( $wp_customize ) {
     $wp_customize->selective_refresh->add_partial( 'onepress_newsletter_title', array(
         'selector' => '.footer-subscribe .follow-heading',
         'settings' => array( 'onepress_newsletter_title' ),
-        'render_callback' =>  function(){
-            return get_theme_mod( 'onepress_newsletter_title' );
-        },
+        'render_callback' => 'onepress_selective_refresh_newsletter_title',
     ) );
     
 }
 add_action( 'customize_register', 'onepress_customizer_partials', 50 );
+
+
+
+/**
+ * Selective render content
+ *
+ * @param $partial
+ * @param array $container_context
+ */
+function onepress_selective_refresh_render_section_content( $partial, $container_context = array() ) {
+    $tpl = 'section-parts/'.$partial->id.'.php';
+    $GLOBALS['onepress_is_selective_refresh'] = true;
+    $file = onepress_customizer_load_template( $tpl );
+    if ( $file ) {
+        include $file;
+    }
+}
+
+function onepress_selective_refresh_social_footer_title(){
+    return get_theme_mod( 'onepress_social_footer_title' );
+}
+
+function onepress_selective_refresh_newsletter_title(){
+    return get_theme_mod( 'onepress_newsletter_title' );
+}

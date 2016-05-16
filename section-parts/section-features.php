@@ -21,7 +21,7 @@ if ( !$disable && !empty( $data ) ) {
             <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
             <?php if ($title != '') echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
             <?php if ( $desc ) {
-                echo '<div class="section-desc">' . wp_kses_post( $desc ) . '</div>';
+                echo '<div class="section-desc">' . apply_filters( 'the_content', wp_kses_post( $desc ) ) . '</div>';
             } ?>
         </div>
         <?php } ?>
@@ -53,7 +53,7 @@ if ( !$disable && !empty( $data ) ) {
                 }
 
                 ?>
-                <div class="feature-item col-lg-<?php echo esc_attr( $layout ); ?> col-md-6 wow slideInUp">
+                <div class="feature-item col-lg-<?php echo esc_attr( $layout ); ?> col-sm-6 wow slideInUp">
                     <div class="feature-media">
                         <?php if ( $f['link'] ) { ?><a href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?>
                         <?php echo $media; ?>

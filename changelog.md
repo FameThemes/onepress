@@ -1,6 +1,12 @@
 ====================================================================
 CHANGELOG
-====================================================================
+=========
+## 1.2.2
+* Update selective refresh render callback.
+* Remove capability for hero animation settings.
+* Use Shortcode within section description.
+
+
 ## 1.2.1
 * Improve menu scroll.
 * Fix translation issues.

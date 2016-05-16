@@ -24,7 +24,7 @@ if ( ! empty( $page_ids ) ) {
                     <?php if ($onepress_service_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_service_subtitle) . '</h5>'; ?>
                     <?php if ($onepress_service_title != '') echo '<h2 class="section-title">' . esc_html($onepress_service_title) . '</h2>'; ?>
                     <?php if ( $desc ) {
-                        echo '<div class="section-desc">' . wp_kses_post( $desc ) . '</div>';
+                        echo '<div class="section-desc">' . apply_filters( 'the_content', wp_kses_post( $desc ) ) . '</div>';
                     } ?>
                 </div>
                 <?php } ?>
@@ -71,7 +71,7 @@ if ( ! empty( $page_ids ) ) {
                                 $media = '<div class="service-image"><i class="fa '.esc_attr( $settings['icon'] ).' fa-5x"></i></div>';
                             }
 
-                            $classes = 'col-sm-12 col-md-6 col-lg-'.$layout;
+                            $classes = 'col-sm-6 col-lg-'.$layout;
                             if ($j >= $columns) {
                                 $j = 1;
                                 $classes .= ' clearleft';
