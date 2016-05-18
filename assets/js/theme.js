@@ -20,6 +20,17 @@
         }
     );
 
+    // toggle mobile dropdown menu after click menu item link
+    if ( jQuery( '#nav-toggle:visible' ).length > 0 ) {
+        jQuery( '.onepress-menu a' ).on( 'click', function () {
+            var $om = jQuery( '.onepress-menu' );
+            if ( ! $om.hasClass( 'onepress-menu-mobile' ) ) return false;
+            $om.slideUp( function () {
+                jQuery( '#nav-toggle' ).click();
+            } );
+        } );
+    }
+
 } )();
 
 /**
