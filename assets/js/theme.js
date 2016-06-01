@@ -69,9 +69,11 @@
 ( function() {
 
     jQuery(window).on('resize', function (){
+        var is_transparent = jQuery( 'body').hasClass( 'header-transparent' );
+
         var headerH;
         var is_top_header = jQuery( '#page > .site-header').length ?  true : false;
-        if( is_top_header ) {
+        if( is_top_header && ! is_transparent ) {
             headerH = jQuery('.site-header').height();
         } else {
             headerH = 0;
@@ -212,7 +214,7 @@
             var header_h = header_fixed.height() || 0;
            // $( '.site-header-wrapper').height( header_h );
             p_to_top    = header_parent.position().top;
-            var topbar = $( '#wpadminbar').height() || 0;
+            var topbar = $( '#wpadminbar' ).height() || 0;
             if (  topbar > 0 ) {
                 var  topbar_pos = $( '#wpadminbar').css( 'position' );
                 if ( 'fixed' !== topbar_pos ) {
