@@ -11,24 +11,24 @@
 function onepress_customizer_load_template( $template_names ){
     $located = '';
 
-    $is_child =  STYLESHEETPATH != TEMPLATEPATH ;
+    $is_child =  get_stylesheet_directory() != get_template_directory() ;
     foreach ( (array) $template_names as $template_name ) {
         if (  !$template_name )
             continue;
 
-        if ( $is_child && file_exists( STYLESHEETPATH . '/' . $template_name ) ) {  // Child them
-            $located = STYLESHEETPATH . '/' . $template_name;
+        if ( $is_child && file_exists( get_stylesheet_directory() . '/' . $template_name ) ) {  // Child them
+            $located = get_stylesheet_directory() . '/' . $template_name;
             break;
 
         } elseif ( defined( 'ONEPRESS_PLUS_PATH' ) && file_exists( ONEPRESS_PLUS_PATH  . $template_name ) ) { // Check part in the plugin
             $located = ONEPRESS_PLUS_PATH . $template_name;
             break;
-        } elseif ( file_exists(TEMPLATEPATH . '/' . $template_name) ) { // current_theme
-            $located = TEMPLATEPATH . '/' . $template_name;
+        } elseif ( file_exists( get_template_directory() . '/' . $template_name) ) { // current_theme
+            $located =  get_template_directory() . '/' . $template_name;
             break;
         }
     }
-
+    
     return $located;
 }
 
@@ -219,7 +219,7 @@ function onepress_customizer_partials( $wp_customize ) {
         'settings' => array( 'onepress_newsletter_title' ),
         'render_callback' => 'onepress_selective_refresh_newsletter_title',
     ) );
-    
+
 }
 add_action( 'customize_register', 'onepress_customizer_partials', 50 );
 
