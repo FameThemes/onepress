@@ -19,6 +19,16 @@
             jQuery(this).parent().toggleClass("nav-toggle-dropdown");
         }
     );
+    
+    // toggle mobile dropdown menu after click menu link
+    jQuery( '.onepress-menu a' ).on( 'click', function ( e ) {
+        e.preventDefault();
+        var $om = jQuery( '.onepress-menu' );
+        if ( ! $om.hasClass( 'onepress-menu-mobile' ) ) {
+            return false;
+        }
+        jQuery( '#nav-toggle' ).trigger( 'click' );
+    } );
 
 } )();
 
