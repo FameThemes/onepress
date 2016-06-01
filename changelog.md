@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
 =========
+## 1.2.3
+* Fix Background image full screen when header transparent.
+* Fix issue No Custom CSS under Theme Options when defined DISALLOW_FILE_EDIT = false.
+* Fix issue counter section.
+
 ## 1.2.2
 * Update selective refresh render callback.
 * Remove capability for hero animation settings.
