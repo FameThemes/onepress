@@ -605,7 +605,6 @@ function onepress_customize_register( $wp_customize ) {
 				'onepress_custom_css',
 				array(
 					'default'              => '',
-					'capability'           => 'edit_themes',
 					'sanitize_callback'    => 'onepress_sanitize_css',
 					'type' 				   => 'option',
 				)
