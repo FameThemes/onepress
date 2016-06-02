@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.2.4
+* Fix issue can click to nav link.
+
 ## 1.2.3
 * Fix Background image full screen when header transparent.
 * Fix issue No Custom CSS under Theme Options when defined DISALLOW_FILE_EDIT = false.
