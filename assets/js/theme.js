@@ -1,36 +1,4 @@
-/**
- * Initialise Menu Toggle
- */
-( function() {
 
-    jQuery('#nav-toggle').on('click', function(event){
-        event.preventDefault();
-        jQuery('#nav-toggle').toggleClass('nav-is-visible');
-        jQuery('.main-navigation .onepress-menu').toggleClass("onepress-menu-mobile");
-        jQuery('.header-widget').toggleClass("header-widget-mobile");
-    });
-
-    jQuery('.onepress-menu li.menu-item-has-children, .onepress-menu li.page_item_has_children').each( function() {
-		jQuery(this).prepend('<div class="nav-toggle-subarrow"><i class="fa fa-angle-down"></i></div>');
-	});
-
-    jQuery('.nav-toggle-subarrow, .nav-toggle-subarrow .nav-toggle-subarrow').click(
-        function () {
-            jQuery(this).parent().toggleClass("nav-toggle-dropdown");
-        }
-    );
-    
-    // toggle mobile dropdown menu after click menu link
-    jQuery( '.onepress-menu a' ).on( 'click', function ( e ) {
-        e.preventDefault();
-        var $om = jQuery( '.onepress-menu' );
-        if ( ! $om.hasClass( 'onepress-menu-mobile' ) ) {
-            return false;
-        }
-        jQuery( '#nav-toggle' ).trigger( 'click' );
-    } );
-
-} )();
 
 /**
  * skip-link-focus-fix.js
@@ -259,23 +227,46 @@
 
 
 
-
-
 /*
+* Nav Menu & element actions
+*
 * Smooth scroll for navigation and other elements
 */
 ( function() {
 
+    // Initialise Menu Toggle
+    jQuery('#nav-toggle').on('click', function(event){
+        event.preventDefault();
+        jQuery('#nav-toggle').toggleClass('nav-is-visible');
+        jQuery('.main-navigation .onepress-menu').toggleClass("onepress-menu-mobile");
+        jQuery('.header-widget').toggleClass("header-widget-mobile");
+    });
+
+    jQuery('.onepress-menu li.menu-item-has-children, .onepress-menu li.page_item_has_children').each( function() {
+        jQuery(this).prepend('<div class="nav-toggle-subarrow"><i class="fa fa-angle-down"></i></div>');
+    });
+
+    jQuery('.nav-toggle-subarrow, .nav-toggle-subarrow .nav-toggle-subarrow').click(
+        function () {
+            jQuery(this).parent().toggleClass("nav-toggle-dropdown");
+        }
+    );
+
     // Get the header height and wpadminbar height if enable.
+    var h;
     if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
-        var h = jQuery('#wpadminbar').height() + jQuery('.site-header').height();
+        h = jQuery('#wpadminbar').height() + jQuery('.site-header').height();
     } else {
-        var h = jQuery('#wpadminbar').height();
+        h = jQuery('#wpadminbar').height();
     }
 
     // Navigation click to section.
     jQuery('.home #site-navigation li a[href*="#"]').on('click', function(event){
         event.preventDefault();
+        // if in mobile mod
+        if (  jQuery( '.onepress-menu' ).hasClass( 'onepress-menu-mobile' ) ) {
+            jQuery( '#nav-toggle' ).trigger( 'click' );
+        }
         smoothScroll(jQuery(this.hash));
     });
 
