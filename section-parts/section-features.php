@@ -60,7 +60,7 @@ if ( !$disable && !empty( $data ) ) {
                         <?php if ( $f['link'] )  { ?></a><?php } ?>
                     </div>
                     <h4><?php if ( $f['link'] ) { ?><a href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?><?php echo esc_html( $f['title'] ); ?><?php if ( $f['link'] )  { ?></a><?php } ?></h4>
-                    <div><?php echo wp_kses_post( $f['desc'] ); ?></div>
+                    <div class="feature-item-content"><?php echo apply_filters( 'the_content', $f['desc'] ); ?></div>
                 </div>
             <?php
             }// end loop featues
