@@ -137,6 +137,7 @@ function onepress_sanitize_repeatable_data_field( $input , $setting ){
                         $data[ $i ][ $id ] = sanitize_text_field( $value );
                         break;
                     case 'textarea':
+                    case 'editor':
                         $data[ $i ][ $id ] = wp_kses_post( $value );
                         break;
                     case 'color':
