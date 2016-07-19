@@ -359,11 +359,9 @@
 					}
 				};
 
-
                 //console.log( tmceInit );
                 tmceInit.plugins = tmceInit.plugins.replace('fullscreen,', '');
 				tinyMCEPreInit.mceInit[ id ] = tmceInit;
-				//console.log( tmceInit );
 
 				qtInit.id = id;
 				tinyMCEPreInit.qtInit[ id ] = qtInit;
@@ -482,6 +480,9 @@
 ( function( api , $ ) {
 	api.controlConstructor['wp_editor'] = api.Control.extend( {
 		ready: function() {
+            if ( ! window.tinyMCE ) {
+                return;
+            }
 			var control = this;
 			control.editing_area = $( '.wp-js-editor-textarea' , control.container );
 			control.editing_area.uniqueId();
@@ -492,7 +493,9 @@
 			var content = control.editing_area.val();
 			// Load default value
 			$( 'textarea', control.editing_editor).val( content );
-			control.preview.html( window.switchEditors._wp_Autop( content ) );
+            if (  window.switchEditors ) {
+                control.preview.html(window.switchEditors._wp_Autop(content));
+            }
 
 			$( 'body' ).on( 'click', '#customize-controls, .customize-section-back', function( e ) {
 				if ( ! $( e.target ).is( control.preview ) ) {
@@ -548,7 +551,10 @@
 			control.preview.on( 'click', function( e ){
 				$( '.modal-wp-js-editor').removeClass( 'wpe-active' );
 				control.editing_editor.toggleClass( 'wpe-active' );
-				tinyMCE.get( control.editor_id ).focus();
+                if ( window.tinyMCE ) {
+                    tinyMCE.get( control.editor_id ).focus();
+                }
+
 				control.preview.addClass( 'wpe-focus' );
 				control._resize();
 				return false;
@@ -570,9 +576,11 @@
 			tb_h += w.find( '.wp-editor-tools' ).eq( 0 ).height();
             tb_h += 50;
 			//var width = $( window ).width();
-			var editor = tinymce.get( control.editor_id );
-            control.editing_editor.width( '' );
-            editor.theme.resizeTo( '100%', height - tb_h );
+            if ( window.tinymce ){
+                var editor = tinymce.get( control.editor_id );
+                control.editing_editor.width( '' );
+                editor.theme.resizeTo( '100%', height - tb_h );
+            }
             w.find( 'textarea.wp-editor-area').height( height - tb_h  );
 		}
 
@@ -707,6 +715,9 @@
 		},
 
 		editor: function( $textarea ){
+            if ( ! window.tinyMCE ) {
+                return;
+            }
 			var control = this;
 			if ( $textarea.hasClass( 'editor-added' ) ){
 				return;
@@ -729,7 +740,9 @@
 			var content = settings.editing_area.val();
 			// Load default value
 			$( 'textarea', settings.editing_editor).val( content );
-			settings.preview.html( window.switchEditors._wp_Autop( content ) );
+            if ( window.switchEditors ) {
+                settings.preview.html( window.switchEditors._wp_Autop( content ) );
+            }
 
 			$( 'body' ).on( 'click', '#customize-controls, .customize-section-back', function( e ) {
 				if ( ! $( e.target ).is( settings.preview ) ) {
@@ -778,7 +791,9 @@
 					$( '.wp-js-editor-preview').removeClass( 'wpe-focus' );
 					$('.modal-wp-js-editor').removeClass('wpe-active');
 					settings.editing_editor.toggleClass('wpe-active');
-					tinyMCE.get(settings.editor_id).focus();
+                    if ( window.tinyMCE ) {
+                        tinyMCE.get(settings.editor_id).focus();
+                    }
 					settings.preview.addClass( 'wpe-focus' );
 					settings._resize();
 					return false;
@@ -799,9 +814,11 @@
                 var tb_h = w.find( '.mce-toolbar-grp' ).eq( 0 ).height();
                 tb_h += w.find( '.wp-editor-tools' ).eq( 0 ).height();
                 tb_h += 50;
-				var editor = tinymce.get( settings.editor_id );
-                settings.editing_editor.width( '' );
-                editor.theme.resizeTo( '100%', height - tb_h );
+                if ( window.tinymce ) {
+                    var editor = tinymce.get(settings.editor_id);
+                    settings.editing_editor.width('');
+                    editor.theme.resizeTo('100%', height - tb_h);
+                }
                 w.find( 'textarea.wp-editor-area').height( height - tb_h  );
 			};
 
