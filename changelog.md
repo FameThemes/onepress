@@ -4,6 +4,9 @@ CHANGELOG
 
 ## 1.2.5
 * Update FontAwesome to latest version.
+* Remove logo 1.2.0 fallback.
+* Fix customizer issue.
+* Add filter the content for features items.
 
 ## 1.2.4
 * Fix issue can click to nav link.
