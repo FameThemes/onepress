@@ -187,7 +187,7 @@ if ( ! function_exists( 'onepress_fonts_url' ) ) :
 	        }
 
 	        if ( 'off' !== $open_sans ) {
-	            $font_families[] = 'Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic';
+	            $font_families[] = 'Open Sans:400,300,300italic,400italic,600,600italic,700,700italic';
 	        }
 
 	        $query_args = array(
