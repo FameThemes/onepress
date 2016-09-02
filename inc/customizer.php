@@ -129,7 +129,7 @@ function onepress_customize_register( $wp_customize ) {
 				'panel'       => 'onepress_options',
 			)
 		);
-	
+
 			// Disable Sticky Header
 			$wp_customize->add_setting( 'onepress_sticky_header_disable',
 				array(
@@ -1032,7 +1032,7 @@ function onepress_customize_register( $wp_customize ) {
                 );
                 $wp_customize->add_control( 'onepress_hcl1_btn2_style',
                     array(
-                        'label' 		=> esc_html__('Button #1 style', 'onepress'),
+                        'label' 		=> esc_html__('Button #2 style', 'onepress'),
                         'section' 		=> 'onepress_hero_content_layout1',
                         'type'          => 'select',
                         'choices' => array(
