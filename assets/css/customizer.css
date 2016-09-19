@@ -115,9 +115,10 @@ body .wp-full-overlay{
     z-index: 9999;
 }
 
-.wp-js-editor-active textarea{
+.wp-js-editor-active textarea, .onepress-editor-added textarea{
     display: none;
 }
+
 .wp-js-editor-preview {
     background-color: #fff;
     border: 1px solid #ddd;
