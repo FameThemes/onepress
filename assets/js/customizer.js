@@ -576,11 +576,16 @@
 			tb_h += w.find( '.wp-editor-tools' ).eq( 0 ).height();
             tb_h += 50;
 			//var width = $( window ).width();
-            if ( window.tinymce ){
-                var editor = tinymce.get( control.editor_id );
-                control.editing_editor.width( '' );
-                editor.theme.resizeTo( '100%', height - tb_h );
+            try {
+                if ( window.tinymce ){
+                    var editor = tinymce.get( control.editor_id );
+                    control.editing_editor.width( '' );
+                    editor.theme.resizeTo( '100%', height - tb_h );
+                }
+            } catch ( e ) {
+
             }
+
             w.find( 'textarea.wp-editor-area').height( height - tb_h  );
 		}
 
