@@ -19,15 +19,15 @@ if (is_string($_images)) {
 	$_images = json_decode($_images, true);
 }
 
-if (empty($_images) || !is_array($_images)) {
-    $_images = array(  );
+if ( empty( $_images ) || !is_array( $_images ) ) {
+    $_images = array();
 }
 
 $images = array();
 
 foreach ( $_images as $m ) {
-	$m = wp_parse_args($m, array('image' => ''));
-	$_u = onepress_get_media_url($m['image']);
+	$m  = wp_parse_args( $m, array('image' => '' ) );
+	$_u = onepress_get_media_url( $m['image'] );
 	if ( $_u ) {
 		$images[] = $_u;
 	}
@@ -40,19 +40,28 @@ if ( empty( $images ) ){
 $is_parallax =  get_theme_mod( 'onepress_hero_parallax' ) == 1 && ! empty( $images ) ;
 
 if ( $is_parallax ) {
-    echo '<div id="parallax-hero" class="parallax-hero parallax-window" data-over-scroll-fix="true" data-z-index="1" data-speed="0.3" data-image-src="'.esc_attr( $images[0] ).'" data-parallax="scroll" data-position="center" data-bleed="0">';
+    echo '<div id="parallax-hero" class="parallax-hero parallax-window" data-over-scroll-fix="true" data-z-index="1" data-speed="0.3" data-image-src="'.esc_attr( $images[0] ).'" data-position="center" data-bleed="0">';
 }
 
 ?>
 <?php if ( ! $onepress_hero_disable && ! empty ( $images ) ) : ?>
-	<section id="<?php if ($onepress_hero_id != '') echo $onepress_hero_id; ?>" class="hero-slideshow-wrapper <?php if ($onepress_hero_fullscreen == 1) {
-		echo 'hero-slideshow-fullscreen';
-	} else {
-		echo 'hero-slideshow-normal';
-	} ?>">
-		<?php
-		$layout = get_theme_mod( 'onepress_hero_layout', 1 );
+	<section id="<?php if ( $onepress_hero_id != '' ){ echo esc_attr( $onepress_hero_id ); } ?>" <?php if ( ! empty ( $images) && ! $is_parallax ) { ?> data-images="<?php echo esc_attr( json_encode( $images ) ); ?>"<?php } ?>
+             class="hero-slideshow-wrapper <?php echo ( $onepress_hero_fullscreen == 1 ) ? 'hero-slideshow-fullscreen' : 'hero-slideshow-normal'; ?>">
 
+        <div class="sk-cube-grid ">
+            <div class="sk-cube sk-cube1"></div>
+            <div class="sk-cube sk-cube2"></div>
+            <div class="sk-cube sk-cube3"></div>
+            <div class="sk-cube sk-cube4"></div>
+            <div class="sk-cube sk-cube5"></div>
+            <div class="sk-cube sk-cube6"></div>
+            <div class="sk-cube sk-cube7"></div>
+            <div class="sk-cube sk-cube8"></div>
+            <div class="sk-cube sk-cube9"></div>
+        </div>
+
+        <?php
+		$layout = get_theme_mod( 'onepress_hero_layout', 1 );
 		switch( $layout ) {
 			case 2:
 				$hcl2_content =  get_theme_mod( 'onepress_hcl2_content', wp_kses_post( '<h1>Business Website'."\n".'Made Simple.</h1>'."\n".'We provide creative solutions to clients around the world,'."\n".'creating things that get attention and meaningful.'."\n\n".'<a class="btn btn-secondary-outline btn-lg" href="#">Get Started</a>' ) );
@@ -92,18 +101,6 @@ if ( $is_parallax ) {
 				<?php
 		}
 
-		if ( ! empty ( $images) && ! $is_parallax ) {
-			?>
-			<script>
-				jQuery(document).ready(function () {
-					jQuery('.hero-slideshow-wrapper').backstretch(<?php echo json_encode( $images ) ?>, {
-						fade: 750,
-						duration: 5000
-					});
-				});
-			</script>
-			<?php
-		}
 	?>
 	</section>
 <?php endif;

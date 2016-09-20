@@ -1,4 +1,28 @@
 
+function preload_images( images, complete_callback ) {
+    var id = 'test-'+( new Date().getTime() );
+    jQuery( 'body').append( '<div id="'+id+'"></div>' );
+    jQuery.each( images, function( index, src ){
+        var img = jQuery( '<img>' );
+        img.attr( 'alt', ''  );
+        img.attr( 'class', 'image__preload'  );
+        img.css( 'display', 'none' );
+        img.attr( 'src', src );
+        jQuery( '#'+id ).append( img );
+    } );
+
+    jQuery( '#'+id ).imagesLoaded( function() {
+        console.log( 'loaded' );
+        console.log( images );
+        if ( complete_callback ) {
+            complete_callback();
+        }
+        setTimeout( function(){
+            jQuery( '#'+id ).remove();
+        }, 5000 );
+    });
+
+}
 
 /**
  * skip-link-focus-fix.js
@@ -125,19 +149,21 @@
         jQuery('.section-has-parallax').each(function() {
             var $this = jQuery(this);
             var bg    = $this.find('.parallax_bg');
+            var img = $this.data('bg');
 
-            jQuery(bg).css('backgroundImage', 'url(' + $this.data('bg') + ')');
+            preload_images( [ img ], function(){
+                jQuery(bg).css('backgroundImage', 'url(' + img + ')');
+                if (testMobile == null) {
+                    jQuery(bg).addClass('not-mobile');
+                    jQuery(bg).removeClass('is-mobile');
+                    jQuery(bg).parallax('50%', 0.4);
+                } else {
+                    //jQuery(bg).css('backgroundAttachment', 'inherit');
+                    jQuery(bg).removeClass('not-mobile');
+                    jQuery(bg).addClass('is-mobile');
+                }
+            });
 
-            if (testMobile == null) {
-                jQuery(bg).addClass('not-mobile');
-                jQuery(bg).removeClass('is-mobile');
-                jQuery(bg).parallax('50%', 0.4);
-            } else {
-                //jQuery(bg).css('backgroundAttachment', 'inherit');
-                jQuery(bg).removeClass('not-mobile');
-                jQuery(bg).addClass('is-mobile');
-
-            }
         });
     }
 })();
@@ -206,7 +232,6 @@
                 }
 
                 $wrap.addClass( 'is-fixed').removeClass( 'no-scroll' );
-
                 header_fixed.addClass('header-fixed');
                 header_fixed.css( 'top', topbar+'px' );
                 header_fixed.stop().animate({},400);
@@ -327,7 +352,7 @@ jQuery( document ).ready( function( $ ){
 /**
  * Call magnificPopup when use
  */
-( function() {
+jQuery( document ).ready( function( $ ){
 
     jQuery('.popup-video').magnificPopup({
         //disableOn: 700,
@@ -341,4 +366,48 @@ jQuery( document ).ready( function( $ ){
         }
     });
 
-})();
+} );
+
+
+/**
+ * Hero sliders
+ */
+jQuery(document).ready(function ( $ ) {
+
+    jQuery('.hero-slideshow-wrapper').each( function(){
+        var hero = $( this );
+        if ( hero.hasClass( 'video-hero' ) ) {
+            return ;
+        }
+        var images = hero.data( 'images' )  || false;
+        if ( typeof images == 'string' ) {
+            images = jQuery.parseJSON( images );
+        }
+
+        preload_images( images, function(){
+            hero.backstretch( images , {
+                fade: 750,
+                duration: 5000
+            });
+            hero.addClass( 'loaded');
+            setTimeout( function(){
+                hero.find( '.sk-cube-grid').remove();
+            }, 600 );
+        } ) ;
+
+    } );
+
+    $( '.parallax-hero').each( function(){
+        var hero = $( this);
+        var img = hero.attr( 'data-image-src' ) || '';
+        preload_images( [ img ], function(){
+            hero.parallax();
+            hero.find( '.hero-slideshow-wrapper' ).addClass( 'loaded');
+            setTimeout( function(){
+                hero.find( '.hero-slideshow-wrapper' ).find( '.sk-cube-grid').remove();
+            }, 600 );
+        } ) ;
+
+    } );
+
+});
