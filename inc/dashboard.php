@@ -230,9 +230,11 @@ function onepress_theme_info_page() {
 
                         } else {
                             $install_url = add_query_arg(array(
-                                '_wpnonce' => wp_create_nonce('activate-plugin_' . $plugin_name . '/' . $plugin_name . '.php'),
                                 'action' => 'activate',
-                                'plugin' => $plugin_name . '/' . $plugin_name . '.php',
+                                'plugin' => rawurlencode( $plugin_name . '/' . $plugin_name . '.php' ),
+                                'plugin_status' => 'all',
+                                'paged' => '1',
+                                '_wpnonce' => wp_create_nonce('activate-plugin_' . $plugin_name . '/' . $plugin_name . '.php'),
                             ), network_admin_url('plugins.php'));
                             $button_class = 'activate-now button-primary';
                             $button_txt = esc_html__( 'Active Now', 'onepress' );
@@ -258,7 +260,7 @@ function onepress_theme_info_page() {
                         );
                         echo '</p>';
 
-                        echo '<p class="plugin-card-'.esc_attr( $plugin_name ).'"><a href="'.esc_attr( $install_url ).'" data-slug="'.esc_attr( $plugin_name ).'" class="'.esc_attr( $button_class ).'">'.$button_txt.'</a></p>';
+                        echo '<p class="plugin-card-'.esc_attr( $plugin_name ).'"><a href="'.esc_url( $install_url ).'" data-slug="'.esc_attr( $plugin_name ).'" class="'.esc_attr( $button_class ).'">'.$button_txt.'</a></p>';
 
                         ?>
                     </div>
@@ -272,8 +274,6 @@ function onepress_theme_info_page() {
     <script type="text/javascript">
         jQuery(  document).ready( function( $ ){
             $( 'body').addClass( 'about-php' );
-            // $document.trigger( 'wp-plugin-updating', args );
-            // $document.trigger( 'wp-plugin-install-success', response );
         } );
     </script>
     <?php
