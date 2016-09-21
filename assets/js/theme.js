@@ -12,8 +12,6 @@ function preload_images( images, complete_callback ) {
     } );
 
     jQuery( '#'+id ).imagesLoaded( function() {
-        console.log( 'loaded' );
-        console.log( images );
         if ( complete_callback ) {
             complete_callback();
         }
@@ -257,7 +255,7 @@ function preload_images( images, complete_callback ) {
 *
 * Smooth scroll for navigation and other elements
 */
-( function() {
+( function( $ ) {
 
     // Initialise Menu Toggle
     jQuery('#nav-toggle').on('click', function(event){
@@ -339,7 +337,21 @@ function preload_images( images, complete_callback ) {
         });
         return false;
     }
-})();
+
+    if ( onepress_js_settings.is_home ) {
+        // custom-logo-link
+        jQuery( '.site-branding .site-brand-inner').on( 'click', function( e ){
+            e.preventDefault();
+            jQuery("html, body").animate({
+                scrollTop: "0px"
+            }, {
+                duration: 800,
+                easing: "swing"
+            });
+        } );
+    }
+
+})( jQuery );
 
 // Counter Up
 jQuery( document ).ready( function( $ ){
