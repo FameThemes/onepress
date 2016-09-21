@@ -345,7 +345,7 @@ function preload_images( images, complete_callback ) {
             jQuery("html, body").animate({
                 scrollTop: "0px"
             }, {
-                duration: 800,
+                duration: 300,
                 easing: "swing"
             });
         } );

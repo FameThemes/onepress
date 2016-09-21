@@ -206,18 +206,6 @@ if ( ! function_exists( 'onepress_fonts_url' ) ) :
 	}
 endif;
 
-if ( ! function_exists( 'onepress_admin_scripts' ) ) :
-	/**
-	 * Enqueue scripts for admin page only: Theme info page
-	 */
-	function onepress_admin_scripts( $hook ) {
-		if ( $hook === 'widgets.php' || $hook === 'appearance_page_ft_onepress'  ) {
-			wp_enqueue_style( 'onepress-admin-css', get_template_directory_uri() . '/assets/css/admin.css' );
-		}
-	}
-endif;
-add_action( 'admin_enqueue_scripts', 'onepress_admin_scripts' );
-
 
 if ( ! function_exists( 'onepress_register_required_plugins' ) ) :
 	/**
