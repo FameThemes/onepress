@@ -352,24 +352,37 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-
 		// Header Transparent
-		$wp_customize->add_setting( 'onepress_header_transparent',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_checkbox',
-				'default'           => '',
-				'active_callback'   => 'onepress_showon_frontpage'
-			)
-		);
-		$wp_customize->add_control( 'onepress_header_transparent',
-			array(
-				'type'        => 'checkbox',
-				'label'       => esc_html__('Header Transparent', 'onepress'),
-				'section'     => 'onepress_header_settings',
-				'description' => esc_html__('Apply for front page template only.', 'onepress')
-			)
-		);
+        $wp_customize->add_setting( 'onepress_header_transparent',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_checkbox',
+                'default'           => '',
+                'active_callback'   => 'onepress_showon_frontpage'
+            )
+        );
+        $wp_customize->add_control( 'onepress_header_transparent',
+            array(
+                'type'        => 'checkbox',
+                'label'       => esc_html__('Header Transparent', 'onepress'),
+                'section'     => 'onepress_header_settings',
+                'description' => esc_html__('Apply for front page template only.', 'onepress')
+            )
+        );
 
+        $wp_customize->add_setting( 'onepress_header_scroll_logo',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_checkbox',
+                'default'           => 0,
+                'active_callback'   => ''
+            )
+        );
+        $wp_customize->add_control( 'onepress_header_scroll_logo',
+            array(
+                'type'        => 'checkbox',
+                'label'       => esc_html__('Scroll to top when click to home page on front page.', 'onepress'),
+                'section'     => 'onepress_header_settings',
+            )
+        );
 
 		/* Social Settings
 		----------------------------------------------------------------------*/
@@ -2606,6 +2619,6 @@ function opneress_customize_js_settings(){
     wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(
         'number_action' => $number_action,
         'is_plus_activated' => class_exists( 'OnePress_PLus' ) ? 'y' : 'n',
-        'action_url' => admin_url( 'themes.php?page=ft_onepress&tab=actions_required' )
+        'action_url' => admin_url( 'themes.php?page=ft_onepress&tab=actions_required' ),
     ) );
 }

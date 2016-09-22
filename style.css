@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design. The theme overall is an elegant and classic one, a fine example of Bootstrap 4 WordPress theme which compatibility with latest version of WooCommerce. (Live preview : http://www.famethemes.com/preview/?theme=OnePress)
-Version: 1.2.4
+Version: 1.2.5
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -1835,6 +1835,90 @@ input[type="radio"], input[type="checkbox"] {
 	border-color: #03c4eb;
 }
 
+/* Loading
+------------------------------*/
+.sk-cube-grid {
+	width: 40px;
+	height: 40px;
+	margin: 100px auto;
+}
+
+.sk-cube-grid .sk-cube {
+	width: 33%;
+	height: 33%;
+	background-color: #fff;
+	float: left;
+	-webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+	animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+}
+
+.sk-cube-grid .sk-cube1 {
+	-webkit-animation-delay: 0.2s;
+	animation-delay: 0.2s;
+}
+
+.sk-cube-grid .sk-cube2 {
+	-webkit-animation-delay: 0.3s;
+	animation-delay: 0.3s;
+}
+
+.sk-cube-grid .sk-cube3 {
+	-webkit-animation-delay: 0.4s;
+	animation-delay: 0.4s;
+}
+
+.sk-cube-grid .sk-cube4 {
+	-webkit-animation-delay: 0.1s;
+	animation-delay: 0.1s;
+}
+
+.sk-cube-grid .sk-cube5 {
+	-webkit-animation-delay: 0.2s;
+	animation-delay: 0.2s;
+}
+
+.sk-cube-grid .sk-cube6 {
+	-webkit-animation-delay: 0.3s;
+	animation-delay: 0.3s;
+}
+
+.sk-cube-grid .sk-cube7 {
+	-webkit-animation-delay: 0s;
+	animation-delay: 0s;
+}
+
+.sk-cube-grid .sk-cube8 {
+	-webkit-animation-delay: 0.1s;
+	animation-delay: 0.1s;
+}
+
+.sk-cube-grid .sk-cube9 {
+	-webkit-animation-delay: 0.2s;
+	animation-delay: 0.2s;
+}
+
+@-webkit-keyframes sk-cubeGridScaleDelay {
+	0%, 70%, 100% {
+		-webkit-transform: scale3D(1, 1, 1);
+		transform: scale3D(1, 1, 1);
+	}
+	35% {
+		-webkit-transform: scale3D(0, 0, 1);
+		transform: scale3D(0, 0, 1);
+	}
+}
+
+@keyframes sk-cubeGridScaleDelay {
+	0%, 70%, 100% {
+		-webkit-transform: scale3D(1, 1, 1);
+		transform: scale3D(1, 1, 1);
+	}
+	35% {
+		-webkit-transform: scale3D(0, 0, 1);
+		transform: scale3D(0, 0, 1);
+	}
+}
+
 /*--------------------------------------------------------------
 7.0 Widgets
 --------------------------------------------------------------*/
@@ -2080,8 +2164,9 @@ input[type="radio"], input[type="checkbox"] {
 .hero-slideshow-wrapper {
 	width: 100%;
 	position: relative;
-	background-color: #000000;
+	background-color: #222222;
 	overflow: hidden;
+	/* Loading icon */
 }
 
 .hero-slideshow-wrapper:after {
@@ -2093,6 +2178,52 @@ input[type="radio"], input[type="checkbox"] {
 	background-color: rgba(0, 0, 0, 0.3);
 	display: block;
 	content: "";
+}
+
+.hero-slideshow-wrapper .hero__content .hero-large-text, .hero-slideshow-wrapper .hero__content .hero-small-text, .hero-slideshow-wrapper .hero__content .btn {
+	visibility: hidden;
+	opacity: 0;
+	-webkit-transform: translateY(100px);
+	transform: translateY(100px);
+	-webkit-transition: all .5s linear;
+	transition: all .5s linear;
+}
+
+.hero-slideshow-wrapper .hero__content .hero-large-text {
+	-webkit-transition-delay: 1.0s;
+	/* Safari */
+	transition-delay: 1.0s;
+}
+
+.hero-slideshow-wrapper .hero__content .hero-small-text {
+	-webkit-transition-delay: 1.5s;
+	/* Safari */
+	transition-delay: 1.5s;
+}
+
+.hero-slideshow-wrapper .hero__content .btn {
+	-webkit-transition-delay: 1.8s;
+	/* Safari */
+	transition-delay: 1.8s;
+}
+
+.hero-slideshow-wrapper.loaded .container .hero__content .hero-large-text,
+.hero-slideshow-wrapper.loaded .container .hero__content .hero-small-text,
+.hero-slideshow-wrapper.loaded .container .hero__content .btn {
+	visibility: visible;
+	opacity: 1;
+	-webkit-transform: translateY(0);
+	transform: translateY(0);
+}
+
+.hero-slideshow-wrapper .sk-cube-grid {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 9999999;
+	margin: 0px;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 }
 
 .hero-slideshow-normal .container {
@@ -2805,6 +2936,11 @@ div.wpcf7-response-output {
 
 .section-videolightbox .video_icon:hover i {
 	color: #000;
+}
+
+.parallax-mirror, .parallax-mirror .parallax-slider,
+.parallax-hero.parallax-window {
+	background-color: #222222;
 }
 
 .parallax-videolightbox .parallax-mirror::before {

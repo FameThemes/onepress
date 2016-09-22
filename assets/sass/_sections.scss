@@ -115,10 +115,11 @@
 
 /* Section: Hero
 ------------------------------*/
+
 .hero-slideshow-wrapper {
 	width: 100%;
 	position: relative;
-	background-color: #000000;
+	background-color: #222222;
 	overflow: hidden;
 	&:after{
 		position: absolute;
@@ -129,6 +130,59 @@
 		background-color: rgba(0,0,0,0.3);
 		display: block;
 		content: "";
+	}
+
+	.hero__content {
+
+		.hero-large-text, .hero-small-text, .btn {
+			visibility: hidden;
+			opacity: 0;
+			-webkit-transform: translateY(100px);
+			transform: translateY(100px);
+			-webkit-transition: all .5s linear;
+			transition: all .5s linear;
+		}
+		.hero-large-text {
+			-webkit-transition-delay: 1.0s; /* Safari */
+			transition-delay: 1.0s;
+		}
+		.hero-small-text {
+			-webkit-transition-delay: 1.5s; /* Safari */
+			transition-delay: 1.5s;
+		}
+		.btn{
+			-webkit-transition-delay: 1.8s; /* Safari */
+			transition-delay: 1.8s;
+		}
+
+	}
+
+	&.loaded {
+		.container {
+			.hero__content {
+
+				.hero-large-text,
+				.hero-small-text,
+				.btn {
+					visibility: visible;
+					opacity: 1;
+					-webkit-transform: translateY(0);
+					transform: translateY(0);
+				}
+
+			}
+		}
+	}
+
+	/* Loading icon */
+	.sk-cube-grid {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		z-index: 9999999;
+		margin: 0px;
+		-webkit-transform: translate(-50%, -50%);
+	            transform: translate(-50%, -50%);
 	}
 }
 
@@ -529,7 +583,7 @@
 			width: 100%;
 		}
 	}
-	
+
 }
 
 .team-member {
@@ -782,6 +836,10 @@ div.wpcf7-response-output {
 			}
 		}
 	}
+}
+.parallax-mirror, .parallax-mirror .parallax-slider,
+.parallax-hero.parallax-window {
+	background-color: #222222;
 }
 .parallax-videolightbox .parallax-mirror::before {
 	background-color: #000000;

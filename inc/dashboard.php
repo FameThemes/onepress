@@ -3,10 +3,25 @@
  * Add theme dashboard page
  */
 
+if ( ! function_exists( 'onepress_admin_scripts' ) ) :
+    /**
+     * Enqueue scripts for admin page only: Theme info page
+     */
+    function onepress_admin_scripts( $hook ) {
+        if ( $hook === 'widgets.php' || $hook === 'appearance_page_ft_onepress'  ) {
+            wp_enqueue_style( 'onepress-admin-css', get_template_directory_uri() . '/assets/css/admin.css' );
+            // Add recommend plugin css
+            wp_enqueue_style( 'plugin-install' );
+            wp_enqueue_script( 'plugin-install' );
+            wp_enqueue_script( 'updates' );
+            add_thickbox();
+        }
+    }
+endif;
+add_action( 'admin_enqueue_scripts', 'onepress_admin_scripts' );
+
 add_action('admin_menu', 'onepress_theme_info');
 function onepress_theme_info() {
-    //$theme_data = wp_get_theme('onepress');
-
     $actions = onepress_get_actions_required();
     $n = array_count_values( $actions );
     $number_count =  0;
@@ -58,6 +73,7 @@ function onepress_one_activation_admin_notice(){
     }
 }
 
+
 /* activation notice */
 add_action( 'load-themes.php',  'onepress_one_activation_admin_notice'  );
 
@@ -97,6 +113,7 @@ function onepress_theme_info_page() {
         <h2 class="nav-tab-wrapper">
             <a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'OnePress', 'onepress' ) ?></a>
             <a href="?page=ft_onepress&tab=actions_required" class="nav-tab<?php echo $tab == 'actions_required' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Actions Required', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
+            <a href="?page=ft_onepress&tab=demo-data-importer" class="nav-tab<?php echo $tab == 'demo-data-importer' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'One Click Demo Import', 'onepress' ); ?></span></a>
             <?php do_action( 'onepress_admin_more_tabs' ); ?>
         </h2>
 
@@ -188,8 +205,76 @@ function onepress_theme_info_page() {
             </div>
         <?php } ?>
 
+        <?php if ( $tab == 'demo-data-importer' ) { ?>
+            <div class="demo-import-tab-content info-tab-content">
+                <?php if ( has_action( 'onepress_demo_import_content_tab' ) ) {
+                    do_action( 'onepress_demo_import_content_tab' );
+                } else { ?>
+                    <div id="plugin-filter" class="demo-import-boxed">
+                        <?php
+                        $plugin_name = 'famethemes-demo-importer';
+                        $status = is_dir( WP_PLUGIN_DIR . '/' . $plugin_name );
+                        $button_class = 'install-now button';
+                        $button_txt = esc_html__( 'Install Now', 'onepress' );
+                        if ( ! $status ) {
+                            $install_url = wp_nonce_url(
+                                add_query_arg(
+                                    array(
+                                        'action' => 'install-plugin',
+                                        'plugin' => $plugin_name
+                                    ),
+                                    network_admin_url( 'update.php' )
+                                ),
+                                'install-plugin_'.$plugin_name
+                            );
+
+                        } else {
+                            $install_url = add_query_arg(array(
+                                'action' => 'activate',
+                                'plugin' => rawurlencode( $plugin_name . '/' . $plugin_name . '.php' ),
+                                'plugin_status' => 'all',
+                                'paged' => '1',
+                                '_wpnonce' => wp_create_nonce('activate-plugin_' . $plugin_name . '/' . $plugin_name . '.php'),
+                            ), network_admin_url('plugins.php'));
+                            $button_class = 'activate-now button-primary';
+                            $button_txt = esc_html__( 'Active Now', 'onepress' );
+                        }
+
+                        $detail_link = add_query_arg(
+                            array(
+                                'tab' => 'plugin-information',
+                                'plugin' => $plugin_name,
+                                'TB_iframe' => 'true',
+                                'width' => '772',
+                                'height' => '349',
+
+                            ),
+                            network_admin_url( 'plugin-install.php' )
+                        );
+
+                        echo '<p>';
+                        printf( esc_html__(
+                            '%1$s you will need to install and activate the %2$s plugin first.', 'onepress' ),
+                            '<b>'.esc_html__( 'Hey.', 'onepress' ).'</b>',
+                            '<a class="thickbox open-plugin-details-modal" href="'.esc_url( $detail_link ).'">'.esc_html__( 'FameThemes Demo Importer', 'onepress' ).'</a>'
+                        );
+                        echo '</p>';
+
+                        echo '<p class="plugin-card-'.esc_attr( $plugin_name ).'"><a href="'.esc_url( $install_url ).'" data-slug="'.esc_attr( $plugin_name ).'" class="'.esc_attr( $button_class ).'">'.$button_txt.'</a></p>';
+
+                        ?>
+                    </div>
+                <?php } ?>
+            </div>
+        <?php } ?>
+
         <?php do_action( 'onepress_more_tabs_details', $actions ); ?>
 
     </div> <!-- END .theme_info -->
+    <script type="text/javascript">
+        jQuery(  document).ready( function( $ ){
+            $( 'body').addClass( 'about-php' );
+        } );
+    </script>
     <?php
 }

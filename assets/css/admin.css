@@ -131,3 +131,16 @@
     text-decoration: none;
     color: #d54e21;
 }
+
+.demo-import-boxed {
+    background: #fff none repeat scroll 0 0;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    line-height: 2.1em;
+    margin-bottom: 25px;
+    max-width: 1050px;
+    overflow: auto;
+    padding: 0 12px;
+    position: relative;
+    border-left: 4px solid #0085ba;
+}

@@ -12,32 +12,19 @@
  * @since 1.2.1
  */
 function onepress_site_logo(){
-    $is_old_logo = false;
-    $is_wp_4_5   =  function_exists( 'the_custom_logo' );
     $classes = array();
     $html = '' ;
     $classes['logo'] = 'no-logo-img';
-    if ( $is_wp_4_5 && has_custom_logo() ) {
+
+    if ( has_custom_logo() ) {
         $classes['logo'] = 'has-logo-img';
         $html .= '<div class="site-logo-div">';
         $html .= get_custom_logo();
         $html .= '</div>';
-    } else {
-        $site_image_logo = get_theme_mod( 'onepress_site_image_logo' );
-        /**
-         *  Fallback OnePress 1.2.0 and WordPress < 4.5
-         */
-        if ( $site_image_logo != "" ) {
-            $is_old_logo = true;
-            $classese['logo'] = 'has-logo-img';
-            $html .= '<div class="site-logo-div"><a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
-            $html .= '<img src="' . $site_image_logo . '" alt="' . get_bloginfo('title') . '">';
-            $html .= '</a></div>';
-        }
     }
 
-    $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle', $is_old_logo ? 1: 0 );
-    $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', $is_old_logo ? 1: 0 );
+    $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle',  0 );
+    $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', 0 );
 
     if ( ! $hide_sitetile ) {
         $classes['title'] = 'has-title';
