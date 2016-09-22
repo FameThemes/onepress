@@ -156,7 +156,9 @@ function onepress_scripts() {
 		'is_home'   					 => '',
 	);
     if ( is_front_page() && is_page_template( 'template-frontpage.php' ) ) {
-        $onepress_js_settings['is_home'] = 1;
+        if ( get_theme_mod( 'onepress_header_scroll_logo' ) ) {
+            $onepress_js_settings['is_home'] = 1;
+        }
     }
 	wp_localize_script( 'jquery', 'onepress_js_settings', $onepress_js_settings );
 
