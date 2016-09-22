@@ -7,6 +7,13 @@ CHANGELOG
 * Remove logo 1.2.0 fallback.
 * Fix customizer issue.
 * Add filter the content for features items.
+* Update WPML config file.
+* Fix google font family issue.
+* Fix editor error when resize browser.
+* Speedup customizer.
+* Home logo click to scroll to top without reload page.
+* Add demo import content tab.
+
 
 ## 1.2.4
 * Fix issue can click to nav link.
