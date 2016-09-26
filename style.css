@@ -612,6 +612,16 @@ input[type="radio"], input[type="checkbox"] {
 	clear: left;
 }
 
+.break, h1,
+h2,
+h3,
+h4,
+h5,
+h6, p, ul, ol, dl, blockquote, pre {
+	word-break: break-word;
+	word-wrap: break-word;
+}
+
 /*--------------------------------------------------------------
 3.0 Layout
 --------------------------------------------------------------*/
