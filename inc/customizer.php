@@ -379,7 +379,7 @@ function onepress_customize_register( $wp_customize ) {
         $wp_customize->add_control( 'onepress_header_scroll_logo',
             array(
                 'type'        => 'checkbox',
-                'label'       => esc_html__('Scroll to top when click to home page on front page.', 'onepress'),
+                'label'       => esc_html__('Scroll to top when click to the site logo or site title, only apply on front page.', 'onepress'),
                 'section'     => 'onepress_header_settings',
             )
         );
