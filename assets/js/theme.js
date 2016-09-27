@@ -396,29 +396,44 @@ jQuery(document).ready(function ( $ ) {
             images = jQuery.parseJSON( images );
         }
 
-        preload_images( images, function(){
-            hero.backstretch( images , {
-                fade: 750,
-                duration: 5000
+        if ( images ) {
+
+            preload_images(images, function () {
+                hero.backstretch(images, {
+                    fade: 750,
+                    duration: 5000
+                });
+                hero.addClass('loaded');
+                hero.removeClass( 'loading' );
+                setTimeout(function () {
+                    hero.find('.sk-cube-grid').remove();
+                }, 600);
             });
-            hero.addClass( 'loaded');
-            setTimeout( function(){
-                hero.find( '.sk-cube-grid').remove();
-            }, 600 );
-        } ) ;
+        } else {
+            hero.addClass('loaded');
+            hero.removeClass( 'loading' );
+            hero.find('.sk-cube-grid').remove();
+        }
 
     } );
 
     $( '.parallax-hero').each( function(){
         var hero = $( this);
-        var img = hero.attr( 'data-image-src' ) || '';
-        preload_images( [ img ], function(){
-            hero.parallax();
-            hero.find( '.hero-slideshow-wrapper' ).addClass( 'loaded');
-            setTimeout( function(){
-                hero.find( '.hero-slideshow-wrapper' ).find( '.sk-cube-grid').remove();
-            }, 600 );
-        } ) ;
+        var img = hero.attr( 'data-image-src' ) || false;
+        if ( img ) {
+            preload_images([img], function () {
+                hero.parallax();
+                hero.find('.hero-slideshow-wrapper').addClass('loaded');
+                hero.removeClass( 'loading' );
+                setTimeout(function () {
+                    hero.find('.hero-slideshow-wrapper').find('.sk-cube-grid').remove();
+                }, 600);
+            });
+        } else {
+            hero.removeClass( 'loading' );
+            hero.find('.hero-slideshow-wrapper').find('.sk-cube-grid').remove();
+            hero.find('.hero-slideshow-wrapper').addClass('loaded').removeClass( 'loading' );
+        }
 
     } );
 
