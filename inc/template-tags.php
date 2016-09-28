@@ -28,7 +28,7 @@ function onepress_site_logo(){
 
     if ( ! $hide_sitetile ) {
         $classes['title'] = 'has-title';
-        if ( is_front_page() && is_home() ) {
+        if ( is_front_page() || !is_home() ) {
             $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
         } else {
             $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
@@ -751,6 +751,3 @@ if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
         return isset($GLOBALS['onepress_is_selective_refresh']) && $GLOBALS['onepress_is_selective_refresh'] ? true : false;
     }
 }
-
-
-
