@@ -16,11 +16,13 @@ function onepress_site_logo(){
     $html = '' ;
     $classes['logo'] = 'no-logo-img';
 
-    if ( has_custom_logo() ) {
-        $classes['logo'] = 'has-logo-img';
-        $html .= '<div class="site-logo-div">';
-        $html .= get_custom_logo();
-        $html .= '</div>';
+    if ( function_exists( 'has_custom_logo' ) ) {
+        if ( has_custom_logo()) {
+            $classes['logo'] = 'has-logo-img';
+            $html .= '<div class="site-logo-div">';
+            $html .= get_custom_logo();
+            $html .= '</div>';
+        }
     }
 
     $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle',  0 );

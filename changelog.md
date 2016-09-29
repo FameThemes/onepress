@@ -5,6 +5,7 @@ CHANGELOG
 * Fix Background image of Heros changes when editing background in section order and styling.
 * Add version for assets files.
 * Add Gallery section.
+* Add breadcrumb for template full width, left sidebar.
 
 
 ## 1.2.5
