@@ -1713,6 +1713,7 @@ function onepress_customize_register( $wp_customize ) {
                     '3' => esc_html__( '4 Columns', 'onepress' ),
                     '4' => esc_html__( '3 Columns', 'onepress' ),
                     '6' => esc_html__( '2 Columns', 'onepress' ),
+                    '12' => esc_html__( '1 Column', 'onepress' ),
                 ),
             )
         );
