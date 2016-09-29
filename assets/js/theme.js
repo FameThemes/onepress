@@ -22,6 +22,40 @@ function preload_images( images, complete_callback ) {
 
 }
 
+
+function _to_number( string ) {
+    if ( typeof string === 'number' ) {
+        return string;
+    }
+    var n  = string.match(/\d+$/);
+    if ( n ) {
+        return parseFloat( n[0] );
+    } else {
+        return 0;
+    }
+}
+
+function _to_bool( v ) {
+    if (  typeof v === 'boolean' ){
+        return v;
+    }
+
+    if (  typeof v === 'number' ){
+        return v === 0  ? false : true;
+    }
+
+    if (  typeof v === 'string' ){
+        if ( v === 'true' || v === '1' ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
 /**
  * skip-link-focus-fix.js
  *
@@ -381,10 +415,12 @@ jQuery( document ).ready( function( $ ){
 } );
 
 
-/**
- * Hero sliders
- */
+
 jQuery(document).ready(function ( $ ) {
+
+    /**
+     * Hero sliders
+     */
 
     jQuery('.hero-slideshow-wrapper').each( function(){
         var hero = $( this );
@@ -436,5 +472,161 @@ jQuery(document).ready(function ( $ ) {
         }
 
     } );
+
+
+    /**
+     * Gallery
+     */
+
+    function onepress_gallery_init( $context ){
+        // justified
+        if ( $.fn.justifiedGallery ) {
+            $( '.gallery-justified', $context).each( function(){
+                var margin = $( this).attr( 'data-spacing' ) || 20;
+                margin = _to_number( margin );
+                $( this ).justifiedGallery({
+                    rowHeight: 120,
+                    margins: margin,
+                    selector: 'a, div:not(.spinner), .inner'
+                });
+            } );
+        }
+
+
+        // Slider
+        if ( $.fn.owlCarousel ) {
+            // Slider
+            $( '.gallery-slider', $context ).owlCarousel({
+                items: 1,
+                itemsCustom: false,
+                itemsDesktop: 1,
+                itemsDesktopSmall: 1,
+                itemsTablet: 1,
+                itemsTabletSmall: false,
+                itemsMobile: 1,
+                singleItem: true,
+                itemsScaleUp: false,
+
+                slideSpeed : 200,
+                paginationSpeed : 800,
+                rewindSpeed : 1000,
+                autoPlay : 4000,
+                stopOnHover : true,
+
+                navigation : true,
+                navigationText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
+
+                pagination : false,
+                paginationNumbers : false,
+            });
+
+            $('.gallery-carousel', $context).each( function(){
+                var n = $( this ).attr( 'data-col' ) || 5;
+                n = _to_number( n );
+                if( n <= 0 ) {
+                    n = 5;
+                }
+
+                $( this ).owlCarousel({
+                    items: n,
+                    itemsCustom : false,
+                    itemsDesktop : [1199, ( n > 4) ? 4 : n ],
+                    itemsDesktopSmall : [979, ( n > 3) ? 3 : n ],
+                    itemsTablet : [768, ( n > 2) ? 2 : n ],
+                    itemsTabletSmall : false,
+                    itemsMobile : [479, ( n > 2) ? 2 : n ],
+                    singleItem : false,
+                    itemsScaleUp : false,
+
+                    slideSpeed : 200,
+                    paginationSpeed : 800,
+                    rewindSpeed : 1000,
+                    autoPlay : 4000,
+                    stopOnHover : true,
+
+                    navigation : true,
+                    navigationText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
+
+                    pagination : false,
+                    paginationNumbers : false,
+                });
+
+            } );
+
+
+
+        }
+
+
+        function isotope_init (){
+            if ( $.fn.isotope ) {
+                $(".gallery-masonry", $context ).each(function () {
+                    var m = $(this);
+                    var gutter = m.attr('data-gutter') || 10;
+                    var columns = m.attr('data-col') || 5;
+
+                    console.log( columns );
+
+                    gutter = _to_number(gutter);
+                    columns = _to_number(columns);
+
+                    var w = $(window).width();
+                    if ( w <= 940 ) {
+                        columns = columns > 2 ? columns - 1 : columns;
+                    }
+
+                    if ( w <= 720 ) {
+                        columns = columns > 3 ? 3 : columns;
+                    }
+
+                    if ( w <= 576 ) {
+                        columns = columns > 2 ? 2 : columns;
+                    }
+
+                    //gutter = gutter / 2;
+                   // m.parent().css({'margin-left': -gutter, 'margin-right': -gutter});
+                    m.find('.g-item').css({'width': ( 100 / columns  ) + '%', 'float': 'left', 'padding': 0});
+                   // m.find('.g-item .inner').css({'padding': gutter / 2});
+                    m.isotope({
+                        // options
+                        itemSelector: '.g-item',
+                        percentPosition: true,
+                        masonry: {
+                            columnWidth: '.inner'
+                        }
+                    });
+
+                });
+            }
+        }
+
+        isotope_init();
+        $( window ).resize( function(){
+            isotope_init();
+        } );
+
+
+        if ( $.fn.lightGallery ) {
+            $('.enable-lightbox', $context).lightGallery({
+                mode: 'lg-fade',
+                selector: 'a',
+                // cssEasing : 'cubic-bezier(0.25, 0, 0.25, 1)'
+
+            });
+        }
+
+
+    }
+
+    onepress_gallery_init( $( '.gallery-content' ) );
+
+
+    if ( 'undefined' !== typeof wp && wp.customize && wp.customize.selectiveRefresh ) {
+        wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( placement ) {
+            if ( placement.partial.id == 'section-gallery' ) {
+                onepress_gallery_init( placement.container.find( '.gallery-content' ) );
+            }
+        } );
+    }
 
 });

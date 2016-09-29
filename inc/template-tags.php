@@ -501,6 +501,23 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 <?php
             }
 
+            $gallery_spacing = absint( get_theme_mod( 'onepress_g_spacing', 20 ) );
+
+            ?>
+            .gallery-carousel .g-item{
+                padding: 0px <?php echo intval( $gallery_spacing / 2 ); ?>px;
+            }
+            .gallery-carousel {
+                margin-left: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+                margin-right: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+            }
+            .gallery-grid .g-item, .gallery-masonry .g-item .inner {
+                padding: <?php echo intval( $gallery_spacing / 2 ); ?>px;
+            }
+            .gallery-grid, .gallery-masonry {
+                margin: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+            }
+        <?php
 
         $css = ob_get_clean();
 
@@ -712,6 +729,377 @@ if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
         return $html;
     }
 }
+
+
+if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
+    /**
+     * Get Gallery data
+     *
+     * @since 1.2.6
+     *
+     * @return array
+     */
+    function onepress_get_section_gallery_data()
+    {
+
+        $source = get_theme_mod( 'onepress_gallery_source' );
+        $data = array();
+        $number_item = 20;
+
+        $transient_expired = 6 * HOUR_IN_SECONDS;
+
+        switch ( $source ) {
+            case 'instagram':
+
+                //Example:  https://www.instagram.com/taylorswift/media/
+                $user_id = wp_strip_all_tags( get_theme_mod( 'onepress_gallery_source_instagram' ) );
+                if ( ! $user_id ) {
+                    return $data;
+                }
+                // Check cache
+                $data = get_transient( 'onepress_gallery_'.$source.'_'.$user_id );
+                if ( false !== $data && is_array( $data ) ) {
+                    return $data;
+                }
+
+                //Maximum is 20 items
+                $res = wp_remote_get( 'https://www.instagram.com/'.rawurlencode( $user_id ).'/media/' );
+                if ( wp_remote_retrieve_response_code( $res ) == 200 ) {
+                    $res_data = wp_remote_retrieve_body($res);
+                    $res_data = json_decode($res_data, true);
+                    if( $res_data['status'] == 'ok' ) {
+                        foreach ( $res_data['items'] as $id => $item ) {
+                            $data[ $id ] = array(
+                                'low_resolution' => $item['images']['low_resolution']['url'],
+                                //'thumbnail' => $item['images']['thumbnail']['url'],
+                                'thumbnail' => $item['images']['standard_resolution']['url'],
+                                'full' => $item['images']['standard_resolution']['url'],
+                                'id' => '',
+                                'title' => $item['caption']['text'],
+                            );
+                        }
+                    }
+                }
+
+                if ( ! empty( $data ) ) {
+                    set_transient('onepress_gallery_' . $source . '_' . $user_id, $data, $transient_expired);
+                } else {
+                    delete_transient( 'onepress_gallery_'.$source.'_'.$user_id );
+                }
+
+                break;
+            case 'flickr':
+
+                $api_key = get_theme_mod( 'onepress_gallery_api_flickr', 'a68c0befe246035b74a8f67943da7edc' );
+                if ( ! $api_key ) {
+                    return $data;
+                }
+                $user_id = wp_strip_all_tags( get_theme_mod( 'onepress_gallery_source_flickr' ) );
+                if ( ! $user_id ) {
+                    return $data;
+                }
+
+                // Check cache
+                $data = get_transient( 'onepress_gallery_'.$source.'_'.$user_id );
+                if ( false !== $data && is_array( $data ) ) {
+                    return $data;
+                }
+
+                $flickr_api_url = 'https://api.flickr.com/services/rest/';
+                // @see https://www.flickr.com/services/api/explore/flickr.people.getPhotos
+                $url = add_query_arg( array(
+                    'method' => 'flickr.people.getPhotos',
+                    'api_key' => $api_key,
+                    'user_id' => $user_id,
+                    'per_page' => $number_item,
+                    'format' => 'json',
+                    'nojsoncallback' => '1',
+                ), $flickr_api_url );
+
+                $res = wp_remote_get( $url );
+                if ( wp_remote_retrieve_response_code( $res ) == 200 ) {
+                    $res_data = wp_remote_retrieve_body( $res );
+                    $res_data = json_decode( $res_data, true );
+                    if ( $res_data['stat'] == 'ok' && $res_data['photos']['photo'] ) {
+
+                        foreach ( $res_data['photos']['photo'] as $k => $photo ) {
+                            $image_get_url = add_query_arg( array(
+                                'method' => 'flickr.photos.getSizes',
+                                'api_key' => $api_key,
+                                'photo_id' => $photo['id'],
+                                'format' => 'json',
+                                'nojsoncallback' => '1',
+                            ), $flickr_api_url );
+
+                            $img_res = wp_remote_get( $image_get_url );
+                            if ( wp_remote_retrieve_response_code( $img_res ) == 200 ) {
+                                $img_res = wp_remote_retrieve_body($img_res);
+                                $img_res = json_decode($img_res, true);
+                                if( isset( $img_res['sizes'] ) && $img_res['stat'] == 'ok' ) {
+
+                                    $img_full = false;
+                                    $tw = 0;
+                                    $images = array();
+                                    foreach ( $img_res['sizes']['size'] as $img ){
+                                        if ( $tw < $img['width'] ) {
+                                            $tw = $img['width'];
+                                            $img_full = $img['source'];
+                                        }
+                                        $images[ $img['label'] ] = $img['source'];
+                                    }
+
+                                    $data[$photo['id']] = array(
+                                        'id' => $photo['id'],
+                                        'thumbnail' => $img_full,
+                                        'full' => $img_full,
+                                        'sizes' => $images,
+                                        'title' => $photo['title'],
+                                        'content' => ''
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if ( ! empty( $data ) ) {
+                    set_transient( 'onepress_gallery_'.$source.'_'.$user_id, $data, $transient_expired );
+                } else {
+                    delete_transient( 'onepress_gallery_'.$source.'_'.$user_id );
+                }
+
+
+                break;
+            case 'facebook':
+
+                $album_id = false;
+                $album_url = get_theme_mod( 'onepress_gallery_source_facebook', '' );
+                if ( is_numeric( $album_url ) ) {
+                    $album_id = absint( $album_url );
+                } else {
+                    preg_match( '/a\.(.*?)\.(.*?)/', $album_url, $arr );
+                    if ( $arr ) {
+                        $album_id = $arr[1];
+                    }
+                }
+
+                if ( ! $album_id ) {
+                    return false;
+                }
+                $token = get_theme_mod( 'onepress_gallery_api_facebook', '1813325532276774|c0e7681c4a5727a6ca5d31020d0b44b0' );
+                if ( ! $token ) {
+                    return false;
+                }
+
+                // Check cache
+                $data = get_transient( 'onepress_gallery_'.$source.'_'.$album_id );
+                if ( false !== $data && is_array( $data ) ) {
+                    return $data;
+                }
+
+                $url = 'https://graph.facebook.com/v2.7/'.$album_id;
+                $url = add_query_arg( array(
+                    'fields' => 'photos.limit('.$number_item.'){images,link,name,picture,width}',
+                    'access_token' => $token ,
+                ), $url );
+
+                $res = wp_remote_get( $url );
+                if ( wp_remote_retrieve_response_code( $res ) == 200 ) {
+                    $res_data = wp_remote_retrieve_body( $res );
+                    $res_data = json_decode( $res_data, true );
+
+                    if ( isset( $res_data['photos'] ) && isset( $res_data['photos']['data'] ) ) {
+                        foreach ( $res_data['photos']['data'] as $k => $photo ) {
+
+                            $img_full = false;
+                            $tw = 0;
+                            foreach ( $photo['images'] as $img ){
+                                if ( $tw < $img['width'] ) {
+                                    $tw = $img['width'];
+                                    $img_full = $img['source'];
+                                }
+                            }
+                            $data[ $photo['id'] ] = array(
+                                'id'        => $photo['id'],
+                                'thumbnail' => $img_full,
+                                'full'      => $img_full,
+                                'title'     => isset( $photo['name'] ) ? $photo['name'] : '',
+                                'content'  => ''
+                            );
+                        }
+
+                    }
+                }
+
+                if ( ! empty( $data ) ) {
+                    set_transient('onepress_gallery_' . $source . '_' . $album_id, $data, $transient_expired);
+                } else {
+                    delete_transient( 'onepress_gallery_'.$source.'_'.$album_id );
+                }
+
+                break;
+            case "page":
+                $page_id = get_theme_mod( 'onepress_gallery_source_page' );
+                $images = '';
+                if ( $page_id ) {
+                    $gallery = get_post_gallery( $page_id , false );
+                    if ( $gallery ) {
+                        $images = $gallery['ids'];
+                    }
+                }
+
+                $image_thumb_size = apply_filters( 'onepress_gallery_page_img_size', 'onepress-small' );
+
+                if ( ! empty( $images ) ) {
+                    $images = explode( ',', $images );
+                    foreach ( $images as $post_id ) {
+                        $post = get_post( $post_id );
+                        if ( $post ) {
+                            $img_thumb = wp_get_attachment_image_src($post_id, $image_thumb_size );
+                            if ($img_thumb) {
+                                $img_thumb = $img_thumb[0];
+                            }
+
+                            $img_full = wp_get_attachment_image_src($post_id, 'full');
+                            if ($img_full) {
+                                $img_full = $img_full[0];
+                            }
+
+                            if ( $img_thumb && $img_full ) {
+                                $data[ $post_id ] = array(
+                                    'id'        => $post_id,
+                                    'thumbnail' => $img_thumb,
+                                    'full'      => $img_full,
+                                    'title'     => $post->post_title,
+                                    'content'   => $post->post_content,
+                                );
+                            }
+                        }
+                    }
+                }
+
+                break;
+        }
+
+        return $data;
+
+    }
+}
+
+/**
+ * Generate HTML content for gallery items.
+ *
+ * @since 1.2.6
+ *
+ * @param $data
+ * @param bool|true $inner
+ * @return string
+ */
+function onepress_gallery_html( $data, $inner = true ) {
+    $max_item = get_theme_mod( 'onepress_g_number', 10 );
+    $html = '';
+    $n = count( $data );
+    if ( $max_item > $n ) {
+        $max_item =  $n;
+    }
+    $i = 0;
+    while( $i < $max_item ){
+        $photo = current( $data );
+        $i ++ ;
+
+        $html .= '<a href="'.esc_attr( $photo['thumbnail'] ).'" class="g-item" title="'.esc_attr( wp_strip_all_tags( $photo['title'] ) ).'">';
+        if ( $inner ) {
+            $html .= '<span class="inner">';
+            $html .= '<img src="'.esc_url( $photo['full'] ).'" alt="">';
+            $html .= '</span>';
+        } else {
+            $html .= '<img src="'.esc_url( $photo['full'] ).'" alt="">';
+        }
+
+        $html .= '</a>';
+        next( $data );
+    }
+    reset( $data );
+
+    return $html;
+}
+
+
+/**
+ * Generate Gallery HTML
+ *
+ * @since 1.2.6
+ * @param bool|true $echo
+ * @return string
+ */
+function onepress_gallery_generate( $echo = true ){
+
+    $div = '';
+
+    $data = onepress_get_section_gallery_data();
+    $display_type = get_theme_mod( 'onepress_gallery_display', 'grid' );
+    $lightbox = get_theme_mod( 'onepress_g_lightbox', 1 );
+    $class = '';
+    if ( $lightbox ) {
+        $class = ' enable-lightbox ';
+    }
+    $col = absint( get_theme_mod( 'onepress_g_col', 4 ) );
+    if ( $col <= 0 ) {
+        $col = 4;
+    }
+    switch( $display_type ) {
+        case 'masonry':
+            $html = onepress_gallery_html( $data );
+            if ( $html ) {
+                $div .= '<div data-col="'.$col.'" class="gallery-masonry '.$class.' gallery-grid g-col-'.$col.'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+        case 'carousel':
+            $html = onepress_gallery_html( $data );
+            if ( $html ) {
+                $div .= '<div data-col="'.$col.'" class="gallery-carousel'.$class.'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+        case 'slider':
+            $html = onepress_gallery_html( $data );
+            if ( $html ) {
+                $div .= '<div class="gallery-slider'.$class.'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+        case 'justified':
+            $html = onepress_gallery_html( $data, false );
+            if ( $html ) {
+                $gallery_spacing = absint( get_theme_mod( 'onepress_g_spacing', 20 ) );
+                $div .= '<div data-spacing="'.$gallery_spacing.'" class="gallery-justified'.$class.'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+        default: // grid
+            $html = onepress_gallery_html( $data );
+            if ( $html ) {
+                $div .= '<div class="gallery-grid '.$class.' g-col-'.$col .'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+    }
+
+    if ( $echo ) {
+        echo $div;
+    } else {
+        return $div;
+    }
+
+}
+
+
 
 if ( ! function_exists( 'onepress_footer_site_info' ) ) {
     /**

@@ -33,7 +33,7 @@ function onepress_customize_register( $wp_customize ) {
 
 	$pages  =  get_pages();
 	$option_pages = array();
-	$option_pages[0] = __( 'Select page', 'onepress' );
+	$option_pages[0] = esc_html__( 'Select page', 'onepress' );
 	foreach( $pages as $p ){
 		$option_pages[ $p->ID ] = $p->post_title;
 	}
@@ -44,7 +44,7 @@ function onepress_customize_register( $wp_customize ) {
 		'number'       => '',
 	) );
 
-	$option_users[0] = __( 'Select member', 'onepress' );
+	$option_users[0] = esc_html__( 'Select member', 'onepress' );
 	foreach( $users as $user ){
 		$option_users[ $user->ID ] = $user->display_name;
 	}
@@ -2108,6 +2108,371 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			)
 		);
+
+
+    /*------------------------------------------------------------------------*/
+    /*  Section: Gallery
+    /*------------------------------------------------------------------------*/
+    $wp_customize->add_panel( 'onepress_gallery' ,
+        array(
+            'priority'        => 137,
+            'title'           => esc_html__( 'Section: Gallery', 'onepress' ),
+            'description'     => '',
+            'active_callback' => 'onepress_showon_frontpage'
+        )
+    );
+
+    $wp_customize->add_section( 'onepress_gallery_settings' ,
+        array(
+            'priority'    => 3,
+            'title'       => esc_html__( 'Section Settings', 'onepress' ),
+            'description' => '',
+            'panel'       => 'onepress_gallery',
+        )
+    );
+
+    // Show Content
+    $wp_customize->add_setting( 'onepress_gallery_disable',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_checkbox',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_disable',
+        array(
+            'type'        => 'checkbox',
+            'label'       => esc_html__('Hide this section?', 'onepress'),
+            'section'     => 'onepress_gallery_settings',
+            'description' => esc_html__('Check this box to hide this section.', 'onepress'),
+        )
+    );
+
+    // Section ID
+    $wp_customize->add_setting( 'onepress_gallery_id',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_text',
+            'default'           => esc_html__('gallery', 'onepress'),
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_id',
+        array(
+            'label'     => esc_html__('Section ID:', 'onepress'),
+            'section' 		=> 'onepress_gallery_settings',
+            'description'   => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
+        )
+    );
+
+    // Title
+    $wp_customize->add_setting( 'onepress_gallery_title',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => esc_html__('Gallery', 'onepress'),
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_title',
+        array(
+            'label'     => esc_html__('Section Title', 'onepress'),
+            'section' 		=> 'onepress_gallery_settings',
+            'description'   => '',
+        )
+    );
+
+    // Sub Title
+    $wp_customize->add_setting( 'onepress_gallery_subtitle',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => esc_html__('Section subtitle', 'onepress'),
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_subtitle',
+        array(
+            'label'     => esc_html__('Section Subtitle', 'onepress'),
+            'section' 		=> 'onepress_gallery_settings',
+            'description'   => '',
+        )
+    );
+
+    // Description
+    $wp_customize->add_setting( 'onepress_gallery_desc',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_text',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( new OnePress_Editor_Custom_Control(
+        $wp_customize,
+        'onepress_gallery_desc',
+        array(
+            'label' 		=> esc_html__('Section Description', 'onepress'),
+            'section' 		=> 'onepress_gallery_settings',
+            'description'   => '',
+        )
+    ));
+
+
+    $wp_customize->add_section( 'onepress_gallery_content' ,
+        array(
+            'priority'    => 6,
+            'title'       => esc_html__( 'Section Content', 'onepress' ),
+            'description' => '',
+            'panel'       => 'onepress_gallery',
+        )
+    );
+    // Gallery Source
+    $wp_customize->add_setting( 'onepress_gallery_source',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => 'page',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_source',
+        array(
+            'label'     	=> esc_html__('Select Gallery Source', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'type'          => 'select',
+            'priority'      => 5,
+            'choices'       => array(
+                'page'      => esc_html__('Page', 'onepress'),
+                'facebook'  => esc_html__('Facebook', 'onepress'),
+                'instagram' => esc_html__('Instagram', 'onepress'),
+                'flickr'    => esc_html__('Flickr', 'onepress'),
+            )
+        )
+    );
+
+
+    // Source page settings
+    $wp_customize->add_setting( 'onepress_gallery_source_page',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_number',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_source_page',
+        array(
+            'label'     	=> esc_html__('Select Gallery Page', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'type'          => 'select',
+            'priority'      => 10,
+            'choices'       => $option_pages,
+            'description'   => esc_html__('Select a page which have content contain [gallery] shortcode.', 'onepress'),
+        )
+    );
+
+
+    // Source facebook settings
+    $wp_customize->add_setting( 'onepress_gallery_source_facebook',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_source_facebook',
+        array(
+            'label'     	=> esc_html__('Facebook Fan Page Album', 'onepress'),
+            'priority'      => 15,
+            'section' 		=> 'onepress_gallery_content',
+            'description'   => esc_html__('Enter Facebook fan page album ID or album URL here. Your album should publish to load data.', 'onepress'),
+        )
+    );
+
+    // Source flickr API settings
+    $wp_customize->add_setting( 'onepress_gallery_api_facebook',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_api_facebook',
+        array(
+            'label'     	=> esc_html__('Facebook API', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 20,
+            'description'   => sprintf( esc_html__('Paste your Facebook Token here, example: {App_ID}|{App_Secret}. Click %1$s to create an app.', 'onepress'), '<a target="_blank" href="https://developers.facebook.com/apps/">'.esc_html( 'here', 'onepress' ).'</a>' ),
+        )
+    );
+
+    // Source flickr settings
+    $wp_customize->add_setting( 'onepress_gallery_source_flickr',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_source_flickr',
+        array(
+            'label'     	=> esc_html__('Flickr Username or ID', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 25,
+            'description'   => esc_html__('Flickr Username or ID here, Required Flickr API.', 'onepress'),
+        )
+    );
+
+    // Source flickr API settings
+    $wp_customize->add_setting( 'onepress_gallery_api_flickr',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_api_flickr',
+        array(
+            'label'     	=> esc_html__('Flickr API key', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 30,
+            'description'   => esc_html__('Paste your Flickr API key here.', 'onepress'),
+        )
+    );
+
+
+    // Source instagram settings
+    $wp_customize->add_setting( 'onepress_gallery_source_instagram',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_source_instagram',
+        array(
+            'label'     	=> esc_html__('Instagram Username', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 35,
+            'description'   => esc_html__('Enter your Instagram username here.', 'onepress'),
+        )
+    );
+
+
+    // Gallery Layout
+    $wp_customize->add_setting( 'onepress_gallery_layout',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => 'default',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_layout',
+        array(
+            'label'     	=> esc_html__('Layout', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'type'          => 'select',
+            'priority'      => 40,
+            'choices'       => array(
+                'default'      => esc_html__('Default, inside container', 'onepress'),
+                'full-width'  => esc_html__('Full Width', 'onepress'),
+            )
+        )
+    );
+
+    // Gallery Display
+    $wp_customize->add_setting( 'onepress_gallery_display',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => 'default',
+        )
+    );
+    $wp_customize->add_control( 'onepress_gallery_display',
+        array(
+            'label'     	=> esc_html__('Display', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'type'          => 'select',
+            'priority'      => 50,
+            'choices'       => array(
+                'grid'      => esc_html__('Grid', 'onepress'),
+                'carousel'    => esc_html__('Carousel', 'onepress'),
+                'slider'      => esc_html__('Slider', 'onepress'),
+                'justified'   => esc_html__('Justified', 'onepress'),
+                'masonry'     => esc_html__('Masonry', 'onepress'),
+            )
+        )
+    );
+
+    // Gallery grid spacing
+    $wp_customize->add_setting( 'onepress_g_spacing',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => 20,
+        )
+    );
+    $wp_customize->add_control( 'onepress_g_spacing',
+        array(
+            'label'     	=> esc_html__('Item Spacing', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 55,
+
+        )
+    );
+
+    // Gallery grid spacing
+    $wp_customize->add_setting( 'onepress_g_row_height',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => 120,
+        )
+    );
+    $wp_customize->add_control( 'onepress_g_row_height',
+        array(
+            'label'     	=> esc_html__('Row Height', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 57,
+
+        )
+    );
+
+    // Gallery grid gird col
+    $wp_customize->add_setting( 'onepress_g_col',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '4',
+        )
+    );
+    $wp_customize->add_control( 'onepress_g_col',
+        array(
+            'label'     	=> esc_html__('Layout columns', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 60,
+            'type'          => 'select',
+            'choices'       => array(
+                '1'      => 1,
+                '2'      => 2,
+                '3'      => 3,
+                '4'      => 4,
+                '5'      => 5,
+                '6'      => 6,
+            )
+
+        )
+    );
+
+    // Gallery max number
+    $wp_customize->add_setting( 'onepress_g_number',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => 10,
+        )
+    );
+    $wp_customize->add_control( 'onepress_g_number',
+        array(
+            'label'     	=> esc_html__('Number items', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 65,
+        )
+    );
+    // Gallery grid spacing
+    $wp_customize->add_setting( 'onepress_g_lightbox',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_checkbox',
+            'default'           => 1,
+        )
+    );
+    $wp_customize->add_control( 'onepress_g_lightbox',
+        array(
+            'label'     	=> esc_html__('Enable Lightbox', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 70,
+            'type'          => 'checkbox',
+        )
+    );
+
+
 
 	/*------------------------------------------------------------------------*/
     /*  Section: News

@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.2.6
+* Fix Background image of Heros changes when editing background in section order and styling.
+* Add version for assets files.
+* Add Gallery section.
+
 
 ## 1.2.5
 * Update FontAwesome to latest version.

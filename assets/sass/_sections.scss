@@ -155,11 +155,7 @@
 			transition-delay: 1s;
 		}
 
-
-
 	}
-
-
 
 	&.loaded {
 		.container {
@@ -881,4 +877,93 @@ div.wpcf7-response-output {
 	position: absolute;
 	top: 0px; left: 0px; right: 0px; bottom: 0px; display: block;
 	z-index: 2;
+}
+
+/* Section: Gallery
+------------------------------*/
+
+.gallery-grid .g-item {
+	padding: 10px;
+	float: left;
+}
+.g-layout-full-width.container {
+	width: 100%;
+	max-width: none;
+	padding: 0px;
+}
+@include for( small-screens ) {
+  @for $i from 1 through 6 {
+    .g-col-#{$i} {
+      .g-item {
+        width: (100% / $i);
+        &:nth-child( #{$i}n+1 ) {
+          clear: left;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $small_phone) and (max-width: $phone) {
+  @for $i from 1 through 6 {
+    .g-col-#{$i} {
+      .g-item {
+        width: (100% / $i);
+        &:nth-child( #{$i}n+1 ) {
+          clear: left;
+        }
+      }
+    }
+  }
+}
+
+@include for( screens-tiny ){
+  @for $i from 1 through 6 {
+    .g-col-#{$i} {
+      .g-item {
+        width: (100% / $i);
+        &:nth-child( #{$i}n+1 ) {
+          clear: left;
+        }
+      }
+    }
+  }
+}
+
+
+.gallery-justified {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+  img {
+	  max-width: none;
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  margin: 0;
+	  padding: 0;
+	  border: none;
+  }
+}
+.gallery-justified > a,
+.gallery-justified > div {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  float: left;
+  //filter: "alpha(opacity=10)";
+  //opacity: 0.1;
+}
+
+.gallery-masonry {
+	width: 100%;
+	position: relative;
+	display: block;
+	&:affter{
+		@include clearfix-after();
+	}
+	.inner {
+		display: block;
+	}
 }
