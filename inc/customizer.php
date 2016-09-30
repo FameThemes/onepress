@@ -2210,7 +2210,6 @@ function onepress_customize_register( $wp_customize ) {
         )
     ));
 
-
     $wp_customize->add_section( 'onepress_gallery_content' ,
         array(
             'priority'    => 6,
@@ -2234,13 +2233,9 @@ function onepress_customize_register( $wp_customize ) {
             'priority'      => 5,
             'choices'       => array(
                 'page'      => esc_html__('Page', 'onepress'),
-                'facebook'  => esc_html__('Facebook', 'onepress'),
-                'instagram' => esc_html__('Instagram', 'onepress'),
-                'flickr'    => esc_html__('Flickr', 'onepress'),
             )
         )
     );
-
 
     // Source page settings
     $wp_customize->add_setting( 'onepress_gallery_source_page',
@@ -2257,88 +2252,6 @@ function onepress_customize_register( $wp_customize ) {
             'priority'      => 10,
             'choices'       => $option_pages,
             'description'   => esc_html__('Select a page which have content contain [gallery] shortcode.', 'onepress'),
-        )
-    );
-
-
-    // Source facebook settings
-    $wp_customize->add_setting( 'onepress_gallery_source_facebook',
-        array(
-            'sanitize_callback' => 'sanitize_text_field',
-            'default'           => '',
-        )
-    );
-    $wp_customize->add_control( 'onepress_gallery_source_facebook',
-        array(
-            'label'     	=> esc_html__('Facebook Fan Page Album', 'onepress'),
-            'priority'      => 15,
-            'section' 		=> 'onepress_gallery_content',
-            'description'   => esc_html__('Enter Facebook fan page album ID or album URL here. Your album should publish to load data.', 'onepress'),
-        )
-    );
-
-    // Source flickr API settings
-    $wp_customize->add_setting( 'onepress_gallery_api_facebook',
-        array(
-            'sanitize_callback' => 'sanitize_text_field',
-            'default'           => '',
-        )
-    );
-    $wp_customize->add_control( 'onepress_gallery_api_facebook',
-        array(
-            'label'     	=> esc_html__('Facebook API', 'onepress'),
-            'section' 		=> 'onepress_gallery_content',
-            'priority'      => 20,
-            'description'   => sprintf( esc_html__('Paste your Facebook Token here, example: {App_ID}|{App_Secret}. Click %1$s to create an app.', 'onepress'), '<a target="_blank" href="https://developers.facebook.com/apps/">'.esc_html( 'here', 'onepress' ).'</a>' ),
-        )
-    );
-
-    // Source flickr settings
-    $wp_customize->add_setting( 'onepress_gallery_source_flickr',
-        array(
-            'sanitize_callback' => 'sanitize_text_field',
-            'default'           => '',
-        )
-    );
-    $wp_customize->add_control( 'onepress_gallery_source_flickr',
-        array(
-            'label'     	=> esc_html__('Flickr Username or ID', 'onepress'),
-            'section' 		=> 'onepress_gallery_content',
-            'priority'      => 25,
-            'description'   => esc_html__('Flickr Username or ID here, Required Flickr API.', 'onepress'),
-        )
-    );
-
-    // Source flickr API settings
-    $wp_customize->add_setting( 'onepress_gallery_api_flickr',
-        array(
-            'sanitize_callback' => 'sanitize_text_field',
-            'default'           => '',
-        )
-    );
-    $wp_customize->add_control( 'onepress_gallery_api_flickr',
-        array(
-            'label'     	=> esc_html__('Flickr API key', 'onepress'),
-            'section' 		=> 'onepress_gallery_content',
-            'priority'      => 30,
-            'description'   => esc_html__('Paste your Flickr API key here.', 'onepress'),
-        )
-    );
-
-
-    // Source instagram settings
-    $wp_customize->add_setting( 'onepress_gallery_source_instagram',
-        array(
-            'sanitize_callback' => 'sanitize_text_field',
-            'default'           => '',
-        )
-    );
-    $wp_customize->add_control( 'onepress_gallery_source_instagram',
-        array(
-            'label'     	=> esc_html__('Instagram Username', 'onepress'),
-            'section' 		=> 'onepress_gallery_content',
-            'priority'      => 35,
-            'description'   => esc_html__('Enter your Instagram username here.', 'onepress'),
         )
     );
 

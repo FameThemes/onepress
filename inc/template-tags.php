@@ -743,204 +743,16 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
      */
     function onepress_get_section_gallery_data()
     {
-
-        $source = get_theme_mod( 'onepress_gallery_source' );
+        
+        $source = 'page'; // get_theme_mod( 'onepress_gallery_source' );
+        $data =  apply_filters( 'onepress_get_section_gallery_data', false );
+        if ( $data ) {
+            return $data;
+        }
         $data = array();
-        $number_item = 20;
-
-        $transient_expired = 6 * HOUR_IN_SECONDS;
 
         switch ( $source ) {
-            case 'instagram':
-
-                //Example:  https://www.instagram.com/taylorswift/media/
-                $user_id = wp_strip_all_tags( get_theme_mod( 'onepress_gallery_source_instagram' ) );
-                if ( ! $user_id ) {
-                    return $data;
-                }
-                // Check cache
-                $data = get_transient( 'onepress_gallery_'.$source.'_'.$user_id );
-                if ( false !== $data && is_array( $data ) ) {
-                    return $data;
-                }
-
-                //Maximum is 20 items
-                $res = wp_remote_get( 'https://www.instagram.com/'.rawurlencode( $user_id ).'/media/' );
-                if ( wp_remote_retrieve_response_code( $res ) == 200 ) {
-                    $res_data = wp_remote_retrieve_body($res);
-                    $res_data = json_decode($res_data, true);
-                    if( $res_data['status'] == 'ok' ) {
-                        foreach ( $res_data['items'] as $id => $item ) {
-                            $data[ $id ] = array(
-                                'low_resolution' => $item['images']['low_resolution']['url'],
-                                //'thumbnail' => $item['images']['thumbnail']['url'],
-                                'thumbnail' => $item['images']['standard_resolution']['url'],
-                                'full' => $item['images']['standard_resolution']['url'],
-                                'id' => '',
-                                'title' => $item['caption']['text'],
-                            );
-                        }
-                    }
-                }
-
-                if ( ! empty( $data ) ) {
-                    set_transient('onepress_gallery_' . $source . '_' . $user_id, $data, $transient_expired);
-                } else {
-                    delete_transient( 'onepress_gallery_'.$source.'_'.$user_id );
-                }
-
-                break;
-            case 'flickr':
-
-                $api_key = get_theme_mod( 'onepress_gallery_api_flickr', 'a68c0befe246035b74a8f67943da7edc' );
-                if ( ! $api_key ) {
-                    return $data;
-                }
-                $user_id = wp_strip_all_tags( get_theme_mod( 'onepress_gallery_source_flickr' ) );
-                if ( ! $user_id ) {
-                    return $data;
-                }
-
-                // Check cache
-                $data = get_transient( 'onepress_gallery_'.$source.'_'.$user_id );
-                if ( false !== $data && is_array( $data ) ) {
-                    return $data;
-                }
-
-                $flickr_api_url = 'https://api.flickr.com/services/rest/';
-                // @see https://www.flickr.com/services/api/explore/flickr.people.getPhotos
-                $url = add_query_arg( array(
-                    'method' => 'flickr.people.getPhotos',
-                    'api_key' => $api_key,
-                    'user_id' => $user_id,
-                    'per_page' => $number_item,
-                    'format' => 'json',
-                    'nojsoncallback' => '1',
-                ), $flickr_api_url );
-
-                $res = wp_remote_get( $url );
-                if ( wp_remote_retrieve_response_code( $res ) == 200 ) {
-                    $res_data = wp_remote_retrieve_body( $res );
-                    $res_data = json_decode( $res_data, true );
-                    if ( $res_data['stat'] == 'ok' && $res_data['photos']['photo'] ) {
-
-                        foreach ( $res_data['photos']['photo'] as $k => $photo ) {
-                            $image_get_url = add_query_arg( array(
-                                'method' => 'flickr.photos.getSizes',
-                                'api_key' => $api_key,
-                                'photo_id' => $photo['id'],
-                                'format' => 'json',
-                                'nojsoncallback' => '1',
-                            ), $flickr_api_url );
-
-                            $img_res = wp_remote_get( $image_get_url );
-                            if ( wp_remote_retrieve_response_code( $img_res ) == 200 ) {
-                                $img_res = wp_remote_retrieve_body($img_res);
-                                $img_res = json_decode($img_res, true);
-                                if( isset( $img_res['sizes'] ) && $img_res['stat'] == 'ok' ) {
-
-                                    $img_full = false;
-                                    $tw = 0;
-                                    $images = array();
-                                    foreach ( $img_res['sizes']['size'] as $img ){
-                                        if ( $tw < $img['width'] ) {
-                                            $tw = $img['width'];
-                                            $img_full = $img['source'];
-                                        }
-                                        $images[ $img['label'] ] = $img['source'];
-                                    }
-
-                                    $data[$photo['id']] = array(
-                                        'id' => $photo['id'],
-                                        'thumbnail' => $img_full,
-                                        'full' => $img_full,
-                                        'sizes' => $images,
-                                        'title' => $photo['title'],
-                                        'content' => ''
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if ( ! empty( $data ) ) {
-                    set_transient( 'onepress_gallery_'.$source.'_'.$user_id, $data, $transient_expired );
-                } else {
-                    delete_transient( 'onepress_gallery_'.$source.'_'.$user_id );
-                }
-
-
-                break;
-            case 'facebook':
-
-                $album_id = false;
-                $album_url = get_theme_mod( 'onepress_gallery_source_facebook', '' );
-                if ( is_numeric( $album_url ) ) {
-                    $album_id = absint( $album_url );
-                } else {
-                    preg_match( '/a\.(.*?)\.(.*?)/', $album_url, $arr );
-                    if ( $arr ) {
-                        $album_id = $arr[1];
-                    }
-                }
-
-                if ( ! $album_id ) {
-                    return false;
-                }
-                $token = get_theme_mod( 'onepress_gallery_api_facebook', '1813325532276774|c0e7681c4a5727a6ca5d31020d0b44b0' );
-                if ( ! $token ) {
-                    return false;
-                }
-
-                // Check cache
-                $data = get_transient( 'onepress_gallery_'.$source.'_'.$album_id );
-                if ( false !== $data && is_array( $data ) ) {
-                    return $data;
-                }
-
-                $url = 'https://graph.facebook.com/v2.7/'.$album_id;
-                $url = add_query_arg( array(
-                    'fields' => 'photos.limit('.$number_item.'){images,link,name,picture,width}',
-                    'access_token' => $token ,
-                ), $url );
-
-                $res = wp_remote_get( $url );
-                if ( wp_remote_retrieve_response_code( $res ) == 200 ) {
-                    $res_data = wp_remote_retrieve_body( $res );
-                    $res_data = json_decode( $res_data, true );
-
-                    if ( isset( $res_data['photos'] ) && isset( $res_data['photos']['data'] ) ) {
-                        foreach ( $res_data['photos']['data'] as $k => $photo ) {
-
-                            $img_full = false;
-                            $tw = 0;
-                            foreach ( $photo['images'] as $img ){
-                                if ( $tw < $img['width'] ) {
-                                    $tw = $img['width'];
-                                    $img_full = $img['source'];
-                                }
-                            }
-                            $data[ $photo['id'] ] = array(
-                                'id'        => $photo['id'],
-                                'thumbnail' => $img_full,
-                                'full'      => $img_full,
-                                'title'     => isset( $photo['name'] ) ? $photo['name'] : '',
-                                'content'  => ''
-                            );
-                        }
-
-                    }
-                }
-
-                if ( ! empty( $data ) ) {
-                    set_transient('onepress_gallery_' . $source . '_' . $album_id, $data, $transient_expired);
-                } else {
-                    delete_transient( 'onepress_gallery_'.$source.'_'.$album_id );
-                }
-
-                break;
-            case "page":
+            default:
                 $page_id = get_theme_mod( 'onepress_gallery_source_page' );
                 $images = '';
                 if ( $page_id ) {
@@ -979,8 +791,7 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
                         }
                     }
                 }
-
-                break;
+            break;
         }
 
         return $data;
