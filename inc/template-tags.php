@@ -11,11 +11,12 @@
  * Display header brand
  * @since 1.2.1
  */
+if ( ! function_exists( 'onepress_site_logo' ) ) {
 function onepress_site_logo(){
     $is_old_logo = false;
     $is_wp_4_5   =  function_exists( 'the_custom_logo' );
     $classes = array();
-    $html = '' ;
+    $html = 'HOLA!!!!' ;
     $classes['logo'] = 'no-logo-img';
     if ( $is_wp_4_5 && has_custom_logo() ) {
         $classes['logo'] = 'has-logo-img';
@@ -59,6 +60,7 @@ function onepress_site_logo(){
     }
     echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
 }
+} /* if function_exists onepress_site_logo */
 
 add_action( 'onepress_site_start', 'onepress_site_header' );
 if ( ! function_exists( 'onepress_site_header' ) ) {
@@ -160,6 +162,7 @@ if ( ! function_exists( 'onepress_entry_footer' ) ) {
  *
  * @return bool
  */
+if ( ! function_exists( 'onepress_categorized_blog' ) ) {
 function onepress_categorized_blog() {
 	if ( false === ( $all_the_cool_cats = get_transient( 'onepress_categories' ) ) ) {
 		// Create an array of all the categories that are attached to posts.
@@ -185,16 +188,18 @@ function onepress_categorized_blog() {
 		return false;
 	}
 }
-
+}
 /**
  * Flush out the transients used in onepress_categorized_blog.
  */
+if ( ! function_exists( 'onepress_category_transient_flusher' ) ) {
 function onepress_category_transient_flusher() {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
 	}
 	// Like, beat it. Dig?
 	delete_transient( 'onepress_categories' );
+}
 }
 add_action( 'edit_category', 'onepress_category_transient_flusher' );
 add_action( 'save_post',     'onepress_category_transient_flusher' );
@@ -746,6 +751,7 @@ add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
 /**
  * Breadcrumb NavXT Compatibility.
  */
+if ( ! function_exists( 'onepress_breadcrumb') ) {
 function onepress_breadcrumb() {
 	if ( function_exists('bcn_display') ) {
         ?>
@@ -756,6 +762,7 @@ function onepress_breadcrumb() {
         </div>
         <?php
 	}
+}
 }
 
 if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
