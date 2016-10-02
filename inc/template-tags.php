@@ -12,55 +12,55 @@
  * @since 1.2.1
  */
 if ( ! function_exists( 'onepress_site_logo' ) ) {
-function onepress_site_logo(){
-    $is_old_logo = false;
-    $is_wp_4_5   =  function_exists( 'the_custom_logo' );
-    $classes = array();
-    $html = 'HOLA!!!!' ;
-    $classes['logo'] = 'no-logo-img';
-    if ( $is_wp_4_5 && has_custom_logo() ) {
-        $classes['logo'] = 'has-logo-img';
-        $html .= '<div class="site-logo-div">';
-        $html .= get_custom_logo();
-        $html .= '</div>';
-    } else {
-        $site_image_logo = get_theme_mod( 'onepress_site_image_logo' );
-        /**
-         *  Fallback OnePress 1.2.0 and WordPress < 4.5
-         */
-        if ( $site_image_logo != "" ) {
-            $is_old_logo = true;
-            $classese['logo'] = 'has-logo-img';
-            $html .= '<div class="site-logo-div"><a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
-            $html .= '<img src="' . $site_image_logo . '" alt="' . get_bloginfo('title') . '">';
-            $html .= '</a></div>';
-        }
-    }
-
-    $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle', $is_old_logo ? 1: 0 );
-    $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', $is_old_logo ? 1: 0 );
-
-    if ( ! $hide_sitetile ) {
-        $classes['title'] = 'has-title';
-        if ( is_front_page() && is_home() ) {
-            $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
+    function onepress_site_logo(){
+        $is_old_logo = false;
+        $is_wp_4_5   =  function_exists( 'the_custom_logo' );
+        $classes = array();
+        $html = '' ;
+        $classes['logo'] = 'no-logo-img';
+        if ( $is_wp_4_5 && has_custom_logo() ) {
+            $classes['logo'] = 'has-logo-img';
+            $html .= '<div class="site-logo-div">';
+            $html .= get_custom_logo();
+            $html .= '</div>';
         } else {
-            $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
+            $site_image_logo = get_theme_mod( 'onepress_site_image_logo' );
+            /**
+             *  Fallback OnePress 1.2.0 and WordPress < 4.5
+             */
+            if ( $site_image_logo != "" ) {
+                $is_old_logo = true;
+                $classese['logo'] = 'has-logo-img';
+                $html .= '<div class="site-logo-div"><a class="site-image-logo" href="' . esc_url(home_url('/')) . '" rel="home">';
+                $html .= '<img src="' . $site_image_logo . '" alt="' . get_bloginfo('title') . '">';
+                $html .= '</a></div>';
+            }
         }
-    }
 
-    if ( ! $hide_tagline ) {
-        $description = get_bloginfo( 'description', 'display' );
-        if ( $description || is_customize_preview() ) {
-            $classes['desc'] = 'has-desc';
-            $html .= '<p class="site-description">'.$description.'</p>';
+        $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle', $is_old_logo ? 1: 0 );
+        $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', $is_old_logo ? 1: 0 );
+
+        if ( ! $hide_sitetile ) {
+            $classes['title'] = 'has-title';
+            if ( is_front_page() && is_home() ) {
+                $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
+            } else {
+                $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
+            }
         }
-    } else {
-        $classes['desc'] = 'no-desc';
+
+        if ( ! $hide_tagline ) {
+            $description = get_bloginfo( 'description', 'display' );
+            if ( $description || is_customize_preview() ) {
+                $classes['desc'] = 'has-desc';
+                $html .= '<p class="site-description">'.$description.'</p>';
+            }
+        } else {
+            $classes['desc'] = 'no-desc';
+        }
+        echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
     }
-    echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
-}
-} /* if function_exists onepress_site_logo */
+} /* end if function_exists onepress_site_logo */
 
 add_action( 'onepress_site_start', 'onepress_site_header' );
 if ( ! function_exists( 'onepress_site_header' ) ) {
@@ -163,44 +163,46 @@ if ( ! function_exists( 'onepress_entry_footer' ) ) {
  * @return bool
  */
 if ( ! function_exists( 'onepress_categorized_blog' ) ) {
-function onepress_categorized_blog() {
-	if ( false === ( $all_the_cool_cats = get_transient( 'onepress_categories' ) ) ) {
-		// Create an array of all the categories that are attached to posts.
-		$all_the_cool_cats = get_categories( array(
-			'fields'     => 'ids',
-			'hide_empty' => 1,
+  function onepress_categorized_blog() {
+    if ( false === ( $all_the_cool_cats = get_transient( 'onepress_categories' ) ) ) {
+	    // Create an array of all the categories that are attached to posts.
+	    $all_the_cool_cats = get_categories( array(
+		    'fields'     => 'ids',
+		    'hide_empty' => 1,
 
-			// We only need to know if there is more than one category.
-			'number'     => 2,
-		) );
+		    // We only need to know if there is more than one category.
+		    'number'     => 2,
+	    ) );
 
-		// Count the number of categories that are attached to the posts.
-		$all_the_cool_cats = count( $all_the_cool_cats );
+	    // Count the number of categories that are attached to the posts.
+	    $all_the_cool_cats = count( $all_the_cool_cats );
 
-		set_transient( 'onepress_categories', $all_the_cool_cats );
-	}
+	    set_transient( 'onepress_categories', $all_the_cool_cats );
+    }
 
-	if ( $all_the_cool_cats > 1 ) {
-		// This blog has more than 1 category so onepress_categorized_blog should return true.
-		return true;
-	} else {
-		// This blog has only 1 category so onepress_categorized_blog should return false.
-		return false;
-	}
-}
-}
+    if ( $all_the_cool_cats > 1 ) {
+	    // This blog has more than 1 category so onepress_categorized_blog should return true.
+	    return true;
+    } else {
+	    // This blog has only 1 category so onepress_categorized_blog should return false.
+	    return false;
+    }
+  }
+} /* end if function_exists onepress_categorized_blog */
+
 /**
  * Flush out the transients used in onepress_categorized_blog.
  */
 if ( ! function_exists( 'onepress_category_transient_flusher' ) ) {
-function onepress_category_transient_flusher() {
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-		return;
-	}
-	// Like, beat it. Dig?
-	delete_transient( 'onepress_categories' );
-}
-}
+  function onepress_category_transient_flusher() {
+	  if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		  return;
+	  }
+	  // Like, beat it. Dig?
+	  delete_transient( 'onepress_categories' );
+  }
+} /* end if function_exists onepress_category_transient_flusher */
+
 add_action( 'edit_category', 'onepress_category_transient_flusher' );
 add_action( 'save_post',     'onepress_category_transient_flusher' );
 
@@ -752,18 +754,18 @@ add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
  * Breadcrumb NavXT Compatibility.
  */
 if ( ! function_exists( 'onepress_breadcrumb') ) {
-function onepress_breadcrumb() {
-	if ( function_exists('bcn_display') ) {
-        ?>
-        <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
-            <div class="container">
-                <?php bcn_display(); ?>
+    function onepress_breadcrumb() {
+	      if ( function_exists('bcn_display') ) {
+            ?>
+            <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+                <div class="container">
+                    <?php bcn_display(); ?>
+                </div>
             </div>
-        </div>
-        <?php
-	}
-}
-}
+            <?php
+	      }
+    }
+} /* end if function_exists onepress_breadcrumb */
 
 if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
     function onepress_is_selective_refresh()
