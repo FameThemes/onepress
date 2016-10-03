@@ -2971,11 +2971,6 @@ div.wpcf7-response-output {
 	color: #000;
 }
 
-.parallax-mirror, .parallax-mirror .parallax-slider,
-.parallax-hero.parallax-window {
-	background-color: #222222;
-}
-
 .parallax-videolightbox .parallax-mirror::before {
 	background-color: #000000;
 	opacity: 0.4;

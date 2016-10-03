@@ -600,7 +600,7 @@ jQuery(document).ready(function ( $ ) {
     }
 
     onepress_gallery_init( $( '.gallery-content' ) );
-    
+
     if ( 'undefined' !== typeof wp && wp.customize && wp.customize.selectiveRefresh ) {
         wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( placement ) {
             if ( placement.partial.id == 'section-gallery' ) {
