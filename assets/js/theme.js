@@ -22,7 +22,6 @@ function preload_images( images, complete_callback ) {
 
 }
 
-
 function _to_number( string ) {
     if ( typeof string === 'number' ) {
         return string;
@@ -44,7 +43,7 @@ function _to_bool( v ) {
         return v === 0  ? false : true;
     }
 
-    if (  typeof v === 'string' ){
+    if ( typeof v === 'string' ) {
         if ( v === 'true' || v === '1' ) {
             return true;
         } else {
@@ -55,6 +54,26 @@ function _to_bool( v ) {
     return false;
 }
 
+var isMobile = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
 
 /**
  * skip-link-focus-fix.js
@@ -90,115 +109,6 @@ function _to_bool( v ) {
     }
 })();
 
-/**
-* Responsive Videos
-*/
-( function() {
-    jQuery('.site-content').fitVids();
-})();
-
-/**
- * Section: Hero Full Screen Slideshow
- */
-( function() {
-
-    jQuery(window).on('resize', function (){
-        var is_transparent = jQuery( 'body').hasClass( 'header-transparent' );
-
-        var headerH;
-        var is_top_header = jQuery( '#page > .site-header').length ?  true : false;
-        if( is_top_header && ! is_transparent ) {
-            headerH = jQuery('.site-header').height();
-        } else {
-            headerH = 0;
-        }
-        jQuery('.hero-slideshow-fullscreen').css('height',(jQuery(window).height()-headerH+1)+'px');
-
-    });
-    jQuery(window).trigger( 'resize' );
-
-} )();
-
-
-/**
- * Text rotator
- */
-( function() {
-
-    jQuery(".js-rotating").Morphext({
-        // The [in] animation type. Refer to Animate.css for a list of available animations.
-        animation: onepress_js_settings.hero_animation,
-        // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
-        separator: "|",
-        // The delay between the changing of each phrase in milliseconds.
-        speed: parseInt( onepress_js_settings.hero_speed ),
-        complete: function () {
-            // Called after the entrance animation is executed.
-        }
-    });
-} )();
-
-
-
-/**
- * Parallax Section
- */
-( function() {
-
-    jQuery(window).resize(function(){
-        onepressParallax();
-    });
-
-    function onepressParallax() {
-        var isMobile = {
-            Android: function() {
-                return navigator.userAgent.match(/Android/i);
-            },
-            BlackBerry: function() {
-                return navigator.userAgent.match(/BlackBerry/i);
-            },
-            iOS: function() {
-                return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-            },
-            Opera: function() {
-                return navigator.userAgent.match(/Opera Mini/i);
-            },
-            Windows: function() {
-                return navigator.userAgent.match(/IEMobile/i);
-            },
-            any: function() {
-                return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-            }
-        };
-
-        var testMobile = isMobile.any();
-        if (testMobile == null) {
-            jQuery( 'body' ).addClass( 'body-desktop') .removeClass( 'body-mobile' );
-        } else {
-            jQuery( 'body' ).addClass( 'body-mobile' ).removeClass( 'body-desktop' );
-        }
-
-        jQuery('.section-has-parallax').each(function() {
-            var $this = jQuery(this);
-            var bg    = $this.find('.parallax_bg');
-            var img = $this.data('bg');
-
-            preload_images( [ img ], function(){
-                jQuery(bg).css('backgroundImage', 'url(' + img + ')');
-                if (testMobile == null) {
-                    jQuery(bg).addClass('not-mobile');
-                    jQuery(bg).removeClass('is-mobile');
-                    jQuery(bg).parallax('50%', 0.4);
-                } else {
-                    //jQuery(bg).css('backgroundAttachment', 'inherit');
-                    jQuery(bg).removeClass('not-mobile');
-                    jQuery(bg).addClass('is-mobile');
-                }
-            });
-
-        });
-    }
-})();
 
 
 /**
@@ -217,15 +127,6 @@ function _to_bool( v ) {
     }
 })();
 
-/**
- * Center vertical align for navigation.
- */
-( function() {
-    if ( onepress_js_settings.onepress_vertical_align_menu == '1' ) {
-        var header_height = jQuery('.site-header').height();
-        jQuery('.site-header .onepress-menu').css( 'line-height', header_height + "px" );
-    }
-})();
 
 /**
  * Sticky header when scroll.
@@ -387,19 +288,41 @@ function _to_bool( v ) {
 
 })( jQuery );
 
-// Counter Up
-jQuery( document ).ready( function( $ ){
-    $('.counter').counterUp({
-        delay: 10,
-        time: 1000
+
+
+
+jQuery(document).ready(function ( $ ) {
+
+    if ( isMobile.any() ) {
+        jQuery( 'body' ).addClass( 'body-mobile' ).removeClass( 'body-desktop' );
+    } else {
+        jQuery( 'body' ).addClass( 'body-desktop') .removeClass( 'body-mobile' );
+    }
+
+    /**
+     * Text rotator
+     */
+    jQuery(".js-rotating").Morphext({
+        // The [in] animation type. Refer to Animate.css for a list of available animations.
+        animation: onepress_js_settings.hero_animation,
+        // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
+        separator: "|",
+        // The delay between the changing of each phrase in milliseconds.
+        speed: parseInt( onepress_js_settings.hero_speed ),
+        complete: function () {
+            // Called after the entrance animation is executed.
+        }
     });
-} );
 
-/**
- * Call magnificPopup when use
- */
-jQuery( document ).ready( function( $ ){
+    /**
+     * Responsive Videos
+     */
+    jQuery('.site-content').fitVids();
 
+
+    /**
+     * Call magnificPopup when use
+     */
     jQuery('.popup-video').magnificPopup({
         //disableOn: 700,
         type: 'iframe',
@@ -412,16 +335,77 @@ jQuery( document ).ready( function( $ ){
         }
     });
 
-} );
+    // Counter Up
+    $('.counter').counterUp({
+        delay: 10,
+        time: 1000
+    });
+
+    /**
+     * Center vertical align for navigation.
+     */
+    if ( onepress_js_settings.onepress_vertical_align_menu == '1' ) {
+        var header_height = jQuery('.site-header').height();
+        jQuery('.site-header .onepress-menu').css( 'line-height', header_height + "px" );
+    }
 
 
+    /**
+     * Parallax Section
+     */
+    jQuery(window).resize(function(){
+        onepressParallax();
+    });
 
-jQuery(document).ready(function ( $ ) {
+    function onepressParallax() {
+
+        var testMobile = isMobile.any();
+
+
+        jQuery('.section-has-parallax').each(function() {
+            var $this = jQuery(this);
+            var bg    = $this.find('.parallax_bg');
+            var img = $this.data('bg');
+
+            preload_images( [ img ], function(){
+                jQuery(bg).css('backgroundImage', 'url(' + img + ')');
+                if (testMobile == null) {
+                    jQuery(bg).addClass('not-mobile');
+                    jQuery(bg).removeClass('is-mobile');
+                    jQuery(bg).parallax('50%', 0.4);
+                } else {
+                    //jQuery(bg).css('backgroundAttachment', 'inherit');
+                    jQuery(bg).removeClass('not-mobile');
+                    jQuery(bg).addClass('is-mobile');
+                }
+            });
+
+        });
+    }
+
+
+    /**
+     * Section: Hero Full Screen Slideshow
+     */
+    function hero_full_screen(){
+        var is_transparent = jQuery( 'body').hasClass( 'header-transparent' );
+        var headerH;
+        var is_top_header = jQuery( '#page > .site-header').length ?  true : false;
+        if( is_top_header && ! is_transparent ) {
+            headerH = jQuery('.site-header').height();
+        } else {
+            headerH = 0;
+        }
+        jQuery('.hero-slideshow-fullscreen').css('height',(jQuery(window).height()-headerH+1)+'px');
+    }
+    jQuery(window).on('resize', function (){
+        hero_full_screen();
+    });
+    hero_full_screen();
 
     /**
      * Hero sliders
      */
-
     jQuery('.hero-slideshow-wrapper').each( function(){
         var hero = $( this );
         if ( hero.hasClass( 'video-hero' ) ) {
@@ -433,7 +417,6 @@ jQuery(document).ready(function ( $ ) {
         }
 
         if ( images ) {
-
             preload_images(images, function () {
                 hero.backstretch(images, {
                     fade: 750,
@@ -472,6 +455,7 @@ jQuery(document).ready(function ( $ ) {
         }
 
     } );
+
 
 
     /**
@@ -605,7 +589,6 @@ jQuery(document).ready(function ( $ ) {
             isotope_init();
         } );
 
-
         if ( $.fn.lightGallery ) {
             $('.enable-lightbox', $context).lightGallery({
                 mode: 'lg-fade',
@@ -614,13 +597,10 @@ jQuery(document).ready(function ( $ ) {
 
             });
         }
-
-
     }
 
     onepress_gallery_init( $( '.gallery-content' ) );
-
-
+    
     if ( 'undefined' !== typeof wp && wp.customize && wp.customize.selectiveRefresh ) {
         wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( placement ) {
             if ( placement.partial.id == 'section-gallery' ) {
