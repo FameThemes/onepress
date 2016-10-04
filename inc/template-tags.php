@@ -745,10 +745,11 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
     {
         
         $source = 'page'; // get_theme_mod( 'onepress_gallery_source' );
-        $data =  apply_filters( 'onepress_get_section_gallery_data', false );
-        if ( $data ) {
+        if( has_filter( 'onepress_get_section_gallery_data' ) ) {
+            $data =  apply_filters( 'onepress_get_section_gallery_data', false );
             return $data;
         }
+
         $data = array();
 
         switch ( $source ) {
@@ -811,6 +812,9 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 function onepress_gallery_html( $data, $inner = true, $size = 'thumbnail' ) {
     $max_item = get_theme_mod( 'onepress_g_number', 10 );
     $html = '';
+    if ( ! is_array( $data ) ) {
+        return $html;
+    }
     $n = count( $data );
     if ( $max_item > $n ) {
         $max_item =  $n;
