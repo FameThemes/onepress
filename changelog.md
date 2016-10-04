@@ -6,6 +6,13 @@ CHANGELOG
 * Add version for assets files.
 * Add Gallery section.
 * Add breadcrumb for template full width, left sidebar.
+* Disable disable animation hero text in Customizer.
+* Fix highlight/active latest menu item on large screen.
+* Improve parallax.
+* Fix Hero slider overlay on mobile.
+* Support services 1 column.
+* Fix h1 site title tag close.
+* Move .break from reset to _document.scss.
 
 
 ## 1.2.5
