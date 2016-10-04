@@ -898,7 +898,7 @@ button {
         display: block;
     }
     .owl-buttons {
-        div {
+        > div {
             position: absolute;
             top: 50%;
             background-color: rgba(0, 0, 0, 0.45);
@@ -910,6 +910,10 @@ button {
             margin-top: 0px;
             padding: 4px 10px 5px;
             transform: translateY( -50% );
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.6);
+	            color: #fff;
+			}
         }
         .owl-prev {
             left: 15px;

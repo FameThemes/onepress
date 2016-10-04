@@ -3899,7 +3899,7 @@ img.mfp-img {
 	display: block;
 }
 
-.owl-carousel .owl-buttons div {
+.owl-carousel .owl-buttons > div {
 	position: absolute;
 	top: 50%;
 	background-color: rgba(0, 0, 0, 0.45);
@@ -3911,6 +3911,11 @@ img.mfp-img {
 	margin-top: 0px;
 	padding: 4px 10px 5px;
 	transform: translateY(-50%);
+}
+
+.owl-carousel .owl-buttons > div:hover {
+	background-color: rgba(0, 0, 0, 0.6);
+	color: #fff;
 }
 
 .owl-carousel .owl-buttons .owl-prev {
