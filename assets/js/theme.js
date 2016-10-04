@@ -577,6 +577,7 @@ jQuery(document).ready(function ( $ ) {
 
                 pagination : false,
                 paginationNumbers : false,
+                autoHeight : true,
             });
 
             $('.gallery-carousel', $context).each( function(){
