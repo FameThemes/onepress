@@ -156,3 +156,21 @@ License: Dual licensed under the MIT and GPL licenses: https://github.com/IanLun
 - FontAwesome
 Source: https://fortawesome.github.io/Font-Awesome/
 License: GPL - https://fortawesome.github.io/Font-Awesome/license/
+
+- Isotope
+Source: http://isotope.metafizzy.co
+License: Licensed GPLv3 for open source use.
+License: Isotope Commercial License for commercial use.
+
+- lightGallery
+Source: http://sachinchoolur.github.io/lightGallery/
+License: Apache 2.0
+
+- Justified Gallery
+Source: http://miromannino.github.io/Justified-Gallery/
+License: Licensed under the MIT license.
+
+- jQuery OwlCarousel
+Source: http://www.owlgraphic.com/owlcarousel/
+License: Licensed under MIT
+
