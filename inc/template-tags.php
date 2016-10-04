@@ -808,7 +808,7 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
  * @param bool|true $inner
  * @return string
  */
-function onepress_gallery_html( $data, $inner = true ) {
+function onepress_gallery_html( $data, $inner = true, $size = 'thumbnail' ) {
     $max_item = get_theme_mod( 'onepress_g_number', 10 );
     $html = '';
     $n = count( $data );
@@ -819,14 +819,21 @@ function onepress_gallery_html( $data, $inner = true ) {
     while( $i < $max_item ){
         $photo = current( $data );
         $i ++ ;
+        if ( $size == 'full' ) {
+            $thumb = $photo['full'];
+        } else {
+            $thumb = $photo['thumbnail'];
+        }
 
         $html .= '<a href="'.esc_attr( $photo['full'] ).'" class="g-item" title="'.esc_attr( wp_strip_all_tags( $photo['title'] ) ).'">';
         if ( $inner ) {
             $html .= '<span class="inner">';
-            $html .= '<img src="'.esc_url( $photo['thumbnail'] ).'" alt="">';
+                $html .= '<span class="inner-content">';
+                $html .= '<img src="'.esc_url( $thumb ).'" alt="">';
+                $html .= '</span>';
             $html .= '</span>';
         } else {
-            $html .= '<img src="'.esc_url( $photo['thumbnail'] ).'" alt="">';
+            $html .= '<img src="'.esc_url( $thumb ).'" alt="">';
         }
 
         $html .= '</a>';
@@ -864,7 +871,7 @@ function onepress_gallery_generate( $echo = true ){
         case 'masonry':
             $html = onepress_gallery_html( $data );
             if ( $html ) {
-                $div .= '<div data-col="'.$col.'" class="gallery-masonry '.$class.' gallery-grid g-col-'.$col.'">';
+                $div .= '<div data-col="'.$col.'" class="g-zoom-in gallery-masonry '.$class.' gallery-grid g-col-'.$col.'">';
                 $div .= $html;
                 $div .= '</div>';
             }
@@ -872,13 +879,13 @@ function onepress_gallery_generate( $echo = true ){
         case 'carousel':
             $html = onepress_gallery_html( $data );
             if ( $html ) {
-                $div .= '<div data-col="'.$col.'" class="gallery-carousel'.$class.'">';
+                $div .= '<div data-col="'.$col.'" class="g-zoom-in gallery-carousel'.$class.'">';
                 $div .= $html;
                 $div .= '</div>';
             }
             break;
         case 'slider':
-            $html = onepress_gallery_html( $data );
+            $html = onepress_gallery_html( $data , true , 'full' );
             if ( $html ) {
                 $div .= '<div class="gallery-slider'.$class.'">';
                 $div .= $html;
@@ -889,7 +896,7 @@ function onepress_gallery_generate( $echo = true ){
             $html = onepress_gallery_html( $data, false );
             if ( $html ) {
                 $gallery_spacing = absint( get_theme_mod( 'onepress_g_spacing', 20 ) );
-                $div .= '<div data-spacing="'.$gallery_spacing.'" class="gallery-justified'.$class.'">';
+                $div .= '<div data-spacing="'.$gallery_spacing.'" class="g-zoom-in gallery-justified'.$class.'">';
                 $div .= $html;
                 $div .= '</div>';
             }
@@ -897,7 +904,7 @@ function onepress_gallery_generate( $echo = true ){
         default: // grid
             $html = onepress_gallery_html( $data );
             if ( $html ) {
-                $div .= '<div class="gallery-grid '.$class.' g-col-'.$col .'">';
+                $div .= '<div class="gallery-grid g-zoom-in '.$class.' g-col-'.$col .'">';
                 $div .= $html;
                 $div .= '</div>';
             }
