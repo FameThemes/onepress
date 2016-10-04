@@ -94,7 +94,7 @@ function onepress_customizer_partials( $wp_customize ) {
         ),
 
         // section gallery
-        array(
+        'gallery' => array(
             'id' => 'gallery',
             'selector' => '.section-gallery',
             'settings' => array(
@@ -103,11 +103,7 @@ function onepress_customizer_partials( $wp_customize ) {
                 'onepress_gallery_title',
                 'onepress_gallery_subtitle',
                 'onepress_gallery_desc',
-
                 'onepress_gallery_source_page',
-                'onepress_gallery_source_facebook',
-                'onepress_gallery_source_flickr',
-                'onepress_gallery_source_instagram',
                 'onepress_gallery_layout',
                 'onepress_gallery_display',
                 'onepress_g_number',

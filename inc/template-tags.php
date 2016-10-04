@@ -774,7 +774,7 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
                                 $img_thumb = $img_thumb[0];
                             }
 
-                            $img_full = wp_get_attachment_image_src($post_id, 'full');
+                            $img_full = wp_get_attachment_image_src( $post_id, 'full' );
                             if ($img_full) {
                                 $img_full = $img_full[0];
                             }
@@ -820,13 +820,13 @@ function onepress_gallery_html( $data, $inner = true ) {
         $photo = current( $data );
         $i ++ ;
 
-        $html .= '<a href="'.esc_attr( $photo['thumbnail'] ).'" class="g-item" title="'.esc_attr( wp_strip_all_tags( $photo['title'] ) ).'">';
+        $html .= '<a href="'.esc_attr( $photo['full'] ).'" class="g-item" title="'.esc_attr( wp_strip_all_tags( $photo['title'] ) ).'">';
         if ( $inner ) {
             $html .= '<span class="inner">';
-            $html .= '<img src="'.esc_url( $photo['full'] ).'" alt="">';
+            $html .= '<img src="'.esc_url( $photo['thumbnail'] ).'" alt="">';
             $html .= '</span>';
         } else {
-            $html .= '<img src="'.esc_url( $photo['full'] ).'" alt="">';
+            $html .= '<img src="'.esc_url( $photo['thumbnail'] ).'" alt="">';
         }
 
         $html .= '</a>';
