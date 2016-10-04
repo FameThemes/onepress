@@ -1292,20 +1292,20 @@ jQuery( window ).ready( function( $ ){
                 $( "#customize-control-onepress_g_row_height, #customize-control-onepress_g_col, #customize-control-onepress_g_spacing").hide();
                 break;
             case 'justified':
-                $( "#customize-control-onepress_g_col").hide();
+                $( "#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").hide();
                 $( "#customize-control-onepress_g_row_height").show();
                 break;
             case 'carousel':
                 $( "#customize-control-onepress_g_row_height, #customize-control-onepress_g_col").hide();
-                $( "#customize-control-onepress_g_col").show();
+                $( "#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").show();
                 break;
             case 'masonry':
                 $( "#customize-control-onepress_g_row_height").hide();
-                $( "#customize-control-onepress_g_col").show();
+                $( "#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").show();
                 break;
             default:
                 $( "#customize-control-onepress_g_row_height").hide();
-                $( "#customize-control-onepress_g_col").show();
+                $( "#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").show();
 
         }
 
