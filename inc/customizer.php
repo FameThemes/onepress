@@ -2136,7 +2136,7 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'onepress_gallery_disable',
         array(
             'sanitize_callback' => 'onepress_sanitize_checkbox',
-            'default'           => '',
+            'default'           => 1,
         )
     );
     $wp_customize->add_control( 'onepress_gallery_disable',

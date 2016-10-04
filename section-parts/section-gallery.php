@@ -1,6 +1,6 @@
 <?php
 $id       = get_theme_mod( 'onepress_gallery_id', esc_html__('gallery', 'onepress') );
-$disable  = get_theme_mod( 'onepress_gallery_disable' ) ==  1 ? true : false;
+$disable  = get_theme_mod( 'onepress_gallery_disable', 1 ) ==  1 ? true : false;
 $title    = get_theme_mod( 'onepress_gallery_title', esc_html__('Gallery', 'onepress' ));
 $subtitle = get_theme_mod( 'onepress_gallery_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $desc     = get_theme_mod( 'onepress_gallery_desc' );
