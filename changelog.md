@@ -15,6 +15,7 @@ CHANGELOG
 * Fix h1 site title tag close.
 * Move .break from reset to document.scss.
 * Update WPML config.
+* Update translate file.
 
 
 ## 1.2.5
