@@ -206,6 +206,9 @@
 
 // DIsable text animation
 .is-customize-preview {
+	.sk-cube-grid {
+		display: none !important;
+	}
 	.hero-slideshow-wrapper {
 
 		.hero__content {

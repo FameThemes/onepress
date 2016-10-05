@@ -2259,6 +2259,10 @@ h6, p, ul, ol, dl, blockquote, pre {
 	transform: translate(-50%, -50%);
 }
 
+.is-customize-preview .sk-cube-grid {
+	display: none !important;
+}
+
 .is-customize-preview .hero-slideshow-wrapper .hero__content .hero-large-text, .is-customize-preview .hero-slideshow-wrapper .hero__content .hero-small-text, .is-customize-preview .hero-slideshow-wrapper .hero__content .btn {
 	visibility: visible;
 	opacity: 1;
