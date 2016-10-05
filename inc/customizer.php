@@ -1296,6 +1296,7 @@ function onepress_customize_register( $wp_customize ) {
 	$wp_customize->add_setting( 'onepress_gallery_source',
 		array(
 			'sanitize_callback' => 'sanitize_text_field',
+			'validate_callback' => 'onepress_gallery_source_validate',
 			'default'           => 'page',
 		)
 	);
@@ -1307,6 +1308,9 @@ function onepress_customize_register( $wp_customize ) {
 			'priority'      => 5,
 			'choices'       => array(
 				'page'      => esc_html__('Page', 'onepress'),
+				'facebook'  => esc_html__('Facebook', 'onepress'),
+				'instagram' => esc_html__('Instagram', 'onepress'),
+				'flickr'    => esc_html__('Flickr', 'onepress'),
 			)
 		)
 	);
@@ -2851,6 +2855,14 @@ function onepress_showon_frontpage() {
 	return is_page_template( 'template-frontpage.php' );
 }
 
+function onepress_gallery_source_validate( $validity, $value ){
+	if ( ! class_exists( 'OnePress_PLus' ) ) {
+		if ( $value != 'page' ) {
+			$validity->add('notice', esc_html__('Upgrade to OnePress Plus to unlock this feature.', 'onepress'));
+		}
+	}
+	return $validity;
+}
 /**
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
