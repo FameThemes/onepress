@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-05 02:50+0000\n"
+"POT-Creation-Date: 2016-10-05 03:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -785,18 +785,6 @@ msgstr ""
 
 #: inc/customizer.php:1310
 msgid "Page"
-msgstr ""
-
-#: inc/customizer.php:1311
-msgid "Facebook"
-msgstr ""
-
-#: inc/customizer.php:1312
-msgid "Instagram"
-msgstr ""
-
-#: inc/customizer.php:1313
-msgid "Flickr"
 msgstr ""
 
 #: inc/customizer.php:1327

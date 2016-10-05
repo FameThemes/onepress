@@ -1308,9 +1308,9 @@ function onepress_customize_register( $wp_customize ) {
 			'priority'      => 5,
 			'choices'       => array(
 				'page'      => esc_html__('Page', 'onepress'),
-				'facebook'  => esc_html__('Facebook', 'onepress'),
-				'instagram' => esc_html__('Instagram', 'onepress'),
-				'flickr'    => esc_html__('Flickr', 'onepress'),
+				'facebook'  => 'Facebook',
+				'instagram' => 'Instagram',
+				'flickr'    => 'Flickr',
 			)
 		)
 	);
@@ -2858,7 +2858,7 @@ function onepress_showon_frontpage() {
 function onepress_gallery_source_validate( $validity, $value ){
 	if ( ! class_exists( 'OnePress_PLus' ) ) {
 		if ( $value != 'page' ) {
-			$validity->add('notice', esc_html__('Upgrade to OnePress Plus to unlock this feature.', 'onepress'));
+			$validity->add('notice', esc_html__('Upgrade to OnePress Plus to unlock this feature.', 'onepress' ) );
 		}
 	}
 	return $validity;
