@@ -153,6 +153,12 @@
             <key name='onepress_hero_mobile_img' />
             <key name='onepress_hero_overlay_color' />
 
+            <key name='onepress_gallery_title' />
+            <key name='onepress_gallery_subtitle' />
+            <key name='onepress_gallery_desc' />
+            <key name='onepress_gallery_source_page' />
+            <key name='onepress_gallery_desc' />
+
         </key>
     </admin-texts>
 </wpml-config>
