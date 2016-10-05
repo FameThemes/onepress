@@ -972,8 +972,11 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   transition: left 1s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.1s ease 0s;
 }
 
-body.lg-on #wpadminbar {
-	display: none !important;
+body.lg-on .lg-backdrop {
+	z-index: 99999;
+}
+body.lg-on .lg-outer {
+	z-index: 999999;
 }
 
 /*# sourceMappingURL=lightgallery.css.map */
