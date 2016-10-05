@@ -132,29 +132,67 @@ add_action( 'widgets_init', 'onepress_widgets_init' );
  * Enqueue scripts and styles.
  */
 function onepress_scripts() {
-	wp_enqueue_style( 'onepress-fonts', onepress_fonts_url(), array(), null );
-	wp_enqueue_style( 'onepress-animate', get_template_directory_uri() .'/assets/css/animate.min.css', array(), '1.0.0' );
-	wp_enqueue_style( 'onepress-fa', get_template_directory_uri() .'/assets/css/font-awesome.min.css', array(), '4.4.0' );
-	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', false, '4.0.0' );
+
+    $theme = wp_get_theme();
+    $version = $theme->get( 'Version' );
+
+	wp_enqueue_style( 'onepress-fonts', onepress_fonts_url(), array(), $version );
+	wp_enqueue_style( 'onepress-animate', get_template_directory_uri() .'/assets/css/animate.min.css', array(), $version );
+	wp_enqueue_style( 'onepress-fa', get_template_directory_uri() .'/assets/css/font-awesome.min.css', array(), $version );
+	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', false, $version );
 	wp_enqueue_style( 'onepress-style', get_template_directory_uri().'/style.css' );
 
 	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array(), '1.0.0', true );
-	wp_enqueue_script( 'onepress-js-bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.min.js', array(), '4.0.0', true );
-	wp_enqueue_script( 'onepress-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), '20120206', true );
+	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array(), $version, true );
+	wp_enqueue_script( 'onepress-js-bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.min.js', array(), $version, true );
+
+    // Animation from settings.
+    $onepress_js_settings = array(
+        'onepress_disable_animation'     => get_theme_mod( 'onepress_animation_disable' ),
+        'onepress_disable_sticky_header' => get_theme_mod( 'onepress_sticky_header_disable' ),
+        'onepress_vertical_align_menu'   => get_theme_mod( 'onepress_vertical_align_menu' ),
+        'hero_animation'   				 => get_theme_mod( 'onepress_hero_option_animation', 'flipInX' ),
+        'hero_speed'   					 => intval( get_theme_mod( 'onepress_hero_option_speed', 5000 ) ),
+        'is_home'   					 => '',
+        'gallery_enable'   				 => '',
+    );
+    // Load gallery scripts
+    $galley_disable  = get_theme_mod( 'onepress_gallery_disable' ) ==  1 ? true : false;
+    if ( ! $galley_disable || is_customize_preview() ) {
+        $onepress_js_settings['gallery_enable'] = 1;
+        $display = get_theme_mod( 'onepress_gallery_display', 'grid' );
+        if ( ! is_customize_preview() ) {
+            switch ( $display ) {
+                case 'masonry':
+                    wp_enqueue_script('onepress-gallery-masonry', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array(), $version, true);
+                    break;
+                case 'justified':
+                    wp_enqueue_script('onepress-gallery-justified', get_template_directory_uri() . '/assets/js/jquery.justifiedGallery.min.js', array(), $version, true);
+                    break;
+                case 'slider':
+                case 'carousel':
+                    wp_enqueue_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            wp_enqueue_script('onepress-gallery-masonry', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array(), $version, true);
+            wp_enqueue_script('onepress-gallery-justified', get_template_directory_uri() . '/assets/js/jquery.justifiedGallery.min.js', array(), $version, true);
+            wp_enqueue_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
+        }
+
+        if ( get_theme_mod( 'onepress_g_lightbox', 1 ) || is_customize_preview() ) {
+            wp_enqueue_script('onepress-gallery-lightgallery', get_template_directory_uri() . '/assets/js/lightgallery.js', array('jquery'), $version, true);
+            wp_enqueue_style( 'onepress-gallery-lightgallery', get_template_directory_uri().'/assets/css/lightgallery.css' );
+        }
+    }
+
+	wp_enqueue_script( 'onepress-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 
-	// Animation from settings.
-	$onepress_js_settings = array(
-		'onepress_disable_animation'     => get_theme_mod( 'onepress_animation_disable' ),
-		'onepress_disable_sticky_header' => get_theme_mod( 'onepress_sticky_header_disable' ),
-		'onepress_vertical_align_menu'   => get_theme_mod( 'onepress_vertical_align_menu' ),
-		'hero_animation'   				 => get_theme_mod( 'onepress_hero_option_animation', 'flipInX' ),
-		'hero_speed'   					 => intval( get_theme_mod( 'onepress_hero_option_speed', 5000 ) ),
-		'is_home'   					 => '',
-	);
     if ( is_front_page() && is_page_template( 'template-frontpage.php' ) ) {
         if ( get_theme_mod( 'onepress_header_scroll_logo' ) ) {
             $onepress_js_settings['is_home'] = 1;

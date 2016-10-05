@@ -518,3 +518,8 @@ input[type="radio"],input[type="checkbox"] {
 .clearleft {
 	clear: left;
 }
+
+.break {
+    word-break: break-word;
+    word-wrap: break-word;
+}

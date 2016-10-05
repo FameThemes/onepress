@@ -70,8 +70,12 @@ if ( ! empty( $page_ids ) ) {
                                 }
                                 $media = '<div class="service-image"><i class="fa '.esc_attr( $settings['icon'] ).' fa-5x"></i></div>';
                             }
+                            if ( $layout == 12 ) {
+                                $classes = 'col-sm-12 col-lg-'.$layout;
+                            } else {
+                                $classes = 'col-sm-6 col-lg-'.$layout;
+                            }
 
-                            $classes = 'col-sm-6 col-lg-'.$layout;
                             if ($j >= $columns) {
                                 $j = 1;
                                 $classes .= ' clearleft';

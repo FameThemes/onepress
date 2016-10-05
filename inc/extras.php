@@ -32,6 +32,10 @@ function onepress_body_classes( $classes ) {
         }
     }
 
+    if ( is_customize_preview() ) {
+        $classes[ ] = 'is-customize-preview';
+    }
+
 	return $classes;
 }
 add_filter( 'body_class', 'onepress_body_classes' );

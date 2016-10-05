@@ -33,7 +33,7 @@ function onepress_customize_register( $wp_customize ) {
 
 	$pages  =  get_pages();
 	$option_pages = array();
-	$option_pages[0] = __( 'Select page', 'onepress' );
+	$option_pages[0] = esc_html__( 'Select page', 'onepress' );
 	foreach( $pages as $p ){
 		$option_pages[ $p->ID ] = $p->post_title;
 	}
@@ -44,7 +44,7 @@ function onepress_customize_register( $wp_customize ) {
 		'number'       => '',
 	) );
 
-	$option_users[0] = __( 'Select member', 'onepress' );
+	$option_users[0] = esc_html__( 'Select member', 'onepress' );
 	foreach( $users as $user ){
 		$option_users[ $user->ID ] = $user->display_name;
 	}
@@ -379,7 +379,7 @@ function onepress_customize_register( $wp_customize ) {
         $wp_customize->add_control( 'onepress_header_scroll_logo',
             array(
                 'type'        => 'checkbox',
-                'label'       => esc_html__('Scroll to top when click to home page on front page.', 'onepress'),
+                'label'       => esc_html__('Scroll to top when click to the site logo or site title, only apply on front page.', 'onepress'),
                 'section'     => 'onepress_header_settings',
             )
         );
@@ -852,26 +852,6 @@ function onepress_customize_register( $wp_customize ) {
                 )
             );
 
-			// Overlay Opacity
-			/*
-			$wp_customize->add_setting( 'onepress_hero_overlay_opacity',
-				array(
-					'sanitize_callback' => 'sanitize_text_field',
-					'default'           => '0.3',
-					'transport' => 'refresh', // refresh or postMessage
-				)
-			);
-			$wp_customize->add_control(
-					'onepress_hero_overlay_opacity',
-					array(
-						'label' 		=> esc_html__('Background Overlay Opacity', 'onepress'),
-						'section' 		=> 'onepress_hero_images',
-						'description'   => esc_html__('Enter a float number between 0.1 to 0.9', 'onepress'),
-						'priority'      => 130,
-					)
-			);
-			*/
-
 			// Background Video
 			$wp_customize->add_setting( 'onepress_hero_videobackground_upsell',
 				array(
@@ -1108,7 +1088,7 @@ function onepress_customize_register( $wp_customize ) {
 	/*------------------------------------------------------------------------*/
 	$wp_customize->add_panel( 'onepress_videolightbox' ,
 		array(
-			'priority'        => 132,
+			'priority'        => 180,
 			'title'           => esc_html__( 'Section: Video Lightbox', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
@@ -1205,13 +1185,292 @@ function onepress_customize_register( $wp_customize ) {
     ));
 
 
+	/*------------------------------------------------------------------------*/
+	/*  Section: Gallery
+    /*------------------------------------------------------------------------*/
+	$wp_customize->add_panel( 'onepress_gallery' ,
+		array(
+			'priority'        => 190,
+			'title'           => esc_html__( 'Section: Gallery', 'onepress' ),
+			'description'     => '',
+			'active_callback' => 'onepress_showon_frontpage'
+		)
+	);
+
+	$wp_customize->add_section( 'onepress_gallery_settings' ,
+		array(
+			'priority'    => 3,
+			'title'       => esc_html__( 'Section Settings', 'onepress' ),
+			'description' => '',
+			'panel'       => 'onepress_gallery',
+		)
+	);
+
+	// Show Content
+	$wp_customize->add_setting( 'onepress_gallery_disable',
+		array(
+			'sanitize_callback' => 'onepress_sanitize_checkbox',
+			'default'           => 1,
+		)
+	);
+	$wp_customize->add_control( 'onepress_gallery_disable',
+		array(
+			'type'        => 'checkbox',
+			'label'       => esc_html__('Hide this section?', 'onepress'),
+			'section'     => 'onepress_gallery_settings',
+			'description' => esc_html__('Check this box to hide this section.', 'onepress'),
+		)
+	);
+
+	// Section ID
+	$wp_customize->add_setting( 'onepress_gallery_id',
+		array(
+			'sanitize_callback' => 'onepress_sanitize_text',
+			'default'           => esc_html__('gallery', 'onepress'),
+		)
+	);
+	$wp_customize->add_control( 'onepress_gallery_id',
+		array(
+			'label'     => esc_html__('Section ID:', 'onepress'),
+			'section' 		=> 'onepress_gallery_settings',
+			'description'   => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
+		)
+	);
+
+	// Title
+	$wp_customize->add_setting( 'onepress_gallery_title',
+		array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => esc_html__('Gallery', 'onepress'),
+		)
+	);
+	$wp_customize->add_control( 'onepress_gallery_title',
+		array(
+			'label'     => esc_html__('Section Title', 'onepress'),
+			'section' 		=> 'onepress_gallery_settings',
+			'description'   => '',
+		)
+	);
+
+	// Sub Title
+	$wp_customize->add_setting( 'onepress_gallery_subtitle',
+		array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => esc_html__('Section subtitle', 'onepress'),
+		)
+	);
+	$wp_customize->add_control( 'onepress_gallery_subtitle',
+		array(
+			'label'     => esc_html__('Section Subtitle', 'onepress'),
+			'section' 		=> 'onepress_gallery_settings',
+			'description'   => '',
+		)
+	);
+
+	// Description
+	$wp_customize->add_setting( 'onepress_gallery_desc',
+		array(
+			'sanitize_callback' => 'onepress_sanitize_text',
+			'default'           => '',
+		)
+	);
+	$wp_customize->add_control( new OnePress_Editor_Custom_Control(
+		$wp_customize,
+		'onepress_gallery_desc',
+		array(
+			'label' 		=> esc_html__('Section Description', 'onepress'),
+			'section' 		=> 'onepress_gallery_settings',
+			'description'   => '',
+		)
+	));
+
+	$wp_customize->add_section( 'onepress_gallery_content' ,
+		array(
+			'priority'    => 6,
+			'title'       => esc_html__( 'Section Content', 'onepress' ),
+			'description' => '',
+			'panel'       => 'onepress_gallery',
+		)
+	);
+	// Gallery Source
+	$wp_customize->add_setting( 'onepress_gallery_source',
+		array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'validate_callback' => 'onepress_gallery_source_validate',
+			'default'           => 'page',
+		)
+	);
+	$wp_customize->add_control( 'onepress_gallery_source',
+		array(
+			'label'     	=> esc_html__('Select Gallery Source', 'onepress'),
+			'section' 		=> 'onepress_gallery_content',
+			'type'          => 'select',
+			'priority'      => 5,
+			'choices'       => array(
+				'page'      => esc_html__('Page', 'onepress'),
+				'facebook'  => 'Facebook',
+				'instagram' => 'Instagram',
+				'flickr'    => 'Flickr',
+			)
+		)
+	);
+
+	// Source page settings
+	$wp_customize->add_setting( 'onepress_gallery_source_page',
+		array(
+			'sanitize_callback' => 'onepress_sanitize_number',
+			'default'           => '',
+		)
+	);
+	$wp_customize->add_control( 'onepress_gallery_source_page',
+		array(
+			'label'     	=> esc_html__('Select Gallery Page', 'onepress'),
+			'section' 		=> 'onepress_gallery_content',
+			'type'          => 'select',
+			'priority'      => 10,
+			'choices'       => $option_pages,
+			'description'   => esc_html__('Select a page which have content contain [gallery] shortcode.', 'onepress'),
+		)
+	);
+
+
+	// Gallery Layout
+	$wp_customize->add_setting( 'onepress_gallery_layout',
+		array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => 'default',
+		)
+	);
+	$wp_customize->add_control( 'onepress_gallery_layout',
+		array(
+			'label'     	=> esc_html__('Layout', 'onepress'),
+			'section' 		=> 'onepress_gallery_content',
+			'type'          => 'select',
+			'priority'      => 40,
+			'choices'       => array(
+				'default'      => esc_html__('Default, inside container', 'onepress'),
+				'full-width'  => esc_html__('Full Width', 'onepress'),
+			)
+		)
+	);
+
+	// Gallery Display
+	$wp_customize->add_setting( 'onepress_gallery_display',
+		array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => 'default',
+		)
+	);
+	$wp_customize->add_control( 'onepress_gallery_display',
+		array(
+			'label'     	=> esc_html__('Display', 'onepress'),
+			'section' 		=> 'onepress_gallery_content',
+			'type'          => 'select',
+			'priority'      => 50,
+			'choices'       => array(
+				'grid'      => esc_html__('Grid', 'onepress'),
+				'carousel'    => esc_html__('Carousel', 'onepress'),
+				'slider'      => esc_html__('Slider', 'onepress'),
+				'justified'   => esc_html__('Justified', 'onepress'),
+				'masonry'     => esc_html__('Masonry', 'onepress'),
+			)
+		)
+	);
+
+	// Gallery grid spacing
+	$wp_customize->add_setting( 'onepress_g_spacing',
+		array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => 20,
+		)
+	);
+	$wp_customize->add_control( 'onepress_g_spacing',
+		array(
+			'label'     	=> esc_html__('Item Spacing', 'onepress'),
+			'section' 		=> 'onepress_gallery_content',
+			'priority'      => 55,
+
+		)
+	);
+
+	// Gallery grid spacing
+	$wp_customize->add_setting( 'onepress_g_row_height',
+		array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => 120,
+		)
+	);
+	$wp_customize->add_control( 'onepress_g_row_height',
+		array(
+			'label'     	=> esc_html__('Row Height', 'onepress'),
+			'section' 		=> 'onepress_gallery_content',
+			'priority'      => 57,
+
+		)
+	);
+
+	// Gallery grid gird col
+	$wp_customize->add_setting( 'onepress_g_col',
+		array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '4',
+		)
+	);
+	$wp_customize->add_control( 'onepress_g_col',
+		array(
+			'label'     	=> esc_html__('Layout columns', 'onepress'),
+			'section' 		=> 'onepress_gallery_content',
+			'priority'      => 60,
+			'type'          => 'select',
+			'choices'       => array(
+				'1'      => 1,
+				'2'      => 2,
+				'3'      => 3,
+				'4'      => 4,
+				'5'      => 5,
+				'6'      => 6,
+			)
+
+		)
+	);
+
+	// Gallery max number
+	$wp_customize->add_setting( 'onepress_g_number',
+		array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => 10,
+		)
+	);
+	$wp_customize->add_control( 'onepress_g_number',
+		array(
+			'label'     	=> esc_html__('Number items', 'onepress'),
+			'section' 		=> 'onepress_gallery_content',
+			'priority'      => 65,
+		)
+	);
+	// Gallery grid spacing
+	$wp_customize->add_setting( 'onepress_g_lightbox',
+		array(
+			'sanitize_callback' => 'onepress_sanitize_checkbox',
+			'default'           => 1,
+		)
+	);
+	$wp_customize->add_control( 'onepress_g_lightbox',
+		array(
+			'label'     	=> esc_html__('Enable Lightbox', 'onepress'),
+			'section' 		=> 'onepress_gallery_content',
+			'priority'      => 70,
+			'type'          => 'checkbox',
+		)
+	);
+
 
 	/*------------------------------------------------------------------------*/
     /*  Section: About
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_about' ,
 		array(
-			'priority'        => 132,
+			'priority'        => 160,
 			'title'           => esc_html__( 'Section: About', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
@@ -1386,7 +1645,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_features' ,
         array(
-            'priority'        => 134,
+            'priority'        => 150,
             'title'           => esc_html__( 'Section: Features', 'onepress' ),
             'description'     => '',
             'active_callback' => 'onepress_showon_frontpage'
@@ -1594,13 +1853,12 @@ function onepress_customize_register( $wp_customize ) {
     );
 
 
-
     /*------------------------------------------------------------------------*/
     /*  Section: Services
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_services' ,
 		array(
-			'priority'        => 134,
+			'priority'        => 170,
 			'title'           => esc_html__( 'Section: Services', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
@@ -1713,6 +1971,7 @@ function onepress_customize_register( $wp_customize ) {
                     '3' => esc_html__( '4 Columns', 'onepress' ),
                     '4' => esc_html__( '3 Columns', 'onepress' ),
                     '6' => esc_html__( '2 Columns', 'onepress' ),
+                    '12' => esc_html__( '1 Column', 'onepress' ),
                 ),
             )
         );
@@ -1791,7 +2050,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
 	$wp_customize->add_panel( 'onepress_counter' ,
 		array(
-			'priority'        => 134,
+			'priority'        => 210,
 			'title'           => esc_html__( 'Section: Counter', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
@@ -1947,7 +2206,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_team' ,
 		array(
-			'priority'        => 136,
+			'priority'        => 250,
 			'title'           => esc_html__( 'Section: Team', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
@@ -2109,12 +2368,14 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
+
+
 	/*------------------------------------------------------------------------*/
     /*  Section: News
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_news' ,
 		array(
-			'priority'        => 138,
+			'priority'        => 260,
 			'title'           => esc_html__( 'Section: News', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
@@ -2269,7 +2530,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
     $wp_customize->add_panel( 'onepress_contact' ,
 		array(
-			'priority'        => 140,
+			'priority'        => 270,
 			'title'           => esc_html__( 'Section: Contact', 'onepress' ),
 			'description'     => '',
 			'active_callback' => 'onepress_showon_frontpage'
@@ -2594,6 +2855,14 @@ function onepress_showon_frontpage() {
 	return is_page_template( 'template-frontpage.php' );
 }
 
+function onepress_gallery_source_validate( $validity, $value ){
+	if ( ! class_exists( 'OnePress_PLus' ) ) {
+		if ( $value != 'page' ) {
+			$validity->add('notice', esc_html__('Upgrade to OnePress Plus to unlock this feature.', 'onepress' ) );
+		}
+	}
+	return $validity;
+}
 /**
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */

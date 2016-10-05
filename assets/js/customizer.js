@@ -500,25 +500,25 @@
                 // console.log(selection);
             });
 
-            control.media_current = {};
-            control.media_btn = {};
+            window.media_current = {};
+            window.media_btn = {};
 
             window._upload_fame.on('select', function () {
                 // Grab our attachment selection and construct a JSON representation of the model.
                 var media_attachment = window._upload_fame.state().get('selection').first().toJSON();
-                $('.image_id', control.media_current).val(media_attachment.id);
+                $('.image_id', window.media_current).val(media_attachment.id);
                 var preview, img_url;
                 img_url = media_attachment.url;
-                $('.current', control.media_current).removeClass('hide').addClass('show');
-                $('.image_url', control.media_current).val(img_url);
+                $('.current', window.media_current).removeClass('hide').addClass('show');
+                $('.image_url', window.media_current).val(img_url);
                 if (media_attachment.type == 'image') {
                     preview = '<img src="' + img_url + '" alt="">';
-                    $('.thumbnail-image', control.media_current).html(preview);
+                    $('.thumbnail-image', window.media_current).html(preview);
                 }
-                $('.remove-button', control.media_current).show();
-                $('.image_id', control.media_current).trigger('change');
+                $('.remove-button', window.media_current).show();
+                $('.image_id', window.media_current).trigger('change');
                 try {
-                    control.media_btn.text(control.media_btn.attr('data-change-txt'));
+                    window.media_btn.text(window.media_btn.attr('data-change-txt'));
                 } catch ( e ){
 
                 }
@@ -543,8 +543,8 @@
                     // when upload item
                     $('.upload-button, .attachment-media-view', _item).on('click', function (e) {
                         e.preventDefault();
-                        control.media_current = _item;
-                        control.media_btn = $(this);
+                        window.media_current = _item;
+                        window.media_btn = $(this);
                         window._upload_fame.open();
                     });
                 });
@@ -1251,18 +1251,65 @@ jQuery( window ).ready( function( $ ){
         }
     }
 
-	/**
-	 * For Hero layout content settings
-	 */
-	$( 'select[data-customize-setting-link="onepress_hero_layout"]').on( 'change on_custom_load', function(){
-		var v = $( this).val() || '';
 
-		$( "li[id^='customize-control-onepress_hcl']").hide();
-		$( "li[id^='customize-control-onepress_hcl"+v+"']").show();
+    /**
+     * For Hero layout content settings
+     */
+    $( 'select[data-customize-setting-link="onepress_hero_layout"]').on( 'change on_custom_load', function(){
+        var v = $( this).val() || '';
 
-	} );
+        $( "li[id^='customize-control-onepress_hcl']").hide();
+        $( "li[id^='customize-control-onepress_hcl"+v+"']").show();
 
-	$( 'select[data-customize-setting-link="onepress_hero_layout"]').trigger( 'on_custom_load' );
+    } );
+    $( 'select[data-customize-setting-link="onepress_hero_layout"]').trigger( 'on_custom_load' );
 
+
+    /**
+     * For Gallery content settings
+     */
+    $( 'select[data-customize-setting-link="onepress_gallery_source"]').on( 'change on_custom_load', function(){
+        var v = $( this).val() || '';
+
+        $( "li[id^='customize-control-onepress_gallery_source_']").hide();
+        $( "li[id^='customize-control-onepress_gallery_api_']").hide();
+        $( "li[id^='customize-control-onepress_gallery_settings_']").hide();
+        $( "li[id^='customize-control-onepress_gallery_source_"+v+"']").show();
+        $( "li[id^='customize-control-onepress_gallery_api_"+v+"']").show();
+        $( "li[id^='customize-control-onepress_gallery_settings_"+v+"']").show();
+
+    } );
+
+    $( 'select[data-customize-setting-link="onepress_gallery_source"]').trigger( 'on_custom_load' );
+
+    /**
+     * For Gallery display settings
+     */
+    $( 'select[data-customize-setting-link="onepress_gallery_display"]').on( 'change on_custom_load', function(){
+        var v = $( this).val() || '';
+        switch ( v ) {
+            case 'slider':
+                $( "#customize-control-onepress_g_row_height, #customize-control-onepress_g_col, #customize-control-onepress_g_spacing").hide();
+                break;
+            case 'justified':
+                $( "#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").hide();
+                $( "#customize-control-onepress_g_row_height").show();
+                break;
+            case 'carousel':
+                $( "#customize-control-onepress_g_row_height, #customize-control-onepress_g_col").hide();
+                $( "#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").show();
+                break;
+            case 'masonry':
+                $( "#customize-control-onepress_g_row_height").hide();
+                $( "#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").show();
+                break;
+            default:
+                $( "#customize-control-onepress_g_row_height").hide();
+                $( "#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").show();
+
+        }
+
+    } );
+    $( 'select[data-customize-setting-link="onepress_gallery_display"]').trigger( 'on_custom_load' );
 
 } );

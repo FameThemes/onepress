@@ -16,11 +16,13 @@ function onepress_site_logo(){
     $html = '' ;
     $classes['logo'] = 'no-logo-img';
 
-    if ( has_custom_logo() ) {
-        $classes['logo'] = 'has-logo-img';
-        $html .= '<div class="site-logo-div">';
-        $html .= get_custom_logo();
-        $html .= '</div>';
+    if ( function_exists( 'has_custom_logo' ) ) {
+        if ( has_custom_logo()) {
+            $classes['logo'] = 'has-logo-img';
+            $html .= '<div class="site-logo-div">';
+            $html .= get_custom_logo();
+            $html .= '</div>';
+        }
     }
 
     $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle',  0 );
@@ -28,7 +30,7 @@ function onepress_site_logo(){
 
     if ( ! $hide_sitetile ) {
         $classes['title'] = 'has-title';
-        if ( is_front_page() && is_home() ) {
+        if ( is_front_page() && !is_home() ) {
             $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
         } else {
             $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
@@ -44,6 +46,7 @@ function onepress_site_logo(){
     } else {
         $classes['desc'] = 'no-desc';
     }
+    
     echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
 }
 
@@ -344,7 +347,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 display: block;
                 content: "";
             }
-            .parallax-hero .hero-slideshow-wrapper:after {
+            .body-desktop .parallax-hero .hero-slideshow-wrapper:after {
                 display: none !important;
             }
             .parallax-hero .parallax-mirror:after {
@@ -501,6 +504,23 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 <?php
             }
 
+            $gallery_spacing = absint( get_theme_mod( 'onepress_g_spacing', 20 ) );
+
+            ?>
+            .gallery-carousel .g-item{
+                padding: 0px <?php echo intval( $gallery_spacing / 2 ); ?>px;
+            }
+            .gallery-carousel {
+                margin-left: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+                margin-right: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+            }
+            .gallery-grid .g-item, .gallery-masonry .g-item .inner {
+                padding: <?php echo intval( $gallery_spacing / 2 ); ?>px;
+            }
+            .gallery-grid, .gallery-masonry {
+                margin: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+            }
+        <?php
 
         $css = ob_get_clean();
 
@@ -713,6 +733,199 @@ if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
     }
 }
 
+
+if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
+    /**
+     * Get Gallery data
+     *
+     * @since 1.2.6
+     *
+     * @return array
+     */
+    function onepress_get_section_gallery_data()
+    {
+        
+        $source = 'page'; // get_theme_mod( 'onepress_gallery_source' );
+        if( has_filter( 'onepress_get_section_gallery_data' ) ) {
+            $data =  apply_filters( 'onepress_get_section_gallery_data', false );
+            return $data;
+        }
+
+        $data = array();
+
+        switch ( $source ) {
+            default:
+                $page_id = get_theme_mod( 'onepress_gallery_source_page' );
+                $images = '';
+                if ( $page_id ) {
+                    $gallery = get_post_gallery( $page_id , false );
+                    if ( $gallery ) {
+                        $images = $gallery['ids'];
+                    }
+                }
+
+                $image_thumb_size = apply_filters( 'onepress_gallery_page_img_size', 'onepress-small' );
+
+                if ( ! empty( $images ) ) {
+                    $images = explode( ',', $images );
+                    foreach ( $images as $post_id ) {
+                        $post = get_post( $post_id );
+                        if ( $post ) {
+                            $img_thumb = wp_get_attachment_image_src($post_id, $image_thumb_size );
+                            if ($img_thumb) {
+                                $img_thumb = $img_thumb[0];
+                            }
+
+                            $img_full = wp_get_attachment_image_src( $post_id, 'full' );
+                            if ($img_full) {
+                                $img_full = $img_full[0];
+                            }
+
+                            if ( $img_thumb && $img_full ) {
+                                $data[ $post_id ] = array(
+                                    'id'        => $post_id,
+                                    'thumbnail' => $img_thumb,
+                                    'full'      => $img_full,
+                                    'title'     => $post->post_title,
+                                    'content'   => $post->post_content,
+                                );
+                            }
+                        }
+                    }
+                }
+            break;
+        }
+
+        return $data;
+
+    }
+}
+
+/**
+ * Generate HTML content for gallery items.
+ *
+ * @since 1.2.6
+ *
+ * @param $data
+ * @param bool|true $inner
+ * @return string
+ */
+function onepress_gallery_html( $data, $inner = true, $size = 'thumbnail' ) {
+    $max_item = get_theme_mod( 'onepress_g_number', 10 );
+    $html = '';
+    if ( ! is_array( $data ) ) {
+        return $html;
+    }
+    $n = count( $data );
+    if ( $max_item > $n ) {
+        $max_item =  $n;
+    }
+    $i = 0;
+    while( $i < $max_item ){
+        $photo = current( $data );
+        $i ++ ;
+        if ( $size == 'full' ) {
+            $thumb = $photo['full'];
+        } else {
+            $thumb = $photo['thumbnail'];
+        }
+
+        $html .= '<a href="'.esc_attr( $photo['full'] ).'" class="g-item" title="'.esc_attr( wp_strip_all_tags( $photo['title'] ) ).'">';
+        if ( $inner ) {
+            $html .= '<span class="inner">';
+                $html .= '<span class="inner-content">';
+                $html .= '<img src="'.esc_url( $thumb ).'" alt="">';
+                $html .= '</span>';
+            $html .= '</span>';
+        } else {
+            $html .= '<img src="'.esc_url( $thumb ).'" alt="">';
+        }
+
+        $html .= '</a>';
+        next( $data );
+    }
+    reset( $data );
+
+    return $html;
+}
+
+
+/**
+ * Generate Gallery HTML
+ *
+ * @since 1.2.6
+ * @param bool|true $echo
+ * @return string
+ */
+function onepress_gallery_generate( $echo = true ){
+
+    $div = '';
+
+    $data = onepress_get_section_gallery_data();
+    $display_type = get_theme_mod( 'onepress_gallery_display', 'grid' );
+    $lightbox = get_theme_mod( 'onepress_g_lightbox', 1 );
+    $class = '';
+    if ( $lightbox ) {
+        $class = ' enable-lightbox ';
+    }
+    $col = absint( get_theme_mod( 'onepress_g_col', 4 ) );
+    if ( $col <= 0 ) {
+        $col = 4;
+    }
+    switch( $display_type ) {
+        case 'masonry':
+            $html = onepress_gallery_html( $data );
+            if ( $html ) {
+                $div .= '<div data-col="'.$col.'" class="g-zoom-in gallery-masonry '.$class.' gallery-grid g-col-'.$col.'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+        case 'carousel':
+            $html = onepress_gallery_html( $data );
+            if ( $html ) {
+                $div .= '<div data-col="'.$col.'" class="g-zoom-in gallery-carousel'.$class.'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+        case 'slider':
+            $html = onepress_gallery_html( $data , true , 'full' );
+            if ( $html ) {
+                $div .= '<div class="gallery-slider'.$class.'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+        case 'justified':
+            $html = onepress_gallery_html( $data, false );
+            if ( $html ) {
+                $gallery_spacing = absint( get_theme_mod( 'onepress_g_spacing', 20 ) );
+                $div .= '<div data-spacing="'.$gallery_spacing.'" class="g-zoom-in gallery-justified'.$class.'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+        default: // grid
+            $html = onepress_gallery_html( $data );
+            if ( $html ) {
+                $div .= '<div class="gallery-grid g-zoom-in '.$class.' g-col-'.$col .'">';
+                $div .= $html;
+                $div .= '</div>';
+            }
+            break;
+    }
+
+    if ( $echo ) {
+        echo $div;
+    } else {
+        return $div;
+    }
+
+}
+
+
+
 if ( ! function_exists( 'onepress_footer_site_info' ) ) {
     /**
      * Add Copyright and Credit text to footer
@@ -751,6 +964,3 @@ if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
         return isset($GLOBALS['onepress_is_selective_refresh']) && $GLOBALS['onepress_is_selective_refresh'] ? true : false;
     }
 }
-
-
-

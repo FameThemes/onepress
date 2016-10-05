@@ -1,6 +1,22 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.2.6
+* NEW Gallery section.
+* Fixed: Hero background image changes when edit in section order & styling.
+* Fixed: Hero loading on mobile when use video background.
+* Add version for assets files.
+* Add breadcrumb for template full width, left sidebar.
+* Disable disable animation hero text in Customizer.
+* Fix highlight/active latest menu item on large screen.
+* Improve parallax section.
+* Fix Hero slider overlay on mobile.
+* Support services 1 column.
+* Fix h1 site title tag close.
+* Move .break from reset to document.scss.
+* Update WPML config.
+* Update translate file.
+
 
 ## 1.2.5
 * Update FontAwesome to latest version.

@@ -93,6 +93,25 @@ function onepress_customizer_partials( $wp_customize ) {
             ),
         ),
 
+        // section gallery
+        'gallery' => array(
+            'id' => 'gallery',
+            'selector' => '.section-gallery',
+            'settings' => array(
+                'onepress_gallery_source',
+
+                'onepress_gallery_title',
+                'onepress_gallery_subtitle',
+                'onepress_gallery_desc',
+                'onepress_gallery_source_page',
+                'onepress_gallery_layout',
+                'onepress_gallery_display',
+                'onepress_g_number',
+                'onepress_g_row_height',
+                'onepress_g_col',
+            ),
+        ),
+
         // section news
         array(
             'id' => 'news',
