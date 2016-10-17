@@ -718,6 +718,18 @@ h6, p, ul, ol, dl, blockquote, pre {
 	position: fixed;
 }
 
+.header-transparent .no-scroll .site-header #nav-toggle span {
+	background-color: #ffffff;
+}
+
+.header-transparent .no-scroll .site-header #nav-toggle span::before, .header-transparent .no-scroll .site-header #nav-toggle span::after {
+	background-color: #ffffff;
+}
+
+.header-transparent .no-scroll .site-header #nav-toggle.nav-is-visible span {
+	background-color: transparent;
+}
+
 @media screen and (min-width: 1140px) {
 	.header-transparent .no-scroll .site-header .onepress-menu > li > a {
 		color: rgba(255, 255, 255, 0.9);
@@ -1086,9 +1098,9 @@ h6, p, ul, ol, dl, blockquote, pre {
 	top: 50%;
 	right: 5px;
 	margin-top: -2px;
-	-webkit-transition: background 0.2s;
-	-moz-transition: background 0.2s;
-	transition: background 0.2s;
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	transition: all 0.2s;
 	display: inline-block;
 	height: 3px;
 	width: 24px;
