@@ -744,7 +744,7 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
      */
     function onepress_get_section_gallery_data()
     {
-        
+
         $source = 'page'; // get_theme_mod( 'onepress_gallery_source' );
         if( has_filter( 'onepress_get_section_gallery_data' ) ) {
             $data =  apply_filters( 'onepress_get_section_gallery_data', false );
