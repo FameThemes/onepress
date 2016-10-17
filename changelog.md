@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
-====================================================================
+=========
+## 1.2.7
+* Fix Mobile Menu button color option on header transparent.
+
 ## 1.2.6
 * NEW Gallery section.
 * Fixed: Hero background image changes when edit in section order & styling.
