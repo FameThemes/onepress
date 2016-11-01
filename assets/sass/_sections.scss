@@ -402,6 +402,18 @@
 	}
 }
 
+.header-transparent {
+	#hero {
+		.container {
+			.hero__content {
+				margin-top: 70px;
+			}
+
+		}
+	}
+}
+
+
 /* Text Rotator */
 .morphext > .animated {
     display: inline-block;

@@ -713,6 +713,18 @@ h6, p, ul, ol, dl, blockquote, pre {
 	display: block;
 }
 
+.no-sticky-header.header-transparent .site-header #nav-toggle span {
+	background-color: #ffffff;
+}
+
+.no-sticky-header.header-transparent .site-header #nav-toggle span::before, .no-sticky-header.header-transparent .site-header #nav-toggle span::after {
+	background-color: #ffffff;
+}
+
+.no-sticky-header.header-transparent .site-header #nav-toggle.nav-is-visible span {
+	background-color: transparent;
+}
+
 .header-transparent .no-scroll .site-header {
 	background: transparent;
 	position: fixed;
@@ -2478,6 +2490,10 @@ h6, p, ul, ol, dl, blockquote, pre {
 
 #hero .btn {
 	box-shadow: none;
+}
+
+.header-transparent #hero .container .hero__content {
+	margin-top: 70px;
 }
 
 /* Text Rotator */
