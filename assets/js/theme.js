@@ -110,10 +110,6 @@ var isMobile = {
 })();
 
 
-
-
-
-
 /**
  * Sticky header when scroll.
  */
@@ -176,14 +172,38 @@ var isMobile = {
 * Smooth scroll for navigation and other elements
 */
 ( function( $ ) {
+    var mobile_max_width =  1140; // Media max width for mobile
+    var main_navigation = jQuery('.main-navigation .onepress-menu');
+    var stite_header =  $( '.site-header' );
 
     // Initialise Menu Toggle
     jQuery('#nav-toggle').on('click', function(event){
         event.preventDefault();
         jQuery('#nav-toggle').toggleClass('nav-is-visible');
-        jQuery('.main-navigation .onepress-menu').toggleClass("onepress-menu-mobile");
+        main_navigation.toggleClass("onepress-menu-mobile");
         jQuery('.header-widget').toggleClass("header-widget-mobile");
+        if ( main_navigation.hasClass( 'onepress-menu-mobile' ) && $( window).width() <= mobile_max_width ) {
+            var h = $( window).height( ) - stite_header.height();
+            main_navigation.css( {
+                height: h,
+                overflow: 'auto',
+            });
+        } else {
+            main_navigation.removeAttr( 'style' );
+        }
     });
+
+    $( window).resize( function(){
+        if ( main_navigation.hasClass( 'onepress-menu-mobile' ) && $( window).width() <= mobile_max_width ) {
+            var h = $( window).height( ) - stite_header.height();
+            main_navigation.css( {
+                height: h,
+                overflow: 'auto',
+            });
+        } else {
+            main_navigation.removeAttr( 'style' );
+        }
+    } );
 
     jQuery('.onepress-menu li.menu-item-has-children, .onepress-menu li.page_item_has_children').each( function() {
         jQuery(this).prepend('<div class="nav-toggle-subarrow"><i class="fa fa-angle-down"></i></div>');
