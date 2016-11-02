@@ -15,6 +15,22 @@
   display: block;
 }
 
+.no-sticky-header.header-transparent .site-header{
+  #nav-toggle {
+    span {
+      background-color: #ffffff;
+      &::before, &::after {
+        background-color: #ffffff;
+      }
+    }
+    &.nav-is-visible {
+      span {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
 .header-transparent .no-scroll .site-header{
   background: transparent;
   position: fixed;
