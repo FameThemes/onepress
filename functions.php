@@ -127,7 +127,7 @@ function onepress_widgets_init() {
 
     if ( class_exists( 'WooCommerce' ) ) {
         register_sidebar( array(
-            'name'          => esc_html__( 'Shop Sidebar', 'onepress' ),
+            'name'          => esc_html__( 'WooCommerce Sidebar', 'onepress' ),
             'id'            => 'sidebar-shop',
             'description'   => '',
             'before_widget' => '<aside id="%1$s" class="widget %2$s">',
