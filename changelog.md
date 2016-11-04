@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
 =========
+## 1.2.8
+* Add sidebar for WooCommerce plugins.
+* Fix menu couldn't scroll if have too much sub menu items.
+* Improve header.
+
 ## 1.2.7
 * Fix Mobile Menu button color option on header transparent.
 
