@@ -132,6 +132,12 @@
     color: #d54e21;
 }
 
+.theme_info_boxed {
+    background: #FFFFFF;
+    text-align: center;
+    padding: 20px 30px 20px 30px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
 .demo-import-boxed {
     background: #fff none repeat scroll 0 0;
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
@@ -143,4 +149,33 @@
     padding: 0 12px;
     position: relative;
     border-left: 4px solid #0085ba;
+}
+
+/* Recommend plugins */
+.recommend-plugins > h3 {
+    margin-bottom: 20px;
+}
+.rcp::after {
+    clear: both;
+    content: "";
+    display: block;
+}
+.rcp {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-left: -25px;
+    margin-right: -25px;
+    padding: 20px 25px 10px;
+}
+.rcp h4 {
+    margin: 0px;
+}
+.rcp a {
+    text-decoration: none;
+}
+.rcp .action-btn {
+    display: inline-block;
+}
+.rcp .plugin-detail {
+    margin-left: 10px;
+    margin-right: 10px;
 }

@@ -101,6 +101,10 @@ if ( ! function_exists( 'onepress_setup' ) ) :
                 'name' => esc_html__( 'Contact Form 7', 'onepress' ),
                 'active_filename' => 'contact-form-7/wp-contact-form-7.php',
             ),
+            'famethemes-demo-importer' => array(
+                'name' => esc_html__( 'Famethemes Demo Importer', 'onepress' ),
+                'active_filename' => 'famethemes-demo-importer/famethemes-demo-importer.php',
+            ),
         ) );
 
 	}
