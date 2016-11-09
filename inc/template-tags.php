@@ -901,7 +901,8 @@ function onepress_gallery_generate( $echo = true ){
             $html = onepress_gallery_html( $data, false );
             if ( $html ) {
                 $gallery_spacing = absint( get_theme_mod( 'onepress_g_spacing', 20 ) );
-                $div .= '<div data-spacing="'.$gallery_spacing.'" class="g-zoom-in gallery-justified'.$class.'">';
+                $row_height = absint( get_theme_mod( 'onepress_g_row_height', 120 ) );
+                $div .= '<div data-row-height="'.$row_height.'" data-spacing="'.$gallery_spacing.'" class="g-zoom-in gallery-justified'.$class.'">';
                 $div .= $html;
                 $div .= '</div>';
             }
