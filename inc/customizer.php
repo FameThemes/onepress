@@ -1487,6 +1487,37 @@ function onepress_customize_register( $wp_customize ) {
 		)
 	);
 
+    // Gallery readmore link
+    $wp_customize->add_setting( 'onepress_g_readmore_link',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_g_readmore_link',
+        array(
+            'label'     	=> esc_html__('Read More Link', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 90,
+            'type'          => 'text',
+        )
+    );
+
+    $wp_customize->add_setting( 'onepress_g_readmore_text',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => esc_html__('View More', 'onepress'),
+        )
+    );
+    $wp_customize->add_control( 'onepress_g_readmore_text',
+        array(
+            'label'     	=> esc_html__('Read More Text', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 100,
+            'type'          => 'text',
+        )
+    );
+
 
 	/*------------------------------------------------------------------------*/
     /*  Section: About

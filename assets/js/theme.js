@@ -550,7 +550,6 @@ jQuery(document).ready(function ( $ ) {
             hero.find('.hero-slideshow-wrapper').find('.sk-cube-grid').remove();
             hero.find('.hero-slideshow-wrapper').addClass('loaded').removeClass( 'loading' );
         }
-
     } );
 
 
@@ -706,6 +705,9 @@ jQuery(document).ready(function ( $ ) {
         wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( placement ) {
             if ( placement.partial.id == 'section-gallery' ) {
                 onepress_gallery_init( placement.container.find( '.gallery-content' ) );
+
+                // Trigger resize to make other sections work.
+                $( window ).resize();
             }
         } );
     }

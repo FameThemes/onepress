@@ -3093,6 +3093,12 @@ div.wpcf7-response-output {
 	float: left;
 }
 
+.all-gallery {
+	text-align: center;
+	margin-top: 40px;
+	display: block;
+}
+
 .g-zoom-in .g-item {
 	display: block;
 	overflow: hidden;

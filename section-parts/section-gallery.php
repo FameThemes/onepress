@@ -32,6 +32,15 @@ $layout = get_theme_mod( 'onepress_gallery_layout', 'default' );
             onepress_gallery_generate();
             ?>
         </div>
+        <?php
+        $readmore_link = get_theme_mod( 'onepress_g_readmore_link' );
+        $readmore_text = get_theme_mod( 'onepress_g_readmore_text', esc_html__('View More', 'onepress') );
+        if ( $readmore_link ) {
+        ?>
+        <div class="all-gallery">
+            <a class="btn btn-theme-primary-outline" href="<?php echo esc_attr( $readmore_link ); ?>"><?php echo esc_html( $readmore_text ); ?></a>
+        </div>
+        <?php } ?>
 
     </div>
     <?php do_action('onepress_section_after_inner', 'gallery'); ?>

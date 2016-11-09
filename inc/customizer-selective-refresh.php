@@ -109,6 +109,8 @@ function onepress_customizer_partials( $wp_customize ) {
                 'onepress_g_number',
                 'onepress_g_row_height',
                 'onepress_g_col',
+                'onepress_g_readmore_link',
+                'onepress_g_readmore_text',
             ),
         ),
 
