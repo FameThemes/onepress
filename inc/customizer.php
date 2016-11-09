@@ -130,7 +130,6 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-
             // Sidebar settings
             $wp_customize->add_setting( 'onepress_layout',
                 array(

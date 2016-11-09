@@ -234,6 +234,7 @@ function onepress_render_recommend_plugins( $recommend_plugins = array() ){
 }
 
 function onepress_admin_dismiss_actions(){
+    // Action for dismiss
     if ( isset( $_GET['onepress_action_notice'] ) ) {
         $actions_dismiss =  get_option( 'onepress_actions_dismiss' );
         if ( ! is_array( $actions_dismiss ) ) {
@@ -251,6 +252,22 @@ function onepress_admin_dismiss_actions(){
         wp_redirect( $url );
         die();
     }
+
+    // Action for copy options
+    if ( isset( $_POST['copy_from'] ) && isset( $_POST['copy_to'] ) ) {
+        $from = sanitize_text_field( $_POST['copy_from'] );
+        $to = sanitize_text_field( $_POST['copy_to'] );
+        if ( $from && $to ) {
+            $mods = get_option("theme_mods_" . $from);
+            update_option("theme_mods_" . $to, $mods);
+
+            $url = $_SERVER['REQUEST_URI'];
+            $url = add_query_arg(array('copied' => 1), $url);
+            wp_redirect($url);
+            die();
+        }
+    }
+
 }
 
 add_action( 'admin_init', 'onepress_admin_dismiss_actions' );
@@ -342,6 +359,38 @@ function onepress_theme_info_page() {
 
         <?php if ( $tab == 'actions_required' ) { ?>
             <div class="action-required-tab info-tab-content">
+
+                <?php if ( is_child_theme() ){
+                    $child_theme = wp_get_theme();
+                    ?>
+                    <form method="post" action="<?php echo esc_attr( $current_action_link ); ?>" class="demo-import-boxed copy-settings-form">
+                        <p>
+                           <strong> <?php printf( esc_html__(  'You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress' ) ,  $child_theme->Name ); ?></strong>
+                        </p>
+                        <p>
+                        <?php
+                        $select = '<select name="copy_from">';
+                        $select .= '<option value="">'.esc_html__( 'From Theme', 'onepres' ).'</option>';
+                        $select .= '<option value="onepress">OnePress</option>';
+                        $select .= '<option value="'.esc_attr( $child_theme->get_stylesheet() ).'">'.esc_html__( $child_theme->Name ).'</option>';
+                        $select .='</select>';
+
+                        $select_2 = '<select name="copy_to">';
+                        $select_2 .= '<option value="">'.esc_html__( 'To Theme', 'onepres' ).'</option>';
+                        $select_2 .= '<option value="onepress">OnePress</option>';
+                        $select_2 .= '<option value="'.esc_attr( $child_theme->get_stylesheet() ).'">'.esc_html__( $child_theme->Name ).'</option>';
+                        $select_2 .='</select>';
+
+                        printf( esc_html__(  'Your settings may lost do you want copy settings %1$s to %2$s', 'onepress' ) , $select,$select_2 );
+                        ?>
+                        <input type="submit" class="button button-secondary" value="<?php esc_attr_e( 'Copy now', 'onepress' ); ?>">
+                        </p>
+                        <?php if ( isset( $_GET['copied'] ) && $_GET['copied'] == 1 ) { ?>
+                            <p><?php esc_html_e( 'Your settings copied.', 'onepress' ); ?></p>
+                        <?php } ?>
+                    </form>
+
+                <?php } ?>
                 <?php if ( $actions_r['number_active']  > 0 ) { ?>
                     <?php $actions = wp_parse_args( $actions, array( 'page_on_front' => '', 'page_template' ) ) ?>
 
@@ -491,6 +540,13 @@ function onepress_theme_info_page() {
     <script type="text/javascript">
         jQuery(  document).ready( function( $ ){
             $( 'body').addClass( 'about-php' );
+
+            $( '.copy-settings-form').on( 'submit', function(){
+                var c = confirm( '<?php echo esc_attr_e( 'Are you sure want to copy ?', 'onepress' ); ?>' );
+                if ( ! c ) {
+                    return false;
+                }
+            } );
         } );
     </script>
     <?php
