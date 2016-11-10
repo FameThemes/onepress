@@ -3,6 +3,106 @@
  * Add theme dashboard page
  */
 
+/**
+ * Get theme actions required
+ *
+ * @return array|mixed|void
+ */
+function onepress_get_actions_required( ) {
+
+    $actions = array();
+    $front_page = get_option( 'page_on_front' );
+    $actions['page_on_front'] = 'dismiss';
+    $actions['page_template'] = 'dismiss';
+    $actions['recommend_plugins'] = 'dismiss';
+    if ( 'page' != get_option( 'show_on_front' ) ) {
+        $front_page = 0;
+    }
+    if ( $front_page <= 0  ) {
+        $actions['page_on_front'] = 'active';
+        $actions['page_template'] = 'active';
+    } else {
+        if ( get_post_meta( $front_page, '_wp_page_template', true ) == 'template-frontpage.php' ) {
+            $actions['page_template'] = 'dismiss';
+        } else {
+            $actions['page_template'] = 'active';
+        }
+    }
+
+    $recommend_plugins = get_theme_support( 'recommend-plugins' );
+    if ( is_array( $recommend_plugins ) && isset( $recommend_plugins[0] ) ){
+        $recommend_plugins = $recommend_plugins[0];
+    } else {
+        $recommend_plugins[] = array();
+    }
+
+    if ( ! empty( $recommend_plugins ) ) {
+
+        foreach ( $recommend_plugins as $plugin_slug => $plugin_info ) {
+            $plugin_info = wp_parse_args( $plugin_info, array(
+                'name' => '',
+                'active_filename' => '',
+            ) );
+            if ( $plugin_info['active_filename'] ) {
+                $active_file_name = $plugin_info['active_filename'] ;
+            } else {
+                $active_file_name = $plugin_slug . '/' . $plugin_slug . '.php';
+            }
+            if ( ! is_plugin_active( $active_file_name ) ) {
+                $actions['recommend_plugins'] = 'active';
+            }
+        }
+
+    }
+
+    $actions = apply_filters( 'onepress_get_actions_required', $actions );
+    $hide_by_click = get_option( 'onepress_actions_dismiss' );
+    if ( ! is_array( $hide_by_click ) ) {
+        $hide_by_click = array();
+    }
+
+    $n_active  = $n_dismiss = 0;
+    $number_notice = 0;
+    foreach ( $actions as $k => $v ) {
+        if ( ! isset( $hide_by_click[ $k ] ) ) {
+            $hide_by_click[ $k ] = false;
+        }
+
+        if ( $v == 'active' ) {
+            $n_active ++ ;
+            $number_notice ++ ;
+            if ( $hide_by_click[ $k ] ) {
+                if ( $hide_by_click[ $k ] == 'hide' ) {
+                    $number_notice -- ;
+                }
+            }
+        } else if ( $v == 'dismiss' ) {
+            $n_dismiss ++ ;
+        }
+
+    }
+
+    $return = array(
+        'actions' => $actions,
+        'number_actions' => count( $actions ),
+        'number_active' => $n_active,
+        'number_dismiss' => $n_dismiss,
+        'hide_by_click'  => $hide_by_click,
+        'number_notice'  => $number_notice,
+    );
+    if ( $return['number_notice'] < 0 ) {
+        $return['number_notice'] = 0;
+    }
+
+    return $return;
+}
+
+add_action('switch_theme', 'onepress_reset_actions_required');
+function onepress_reset_actions_required () {
+    delete_option('onepress_actions_dismiss');
+}
+
+
 if ( ! function_exists( 'onepress_admin_scripts' ) ) :
     /**
      * Enqueue scripts for admin page only: Theme info page
@@ -22,12 +122,9 @@ add_action( 'admin_enqueue_scripts', 'onepress_admin_scripts' );
 
 add_action('admin_menu', 'onepress_theme_info');
 function onepress_theme_info() {
+
     $actions = onepress_get_actions_required();
-    $n = array_count_values( $actions );
-    $number_count =  0;
-    if ( $n && isset( $n['active'] ) ) {
-        $number_count = $n['active'];
-    }
+    $number_count = $actions['number_notice'];
 
     if ( $number_count > 0 ){
         $update_label = sprintf( _n( '%1$s action required', '%1$s actions required', $number_count, 'onepress' ), $number_count );
@@ -51,27 +148,138 @@ function onepress_admin_notice() {
         return false;
     }
     $actions = onepress_get_actions_required();
-    $n = array_count_values( $actions );
-    $number_action =  0;
-    if ( $n && isset( $n['active'] ) ) {
-        $number_action = $n['active'];
-    }
+    $number_action = $actions['number_notice'];
+
     if ( $number_action > 0 ) {
         $theme_data = wp_get_theme();
         ?>
-        <div class="updated notice is-dismissible">
+        <div class="updated notice notice-success notice-alt is-dismissible">
             <p><?php printf( __( 'Welcome! Thank you for choosing %1$s! To fully take advantage of the best our theme can offer please make sure you visit our <a href="%2$s">Welcome page</a>', 'onepress' ),  $theme_data->Name, admin_url( 'themes.php?page=ft_onepress' )  ); ?></p>
         </div>
         <?php
     }
 }
 
+function onepress_admin_import_notice(){
+    ?>
+    <div class="updated notice notice-success notice-alt is-dismissible">
+        <p><?php printf( esc_html__( 'Save time by import our demo data, your website will be set up and ready to customize in minutes. %s', 'onepress' ), '<a class="button button-secondary" href="'.esc_url( add_query_arg( array( 'page' => 'ft_onepress&tab=demo-data-importer' ), admin_url( 'themes.php' ) ) ).'">'.esc_html__( 'Import Demo Data', 'onepress' ).'</a>'  ); ?></p>
+    </div>
+    <?php
+}
+
 function onepress_one_activation_admin_notice(){
     global $pagenow;
     if ( is_admin() && ('themes.php' == $pagenow) && isset( $_GET['activated'] ) ) {
         add_action( 'admin_notices', 'onepress_admin_notice' );
+        add_action( 'admin_notices', 'onepress_admin_import_notice' );
     }
 }
+
+
+function onepress_render_recommend_plugins( $recommend_plugins = array() ){
+    foreach ( $recommend_plugins as $plugin_slug => $plugin_info ) {
+        $plugin_info = wp_parse_args( $plugin_info, array(
+            'name' => '',
+            'active_filename' => '',
+        ) );
+        $plugin_name = $plugin_info['name'];
+        $status = is_dir( WP_PLUGIN_DIR . '/' . $plugin_slug );
+        $button_class = 'install-now button';
+        if ( $plugin_info['active_filename'] ) {
+            $active_file_name = $plugin_info['active_filename'] ;
+        } else {
+            $active_file_name = $plugin_slug . '/' . $plugin_slug . '.php';
+        }
+
+        if ( ! is_plugin_active( $active_file_name ) ) {
+            $button_txt = esc_html__( 'Install Now', 'onepress' );
+            if ( ! $status ) {
+                $install_url = wp_nonce_url(
+                    add_query_arg(
+                        array(
+                            'action' => 'install-plugin',
+                            'plugin' => $plugin_slug
+                        ),
+                        network_admin_url( 'update.php' )
+                    ),
+                    'install-plugin_'.$plugin_slug
+                );
+
+            } else {
+                $install_url = add_query_arg(array(
+                    'action' => 'activate',
+                    'plugin' => rawurlencode( $active_file_name ),
+                    'plugin_status' => 'all',
+                    'paged' => '1',
+                    '_wpnonce' => wp_create_nonce('activate-plugin_' . $active_file_name ),
+                ), network_admin_url('plugins.php'));
+                $button_class = 'activate-now button-primary';
+                $button_txt = esc_html__( 'Active Now', 'onepress' );
+            }
+
+            $detail_link = add_query_arg(
+                array(
+                    'tab' => 'plugin-information',
+                    'plugin' => $plugin_slug,
+                    'TB_iframe' => 'true',
+                    'width' => '772',
+                    'height' => '349',
+
+                ),
+                network_admin_url( 'plugin-install.php' )
+            );
+
+            echo '<div class="rcp">';
+            echo '<h4 class="rcp-name">';
+            echo esc_html( $plugin_name );
+            echo '</h4>';
+            echo '<p class="action-btn plugin-card-'.esc_attr( $plugin_slug ).'"><a href="'.esc_url( $install_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="'.esc_attr( $button_class ).'">'.$button_txt.'</a></p>';
+            echo '<a class="plugin-detail thickbox open-plugin-details-modal" href="'.esc_url( $detail_link ).'">'.esc_html__( 'Details', 'onepress' ).'</a>';
+            echo '</div>';
+        }
+
+    }
+}
+
+function onepress_admin_dismiss_actions(){
+    // Action for dismiss
+    if ( isset( $_GET['onepress_action_notice'] ) ) {
+        $actions_dismiss =  get_option( 'onepress_actions_dismiss' );
+        if ( ! is_array( $actions_dismiss ) ) {
+            $actions_dismiss = array();
+        }
+        $action_key = stripslashes( $_GET['onepress_action_notice'] );
+        if ( isset( $actions_dismiss[ $action_key ] ) &&  $actions_dismiss[ $action_key ] == 'hide' ){
+            $actions_dismiss[ $action_key ] = 'show';
+        } else {
+            $actions_dismiss[ $action_key ] = 'hide';
+        }
+        update_option( 'onepress_actions_dismiss', $actions_dismiss );
+        $url = $_SERVER['REQUEST_URI'];
+        $url = remove_query_arg( 'onepress_action_notice', $url );
+        wp_redirect( $url );
+        die();
+    }
+
+    // Action for copy options
+    if ( isset( $_POST['copy_from'] ) && isset( $_POST['copy_to'] ) ) {
+        $from = sanitize_text_field( $_POST['copy_from'] );
+        $to = sanitize_text_field( $_POST['copy_to'] );
+        if ( $from && $to ) {
+            $mods = get_option("theme_mods_" . $from);
+            update_option("theme_mods_" . $to, $mods);
+
+            $url = $_SERVER['REQUEST_URI'];
+            $url = add_query_arg(array('copied' => 1), $url);
+            wp_redirect($url);
+            die();
+        }
+    }
+
+}
+
+add_action( 'admin_init', 'onepress_admin_dismiss_actions' );
 
 
 /* activation notice */
@@ -98,13 +306,18 @@ function onepress_theme_info_page() {
         $tab = null;
     }
 
-    $actions = onepress_get_actions_required();
-    $n = array_count_values( $actions );
-    $number_action =  0;
-    if ( $n && isset( $n['active'] ) ) {
-        $number_action = $n['active'];
-    }
+    $actions_r = onepress_get_actions_required();
+    $number_action = $actions_r['number_notice'];
+    $actions = $actions_r['actions'];
+
     $current_action_link =  admin_url( 'themes.php?page=ft_onepress&tab=actions_required' );
+
+    $recommend_plugins = get_theme_support( 'recommend-plugins' );
+    if ( is_array( $recommend_plugins ) && isset( $recommend_plugins[0] ) ){
+        $recommend_plugins = $recommend_plugins[0];
+    } else {
+        $recommend_plugins[] = array();
+    }
     ?>
     <div class="wrap about-wrap theme_info_wrapper">
         <h1><?php printf(esc_html__('Welcome to OnePress - Version %1s', 'onepress'), $theme_data->Version ); ?></h1>
@@ -155,11 +368,67 @@ function onepress_theme_info_page() {
 
         <?php if ( $tab == 'actions_required' ) { ?>
             <div class="action-required-tab info-tab-content">
-                <?php if ( $number_action > 0 ) { ?>
+
+                <?php if ( is_child_theme() ){
+                    $child_theme = wp_get_theme();
+                    ?>
+                    <form method="post" action="<?php echo esc_attr( $current_action_link ); ?>" class="demo-import-boxed copy-settings-form">
+                        <p>
+                           <strong> <?php printf( esc_html__(  'You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress' ) ,  $child_theme->Name ); ?></strong>
+                        </p>
+                        <p>
+                        <?php
+                        $select = '<select name="copy_from">';
+                        $select .= '<option value="">'.esc_html__( 'From Theme', 'onepres' ).'</option>';
+                        $select .= '<option value="onepress">OnePress</option>';
+                        $select .= '<option value="'.esc_attr( $child_theme->get_stylesheet() ).'">'.esc_html__( $child_theme->Name ).'</option>';
+                        $select .='</select>';
+
+                        $select_2 = '<select name="copy_to">';
+                        $select_2 .= '<option value="">'.esc_html__( 'To Theme', 'onepres' ).'</option>';
+                        $select_2 .= '<option value="onepress">OnePress</option>';
+                        $select_2 .= '<option value="'.esc_attr( $child_theme->get_stylesheet() ).'">'.esc_html__( $child_theme->Name ).'</option>';
+                        $select_2 .='</select>';
+
+                        printf( esc_html__(  'Your settings may lost do you want copy settings %1$s to %2$s', 'onepress' ) , $select,$select_2 );
+                        ?>
+                        <input type="submit" class="button button-secondary" value="<?php esc_attr_e( 'Copy now', 'onepress' ); ?>">
+                        </p>
+                        <?php if ( isset( $_GET['copied'] ) && $_GET['copied'] == 1 ) { ?>
+                            <p><?php esc_html_e( 'Your settings copied.', 'onepress' ); ?></p>
+                        <?php } ?>
+                    </form>
+
+                <?php } ?>
+                <?php if ( $actions_r['number_active']  > 0 ) { ?>
                     <?php $actions = wp_parse_args( $actions, array( 'page_on_front' => '', 'page_template' ) ) ?>
+
+                    <?php if ( $actions['recommend_plugins'] == 'active' ) {  ?>
+                        <div id="plugin-filter" class="recommend-plugins action-required">
+                            <a  title="" class="dismiss" href="<?php echo add_query_arg( array( 'onepress_action_notice' => 'recommend_plugins' ), $current_action_link ); ?>">
+                                <?php if ( $actions_r['hide_by_click']['recommend_plugins'] == 'hide' ) { ?>
+                                    <span class="dashicons dashicons-hidden"></span>
+                                <?php } else { ?>
+                                    <span class="dashicons  dashicons-visibility"></span>
+                                <?php } ?>
+                            </a>
+                            <h3><?php esc_html_e( 'Recommend Plugins', 'onepress' ); ?></h3>
+                            <?php
+                            onepress_render_recommend_plugins( $recommend_plugins );
+                            ?>
+                        </div>
+                    <?php } ?>
+
+
                     <?php if ( $actions['page_on_front'] == 'active' ) {  ?>
                         <div class="theme_link  action-required">
-                            <a title="<?php  esc_attr_e( 'Dismiss', 'onepress' ); ?>" class="dismiss" href="<?php echo add_query_arg( array( 'onepress_action_dismiss' => 'page_on_front' ), $current_action_link ); ?>"><span class="dashicons dashicons-dismiss"></span></a>
+                            <a title="<?php  esc_attr_e( 'Dismiss', 'onepress' ); ?>" class="dismiss" href="<?php echo add_query_arg( array( 'onepress_action_notice' => 'page_on_front' ), $current_action_link ); ?>">
+                                <?php if ( $actions_r['hide_by_click']['page_on_front'] == 'hide' ) { ?>
+                                    <span class="dashicons dashicons-hidden"></span>
+                                <?php } else { ?>
+                                    <span class="dashicons  dashicons-visibility"></span>
+                                <?php } ?>
+                            </a>
                             <h3><?php esc_html_e( 'Switch "Front page displays" to "A static page"', 'onepress' ); ?></h3>
                             <div class="about">
                                 <p><?php _e( 'In order to have the one page look for your website, please go to Customize -&gt; Static Front Page and switch "Front page displays" to "A static page".', 'onepress' ); ?></p>
@@ -172,7 +441,13 @@ function onepress_theme_info_page() {
 
                     <?php if ( $actions['page_template'] == 'active' ) {  ?>
                         <div class="theme_link  action-required">
-                            <a  title="<?php  esc_attr_e( 'Dismiss', 'onepress' ); ?>" class="dismiss" href="<?php echo add_query_arg( array( 'onepress_action_dismiss' => 'page_template' ), $current_action_link ); ?>"><span class="dashicons dashicons-dismiss"></span></a>
+                            <a  title="<?php  esc_attr_e( 'Dismiss', 'onepress' ); ?>" class="dismiss" href="<?php echo add_query_arg( array( 'onepress_action_notice' => 'page_template' ), $current_action_link ); ?>">
+                                <?php if ( $actions_r['hide_by_click']['page_template'] == 'hide' ) { ?>
+                                    <span class="dashicons dashicons-hidden"></span>
+                                <?php } else { ?>
+                                    <span class="dashicons  dashicons-visibility"></span>
+                                <?php } ?>
+                            </a>
                             <h3><?php esc_html_e( 'Set your homepage page template to "Frontpage".', 'onepress' ); ?></h3>
 
                             <div class="about">
@@ -274,6 +549,13 @@ function onepress_theme_info_page() {
     <script type="text/javascript">
         jQuery(  document).ready( function( $ ){
             $( 'body').addClass( 'about-php' );
+
+            $( '.copy-settings-form').on( 'submit', function(){
+                var c = confirm( '<?php echo esc_attr_e( 'Are you sure want to copy ?', 'onepress' ); ?>' );
+                if ( ! c ) {
+                    return false;
+                }
+            } );
         } );
     </script>
     <?php

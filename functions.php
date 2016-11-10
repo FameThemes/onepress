@@ -93,6 +93,20 @@ if ( ! function_exists( 'onepress_setup' ) ) :
             'flex-width'  => true,
             //'header-text' => array( 'site-title',  'site-description' ), //
         ) );
+
+
+        // Recommend plugins
+        add_theme_support( 'recommend-plugins', array(
+            'contact-form-7' => array(
+                'name' => esc_html__( 'Contact Form 7', 'onepress' ),
+                'active_filename' => 'contact-form-7/wp-contact-form-7.php',
+            ),
+            'famethemes-demo-importer' => array(
+                'name' => esc_html__( 'Famethemes Demo Importer', 'onepress' ),
+                'active_filename' => 'famethemes-demo-importer/famethemes-demo-importer.php',
+            ),
+        ) );
+
 	}
 endif;
 add_action( 'after_setup_theme', 'onepress_setup' );
@@ -362,11 +376,6 @@ require get_template_directory() . '/inc/extras.php';
  * Customizer additions.
  */
 require get_template_directory() . '/inc/customizer.php';
-
-/**
- * Load TGM class plugin activation.
- */
-require get_template_directory() . '/inc/tgm-plugin-activation.php';
 
 /**
  * Add theme info page

@@ -550,7 +550,6 @@ jQuery(document).ready(function ( $ ) {
             hero.find('.hero-slideshow-wrapper').find('.sk-cube-grid').remove();
             hero.find('.hero-slideshow-wrapper').addClass('loaded').removeClass( 'loading' );
         }
-
     } );
 
 
@@ -560,17 +559,20 @@ jQuery(document).ready(function ( $ ) {
     function onepress_gallery_init( $context ){
         // justified
         if ( $.fn.justifiedGallery ) {
-            $( '.gallery-justified', $context).each( function(){
-                var margin = $( this).attr( 'data-spacing' ) || 20;
-                margin = _to_number( margin );
-                $( this ).justifiedGallery({
-                    rowHeight: 120,
-                    margins: margin,
-                    selector: 'a, div:not(.spinner), .inner'
-                });
+            $( '.gallery-justified', $context).imagesLoaded( function(){
+                $( '.gallery-justified', $context).each( function(){
+                    var margin = $( this).attr( 'data-spacing' ) || 20;
+                    var row_height = $( this).attr( 'data-row-height' ) || 120;
+                    margin = _to_number( margin );
+                    row_height = _to_number( row_height );
+                    $( this ).justifiedGallery({
+                        rowHeight: row_height,
+                        margins: margin,
+                        selector: 'a, div:not(.spinner), .inner'
+                    });
+                } );
             } );
         }
-
 
         // Slider
         if ( $.fn.owlCarousel ) {
@@ -633,8 +635,6 @@ jQuery(document).ready(function ( $ ) {
 
             } );
 
-
-
         }
 
 
@@ -679,19 +679,23 @@ jQuery(document).ready(function ( $ ) {
                 });
             }
         }
+        $( ".gallery-masonry", $context ).imagesLoaded( function() {
+            isotope_init();
+        });
 
-        isotope_init();
+
         $( window ).resize( function(){
             isotope_init();
         } );
 
         if ( $.fn.lightGallery ) {
+
             $('.enable-lightbox', $context).lightGallery({
                 mode: 'lg-fade',
                 selector: 'a',
-                // cssEasing : 'cubic-bezier(0.25, 0, 0.25, 1)'
-
+                //cssEasing : 'cubic-bezier(0.25, 0, 0.25, 1)'
             });
+
         }
     }
 
@@ -701,6 +705,9 @@ jQuery(document).ready(function ( $ ) {
         wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( placement ) {
             if ( placement.partial.id == 'section-gallery' ) {
                 onepress_gallery_init( placement.container.find( '.gallery-content' ) );
+
+                // Trigger resize to make other sections work.
+                $( window ).resize();
             }
         } );
     }

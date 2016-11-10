@@ -14,10 +14,12 @@
 
 get_header();
 
+$layout = get_theme_mod( 'onepress_layout', 'right-sidebar' );
+
 ?>
 	<?php echo onepress_breadcrumb(); ?>
 	<div id="content" class="site-content">
-		<div id="content-inside" class="container right-sidebar">
+		<div id="content-inside" class="container <?php echo esc_attr( $layout ); ?>">
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">
 
@@ -54,8 +56,9 @@ get_header();
 
 				</main><!-- #main -->
 			</div><!-- #primary -->
-
+            <?php if ( $layout != 'no-sidebar' ) { ?>
 			<?php get_sidebar(); ?>
+            <?php } ?>
 
 		</div><!--#content-inside -->
 	</div><!-- #content -->

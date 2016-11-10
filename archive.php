@@ -7,7 +7,10 @@
  * @package OnePress
  */
 
-get_header(); ?>
+get_header();
+
+$layout = get_theme_mod( 'onepress_layout', 'right-sidebar' );
+?>
 
 	<div id="content" class="site-content">
 
@@ -20,7 +23,7 @@ get_header(); ?>
 
 		<?php echo onepress_breadcrumb(); ?>
 
-		<div id="content-inside" class="container right-sidebar">
+		<div id="content-inside" class="container <?php echo esc_attr( $layout ); ?>">
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">
 
@@ -52,7 +55,9 @@ get_header(); ?>
 				</main><!-- #main -->
 			</div><!-- #primary -->
 
-			<?php get_sidebar(); ?>
+            <?php if ( $layout != 'no-sidebar' ) { ?>
+                <?php get_sidebar(); ?>
+            <?php } ?>
 
 		</div><!--#content-inside -->
 	</div><!-- #content -->

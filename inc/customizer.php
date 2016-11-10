@@ -130,6 +130,28 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
+            // Sidebar settings
+            $wp_customize->add_setting( 'onepress_layout',
+                array(
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'default'           => 'right-sidebar',
+                    //'transport'			=> 'postMessage'
+                )
+            );
+            $wp_customize->add_control( 'onepress_layout',
+                array(
+                    'type'        => 'select',
+                    'label'       => esc_html__('Site Layout', 'onepress'),
+                    'description'       => esc_html__('Site Layout, apply for all pages, exclude home page and custom page templates.', 'onepress'),
+                    'section'     => 'onepress_global_settings',
+                    'choices' => array(
+                        'right-sidebar' => esc_html__('Right sidebar', 'onepress'),
+                        'left-sidebar' => esc_html__('Left sidebar', 'onepress'),
+                        'no-sidebar' => esc_html__('No sidebar', 'onepress'),
+                    )
+                )
+            );
+
 			// Disable Sticky Header
 			$wp_customize->add_setting( 'onepress_sticky_header_disable',
 				array(
@@ -178,6 +200,7 @@ function onepress_customize_register( $wp_customize ) {
 					'description' => esc_html__('Check this box to hide footer back to top button.', 'onepress')
 				)
 			);
+
 
 		/* Colors
 		----------------------------------------------------------------------*/
@@ -229,9 +252,7 @@ function onepress_customize_register( $wp_customize ) {
                     'description' => '',
                 )
             ));
-
-
-
+    
 
 		/* Header
 		----------------------------------------------------------------------*/
@@ -1463,6 +1484,37 @@ function onepress_customize_register( $wp_customize ) {
 			'type'          => 'checkbox',
 		)
 	);
+
+    // Gallery readmore link
+    $wp_customize->add_setting( 'onepress_g_readmore_link',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'onepress_g_readmore_link',
+        array(
+            'label'     	=> esc_html__('Read More Link', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 90,
+            'type'          => 'text',
+        )
+    );
+
+    $wp_customize->add_setting( 'onepress_g_readmore_text',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => esc_html__('View More', 'onepress'),
+        )
+    );
+    $wp_customize->add_control( 'onepress_g_readmore_text',
+        array(
+            'label'     	=> esc_html__('Read More Text', 'onepress'),
+            'section' 		=> 'onepress_gallery_content',
+            'priority'      => 100,
+            'type'          => 'text',
+        )
+    );
 
 
 	/*------------------------------------------------------------------------*/
@@ -2878,12 +2930,9 @@ function opneress_customize_js_settings(){
     if ( ! function_exists( 'onepress_get_actions_required' ) ) {
         return;
     }
+
     $actions = onepress_get_actions_required();
-    $n = array_count_values( $actions );
-    $number_action =  0;
-    if ( $n && isset( $n['active'] ) ) {
-        $number_action = $n['active'];
-    }
+    $number_action = $actions['number_notice'];
 
     wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(
         'number_action' => $number_action,
