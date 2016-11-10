@@ -153,7 +153,7 @@ function onepress_admin_notice() {
     if ( $number_action > 0 ) {
         $theme_data = wp_get_theme();
         ?>
-        <div class="updated notice is-dismissible">
+        <div class="updated notice notice-success notice-alt is-dismissible">
             <p><?php printf( __( 'Welcome! Thank you for choosing %1$s! To fully take advantage of the best our theme can offer please make sure you visit our <a href="%2$s">Welcome page</a>', 'onepress' ),  $theme_data->Name, admin_url( 'themes.php?page=ft_onepress' )  ); ?></p>
         </div>
         <?php
@@ -163,7 +163,7 @@ function onepress_admin_notice() {
 function onepress_admin_import_notice(){
     ?>
     <div class="updated notice notice-success notice-alt is-dismissible">
-        <p><?php printf( esc_html__( 'Save time by import our demo data, your website will be set up and ready to customize in minutes. %s', 'screenr' ), '<a class="button button-secondary" href="'.esc_url( add_query_arg( array( 'page' => 'ft_onepress&tab=demo-data-importer' ), admin_url( 'themes.php' ) ) ).'">'.esc_html__( 'Import Demo Data', 'screenr' ).'</a>'  ); ?></p>
+        <p><?php printf( esc_html__( 'Save time by import our demo data, your website will be set up and ready to customize in minutes. %s', 'onepress' ), '<a class="button button-secondary" href="'.esc_url( add_query_arg( array( 'page' => 'ft_onepress&tab=demo-data-importer' ), admin_url( 'themes.php' ) ) ).'">'.esc_html__( 'Import Demo Data', 'screenr' ).'</a>'  ); ?></p>
     </div>
     <?php
 }
