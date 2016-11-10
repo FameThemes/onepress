@@ -160,10 +160,19 @@ function onepress_admin_notice() {
     }
 }
 
+function onepress_admin_import_notice(){
+    ?>
+    <div class="updated notice notice-success notice-alt is-dismissible">
+        <p><?php printf( esc_html__( 'Save time by import our demo data, your website will be set up and ready to customize in minutes. %s', 'screenr' ), '<a class="button button-secondary" href="'.esc_url( add_query_arg( array( 'page' => 'ft_onepress&tab=demo-data-importer' ), admin_url( 'themes.php' ) ) ).'">'.esc_html__( 'Import Demo Data', 'screenr' ).'</a>'  ); ?></p>
+    </div>
+    <?php
+}
+
 function onepress_one_activation_admin_notice(){
     global $pagenow;
     if ( is_admin() && ('themes.php' == $pagenow) && isset( $_GET['activated'] ) ) {
         add_action( 'admin_notices', 'onepress_admin_notice' );
+        add_action( 'admin_notices', 'onepress_admin_import_notice' );
     }
 }
 
