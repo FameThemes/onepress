@@ -163,7 +163,7 @@ function onepress_admin_notice() {
 function onepress_admin_import_notice(){
     ?>
     <div class="updated notice notice-success notice-alt is-dismissible">
-        <p><?php printf( esc_html__( 'Save time by import our demo data, your website will be set up and ready to customize in minutes. %s', 'onepress' ), '<a class="button button-secondary" href="'.esc_url( add_query_arg( array( 'page' => 'ft_onepress&tab=demo-data-importer' ), admin_url( 'themes.php' ) ) ).'">'.esc_html__( 'Import Demo Data', 'screenr' ).'</a>'  ); ?></p>
+        <p><?php printf( esc_html__( 'Save time by import our demo data, your website will be set up and ready to customize in minutes. %s', 'onepress' ), '<a class="button button-secondary" href="'.esc_url( add_query_arg( array( 'page' => 'ft_onepress&tab=demo-data-importer' ), admin_url( 'themes.php' ) ) ).'">'.esc_html__( 'Import Demo Data', 'onepress' ).'</a>'  ); ?></p>
     </div>
     <?php
 }
