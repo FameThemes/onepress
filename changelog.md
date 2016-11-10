@@ -1,6 +1,14 @@
 ====================================================================
 CHANGELOG
 =========
+## 1.2.9
+* Improve recommend plugins.
+* Remove `TGM recommend plugins` file.
+* Add copy theme mod function.
+* Add option to select site layout.
+* Improve gallery and add view more button.
+
+
 ## 1.2.8
 * Add sidebar for WooCommerce plugins.
 * Fix menu couldn't scroll if have too much sub menu items.
