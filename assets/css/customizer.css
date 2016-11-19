@@ -350,3 +350,136 @@ body .wp-full-overlay{
 }
 
 
+/* Customizer ICON Picker */
+.icon-wrapper {
+    border: 1px solid #cccccc;
+    font-size: 24px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 40px;
+    cursor: pointer;
+}
+.icon-wrapper i:before {
+    font-size: 24px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 40px !important;
+}
+.c-icon-picker *{
+    box-sizing: border-box;
+}
+.c-icon-picker {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    display: block;
+    width: 300px;
+    background: #EEEEEE;
+    border-right: 1px solid #ddd;
+
+    -webkit-transition: all .5s; /* Safari */
+    transition: all .5s;
+
+    -ms-transform: translateX(-100%); /* IE 9 */
+    -webkit-transform: translateX(-100%); /* Safari */
+    transform: translateX(-100%);
+}
+.c-icon-picker.ic-active {
+    -ms-transform: translateX(0); /* IE 9 */
+    -webkit-transform: translateX(0); /* Safari */
+    transform: translateX(0);
+}
+.c-icon-type {
+
+}
+.c-icon-type-wrap {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+}
+.c-icon-type-wrap select {
+    height: 30px;
+    width: 100%;
+}
+.c-icon-search {
+    position: absolute;
+    top: 44px;
+    left: 10px;
+    right: 10px;
+}
+.c-icon-search input {
+    width: 100%;
+    height: 25px;
+}
+.c-icon-list {
+    position: absolute;
+    top: 75px;
+    left: 0px;
+    right: 0px;
+    bottom: 10px;
+    padding: 0 8px 0;
+    overflow: auto;
+
+}
+.c-icon-list:after {
+    clear: both; display: block; content: " ";
+}
+.c-icon-list i {
+    font-size: 20px;
+    line-height: 35px;
+    color: #333333;
+}
+.c-icon-list span {
+    width: 35px;
+    height: 35px;
+    display: block;
+    float: left;
+    background: #ffffff;
+    text-align: center;
+    margin: 2px;
+    cursor: pointer;
+}
+.c-icon-list span:hover {
+    background: #e86240;
+}
+.c-icon-list span:hover i {
+    color: #ffffff;
+}
+.icon-wrapper.icon-editing {
+    background: #f5f5f5;
+    box-shadow: 0 0 2px rgba(30, 140, 190, 0.8);
+    border-color: #5b9dd9;
+}
+
+@media (max-width: 700px) {
+    .c-icon-picker {
+        z-index: 99999;
+        width: 100%;
+        top: 50%;
+        left: 0px;
+        border-top: 1px solid #ddd;
+        border-right: 0 none !important;
+
+        -ms-transform: translateX(0); /* IE 9 */
+        -webkit-transform: translateX(0); /* Safari */
+        transform: translateX(0);
+
+        -ms-transform: translateY(100%); /* IE 9 */
+        -webkit-transform: translateY(100%); /* Safari */
+        transform: translateY(100%);
+
+    }
+    .c-icon-picker.ic-active {
+        -ms-transform: translateY(0); /* IE 9 */
+        -webkit-transform: translateY(0); /* Safari */
+        transform: translateY(0);
+
+    }
+
+}
+
+
