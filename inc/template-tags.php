@@ -673,7 +673,7 @@ if ( ! function_exists( 'onepress_get_features_data' ) ) {
 
                 //Get/Set social icons
                 $array[$k]['icon'] = trim($array[$k]['icon']);
-                if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa-') !== 0) {
+                if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa') !== 0) {
                     $array[$k]['icon'] = 'fa-' . $array[$k]['icon'];
                 }
             }
