@@ -100,3 +100,11 @@
             transform: scale3D(0, 0, 1);
   }
 }
+
+
+/* WP 4.7 Shortcut */
+section > .customize-partial-edit-shortcut {
+    button {
+        left: 30px;
+    }
+}

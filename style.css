@@ -1953,6 +1953,11 @@ h6, p, ul, ol, dl, blockquote, pre {
 	}
 }
 
+/* WP 4.7 Shortcut */
+section > .customize-partial-edit-shortcut button {
+	left: 30px;
+}
+
 /*--------------------------------------------------------------
 7.0 Widgets
 --------------------------------------------------------------*/
