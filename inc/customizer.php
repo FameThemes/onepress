@@ -489,7 +489,6 @@ function onepress_customize_register( $wp_customize ) {
                             ),
                             'icon'  => array(
                                 'title' => esc_html__('Icon', 'onepress'),
-                                'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
                                 'type'  =>'icon',
                             ),
                             'link'  => array(
@@ -1851,7 +1850,6 @@ function onepress_customize_register( $wp_customize ) {
                     ),
 					'icon_type'  => array(
 						'title' => esc_html__('Custom icon', 'onepress'),
-						'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
 						'type'  =>'select',
 						'options' => array(
 							'icon' => esc_html__('Icon', 'onepress'),
@@ -1860,7 +1858,6 @@ function onepress_customize_register( $wp_customize ) {
 					),
                     'icon'  => array(
                         'title' => esc_html__('Icon', 'onepress'),
-                        'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
                         'type'  =>'icon',
 						'required' => array( 'icon_type', '=', 'icon' ),
                     ),
@@ -2063,7 +2060,6 @@ function onepress_customize_register( $wp_customize ) {
 					'fields'    => array(
 						'icon_type'  => array(
 							'title' => esc_html__('Custom icon', 'onepress'),
-							'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
 							'type'  =>'select',
 							'options' => array(
 								'icon' => esc_html__('Icon', 'onepress'),
@@ -2072,7 +2068,6 @@ function onepress_customize_register( $wp_customize ) {
 						),
 						'icon'  => array(
 							'title' => esc_html__('Icon', 'onepress'),
-							'desc' => __('Paste your <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon class name here.', 'onepress'),
 							'type'  =>'icon',
 							'required' => array( 'icon_type', '=', 'icon' ),
 						),
