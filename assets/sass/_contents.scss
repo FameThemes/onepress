@@ -115,7 +115,7 @@
 	border-left: none;
 	border-right: none;
 	margin-bottom: 50px;
-	@extend .clearfix;
+	@extend .clearfix !optional;;
 	.nav-previous {
 		float: left;
 	}

@@ -68,7 +68,7 @@
 .widget-area .widget_categories ul,
 .widget-area .widget_archive ul,
 .widget-area .widget_meta ul{
-	@extend .clearfix;
+	@extend .clearfix !optional;
 }
 
 
