@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
 =========
+## 1.3.0
+* Support WP 4.7 customizer shortcut.
+* Add icon picker.
+* Update WC layout template.
+
 ## 1.2.9
 * Improve recommend plugins.
 * Remove `TGM recommend plugins` file.
