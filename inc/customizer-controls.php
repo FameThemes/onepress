@@ -642,8 +642,18 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                         <# } else if ( field.type == 'textarea' || field.type == 'editor' ) { #>
                                             <textarea data-live-id="{{{ field.id }}}" data-repeat-name="_items[__i__][{{ field.id }}]">{{ field.value }}</textarea>
                                         <# }  else if ( field.type == 'icon'  ) { #>
+                                            <#
+                                                var icon_class = field.value;
+                                                if ( icon_class.indexOf( 'fa-' ) != 0 ) {
+                                                    icon_class = 'fa-' + field.value;
+                                                } else {
+                                                    icon_class = icon_class.replace( 'fa ', '' );
+                                                }
+                                                icon_class = icon_class.replace( 'fa-fa', '' );
+                                                
+                                                #>
                                             <div class="icon-wrapper">
-                                                <i class="fa fa-{{ field.value }}"></i>
+                                                <i class="fa {{ icon_class }}"></i>
                                                 <input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
                                             </div>
                                             <a href="#" class="remove-icon"><?php esc_html_e( 'Remove', 'onepress' ); ?></a>
