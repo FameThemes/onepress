@@ -650,7 +650,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                                     icon_class = icon_class.replace( 'fa ', '' );
                                                 }
                                                 icon_class = icon_class.replace( 'fa-fa', '' );
-
+                                                
                                                 #>
                                             <div class="icon-wrapper">
                                                 <i class="fa {{ icon_class }}"></i>
