@@ -2,6 +2,7 @@
 CHANGELOG
 =========
 ## 1.3.0
+* WP 4.7 compatible.
 * Support WP 4.7 customizer shortcut.
 * Add icon picker.
 * Update WC layout template.
