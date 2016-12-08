@@ -46,7 +46,7 @@ function onepress_site_logo(){
     } else {
         $classes['desc'] = 'no-desc';
     }
-    
+
     echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
 }
 
