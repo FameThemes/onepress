@@ -302,7 +302,10 @@ if ( ! function_exists( 'onepress_hex_to_rgba' ) ) {
     }
 }
 
+
+
 add_action( 'wp_enqueue_scripts', 'onepress_custom_inline_style', 100 );
+
 if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
     /**
      * Add custom css to header
@@ -541,14 +544,32 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $css
         );
 
-        $custom = get_option( 'onepress_custom_css' );
-        if ( $custom ){
-            $css.= "\n/* --- Begin custom CSS --- */\n". $custom."\n/* --- End custom CSS --- */\n";
+        if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress < 4.7.
+            $custom = get_option('onepress_custom_css');
+            if ($custom) {
+                $css .= "\n/* --- Begin custom CSS --- */\n" . $custom . "\n/* --- End custom CSS --- */\n";
+            }
         }
 
         wp_add_inline_style( 'onepress-style', $css );
 	}
 
+}
+
+
+if ( function_exists( 'wp_update_custom_css_post' ) ) {
+    // Migrate any existing theme CSS to the core option added in WordPress 4.7.
+    $css = get_option( 'onepress_custom_css' );
+    if ( $css ) {
+        $core_css = wp_get_custom_css(); // Preserve any CSS already added to the core option.
+        $return = wp_update_custom_css_post( $core_css ."\n". $css );
+        if ( ! is_wp_error( $return ) ) {
+            // Remove the old theme_mod, so that the CSS is stored in only one place moving forward.
+            delete_option( 'onepress_custom_css' );
+        }
+    }
+} else {
+    // Back-compat for WordPress < 4.7.
 }
 
 if ( ! function_exists( 'onepress_get_section_about_data' ) ) {

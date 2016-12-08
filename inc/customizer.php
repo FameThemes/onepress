@@ -5,12 +5,14 @@
  * @package OnePress
  */
 
+
 /**
  * Add postMessage support for site title and description for the Theme Customizer.
  *
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
 function onepress_customize_register( $wp_customize ) {
+
 
 	// Load custom controls.
 	require get_template_directory() . '/inc/customizer-controls.php';
@@ -52,27 +54,7 @@ function onepress_customize_register( $wp_customize ) {
 	/*------------------------------------------------------------------------*/
     /*  Site Identity.
     /*------------------------------------------------------------------------*/
-        /*
-         * @deprecated 1.2.0
-         */
-        /*
-    	$wp_customize->add_setting( 'onepress_site_image_logo',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_file_url',
-				'default'           => ''
-			)
-		);
-    	$wp_customize->add_control( new WP_Customize_Image_Control(
-            $wp_customize,
-            'onepress_site_image_logo',
-				array(
-					'label' 		=> esc_html__('Site Image Logo', 'onepress'),
-					'section' 		=> 'title_tagline',
-					'description'   => esc_html__('Your site image logo', 'onepress'),
-				)
-			)
-		);
-        */
+
         $is_old_logo = get_theme_mod( 'onepress_site_image_logo' );
 
         $wp_customize->add_setting( 'onepress_hide_sitetitle',
@@ -622,36 +604,39 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+            if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress < 4.7.
 
-			/* Custom CSS Settings
-			----------------------------------------------------------------------*/
-			$wp_customize->add_section(
-				'onepress_custom_code',
-				array(
-					'title'       => __( 'Custom CSS', 'onepress' ),
-					'panel'       => 'onepress_options',
-				)
-			);
+                /* Custom CSS Settings
+                ----------------------------------------------------------------------*/
+                $wp_customize->add_section(
+                    'onepress_custom_code',
+                    array(
+                        'title' => __('Custom CSS', 'onepress'),
+                        'panel' => 'onepress_options',
+                    )
+                );
 
 
-			$wp_customize->add_setting(
-				'onepress_custom_css',
-				array(
-					'default'              => '',
-					'sanitize_callback'    => 'onepress_sanitize_css',
-					'type' 				   => 'option',
-				)
-			);
+                $wp_customize->add_setting(
+                    'onepress_custom_css',
+                    array(
+                        'default' => '',
+                        'sanitize_callback' => 'onepress_sanitize_css',
+                        'type' => 'option',
+                    )
+                );
 
-			$wp_customize->add_control(
-				'onepress_custom_css',
-				array(
-					'label'    => __( 'Custom CSS', 'onepress' ),
-					'section'  => 'onepress_custom_code',
-					'type'     => 'textarea'
-				)
-			);
-
+                $wp_customize->add_control(
+                    'onepress_custom_css',
+                    array(
+                        'label' => __('Custom CSS', 'onepress'),
+                        'section' => 'onepress_custom_code',
+                        'type' => 'textarea'
+                    )
+                );
+            } else {
+                $wp_customize->get_section( 'custom_css' )->priority = 994;
+            }
 
 	/*------------------------------------------------------------------------*/
     /*  Section: Order & Styling

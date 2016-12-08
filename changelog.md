@@ -6,6 +6,7 @@ CHANGELOG
 * Support WP 4.7 customizer shortcut.
 * Add icon picker.
 * Update WC layout template.
+* Migrate existing theme CSS to the core option added in WordPress 4.7.
 
 ## 1.2.9
 * Improve recommend plugins.
