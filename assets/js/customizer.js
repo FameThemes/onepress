@@ -1173,11 +1173,11 @@ jQuery( document ).ready( function( $ ){
 
     var _is_init_editors = {};
 
-    $( 'body' ).on( 'click', '#customize-theme-controls li.accordion-section', function( e ){
+    $( 'body' ).on( 'click', '#customize-theme-controls .accordion-section', function( e ){
         //e.preventDefault();
         var section = $( this );
         var id = section.attr( 'id' ) || '';
-        if ( id.indexOf( 'accordion-section') > -1 ) {
+        if ( id ) {
             if ( typeof _is_init_editors[ id ] === "undefined" ) {
                 _is_init_editors[ id ] = true;
 
@@ -1193,7 +1193,7 @@ jQuery( document ).ready( function( $ ){
                             _the_editor( $( this ) );
                         } );
                     }
-                }, 300 );
+                }, 10 );
 
             }
         }
@@ -1203,7 +1203,7 @@ jQuery( document ).ready( function( $ ){
     // Check section when focus
     if ( _wpCustomizeSettings.autofocus ) {
         if ( _wpCustomizeSettings.autofocus.section ) {
-            var id = "accordion-section-"+_wpCustomizeSettings.autofocus.section ;
+            var id = "sub-accordion-section-"+_wpCustomizeSettings.autofocus.section ;
             _is_init_editors[ id ] = true;
             var section = $( '#'+id );
             setTimeout( function(){
