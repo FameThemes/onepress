@@ -11,43 +11,46 @@
  * Display header brand
  * @since 1.2.1
  */
-function onepress_site_logo(){
-    $classes = array();
-    $html = '' ;
-    $classes['logo'] = 'no-logo-img';
 
-    if ( function_exists( 'has_custom_logo' ) ) {
-        if ( has_custom_logo()) {
-            $classes['logo'] = 'has-logo-img';
-            $html .= '<div class="site-logo-div">';
-            $html .= get_custom_logo();
-            $html .= '</div>';
+if ( ! function_exists( 'onepress_site_logo' ) ) {
+    function onepress_site_logo(){
+        $classes = array();
+        $html = '' ;
+        $classes['logo'] = 'no-logo-img';
+
+        if ( function_exists( 'has_custom_logo' ) ) {
+            if ( has_custom_logo()) {
+                $classes['logo'] = 'has-logo-img';
+                $html .= '<div class="site-logo-div">';
+                $html .= get_custom_logo();
+                $html .= '</div>';
+            }
         }
-    }
 
-    $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle',  0 );
-    $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', 0 );
+        $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle',  0 );
+        $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', 0 );
 
-    if ( ! $hide_sitetile ) {
-        $classes['title'] = 'has-title';
-        if ( is_front_page() && !is_home() ) {
-            $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
+        if ( ! $hide_sitetile ) {
+            $classes['title'] = 'has-title';
+            if ( is_front_page() && !is_home() ) {
+                $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
+            } else {
+                $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
+            }
+        }
+
+        if ( ! $hide_tagline ) {
+            $description = get_bloginfo( 'description', 'display' );
+            if ( $description || is_customize_preview() ) {
+                $classes['desc'] = 'has-desc';
+                $html .= '<p class="site-description">'.$description.'</p>';
+            }
         } else {
-            $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
+            $classes['desc'] = 'no-desc';
         }
-    }
 
-    if ( ! $hide_tagline ) {
-        $description = get_bloginfo( 'description', 'display' );
-        if ( $description || is_customize_preview() ) {
-            $classes['desc'] = 'has-desc';
-            $html .= '<p class="site-description">'.$description.'</p>';
-        }
-    } else {
-        $classes['desc'] = 'no-desc';
+        echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
     }
-
-    echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
 }
 
 add_action( 'onepress_site_start', 'onepress_site_header' );
