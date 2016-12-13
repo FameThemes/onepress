@@ -46,6 +46,8 @@ if ( ! empty( $user_ids ) ) {
                              ) );
 
                             $image_attributes = wp_get_attachment_image_src( $user_id['id'], 'onepress-small' );
+                            $image_alt = get_post_meta( $user_id['id'], '_wp_attachment_image_alt', true);
+
                             if ( $image_attributes ) {
                                 $image = $image_attributes[0];
                                 $data = get_post( $user_id['id'] );
@@ -56,7 +58,7 @@ if ( ! empty( $user_ids ) ) {
                                         <?php if ( $link ) { ?>
                                             <a href="<?php echo esc_url( $link ); ?>">
                                         <?php } ?>
-                                        <img src="<?php echo esc_url( $image ); ?>" alt="">
+                                        <img src="<?php echo esc_url( $image ); ?>" alt="<?php echo $image_alt; ?>">
                                         <?php if ( $link ) { ?>
                                             </a>
                                         <?php } ?>
