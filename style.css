@@ -1226,7 +1226,7 @@ h6, p, ul, ol, dl, blockquote, pre {
 .site-footer .footer-connect {
 	padding: 90px 0px;
 	padding: 80px 0px;
-	padding:  5rem 0px;
+	padding:  5rem 0rem;
 	text-align: center;
 }
 
@@ -1822,6 +1822,12 @@ h6, p, ul, ol, dl, blockquote, pre {
 	margin: 0 auto;
 }
 
+/* woocommerce
+------------------------------*/
+.woocommerce div.product form.cart .variations td.label {
+	color: #777;
+}
+
 /*--------------------------------------------------------------
 6.0 Elements
 --------------------------------------------------------------*/
@@ -2075,17 +2081,17 @@ section > .customize-partial-edit-shortcut button {
 ------------------------------*/
 .section-padding {
 	padding: 70px 0px;
-	padding:  4.375rem 0px;
+	padding:  4.375rem 0rem;
 }
 
 .section-padding-lg {
 	padding: 90px 0px;
-	padding:  5.625rem 0px;
+	padding:  5.625rem 0rem;
 }
 
 .section-padding-larger {
 	padding: 140px 0px;
-	padding:  8.75rem 0px;
+	padding:  8.75rem 0rem;
 }
 
 .section-meta {
@@ -2384,7 +2390,7 @@ section > .customize-partial-edit-shortcut button {
 
 .hero__content a.btn {
 	margin: 10px 10px 20px 0px;
-	margin:  0.625rem 0.625rem 1.25rem 0px;
+	margin:  0.625rem 0.625rem 1.25rem 0rem;
 }
 
 .hero__content p {
@@ -2413,7 +2419,7 @@ section > .customize-partial-edit-shortcut button {
 
 .hero-content-style2 .hcl2-content {
 	padding: 50px 0px;
-	padding:  3.125rem 0px;
+	padding:  3.125rem 0rem;
 }
 
 .hero-content-style2 .hcl2-image {
