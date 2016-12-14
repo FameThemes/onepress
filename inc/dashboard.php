@@ -376,8 +376,11 @@ function onepress_theme_info_page() {
                         <p>
                            <strong> <?php printf( esc_html__(  'You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress' ) ,  $child_theme->Name ); ?></strong>
                         </p>
+                        <p><?php printf( esc_html__(  'Child theme uses it’s own theme setting name, would you like to copy setting data from parent theme to this child theme?', 'onepress' ) ); ?></p>
                         <p>
+
                         <?php
+
                         $select = '<select name="copy_from">';
                         $select .= '<option value="">'.esc_html__( 'From Theme', 'onepres' ).'</option>';
                         $select .= '<option value="onepress">OnePress</option>';
@@ -390,7 +393,8 @@ function onepress_theme_info_page() {
                         $select_2 .= '<option value="'.esc_attr( $child_theme->get_stylesheet() ).'">'.esc_html__( $child_theme->Name ).'</option>';
                         $select_2 .='</select>';
 
-                        printf( esc_html__(  'Your settings may lost do you want copy settings %1$s to %2$s', 'onepress' ) , $select,$select_2 );
+                        echo $select . ' to '. $select_2;
+
                         ?>
                         <input type="submit" class="button button-secondary" value="<?php esc_attr_e( 'Copy now', 'onepress' ); ?>">
                         </p>
