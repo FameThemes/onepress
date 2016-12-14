@@ -1,6 +1,16 @@
 ====================================================================
 CHANGELOG
 =========
+## 1.3.0
+* WP 4.7 compatible.
+* Support WP 4.7 customizer shortcut.
+* Add icon picker.
+* Update WC layout template.
+* Migrate existing theme CSS to the core option added in WordPress 4.7.
+* Fix WooCommerce variations label color.
+* Add team member image alt text.
+* change copy setting notice message text.
+
 ## 1.2.9
 * Improve recommend plugins.
 * Remove `TGM recommend plugins` file.

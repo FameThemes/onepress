@@ -46,9 +46,6 @@ if ( !$disable && !empty( $data ) ) {
                     }
                 } else if ( $f['icon'] ) {
                     $f['icon'] = trim( $f['icon'] );
-                    if ($f['icon'] != '' && strpos($f['icon'], 'fa-') !== 0) {
-                        $f['icon'] = 'fa-' . $f['icon'];
-                    }
                     $media = '<span class="fa-stack fa-5x"><i class="fa fa-circle fa-stack-2x icon-background-default"></i> <i class="feature-icon fa '.esc_attr( $f['icon'] ).' fa-stack-1x"></i></span>';
                 }
 

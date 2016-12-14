@@ -1173,11 +1173,11 @@ jQuery( document ).ready( function( $ ){
 
     var _is_init_editors = {};
 
-    $( 'body' ).on( 'click', '#customize-theme-controls li.accordion-section', function( e ){
+    $( 'body' ).on( 'click', '#customize-theme-controls .accordion-section', function( e ){
         //e.preventDefault();
         var section = $( this );
         var id = section.attr( 'id' ) || '';
-        if ( id.indexOf( 'accordion-section') > -1 ) {
+        if ( id ) {
             if ( typeof _is_init_editors[ id ] === "undefined" ) {
                 _is_init_editors[ id ] = true;
 
@@ -1193,7 +1193,7 @@ jQuery( document ).ready( function( $ ){
                             _the_editor( $( this ) );
                         } );
                     }
-                }, 300 );
+                }, 10 );
 
             }
         }
@@ -1203,7 +1203,7 @@ jQuery( document ).ready( function( $ ){
     // Check section when focus
     if ( _wpCustomizeSettings.autofocus ) {
         if ( _wpCustomizeSettings.autofocus.section ) {
-            var id = "accordion-section-"+_wpCustomizeSettings.autofocus.section ;
+            var id = "sub-accordion-section-"+_wpCustomizeSettings.autofocus.section ;
             _is_init_editors[ id ] = true;
             var section = $( '#'+id );
             setTimeout( function(){
@@ -1246,7 +1246,7 @@ jQuery( window ).ready( function( $ ){
             $('.control-section-themes h3.accordion-section-title').append('<a class="theme-action-count" href="' + onepress_customizer_settings.action_url + '">' + onepress_customizer_settings.number_action + '</a>');
         }
         if ( onepress_customizer_settings.is_plus_activated !== 'y' ) {
-            $('#customize-info .accordion-section-title').append('<a target="_blank" style="text-transform: uppercase; background: #D54E21; color: #fff; font-size: 10px; line-height: 14px; padding: 2px 5px; display: inline-block;" href="https://www.famethemes.com/themes/onepress/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">Upgrade to OnePress plus</a>');
+            $('#customize-info .accordion-section-title').append('<a target="_blank" style="text-transform: uppercase; background: #D54E21; color: #fff; font-size: 10px; line-height: 14px; padding: 2px 5px; display: inline-block;" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">Upgrade to OnePress plus</a>');
             $( '#accordion-section-onepress_order_styling > .accordion-section-title').append( '<span class="onepress-notice">Plus</span>' );
         }
     }
@@ -1311,5 +1311,128 @@ jQuery( window ).ready( function( $ ){
 
     } );
     $( 'select[data-customize-setting-link="onepress_gallery_display"]').trigger( 'on_custom_load' );
+
+} );
+
+
+
+
+
+
+
+/**
+ * Icon picker
+ */
+jQuery( document ).ready( function( $ ) {
+
+    window.editing_icon = false;
+    var icon_picker = $( '<div class="c-icon-picker"><div class="c-icon-type-wrap"><select class="c-icon-type"></select></div><div class="c-icon-search"><input class="" type="text"></div><div class="c-icon-list"></div></div>' );
+    var options_font_type  = '', icon_group = '';
+
+    $.each( C_Icon_Picker.fonts, function( key, font ) {
+
+        font = $.extend( {}, {
+            url: '',
+            name: '',
+            prefix: '',
+            icons: ''
+        }, font );
+
+        $('<link>')
+            .appendTo('head')
+            .attr({type : 'text/css', rel : 'stylesheet'})
+            .attr('id', 'customizer-icon-' + key )
+            .attr('href', font.url );
+
+        options_font_type += '<option value="'+key+'">' +font.name+ '</option>';
+
+        var icons_array = font.icons.split('|');
+
+        icon_group += '<div class="ic-icons-group" style="display: none;" data-group-name="'+key+'">';
+        $.each( icons_array, function( index, icon ){
+            if ( font.prefix ) {
+                icon = font.prefix + ' ' + icon;
+            }
+            icon_group +=  '<span title="'+icon+'" data-name="'+icon+'"><i class="'+ icon +'"></i></span>';
+
+        } );
+        icon_group += '</div>';
+
+    } );
+    icon_picker.find( '.c-icon-search input' ).attr( 'placeholder', C_Icon_Picker.search );
+    icon_picker.find( '.c-icon-type' ).html( options_font_type );
+    icon_picker.find( '.c-icon-list' ).append( icon_group );
+    $( '.wp-full-overlay' ).append( icon_picker );
+
+    // Change icon type
+    $( 'body' ).on( 'change', 'select.c-icon-type', function(){
+        var t =  $( this ).val();
+        icon_picker.find( '.ic-icons-group' ).hide();
+        icon_picker.find( '.ic-icons-group[data-group-name="'+t+'"]' ).show();
+
+    } );
+    icon_picker.find( 'select.c-icon-type' ).trigger( 'change' );
+
+    // When type to search
+    $( 'body' ).on( 'keyup', '.c-icon-search input', function(){
+        var v = $( this ).val();
+        if ( v == '' ) {
+            $( '.c-icon-list span' ).show();
+        } else {
+            $( '.c-icon-list span' ).hide();
+            try {
+                $( '.c-icon-list span[data-name*="'+v+'"]' ).show();
+            } catch ( e ){
+
+            }
+        }
+    } );
+
+    // Edit icon
+    $( 'body' ).on( 'click', '.icon-wrapper', function( e ){
+        e.preventDefault();
+        var icon =  $( this );
+        window.editing_icon = icon;
+        icon_picker.addClass( 'ic-active' );
+        $( 'body' ).find( '.icon-wrapper' ).removeClass('icon-editing');
+        icon.addClass( 'icon-editing' );
+    } );
+    // Remove icon
+    $( 'body' ).on( 'click', '.item-icon .remove-icon', function( e ){
+        e.preventDefault();
+        var item =  $( this ).closest( '.item-icon' );
+        item.find( '.icon-wrapper input' ).val( '' );
+        item.find( '.icon-wrapper input' ).trigger( 'change' );
+        item.find( '.icon-wrapper i' ).attr( 'class', '' );
+        $( 'body' ).find( '.icon-wrapper' ).removeClass('icon-editing');
+    } );
+
+    // Selected icon
+    $( 'body' ).on( 'click', '.c-icon-list span', function( e ){
+        e.preventDefault();
+        var icon_name =  $( this ).attr( 'data-name' ) || '';
+        if ( window.editing_icon ) {
+            window.editing_icon.find( 'i' ).attr( 'class', '' ).addClass( $( this ).find( 'i' ).attr( 'class' ) );
+            window.editing_icon.find( 'input' ).val( icon_name ).trigger( 'change' );
+        }
+        icon_picker.removeClass( 'ic-active' );
+        window.editing_icon = false;
+        $( 'body' ).find( '.icon-wrapper' ).removeClass('icon-editing');
+    } );
+
+    $( document ).mouseup( function ( e ) {
+        if ( window.editing_icon ) {
+            if ( ! window.editing_icon.is( e.target ) // if the target of the click isn't the container...
+                && window.editing_icon.has( e.target ).length === 0 // ... nor a descendant of the container
+                && (
+                    !icon_picker.is( e.target )
+                    && icon_picker.has( e.target ).length === 0
+                )
+            ) {
+                icon_picker.removeClass('ic-active');
+                // window.editing_icon = false;
+            }
+        }
+    });
 
 } );

@@ -115,7 +115,7 @@
 	border-left: none;
 	border-right: none;
 	margin-bottom: 50px;
-	@extend .clearfix;
+	@extend .clearfix !optional;;
 	.nav-previous {
 		float: left;
 	}
@@ -398,4 +398,10 @@
 .full-screen .comments-area {
 	max-width: $grid;
 	margin: 0 auto;
+}
+
+/* woocommerce
+------------------------------*/
+.woocommerce div.product form.cart .variations td.label {
+	color: #777;
 }

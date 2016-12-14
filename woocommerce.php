@@ -7,8 +7,8 @@
 
 get_header();
 
-
 $is_active_sidebar = is_active_sidebar( 'sidebar-shop' );
+$layout = get_theme_mod( 'onepress_layout', 'right-sidebar' );
 ?>
 
 	<div id="content" class="site-content">
@@ -21,25 +21,21 @@ $is_active_sidebar = is_active_sidebar( 'sidebar-shop' );
 
 		<?php echo onepress_breadcrumb(); ?>
 
-		<div id="content-inside" class="container <?php echo ( $is_active_sidebar ) ? 'right-sidebar' : 'no-sidebar'; ?>">
+		<div id="content-inside" class="container <?php echo ( $is_active_sidebar ) ? esc_attr( $layout ) : 'no-sidebar'; ?>">
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">
 					<?php woocommerce_content(); ?>
 				</main><!-- #main -->
 			</div><!-- #primary -->
-            <?php if ( $is_active_sidebar ) {
-                ?>
-                <div id="secondary" class="widget-area sidebar" role="complementary">
-                    <?php dynamic_sidebar( 'sidebar-shop' ); ?>
-                </div><!-- #secondary -->
-                <?php
-            } ?>
+            <?php if ( $is_active_sidebar ) { ?>
+                <?php if ( $layout != 'no-sidebar' ) { ?>
+                    <div id="secondary" class="widget-area sidebar" role="complementary">
+                        <?php dynamic_sidebar( 'sidebar-shop' ); ?>
+                    </div><!-- #secondary -->
+                <?php } ?>
+
+            <?php } ?>
 		</div><!--#content-inside -->
-
-        <?php
-
-
-        ?>
 
 
 	</div><!-- #content -->

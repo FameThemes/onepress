@@ -11,43 +11,46 @@
  * Display header brand
  * @since 1.2.1
  */
-function onepress_site_logo(){
-    $classes = array();
-    $html = '' ;
-    $classes['logo'] = 'no-logo-img';
 
-    if ( function_exists( 'has_custom_logo' ) ) {
-        if ( has_custom_logo()) {
-            $classes['logo'] = 'has-logo-img';
-            $html .= '<div class="site-logo-div">';
-            $html .= get_custom_logo();
-            $html .= '</div>';
+if ( ! function_exists( 'onepress_site_logo' ) ) {
+    function onepress_site_logo(){
+        $classes = array();
+        $html = '' ;
+        $classes['logo'] = 'no-logo-img';
+
+        if ( function_exists( 'has_custom_logo' ) ) {
+            if ( has_custom_logo()) {
+                $classes['logo'] = 'has-logo-img';
+                $html .= '<div class="site-logo-div">';
+                $html .= get_custom_logo();
+                $html .= '</div>';
+            }
         }
-    }
 
-    $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle',  0 );
-    $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', 0 );
+        $hide_sitetile = get_theme_mod( 'onepress_hide_sitetitle',  0 );
+        $hide_tagline  = get_theme_mod( 'onepress_hide_tagline', 0 );
 
-    if ( ! $hide_sitetile ) {
-        $classes['title'] = 'has-title';
-        if ( is_front_page() && !is_home() ) {
-            $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
+        if ( ! $hide_sitetile ) {
+            $classes['title'] = 'has-title';
+            if ( is_front_page() && !is_home() ) {
+                $html .= '<h1 class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></h1>';
+            } else {
+                $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
+            }
+        }
+
+        if ( ! $hide_tagline ) {
+            $description = get_bloginfo( 'description', 'display' );
+            if ( $description || is_customize_preview() ) {
+                $classes['desc'] = 'has-desc';
+                $html .= '<p class="site-description">'.$description.'</p>';
+            }
         } else {
-            $html .= '<p class="site-title"><a class="site-text-logo" href="' . esc_url(home_url('/')) . '" rel="home">' . get_bloginfo('name') . '</a></p>';
+            $classes['desc'] = 'no-desc';
         }
-    }
 
-    if ( ! $hide_tagline ) {
-        $description = get_bloginfo( 'description', 'display' );
-        if ( $description || is_customize_preview() ) {
-            $classes['desc'] = 'has-desc';
-            $html .= '<p class="site-description">'.$description.'</p>';
-        }
-    } else {
-        $classes['desc'] = 'no-desc';
+        echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
     }
-    
-    echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
 }
 
 add_action( 'onepress_site_start', 'onepress_site_header' );
@@ -302,7 +305,10 @@ if ( ! function_exists( 'onepress_hex_to_rgba' ) ) {
     }
 }
 
+
+
 add_action( 'wp_enqueue_scripts', 'onepress_custom_inline_style', 100 );
+
 if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
     /**
      * Add custom css to header
@@ -541,14 +547,32 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $css
         );
 
-        $custom = get_option( 'onepress_custom_css' );
-        if ( $custom ){
-            $css.= "\n/* --- Begin custom CSS --- */\n". $custom."\n/* --- End custom CSS --- */\n";
+        if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress < 4.7.
+            $custom = get_option('onepress_custom_css');
+            if ($custom) {
+                $css .= "\n/* --- Begin custom CSS --- */\n" . $custom . "\n/* --- End custom CSS --- */\n";
+            }
         }
 
         wp_add_inline_style( 'onepress-style', $css );
 	}
 
+}
+
+
+if ( function_exists( 'wp_update_custom_css_post' ) ) {
+    // Migrate any existing theme CSS to the core option added in WordPress 4.7.
+    $css = get_option( 'onepress_custom_css' );
+    if ( $css ) {
+        $core_css = wp_get_custom_css(); // Preserve any CSS already added to the core option.
+        $return = wp_update_custom_css_post( $core_css ."\n". $css );
+        if ( ! is_wp_error( $return ) ) {
+            // Remove the old theme_mod, so that the CSS is stored in only one place moving forward.
+            delete_option( 'onepress_custom_css' );
+        }
+    }
+} else {
+    // Back-compat for WordPress < 4.7.
 }
 
 if ( ! function_exists( 'onepress_get_section_about_data' ) ) {
@@ -673,7 +697,7 @@ if ( ! function_exists( 'onepress_get_features_data' ) ) {
 
                 //Get/Set social icons
                 $array[$k]['icon'] = trim($array[$k]['icon']);
-                if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa-') !== 0) {
+                if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa') !== 0) {
                     $array[$k]['icon'] = 'fa-' . $array[$k]['icon'];
                 }
             }
