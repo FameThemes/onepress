@@ -732,15 +732,13 @@ if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
                 // If icon isset
                 $icons = array();
                 $array[$k]['icon'] = trim($array[$k]['icon']);
-
-                if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa') !== 0) {
-                    $icons[$array[$k]['icon']] = 'fa-' . $array[$k]['icon'];
+                if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa-') !== 0) {
+                    $icons['fa-' . $array[$k]['icon']] = 'fa-' . $array[$k]['icon'];
                 } else {
                     $icons[$array[$k]['icon']] = $array[$k]['icon'];
                 }
-
                 $network = ($array[$k]['network']) ? sanitize_title($array[$k]['network']) : false;
-                if ( $network && ! $array[$k]['icon'] ) {
+                if ($network) {
                     $icons['fa-' . $network] = 'fa-' . $network;
                 }
 
