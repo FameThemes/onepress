@@ -3019,6 +3019,10 @@ section > .customize-partial-edit-shortcut button {
 	margin-bottom: 5px;
 }
 
+.wpcf7-form label {
+	width: 100%;
+}
+
 div.wpcf7-validation-errors {
 	margin: 20px 0px;
 	padding: 15px;
