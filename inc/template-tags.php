@@ -790,7 +790,14 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
                     }
                 }
 
-                $image_thumb_size = apply_filters( 'onepress_gallery_page_img_size', 'onepress-small' );
+                $display_type = get_theme_mod( 'onepress_gallery_display', 'grid' );
+                if ( $display_type == 'masonry' || $display_type == ' justified' ) {
+                    $size = 'large';
+                } else {
+                    $size = 'onepress-small';
+                }
+
+                $image_thumb_size = apply_filters( 'onepress_gallery_page_img_size', $size );
 
                 if ( ! empty( $images ) ) {
                     $images = explode( ',', $images );
