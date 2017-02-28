@@ -420,19 +420,13 @@ jQuery(document).ready(function ( $ ) {
 
 
     /**
-     * Call magnificPopup when use
+     * Video lightbox
      */
-    jQuery('.popup-video').magnificPopup({
-        //disableOn: 700,
-        type: 'iframe',
-        mainClass: 'mfp-fade',
-        removalDelay: 160,
-        preloader: false,
-        fixedContentPos: false,
-        zoom: {
-            enabled:true
-        }
-    });
+
+    if ($.fn.lightGallery ) {
+
+        $(".videolightbox-popup").lightGallery({});
+    }
 
     // Counter Up
     $('.counter').counterUp({
@@ -644,8 +638,6 @@ jQuery(document).ready(function ( $ ) {
                     var m = $(this);
                     var gutter = m.attr('data-gutter') || 10;
                     var columns = m.attr('data-col') || 5;
-
-                    console.log( columns );
 
                     gutter = _to_number(gutter);
                     columns = _to_number(columns);

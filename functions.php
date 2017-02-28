@@ -212,10 +212,8 @@ function onepress_scripts() {
             wp_enqueue_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
         }
 
-        if ( get_theme_mod( 'onepress_g_lightbox', 1 ) || is_customize_preview() ) {
-            wp_enqueue_script('onepress-gallery-lightgallery', get_template_directory_uri() . '/assets/js/lightgallery.js', array('jquery'), $version, true);
-            wp_enqueue_style( 'onepress-gallery-lightgallery', get_template_directory_uri().'/assets/css/lightgallery.css' );
-        }
+        wp_enqueue_style( 'onepress-gallery-lightgallery', get_template_directory_uri().'/assets/css/lightgallery.css' );
+
     }
 
 	wp_enqueue_script( 'onepress-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );

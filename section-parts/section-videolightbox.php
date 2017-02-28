@@ -21,8 +21,8 @@ if ( ( ! $disable && ( $video || $heading ) )  || onepress_is_selective_refresh(
             <?php do_action('onepress_section_before_inner', 'videolightbox'); ?>
             <div class="container">
                 <?php if ( $video ) { ?>
-                <div class="videolightbox__icon">
-                    <a href="<?php echo esc_url( $video ); ?>" class="popup-video">
+                <div class="videolightbox__icon videolightbox-popup">
+                    <a href="<?php echo esc_attr( $video ); ?>" data-scr="<?php echo esc_attr( $video ); ?>" class="popup-video">
                         <span class="video_icon"><i class="fa fa-play"></i></span>
                     </a>
                 </div>
