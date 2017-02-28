@@ -516,13 +516,13 @@ jQuery(document).ready(function ( $ ) {
                 hero.addClass('loaded');
                 hero.removeClass( 'loading' );
                 setTimeout(function () {
-                    hero.find('.sk-cube-grid').remove();
+                    hero.find('.slider-spinner').remove();
                 }, 600);
             });
         } else {
             hero.addClass('loaded');
             hero.removeClass( 'loading' );
-            hero.find('.sk-cube-grid').remove();
+            hero.find('.slider-spinner`').remove();
         }
 
     } );
@@ -536,12 +536,12 @@ jQuery(document).ready(function ( $ ) {
                 hero.find('.hero-slideshow-wrapper').addClass('loaded');
                 hero.removeClass( 'loading' );
                 setTimeout(function () {
-                    hero.find('.hero-slideshow-wrapper').find('.sk-cube-grid').remove();
+                    hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
                 }, 600);
             });
         } else {
             hero.removeClass( 'loading' );
-            hero.find('.hero-slideshow-wrapper').find('.sk-cube-grid').remove();
+            hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
             hero.find('.hero-slideshow-wrapper').addClass('loaded').removeClass( 'loading' );
         }
     } );
