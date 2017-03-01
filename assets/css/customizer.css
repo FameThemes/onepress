@@ -1,3 +1,12 @@
+li[id*="accordion-panel-onepress"] > .accordion-section-title{
+    padding-left: 30px;
+}
+li#accordion-panel-onepress_options > .accordion-section-title,
+li#accordion-panel-onepress_typo > .accordion-section-title
+{
+    padding-left: 14px;
+}
+
 .theme-action-count {
     padding: 0 6px;
     display: inline-block;
