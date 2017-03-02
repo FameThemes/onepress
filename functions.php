@@ -183,6 +183,8 @@ function onepress_scripts() {
         'onepress_vertical_align_menu'   => get_theme_mod( 'onepress_vertical_align_menu' ),
         'hero_animation'   				 => get_theme_mod( 'onepress_hero_option_animation', 'flipInX' ),
         'hero_speed'   					 => intval( get_theme_mod( 'onepress_hero_option_speed', 5000 ) ),
+        'hero_fade'   					 => intval( get_theme_mod( 'onepress_hero_slider_fade', 750 ) ),
+        'hero_duration'   				 => intval( get_theme_mod( 'onepress_hero_slider_duration', 5000 ) ),
         'is_home'   					 => '',
         'gallery_enable'   				 => '',
     );

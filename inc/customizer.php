@@ -541,68 +541,7 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
-			/* Hero options
-			----------------------------------------------------------------------*/
-			$wp_customize->add_section(
-				'onepress_hero_options',
-				array(
-					'title'       => __( 'Hero Options', 'onepress' ),
-					'panel'       => 'onepress_options',
-				)
-			);
 
-
-			$wp_customize->add_setting(
-				'onepress_hero_option_animation',
-				array(
-					'default'              => 'flipInX',
-					'sanitize_callback'    => 'sanitize_text_field',
-				)
-			);
-
-			/**
-			 * @see https://github.com/daneden/animate.css
-			 */
-
-			$animations_css = 'bounce flash pulse rubberBand shake headShake swing tada wobble jello bounceIn bounceInDown bounceInLeft bounceInRight bounceInUp bounceOut bounceOutDown bounceOutLeft bounceOutRight bounceOutUp fadeIn fadeInDown fadeInDownBig fadeInLeft fadeInLeftBig fadeInRight fadeInRightBig fadeInUp fadeInUpBig fadeOut fadeOutDown fadeOutDownBig fadeOutLeft fadeOutLeftBig fadeOutRight fadeOutRightBig fadeOutUp fadeOutUpBig flipInX flipInY flipOutX flipOutY lightSpeedIn lightSpeedOut rotateIn rotateInDownLeft rotateInDownRight rotateInUpLeft rotateInUpRight rotateOut rotateOutDownLeft rotateOutDownRight rotateOutUpLeft rotateOutUpRight hinge rollIn rollOut zoomIn zoomInDown zoomInLeft zoomInRight zoomInUp zoomOut zoomOutDown zoomOutLeft zoomOutRight zoomOutUp slideInDown slideInLeft slideInRight slideInUp slideOutDown slideOutLeft slideOutRight slideOutUp';
-
-			$animations_css = explode( ' ', $animations_css );
-			$animations = array();
-			foreach ( $animations_css as $v ) {
-				$v =  trim( $v );
-				if ( $v ){
-					$animations[ $v ]= $v;
-				}
-
-			}
-
-			$wp_customize->add_control(
-				'onepress_hero_option_animation',
-				array(
-					'label'    => __( 'Text animation', 'onepress' ),
-					'section'  => 'onepress_hero_options',
-					'type'     => 'select',
-					'choices' => $animations,
-				)
-			);
-
-
-			$wp_customize->add_setting(
-				'onepress_hero_option_speed',
-				array(
-					'default'              => '5000',
-					'sanitize_callback'    => 'sanitize_text_field',
-				)
-			);
-
-			$wp_customize->add_control(
-				'onepress_hero_option_speed',
-				array(
-					'label'    => __( 'Speed', 'onepress' ),
-					'description' => esc_html__( 'The delay between the changing of each phrase in milliseconds.', 'onepress' ),
-					'section'  => 'onepress_hero_options',
-				)
-			);
 
             if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress < 4.7.
 
@@ -765,6 +704,99 @@ function onepress_customize_register( $wp_customize ) {
 					'active_callback' => 'onepress_hero_fullscreen_callback'
 				)
 			);
+
+
+            /* Hero options
+            ----------------------------------------------------------------------*/
+
+            $wp_customize->add_setting(
+                'onepress_hero_option_animation',
+                array(
+                    'default'              => 'flipInX',
+                    'sanitize_callback'    => 'sanitize_text_field',
+                )
+            );
+
+            /**
+             * @see https://github.com/daneden/animate.css
+             */
+
+            $animations_css = 'bounce flash pulse rubberBand shake headShake swing tada wobble jello bounceIn bounceInDown bounceInLeft bounceInRight bounceInUp bounceOut bounceOutDown bounceOutLeft bounceOutRight bounceOutUp fadeIn fadeInDown fadeInDownBig fadeInLeft fadeInLeftBig fadeInRight fadeInRightBig fadeInUp fadeInUpBig fadeOut fadeOutDown fadeOutDownBig fadeOutLeft fadeOutLeftBig fadeOutRight fadeOutRightBig fadeOutUp fadeOutUpBig flipInX flipInY flipOutX flipOutY lightSpeedIn lightSpeedOut rotateIn rotateInDownLeft rotateInDownRight rotateInUpLeft rotateInUpRight rotateOut rotateOutDownLeft rotateOutDownRight rotateOutUpLeft rotateOutUpRight hinge rollIn rollOut zoomIn zoomInDown zoomInLeft zoomInRight zoomInUp zoomOut zoomOutDown zoomOutLeft zoomOutRight zoomOutUp slideInDown slideInLeft slideInRight slideInUp slideOutDown slideOutLeft slideOutRight slideOutUp';
+
+            $animations_css = explode( ' ', $animations_css );
+            $animations = array();
+            foreach ( $animations_css as $v ) {
+                $v =  trim( $v );
+                if ( $v ){
+                    $animations[ $v ]= $v;
+                }
+
+            }
+
+            $wp_customize->add_control(
+                'onepress_hero_option_animation',
+                array(
+                    'label'    => __( 'Text animation', 'onepress' ),
+                    'section'  => 'onepress_hero_settings',
+                    'type'     => 'select',
+                    'choices' => $animations,
+                )
+            );
+
+
+            $wp_customize->add_setting(
+                'onepress_hero_option_speed',
+                array(
+                    'default'              => '5000',
+                    'sanitize_callback'    => 'sanitize_text_field',
+                )
+            );
+
+            $wp_customize->add_control(
+                'onepress_hero_option_speed',
+                array(
+                    'label'    => __( 'Text animation speed', 'onepress' ),
+                    'description' => esc_html__( 'The delay between the changing of each phrase in milliseconds.', 'onepress' ),
+                    'section'  => 'onepress_hero_settings',
+                )
+            );
+
+
+        $wp_customize->add_setting(
+            'onepress_hero_slider_fade',
+            array(
+                'default'              => '750',
+                'sanitize_callback'    => 'sanitize_text_field',
+            )
+        );
+
+        $wp_customize->add_control(
+            'onepress_hero_slider_fade',
+            array(
+                'label'    => __( 'Slider animation speed', 'onepress' ),
+                'description' => esc_html__( 'This is the speed at which the image will fade in. Integers in milliseconds are accepted.', 'onepress' ),
+                'section'  => 'onepress_hero_settings',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'onepress_hero_slider_duration',
+            array(
+                'default'              => '5000',
+                'sanitize_callback'    => 'sanitize_text_field',
+            )
+        );
+
+        $wp_customize->add_control(
+            'onepress_hero_slider_duration',
+            array(
+                'label'    => __( 'Slider duration speed', 'onepress' ),
+                'description' => esc_html__( 'The amount of time in between slides, expressed as the number of milliseconds.', 'onepress' ),
+                'section'  => 'onepress_hero_settings',
+            )
+        );
+
+
 
 		$wp_customize->add_section( 'onepress_hero_images' ,
 			array(

@@ -478,9 +478,10 @@ jQuery(document).ready(function ( $ ) {
 
         if ( images ) {
             preload_images(images, function () {
+                console.log( _to_number( onepress_js_settings.hero_duration ) );
                 hero.backstretch(images, {
-                    fade: 750,
-                    duration: 5000
+                    fade: _to_number( onepress_js_settings.hero_fade ),
+                    duration: _to_number( onepress_js_settings.hero_duration )
                 });
                 hero.addClass('loaded');
                 hero.removeClass( 'loading' );

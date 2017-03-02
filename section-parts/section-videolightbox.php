@@ -12,7 +12,7 @@ if ( ( ! $disable && ( $video || $heading ) )  || onepress_is_selective_refresh(
     if ( ! onepress_is_selective_refresh() ){
     ?>
     <?php if ( $image ) { ?>
-    <div id="parallax-<?php echo esc_attr( $id ); ?>" class="parallax-<?php echo esc_attr( $id ); ?> parallax-window" data-over-scroll-fix="true" data-z-index="1" data-speed="0.3" data-image-src="<?php echo esc_url( $image ); ?>" data-parallax="scroll" data-position="center" data-bleed="0">
+    <div id="parallax-<?php echo esc_attr( $id ); ?>" class="parallax-<?php echo esc_attr( $id ); ?> parallax-window" data-over-scroll-fix="false" data-z-index="1" data-speed="0.3" data-image-src="<?php echo esc_url( $image ); ?>" data-parallax="scroll" data-position="center" data-bleed="0">
     <?php } ?>
         <section id="<?php if ($id != '') echo esc_attr( $id ); ?>" <?php do_action('onepress_section_atts', 'videolightbox'); ?>
              class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-videolightbox section-padding section-padding-larger section-inverse onepage-section', 'videolightbox')); ?>">
