@@ -443,37 +443,6 @@ jQuery(document).ready(function ( $ ) {
     }
 
 
-    /**
-     * Parallax Section
-     */
-    jQuery(window).resize(function(){
-        onepressParallax();
-    });
-
-    function onepressParallax() {
-        var testMobile = isMobile.any();
-
-        jQuery('.section-has-parallax').each(function() {
-            var $this = jQuery(this);
-            var bg    = $this.find('.parallax_bg');
-            var img = $this.data('bg');
-
-            preload_images( [ img ], function(){
-                jQuery(bg).css('backgroundImage', 'url(' + img + ')');
-                if (testMobile == null) {
-                    jQuery(bg).addClass('not-mobile');
-                    jQuery(bg).removeClass('is-mobile');
-                    jQuery(bg).parallax('50%', 0.4);
-                } else {
-                    //jQuery(bg).css('backgroundAttachment', 'inherit');
-                    jQuery(bg).removeClass('not-mobile');
-                    jQuery(bg).addClass('is-mobile');
-                }
-            });
-
-        });
-    }
-
 
     /**
      * Section: Hero Full Screen Slideshow
