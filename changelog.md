@@ -2,7 +2,8 @@
 CHANGELOG
 =========
 ## 1.3.2
- * Fix js syntax.
+* Fix js syntax.
+* Update parallax hero.
 
 ## 1.3.1
 * Fix social icons.
