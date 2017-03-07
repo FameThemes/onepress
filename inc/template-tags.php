@@ -343,29 +343,14 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             .body-desktop .parallax-hero .hero-slideshow-wrapper:after {
                 display: none !important;
             }
-            .parallax-hero .parallax-mirror:after {
-                position: absolute;
-                top: 0px;
-                left: 0px;
-                width: 100%;
-                height: 100%;
+            #mirror-parallax-hero::before, .parallax-hero .hero-slideshow-wrapper {
                 background-color: <?php echo $hero_bg_color; ?>;
-                display: block;
-                content: "";
+                opacity: 1;
             }
             .body-desktop .parallax-hero .hero-slideshow-wrapper:after {
                 display: none !important;
             }
-            .parallax-hero .parallax-mirror:after {
-                position: absolute;
-                top: 0px;
-                left: 0px;
-                width: 100%;
-                height: 100%;
-                background-color: <?php echo $hero_bg_color; ?>;
-                display: block;
-                content: "";
-            }
+
             <?php
             /**
              * Theme Color

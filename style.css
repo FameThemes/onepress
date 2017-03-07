@@ -3058,7 +3058,7 @@ div.wpcf7-response-output {
 	background: transparent !important;
 }
 
-.parallax-window .parallax-mirror::before {
+.parallax-mirror::before {
 	content: " ";
 	position: absolute;
 	top: 0px;
@@ -3067,6 +3067,12 @@ div.wpcf7-response-output {
 	bottom: 0px;
 	display: block;
 	z-index: 2;
+	background-color: #000000;
+	opacity: 0.4;
+}
+
+#mirror-parallax-hero {
+	z-index: 30;
 }
 
 /* Section: Gallery
