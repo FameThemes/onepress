@@ -466,45 +466,50 @@ jQuery(document).ready(function ( $ ) {
     /**
      * Hero sliders
      */
-    jQuery('.hero-slideshow-wrapper').each( function(){
-        var hero = $( this );
-        if ( hero.hasClass( 'video-hero' ) ) {
-            return ;
-        }
-        var images = hero.data( 'images' )  || false;
-        if ( typeof images == 'string' ) {
-            images = jQuery.parseJSON( images );
-        }
+    if( $( '#parallax-hero').length <= 0 ) {
+        jQuery('.hero-slideshow-wrapper').each(function () {
+            var hero = $(this);
+            if (hero.hasClass('video-hero')) {
+                return;
+            }
+            var images = hero.data('images') || false;
+            if (typeof images == 'string') {
+                images = jQuery.parseJSON(images);
+            }
 
-        if ( images ) {
-            preload_images(images, function () {
-                console.log( _to_number( onepress_js_settings.hero_duration ) );
-                hero.backstretch(images, {
-                    fade: _to_number( onepress_js_settings.hero_fade ),
-                    duration: _to_number( onepress_js_settings.hero_duration )
+            if (images) {
+                preload_images(images, function () {
+                    console.log(_to_number(onepress_js_settings.hero_duration));
+                    hero.backstretch(images, {
+                        fade: _to_number(onepress_js_settings.hero_fade),
+                        duration: _to_number(onepress_js_settings.hero_duration)
+                    });
+                    hero.addClass('loaded');
+                    hero.removeClass('loading');
+                    setTimeout(function () {
+                        hero.find('.slider-spinner').remove();
+                    }, 600);
                 });
+            } else {
                 hero.addClass('loaded');
-                hero.removeClass( 'loading' );
-                setTimeout(function () {
-                    hero.find('.slider-spinner').remove();
-                }, 600);
-            });
-        } else {
-            hero.addClass('loaded');
-            hero.removeClass( 'loading' );
-            hero.find('.slider-spinner').remove();
-        }
+                hero.removeClass('loading');
+                hero.find('.slider-spinner').remove();
+            }
 
-    } );
+        });
+    }
 
 
     $( '.parallax-hero').each( function(){
         var hero = $( this);
+        hero.addClass( 'loading' );
         var img = hero.attr( 'data-image-src' ) || false;
         if ( img ) {
+            console.log( 'hass_img' );
             preload_images([img], function () {
                 hero.find('.hero-slideshow-wrapper').addClass('loaded');
                 hero.removeClass( 'loading' );
+                hero.parallax();
                 setTimeout(function () {
                     hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
                 }, 600);
