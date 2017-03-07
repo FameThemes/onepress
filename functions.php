@@ -183,6 +183,8 @@ function onepress_scripts() {
         'onepress_vertical_align_menu'   => get_theme_mod( 'onepress_vertical_align_menu' ),
         'hero_animation'   				 => get_theme_mod( 'onepress_hero_option_animation', 'flipInX' ),
         'hero_speed'   					 => intval( get_theme_mod( 'onepress_hero_option_speed', 5000 ) ),
+        'hero_fade'   					 => intval( get_theme_mod( 'onepress_hero_slider_fade', 750 ) ),
+        'hero_duration'   				 => intval( get_theme_mod( 'onepress_hero_slider_duration', 5000 ) ),
         'is_home'   					 => '',
         'gallery_enable'   				 => '',
     );
@@ -212,10 +214,8 @@ function onepress_scripts() {
             wp_enqueue_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
         }
 
-        if ( get_theme_mod( 'onepress_g_lightbox', 1 ) || is_customize_preview() ) {
-            wp_enqueue_script('onepress-gallery-lightgallery', get_template_directory_uri() . '/assets/js/lightgallery.js', array('jquery'), $version, true);
-            wp_enqueue_style( 'onepress-gallery-lightgallery', get_template_directory_uri().'/assets/css/lightgallery.css' );
-        }
+        wp_enqueue_style( 'onepress-gallery-lightgallery', get_template_directory_uri().'/assets/css/lightgallery.css' );
+
     }
 
 	wp_enqueue_script( 'onepress-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );

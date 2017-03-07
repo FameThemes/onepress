@@ -1,6 +1,17 @@
 ====================================================================
 CHANGELOG
 =========
+## 1.3.1
+* Fix social icons.
+* Make contact form label full width.
+* Update images size for gallery masonry and justified.
+* New slider speed option, move hero settings to hero sections.
+* Update parallax version.
+* Add custom section padding in Customizer.
+* Change hero loading icon.
+* Remove Magnific-Popup, update lightbox video.
+
+
 ## 1.3.0
 * WP 4.7 compatible.
 * Support WP 4.7 customizer shortcut.

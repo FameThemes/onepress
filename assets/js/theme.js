@@ -420,19 +420,13 @@ jQuery(document).ready(function ( $ ) {
 
 
     /**
-     * Call magnificPopup when use
+     * Video lightbox
      */
-    jQuery('.popup-video').magnificPopup({
-        //disableOn: 700,
-        type: 'iframe',
-        mainClass: 'mfp-fade',
-        removalDelay: 160,
-        preloader: false,
-        fixedContentPos: false,
-        zoom: {
-            enabled:true
-        }
-    });
+
+    if ($.fn.lightGallery ) {
+
+        $(".videolightbox-popup").lightGallery({});
+    }
 
     // Counter Up
     $('.counter').counterUp({
@@ -448,37 +442,6 @@ jQuery(document).ready(function ( $ ) {
         jQuery('.site-header .onepress-menu').css( 'line-height', header_height + "px" );
     }
 
-
-    /**
-     * Parallax Section
-     */
-    jQuery(window).resize(function(){
-        onepressParallax();
-    });
-
-    function onepressParallax() {
-        var testMobile = isMobile.any();
-
-        jQuery('.section-has-parallax').each(function() {
-            var $this = jQuery(this);
-            var bg    = $this.find('.parallax_bg');
-            var img = $this.data('bg');
-
-            preload_images( [ img ], function(){
-                jQuery(bg).css('backgroundImage', 'url(' + img + ')');
-                if (testMobile == null) {
-                    jQuery(bg).addClass('not-mobile');
-                    jQuery(bg).removeClass('is-mobile');
-                    jQuery(bg).parallax('50%', 0.4);
-                } else {
-                    //jQuery(bg).css('backgroundAttachment', 'inherit');
-                    jQuery(bg).removeClass('not-mobile');
-                    jQuery(bg).addClass('is-mobile');
-                }
-            });
-
-        });
-    }
 
 
     /**
@@ -515,20 +478,21 @@ jQuery(document).ready(function ( $ ) {
 
         if ( images ) {
             preload_images(images, function () {
+                console.log( _to_number( onepress_js_settings.hero_duration ) );
                 hero.backstretch(images, {
-                    fade: 750,
-                    duration: 5000
+                    fade: _to_number( onepress_js_settings.hero_fade ),
+                    duration: _to_number( onepress_js_settings.hero_duration )
                 });
                 hero.addClass('loaded');
                 hero.removeClass( 'loading' );
                 setTimeout(function () {
-                    hero.find('.sk-cube-grid').remove();
+                    hero.find('.slider-spinner').remove();
                 }, 600);
             });
         } else {
             hero.addClass('loaded');
             hero.removeClass( 'loading' );
-            hero.find('.sk-cube-grid').remove();
+            hero.find('.slider-spinner`').remove();
         }
 
     } );
@@ -542,12 +506,12 @@ jQuery(document).ready(function ( $ ) {
                 hero.find('.hero-slideshow-wrapper').addClass('loaded');
                 hero.removeClass( 'loading' );
                 setTimeout(function () {
-                    hero.find('.hero-slideshow-wrapper').find('.sk-cube-grid').remove();
+                    hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
                 }, 600);
             });
         } else {
             hero.removeClass( 'loading' );
-            hero.find('.hero-slideshow-wrapper').find('.sk-cube-grid').remove();
+            hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
             hero.find('.hero-slideshow-wrapper').addClass('loaded').removeClass( 'loading' );
         }
     } );
@@ -644,8 +608,6 @@ jQuery(document).ready(function ( $ ) {
                     var m = $(this);
                     var gutter = m.attr('data-gutter') || 10;
                     var columns = m.attr('data-col') || 5;
-
-                    console.log( columns );
 
                     gutter = _to_number(gutter);
                     columns = _to_number(columns);

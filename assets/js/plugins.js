@@ -8,10 +8,8 @@
 */
 !function(a){a.fn.fitVids=function(b){var c={customSelector:null},d=document.createElement("div"),e=document.getElementsByTagName("base")[0]||document.getElementsByTagName("script")[0];return d.className="fit-vids-style",d.innerHTML="&shy;<style>               .fluid-width-video-wrapper {                 width: 100%;                              position: relative;                       padding: 0;                            }                                                                                   .fluid-width-video-wrapper iframe,        .fluid-width-video-wrapper object,        .fluid-width-video-wrapper embed {           position: absolute;                       top: 0;                                   left: 0;                                  width: 100%;                              height: 100%;                          }                                       </style>",e.parentNode.insertBefore(d,e),b&&a.extend(c,b),this.each(function(){var b=["iframe[src*='player.vimeo.com']","iframe[src*='www.youtube.com']","iframe[src*='www.kickstarter.com']","object","embed"];c.customSelector&&b.push(c.customSelector);var d=a(this).find(b.join(","));d.each(function(){var b=a(this);if(!("embed"==this.tagName.toLowerCase()&&b.parent("object").length||b.parent(".fluid-width-video-wrapper").length)){var c="object"==this.tagName.toLowerCase()?b.attr("height"):b.height(),d=c/b.width();if(!b.attr("id")){var e="fitvid"+Math.floor(999999*Math.random());b.attr("id",e)}b.wrap('<div class="fluid-width-video-wrapper"></div>').parent(".fluid-width-video-wrapper").css("padding-top",100*d+"%"),b.removeAttr("height").removeAttr("width")}})})}}(jQuery);
 
-/*! Magnific Popup - v1.0.0 - 2015-01-03
-* http://dimsemenov.com/plugins/magnific-popup/
-* Copyright (c) 2015 Dmitry Semenov; */
-!function(a){"function"==typeof define&&define.amd?define(["jquery"],a):a("object"==typeof exports?require("jquery"):window.jQuery||window.Zepto)}(function(a){var b,c,d,e,f,g,h="Close",i="BeforeClose",j="AfterClose",k="BeforeAppend",l="MarkupParse",m="Open",n="Change",o="mfp",p="."+o,q="mfp-ready",r="mfp-removing",s="mfp-prevent-close",t=function(){},u=!!window.jQuery,v=a(window),w=function(a,c){b.ev.on(o+a+p,c)},x=function(b,c,d,e){var f=document.createElement("div");return f.className="mfp-"+b,d&&(f.innerHTML=d),e?c&&c.appendChild(f):(f=a(f),c&&f.appendTo(c)),f},y=function(c,d){b.ev.triggerHandler(o+c,d),b.st.callbacks&&(c=c.charAt(0).toLowerCase()+c.slice(1),b.st.callbacks[c]&&b.st.callbacks[c].apply(b,a.isArray(d)?d:[d]))},z=function(c){return c===g&&b.currTemplate.closeBtn||(b.currTemplate.closeBtn=a(b.st.closeMarkup.replace("%title%",b.st.tClose)),g=c),b.currTemplate.closeBtn},A=function(){a.magnificPopup.instance||(b=new t,b.init(),a.magnificPopup.instance=b)},B=function(){var a=document.createElement("p").style,b=["ms","O","Moz","Webkit"];if(void 0!==a.transition)return!0;for(;b.length;)if(b.pop()+"Transition"in a)return!0;return!1};t.prototype={constructor:t,init:function(){var c=navigator.appVersion;b.isIE7=-1!==c.indexOf("MSIE 7."),b.isIE8=-1!==c.indexOf("MSIE 8."),b.isLowIE=b.isIE7||b.isIE8,b.isAndroid=/android/gi.test(c),b.isIOS=/iphone|ipad|ipod/gi.test(c),b.supportsTransition=B(),b.probablyMobile=b.isAndroid||b.isIOS||/(Opera Mini)|Kindle|webOS|BlackBerry|(Opera Mobi)|(Windows Phone)|IEMobile/i.test(navigator.userAgent),d=a(document),b.popupsCache={}},open:function(c){var e;if(c.isObj===!1){b.items=c.items.toArray(),b.index=0;var g,h=c.items;for(e=0;e<h.length;e++)if(g=h[e],g.parsed&&(g=g.el[0]),g===c.el[0]){b.index=e;break}}else b.items=a.isArray(c.items)?c.items:[c.items],b.index=c.index||0;if(b.isOpen)return void b.updateItemHTML();b.types=[],f="",b.ev=c.mainEl&&c.mainEl.length?c.mainEl.eq(0):d,c.key?(b.popupsCache[c.key]||(b.popupsCache[c.key]={}),b.currTemplate=b.popupsCache[c.key]):b.currTemplate={},b.st=a.extend(!0,{},a.magnificPopup.defaults,c),b.fixedContentPos="auto"===b.st.fixedContentPos?!b.probablyMobile:b.st.fixedContentPos,b.st.modal&&(b.st.closeOnContentClick=!1,b.st.closeOnBgClick=!1,b.st.showCloseBtn=!1,b.st.enableEscapeKey=!1),b.bgOverlay||(b.bgOverlay=x("bg").on("click"+p,function(){b.close()}),b.wrap=x("wrap").attr("tabindex",-1).on("click"+p,function(a){b._checkIfClose(a.target)&&b.close()}),b.container=x("container",b.wrap)),b.contentContainer=x("content"),b.st.preloader&&(b.preloader=x("preloader",b.container,b.st.tLoading));var i=a.magnificPopup.modules;for(e=0;e<i.length;e++){var j=i[e];j=j.charAt(0).toUpperCase()+j.slice(1),b["init"+j].call(b)}y("BeforeOpen"),b.st.showCloseBtn&&(b.st.closeBtnInside?(w(l,function(a,b,c,d){c.close_replaceWith=z(d.type)}),f+=" mfp-close-btn-in"):b.wrap.append(z())),b.st.alignTop&&(f+=" mfp-align-top"),b.wrap.css(b.fixedContentPos?{overflow:b.st.overflowY,overflowX:"hidden",overflowY:b.st.overflowY}:{top:v.scrollTop(),position:"absolute"}),(b.st.fixedBgPos===!1||"auto"===b.st.fixedBgPos&&!b.fixedContentPos)&&b.bgOverlay.css({height:d.height(),position:"absolute"}),b.st.enableEscapeKey&&d.on("keyup"+p,function(a){27===a.keyCode&&b.close()}),v.on("resize"+p,function(){b.updateSize()}),b.st.closeOnContentClick||(f+=" mfp-auto-cursor"),f&&b.wrap.addClass(f);var k=b.wH=v.height(),n={};if(b.fixedContentPos&&b._hasScrollBar(k)){var o=b._getScrollbarSize();o&&(n.marginRight=o)}b.fixedContentPos&&(b.isIE7?a("body, html").css("overflow","hidden"):n.overflow="hidden");var r=b.st.mainClass;return b.isIE7&&(r+=" mfp-ie7"),r&&b._addClassToMFP(r),b.updateItemHTML(),y("BuildControls"),a("html").css(n),b.bgOverlay.add(b.wrap).prependTo(b.st.prependTo||a(document.body)),b._lastFocusedEl=document.activeElement,setTimeout(function(){b.content?(b._addClassToMFP(q),b._setFocus()):b.bgOverlay.addClass(q),d.on("focusin"+p,b._onFocusIn)},16),b.isOpen=!0,b.updateSize(k),y(m),c},close:function(){b.isOpen&&(y(i),b.isOpen=!1,b.st.removalDelay&&!b.isLowIE&&b.supportsTransition?(b._addClassToMFP(r),setTimeout(function(){b._close()},b.st.removalDelay)):b._close())},_close:function(){y(h);var c=r+" "+q+" ";if(b.bgOverlay.detach(),b.wrap.detach(),b.container.empty(),b.st.mainClass&&(c+=b.st.mainClass+" "),b._removeClassFromMFP(c),b.fixedContentPos){var e={marginRight:""};b.isIE7?a("body, html").css("overflow",""):e.overflow="",a("html").css(e)}d.off("keyup"+p+" focusin"+p),b.ev.off(p),b.wrap.attr("class","mfp-wrap").removeAttr("style"),b.bgOverlay.attr("class","mfp-bg"),b.container.attr("class","mfp-container"),!b.st.showCloseBtn||b.st.closeBtnInside&&b.currTemplate[b.currItem.type]!==!0||b.currTemplate.closeBtn&&b.currTemplate.closeBtn.detach(),b._lastFocusedEl&&a(b._lastFocusedEl).focus(),b.currItem=null,b.content=null,b.currTemplate=null,b.prevHeight=0,y(j)},updateSize:function(a){if(b.isIOS){var c=document.documentElement.clientWidth/window.innerWidth,d=window.innerHeight*c;b.wrap.css("height",d),b.wH=d}else b.wH=a||v.height();b.fixedContentPos||b.wrap.css("height",b.wH),y("Resize")},updateItemHTML:function(){var c=b.items[b.index];b.contentContainer.detach(),b.content&&b.content.detach(),c.parsed||(c=b.parseEl(b.index));var d=c.type;if(y("BeforeChange",[b.currItem?b.currItem.type:"",d]),b.currItem=c,!b.currTemplate[d]){var f=b.st[d]?b.st[d].markup:!1;y("FirstMarkupParse",f),b.currTemplate[d]=f?a(f):!0}e&&e!==c.type&&b.container.removeClass("mfp-"+e+"-holder");var g=b["get"+d.charAt(0).toUpperCase()+d.slice(1)](c,b.currTemplate[d]);b.appendContent(g,d),c.preloaded=!0,y(n,c),e=c.type,b.container.prepend(b.contentContainer),y("AfterChange")},appendContent:function(a,c){b.content=a,a?b.st.showCloseBtn&&b.st.closeBtnInside&&b.currTemplate[c]===!0?b.content.find(".mfp-close").length||b.content.append(z()):b.content=a:b.content="",y(k),b.container.addClass("mfp-"+c+"-holder"),b.contentContainer.append(b.content)},parseEl:function(c){var d,e=b.items[c];if(e.tagName?e={el:a(e)}:(d=e.type,e={data:e,src:e.src}),e.el){for(var f=b.types,g=0;g<f.length;g++)if(e.el.hasClass("mfp-"+f[g])){d=f[g];break}e.src=e.el.attr("data-mfp-src"),e.src||(e.src=e.el.attr("href"))}return e.type=d||b.st.type||"inline",e.index=c,e.parsed=!0,b.items[c]=e,y("ElementParse",e),b.items[c]},addGroup:function(a,c){var d=function(d){d.mfpEl=this,b._openClick(d,a,c)};c||(c={});var e="click.magnificPopup";c.mainEl=a,c.items?(c.isObj=!0,a.off(e).on(e,d)):(c.isObj=!1,c.delegate?a.off(e).on(e,c.delegate,d):(c.items=a,a.off(e).on(e,d)))},_openClick:function(c,d,e){var f=void 0!==e.midClick?e.midClick:a.magnificPopup.defaults.midClick;if(f||2!==c.which&&!c.ctrlKey&&!c.metaKey){var g=void 0!==e.disableOn?e.disableOn:a.magnificPopup.defaults.disableOn;if(g)if(a.isFunction(g)){if(!g.call(b))return!0}else if(v.width()<g)return!0;c.type&&(c.preventDefault(),b.isOpen&&c.stopPropagation()),e.el=a(c.mfpEl),e.delegate&&(e.items=d.find(e.delegate)),b.open(e)}},updateStatus:function(a,d){if(b.preloader){c!==a&&b.container.removeClass("mfp-s-"+c),d||"loading"!==a||(d=b.st.tLoading);var e={status:a,text:d};y("UpdateStatus",e),a=e.status,d=e.text,b.preloader.html(d),b.preloader.find("a").on("click",function(a){a.stopImmediatePropagation()}),b.container.addClass("mfp-s-"+a),c=a}},_checkIfClose:function(c){if(!a(c).hasClass(s)){var d=b.st.closeOnContentClick,e=b.st.closeOnBgClick;if(d&&e)return!0;if(!b.content||a(c).hasClass("mfp-close")||b.preloader&&c===b.preloader[0])return!0;if(c===b.content[0]||a.contains(b.content[0],c)){if(d)return!0}else if(e&&a.contains(document,c))return!0;return!1}},_addClassToMFP:function(a){b.bgOverlay.addClass(a),b.wrap.addClass(a)},_removeClassFromMFP:function(a){this.bgOverlay.removeClass(a),b.wrap.removeClass(a)},_hasScrollBar:function(a){return(b.isIE7?d.height():document.body.scrollHeight)>(a||v.height())},_setFocus:function(){(b.st.focus?b.content.find(b.st.focus).eq(0):b.wrap).focus()},_onFocusIn:function(c){return c.target===b.wrap[0]||a.contains(b.wrap[0],c.target)?void 0:(b._setFocus(),!1)},_parseMarkup:function(b,c,d){var e;d.data&&(c=a.extend(d.data,c)),y(l,[b,c,d]),a.each(c,function(a,c){if(void 0===c||c===!1)return!0;if(e=a.split("_"),e.length>1){var d=b.find(p+"-"+e[0]);if(d.length>0){var f=e[1];"replaceWith"===f?d[0]!==c[0]&&d.replaceWith(c):"img"===f?d.is("img")?d.attr("src",c):d.replaceWith('<img src="'+c+'" class="'+d.attr("class")+'" />'):d.attr(e[1],c)}}else b.find(p+"-"+a).html(c)})},_getScrollbarSize:function(){if(void 0===b.scrollbarSize){var a=document.createElement("div");a.style.cssText="width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;",document.body.appendChild(a),b.scrollbarSize=a.offsetWidth-a.clientWidth,document.body.removeChild(a)}return b.scrollbarSize}},a.magnificPopup={instance:null,proto:t.prototype,modules:[],open:function(b,c){return A(),b=b?a.extend(!0,{},b):{},b.isObj=!0,b.index=c||0,this.instance.open(b)},close:function(){return a.magnificPopup.instance&&a.magnificPopup.instance.close()},registerModule:function(b,c){c.options&&(a.magnificPopup.defaults[b]=c.options),a.extend(this.proto,c.proto),this.modules.push(b)},defaults:{disableOn:0,key:null,midClick:!1,mainClass:"",preloader:!0,focus:"",closeOnContentClick:!1,closeOnBgClick:!0,closeBtnInside:!0,showCloseBtn:!0,enableEscapeKey:!0,modal:!1,alignTop:!1,removalDelay:0,prependTo:null,fixedContentPos:"auto",fixedBgPos:"auto",overflowY:"auto",closeMarkup:'<button title="%title%" type="button" class="mfp-close">&times;</button>',tClose:"Close (Esc)",tLoading:"Loading..."}},a.fn.magnificPopup=function(c){A();var d=a(this);if("string"==typeof c)if("open"===c){var e,f=u?d.data("magnificPopup"):d[0].magnificPopup,g=parseInt(arguments[1],10)||0;f.items?e=f.items[g]:(e=d,f.delegate&&(e=e.find(f.delegate)),e=e.eq(g)),b._openClick({mfpEl:e},d,f)}else b.isOpen&&b[c].apply(b,Array.prototype.slice.call(arguments,1));else c=a.extend(!0,{},c),u?d.data("magnificPopup",c):d[0].magnificPopup=c,b.addGroup(d,c);return d};var C,D,E,F="inline",G=function(){E&&(D.after(E.addClass(C)).detach(),E=null)};a.magnificPopup.registerModule(F,{options:{hiddenClass:"hide",markup:"",tNotFound:"Content not found"},proto:{initInline:function(){b.types.push(F),w(h+"."+F,function(){G()})},getInline:function(c,d){if(G(),c.src){var e=b.st.inline,f=a(c.src);if(f.length){var g=f[0].parentNode;g&&g.tagName&&(D||(C=e.hiddenClass,D=x(C),C="mfp-"+C),E=f.after(D).detach().removeClass(C)),b.updateStatus("ready")}else b.updateStatus("error",e.tNotFound),f=a("<div>");return c.inlineElement=f,f}return b.updateStatus("ready"),b._parseMarkup(d,{},c),d}}});var H,I="ajax",J=function(){H&&a(document.body).removeClass(H)},K=function(){J(),b.req&&b.req.abort()};a.magnificPopup.registerModule(I,{options:{settings:null,cursor:"mfp-ajax-cur",tError:'<a href="%url%">The content</a> could not be loaded.'},proto:{initAjax:function(){b.types.push(I),H=b.st.ajax.cursor,w(h+"."+I,K),w("BeforeChange."+I,K)},getAjax:function(c){H&&a(document.body).addClass(H),b.updateStatus("loading");var d=a.extend({url:c.src,success:function(d,e,f){var g={data:d,xhr:f};y("ParseAjax",g),b.appendContent(a(g.data),I),c.finished=!0,J(),b._setFocus(),setTimeout(function(){b.wrap.addClass(q)},16),b.updateStatus("ready"),y("AjaxContentAdded")},error:function(){J(),c.finished=c.loadError=!0,b.updateStatus("error",b.st.ajax.tError.replace("%url%",c.src))}},b.st.ajax.settings);return b.req=a.ajax(d),""}}});var L,M=function(c){if(c.data&&void 0!==c.data.title)return c.data.title;var d=b.st.image.titleSrc;if(d){if(a.isFunction(d))return d.call(b,c);if(c.el)return c.el.attr(d)||""}return""};a.magnificPopup.registerModule("image",{options:{markup:'<div class="mfp-figure"><div class="mfp-close"></div><figure><div class="mfp-img"></div><figcaption><div class="mfp-bottom-bar"><div class="mfp-title"></div><div class="mfp-counter"></div></div></figcaption></figure></div>',cursor:"mfp-zoom-out-cur",titleSrc:"title",verticalFit:!0,tError:'<a href="%url%">The image</a> could not be loaded.'},proto:{initImage:function(){var c=b.st.image,d=".image";b.types.push("image"),w(m+d,function(){"image"===b.currItem.type&&c.cursor&&a(document.body).addClass(c.cursor)}),w(h+d,function(){c.cursor&&a(document.body).removeClass(c.cursor),v.off("resize"+p)}),w("Resize"+d,b.resizeImage),b.isLowIE&&w("AfterChange",b.resizeImage)},resizeImage:function(){var a=b.currItem;if(a&&a.img&&b.st.image.verticalFit){var c=0;b.isLowIE&&(c=parseInt(a.img.css("padding-top"),10)+parseInt(a.img.css("padding-bottom"),10)),a.img.css("max-height",b.wH-c)}},_onImageHasSize:function(a){a.img&&(a.hasSize=!0,L&&clearInterval(L),a.isCheckingImgSize=!1,y("ImageHasSize",a),a.imgHidden&&(b.content&&b.content.removeClass("mfp-loading"),a.imgHidden=!1))},findImageSize:function(a){var c=0,d=a.img[0],e=function(f){L&&clearInterval(L),L=setInterval(function(){return d.naturalWidth>0?void b._onImageHasSize(a):(c>200&&clearInterval(L),c++,void(3===c?e(10):40===c?e(50):100===c&&e(500)))},f)};e(1)},getImage:function(c,d){var e=0,f=function(){c&&(c.img[0].complete?(c.img.off(".mfploader"),c===b.currItem&&(b._onImageHasSize(c),b.updateStatus("ready")),c.hasSize=!0,c.loaded=!0,y("ImageLoadComplete")):(e++,200>e?setTimeout(f,100):g()))},g=function(){c&&(c.img.off(".mfploader"),c===b.currItem&&(b._onImageHasSize(c),b.updateStatus("error",h.tError.replace("%url%",c.src))),c.hasSize=!0,c.loaded=!0,c.loadError=!0)},h=b.st.image,i=d.find(".mfp-img");if(i.length){var j=document.createElement("img");j.className="mfp-img",c.el&&c.el.find("img").length&&(j.alt=c.el.find("img").attr("alt")),c.img=a(j).on("load.mfploader",f).on("error.mfploader",g),j.src=c.src,i.is("img")&&(c.img=c.img.clone()),j=c.img[0],j.naturalWidth>0?c.hasSize=!0:j.width||(c.hasSize=!1)}return b._parseMarkup(d,{title:M(c),img_replaceWith:c.img},c),b.resizeImage(),c.hasSize?(L&&clearInterval(L),c.loadError?(d.addClass("mfp-loading"),b.updateStatus("error",h.tError.replace("%url%",c.src))):(d.removeClass("mfp-loading"),b.updateStatus("ready")),d):(b.updateStatus("loading"),c.loading=!0,c.hasSize||(c.imgHidden=!0,d.addClass("mfp-loading"),b.findImageSize(c)),d)}}});var N,O=function(){return void 0===N&&(N=void 0!==document.createElement("p").style.MozTransform),N};a.magnificPopup.registerModule("zoom",{options:{enabled:!1,easing:"ease-in-out",duration:300,opener:function(a){return a.is("img")?a:a.find("img")}},proto:{initZoom:function(){var a,c=b.st.zoom,d=".zoom";if(c.enabled&&b.supportsTransition){var e,f,g=c.duration,j=function(a){var b=a.clone().removeAttr("style").removeAttr("class").addClass("mfp-animated-image"),d="all "+c.duration/1e3+"s "+c.easing,e={position:"fixed",zIndex:9999,left:0,top:0,"-webkit-backface-visibility":"hidden"},f="transition";return e["-webkit-"+f]=e["-moz-"+f]=e["-o-"+f]=e[f]=d,b.css(e),b},k=function(){b.content.css("visibility","visible")};w("BuildControls"+d,function(){if(b._allowZoom()){if(clearTimeout(e),b.content.css("visibility","hidden"),a=b._getItemToZoom(),!a)return void k();f=j(a),f.css(b._getOffset()),b.wrap.append(f),e=setTimeout(function(){f.css(b._getOffset(!0)),e=setTimeout(function(){k(),setTimeout(function(){f.remove(),a=f=null,y("ZoomAnimationEnded")},16)},g)},16)}}),w(i+d,function(){if(b._allowZoom()){if(clearTimeout(e),b.st.removalDelay=g,!a){if(a=b._getItemToZoom(),!a)return;f=j(a)}f.css(b._getOffset(!0)),b.wrap.append(f),b.content.css("visibility","hidden"),setTimeout(function(){f.css(b._getOffset())},16)}}),w(h+d,function(){b._allowZoom()&&(k(),f&&f.remove(),a=null)})}},_allowZoom:function(){return"image"===b.currItem.type},_getItemToZoom:function(){return b.currItem.hasSize?b.currItem.img:!1},_getOffset:function(c){var d;d=c?b.currItem.img:b.st.zoom.opener(b.currItem.el||b.currItem);var e=d.offset(),f=parseInt(d.css("padding-top"),10),g=parseInt(d.css("padding-bottom"),10);e.top-=a(window).scrollTop()-f;var h={width:d.width(),height:(u?d.innerHeight():d[0].offsetHeight)-g-f};return O()?h["-moz-transform"]=h.transform="translate("+e.left+"px,"+e.top+"px)":(h.left=e.left,h.top=e.top),h}}});var P="iframe",Q="//about:blank",R=function(a){if(b.currTemplate[P]){var c=b.currTemplate[P].find("iframe");c.length&&(a||(c[0].src=Q),b.isIE8&&c.css("display",a?"block":"none"))}};a.magnificPopup.registerModule(P,{options:{markup:'<div class="mfp-iframe-scaler"><div class="mfp-close"></div><iframe class="mfp-iframe" src="//about:blank" frameborder="0" allowfullscreen></iframe></div>',srcAction:"iframe_src",patterns:{youtube:{index:"youtube.com",id:"v=",src:"//www.youtube.com/embed/%id%?autoplay=1"},vimeo:{index:"vimeo.com/",id:"/",src:"//player.vimeo.com/video/%id%?autoplay=1"},gmaps:{index:"//maps.google.",src:"%id%&output=embed"}}},proto:{initIframe:function(){b.types.push(P),w("BeforeChange",function(a,b,c){b!==c&&(b===P?R():c===P&&R(!0))}),w(h+"."+P,function(){R()})},getIframe:function(c,d){var e=c.src,f=b.st.iframe;a.each(f.patterns,function(){return e.indexOf(this.index)>-1?(this.id&&(e="string"==typeof this.id?e.substr(e.lastIndexOf(this.id)+this.id.length,e.length):this.id.call(this,e)),e=this.src.replace("%id%",e),!1):void 0});var g={};return f.srcAction&&(g[f.srcAction]=e),b._parseMarkup(d,g,c),b.updateStatus("ready"),d}}});var S=function(a){var c=b.items.length;return a>c-1?a-c:0>a?c+a:a},T=function(a,b,c){return a.replace(/%curr%/gi,b+1).replace(/%total%/gi,c)};a.magnificPopup.registerModule("gallery",{options:{enabled:!1,arrowMarkup:'<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>',preload:[0,2],navigateByImgClick:!0,arrows:!0,tPrev:"Previous (Left arrow key)",tNext:"Next (Right arrow key)",tCounter:"%curr% of %total%"},proto:{initGallery:function(){var c=b.st.gallery,e=".mfp-gallery",g=Boolean(a.fn.mfpFastClick);return b.direction=!0,c&&c.enabled?(f+=" mfp-gallery",w(m+e,function(){c.navigateByImgClick&&b.wrap.on("click"+e,".mfp-img",function(){return b.items.length>1?(b.next(),!1):void 0}),d.on("keydown"+e,function(a){37===a.keyCode?b.prev():39===a.keyCode&&b.next()})}),w("UpdateStatus"+e,function(a,c){c.text&&(c.text=T(c.text,b.currItem.index,b.items.length))}),w(l+e,function(a,d,e,f){var g=b.items.length;e.counter=g>1?T(c.tCounter,f.index,g):""}),w("BuildControls"+e,function(){if(b.items.length>1&&c.arrows&&!b.arrowLeft){var d=c.arrowMarkup,e=b.arrowLeft=a(d.replace(/%title%/gi,c.tPrev).replace(/%dir%/gi,"left")).addClass(s),f=b.arrowRight=a(d.replace(/%title%/gi,c.tNext).replace(/%dir%/gi,"right")).addClass(s),h=g?"mfpFastClick":"click";e[h](function(){b.prev()}),f[h](function(){b.next()}),b.isIE7&&(x("b",e[0],!1,!0),x("a",e[0],!1,!0),x("b",f[0],!1,!0),x("a",f[0],!1,!0)),b.container.append(e.add(f))}}),w(n+e,function(){b._preloadTimeout&&clearTimeout(b._preloadTimeout),b._preloadTimeout=setTimeout(function(){b.preloadNearbyImages(),b._preloadTimeout=null},16)}),void w(h+e,function(){d.off(e),b.wrap.off("click"+e),b.arrowLeft&&g&&b.arrowLeft.add(b.arrowRight).destroyMfpFastClick(),b.arrowRight=b.arrowLeft=null})):!1},next:function(){b.direction=!0,b.index=S(b.index+1),b.updateItemHTML()},prev:function(){b.direction=!1,b.index=S(b.index-1),b.updateItemHTML()},goTo:function(a){b.direction=a>=b.index,b.index=a,b.updateItemHTML()},preloadNearbyImages:function(){var a,c=b.st.gallery.preload,d=Math.min(c[0],b.items.length),e=Math.min(c[1],b.items.length);for(a=1;a<=(b.direction?e:d);a++)b._preloadItem(b.index+a);for(a=1;a<=(b.direction?d:e);a++)b._preloadItem(b.index-a)},_preloadItem:function(c){if(c=S(c),!b.items[c].preloaded){var d=b.items[c];d.parsed||(d=b.parseEl(c)),y("LazyLoad",d),"image"===d.type&&(d.img=a('<img class="mfp-img" />').on("load.mfploader",function(){d.hasSize=!0}).on("error.mfploader",function(){d.hasSize=!0,d.loadError=!0,y("LazyLoadError",d)}).attr("src",d.src)),d.preloaded=!0}}}});var U="retina";a.magnificPopup.registerModule(U,{options:{replaceSrc:function(a){return a.src.replace(/\.\w+$/,function(a){return"@2x"+a})},ratio:1},proto:{initRetina:function(){if(window.devicePixelRatio>1){var a=b.st.retina,c=a.ratio;c=isNaN(c)?c():c,c>1&&(w("ImageHasSize."+U,function(a,b){b.img.css({"max-width":b.img[0].naturalWidth/c,width:"100%"})}),w("ElementParse."+U,function(b,d){d.src=a.replaceSrc(d,c)}))}}}}),function(){var b=1e3,c="ontouchstart"in window,d=function(){v.off("touchmove"+f+" touchend"+f)},e="mfpFastClick",f="."+e;a.fn.mfpFastClick=function(e){return a(this).each(function(){var g,h=a(this);if(c){var i,j,k,l,m,n;h.on("touchstart"+f,function(a){l=!1,n=1,m=a.originalEvent?a.originalEvent.touches[0]:a.touches[0],j=m.clientX,k=m.clientY,v.on("touchmove"+f,function(a){m=a.originalEvent?a.originalEvent.touches:a.touches,n=m.length,m=m[0],(Math.abs(m.clientX-j)>10||Math.abs(m.clientY-k)>10)&&(l=!0,d())}).on("touchend"+f,function(a){d(),l||n>1||(g=!0,a.preventDefault(),clearTimeout(i),i=setTimeout(function(){g=!1},b),e())})})}h.on("click"+f,function(){g||e()})})},a.fn.destroyMfpFastClick=function(){a(this).off("touchstart"+f+" click"+f),c&&v.off("touchmove"+f+" touchend"+f)}}(),A()});
+
+
 
 
 /*!
@@ -159,424 +157,723 @@
 
 
 
+/*! lightgallery - v1.3.9 - 2017-02-05
+ * http://sachinchoolur.github.io/lightGallery/
+ * Copyright (c) 2017 Sachin N; Licensed GPLv3 */
+!function(a,b){"function"==typeof define&&define.amd?define(["jquery"],function(a){return b(a)}):"object"==typeof exports?module.exports=b(require("jquery")):b(a.jQuery)}(this,function(a){!function(){"use strict";function b(b,d){if(this.el=b,this.$el=a(b),this.s=a.extend({},c,d),this.s.dynamic&&"undefined"!==this.s.dynamicEl&&this.s.dynamicEl.constructor===Array&&!this.s.dynamicEl.length)throw"When using dynamic mode, you must also define dynamicEl as an Array.";return this.modules={},this.lGalleryOn=!1,this.lgBusy=!1,this.hideBartimeout=!1,this.isTouch="ontouchstart"in document.documentElement,this.s.slideEndAnimatoin&&(this.s.hideControlOnEnd=!1),this.s.dynamic?this.$items=this.s.dynamicEl:"this"===this.s.selector?this.$items=this.$el:""!==this.s.selector?this.s.selectWithin?this.$items=a(this.s.selectWithin).find(this.s.selector):this.$items=this.$el.find(a(this.s.selector)):this.$items=this.$el.children(),this.$slide="",this.$outer="",this.init(),this}var c={mode:"lg-slide",cssEasing:"ease",easing:"linear",speed:600,height:"100%",width:"100%",addClass:"",startClass:"lg-start-zoom",backdropDuration:150,hideBarsDelay:6e3,useLeft:!1,closable:!0,loop:!0,escKey:!0,keyPress:!0,controls:!0,slideEndAnimatoin:!0,hideControlOnEnd:!1,mousewheel:!0,getCaptionFromTitleOrAlt:!0,appendSubHtmlTo:".lg-sub-html",subHtmlSelectorRelative:!1,preload:1,showAfterLoad:!0,selector:"",selectWithin:"",nextHtml:"",prevHtml:"",index:!1,iframeMaxWidth:"100%",download:!0,counter:!0,appendCounterTo:".lg-toolbar",swipeThreshold:50,enableSwipe:!0,enableDrag:!0,dynamic:!1,dynamicEl:[],galleryId:1};b.prototype.init=function(){var b=this;b.s.preload>b.$items.length&&(b.s.preload=b.$items.length);var c=window.location.hash;c.indexOf("lg="+this.s.galleryId)>0&&(b.index=parseInt(c.split("&slide=")[1],10),a("body").addClass("lg-from-hash"),a("body").hasClass("lg-on")||(setTimeout(function(){b.build(b.index)}),a("body").addClass("lg-on"))),b.s.dynamic?(b.$el.trigger("onBeforeOpen.lg"),b.index=b.s.index||0,a("body").hasClass("lg-on")||setTimeout(function(){b.build(b.index),a("body").addClass("lg-on")})):b.$items.on("click.lgcustom",function(c){try{c.preventDefault(),c.preventDefault()}catch(a){c.returnValue=!1}b.$el.trigger("onBeforeOpen.lg"),b.index=b.s.index||b.$items.index(this),a("body").hasClass("lg-on")||(b.build(b.index),a("body").addClass("lg-on"))})},b.prototype.build=function(b){var c=this;c.structure(),a.each(a.fn.lightGallery.modules,function(b){c.modules[b]=new a.fn.lightGallery.modules[b](c.el)}),c.slide(b,!1,!1,!1),c.s.keyPress&&c.keyPress(),c.$items.length>1&&(c.arrow(),setTimeout(function(){c.enableDrag(),c.enableSwipe()},50),c.s.mousewheel&&c.mousewheel()),c.counter(),c.closeGallery(),c.$el.trigger("onAfterOpen.lg"),c.$outer.on("mousemove.lg click.lg touchstart.lg",function(){c.$outer.removeClass("lg-hide-items"),clearTimeout(c.hideBartimeout),c.hideBartimeout=setTimeout(function(){c.$outer.addClass("lg-hide-items")},c.s.hideBarsDelay)}),c.$outer.trigger("mousemove.lg")},b.prototype.structure=function(){var b,c="",d="",e=0,f="",g=this;for(a("body").append('<div class="lg-backdrop"></div>'),a(".lg-backdrop").css("transition-duration",this.s.backdropDuration+"ms"),e=0;e<this.$items.length;e++)c+='<div class="lg-item"></div>';if(this.s.controls&&this.$items.length>1&&(d='<div class="lg-actions"><div class="lg-prev lg-icon">'+this.s.prevHtml+'</div><div class="lg-next lg-icon">'+this.s.nextHtml+"</div></div>"),".lg-sub-html"===this.s.appendSubHtmlTo&&(f='<div class="lg-sub-html"></div>'),b='<div class="lg-outer '+this.s.addClass+" "+this.s.startClass+'"><div class="lg" style="width:'+this.s.width+"; height:"+this.s.height+'"><div class="lg-inner">'+c+'</div><div class="lg-toolbar lg-group"><span class="lg-close lg-icon"></span></div>'+d+f+"</div></div>",a("body").append(b),this.$outer=a(".lg-outer"),this.$slide=this.$outer.find(".lg-item"),this.s.useLeft?(this.$outer.addClass("lg-use-left"),this.s.mode="lg-slide"):this.$outer.addClass("lg-use-css3"),g.setTop(),a(window).on("resize.lg orientationchange.lg",function(){setTimeout(function(){g.setTop()},100)}),this.$slide.eq(this.index).addClass("lg-current"),this.doCss()?this.$outer.addClass("lg-css3"):(this.$outer.addClass("lg-css"),this.s.speed=0),this.$outer.addClass(this.s.mode),this.s.enableDrag&&this.$items.length>1&&this.$outer.addClass("lg-grab"),this.s.showAfterLoad&&this.$outer.addClass("lg-show-after-load"),this.doCss()){var h=this.$outer.find(".lg-inner");h.css("transition-timing-function",this.s.cssEasing),h.css("transition-duration",this.s.speed+"ms")}setTimeout(function(){a(".lg-backdrop").addClass("in")}),setTimeout(function(){g.$outer.addClass("lg-visible")},this.s.backdropDuration),this.s.download&&this.$outer.find(".lg-toolbar").append('<a id="lg-download" target="_blank" download class="lg-download lg-icon"></a>'),this.prevScrollTop=a(window).scrollTop()},b.prototype.setTop=function(){if("100%"!==this.s.height){var b=a(window).height(),c=(b-parseInt(this.s.height,10))/2,d=this.$outer.find(".lg");b>=parseInt(this.s.height,10)?d.css("top",c+"px"):d.css("top","0px")}},b.prototype.doCss=function(){var a=function(){var a=["transition","MozTransition","WebkitTransition","OTransition","msTransition","KhtmlTransition"],b=document.documentElement,c=0;for(c=0;c<a.length;c++)if(a[c]in b.style)return!0};return!!a()},b.prototype.isVideo=function(a,b){var c;if(c=this.s.dynamic?this.s.dynamicEl[b].html:this.$items.eq(b).attr("data-html"),!a&&c)return{html5:!0};var d=a.match(/\/\/(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=|embed\/)?([a-z0-9\-\_\%]+)/i),e=a.match(/\/\/(?:www\.)?vimeo.com\/([0-9a-z\-_]+)/i),f=a.match(/\/\/(?:www\.)?dai.ly\/([0-9a-z\-_]+)/i),g=a.match(/\/\/(?:www\.)?(?:vk\.com|vkontakte\.ru)\/(?:video_ext\.php\?)(.*)/i);return d?{youtube:d}:e?{vimeo:e}:f?{dailymotion:f}:g?{vk:g}:void 0},b.prototype.counter=function(){this.s.counter&&a(this.s.appendCounterTo).append('<div id="lg-counter"><span id="lg-counter-current">'+(parseInt(this.index,10)+1)+'</span> / <span id="lg-counter-all">'+this.$items.length+"</span></div>")},b.prototype.addHtml=function(b){var c,d,e=null;if(this.s.dynamic?this.s.dynamicEl[b].subHtmlUrl?c=this.s.dynamicEl[b].subHtmlUrl:e=this.s.dynamicEl[b].subHtml:(d=this.$items.eq(b),d.attr("data-sub-html-url")?c=d.attr("data-sub-html-url"):(e=d.attr("data-sub-html"),this.s.getCaptionFromTitleOrAlt&&!e&&(e=d.attr("title")||d.find("img").first().attr("alt")))),!c)if("undefined"!=typeof e&&null!==e){var f=e.substring(0,1);"."!==f&&"#"!==f||(e=this.s.subHtmlSelectorRelative&&!this.s.dynamic?d.find(e).html():a(e).html())}else e="";".lg-sub-html"===this.s.appendSubHtmlTo?c?this.$outer.find(this.s.appendSubHtmlTo).load(c):this.$outer.find(this.s.appendSubHtmlTo).html(e):c?this.$slide.eq(b).load(c):this.$slide.eq(b).append(e),"undefined"!=typeof e&&null!==e&&(""===e?this.$outer.find(this.s.appendSubHtmlTo).addClass("lg-empty-html"):this.$outer.find(this.s.appendSubHtmlTo).removeClass("lg-empty-html")),this.$el.trigger("onAfterAppendSubHtml.lg",[b])},b.prototype.preload=function(a){var b=1,c=1;for(b=1;b<=this.s.preload&&!(b>=this.$items.length-a);b++)this.loadContent(a+b,!1,0);for(c=1;c<=this.s.preload&&!(a-c<0);c++)this.loadContent(a-c,!1,0)},b.prototype.loadContent=function(b,c,d){var e,f,g,h,i,j,k=this,l=!1,m=function(b){for(var c=[],d=[],e=0;e<b.length;e++){var g=b[e].split(" ");""===g[0]&&g.splice(0,1),d.push(g[0]),c.push(g[1])}for(var h=a(window).width(),i=0;i<c.length;i++)if(parseInt(c[i],10)>h){f=d[i];break}};if(k.s.dynamic){if(k.s.dynamicEl[b].poster&&(l=!0,g=k.s.dynamicEl[b].poster),j=k.s.dynamicEl[b].html,f=k.s.dynamicEl[b].src,k.s.dynamicEl[b].responsive){var n=k.s.dynamicEl[b].responsive.split(",");m(n)}h=k.s.dynamicEl[b].srcset,i=k.s.dynamicEl[b].sizes}else{if(k.$items.eq(b).attr("data-poster")&&(l=!0,g=k.$items.eq(b).attr("data-poster")),j=k.$items.eq(b).attr("data-html"),f=k.$items.eq(b).attr("href")||k.$items.eq(b).attr("data-src"),k.$items.eq(b).attr("data-responsive")){var o=k.$items.eq(b).attr("data-responsive").split(",");m(o)}h=k.$items.eq(b).attr("data-srcset"),i=k.$items.eq(b).attr("data-sizes")}var p=!1;k.s.dynamic?k.s.dynamicEl[b].iframe&&(p=!0):"true"===k.$items.eq(b).attr("data-iframe")&&(p=!0);var q=k.isVideo(f,b);if(!k.$slide.eq(b).hasClass("lg-loaded")){if(p)k.$slide.eq(b).prepend('<div class="lg-video-cont" style="max-width:'+k.s.iframeMaxWidth+'"><div class="lg-video"><iframe class="lg-object" frameborder="0" src="'+f+'"  allowfullscreen="true"></iframe></div></div>');else if(l){var r="";r=q&&q.youtube?"lg-has-youtube":q&&q.vimeo?"lg-has-vimeo":"lg-has-html5",k.$slide.eq(b).prepend('<div class="lg-video-cont '+r+' "><div class="lg-video"><span class="lg-video-play"></span><img class="lg-object lg-has-poster" src="'+g+'" /></div></div>')}else q?(k.$slide.eq(b).prepend('<div class="lg-video-cont "><div class="lg-video"></div></div>'),k.$el.trigger("hasVideo.lg",[b,f,j])):k.$slide.eq(b).prepend('<div class="lg-img-wrap"><img class="lg-object lg-image" src="'+f+'" /></div>');if(k.$el.trigger("onAferAppendSlide.lg",[b]),e=k.$slide.eq(b).find(".lg-object"),i&&e.attr("sizes",i),h){e.attr("srcset",h);try{picturefill({elements:[e[0]]})}catch(a){console.error("Make sure you have included Picturefill version 2")}}".lg-sub-html"!==this.s.appendSubHtmlTo&&k.addHtml(b),k.$slide.eq(b).addClass("lg-loaded")}k.$slide.eq(b).find(".lg-object").on("load.lg error.lg",function(){var c=0;d&&!a("body").hasClass("lg-from-hash")&&(c=d),setTimeout(function(){k.$slide.eq(b).addClass("lg-complete"),k.$el.trigger("onSlideItemLoad.lg",[b,d||0])},c)}),q&&q.html5&&!l&&k.$slide.eq(b).addClass("lg-complete"),c===!0&&(k.$slide.eq(b).hasClass("lg-complete")?k.preload(b):k.$slide.eq(b).find(".lg-object").on("load.lg error.lg",function(){k.preload(b)}))},b.prototype.slide=function(b,c,d,e){var f=this.$outer.find(".lg-current").index(),g=this;if(!g.lGalleryOn||f!==b){var h=this.$slide.length,i=g.lGalleryOn?this.s.speed:0;if(!g.lgBusy){if(this.s.download){var j;j=g.s.dynamic?g.s.dynamicEl[b].downloadUrl!==!1&&(g.s.dynamicEl[b].downloadUrl||g.s.dynamicEl[b].src):"false"!==g.$items.eq(b).attr("data-download-url")&&(g.$items.eq(b).attr("data-download-url")||g.$items.eq(b).attr("href")||g.$items.eq(b).attr("data-src")),j?(a("#lg-download").attr("href",j),g.$outer.removeClass("lg-hide-download")):g.$outer.addClass("lg-hide-download")}if(this.$el.trigger("onBeforeSlide.lg",[f,b,c,d]),g.lgBusy=!0,clearTimeout(g.hideBartimeout),".lg-sub-html"===this.s.appendSubHtmlTo&&setTimeout(function(){g.addHtml(b)},i),this.arrowDisable(b),e||(b<f?e="prev":b>f&&(e="next")),c){this.$slide.removeClass("lg-prev-slide lg-current lg-next-slide");var k,l;h>2?(k=b-1,l=b+1,0===b&&f===h-1?(l=0,k=h-1):b===h-1&&0===f&&(l=0,k=h-1)):(k=0,l=1),"prev"===e?g.$slide.eq(l).addClass("lg-next-slide"):g.$slide.eq(k).addClass("lg-prev-slide"),g.$slide.eq(b).addClass("lg-current")}else g.$outer.addClass("lg-no-trans"),this.$slide.removeClass("lg-prev-slide lg-next-slide"),"prev"===e?(this.$slide.eq(b).addClass("lg-prev-slide"),this.$slide.eq(f).addClass("lg-next-slide")):(this.$slide.eq(b).addClass("lg-next-slide"),this.$slide.eq(f).addClass("lg-prev-slide")),setTimeout(function(){g.$slide.removeClass("lg-current"),g.$slide.eq(b).addClass("lg-current"),g.$outer.removeClass("lg-no-trans")},50);g.lGalleryOn?(setTimeout(function(){g.loadContent(b,!0,0)},this.s.speed+50),setTimeout(function(){g.lgBusy=!1,g.$el.trigger("onAfterSlide.lg",[f,b,c,d])},this.s.speed)):(g.loadContent(b,!0,g.s.backdropDuration),g.lgBusy=!1,g.$el.trigger("onAfterSlide.lg",[f,b,c,d])),g.lGalleryOn=!0,this.s.counter&&a("#lg-counter-current").text(b+1)}}},b.prototype.goToNextSlide=function(a){var b=this,c=b.s.loop;a&&b.$slide.length<3&&(c=!1),b.lgBusy||(b.index+1<b.$slide.length?(b.index++,b.$el.trigger("onBeforeNextSlide.lg",[b.index]),b.slide(b.index,a,!1,"next")):c?(b.index=0,b.$el.trigger("onBeforeNextSlide.lg",[b.index]),b.slide(b.index,a,!1,"next")):b.s.slideEndAnimatoin&&!a&&(b.$outer.addClass("lg-right-end"),setTimeout(function(){b.$outer.removeClass("lg-right-end")},400)))},b.prototype.goToPrevSlide=function(a){var b=this,c=b.s.loop;a&&b.$slide.length<3&&(c=!1),b.lgBusy||(b.index>0?(b.index--,b.$el.trigger("onBeforePrevSlide.lg",[b.index,a]),b.slide(b.index,a,!1,"prev")):c?(b.index=b.$items.length-1,b.$el.trigger("onBeforePrevSlide.lg",[b.index,a]),b.slide(b.index,a,!1,"prev")):b.s.slideEndAnimatoin&&!a&&(b.$outer.addClass("lg-left-end"),setTimeout(function(){b.$outer.removeClass("lg-left-end")},400)))},b.prototype.keyPress=function(){var b=this;this.$items.length>1&&a(window).on("keyup.lg",function(a){b.$items.length>1&&(37===a.keyCode&&(a.preventDefault(),b.goToPrevSlide()),39===a.keyCode&&(a.preventDefault(),b.goToNextSlide()))}),a(window).on("keydown.lg",function(a){b.s.escKey===!0&&27===a.keyCode&&(a.preventDefault(),b.$outer.hasClass("lg-thumb-open")?b.$outer.removeClass("lg-thumb-open"):b.destroy())})},b.prototype.arrow=function(){var a=this;this.$outer.find(".lg-prev").on("click.lg",function(){a.goToPrevSlide()}),this.$outer.find(".lg-next").on("click.lg",function(){a.goToNextSlide()})},b.prototype.arrowDisable=function(a){!this.s.loop&&this.s.hideControlOnEnd&&(a+1<this.$slide.length?this.$outer.find(".lg-next").removeAttr("disabled").removeClass("disabled"):this.$outer.find(".lg-next").attr("disabled","disabled").addClass("disabled"),a>0?this.$outer.find(".lg-prev").removeAttr("disabled").removeClass("disabled"):this.$outer.find(".lg-prev").attr("disabled","disabled").addClass("disabled"))},b.prototype.setTranslate=function(a,b,c){this.s.useLeft?a.css("left",b):a.css({transform:"translate3d("+b+"px, "+c+"px, 0px)"})},b.prototype.touchMove=function(b,c){var d=c-b;Math.abs(d)>15&&(this.$outer.addClass("lg-dragging"),this.setTranslate(this.$slide.eq(this.index),d,0),this.setTranslate(a(".lg-prev-slide"),-this.$slide.eq(this.index).width()+d,0),this.setTranslate(a(".lg-next-slide"),this.$slide.eq(this.index).width()+d,0))},b.prototype.touchEnd=function(a){var b=this;"lg-slide"!==b.s.mode&&b.$outer.addClass("lg-slide"),this.$slide.not(".lg-current, .lg-prev-slide, .lg-next-slide").css("opacity","0"),setTimeout(function(){b.$outer.removeClass("lg-dragging"),a<0&&Math.abs(a)>b.s.swipeThreshold?b.goToNextSlide(!0):a>0&&Math.abs(a)>b.s.swipeThreshold?b.goToPrevSlide(!0):Math.abs(a)<5&&b.$el.trigger("onSlideClick.lg"),b.$slide.removeAttr("style")}),setTimeout(function(){b.$outer.hasClass("lg-dragging")||"lg-slide"===b.s.mode||b.$outer.removeClass("lg-slide")},b.s.speed+100)},b.prototype.enableSwipe=function(){var a=this,b=0,c=0,d=!1;a.s.enableSwipe&&a.isTouch&&a.doCss()&&(a.$slide.on("touchstart.lg",function(c){a.$outer.hasClass("lg-zoomed")||a.lgBusy||(c.preventDefault(),a.manageSwipeClass(),b=c.originalEvent.targetTouches[0].pageX)}),a.$slide.on("touchmove.lg",function(e){a.$outer.hasClass("lg-zoomed")||(e.preventDefault(),c=e.originalEvent.targetTouches[0].pageX,a.touchMove(b,c),d=!0)}),a.$slide.on("touchend.lg",function(){a.$outer.hasClass("lg-zoomed")||(d?(d=!1,a.touchEnd(c-b)):a.$el.trigger("onSlideClick.lg"))}))},b.prototype.enableDrag=function(){var b=this,c=0,d=0,e=!1,f=!1;b.s.enableDrag&&!b.isTouch&&b.doCss()&&(b.$slide.on("mousedown.lg",function(d){b.$outer.hasClass("lg-zoomed")||(a(d.target).hasClass("lg-object")||a(d.target).hasClass("lg-video-play"))&&(d.preventDefault(),b.lgBusy||(b.manageSwipeClass(),c=d.pageX,e=!0,b.$outer.scrollLeft+=1,b.$outer.scrollLeft-=1,b.$outer.removeClass("lg-grab").addClass("lg-grabbing"),b.$el.trigger("onDragstart.lg")))}),a(window).on("mousemove.lg",function(a){e&&(f=!0,d=a.pageX,b.touchMove(c,d),b.$el.trigger("onDragmove.lg"))}),a(window).on("mouseup.lg",function(g){f?(f=!1,b.touchEnd(d-c),b.$el.trigger("onDragend.lg")):(a(g.target).hasClass("lg-object")||a(g.target).hasClass("lg-video-play"))&&b.$el.trigger("onSlideClick.lg"),e&&(e=!1,b.$outer.removeClass("lg-grabbing").addClass("lg-grab"))}))},b.prototype.manageSwipeClass=function(){var a=this.index+1,b=this.index-1;this.s.loop&&this.$slide.length>2&&(0===this.index?b=this.$slide.length-1:this.index===this.$slide.length-1&&(a=0)),this.$slide.removeClass("lg-next-slide lg-prev-slide"),b>-1&&this.$slide.eq(b).addClass("lg-prev-slide"),this.$slide.eq(a).addClass("lg-next-slide")},b.prototype.mousewheel=function(){var a=this;a.$outer.on("mousewheel.lg",function(b){b.deltaY&&(b.deltaY>0?a.goToPrevSlide():a.goToNextSlide(),b.preventDefault())})},b.prototype.closeGallery=function(){var b=this,c=!1;this.$outer.find(".lg-close").on("click.lg",function(){b.destroy()}),b.s.closable&&(b.$outer.on("mousedown.lg",function(b){c=!!(a(b.target).is(".lg-outer")||a(b.target).is(".lg-item ")||a(b.target).is(".lg-img-wrap"))}),b.$outer.on("mouseup.lg",function(d){(a(d.target).is(".lg-outer")||a(d.target).is(".lg-item ")||a(d.target).is(".lg-img-wrap")&&c)&&(b.$outer.hasClass("lg-dragging")||b.destroy())}))},b.prototype.destroy=function(b){var c=this;b||(c.$el.trigger("onBeforeClose.lg"),a(window).scrollTop(c.prevScrollTop)),b&&(c.s.dynamic||this.$items.off("click.lg click.lgcustom"),a.removeData(c.el,"lightGallery")),this.$el.off(".lg.tm"),a.each(a.fn.lightGallery.modules,function(a){c.modules[a]&&c.modules[a].destroy()}),this.lGalleryOn=!1,clearTimeout(c.hideBartimeout),this.hideBartimeout=!1,a(window).off(".lg"),a("body").removeClass("lg-on lg-from-hash"),c.$outer&&c.$outer.removeClass("lg-visible"),a(".lg-backdrop").removeClass("in"),setTimeout(function(){c.$outer&&c.$outer.remove(),a(".lg-backdrop").remove(),b||c.$el.trigger("onCloseAfter.lg")},c.s.backdropDuration+50)},a.fn.lightGallery=function(c){return this.each(function(){if(a.data(this,"lightGallery"))try{a(this).data("lightGallery").init()}catch(a){console.error("lightGallery has not initiated properly")}else a.data(this,"lightGallery",new b(this,c))})},a.fn.lightGallery.modules={}}()});
+
+
+
+(function($, window, document, undefined) {
 
- /*!
-  * parallax.js v1.3.1 (http://pixelcog.github.io/parallax.js/)
-  * @copyright 2015 PixelCog, Inc.
-  * @license MIT (https://github.com/pixelcog/parallax.js/blob/master/LICENSE)
-  */
-
- ;(function ( $, window, document, undefined ) {
-
-     // Polyfill for requestAnimationFrame
-     // via: https://gist.github.com/paulirish/1579671
-
-     (function() {
-         var lastTime = 0;
-         var vendors = ['ms', 'moz', 'webkit', 'o'];
-         for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-             window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-             window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-             || window[vendors[x]+'CancelRequestAnimationFrame'];
-         }
-
-         if (!window.requestAnimationFrame)
-             window.requestAnimationFrame = function(callback) {
-                 var currTime = new Date().getTime();
-                 var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-                 var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-                     timeToCall);
-                 lastTime = currTime + timeToCall;
-                 return id;
-             };
-
-         if (!window.cancelAnimationFrame)
-             window.cancelAnimationFrame = function(id) {
-                 clearTimeout(id);
-             };
-     }());
-
-
-     // Parallax Constructor
-
-     function Parallax(element, options) {
-         var self = this;
-
-         if (typeof options == 'object') {
-             delete options.refresh;
-             delete options.render;
-             $.extend(this, options);
-         }
-
-         this.$element = $(element);
-
-
-
-         if (!this.imageSrc && this.$element.is('img')) {
-             this.imageSrc = this.$element.attr('src');
-         }
-
-         var positions = (this.position + '').toLowerCase().match(/\S+/g) || [];
-
-         if (positions.length < 1) {
-             positions.push('center');
-         }
-         if (positions.length == 1) {
-             positions.push(positions[0]);
-         }
-
-         if (positions[0] == 'top' || positions[0] == 'bottom' || positions[1] == 'left' || positions[1] == 'right') {
-             positions = [positions[1], positions[0]];
-         }
-
-         if (this.positionX != undefined) positions[0] = this.positionX.toLowerCase();
-         if (this.positionY != undefined) positions[1] = this.positionY.toLowerCase();
-
-         self.positionX = positions[0];
-         self.positionY = positions[1];
-
-         if (this.positionX != 'left' && this.positionX != 'right') {
-             if (isNaN(parseInt(this.positionX))) {
-                 this.positionX = 'center';
-             } else {
-                 this.positionX = parseInt(this.positionX);
-             }
-         }
-
-         if (this.positionY != 'top' && this.positionY != 'bottom') {
-             if (isNaN(parseInt(this.positionY))) {
-                 this.positionY = 'center';
-             } else {
-                 this.positionY = parseInt(this.positionY);
-             }
-         }
-
-         this.position =
-             this.positionX + (isNaN(this.positionX)? '' : 'px') + ' ' +
-             this.positionY + (isNaN(this.positionY)? '' : 'px');
-
-         if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
-             if (this.imageSrc && this.iosFix && !this.$element.is('img')) {
-                 this.$element.css({
-                     backgroundImage: 'url(' + this.imageSrc + ')',
-                     backgroundSize: 'cover',
-                     backgroundPosition: this.position
-                 });
-             }
-             return this;
-         }
-
-         if (navigator.userAgent.match(/(Android)/)) {
-             if (this.imageSrc && this.androidFix && !this.$element.is('img')) {
-                 this.$element.css({
-                     backgroundImage: 'url(' + this.imageSrc + ')',
-                     backgroundSize: 'cover',
-                     backgroundPosition: this.position
-                 });
-             }
-             return this;
-         }
-
-        // this.$mirror = $('<div />').prependTo('body');
-         this.$mirror = $('<div />').prependTo( this.$element );
-
-         /**
-          * add by sa  shrimp2t
-          * @type {*|string}
-          */
-         var el_id = this.$element.attr( 'id' ) || '';
-         if ( typeof el_id === "undefined" || el_id === '' ){
-             el_id = 'parallax-'+ ( new Date().getTime() );
-             this.$element.attr( 'id',  el_id );
-         }
-         this.$mirror.attr( 'id', 'mirror-' + el_id );
-
-
-
-         var slider = this.$element.find('>.parallax-slider');
-         var sliderExisted = false;
-
-         if (slider.length == 0)
-             this.$slider = $('<img />').prependTo(this.$mirror);
-         else {
-             this.$slider = slider.prependTo(this.$mirror)
-             sliderExisted = true;
-         }
-
-         this.$mirror.addClass('parallax-mirror').css({
-             visibility: 'hidden',
-             zIndex: this.zIndex,
-             position: 'fixed',
-             top: 0,
-             left: 0,
-             overflow: 'hidden'
-         });
-
-         this.$slider.addClass('parallax-slider').one('load', function() {
-             if (!self.naturalHeight || !self.naturalWidth) {
-                 self.naturalHeight = this.naturalHeight || this.height || 1;
-                 self.naturalWidth  = this.naturalWidth  || this.width  || 1;
-             }
-             self.aspectRatio = self.naturalWidth / self.naturalHeight;
-
-             Parallax.isSetup || Parallax.setup();
-             Parallax.sliders.push(self);
-             Parallax.isFresh = false;
-             Parallax.requestRender();
-         });
-
-         if (!sliderExisted)
-             this.$slider[0].src = this.imageSrc;
-
-         if (this.naturalHeight && this.naturalWidth || this.$slider[0].complete || slider.length > 0) {
-             this.$slider.trigger('load');
-         }
-
-     };
-
-
-     // Parallax Instance Methods
-
-     $.extend(Parallax.prototype, {
-         speed:    0.2,
-         bleed:    0,
-         zIndex:   -100,
-         iosFix:   true,
-         androidFix: true,
-         position: 'center',
-         overScrollFix: false,
-
-         refresh: function() {
-             this.boxWidth        = this.$element.outerWidth();
-             this.boxHeight       = this.$element.outerHeight() + this.bleed * 2;
-             this.boxOffsetTop    = this.$element.offset().top - this.bleed;
-             this.boxOffsetLeft   = this.$element.offset().left;
-             this.boxOffsetBottom = this.boxOffsetTop + this.boxHeight;
-
-             var winHeight = Parallax.winHeight;
-             var docHeight = Parallax.docHeight;
-             var maxOffset = Math.min(this.boxOffsetTop, docHeight - winHeight);
-             var minOffset = Math.max(this.boxOffsetTop + this.boxHeight - winHeight, 0);
-             var imageHeightMin = this.boxHeight + (maxOffset - minOffset) * (1 - this.speed) | 0;
-             var imageOffsetMin = (this.boxOffsetTop - maxOffset) * (1 - this.speed) | 0;
-
-             if (imageHeightMin * this.aspectRatio >= this.boxWidth) {
-                 this.imageWidth    = imageHeightMin * this.aspectRatio | 0;
-                 this.imageHeight   = imageHeightMin;
-                 this.offsetBaseTop = imageOffsetMin;
-
-                 var margin = this.imageWidth - this.boxWidth;
-
-                 if (this.positionX == 'left') {
-                     this.offsetLeft = 0;
-                 } else if (this.positionX == 'right') {
-                     this.offsetLeft = - margin;
-                 } else if (!isNaN(this.positionX)) {
-                     this.offsetLeft = Math.max(this.positionX, - margin);
-                 } else {
-                     this.offsetLeft = - margin / 2 | 0;
-                 }
-             } else {
-                 this.imageWidth    = this.boxWidth;
-                 this.imageHeight   = this.boxWidth / this.aspectRatio | 0;
-                 this.offsetLeft    = 0;
-
-                 var margin = this.imageHeight - imageHeightMin;
-
-                 if (this.positionY == 'top') {
-                     this.offsetBaseTop = imageOffsetMin;
-                 } else if (this.positionY == 'bottom') {
-                     this.offsetBaseTop = imageOffsetMin - margin;
-                 } else if (!isNaN(this.positionY)) {
-                     this.offsetBaseTop = imageOffsetMin + Math.max(this.positionY, - margin);
-                 } else {
-                     this.offsetBaseTop = imageOffsetMin - margin / 2 | 0;
-                 }
-             }
-         },
-
-         render: function() {
-             var scrollTop    = Parallax.scrollTop;
-             var scrollLeft   = Parallax.scrollLeft;
-             var overScroll   = this.overScrollFix ? Parallax.overScroll : 0;
-             var scrollBottom = scrollTop + Parallax.winHeight;
-
-             if (this.boxOffsetBottom > scrollTop && this.boxOffsetTop <= scrollBottom) {
-                 this.visibility = 'visible';
-             } else {
-                 this.visibility = 'hidden';
-             }
-             this.mirrorTop = this.boxOffsetTop  - scrollTop;
-             this.mirrorLeft = this.boxOffsetLeft - scrollLeft;
-             this.offsetTop = this.offsetBaseTop - this.mirrorTop * (1 - this.speed);
-
-             this.$mirror.css({
-                 transform: 'translate3d(0px, 0px, 0px)',
-                 visibility: this.visibility,
-                 top: this.mirrorTop - overScroll,
-                 left: this.mirrorLeft,
-                 height: this.boxHeight,
-                 width: this.boxWidth
-             });
-
-             this.$slider.css({
-                 transform: 'translate3d(0px, 0px, 0px)',
-                 position: 'absolute',
-                 top: this.offsetTop,
-                 left: this.offsetLeft,
-                 height: this.imageHeight,
-                 width: this.imageWidth,
-                 maxWidth: 'none'
-             });
-         }
-     });
-
-
-     // Parallax Static Methods
-
-     $.extend(Parallax, {
-         scrollTop:    0,
-         scrollLeft:   0,
-         winHeight:    0,
-         winWidth:     0,
-         docHeight:    1 << 30,
-         docWidth:     1 << 30,
-         sliders:      [],
-         isReady:      false,
-         isFresh:      false,
-         isBusy:       false,
-
-         setup: function() {
-             if (this.isReady) return;
-
-             var $doc = $(document), $win = $(window);
-
-             var loadDimensions = function() {
-                 Parallax.winHeight = $win.height();
-                 Parallax.winWidth  = $win.width();
-                 Parallax.docHeight = $doc.height();
-                 Parallax.docWidth  = $doc.width();
-             };
-
-             var loadScrollPosition = function() {
-                 var winScrollTop  = $win.scrollTop();
-                 var scrollTopMax  = Parallax.docHeight - Parallax.winHeight;
-                 var scrollLeftMax = Parallax.docWidth  - Parallax.winWidth;
-                 Parallax.scrollTop  = Math.max(0, Math.min(scrollTopMax,  winScrollTop));
-                 Parallax.scrollLeft = Math.max(0, Math.min(scrollLeftMax, $win.scrollLeft()));
-                 Parallax.overScroll = Math.max(winScrollTop - scrollTopMax, Math.min(winScrollTop, 0));
-             };
-
-             $win.on('resize.px.parallax load.px.parallax', function() {
-                 loadDimensions();
-                 Parallax.isFresh = false;
-                 Parallax.requestRender();
-             })
-                 .on('scroll.px.parallax load.px.parallax', function() {
-                     loadScrollPosition();
-                     Parallax.requestRender();
-                 });
-
-             loadDimensions();
-             loadScrollPosition();
-
-             this.isReady = true;
-         },
-
-         configure: function(options) {
-             if (typeof options == 'object') {
-                 delete options.refresh;
-                 delete options.render;
-                 $.extend(this.prototype, options);
-             }
-         },
-
-         refresh: function() {
-             $.each(this.sliders, function(){ this.refresh() });
-             this.isFresh = true;
-         },
-
-         render: function() {
-             this.isFresh || this.refresh();
-             $.each(this.sliders, function(){ this.render() });
-         },
-
-         requestRender: function() {
-             var self = this;
-
-             if (!this.isBusy) {
-                 this.isBusy = true;
-                 window.requestAnimationFrame(function() {
-                     self.render();
-                     self.isBusy = false;
-                 });
-             }
-         },
-         destroy: function(el){
-             var i,
-                 parallaxElement = $(el).data('px.parallax');
-             parallaxElement.$mirror.remove();
-             for(i=0; i < this.sliders.length; i+=1){
-                 if(this.sliders[i] == parallaxElement){
-                     this.sliders.splice(i, 1);
-                 }
-             }
-             $(el).data('px.parallax', false);
-             if(this.sliders.length === 0){
-                 $(window).off('scroll.px.parallax resize.px.parallax load.px.parallax');
-                 this.isReady = false;
-                 Parallax.isSetup = false;
-             }
-         }
-     });
-
-
-     // Parallax Plugin Definition
-
-     function Plugin(option) {
-         return this.each(function () {
-             var $this = $(this);
-             var options = typeof option == 'object' && option;
-
-             if (this == window || this == document || $this.is('body')) {
-                 Parallax.configure(options);
-             }
-             else if (!$this.data('px.parallax')) {
-                 options = $.extend({}, $this.data(), options);
-                 $this.data('px.parallax', new Parallax(this, options));
-             }
-             else if (typeof option == 'object')
-             {
-                 $.extend($this.data('px.parallax'), options);
-             }
-             if (typeof option == 'string') {
-                 if(option == 'destroy'){
-                     Parallax['destroy'](this);
-                 }else{
-                     Parallax[option]();
-                 }
-             }
-         })
-     };
-
-     var old = $.fn.parallax;
-
-     $.fn.parallax             = Plugin;
-     $.fn.parallax.Constructor = Parallax;
-
-
-     // Parallax No Conflict
-
-     $.fn.parallax.noConflict = function () {
-         $.fn.parallax = old;
-         return this;
-     };
-
-     // Parallax Data-API
-
-     $(document).on('ready.px.parallax.data-api', function () {
-         $('[data-parallax="scroll"]').parallax();
-     });
-
-
- }(jQuery, window, document));
+    'use strict';
+
+    var defaults = {
+        videoMaxWidth: '855px',
+        youtubePlayerParams: false,
+        vimeoPlayerParams: false,
+        dailymotionPlayerParams: false,
+        vkPlayerParams: false,
+        videojs: false,
+        videojsOptions: {}
+    };
+
+    var Video = function(element) {
+
+        this.core = $(element).data('lightGallery');
+
+        this.$el = $(element);
+        this.core.s = $.extend({}, defaults, this.core.s);
+        this.videoLoaded = false;
+
+        this.init();
+
+        return this;
+    };
+
+    Video.prototype.init = function() {
+        var _this = this;
+
+        // Event triggered when video url found without poster
+        _this.core.$el.on('hasVideo.lg.tm', function(event, index, src, html) {
+            _this.core.$slide.eq(index).find('.lg-video').append(_this.loadVideo(src, 'lg-object', true, index, html));
+            if (html) {
+                if (_this.core.s.videojs) {
+                    try {
+                        videojs(_this.core.$slide.eq(index).find('.lg-html5').get(0), _this.core.s.videojsOptions, function() {
+                            if (!_this.videoLoaded) {
+                                this.play();
+                            }
+                        });
+                    } catch (e) {
+                        console.error('Make sure you have included videojs');
+                    }
+                } else {
+                    _this.core.$slide.eq(index).find('.lg-html5').get(0).play();
+                }
+            }
+        });
+
+        // Set max width for video
+        _this.core.$el.on('onAferAppendSlide.lg.tm', function(event, index) {
+            _this.core.$slide.eq(index).find('.lg-video-cont').css('max-width', _this.core.s.videoMaxWidth);
+            _this.videoLoaded = true;
+        });
+
+        var loadOnClick = function($el) {
+            // check slide has poster
+            if ($el.find('.lg-object').hasClass('lg-has-poster') && $el.find('.lg-object').is(':visible')) {
+
+                // check already video element present
+                if (!$el.hasClass('lg-has-video')) {
+
+                    $el.addClass('lg-video-playing lg-has-video');
+
+                    var _src;
+                    var _html;
+                    var _loadVideo = function(_src, _html) {
+
+                        $el.find('.lg-video').append(_this.loadVideo(_src, '', false, _this.core.index, _html));
+
+                        if (_html) {
+                            if (_this.core.s.videojs) {
+                                try {
+                                    videojs(_this.core.$slide.eq(_this.core.index).find('.lg-html5').get(0), _this.core.s.videojsOptions, function() {
+                                        this.play();
+                                    });
+                                } catch (e) {
+                                    console.error('Make sure you have included videojs');
+                                }
+                            } else {
+                                _this.core.$slide.eq(_this.core.index).find('.lg-html5').get(0).play();
+                            }
+                        }
+
+                    };
+
+                    if (_this.core.s.dynamic) {
+
+                        _src = _this.core.s.dynamicEl[_this.core.index].src;
+                        _html = _this.core.s.dynamicEl[_this.core.index].html;
+
+                        _loadVideo(_src, _html);
+
+                    } else {
+
+                        _src = _this.core.$items.eq(_this.core.index).attr('href') || _this.core.$items.eq(_this.core.index).attr('data-src');
+                        _html = _this.core.$items.eq(_this.core.index).attr('data-html');
+
+                        _loadVideo(_src, _html);
+
+                    }
+
+                    var $tempImg = $el.find('.lg-object');
+                    $el.find('.lg-video').append($tempImg);
+
+                    // @todo loading icon for html5 videos also
+                    // for showing the loading indicator while loading video
+                    if (!$el.find('.lg-video-object').hasClass('lg-html5')) {
+                        $el.removeClass('lg-complete');
+                        $el.find('.lg-video-object').on('load.lg error.lg', function() {
+                            $el.addClass('lg-complete');
+                        });
+                    }
+
+                } else {
+
+                    var youtubePlayer = $el.find('.lg-youtube').get(0);
+                    var vimeoPlayer = $el.find('.lg-vimeo').get(0);
+                    var dailymotionPlayer = $el.find('.lg-dailymotion').get(0);
+                    var html5Player = $el.find('.lg-html5').get(0);
+                    if (youtubePlayer) {
+                        youtubePlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                    } else if (vimeoPlayer) {
+                        try {
+                            $f(vimeoPlayer).api('play');
+                        } catch (e) {
+                            console.error('Make sure you have included froogaloop2 js');
+                        }
+                    } else if (dailymotionPlayer) {
+                        dailymotionPlayer.contentWindow.postMessage('play', '*');
+
+                    } else if (html5Player) {
+                        if (_this.core.s.videojs) {
+                            try {
+                                videojs(html5Player).play();
+                            } catch (e) {
+                                console.error('Make sure you have included videojs');
+                            }
+                        } else {
+                            html5Player.play();
+                        }
+                    }
+
+                    $el.addClass('lg-video-playing');
+
+                }
+            }
+        };
+
+        if (_this.core.doCss() && _this.core.$items.length > 1 && ((_this.core.s.enableSwipe && _this.core.isTouch) || (_this.core.s.enableDrag && !_this.core.isTouch))) {
+            _this.core.$el.on('onSlideClick.lg.tm', function() {
+                var $el = _this.core.$slide.eq(_this.core.index);
+                loadOnClick($el);
+            });
+        } else {
+
+            // For IE 9 and bellow
+            _this.core.$slide.on('click.lg', function() {
+                loadOnClick($(this));
+            });
+        }
+
+        _this.core.$el.on('onBeforeSlide.lg.tm', function(event, prevIndex, index) {
+
+            var $videoSlide = _this.core.$slide.eq(prevIndex);
+            var youtubePlayer = $videoSlide.find('.lg-youtube').get(0);
+            var vimeoPlayer = $videoSlide.find('.lg-vimeo').get(0);
+            var dailymotionPlayer = $videoSlide.find('.lg-dailymotion').get(0);
+            var vkPlayer = $videoSlide.find('.lg-vk').get(0);
+            var html5Player = $videoSlide.find('.lg-html5').get(0);
+            if (youtubePlayer) {
+                youtubePlayer.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            } else if (vimeoPlayer) {
+                try {
+                    $f(vimeoPlayer).api('pause');
+                } catch (e) {
+                    console.error('Make sure you have included froogaloop2 js');
+                }
+            } else if (dailymotionPlayer) {
+                dailymotionPlayer.contentWindow.postMessage('pause', '*');
+
+            } else if (html5Player) {
+                if (_this.core.s.videojs) {
+                    try {
+                        videojs(html5Player).pause();
+                    } catch (e) {
+                        console.error('Make sure you have included videojs');
+                    }
+                } else {
+                    html5Player.pause();
+                }
+            } if (vkPlayer) {
+                $(vkPlayer).attr('src', $(vkPlayer).attr('src').replace('&autoplay', '&noplay'));
+            }
+
+            var _src;
+            if (_this.core.s.dynamic) {
+                _src = _this.core.s.dynamicEl[index].src;
+            } else {
+                _src = _this.core.$items.eq(index).attr('href') || _this.core.$items.eq(index).attr('data-src');
+
+            }
+
+            var _isVideo = _this.core.isVideo(_src, index) || {};
+            if (_isVideo.youtube || _isVideo.vimeo || _isVideo.dailymotion || _isVideo.vk) {
+                _this.core.$outer.addClass('lg-hide-download');
+            }
+
+            //$videoSlide.addClass('lg-complete');
+
+        });
+
+        _this.core.$el.on('onAfterSlide.lg.tm', function(event, prevIndex) {
+            _this.core.$slide.eq(prevIndex).removeClass('lg-video-playing');
+        });
+    };
+
+    Video.prototype.loadVideo = function(src, addClass, noposter, index, html) {
+        var video = '';
+        var autoplay = 1;
+        var a = '';
+        var isVideo = this.core.isVideo(src, index) || {};
+
+        // Enable autoplay for first video if poster doesn't exist
+        if (noposter) {
+            if (this.videoLoaded) {
+                autoplay = 0;
+            } else {
+                autoplay = 1;
+            }
+        }
+
+        if (isVideo.youtube) {
+
+            a = '?wmode=opaque&autoplay=' + autoplay + '&enablejsapi=1';
+            if (this.core.s.youtubePlayerParams) {
+                a = a + '&' + $.param(this.core.s.youtubePlayerParams);
+            }
+
+            video = '<iframe class="lg-video-object lg-youtube ' + addClass + '" width="560" height="315" src="//www.youtube.com/embed/' + isVideo.youtube[1] + a + '" frameborder="0" allowfullscreen></iframe>';
+
+        } else if (isVideo.vimeo) {
+
+            a = '?autoplay=' + autoplay + '&api=1';
+            if (this.core.s.vimeoPlayerParams) {
+                a = a + '&' + $.param(this.core.s.vimeoPlayerParams);
+            }
+
+            video = '<iframe class="lg-video-object lg-vimeo ' + addClass + '" width="560" height="315"  src="//player.vimeo.com/video/' + isVideo.vimeo[1] + a + '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+
+        } else if (isVideo.dailymotion) {
+
+            a = '?wmode=opaque&autoplay=' + autoplay + '&api=postMessage';
+            if (this.core.s.dailymotionPlayerParams) {
+                a = a + '&' + $.param(this.core.s.dailymotionPlayerParams);
+            }
+
+            video = '<iframe class="lg-video-object lg-dailymotion ' + addClass + '" width="560" height="315" src="//www.dailymotion.com/embed/video/' + isVideo.dailymotion[1] + a + '" frameborder="0" allowfullscreen></iframe>';
+
+        } else if (isVideo.html5) {
+            var fL = html.substring(0, 1);
+            if (fL === '.' || fL === '#') {
+                html = $(html).html();
+            }
+
+            video = html;
+
+        } else if (isVideo.vk) {
+
+            a = '&autoplay=' + autoplay;
+            if (this.core.s.vkPlayerParams) {
+                a = a + '&' + $.param(this.core.s.vkPlayerParams);
+            }
+
+            video = '<iframe class="lg-video-object lg-vk ' + addClass + '" width="560" height="315" src="http://vk.com/video_ext.php?' + isVideo.vk[1] + a + '" frameborder="0" allowfullscreen></iframe>';
+
+        }
+
+        return video;
+    };
+
+    Video.prototype.destroy = function() {
+        this.videoLoaded = false;
+    };
+
+    $.fn.lightGallery.modules.video = Video;
+
+})(jQuery, window, document);
+
+
+
+
+/*!
+ * parallax.js v1.4.2 (http://pixelcog.github.io/parallax.js/)
+ * @copyright 2016 PixelCog, Inc.
+ * @license MIT (https://github.com/pixelcog/parallax.js/blob/master/LICENSE)
+ */
+
+;(function ( $, window, document, undefined ) {
+
+    // Polyfill for requestAnimationFrame
+    // via: https://gist.github.com/paulirish/1579671
+
+    (function() {
+        var lastTime = 0;
+        var vendors = ['ms', 'moz', 'webkit', 'o'];
+        for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+            window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
+                || window[vendors[x]+'CancelRequestAnimationFrame'];
+        }
+
+        if (!window.requestAnimationFrame)
+            window.requestAnimationFrame = function(callback) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                    timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = function(id) {
+                clearTimeout(id);
+            };
+    }());
+
+
+    // Parallax Constructor
+
+    function Parallax(element, options) {
+        var self = this;
+
+        if (typeof options == 'object') {
+            delete options.refresh;
+            delete options.render;
+            $.extend(this, options);
+        }
+
+        this.$element = $(element);
+
+        if (!this.imageSrc && this.$element.is('img')) {
+            this.imageSrc = this.$element.attr('src');
+        }
+
+        var positions = (this.position + '').toLowerCase().match(/\S+/g) || [];
+
+        if (positions.length < 1) {
+            positions.push('center');
+        }
+        if (positions.length == 1) {
+            positions.push(positions[0]);
+        }
+
+        if (positions[0] == 'top' || positions[0] == 'bottom' || positions[1] == 'left' || positions[1] == 'right') {
+            positions = [positions[1], positions[0]];
+        }
+
+        if (this.positionX != undefined) positions[0] = this.positionX.toLowerCase();
+        if (this.positionY != undefined) positions[1] = this.positionY.toLowerCase();
+
+        self.positionX = positions[0];
+        self.positionY = positions[1];
+
+        if (this.positionX != 'left' && this.positionX != 'right') {
+            if (isNaN(parseInt(this.positionX))) {
+                this.positionX = 'center';
+            } else {
+                this.positionX = parseInt(this.positionX);
+            }
+        }
+
+        if (this.positionY != 'top' && this.positionY != 'bottom') {
+            if (isNaN(parseInt(this.positionY))) {
+                this.positionY = 'center';
+            } else {
+                this.positionY = parseInt(this.positionY);
+            }
+        }
+
+        this.position =
+            this.positionX + (isNaN(this.positionX)? '' : 'px') + ' ' +
+            this.positionY + (isNaN(this.positionY)? '' : 'px');
+
+        if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+            if (this.imageSrc && this.iosFix && !this.$element.is('img')) {
+                this.$element.css({
+                    backgroundImage: 'url(' + this.imageSrc + ')',
+                    backgroundSize: 'cover',
+                    backgroundPosition: this.position
+                });
+            }
+            return this;
+        }
+
+        if (navigator.userAgent.match(/(Android)/)) {
+            if (this.imageSrc && this.androidFix && !this.$element.is('img')) {
+                this.$element.css({
+                    backgroundImage: 'url(' + this.imageSrc + ')',
+                    backgroundSize: 'cover',
+                    backgroundPosition: this.position
+                });
+            }
+            return this;
+        }
+
+        this.$mirror = $('<div />').prependTo('body');
+
+        /**
+         * add by sa  shrimp2t
+         * @type {*|string}
+         */
+        var el_id = this.$element.attr( 'id' ) || '';
+        if ( typeof el_id === "undefined" || el_id === '' ){
+            el_id = 'parallax-'+ ( new Date().getTime() );
+            this.$element.attr( 'id',  el_id );
+        }
+        this.$mirror.attr( 'id', 'mirror-' + el_id );
+
+
+
+
+        var slider = this.$element.find('>.parallax-slider');
+        var sliderExisted = false;
+
+        if (slider.length == 0)
+            this.$slider = $('<img />').prependTo(this.$mirror);
+        else {
+            this.$slider = slider.prependTo(this.$mirror)
+            sliderExisted = true;
+        }
+
+        this.$mirror.addClass('parallax-mirror').css({
+            visibility: 'hidden',
+            zIndex: this.zIndex,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            overflow: 'hidden'
+        });
+
+        this.$slider.addClass('parallax-slider').one('load', function() {
+            if (!self.naturalHeight || !self.naturalWidth) {
+                self.naturalHeight = this.naturalHeight || this.height || 1;
+                self.naturalWidth  = this.naturalWidth  || this.width  || 1;
+            }
+            self.aspectRatio = self.naturalWidth / self.naturalHeight;
+
+            Parallax.isSetup || Parallax.setup();
+            Parallax.sliders.push(self);
+            Parallax.isFresh = false;
+            Parallax.requestRender();
+        });
+
+        if (!sliderExisted)
+            this.$slider[0].src = this.imageSrc;
+
+        if (this.naturalHeight && this.naturalWidth || this.$slider[0].complete || slider.length > 0) {
+            this.$slider.trigger('load');
+        }
+
+    };
+
+
+    // Parallax Instance Methods
+
+    $.extend(Parallax.prototype, {
+        speed:    0.2,
+        bleed:    0,
+        zIndex:   -100,
+        iosFix:   true,
+        androidFix: true,
+        position: 'center',
+        overScrollFix: true,
+
+        refresh: function() {
+            this.boxWidth        = this.$element.outerWidth();
+            this.boxHeight       = this.$element.outerHeight() + this.bleed * 2;
+            this.boxOffsetTop    = this.$element.offset().top - this.bleed;
+            this.boxOffsetLeft   = this.$element.offset().left;
+            this.boxOffsetBottom = this.boxOffsetTop + this.boxHeight;
+
+            var winHeight = Parallax.winHeight;
+            var docHeight = Parallax.docHeight;
+            var maxOffset = Math.min(this.boxOffsetTop, docHeight - winHeight);
+            var minOffset = Math.max(this.boxOffsetTop + this.boxHeight - winHeight, 0);
+            var imageHeightMin = this.boxHeight + (maxOffset - minOffset) * (1 - this.speed) | 0;
+            var imageOffsetMin = (this.boxOffsetTop - maxOffset) * (1 - this.speed) | 0;
+
+            if (imageHeightMin * this.aspectRatio >= this.boxWidth) {
+                this.imageWidth    = imageHeightMin * this.aspectRatio | 0;
+                this.imageHeight   = imageHeightMin;
+                this.offsetBaseTop = imageOffsetMin;
+
+                var margin = this.imageWidth - this.boxWidth;
+
+                if (this.positionX == 'left') {
+                    this.offsetLeft = 0;
+                } else if (this.positionX == 'right') {
+                    this.offsetLeft = - margin;
+                } else if (!isNaN(this.positionX)) {
+                    this.offsetLeft = Math.max(this.positionX, - margin);
+                } else {
+                    this.offsetLeft = - margin / 2 | 0;
+                }
+            } else {
+                this.imageWidth    = this.boxWidth;
+                this.imageHeight   = this.boxWidth / this.aspectRatio | 0;
+                this.offsetLeft    = 0;
+
+                var margin = this.imageHeight - imageHeightMin;
+
+                if (this.positionY == 'top') {
+                    this.offsetBaseTop = imageOffsetMin;
+                } else if (this.positionY == 'bottom') {
+                    this.offsetBaseTop = imageOffsetMin - margin;
+                } else if (!isNaN(this.positionY)) {
+                    this.offsetBaseTop = imageOffsetMin + Math.max(this.positionY, - margin);
+                } else {
+                    this.offsetBaseTop = imageOffsetMin - margin / 2 | 0;
+                }
+            }
+        },
+
+        render: function() {
+            var scrollTop    = Parallax.scrollTop;
+            var scrollLeft   = Parallax.scrollLeft;
+            var overScroll   = this.overScrollFix ? Parallax.overScroll : 0;
+            var scrollBottom = scrollTop + Parallax.winHeight;
+
+            if (this.boxOffsetBottom > scrollTop && this.boxOffsetTop <= scrollBottom) {
+                this.visibility = 'visible';
+                this.mirrorTop = this.boxOffsetTop  - scrollTop;
+                this.mirrorLeft = this.boxOffsetLeft - scrollLeft;
+                this.offsetTop = this.offsetBaseTop - this.mirrorTop * (1 - this.speed);
+            } else {
+                this.visibility = 'hidden';
+            }
+
+            this.$mirror.css({
+                transform: 'translate3d(0px, 0px, 0px)',
+                visibility: this.visibility,
+                top: this.mirrorTop - overScroll,
+                left: this.mirrorLeft,
+                height: this.boxHeight,
+                width: this.boxWidth
+            });
+
+            this.$slider.css({
+                transform: 'translate3d(0px, 0px, 0px)',
+                position: 'absolute',
+                top: this.offsetTop,
+                left: this.offsetLeft,
+                height: this.imageHeight,
+                width: this.imageWidth,
+                maxWidth: 'none'
+            });
+        }
+    });
+
+
+    // Parallax Static Methods
+
+    $.extend(Parallax, {
+        scrollTop:    0,
+        scrollLeft:   0,
+        winHeight:    0,
+        winWidth:     0,
+        docHeight:    1 << 30,
+        docWidth:     1 << 30,
+        sliders:      [],
+        isReady:      false,
+        isFresh:      false,
+        isBusy:       false,
+
+        setup: function() {
+            if (this.isReady) return;
+
+            var $doc = $(document), $win = $(window);
+
+            var loadDimensions = function() {
+                Parallax.winHeight = $win.height();
+                Parallax.winWidth  = $win.width();
+                Parallax.docHeight = $doc.height();
+                Parallax.docWidth  = $doc.width();
+            };
+
+            var loadScrollPosition = function() {
+                var winScrollTop  = $win.scrollTop();
+                var scrollTopMax  = Parallax.docHeight - Parallax.winHeight;
+                var scrollLeftMax = Parallax.docWidth  - Parallax.winWidth;
+                Parallax.scrollTop  = Math.max(0, Math.min(scrollTopMax,  winScrollTop));
+                Parallax.scrollLeft = Math.max(0, Math.min(scrollLeftMax, $win.scrollLeft()));
+                Parallax.overScroll = Math.max(winScrollTop - scrollTopMax, Math.min(winScrollTop, 0));
+            };
+
+            $win.on('resize.px.parallax load.px.parallax', function() {
+                loadDimensions();
+                Parallax.isFresh = false;
+                Parallax.requestRender();
+            })
+                .on('scroll.px.parallax load.px.parallax', function() {
+                    loadScrollPosition();
+                    Parallax.requestRender();
+                });
+
+            loadDimensions();
+            loadScrollPosition();
+
+            this.isReady = true;
+        },
+
+        configure: function(options) {
+            if (typeof options == 'object') {
+                delete options.refresh;
+                delete options.render;
+                $.extend(this.prototype, options);
+            }
+        },
+
+        refresh: function() {
+            $.each(this.sliders, function(){ this.refresh() });
+            this.isFresh = true;
+        },
+
+        render: function() {
+            this.isFresh || this.refresh();
+            $.each(this.sliders, function(){ this.render() });
+        },
+
+        requestRender: function() {
+            var self = this;
+
+            if (!this.isBusy) {
+                this.isBusy = true;
+                window.requestAnimationFrame(function() {
+                    self.render();
+                    self.isBusy = false;
+                });
+            }
+        },
+        destroy: function(el){
+            var i,
+                parallaxElement = $(el).data('px.parallax');
+            parallaxElement.$mirror.remove();
+            for(i=0; i < this.sliders.length; i+=1){
+                if(this.sliders[i] == parallaxElement){
+                    this.sliders.splice(i, 1);
+                }
+            }
+            $(el).data('px.parallax', false);
+            if(this.sliders.length === 0){
+                $(window).off('scroll.px.parallax resize.px.parallax load.px.parallax');
+                this.isReady = false;
+                Parallax.isSetup = false;
+            }
+        }
+    });
+
+
+    // Parallax Plugin Definition
+
+    function Plugin(option) {
+        return this.each(function () {
+            var $this = $(this);
+            var options = typeof option == 'object' && option;
+
+            if (this == window || this == document || $this.is('body')) {
+                Parallax.configure(options);
+            }
+            else if (!$this.data('px.parallax')) {
+                options = $.extend({}, $this.data(), options);
+                $this.data('px.parallax', new Parallax(this, options));
+            }
+            else if (typeof option == 'object')
+            {
+                $.extend($this.data('px.parallax'), options);
+            }
+            if (typeof option == 'string') {
+                if(option == 'destroy'){
+                    Parallax['destroy'](this);
+                }else{
+                    Parallax[option]();
+                }
+            }
+        })
+    };
+
+    var old = $.fn.parallax;
+
+    $.fn.parallax             = Plugin;
+    $.fn.parallax.Constructor = Parallax;
+
+
+    // Parallax No Conflict
+
+    $.fn.parallax.noConflict = function () {
+        $.fn.parallax = old;
+        return this;
+    };
+
+
+    // Parallax Data-API
+
+    $(document).on('ready.px.parallax.data-api', function () {
+        $('[data-parallax="scroll"]').parallax();
+    });
+
+}(jQuery, window, document));
+
+
