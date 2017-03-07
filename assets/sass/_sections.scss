@@ -971,6 +971,9 @@ div.wpcf7-response-output {
 .parallax-hero {
 	background: rgba( 0, 0, 0, .4 );
 }
+.parallax-hero .hero-slideshow-wrapper{
+	overflow: hidden;
+}
 
 /* Section: Gallery
 ------------------------------*/

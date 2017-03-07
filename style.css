@@ -3078,6 +3078,10 @@ div.wpcf7-response-output {
 	background: rgba(0, 0, 0, 0.4);
 }
 
+.parallax-hero .hero-slideshow-wrapper {
+	overflow: hidden;
+}
+
 /* Section: Gallery
 ------------------------------*/
 .gallery-grid .g-item {

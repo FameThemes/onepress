@@ -448,15 +448,17 @@ jQuery(document).ready(function ( $ ) {
      * Section: Hero Full Screen Slideshow
      */
     function hero_full_screen(){
-        var is_transparent = jQuery( 'body').hasClass( 'header-transparent' );
-        var headerH;
-        var is_top_header = jQuery( '#page > .site-header').length ?  true : false;
-        if( is_top_header && ! is_transparent ) {
-            headerH = jQuery('.site-header').height();
-        } else {
-            headerH = 0;
+        if ( $( '.hero-slideshow-fullscreen').length > 0 ) {
+            var is_transparent = jQuery('body').hasClass('header-transparent');
+            var headerH;
+            var is_top_header = jQuery('#page > .site-header').length ? true : false;
+            if (is_top_header && !is_transparent) {
+                headerH = jQuery('.site-header').height();
+            } else {
+                headerH = 0;
+            }
+            jQuery('.hero-slideshow-fullscreen').css('height', (jQuery(window).height() - headerH + 1) + 'px');
         }
-        jQuery('.hero-slideshow-fullscreen').css('height',(jQuery(window).height()-headerH+1)+'px');
     }
     jQuery(window).on('resize', function (){
         hero_full_screen();
@@ -520,6 +522,7 @@ jQuery(document).ready(function ( $ ) {
             hero.find('.hero-slideshow-wrapper').addClass('loaded').removeClass( 'loading' );
         }
     } );
+
 
 
 
