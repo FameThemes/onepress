@@ -40,7 +40,7 @@ if ( empty( $images ) ){
 $is_parallax =  get_theme_mod( 'onepress_hero_parallax' ) == 1 && ! empty( $images ) ;
 
 if ( $is_parallax ) {
-    echo '<div id="parallax-hero" class="parallax-hero parallax-window" data-over-scroll-fix="true" data-z-index="1" data-speed="0.3" data-image-src="'.esc_attr( $images[0] ).'" data-position="center" data-bleed="0">';
+    echo '<div id="parallax-hero"  data-parallax="scroll" class="parallax-hero parallax-window" data-over-scroll-fix="true" data-z-index="1" data-speed="0.3" data-image-src="'.esc_attr( $images[0] ).'" data-position="center" data-bleed="0">';
 }
 
 ?>

@@ -492,17 +492,17 @@ jQuery(document).ready(function ( $ ) {
         } else {
             hero.addClass('loaded');
             hero.removeClass( 'loading' );
-            hero.find('.slider-spinner`').remove();
+            hero.find('.slider-spinner').remove();
         }
 
     } );
+
 
     $( '.parallax-hero').each( function(){
         var hero = $( this);
         var img = hero.attr( 'data-image-src' ) || false;
         if ( img ) {
             preload_images([img], function () {
-                hero.parallax();
                 hero.find('.hero-slideshow-wrapper').addClass('loaded');
                 hero.removeClass( 'loading' );
                 setTimeout(function () {
@@ -515,6 +515,7 @@ jQuery(document).ready(function ( $ ) {
             hero.find('.hero-slideshow-wrapper').addClass('loaded').removeClass( 'loading' );
         }
     } );
+
 
 
     /**
