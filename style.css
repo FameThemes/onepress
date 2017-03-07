@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design. The theme overall is an elegant and classic one, a fine example of Bootstrap 4 WordPress theme which compatibility with latest version of WooCommerce. (Live preview : http://www.famethemes.com/preview/?theme=OnePress)
-Version: 1.3.1
+Version: 1.3.2
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -3058,7 +3058,7 @@ div.wpcf7-response-output {
 	background: transparent !important;
 }
 
-.parallax-window .parallax-mirror::before {
+.parallax-mirror::before {
 	content: " ";
 	position: absolute;
 	top: 0px;
@@ -3067,6 +3067,19 @@ div.wpcf7-response-output {
 	bottom: 0px;
 	display: block;
 	z-index: 2;
+	background: rgba(0, 0, 0, 0.4);
+}
+
+#mirror-parallax-hero {
+	z-index: 30;
+}
+
+.parallax-hero {
+	background: rgba(0, 0, 0, 0.4);
+}
+
+.parallax-hero .hero-slideshow-wrapper {
+	overflow: hidden;
 }
 
 /* Section: Gallery

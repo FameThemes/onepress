@@ -957,11 +957,22 @@ div.wpcf7-response-output {
 	position: relative;
 	background: transparent !important;
 }
-.parallax-window .parallax-mirror::before{
+.parallax-mirror::before{
 	content:  " ";
 	position: absolute;
 	top: 0px; left: 0px; right: 0px; bottom: 0px; display: block;
 	z-index: 2;
+	background: rgba( 0, 0, 0, .4 );
+}
+
+#mirror-parallax-hero {
+	z-index: 30;
+}
+.parallax-hero {
+	background: rgba( 0, 0, 0, .4 );
+}
+.parallax-hero .hero-slideshow-wrapper{
+	overflow: hidden;
 }
 
 /* Section: Gallery
