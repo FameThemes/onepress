@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
-=========
+====================================================================
+
+## 1.3.3
+* Fix translation function that is missing a text-domain
+* Correct the one text domain is being used.
+
 ## 1.3.2
 * Fix js syntax.
 * Update parallax hero.

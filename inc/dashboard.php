@@ -382,15 +382,15 @@ function onepress_theme_info_page() {
                         <?php
 
                         $select = '<select name="copy_from">';
-                        $select .= '<option value="">'.esc_html__( 'From Theme', 'onepres' ).'</option>';
+                        $select .= '<option value="">'.esc_html__( 'From Theme', 'onepress' ).'</option>';
                         $select .= '<option value="onepress">OnePress</option>';
-                        $select .= '<option value="'.esc_attr( $child_theme->get_stylesheet() ).'">'.esc_html__( $child_theme->Name ).'</option>';
+                        $select .= '<option value="'.esc_attr( $child_theme->get_stylesheet() ).'">'.( $child_theme->Name ).'</option>';
                         $select .='</select>';
 
                         $select_2 = '<select name="copy_to">';
-                        $select_2 .= '<option value="">'.esc_html__( 'To Theme', 'onepres' ).'</option>';
+                        $select_2 .= '<option value="">'.esc_html__( 'To Theme', 'onepress' ).'</option>';
                         $select_2 .= '<option value="onepress">OnePress</option>';
-                        $select_2 .= '<option value="'.esc_attr( $child_theme->get_stylesheet() ).'">'.esc_html__( $child_theme->Name ).'</option>';
+                        $select_2 .= '<option value="'.esc_attr( $child_theme->get_stylesheet() ).'">'.( $child_theme->Name ).'</option>';
                         $select_2 .='</select>';
 
                         echo $select . ' to '. $select_2;
