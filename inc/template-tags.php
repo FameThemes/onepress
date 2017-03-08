@@ -343,7 +343,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             .body-desktop .parallax-hero .hero-slideshow-wrapper:after {
                 display: none !important;
             }
-            #mirror-parallax-hero::before, #parallax-hero {
+            #parallax-hero > .parallax-bg::before {
                 background-color: <?php echo $hero_bg_color; ?>;
                 opacity: 1;
             }

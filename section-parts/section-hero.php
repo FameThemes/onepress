@@ -40,12 +40,13 @@ if ( empty( $images ) ){
 $is_parallax =  get_theme_mod( 'onepress_hero_parallax' ) == 1 && ! empty( $images ) ;
 
 if ( $is_parallax ) {
-    echo '<div id="parallax-hero" class="parallax-hero parallax-window" data-over-scroll-fix="true" data-z-index="1" data-speed="0.3" data-image-src="'.esc_attr( $images[0] ).'" data-position="center" data-bleed="0">';
+    echo '<div id="parallax-hero" class="parallax-hero parallax-window" >';
+    echo '<div class="parallax-bg" style="background-image: url('.esc_url( $images[0]).');" data-stellar-ratio="0.5" data-stellar-offset-parent="true"></div>';
 }
 
 ?>
 <?php if ( ! $onepress_hero_disable && ! empty ( $images ) ) : ?>
-	<section id="<?php if ( $onepress_hero_id != '' ){ echo esc_attr( $onepress_hero_id ); } ?>" <?php if ( ! empty ( $images) && ! $is_parallax ) { ?> data-images="<?php echo esc_attr( json_encode( $images ) ); ?>"<?php } ?>
+	<section  id="<?php if ( $onepress_hero_id != '' ){ echo esc_attr( $onepress_hero_id ); } ?>" <?php if ( ! empty ( $images) && ! $is_parallax ) { ?> data-images="<?php echo esc_attr( json_encode( $images ) ); ?>"<?php } ?>
              class="hero-slideshow-wrapper <?php echo ( $onepress_hero_fullscreen == 1 ) ? 'hero-slideshow-fullscreen' : 'hero-slideshow-normal'; ?>">
 
         <div class="slider-spinner">
@@ -99,5 +100,6 @@ if ( $is_parallax ) {
 <?php endif;
 
 if ( $is_parallax ) {
+
     echo '</div>'; // end parallax
 }
