@@ -2648,27 +2648,65 @@ section > .customize-partial-edit-shortcut button {
 
 /* Section: Parallax
 ------------------------------*/
-.section-has-parallax {
-	overflow: hidden;
+#parallax-hero {
 	position: relative;
-	width: 100%;
 }
 
-.parallax_bg {
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-size: cover;
-	height: 100%;
-	width: 100%;
+#parallax-hero .hero-slideshow-wrapper {
+	background: none;
+}
+
+#parallax-hero > .parallax-bg {
 	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
 	display: block;
-	top: 0;
-	left: 0;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-repeat: no-repeat;
 }
 
-.parallax_bg.is-mobile {
-	background-position: 50% 50% !important;
+#parallax-hero > .parallax-bg:before {
+	content: " ";
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: rgba(0, 0, 0, 0.3);
+}
+
+.section-parallax {
+	background: none;
+	position: relative;
+}
+
+.section-parallax .parallax-bg {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	display: block;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.section-parallax .parallax-bg:before {
+	content: " ";
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: rgba(0, 0, 0, 0.3);
 }
 
 .parallax_bg_overlay {
@@ -3043,43 +3081,6 @@ div.wpcf7-response-output {
 
 .section-videolightbox .video_icon:hover i {
 	color: #000;
-}
-
-.parallax-videolightbox .parallax-mirror::before {
-	background-color: #000000;
-	opacity: 0.4;
-}
-
-/* Section: Parallax
-------------------------------*/
-.parallax-window section {
-	z-index: 10;
-	position: relative;
-	background: transparent !important;
-}
-
-.parallax-mirror::before {
-	content: " ";
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	display: block;
-	z-index: 2;
-	background: rgba(0, 0, 0, 0.4);
-}
-
-#mirror-parallax-hero {
-	z-index: 30;
-}
-
-.parallax-hero {
-	background: rgba(0, 0, 0, 0.4);
-}
-
-.parallax-hero .hero-slideshow-wrapper {
-	overflow: hidden;
 }
 
 /* Section: Gallery
