@@ -143,8 +143,8 @@ Source: https://github.com/twbs/bootstrap
 License: https://github.com/twbs/bootstrap/blob/master/LICENSE MIT LICENSE
 
 - jQuery Parallax
-Source: http://www.ianlunn.co.uk/plugins/jquery-parallax/
-License: Dual licensed under the MIT and GPL licenses: https://github.com/IanLunn/jQuery-Parallax#jquery-parallax
+Source: http://markdalgleish.com/projects/stellar.js/
+License: MIT license: http://markdalgleish.mit-license.org
 
 - FontAwesome
 Source: https://fortawesome.github.io/Font-Awesome/
