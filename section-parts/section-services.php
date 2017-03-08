@@ -14,9 +14,7 @@ if ( ! empty( $page_ids ) ) {
     ?>
     <?php if (!$onepress_service_disable) : ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ($onepress_service_id != '') echo $onepress_service_id; ?>" <?php do_action('onepress_section_atts', 'services'); ?>
-                 class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>">
-        <?php } ?>
+        <section id="<?php if ($onepress_service_id != '') echo $onepress_service_id; ?>" <?php do_action('onepress_section_atts', 'services'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>"><?php } ?>
             <?php do_action('onepress_section_before_inner', 'services'); ?>
             <div class="container">
                 <?php if ( $onepress_service_title ||  $onepress_service_subtitle || $desc ){ ?>

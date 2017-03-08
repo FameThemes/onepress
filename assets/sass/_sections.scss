@@ -571,29 +571,59 @@
 
 /* Section: Parallax
 ------------------------------*/
-.section-has-parallax {
-    overflow: hidden;
-    position: relative;
-    width: 100%;
+#parallax-hero {
+	position: relative;
+	background: none;
+	.hero-slideshow-wrapper {
+		background: none;
+	}
+	.hero-slideshow-wrapper::after {
+		background: none;
+	}
+	> .parallax-bg {
+		&:before {
+			content: " ";
+			position: absolute;
+			top: 0px; left: 0px; right: 0px; bottom: 0px;
+			background: rgba( 0, 0, 0 ,.3 );
+		}
+		position: absolute;
+		top: 0px; bottom: 0px; left: 0px; right:0px;
+		display: block;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+	}
 }
+.section-parallax {
+	background: none;
+	position: relative;
+	overflow: hidden;
+	> section, .onepage-section, .section-inverse{
+		background: none;
+	}
+	.parallax-bg {
+		&:before {
+			content: " ";
+			position: absolute;
+			top: 0px; left: 0px; right: 0px; bottom: 0px;
+			background: rgba( 0, 0, 0 ,.3 );
+		}
+		position: absolute;
+		top: 0px; bottom: 0px; left: 0px; right:0px;
+		display: block;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+	}
 
-.parallax_bg {
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-size: cover;
-	height: 100%;
-	width: 100%;
-	position: absolute;
-	display: block;
-	top: 0;
-	left: 0;
 }
-
-.parallax_bg.is-mobile {
-	background-position: 50% 50% !important;
-}
-
 .parallax_bg_overlay {
 	position: absolute;
 	width: 100%;
@@ -941,39 +971,7 @@ div.wpcf7-response-output {
 		}
 	}
 }
-.parallax-mirror, .parallax-mirror .parallax-slider,
-.parallax-hero.parallax-window {
-	//background-color: #222222;
-}
-.parallax-videolightbox .parallax-mirror::before {
-	background-color: #000000;
-	opacity: 0.4;
-}
 
-/* Section: Parallax
-------------------------------*/
-.parallax-window section {
-	z-index: 10;
-	position: relative;
-	background: transparent !important;
-}
-.parallax-mirror::before{
-	content:  " ";
-	position: absolute;
-	top: 0px; left: 0px; right: 0px; bottom: 0px; display: block;
-	z-index: 2;
-	background: rgba( 0, 0, 0, .4 );
-}
-
-#mirror-parallax-hero {
-	z-index: 30;
-}
-.parallax-hero {
-	background: rgba( 0, 0, 0, .4 );
-}
-.parallax-hero .hero-slideshow-wrapper{
-	overflow: hidden;
-}
 
 /* Section: Gallery
 ------------------------------*/
@@ -1080,8 +1078,6 @@ div.wpcf7-response-output {
   display: inline-block;
   overflow: hidden;
   float: left;
-  //filter: "alpha(opacity=10)";
-  //opacity: 0.1;
 }
 
 .gallery-masonry {

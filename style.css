@@ -1226,7 +1226,7 @@ h6, p, ul, ol, dl, blockquote, pre {
 .site-footer .footer-connect {
 	padding: 90px 0px;
 	padding: 80px 0px;
-	padding:  5rem 0rem;
+	padding:  5rem 0px;
 	text-align: center;
 }
 
@@ -2044,17 +2044,17 @@ section > .customize-partial-edit-shortcut button {
 ------------------------------*/
 .section-padding {
 	padding: 70px 0px;
-	padding:  4.375rem 0rem;
+	padding:  4.375rem 0px;
 }
 
 .section-padding-lg {
 	padding: 90px 0px;
-	padding:  5.625rem 0rem;
+	padding:  5.625rem 0px;
 }
 
 .section-padding-larger {
 	padding: 140px 0px;
-	padding:  8.75rem 0rem;
+	padding:  8.75rem 0px;
 }
 
 .section-meta {
@@ -2353,7 +2353,7 @@ section > .customize-partial-edit-shortcut button {
 
 .hero__content a.btn {
 	margin: 10px 10px 20px 0px;
-	margin:  0.625rem 0.625rem 1.25rem 0rem;
+	margin:  0.625rem 0.625rem 1.25rem 0px;
 }
 
 .hero__content p {
@@ -2382,7 +2382,7 @@ section > .customize-partial-edit-shortcut button {
 
 .hero-content-style2 .hcl2-content {
 	padding: 50px 0px;
-	padding:  3.125rem 0rem;
+	padding:  3.125rem 0px;
 }
 
 .hero-content-style2 .hcl2-image {
@@ -2648,27 +2648,77 @@ section > .customize-partial-edit-shortcut button {
 
 /* Section: Parallax
 ------------------------------*/
-.section-has-parallax {
-	overflow: hidden;
+#parallax-hero {
 	position: relative;
-	width: 100%;
+	background: none;
 }
 
-.parallax_bg {
-	background-position: center center;
+#parallax-hero .hero-slideshow-wrapper {
+	background: none;
+}
+
+#parallax-hero .hero-slideshow-wrapper::after {
+	background: none;
+}
+
+#parallax-hero > .parallax-bg {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	display: block;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
-	background-size: cover;
-	height: 100%;
-	width: 100%;
-	position: absolute;
-	display: block;
-	top: 0;
-	left: 0;
 }
 
-.parallax_bg.is-mobile {
-	background-position: 50% 50% !important;
+#parallax-hero > .parallax-bg:before {
+	content: " ";
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: rgba(0, 0, 0, 0.3);
+}
+
+.section-parallax {
+	background: none;
+	position: relative;
+	overflow: hidden;
+}
+
+.section-parallax > section, .section-parallax .onepage-section, .section-parallax .section-inverse {
+	background: none;
+}
+
+.section-parallax .parallax-bg {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	display: block;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.section-parallax .parallax-bg:before {
+	content: " ";
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: rgba(0, 0, 0, 0.3);
 }
 
 .parallax_bg_overlay {
@@ -3043,43 +3093,6 @@ div.wpcf7-response-output {
 
 .section-videolightbox .video_icon:hover i {
 	color: #000;
-}
-
-.parallax-videolightbox .parallax-mirror::before {
-	background-color: #000000;
-	opacity: 0.4;
-}
-
-/* Section: Parallax
-------------------------------*/
-.parallax-window section {
-	z-index: 10;
-	position: relative;
-	background: transparent !important;
-}
-
-.parallax-mirror::before {
-	content: " ";
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	display: block;
-	z-index: 2;
-	background: rgba(0, 0, 0, 0.4);
-}
-
-#mirror-parallax-hero {
-	z-index: 30;
-}
-
-.parallax-hero {
-	background: rgba(0, 0, 0, 0.4);
-}
-
-.parallax-hero .hero-slideshow-wrapper {
-	overflow: hidden;
 }
 
 /* Section: Gallery

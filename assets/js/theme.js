@@ -1,6 +1,6 @@
 
 function preload_images( images, complete_callback ) {
-    var id = 'test-'+( new Date().getTime() );
+    var id = '_img_loading_'+( new Date().getTime() );
     jQuery( 'body').append( '<div id="'+id+'"></div>' );
     jQuery.each( images, function( index, src ){
         var img = jQuery( '<img>' );
@@ -502,27 +502,50 @@ jQuery(document).ready(function ( $ ) {
     }
 
 
+    // Parallax Section
+    $.stellar({
+        scrollProperty: 'scroll',
+        positionProperty: 'position',
+        responsive: true,
+        horizontalScrolling: false,
+        verticalScrolling: true,
+    });
+
+    // Parallax hero
     $( '.parallax-hero').each( function(){
         var hero = $( this);
         hero.addClass( 'loading' );
-        var img = hero.attr( 'data-image-src' ) || false;
-        if ( img ) {
-            console.log( 'hass_img' );
-            preload_images([img], function () {
-                hero.find('.hero-slideshow-wrapper').addClass('loaded');
-                hero.removeClass( 'loading' );
-                hero.parallax();
-                setTimeout(function () {
-                    hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
-                }, 600);
-            });
-        } else {
+        $('.parallax-bg', hero ).imagesLoaded( { background: true }, function() {
+            hero.find('.hero-slideshow-wrapper').addClass('loaded');
             hero.removeClass( 'loading' );
+            hero.stellar({
+                scrollProperty: 'scroll',
+                positionProperty: 'position',
+            });
+            setTimeout(function () {
+                hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
+            }, 600);
+        }).fail( function( instance ) {
+            hero.removeClass( 'loading' );
+            hero.find('.hero-slideshow-wrapper').addClass('loaded');
             hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
-            hero.find('.hero-slideshow-wrapper').addClass('loaded').removeClass( 'loading' );
-        }
+        });
     } );
 
+    $( '.section-parallax' ).each( function() {
+        var s = $( this );
+        s.stellar();
+        $('.parallax-bg', s ).imagesLoaded( { background: true }, function() {
+            s.stellar({
+                scrollProperty: 'scroll',
+                positionProperty: 'position',
+
+            });
+        }).fail( function( instance ) {
+
+        });
+
+    } );
 
 
 
