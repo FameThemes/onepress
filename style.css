@@ -1226,7 +1226,7 @@ h6, p, ul, ol, dl, blockquote, pre {
 .site-footer .footer-connect {
 	padding: 90px 0px;
 	padding: 80px 0px;
-	padding:  5rem 0rem;
+	padding:  5rem 0px;
 	text-align: center;
 }
 
@@ -2044,17 +2044,17 @@ section > .customize-partial-edit-shortcut button {
 ------------------------------*/
 .section-padding {
 	padding: 70px 0px;
-	padding:  4.375rem 0rem;
+	padding:  4.375rem 0px;
 }
 
 .section-padding-lg {
 	padding: 90px 0px;
-	padding:  5.625rem 0rem;
+	padding:  5.625rem 0px;
 }
 
 .section-padding-larger {
 	padding: 140px 0px;
-	padding:  8.75rem 0rem;
+	padding:  8.75rem 0px;
 }
 
 .section-meta {
@@ -2353,7 +2353,7 @@ section > .customize-partial-edit-shortcut button {
 
 .hero__content a.btn {
 	margin: 10px 10px 20px 0px;
-	margin:  0.625rem 0.625rem 1.25rem 0rem;
+	margin:  0.625rem 0.625rem 1.25rem 0px;
 }
 
 .hero__content p {
@@ -2382,7 +2382,7 @@ section > .customize-partial-edit-shortcut button {
 
 .hero-content-style2 .hcl2-content {
 	padding: 50px 0px;
-	padding:  3.125rem 0rem;
+	padding:  3.125rem 0px;
 }
 
 .hero-content-style2 .hcl2-image {
@@ -2650,9 +2650,14 @@ section > .customize-partial-edit-shortcut button {
 ------------------------------*/
 #parallax-hero {
 	position: relative;
+	background: none;
 }
 
 #parallax-hero .hero-slideshow-wrapper {
+	background: none;
+}
+
+#parallax-hero .hero-slideshow-wrapper::after {
 	background: none;
 }
 
@@ -2668,6 +2673,7 @@ section > .customize-partial-edit-shortcut button {
 	-o-background-size: cover;
 	background-size: cover;
 	background-repeat: no-repeat;
+	background-attachment: fixed;
 }
 
 #parallax-hero > .parallax-bg:before {
@@ -2683,6 +2689,11 @@ section > .customize-partial-edit-shortcut button {
 .section-parallax {
 	background: none;
 	position: relative;
+	overflow: hidden;
+}
+
+.section-parallax > section, .section-parallax .onepage-section, .section-parallax .section-inverse {
+	background: none;
 }
 
 .section-parallax .parallax-bg {
@@ -2697,6 +2708,7 @@ section > .customize-partial-edit-shortcut button {
 	-o-background-size: cover;
 	background-size: cover;
 	background-repeat: no-repeat;
+	background-attachment: fixed;
 }
 
 .section-parallax .parallax-bg:before {

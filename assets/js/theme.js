@@ -508,6 +508,7 @@ jQuery(document).ready(function ( $ ) {
         positionProperty: 'position',
         responsive: true,
         horizontalScrolling: false,
+        verticalScrolling: true,
     });
 
     // Parallax hero

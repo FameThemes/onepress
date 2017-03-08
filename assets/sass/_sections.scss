@@ -573,7 +573,11 @@
 ------------------------------*/
 #parallax-hero {
 	position: relative;
+	background: none;
 	.hero-slideshow-wrapper {
+		background: none;
+	}
+	.hero-slideshow-wrapper::after {
 		background: none;
 	}
 	> .parallax-bg {
@@ -591,12 +595,16 @@
 		-o-background-size: cover;
 		background-size: cover;
 		background-repeat: no-repeat;
+		background-attachment: fixed;
 	}
 }
 .section-parallax {
 	background: none;
 	position: relative;
-
+	overflow: hidden;
+	> section, .onepage-section, .section-inverse{
+		background: none;
+	}
 	.parallax-bg {
 		&:before {
 			content: " ";
@@ -612,6 +620,7 @@
 		-o-background-size: cover;
 		background-size: cover;
 		background-repeat: no-repeat;
+		background-attachment: fixed;
 	}
 
 }
