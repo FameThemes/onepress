@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design. The theme overall is an elegant and classic one, a fine example of Bootstrap 4 WordPress theme which compatibility with latest version of WooCommerce. (Live preview : http://www.famethemes.com/preview/?theme=OnePress)
-Version: 1.3.2
+Version: 1.3.3
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -1226,7 +1226,7 @@ h6, p, ul, ol, dl, blockquote, pre {
 .site-footer .footer-connect {
 	padding: 90px 0px;
 	padding: 80px 0px;
-	padding:  5rem 0px;
+	padding:  5rem 0rem;
 	text-align: center;
 }
 
@@ -2044,17 +2044,17 @@ section > .customize-partial-edit-shortcut button {
 ------------------------------*/
 .section-padding {
 	padding: 70px 0px;
-	padding:  4.375rem 0px;
+	padding:  4.375rem 0rem;
 }
 
 .section-padding-lg {
 	padding: 90px 0px;
-	padding:  5.625rem 0px;
+	padding:  5.625rem 0rem;
 }
 
 .section-padding-larger {
 	padding: 140px 0px;
-	padding:  8.75rem 0px;
+	padding:  8.75rem 0rem;
 }
 
 .section-meta {
@@ -2353,7 +2353,7 @@ section > .customize-partial-edit-shortcut button {
 
 .hero__content a.btn {
 	margin: 10px 10px 20px 0px;
-	margin:  0.625rem 0.625rem 1.25rem 0px;
+	margin:  0.625rem 0.625rem 1.25rem 0rem;
 }
 
 .hero__content p {
@@ -2382,7 +2382,7 @@ section > .customize-partial-edit-shortcut button {
 
 .hero-content-style2 .hcl2-content {
 	padding: 50px 0px;
-	padding:  3.125rem 0px;
+	padding:  3.125rem 0rem;
 }
 
 .hero-content-style2 .hcl2-image {
