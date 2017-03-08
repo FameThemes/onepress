@@ -1,13 +1,6 @@
 === OnePress ===
 
-Contributors: famethemes, congthien, kientrong
-Tags: one-column, two-columns, left-sidebar, right-sidebar, fluid-layout, responsive-layout, custom-menu, featured-images, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, blue, light
-Tested up to: 4.4.2
-Stable tag: 1.1.4
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-
-OnePress Theme, Copyright 2015 FameThemes
+OnePress Theme, Copyright 2017 FameThemes
 OnePress is distributed under the terms of the GNU GPL
 
 == Description ==
@@ -173,4 +166,3 @@ License: Licensed under the MIT license.
 - jQuery OwlCarousel
 Source: http://www.owlgraphic.com/owlcarousel/
 License: Licensed under MIT
-
