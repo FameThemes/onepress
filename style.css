@@ -2673,7 +2673,7 @@ section > .customize-partial-edit-shortcut button {
 	-o-background-size: cover;
 	background-size: cover;
 	background-repeat: no-repeat;
-	background-attachment: fixed;
+	background-attachment: local;
 }
 
 #parallax-hero > .parallax-bg:before {
@@ -2708,7 +2708,7 @@ section > .customize-partial-edit-shortcut button {
 	-o-background-size: cover;
 	background-size: cover;
 	background-repeat: no-repeat;
-	background-attachment: fixed;
+	background-attachment: local;
 }
 
 .section-parallax .parallax-bg:before {
@@ -2745,6 +2745,10 @@ section > .customize-partial-edit-shortcut button {
 
 .parallax-content p, .parallax-content a {
 	color: #FFFFFF;
+}
+
+.body-mobile #parallax-hero .parallax-bg, .body-mobile .section-parallax .parallax-bg {
+	background-attachment: local;
 }
 
 /* Section: Team
