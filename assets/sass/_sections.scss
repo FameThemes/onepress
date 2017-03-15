@@ -595,7 +595,7 @@
 		-o-background-size: cover;
 		background-size: cover;
 		background-repeat: no-repeat;
-		background-attachment: fixed;
+		background-attachment: local;
 	}
 }
 .section-parallax {
@@ -620,7 +620,7 @@
 		-o-background-size: cover;
 		background-size: cover;
 		background-repeat: no-repeat;
-		background-attachment: fixed;
+		background-attachment: local;
 	}
 
 }
@@ -648,6 +648,13 @@
 	}
 }
 
+.body-mobile {
+	#parallax-hero, .section-parallax {
+		.parallax-bg {
+			background-attachment: local;
+		}
+	}
+}
 /* Section: Team
 ------------------------------*/
 .section-team {
@@ -1078,6 +1085,8 @@ div.wpcf7-response-output {
   display: inline-block;
   overflow: hidden;
   float: left;
+  //filter: "alpha(opacity=10)";
+  //opacity: 0.1;
 }
 
 .gallery-masonry {

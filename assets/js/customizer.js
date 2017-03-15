@@ -462,8 +462,10 @@
              */
             control.updateValue = function () {
                 var data = control.getData();
-                $("[data-hidden-value]", control.container).val(data);
-                $("[data-hidden-value]", control.container).trigger('change');
+                //$("[data-hidden-value]", control.container).val(data);
+                //$("[data-hidden-value]", control.container).trigger('change');
+
+                control.setting.set( data );
             };
 
             /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * The header for our theme.
+ * The header for the OnePress theme.
  *
  * This is the template that displays all of the <head> section and everything up until <div id="content">
  *
@@ -20,7 +20,7 @@
 </head>
 
 <body <?php body_class(); ?>>
-<?php do_action( 'onepress_before_site_star' ); ?>
+<?php do_action( 'onepress_before_site_start' ); ?>
 <div id="page" class="hfeed site">
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'onepress' ); ?></a>
     <?php

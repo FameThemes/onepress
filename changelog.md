@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.3.4
+* Update parallax.
+* Fix issue sometime video lightbox not show.
 
 ## 1.3.3
 * Fix translation function that is missing a text-domain
@@ -20,7 +23,6 @@ CHANGELOG
 * Change hero loading icon.
 * Remove Magnific-Popup, update lightbox video.
 
-
 ## 1.3.0
 * WP 4.7 compatible.
 * Support WP 4.7 customizer shortcut.
@@ -37,7 +39,6 @@ CHANGELOG
 * Add copy theme mod function.
 * Add option to select site layout.
 * Improve gallery and add view more button.
-
 
 ## 1.2.8
 * Add sidebar for WooCommerce plugins.
@@ -63,7 +64,6 @@ CHANGELOG
 * Update WPML config.
 * Update translate file.
 
-
 ## 1.2.5
 * Update FontAwesome to latest version.
 * Remove logo 1.2.0 fallback.
@@ -75,7 +75,6 @@ CHANGELOG
 * Speedup customizer.
 * Home logo click to scroll to top without reload page.
 * Add demo import content tab.
-
 
 ## 1.2.4
 * Fix issue can click to nav link.
