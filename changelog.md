@@ -3,6 +3,7 @@ CHANGELOG
 ====================================================================
 ## 1.3.4
 * Update parallax.
+* Fix issue sometime video lightbox not show.
 
 ## 1.3.3
 * Fix translation function that is missing a text-domain
