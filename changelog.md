@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.3.5
+* Update responsive parallax.
+
 ## 1.3.4
 * Update parallax.
 * Fix issue sometime video lightbox not show.
