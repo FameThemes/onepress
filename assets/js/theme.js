@@ -164,7 +164,6 @@ jQuery( document ).ready( function( $ ) {
                 header_fixed.addClass('header-fixed');
                 header_fixed.css( 'top', topbar+'px' );
             } else {
-                console.log( 'scroll-0' );
                 header_fixed.removeClass('header-fixed');
                 header_fixed.css( 'top', 'auto' );
                 $wrap.removeClass( 'is-fixed' ).addClass( 'no-scroll' );
@@ -268,7 +267,7 @@ jQuery( document ).ready( function( $ ) {
 
         var el_top = $element.offset().top;
         var eh_h = $element.height();
-        var eh_bot = el_top + eh_h;
+        var el_bot = el_top + eh_h;
         var view_port_bot = view_port_top + view_port_h;
 
         var all_height = $( 'body' )[0].scrollHeight;
@@ -278,13 +277,15 @@ jQuery( document ).ready( function( $ ) {
         var in_view_port = false;
         // If scroll maximum
         if ( view_port_top >= max_top ) {
-            if ( eh_bot > view_port_top &&  eh_bot < view_port_bot ) {
+
+            if ( ( el_top < view_port_top &&  el_top > view_port_bot ) || ( el_top > view_port_top && el_bot < view_port_top  ) ) {
                 in_view_port = true;
             }
+
         } else {
             if ( el_top <= view_port_top + offset_top ) {
                 //if ( eh_bot > view_port_top &&  eh_bot < view_port_bot ) {
-                if ( eh_bot > view_port_top  ) {
+                if ( el_bot > view_port_top  ) {
                     in_view_port = true;
                 }
             }
@@ -308,7 +309,7 @@ jQuery( document ).ready( function( $ ) {
 
             if( _scroll_top < current_top )
             {
-                jQuery('.onepage-section').each( function ( index ) {
+                jQuery('section').each( function ( index ) {
                     var section = jQuery( this );
                     var currentId = section.attr('id') || '';
 
@@ -319,9 +320,9 @@ jQuery( document ).ready( function( $ ) {
                 });
 
             } else {
-                var ns = jQuery('.onepage-section').length;
+                var ns = jQuery('section').length;
                 for ( var i = ns - 1; i >= 0; i-- ) {
-                    var section = jQuery('.onepage-section').eq( i );
+                    var section = jQuery('section').eq( i );
                     var currentId = section.attr('id') || '';
                     var in_vp = inViewPort( section , h + 10) ;
                     if ( in_vp ) {
