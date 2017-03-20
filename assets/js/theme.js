@@ -159,11 +159,12 @@ jQuery( document ).ready( function( $ ) {
             var header_parent = header_fixed.parent();
             var p_to_top = header_parent.offset().top;
             var st = $( document ).scrollTop();
-            if( st > p_to_top ) {
+            if( st > p_to_top && st > 0 ) {
                 $wrap.addClass( 'is-fixed').removeClass( 'no-scroll' );
                 header_fixed.addClass('header-fixed');
                 header_fixed.css( 'top', topbar+'px' );
             } else {
+                console.log( 'scroll-0' );
                 header_fixed.removeClass('header-fixed');
                 header_fixed.css( 'top', 'auto' );
                 $wrap.removeClass( 'is-fixed' ).addClass( 'no-scroll' );

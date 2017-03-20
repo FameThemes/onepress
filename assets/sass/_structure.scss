@@ -416,9 +416,9 @@
     top: 50%;
     right: 5px;
     margin-top: -2px;
-    -webkit-transition: all 0.2s;
-    -moz-transition: all 0.2s;
-    transition: all 0.2s;
+    -webkit-transition: rotate 0.2s, translate 0.2s;
+    -moz-transition: rotate 0.2s, translate 0.2s;
+    transition: rotate 0.2s, translate 0.2s;
     display: inline-block;
     height: 3px;
     width: 24px;
