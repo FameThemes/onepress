@@ -3,6 +3,9 @@ CHANGELOG
 ====================================================================
 ## 1.3.5
 * Update responsive parallax.
+* Update menu toggle button.
+* Fix Header transparent.
+* Update menu items selection.
 
 ## 1.3.4
 * Update parallax.
