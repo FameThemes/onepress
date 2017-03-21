@@ -513,6 +513,38 @@ jQuery(document).ready(function ( $ ) {
 
 
     // Parallax Section
+    var setParallax = function( $section ){
+        var w = $section.width();
+        var h = $section.height();
+        var p;
+        if ( h == 0 ) {
+            h = 1;
+        }
+        if ( w == 0 ) {
+            w = 1;
+        }
+
+        if ( w  > h ) {
+            p = w / h * 100;
+        } else {
+            p = h / w * 100;
+        }
+        if ( p < 130 ) {
+            p = 130;
+        }
+
+        $( '.parallax-bg', $section).css( 'height', p+'%' );
+    };
+    $( '.section-parallax').each( function(){
+        setParallax( $( this ) );
+    } );
+
+    $( window ).resize( function (){
+        $( '.section-parallax').each( function(){
+            setParallax( $( this ) );
+        } );
+    } );
+
 
     $.stellar({
         scrollProperty: 'scroll',
