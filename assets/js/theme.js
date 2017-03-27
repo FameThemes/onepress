@@ -529,8 +529,8 @@ jQuery(document).ready(function ( $ ) {
         } else {
             p = h / w * 100;
         }
-        if ( p < 130 ) {
-            p = 130;
+        if ( p < 120 ) {
+            p = 120;
         }
 
         $( '.parallax-bg', $section).css( 'height', p+'%' );
@@ -595,9 +595,6 @@ jQuery(document).ready(function ( $ ) {
 
         });
     });
-
-
-
 
 
     /**
