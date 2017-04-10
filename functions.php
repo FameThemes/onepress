@@ -163,7 +163,7 @@ add_action( 'widgets_init', 'onepress_widgets_init' );
  */
 function onepress_scripts() {
 
-    $theme = wp_get_theme();
+    $theme = wp_get_theme( 'onepress' );
     $version = $theme->get( 'Version' );
 
 	wp_enqueue_style( 'onepress-fonts', onepress_fonts_url(), array(), $version );
@@ -173,7 +173,7 @@ function onepress_scripts() {
 	wp_enqueue_style( 'onepress-style', get_template_directory_uri().'/style.css' );
 
 	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array(), $version, true );
+	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array( 'jquery' ), $version, true );
 	wp_enqueue_script( 'onepress-js-bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.min.js', array(), $version, true );
 
     // Animation from settings.

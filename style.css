@@ -2662,66 +2662,17 @@ section > .customize-partial-edit-shortcut button {
 	background: none;
 }
 
-#parallax-hero > .parallax-bg {
-	position: absolute;
-	top: 0px;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
-	width: 100%;
-	height: 150%;
-	display: block;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-}
-
-#parallax-hero > .parallax-bg:before {
-	content: " ";
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	background: rgba(0, 0, 0, 0.3);
-	display: block;
-	width: 100%;
-	height: 100%;
-	z-index: 2;
-}
-
-#parallax-hero > .parallax-bg:after {
-	/*
-			content: " ";
-			position: absolute;
-			top: 0px; left: 0px; right: 0px; bottom: 0px;
-			background-image: inherit;
-			background-repeat: no-repeat;
-			background-position: center center;
-			-webkit-background-size: cover;
-			-moz-background-size: cover;
-			-o-background-size: cover;
-			background-size: cover;
-			display: block;
-			width: 100%;
-			height: 100%;
-			*/
-}
-
-.section-parallax {
+.section-parallax, #parallax-hero {
 	background: none;
 	position: relative;
 	overflow: hidden;
 }
 
-.section-parallax > section, .section-parallax .onepage-section, .section-parallax .section-inverse {
+.section-parallax > section, .section-parallax .onepage-section, .section-parallax .section-inverse, #parallax-hero > section, #parallax-hero .onepage-section, #parallax-hero .section-inverse {
 	background: none;
 }
 
-.section-parallax .parallax-bg {
+.section-parallax .parallax-bg, #parallax-hero .parallax-bg {
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
@@ -2732,13 +2683,12 @@ section > .customize-partial-edit-shortcut button {
 	display: block;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
-	-o-background-size: cover;
 	background-size: cover;
 	background-repeat: no-repeat;
-	background-attachment: fixed;
+	background-attachment: scroll;
 }
 
-.section-parallax .parallax-bg:before {
+.section-parallax .parallax-bg:before, #parallax-hero .parallax-bg:before {
 	content: " ";
 	position: absolute;
 	top: 0px;
@@ -2750,24 +2700,6 @@ section > .customize-partial-edit-shortcut button {
 	width: 100%;
 	height: 100%;
 	z-index: 2;
-}
-
-.section-parallax .parallax-bg:after {
-	/*
-			content: " ";
-			position: absolute;
-			top: 0px; left: 0px; right: 0px; bottom: 0px;
-			background-image: inherit;
-			background-repeat: no-repeat;
-			background-position: top center;
-			-webkit-background-size: cover;
-			-moz-background-size: cover;
-			-o-background-size: cover;
-			background-size: cover;
-			display: block;
-			width: 100%;
-			height: 100%;
-			*/
 }
 
 .parallax_bg_overlay {
@@ -2794,10 +2726,6 @@ section > .customize-partial-edit-shortcut button {
 
 .parallax-content p, .parallax-content a {
 	color: #FFFFFF;
-}
-
-.body-mobile #parallax-hero .parallax-bg, .body-mobile .section-parallax .parallax-bg {
-	background-attachment: local;
 }
 
 /* Section: Team
