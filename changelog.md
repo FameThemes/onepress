@@ -3,6 +3,7 @@ CHANGELOG
 ====================================================================
 ## 1.3.6
 * Improve parallax.
+* Fix a bug load css.map files.
 
 
 ## 1.3.5
