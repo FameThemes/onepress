@@ -511,18 +511,56 @@ jQuery(document).ready(function ( $ ) {
         });
     }
 
-
-    // Parallax Section
-
-    $.stellar({
-        scrollProperty: 'scroll',
-        positionProperty: 'position',
-        responsive: true,
-        horizontalScrolling: false,
-        verticalScrolling: true,
-        parallaxBackgrounds: false,
-        parallaxElements: true,
+    $('.section-parallax, .parallax-hero').bind('inview', function ( event, visible ) {
+        if ( visible == true ) {
+        } else {
+        }
     });
+
+    var lastScrollTop = 0;
+    // Paralax effect
+    function parallaxPosition( direction ){
+        var top = $( window ).scrollTop();
+        var wh = $( window).height();
+        $('.section-parallax, .parallax-hero').each( function(  ){
+            var $el = $( this );
+            var h = $el.width();
+            var r = .3;
+            if ( wh > h ) {
+                r = .3;
+            } else {
+                r = .6;
+            }
+
+            var is_inview = $el.data( 'inview' );
+            if ( is_inview ) {
+                var offsetTop = $el.offset().top;
+                var diff, bgTop;
+                diff = top - offsetTop;
+                bgTop = diff * r;
+                $( '.parallax-bg', $el ) .css( 'background-position', '50% '+( bgTop )+'px' );
+            }
+
+        } );
+    }
+    $(window).scroll(function(e){
+        var top = $( window ).scrollTop();
+        var direction = '';
+        if ( top > lastScrollTop ){
+            direction = 'down';
+        } else {
+            direction = 'up';
+        }
+        lastScrollTop = top ;
+        parallaxPosition( );
+    });
+    $(window).resize( function(){
+        parallaxPosition( );
+    } );
+
+    $(window).trigger('scroll');
+
+
 
 
     // Parallax hero
@@ -532,12 +570,6 @@ jQuery(document).ready(function ( $ ) {
         $('.parallax-bg', hero).imagesLoaded({background: true}, function () {
             hero.find('.hero-slideshow-wrapper').addClass('loaded');
             hero.removeClass('loading');
-
-            hero.stellar({
-                scrollProperty: 'scroll',
-                positionProperty: 'position',
-                horizontalScrolling: false,
-            });
 
             setTimeout(function () {
                 hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
@@ -553,19 +585,11 @@ jQuery(document).ready(function ( $ ) {
         var s = $(this);
         $('.parallax-bg', s).imagesLoaded({background: true}, function () {
 
-            s.stellar({
-                scrollProperty: 'scroll',
-                positionProperty: 'position',
-                horizontalScrolling: false,
-            });
 
         }).fail(function (instance) {
 
         });
     });
-
-
-
 
 
     /**

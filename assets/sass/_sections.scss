@@ -581,46 +581,8 @@
 	.hero-slideshow-wrapper::after {
 		background: none;
 	}
-	> .parallax-bg {
-		&:before {
-			content: " ";
-			position: absolute;
-			top: 0px; left: 0px; right: 0px; bottom: 0px;
-			background: rgba( 0, 0, 0 ,.3 );
-			display: block;
-			width: 100%;
-			height: 100%;
-			z-index: 2;
-		}
-		&:after {
-			content: " ";
-			position: absolute;
-			top: 0px; left: 0px; right: 0px; bottom: 0px;
-			background-image: inherit;
-			background-repeat: no-repeat;
-			background-position: center center;
-			-webkit-background-size: cover;
-			-moz-background-size: cover;
-			-o-background-size: cover;
-			background-size: cover;
-			display: block;
-			width: 100%;
-			height: 100%;
-		}
-		position: absolute;
-		top: 0px; bottom: 0px; left: 0px; right:0px;
-		width: 100%;
-		height: 150%;
-		display: block;
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-attachment: fixed;
-	}
 }
-.section-parallax {
+.section-parallax, #parallax-hero {
 	background: none;
 	position: relative;
 	overflow: hidden;
@@ -640,25 +602,20 @@
 			z-index: 2;
 		}
 		&:after {
-			content: " ";
-			position: absolute;
-			top: 0px; left: 0px; right: 0px; bottom: 0px;
-			background-image: inherit;
-			display: block;
-			width: 100%;
-			height: 100%;
 		}
+
 		position: absolute;
 		top: 0px; bottom: 0px; left: 0px; right:0px;
 		width: 100%;
 		height: 120%;
 		display: block;
+
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
-		-o-background-size: cover;
 		background-size: cover;
 		background-repeat: no-repeat;
-		background-attachment: fixed;
+		background-attachment: scroll;
+		//background-position: top center;
 	}
 
 }
@@ -689,7 +646,11 @@
 .body-mobile {
 	#parallax-hero, .section-parallax {
 		.parallax-bg {
-			background-attachment: local;
+			//background-attachment: local;
+			//-webkit-background-size: none;
+			//-moz-background-size: none;
+			//-o-background-size: none;
+
 		}
 	}
 }

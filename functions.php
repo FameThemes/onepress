@@ -111,6 +111,11 @@ if ( ! function_exists( 'onepress_setup' ) ) :
         // Add theme support for selective refresh for widgets.
         add_theme_support( 'customize-selective-refresh-widgets' );
 
+        // Add support for WooCommerce.
+        add_theme_support( 'wc-product-gallery-zoom' );
+        add_theme_support( 'wc-product-gallery-lightbox' );
+        add_theme_support( 'wc-product-gallery-slider' );
+
 	}
 endif;
 add_action( 'after_setup_theme', 'onepress_setup' );
@@ -163,7 +168,7 @@ add_action( 'widgets_init', 'onepress_widgets_init' );
  */
 function onepress_scripts() {
 
-    $theme = wp_get_theme();
+    $theme = wp_get_theme( 'onepress' );
     $version = $theme->get( 'Version' );
 
 	wp_enqueue_style( 'onepress-fonts', onepress_fonts_url(), array(), $version );
@@ -173,7 +178,7 @@ function onepress_scripts() {
 	wp_enqueue_style( 'onepress-style', get_template_directory_uri().'/style.css' );
 
 	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array(), $version, true );
+	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array( 'jquery' ), $version, true );
 	wp_enqueue_script( 'onepress-js-bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.min.js', array(), $version, true );
 
     // Animation from settings.
@@ -190,33 +195,43 @@ function onepress_scripts() {
     );
     // Load gallery scripts
     $galley_disable  = get_theme_mod( 'onepress_gallery_disable' ) ==  1 ? true : false;
-    if ( ! $galley_disable || is_customize_preview() ) {
-        $onepress_js_settings['gallery_enable'] = 1;
-        $display = get_theme_mod( 'onepress_gallery_display', 'grid' );
-        if ( ! is_customize_preview() ) {
-            switch ( $display ) {
-                case 'masonry':
-                    wp_enqueue_script('onepress-gallery-masonry', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array(), $version, true);
-                    break;
-                case 'justified':
-                    wp_enqueue_script('onepress-gallery-justified', get_template_directory_uri() . '/assets/js/jquery.justifiedGallery.min.js', array(), $version, true);
-                    break;
-                case 'slider':
-                case 'carousel':
-                    wp_enqueue_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            wp_enqueue_script('onepress-gallery-masonry', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array(), $version, true);
-            wp_enqueue_script('onepress-gallery-justified', get_template_directory_uri() . '/assets/js/jquery.justifiedGallery.min.js', array(), $version, true);
-            wp_enqueue_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
+    $is_shop = false;
+    if ( function_exists( 'is_woocommerce' ) ) {
+        if ( is_woocommerce() ) {
+            $is_shop = true;
         }
-
     }
 
-    wp_enqueue_style( 'onepress-gallery-lightgallery', get_template_directory_uri().'/assets/css/lightgallery.css' );
+    // Don't load scripts for woocommerce because it don't need.
+    if ( ! $is_shop ) {
+        if ( ! $galley_disable || is_customize_preview()) {
+            $onepress_js_settings['gallery_enable'] = 1;
+            $display = get_theme_mod('onepress_gallery_display', 'grid');
+            if (!is_customize_preview()) {
+                switch ($display) {
+                    case 'masonry':
+                        wp_enqueue_script('onepress-gallery-masonry', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array(), $version, true);
+                        break;
+                    case 'justified':
+                        wp_enqueue_script('onepress-gallery-justified', get_template_directory_uri() . '/assets/js/jquery.justifiedGallery.min.js', array(), $version, true);
+                        break;
+                    case 'slider':
+                    case 'carousel':
+                        wp_enqueue_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                wp_enqueue_script('onepress-gallery-masonry', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array(), $version, true);
+                wp_enqueue_script('onepress-gallery-justified', get_template_directory_uri() . '/assets/js/jquery.justifiedGallery.min.js', array(), $version, true);
+                wp_enqueue_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
+            }
+
+        }
+        wp_enqueue_style('onepress-gallery-lightgallery', get_template_directory_uri() . '/assets/css/lightgallery.css');
+    }
+
 	wp_enqueue_script( 'onepress-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
