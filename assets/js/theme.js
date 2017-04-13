@@ -149,11 +149,21 @@ jQuery( document ).ready( function( $ ) {
                     topbar = 0;
                 }
             }
+            header_fixed.height( 'auto' );
             header_h = header_fixed.height() || 0;
             if ( ! is_transparent){
                 $wrap.height( header_h );
             }
         } );
+
+        // Need to improve
+        // TODO: Fix safari menu issue
+        for ( var i = i; i<=4; i++ ) {
+            setTimeout( function(){
+                $( window ).resize();
+            } , i*1000 );
+        }
+
 
         $( document ).scroll( function(){
             var header_parent = header_fixed.parent();
