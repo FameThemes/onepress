@@ -141,7 +141,7 @@ jQuery( document ).ready( function( $ ) {
             $wrap.height( header_h );
         }
 
-        $( window).resize( function(){
+        function setUpHeaderHeight(){
             topbar = $( '#wpadminbar' ).height() || 0;
             if (  topbar > 0 ) {
                 var  topbar_pos = $( '#wpadminbar').css( 'position' );
@@ -150,17 +150,29 @@ jQuery( document ).ready( function( $ ) {
                 }
             }
             header_fixed.height( 'auto' );
+            $wrap.height( 'auto' );
+
+            jQuery('.site-header .onepress-menu').css( 'line-height', 'auto' );
+
             header_h = header_fixed.height() || 0;
             if ( ! is_transparent){
                 $wrap.height( header_h );
             }
+            var header_height = jQuery('.site-header').height();
+            jQuery('.site-header .onepress-menu').css( 'line-height', header_height + "px" );
+
+            $( window ).trigger('site_header_height_changed');
+        }
+
+        $( window).resize( function(){
+            setUpHeaderHeight();
         } );
 
         // Need to improve
         // TODO: Fix safari menu issue
-        for ( var i = i; i<=4; i++ ) {
+        for ( var i = i; i <= 10; i++ ) {
             setTimeout( function(){
-                $( window ).resize();
+                setUpHeaderHeight();
             } , i*1000 );
         }
 
