@@ -540,15 +540,33 @@ jQuery(document).ready(function ( $ ) {
     });
 
     var lastScrollTop = 0;
-    // Paralax effect
+    // Parallax effect
+    function parrallaxHeight() {
+        $('.section-parallax ').each( function(  ){
+            var $el = $( this );
+            $('.parallax-bg', $el ).height( '' );
+            var w = $el.width();
+            var h = $el.height();
+            if ( h == 0 ) {
+                h = 1;
+            }
+            if ( h < w ) {
+                if ( w / h < 2.0 ) {
+                    h = w * 1.5;
+                    $('.parallax-bg', $el).height(h);
+                }
+            }
+        } );
+    }
     function parallaxPosition( direction ){
         var top = $( window ).scrollTop();
         var wh = $( window).height();
         $('.section-parallax, .parallax-hero').each( function(  ){
             var $el = $( this );
-            var h = $el.width();
+            var w = $el.width();
+            //var sh = $el.height();
             var r = .3;
-            if ( wh > h ) {
+            if ( wh > w ) {
                 r = .3;
             } else {
                 r = .6;
@@ -577,9 +595,10 @@ jQuery(document).ready(function ( $ ) {
         parallaxPosition( );
     });
     $(window).resize( function(){
+        parrallaxHeight();
         parallaxPosition( );
     } );
-
+    parrallaxHeight();
     $(window).trigger('scroll');
 
 
