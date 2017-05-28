@@ -54,26 +54,6 @@ function _to_bool( v ) {
     return false;
 }
 
-var isMobile = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    any: function() {
-        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-    }
-};
 
 /**
  * skip-link-focus-fix.js
@@ -114,6 +94,28 @@ var isMobile = {
  * Sticky header when scroll.
  */
 jQuery( document ).ready( function( $ ) {
+
+    var isMobile = {
+        Android: function() {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function() {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function() {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function() {
+            return navigator.userAgent.match(/Opera Mini/i);
+        },
+        Windows: function() {
+            return navigator.userAgent.match(/IEMobile/i);
+        },
+        any: function() {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    };
+
 
     if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
         var is_top_header = $( '#page > .site-header').length ?  true : false;
@@ -194,15 +196,14 @@ jQuery( document ).ready( function( $ ) {
 
     }
 
-});
 
 
-/*
-* Nav Menu & element actions
-*
-* Smooth scroll for navigation and other elements
-*/
-( function( $ ) {
+    /*
+     * Nav Menu & element actions
+     *
+     * Smooth scroll for navigation and other elements
+     */
+
     var mobile_max_width =  1140; // Media max width for mobile
     var main_navigation = jQuery('.main-navigation .onepress-menu');
     var stite_header =  $( '.site-header' );
@@ -405,11 +406,8 @@ jQuery( document ).ready( function( $ ) {
         } );
     }
 
-})( jQuery );
 
 
-
-jQuery(document).ready(function ( $ ) {
 
     if ( isMobile.any() ) {
         jQuery( 'body' ).addClass( 'body-mobile' ).removeClass( 'body-desktop' );
@@ -742,9 +740,9 @@ jQuery(document).ready(function ( $ ) {
                     }
 
                     //gutter = gutter / 2;
-                   // m.parent().css({'margin-left': -gutter, 'margin-right': -gutter});
+                    // m.parent().css({'margin-left': -gutter, 'margin-right': -gutter});
                     m.find('.g-item').css({'width': ( 100 / columns  ) + '%', 'float': 'left', 'padding': 0});
-                   // m.find('.g-item .inner').css({'padding': gutter / 2});
+                    // m.find('.g-item .inner').css({'padding': gutter / 2});
                     m.isotope({
                         // options
                         itemSelector: '.g-item',
@@ -789,5 +787,6 @@ jQuery(document).ready(function ( $ ) {
             }
         } );
     }
+
 
 });
