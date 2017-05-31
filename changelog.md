@@ -1,6 +1,17 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.3.7
+* Fix safari menu issue.
+* Improve editor customizer.
+* Run shortcode in hero content.
+* Improve parallax when small padding.
+* Update Bootstrap.
+* Clean up js fix conflict plugin.
+* HTML format for contact text.
+* Do not effect custom content by plugins, change `the_content` to `onepress_the_content`
+
+
 ## 1.3.6
 * Improve parallax.
 * Fix WooCommerce issues.

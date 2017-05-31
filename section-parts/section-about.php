@@ -30,7 +30,7 @@ if ( ! empty( $page_ids ) ) {
                         echo '<h2 class="section-title">' . esc_html($onepress_about_title) . '</h2>';
                     } ?>
                     <?php if ($onepress_about_desc != '') {
-                        echo '<div class="section-desc">' . apply_filters( 'the_content', wp_kses_post( $onepress_about_desc ) ) . '</div>';
+                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $onepress_about_desc ) ) . '</div>';
                     } ?>
                 </div>
                 <?php } ?>
