@@ -53,9 +53,12 @@ if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_addres
 
                     <div class="col-sm-6 wow slideInUp">
                         <br>
-                        <?php if ($onepress_contact_text != '') echo apply_filters( 'the_content', wp_kses_post( $onepress_contact_text ) ); ?>
+                        <?php
+                        if ($onepress_contact_text != '') {
+                            echo apply_filters( 'onepress_the_content', wp_kses_post( $onepress_contact_text ) );
+                        }
+                        ?>
                         <br><br>
-
                         <div class="address-box">
 
                             <h3><?php if ($onepress_contact_address_title != '') echo wp_kses_post($onepress_contact_address_title); ?></h3>
@@ -71,7 +74,6 @@ if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_addres
                             <?php if ($onepress_contact_phone != ''): ?>
                                 <div class="address-contact">
                                     <span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span>
-
                                     <div class="address-content"><?php echo wp_kses_post($onepress_contact_phone); ?></div>
                                 </div>
                             <?php endif; ?>
@@ -79,7 +81,6 @@ if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_addres
                             <?php if ($onepress_contact_email != ''): ?>
                                 <div class="address-contact">
                                     <span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
-
                                     <div class="address-content"><a href="mailto:<?php echo antispambot($onepress_contact_email); ?>"><?php echo antispambot($onepress_contact_email); ?></a></div>
                                 </div>
                             <?php endif; ?>
