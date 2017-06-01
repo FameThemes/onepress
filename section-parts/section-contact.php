@@ -31,7 +31,7 @@ if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_addres
                     <?php if ($onepress_contact_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_contact_subtitle) . '</h5>'; ?>
                     <?php if ($onepress_contact_title != '') echo '<h2 class="section-title">' . esc_html($onepress_contact_title) . '</h2>'; ?>
                     <?php if ( $desc ) {
-                        echo '<div class="section-desc">' . apply_filters( 'the_content', wp_kses_post( $desc ) ) . '</div>';
+                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
                     } ?>
                 </div>
                 <?php } ?>
@@ -53,7 +53,7 @@ if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_addres
 
                     <div class="col-sm-6 wow slideInUp">
                         <br>
-                        <?php if ($onepress_contact_text != '') echo wp_kses_post($onepress_contact_text); ?>
+                        <?php if ($onepress_contact_text != '') echo apply_filters( 'the_content', wp_kses_post( $onepress_contact_text ) ); ?>
                         <br><br>
 
                         <div class="address-box">

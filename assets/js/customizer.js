@@ -1023,11 +1023,11 @@
 
 }( jQuery ));
 
-
-jQuery( document ).ready( function( $ ){
+( function( api, $ ) {
 
     function _the_editor( container ){
         var _editor = {
+            editor_added: false,
             ready: function( container ) {
 
                 var control = this;
@@ -1064,52 +1064,65 @@ jQuery( document ).ready( function( $ ){
                     }
                 } );
 
+                control.container.find( '.wp-js-editor').addClass( 'wp-js-editor-active' );
+                control.preview.insertBefore( control.editing_area );
+
                 control._init();
 
                 $( window ) .on( 'resize', function(){
-                    control._resize();
+                   control._resize();
                 } );
 
+            },
+
+            _add_editor: function(){
+                var control = this;
+                if ( ! this.editor_added ) {
+                    this.editor_added = true;
+
+                    $( 'body .wp-full-overlay').append( control.editing_editor );
+
+                    $( 'textarea',  control.editing_editor).attr(  'data-editor-mod', ( control.editing_area.attr( 'data-editor-mod' ) || '' ) ) .wp_js_editor( {
+                        sync_id: control.editing_area,
+                        init_instance_callback: function( editor ) {
+                            var w =  $( '#wp-'+control.editor_id+ '-wrap' );
+                            $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor fullscreen-wp-editor"  type="button"><span class="dashicons"></span></button>' );
+                            $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor preview-wp-editor"  type="button"><span class="dashicons dashicons-visibility"></span></button>' );
+                            $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor close-wp-editor"  type="button"><span class="dashicons dashicons-no-alt"></span></button>' );
+                            w.on( 'click', '.close-wp-editor', function( e ) {
+                                e.preventDefault();
+                                control.editing_editor.removeClass( 'wpe-active' );
+                                $( '.wp-js-editor-preview').removeClass( 'wpe-focus');
+                            } );
+                            $( '.preview-wp-editor', w ).hover( function(){
+                                w.closest( '.modal-wp-js-editor').css( { opacity: 0 } );
+                            }, function(){
+                                w.closest( '.modal-wp-js-editor').css( { opacity: 1 } );
+                            } );
+                            w.on( 'click', '.fullscreen-wp-editor', function( e ) {
+                                e.preventDefault();
+                                w.closest( '.modal-wp-js-editor').toggleClass( 'fullscreen' );
+                                setTimeout( function(){
+                                    $( window ).resize();
+                                }, 600 );
+                            } );
+                        }
+                    } );
+
+
+                }
             },
 
             _init: function(  ){
 
                 var control = this;
-                $( 'body .wp-full-overlay').append( control.editing_editor );
-
-                $( 'textarea',  control.editing_editor).attr(  'data-editor-mod', ( control.editing_area.attr( 'data-editor-mod' ) || '' ) ) .wp_js_editor( {
-                    sync_id: control.editing_area,
-                    init_instance_callback: function( editor ) {
-                        var w =  $( '#wp-'+control.editor_id+ '-wrap' );
-                        $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor fullscreen-wp-editor"  type="button"><span class="dashicons"></span></button>' );
-                        $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor preview-wp-editor"  type="button"><span class="dashicons dashicons-visibility"></span></button>' );
-                        $( '.wp-editor-tabs', w).append( '<button class="wp-switch-editor close-wp-editor"  type="button"><span class="dashicons dashicons-no-alt"></span></button>' );
-                        w.on( 'click', '.close-wp-editor', function( e ) {
-                            e.preventDefault();
-                            control.editing_editor.removeClass( 'wpe-active' );
-                            $( '.wp-js-editor-preview').removeClass( 'wpe-focus');
-                        } );
-                        $( '.preview-wp-editor', w ).hover( function(){
-                            w.closest( '.modal-wp-js-editor').css( { opacity: 0 } );
-                        }, function(){
-                            w.closest( '.modal-wp-js-editor').css( { opacity: 1 } );
-                        } );
-                        w.on( 'click', '.fullscreen-wp-editor', function( e ) {
-                            e.preventDefault();
-                            w.closest( '.modal-wp-js-editor').toggleClass( 'fullscreen' );
-                            setTimeout( function(){
-                                $( window ).resize();
-                            }, 600 );
-                        } );
-                    }
-                } );
-
 
                 control.editing_area.on( 'change', function() {
                     control.preview.html( window.switchEditors._wp_Autop( $( this).val() ) );
                 });
 
                 control.preview.on( 'click', function( e ){
+                    control._add_editor();
                     $( '.modal-wp-js-editor').removeClass( 'wpe-active' );
                     control.editing_editor.toggleClass( 'wpe-active' );
                     tinyMCE.get( control.editor_id ).focus();
@@ -1118,8 +1131,7 @@ jQuery( document ).ready( function( $ ){
                     return false;
                 } );
 
-                control.container.find( '.wp-js-editor').addClass( 'wp-js-editor-active' );
-                control.preview.insertBefore( control.editing_area );
+
                 control.container.on( 'click', '.wp-js-editor-preview', function( e ){
                     e.preventDefault();
                 } );
@@ -1175,15 +1187,42 @@ jQuery( document ).ready( function( $ ){
 
     var _is_init_editors = {};
 
-    $( 'body' ).on( 'click', '#customize-theme-controls .accordion-section', function( e ){
-        //e.preventDefault();
-        var section = $( this );
-        var id = section.attr( 'id' ) || '';
-        if ( id ) {
-            if ( typeof _is_init_editors[ id ] === "undefined" ) {
-                _is_init_editors[ id ] = true;
+    // jQuery( document ).ready( function( $ ){
 
-                setTimeout( function() {
+    api.bind( 'ready', function( e, b ) {
+
+        $( '#customize-theme-controls .accordion-section').each( function(){
+            var section = $( this );
+            var id = section.attr( 'id' ) || '';
+            if ( id ) {
+                if ( typeof _is_init_editors[ id ] === "undefined" ) {
+                    _is_init_editors[ id ] = true;
+
+                    setTimeout( function() {
+                        if ( $( '.wp-js-editor', section ).length > 0 ) {
+                            $( '.wp-js-editor', section ).each( function(){
+                                _the_editor( $( this ) );
+                            } );
+                        }
+
+                        if ( $( '.repeatable-customize-control:not(.no-changeable) .item-editor', section ).length > 0 ) {
+                            $( '.repeatable-customize-control:not(.no-changeable) .item-editor', section ).each( function(){
+                                _the_editor( $( this ) );
+                            } );
+                        }
+                    }, 10 );
+
+                }
+            }
+        } );
+
+        // Check section when focus
+        if ( _wpCustomizeSettings.autofocus ) {
+            if ( _wpCustomizeSettings.autofocus.section ) {
+                var id = "sub-accordion-section-"+_wpCustomizeSettings.autofocus.section ;
+                _is_init_editors[ id ] = true;
+                var section = $( '#'+id );
+                setTimeout( function(){
                     if ( $( '.wp-js-editor', section ).length > 0 ) {
                         $( '.wp-js-editor', section ).each( function(){
                             _the_editor( $( this ) );
@@ -1195,50 +1234,28 @@ jQuery( document ).ready( function( $ ){
                             _the_editor( $( this ) );
                         } );
                     }
-                }, 10 );
+                }, 1000 );
+
+            } else if ( _wpCustomizeSettings.autofocus.panel ) {
 
             }
         }
-    } );
 
 
-    // Check section when focus
-    if ( _wpCustomizeSettings.autofocus ) {
-        if ( _wpCustomizeSettings.autofocus.section ) {
-            var id = "sub-accordion-section-"+_wpCustomizeSettings.autofocus.section ;
-            _is_init_editors[ id ] = true;
-            var section = $( '#'+id );
-            setTimeout( function(){
-                if ( $( '.wp-js-editor', section ).length > 0 ) {
-                    $( '.wp-js-editor', section ).each( function(){
-                        _the_editor( $( this ) );
-                    } );
-                }
 
-                if ( $( '.repeatable-customize-control:not(.no-changeable) .item-editor', section ).length > 0 ) {
-                    $( '.repeatable-customize-control:not(.no-changeable) .item-editor', section ).each( function(){
-                        _the_editor( $( this ) );
-                    } );
-                }
-            }, 1000 );
+        $( 'body' ).on( 'repeater-control-init-item', function( e, container ){
+            $( '.item-editor', container ).each( function(){
+                _the_editor( $( this ) );
+            } );
+        } );
 
-        } else if ( _wpCustomizeSettings.autofocus.panel ) {
-
-        }
-    }
-
-
-    $( 'body' ).on( 'repeater-control-init-item', function( e, container ){
-        $( '.item-editor', container ).each( function(){
-            _the_editor( $( this ) );
+        $( 'body' ).on( 'repeat-control-remove-item', function( e, container ){
+            _remove_editor( container );
         } );
     } );
 
-    $( 'body' ).on( 'repeat-control-remove-item', function( e, container ){
-        _remove_editor( container );
-    } );
 
-} );
+} )( wp.customize , jQuery );
 
 
 jQuery( window ).ready( function( $ ){
@@ -1252,7 +1269,6 @@ jQuery( window ).ready( function( $ ){
             $( '#accordion-section-onepress_order_styling > .accordion-section-title').append( '<span class="onepress-notice">Plus</span>' );
         }
     }
-
 
     /**
      * For Hero layout content settings

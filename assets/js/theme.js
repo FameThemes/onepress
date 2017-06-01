@@ -54,26 +54,6 @@ function _to_bool( v ) {
     return false;
 }
 
-var isMobile = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    any: function() {
-        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-    }
-};
 
 /**
  * skip-link-focus-fix.js
@@ -115,6 +95,28 @@ var isMobile = {
  */
 jQuery( document ).ready( function( $ ) {
 
+    var isMobile = {
+        Android: function() {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function() {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function() {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function() {
+            return navigator.userAgent.match(/Opera Mini/i);
+        },
+        Windows: function() {
+            return navigator.userAgent.match(/IEMobile/i);
+        },
+        any: function() {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    };
+
+
     if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
         var is_top_header = $( '#page > .site-header').length ?  true : false;
         $('.site-header').eq(0).wrap( '<div class="site-header-wrapper">' );
@@ -141,7 +143,7 @@ jQuery( document ).ready( function( $ ) {
             $wrap.height( header_h );
         }
 
-        $( window).resize( function(){
+        function setUpHeaderHeight(){
             topbar = $( '#wpadminbar' ).height() || 0;
             if (  topbar > 0 ) {
                 var  topbar_pos = $( '#wpadminbar').css( 'position' );
@@ -149,11 +151,33 @@ jQuery( document ).ready( function( $ ) {
                     topbar = 0;
                 }
             }
+            header_fixed.height( 'auto' );
+            $wrap.height( 'auto' );
+
+            jQuery('.site-header .onepress-menu').css( 'line-height', 'auto' );
+
             header_h = header_fixed.height() || 0;
             if ( ! is_transparent){
                 $wrap.height( header_h );
             }
+            var header_height = jQuery('.site-header').height();
+            jQuery('.site-header .onepress-menu').css( 'line-height', header_height + "px" );
+
+            $( window ).trigger('site_header_height_changed');
+        }
+
+        $( window).resize( function(){
+            setUpHeaderHeight();
         } );
+
+        // Need to improve
+        // TODO: Fix safari menu issue
+        for ( var i = i; i <= 10; i++ ) {
+            setTimeout( function(){
+                setUpHeaderHeight();
+            } , i*1000 );
+        }
+
 
         $( document ).scroll( function(){
             var header_parent = header_fixed.parent();
@@ -172,15 +196,14 @@ jQuery( document ).ready( function( $ ) {
 
     }
 
-});
 
 
-/*
-* Nav Menu & element actions
-*
-* Smooth scroll for navigation and other elements
-*/
-( function( $ ) {
+    /*
+     * Nav Menu & element actions
+     *
+     * Smooth scroll for navigation and other elements
+     */
+
     var mobile_max_width =  1140; // Media max width for mobile
     var main_navigation = jQuery('.main-navigation .onepress-menu');
     var stite_header =  $( '.site-header' );
@@ -383,11 +406,8 @@ jQuery( document ).ready( function( $ ) {
         } );
     }
 
-})( jQuery );
 
 
-
-jQuery(document).ready(function ( $ ) {
 
     if ( isMobile.any() ) {
         jQuery( 'body' ).addClass( 'body-mobile' ).removeClass( 'body-desktop' );
@@ -518,15 +538,33 @@ jQuery(document).ready(function ( $ ) {
     });
 
     var lastScrollTop = 0;
-    // Paralax effect
+    // Parallax effect
+    function parrallaxHeight() {
+        $('.section-parallax ').each( function(  ){
+            var $el = $( this );
+            $('.parallax-bg', $el ).height( '' );
+            var w = $el.width();
+            var h = $el.height();
+            if ( h == 0 ) {
+                h = 1;
+            }
+            if ( h < w ) {
+                if ( w / h < 2.0 ) {
+                    h = w * 1.5;
+                    $('.parallax-bg', $el).height(h);
+                }
+            }
+        } );
+    }
     function parallaxPosition( direction ){
         var top = $( window ).scrollTop();
         var wh = $( window).height();
         $('.section-parallax, .parallax-hero').each( function(  ){
             var $el = $( this );
-            var h = $el.width();
+            var w = $el.width();
+            //var sh = $el.height();
             var r = .3;
-            if ( wh > h ) {
+            if ( wh > w ) {
                 r = .3;
             } else {
                 r = .6;
@@ -555,9 +593,10 @@ jQuery(document).ready(function ( $ ) {
         parallaxPosition( );
     });
     $(window).resize( function(){
+        parrallaxHeight();
         parallaxPosition( );
     } );
-
+    parrallaxHeight();
     $(window).trigger('scroll');
 
 
@@ -701,9 +740,9 @@ jQuery(document).ready(function ( $ ) {
                     }
 
                     //gutter = gutter / 2;
-                   // m.parent().css({'margin-left': -gutter, 'margin-right': -gutter});
+                    // m.parent().css({'margin-left': -gutter, 'margin-right': -gutter});
                     m.find('.g-item').css({'width': ( 100 / columns  ) + '%', 'float': 'left', 'padding': 0});
-                   // m.find('.g-item .inner').css({'padding': gutter / 2});
+                    // m.find('.g-item .inner').css({'padding': gutter / 2});
                     m.isotope({
                         // options
                         itemSelector: '.g-item',
@@ -748,5 +787,6 @@ jQuery(document).ready(function ( $ ) {
             }
         } );
     }
+
 
 });
