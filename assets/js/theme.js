@@ -407,8 +407,6 @@ jQuery( document ).ready( function( $ ) {
     }
 
 
-
-
     if ( isMobile.any() ) {
         jQuery( 'body' ).addClass( 'body-mobile' ).removeClass( 'body-desktop' );
     } else {
@@ -472,7 +470,6 @@ jQuery( document ).ready( function( $ ) {
         var header_height = jQuery('.site-header').height();
         jQuery('.site-header .onepress-menu').css( 'line-height', header_height + "px" );
     }
-
 
 
     /**
@@ -549,10 +546,8 @@ jQuery( document ).ready( function( $ ) {
                 h = 1;
             }
             if ( h < w ) {
-                if ( w / h < 2.0 ) {
-                    h = w * 1.5;
-                    $('.parallax-bg', $el).height(h);
-                }
+                h = h * 2.0;
+                $('.parallax-bg', $el).height(h);
             }
         } );
     }
@@ -598,8 +593,6 @@ jQuery( document ).ready( function( $ ) {
     } );
     parrallaxHeight();
     $(window).trigger('scroll');
-
-
 
 
     // Parallax hero
