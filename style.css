@@ -1338,6 +1338,10 @@ h6, p, ul, ol, dl, blockquote, pre {
 	text-decoration: underline;
 }
 
+.site-footer .site-info .container {
+	position: initial;
+}
+
 .site-footer .btt a {
 	border-radius: 0px 20px 0 0;
 	color: #999999;
