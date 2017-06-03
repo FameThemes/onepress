@@ -14,7 +14,7 @@
 
 get_header();
 
-$layout = get_theme_mod( 'onepress_layout', 'right-sidebar' );
+$layout = onepress_get_layout();
 
 ?>
 	<?php echo onepress_breadcrumb(); ?>
