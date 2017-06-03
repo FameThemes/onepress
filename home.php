@@ -13,7 +13,7 @@
 
 get_header();
 
-$layout = get_theme_mod( 'onepress_layout', 'right-sidebar' );
+$layout = onepress_get_layout();
 ?>
 
 	<div id="content" class="site-content">

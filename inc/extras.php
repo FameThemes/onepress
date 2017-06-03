@@ -111,4 +111,38 @@ add_filter( 'onepress_the_content', 'capital_P_dangit' );
 add_filter( 'onepress_the_content', 'do_shortcode' );
 add_filter( 'onepress_the_content', 'convert_smilies' );
 
+if ( ! function_exists( 'onepress_get_layout' ) ) {
+    function onepress_get_layout( $default = 'right-sidebar' ) {
+        $layout = get_theme_mod( 'onepress_layout', $default );
+        if ( function_exists( 'is_woocommerce' ) ) {
+            if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() || is_wc_endpoint_url() ) {
+                $is_active_sidebar = is_active_sidebar( 'sidebar-shop' );
+                if ( ! $is_active_sidebar ) {
+                    $layout = 'no-sidebar';
+                }
+            }
+        }
+        return apply_filters( 'onepress_get_layout', $layout, $default );
+    }
+}
+
+
+
+
+/**
+ * Woocommerce Support
+ */
+if ( class_exists( 'WooCommerce' ) ) {
+    remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
+
+    add_filter( 'loop_shop_per_page', 'onepress_number_products_per_page', 20 );
+
+    function onepress_number_products_per_page( $number ) {
+        // $cols contains the current number of products per page based on the value stored on Options -> Reading
+        // Return the number of products you wanna show per page.
+        $number = 20;
+        return $number;
+    }
+
+}
 
