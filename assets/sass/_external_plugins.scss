@@ -790,11 +790,7 @@ button {
     .woocommerce-customer-details h2 {
         @include rem( font-size, 20px );
     }
-    .woocommerce-table {
-        td, th {
-            text-align: left;
-        }
-    }
+    
 }
 .woocommerce ul.products li.product .price del {
     display: inline-block;
