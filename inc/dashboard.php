@@ -346,7 +346,7 @@ function onepress_theme_info_page() {
                             <h3><?php esc_html_e( 'Theme Documentation', 'onepress' ); ?></h3>
                             <p class="about"><?php printf(esc_html__('Need any help to setup and configure %s? Please have a look at our documentations instructions.', 'onepress'), $theme_data->Name); ?></p>
                             <p>
-                                <a href="<?php echo esc_url( 'http://docs.famethemes.com/category/42-onepress' ); ?>" target="_blank" class="button button-secondary"><?php esc_html_e('OnePress Documentation', 'onepress'); ?></a>
+                                <a href="<?php echo esc_url( 'http://docs.famethemes.com/category/112-onepress' ); ?>" target="_blank" class="button button-secondary"><?php esc_html_e('OnePress Documentation', 'onepress'); ?></a>
                             </p>
                             <?php do_action( 'onepress_dashboard_theme_links' ); ?>
                         </div>
