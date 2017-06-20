@@ -762,9 +762,8 @@ button {
 }
 
 .woocommerce {
-    #customer_details, .woocommerce-Addresses {
+    #customer_details, #customer_login, .woocommerce-Addresses {
         .col-1, .col-2 {
-            width: 100%;
             max-width: 100%;
             padding-left: 0px;
             padding-right: 0px;
@@ -790,7 +789,7 @@ button {
     .woocommerce-customer-details h2 {
         @include rem( font-size, 20px );
     }
-    
+
 }
 .woocommerce ul.products li.product .price del {
     display: inline-block;
