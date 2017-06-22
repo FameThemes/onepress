@@ -592,7 +592,9 @@ jQuery( document ).ready( function( $ ) {
         parallaxPosition( );
     } );
     parrallaxHeight();
-    $(window).trigger('scroll');
+   setTimeout( function(){
+       $(window).trigger('scroll');
+   }, 300 );
 
 
     // Parallax hero
