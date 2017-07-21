@@ -70,11 +70,13 @@ html {
 body {
 	background: #ffffff;
 	height: 100%;
+
 }
 
 .site {
 	background: #FFFFFF;
-	position: relative;
+	background: yellow;
+
 }
 
 body, button, input, select, textarea {
