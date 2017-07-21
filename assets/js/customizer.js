@@ -1147,9 +1147,12 @@
                 tb_h += 50;
                 //var width = $( window ).width();
                 var editor = tinymce.get( control.editor_id );
-                control.editing_editor.width( '' );
-                editor.theme.resizeTo( '100%', height - tb_h );
-                w.find( 'textarea.wp-editor-area').height( height - tb_h  );
+                if ( editor ) {
+                    control.editing_editor.width( '' );
+                    editor.theme.resizeTo( '100%', height - tb_h );
+                    w.find( 'textarea.wp-editor-area').height( height - tb_h  );
+                }
+
             }
 
         };

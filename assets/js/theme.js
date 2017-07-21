@@ -129,19 +129,7 @@ jQuery( document ).ready( function( $ ) {
         }
         var header_fixed = $('.site-header').eq(0);
 
-        var header_h = header_fixed.height() || 0;
 
-        var topbar = $( '#wpadminbar' ).height() || 0;
-        if (  topbar > 0 ) {
-            var  topbar_pos = $( '#wpadminbar').css( 'position' );
-            if ( 'fixed' !== topbar_pos ) {
-                topbar = 0;
-            }
-        }
-
-        if ( ! is_transparent){
-            $wrap.height( header_h );
-        }
 
         function setUpHeaderHeight(){
             topbar = $( '#wpadminbar' ).height() || 0;
@@ -183,6 +171,24 @@ jQuery( document ).ready( function( $ ) {
             var header_parent = header_fixed.parent();
             var p_to_top = header_parent.offset().top;
             var st = $( document ).scrollTop();
+
+
+            // Set wrapper height
+            var header_h = header_fixed.height() || 0;
+            var topbar = $( '#wpadminbar' ).height() || 0;
+            if (  topbar > 0 ) {
+                var  topbar_pos = $( '#wpadminbar').css( 'position' );
+                if ( 'fixed' !== topbar_pos ) {
+                    topbar = 0;
+                }
+            }
+
+            $wrap.height( '' );
+            if ( ! is_transparent){
+                 $wrap.height( header_h );
+            }
+
+
             if( st > p_to_top && st > 0 ) {
                 $wrap.addClass( 'is-fixed').removeClass( 'no-scroll' );
                 header_fixed.addClass('header-fixed');
@@ -576,6 +582,7 @@ jQuery( document ).ready( function( $ ) {
 
         } );
     }
+
     $(window).scroll(function(e){
         var top = $( window ).scrollTop();
         var direction = '';
@@ -587,14 +594,13 @@ jQuery( document ).ready( function( $ ) {
         lastScrollTop = top ;
         parallaxPosition( );
     });
+
     $(window).resize( function(){
         parrallaxHeight();
         parallaxPosition( );
     } );
+
     parrallaxHeight();
-   setTimeout( function(){
-       $(window).trigger('scroll');
-   }, 300 );
 
 
     // Parallax hero
@@ -619,11 +625,16 @@ jQuery( document ).ready( function( $ ) {
         var s = $(this);
         $('.parallax-bg', s).imagesLoaded({background: true}, function () {
 
-
         }).fail(function (instance) {
 
         });
     });
+
+
+    // Trigger when site load
+    setTimeout( function(){
+        $(window).trigger('scroll');
+    }, 500 );
 
 
     /**
