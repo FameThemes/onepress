@@ -130,43 +130,6 @@ jQuery( document ).ready( function( $ ) {
         var header_fixed = $('.site-header').eq(0);
 
 
-
-        function setUpHeaderHeight(){
-            topbar = $( '#wpadminbar' ).height() || 0;
-            if (  topbar > 0 ) {
-                var  topbar_pos = $( '#wpadminbar').css( 'position' );
-                if ( 'fixed' !== topbar_pos ) {
-                    topbar = 0;
-                }
-            }
-            header_fixed.height( 'auto' );
-            $wrap.height( 'auto' );
-
-            jQuery('.site-header .onepress-menu').css( 'line-height', 'auto' );
-
-            header_h = header_fixed.height() || 0;
-            if ( ! is_transparent){
-                $wrap.height( header_h );
-            }
-            var header_height = jQuery('.site-header').height();
-            jQuery('.site-header .onepress-menu').css( 'line-height', header_height + "px" );
-
-            $( window ).trigger('site_header_height_changed');
-        }
-
-        $( window).resize( function(){
-            setUpHeaderHeight();
-        } );
-
-        // Need to improve
-        // TODO: Fix safari menu issue
-        for ( var i = i; i <= 10; i++ ) {
-            setTimeout( function(){
-                setUpHeaderHeight();
-            } , i*1000 );
-        }
-
-
         $( document ).scroll( function(){
             var header_parent = header_fixed.parent();
             var p_to_top = header_parent.offset().top;
@@ -174,6 +137,7 @@ jQuery( document ).ready( function( $ ) {
 
 
             // Set wrapper height
+            /*
             var header_h = header_fixed.height() || 0;
             var topbar = $( '#wpadminbar' ).height() || 0;
             if (  topbar > 0 ) {
@@ -185,10 +149,10 @@ jQuery( document ).ready( function( $ ) {
 
             $wrap.height( '' );
             if ( ! is_transparent){
-                 $wrap.height( header_h );
+                 $wrap.height( header_h + topbar );
             }
-
-
+            */
+            
             if( st > p_to_top && st > 0 ) {
                 $wrap.addClass( 'is-fixed').removeClass( 'no-scroll' );
                 header_fixed.addClass('header-fixed');
