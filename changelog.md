@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.3.9
+* Update Customizer style.
+* Update nav bar, hero background.
+
+
 ## 1.3.8
 * Update WooCommerce layout.
 
