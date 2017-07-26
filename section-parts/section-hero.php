@@ -62,7 +62,7 @@ if ( $is_parallax ) {
 				$hcl2_image   =  get_theme_mod( 'onepress_hcl2_image', get_template_directory_uri().'/assets/images/onepress_responsive.png' );
 				?>
 				<div class="container"<?php echo $hero_content_style; ?>>
-					<div class="hero__content hero-content-style<?php echo esc_attr( $layout ); ?>">
+					<div class="row hero__content hero-content-style<?php echo esc_attr( $layout ); ?>">
 						<div class="col-md-12 col-lg-6">
 							<?php if ( $hcl2_content ) { echo '<div class="hcl2-content">'.apply_filters( 'the_content', do_shortcode( wp_kses_post( $hcl2_content ) ) ).'</div>' ; }; ?>
 						</div>

@@ -41,10 +41,25 @@ li#accordion-panel-onepress_typo > .accordion-section-title
 .list-repeatable  .widget-top:after {
     clear: both; display: block; content: " ";
 }
+.list-repeatable .widget .widget-title-action .widget-action {
+    text-decoration: none;
+    position: relative;
+    font-size: 16px;
+    top: 12px;
+    outline: none !important;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.list-repeatable .widget .widget-title-action .widget-action::after{
+    content: "\f140";
+    font-family: "dashicons";
+}
 
-.list-repeatable .explained .widget-title-action .widget-action::after{
+.list-repeatable .widget.explained .widget-title-action .widget-action::after{
     content: "\f142";
 }
+
+
 .list-repeatable .widget .widget-inside{
     display: none;
 }
@@ -178,9 +193,11 @@ body .wp-full-overlay{
 }
 .modal-wp-js-editor .fullscreen-wp-editor span:before {
     content: "\f211";
+    font-family: "dashicons";
 }
 .modal-wp-js-editor.fullscreen .fullscreen-wp-editor span:before {
     content: "\f506";
+    font-family: "dashicons";
 }
 .modal-wp-js-editor.fullscreen {
     height: 100%;

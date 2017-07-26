@@ -1,6 +1,15 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.3.9
+* Update Customizer style.
+* Update nav bar, hero background.
+* Update sanitize email.
+* Update parallax for tablet.
+* Fixed hero layout 2 issue.
+* Fixed WC login & register page layout.
+
+
 ## 1.3.8
 * Update WooCommerce layout.
 

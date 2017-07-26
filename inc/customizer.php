@@ -2816,7 +2816,7 @@ function onepress_customize_register( $wp_customize ) {
 		// Contact Email
 		$wp_customize->add_setting( 'onepress_contact_email',
 			array(
-				'sanitize_callback' => 'sanitize_email',
+				'sanitize_callback' => 'sanitize_text_field',
 				'default'           => '',
 			)
 		);
