@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.4.0
+* Update JS, fix footer issue.
+
 ## 1.3.9
 * Update Customizer style.
 * Update nav bar, hero background.

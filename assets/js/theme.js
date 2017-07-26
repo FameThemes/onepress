@@ -152,7 +152,7 @@ jQuery( document ).ready( function( $ ) {
                  $wrap.height( header_h + topbar );
             }
             */
-            
+
             if( st > p_to_top && st > 0 ) {
                 $wrap.addClass( 'is-fixed').removeClass( 'no-scroll' );
                 header_fixed.addClass('header-fixed');
