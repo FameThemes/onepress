@@ -135,10 +135,6 @@ jQuery( document ).ready( function( $ ) {
             var p_to_top = header_parent.offset().top;
             var st = $( document ).scrollTop();
 
-
-            // Set wrapper height
-            /*
-            var header_h = header_fixed.height() || 0;
             var topbar = $( '#wpadminbar' ).height() || 0;
             if (  topbar > 0 ) {
                 var  topbar_pos = $( '#wpadminbar').css( 'position' );
@@ -146,6 +142,11 @@ jQuery( document ).ready( function( $ ) {
                     topbar = 0;
                 }
             }
+
+            // Set wrapper height
+            /*
+            var header_h = header_fixed.height() || 0;
+
 
             $wrap.height( '' );
             if ( ! is_transparent){
