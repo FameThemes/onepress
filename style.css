@@ -2266,6 +2266,9 @@ section > .customize-partial-edit-shortcut button {
 #hero .btn {
   box-shadow: none;
 }
+#hero .btn-theme-primary:focus {
+  color: #fff;
+}
 
 .header-transparent #hero .container .hero__content {
   margin-top: 70px;

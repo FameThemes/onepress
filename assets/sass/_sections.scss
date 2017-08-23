@@ -400,6 +400,9 @@
 	.btn {
 		box-shadow: none;
 	}
+    .btn-theme-primary:focus {
+        color: #fff;
+    }
 }
 
 .header-transparent {
