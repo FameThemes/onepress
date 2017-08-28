@@ -1353,6 +1353,10 @@ h6, p, ul, ol, dl, blockquote, pre {
   }
 }
 
+.entry-thumbnail {
+  margin-bottom: 30px;
+}
+
 .single .entry-header .entry-title {
   margin-bottom: 10px;
 }
