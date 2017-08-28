@@ -1,30 +1,30 @@
 <?php
-$onepress_team_id       = get_theme_mod( 'onepress_team_id', esc_html__('team', 'onepress') );
-$onepress_team_disable  = get_theme_mod( 'onepress_team_disable' ) ==  1 ? true : false;
-$onepress_team_title    = get_theme_mod( 'onepress_team_title', esc_html__('Our Team', 'onepress' ));
-$onepress_team_subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('Section subtitle', 'onepress' ));
-$layout = intval( get_theme_mod( 'onepress_team_layout', 3 ) );
+$id       = get_theme_mod( 'onepress_team_id', esc_html__('team', 'onepress') );
+$disable  = get_theme_mod( 'onepress_team_disable' ) ==  1 ? true : false;
+$title    = get_theme_mod( 'onepress_team_title', esc_html__('Our Team', 'onepress' ));
+$subtitle = get_theme_mod( 'onepress_team_subtitle', esc_html__('Section subtitle', 'onepress' ));
+$layout   = intval( get_theme_mod( 'onepress_team_layout', 3 ) );
 if ( $layout <= 0 ){
     $layout = 3;
 }
 $user_ids = onepress_get_section_team_data();
 if ( onepress_is_selective_refresh() ) {
-    $onepress_team_disable = false;
+    $disable = false;
 }
 if ( ! empty( $user_ids ) ) {
     $desc = get_theme_mod( 'onepress_team_desc' );
     ?>
-    <?php if ( ! $onepress_team_disable ) : ?>
+    <?php if ( ! $disable ) : ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ($onepress_team_id != '') echo $onepress_team_id; ?>" <?php do_action('onepress_section_atts', 'team'); ?>
+        <section id="<?php if ($id != '') echo $id; ?>" <?php do_action('onepress_section_atts', 'team'); ?>
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-team section-padding section-meta onepage-section', 'team')); ?>">
         <?php } ?>
             <?php do_action('onepress_section_before_inner', 'team'); ?>
             <div class="container">
-                <?php if ( $onepress_team_title || $onepress_team_subtitle || $desc ){ ?>
+                <?php if ( $title || $subtitle || $desc ){ ?>
                 <div class="section-title-area">
-                    <?php if ($onepress_team_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_team_subtitle) . '</h5>'; ?>
-                    <?php if ($onepress_team_title != '') echo '<h2 class="section-title">' . esc_html($onepress_team_title) . '</h2>'; ?>
+                    <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
+                    <?php if ($title != '') echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
                     <?php if ( $desc ) {
                         echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
                     } ?>

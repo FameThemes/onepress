@@ -129,7 +129,6 @@ jQuery( document ).ready( function( $ ) {
         }
         var header_fixed = $('.site-header').eq(0);
 
-
         $( document ).scroll( function(){
             var header_parent = header_fixed.parent();
             var p_to_top = header_parent.offset().top;
@@ -143,17 +142,6 @@ jQuery( document ).ready( function( $ ) {
                 }
             }
 
-            // Set wrapper height
-            /*
-            var header_h = header_fixed.height() || 0;
-
-
-            $wrap.height( '' );
-            if ( ! is_transparent){
-                 $wrap.height( header_h + topbar );
-            }
-            */
-
             if( st > p_to_top && st > 0 ) {
                 $wrap.addClass( 'is-fixed').removeClass( 'no-scroll' );
                 header_fixed.addClass('header-fixed');
@@ -164,6 +152,7 @@ jQuery( document ).ready( function( $ ) {
                 $wrap.removeClass( 'is-fixed' ).addClass( 'no-scroll' );
             }
         });
+
 
     }
 
