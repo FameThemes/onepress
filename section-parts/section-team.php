@@ -20,7 +20,7 @@ if ( ! empty( $user_ids ) ) {
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-team section-padding section-meta onepage-section', 'team')); ?>">
         <?php } ?>
             <?php do_action('onepress_section_before_inner', 'team'); ?>
-            <div class="container">
+            <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'team' ) ); ?>">
                 <?php if ( $title || $subtitle || $desc ){ ?>
                 <div class="section-title-area">
                     <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>

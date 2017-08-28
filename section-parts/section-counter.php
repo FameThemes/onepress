@@ -18,7 +18,7 @@ if ( ! empty ( $boxes ) ) {
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-counter section-padding onepage-section', 'counter')); ?>">
         <?php } ?>
             <?php do_action('onepress_section_before_inner', 'counter'); ?>
-            <div class="container">
+            <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'counter' ) ); ?>">
                 <?php if ( $title || $subtitle || $desc ){ ?>
                 <div class="section-title-area">
                     <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>

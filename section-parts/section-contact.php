@@ -25,7 +25,7 @@ if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_addres
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-contact section-padding  section-meta onepage-section', 'contact')); ?>">
         <?php } ?>
             <?php do_action('onepress_section_before_inner', 'contact'); ?>
-            <div class="container">
+            <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'contact' ) ); ?>">
                 <?php if ( $onepress_contact_title || $onepress_contact_subtitle || $desc ){ ?>
                 <div class="section-title-area">
                     <?php if ($onepress_contact_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_contact_subtitle) . '</h5>'; ?>

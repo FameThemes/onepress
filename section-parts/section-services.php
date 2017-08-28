@@ -16,7 +16,7 @@ if ( ! empty( $page_ids ) ) {
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
         <section id="<?php if ($id != '') echo $id; ?>" <?php do_action('onepress_section_atts', 'services'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>"><?php } ?>
             <?php do_action('onepress_section_before_inner', 'services'); ?>
-            <div class="container">
+            <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'services' ) ); ?>">
                 <?php if ( $title ||  $subtitle || $desc ){ ?>
                 <div class="section-title-area">
                     <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>

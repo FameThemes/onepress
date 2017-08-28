@@ -17,16 +17,15 @@ $layout = get_theme_mod( 'onepress_gallery_layout', 'default' );
         class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-gallery '.( ( $title || $subtitle || $desc ) ? 'section-padding' : '' ).' section-meta onepage-section', 'gallery' )); ?>">
     <?php } ?>
     <?php do_action('onepress_section_before_inner', 'gallery'); ?>
-    <div class="g-layout-<?php echo esc_attr( $layout ); ?> container">
+
+    <div class="g-layout-<?php echo esc_attr( $layout ); ?> <?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'gallery' ) ); ?>">
         <?php if ( $title || $subtitle || $desc ){ ?>
-            <div class="container">
-                <div class="section-title-area">
-                    <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
-                    <?php if ($title != '') echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
-                    <?php if ( $desc ) {
-                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
-                    } ?>
-                </div>
+            <div class="section-title-area">
+                <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
+                <?php if ($title != '') echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
+                <?php if ( $desc ) {
+                    echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
+                } ?>
             </div>
         <?php } ?>
         <div class="gallery-content">

@@ -18,7 +18,7 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 <section id="<?php if ( $id != '' ) echo $id; ?>" <?php do_action( 'onepress_section_atts', 'news' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-news section-padding onepage-section', 'news' ) ); ?>">
 <?php } ?>
     <?php do_action( 'onepress_section_before_inner', 'news' ); ?>
-	<div class="container">
+	<div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'news' ) ); ?>">
 		<?php if ( $title ||  $subtitle ||  $desc ) { ?>
 		<div class="section-title-area">
 			<?php if ( $subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $subtitle ) . '</h5>'; ?>
