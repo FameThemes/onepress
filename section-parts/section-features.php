@@ -15,7 +15,7 @@ if ( !$disable && !empty( $data ) ) {
          class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-features section-padding section-meta onepage-section', 'features')); ?>">
 <?php } ?>
     <?php do_action('onepress_section_before_inner', 'features'); ?>
-    <div class="container">
+    <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'features' ) ); ?>">
         <?php if ( $title ||  $subtitle || $desc ){ ?>
         <div class="section-title-area">
             <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>

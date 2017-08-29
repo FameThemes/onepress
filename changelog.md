@@ -1,6 +1,13 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.4.2
+* Improve front page sections.
+* Fix an issue incorrect section position for first menu item is clicked.
+* Improve nav menu.
+* Add single post options.
+* Add filter for section container class.
+
 ## 1.4.1
 * Fix js error.
 

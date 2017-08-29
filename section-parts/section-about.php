@@ -1,36 +1,36 @@
 <?php
-$onepress_about_id       = get_theme_mod( 'onepress_about_id', esc_html__('about', 'onepress') );
-$onepress_about_disable  = get_theme_mod( 'onepress_about_disable' ) == 1 ? true : false;
-$onepress_about_title    = get_theme_mod( 'onepress_about_title', esc_html__('About Us', 'onepress' ));
-$onepress_about_subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__('Section subtitle', 'onepress' ));
-$onepress_about_desc     = get_theme_mod( 'onepress_about_desc');
+$id       = get_theme_mod( 'onepress_about_id', esc_html__('about', 'onepress') );
+$disable  = get_theme_mod( 'onepress_about_disable' ) == 1 ? true : false;
+$title    = get_theme_mod( 'onepress_about_title', esc_html__('About Us', 'onepress' ));
+$subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__('Section subtitle', 'onepress' ));
+$desc     = get_theme_mod( 'onepress_about_desc');
 if ( onepress_is_selective_refresh() ) {
-    $onepress_about_disable = false;
+    $disable = false;
 }
 // Get data
 $page_ids =  onepress_get_section_about_data();
 $content_source = get_theme_mod( 'onepress_about_content_source' );
 if ( ! empty( $page_ids ) ) {
     ?>
-    <?php if (!$onepress_about_disable) { ?>
+    <?php if (!$disable) { ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ($onepress_about_id != '') {
-            echo $onepress_about_id;
+        <section id="<?php if ($id != '') {
+            echo $id;
         }; ?>" <?php do_action('onepress_section_atts', 'about'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-about section-padding onepage-section', 'about')); ?>">
         <?php } ?>
 
             <?php do_action('onepress_section_before_inner', 'about'); ?>
-            <div class="container">
-                <?php if ( $onepress_about_title || $onepress_about_subtitle || $onepress_about_desc ){ ?>
+            <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'about' ) ); ?>">
+                <?php if ( $title || $subtitle || $desc ){ ?>
                 <div class="section-title-area">
-                    <?php if ($onepress_about_subtitle != '') {
-                        echo '<h5 class="section-subtitle">' . esc_html($onepress_about_subtitle) . '</h5>';
+                    <?php if ($subtitle != '') {
+                        echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>';
                     } ?>
-                    <?php if ($onepress_about_title != '') {
-                        echo '<h2 class="section-title">' . esc_html($onepress_about_title) . '</h2>';
+                    <?php if ($title != '') {
+                        echo '<h2 class="section-title">' . esc_html($title) . '</h2>';
                     } ?>
-                    <?php if ($onepress_about_desc != '') {
-                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $onepress_about_desc ) ) . '</div>';
+                    <?php if ($desc != '') {
+                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
                     } ?>
                 </div>
                 <?php } ?>
