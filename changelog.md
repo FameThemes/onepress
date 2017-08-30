@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.4.3
+* Fix header issue.
+
 ## 1.4.2
 * Improve front page sections.
 * Fix an issue incorrect section position for first menu item is clicked.
