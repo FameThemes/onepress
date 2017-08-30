@@ -443,8 +443,12 @@ jQuery( document ).ready( function( $ ) {
         if ( $( '.hero-slideshow-fullscreen').length > 0 ) {
             var is_transparent = jQuery('body').hasClass('header-transparent');
             var headerH;
+            var is_fixed_header;
+            is_fixed_header = jQuery( 'body').hasClass( 'sticky-header' );
             var is_top_header = jQuery('#page > .site-header').length ? true : false;
             if (is_top_header && !is_transparent) {
+                headerH = jQuery('.site-header').height();
+            } else if ( is_fixed_header ) {
                 headerH = jQuery('.site-header').height();
             } else {
                 headerH = 0;
