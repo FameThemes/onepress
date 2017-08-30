@@ -21,8 +21,11 @@
         background: transparent;
     }
     &.sticky-header {
-        display: block;
-        height: 75px;
+        .site-header-wrapper {
+            display: block;
+            height: 75px;
+        }
+
     }
 }
 
