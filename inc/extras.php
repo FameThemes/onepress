@@ -26,11 +26,14 @@ function onepress_body_classes( $classes ) {
         $classes[] = 'no-sticky-header';
     }
     // onepress_header_transparent
+    $transparent =  'no-header-transparent';
     if ( is_front_page() && is_page_template( 'template-frontpage.php' ) ) {
         if ( get_theme_mod( 'onepress_header_transparent' ) ) {
-            $classes[] = 'header-transparent';
+            $transparent  = 'header-transparent';
         }
     }
+
+    $classes[] = $transparent;
 
     if ( is_customize_preview() ) {
         $classes[ ] = 'is-customize-preview';
