@@ -12,10 +12,25 @@
     transition: all .5s ease-out;
 }
 
-.site-header-wrapper {
-    display: block;
-    height: 75px;
+.no-sticky-header {
+    .site-header-wrapper {
+        display: block;
+        height: 75px;
+    }
+    .site-header {
+        background: transparent;
+    }
 }
+
+.sticky-header {
+    &.no-header-transparent {
+        .site-header-wrapper {
+            display: block;
+            height: 75px;
+        }
+    }
+}
+
 
 .no-sticky-header.header-transparent .site-header {
     #nav-toggle {

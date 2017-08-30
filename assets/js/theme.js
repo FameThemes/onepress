@@ -141,8 +141,12 @@ jQuery( document ).ready( function( $ ) {
                     topbar = 0;
                 }
             }
-
-            if( st > p_to_top && st > 0 ) {
+            //  if( st > p_to_top && st > 0 ) {
+            var post_check = 1;
+            if ( topbar ) {
+                post_check = 0;
+            }
+            if( st > post_check ) {
                 $wrap.addClass( 'is-fixed').removeClass( 'no-scroll' );
                 header_fixed.addClass('header-fixed');
                 header_fixed.css( 'top', topbar+'px' );

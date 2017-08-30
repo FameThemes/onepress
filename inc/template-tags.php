@@ -398,7 +398,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $header_bg_color =  get_theme_mod( 'onepress_header_bg_color' );
             if ( $header_bg_color ) {
                 ?>
-                .site-header {
+                .site-header, .no-sticky-header.no-header-transparent .site-header {
                     background: #<?php echo $header_bg_color; ?>;
                     border-bottom: 0px none;
                 }
