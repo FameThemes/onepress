@@ -20,12 +20,14 @@
     .site-header {
         background: transparent;
     }
-    &.sticky-header {
+}
+
+.sticky-header {
+    &.no-header-transparent {
         .site-header-wrapper {
             display: block;
             height: 75px;
         }
-
     }
 }
 
