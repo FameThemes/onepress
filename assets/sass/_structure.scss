@@ -20,7 +20,12 @@
     .site-header {
         background: transparent;
     }
+    &.sticky-header {
+        display: block;
+        height: 75px;
+    }
 }
+
 
 .no-sticky-header.header-transparent .site-header {
     #nav-toggle {

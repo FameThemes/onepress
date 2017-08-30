@@ -701,6 +701,10 @@ h6, p, ul, ol, dl, blockquote, pre {
 .no-sticky-header .site-header {
   background: transparent;
 }
+.no-sticky-header.sticky-header {
+  display: block;
+  height: 75px;
+}
 
 .no-sticky-header.header-transparent .site-header #nav-toggle span {
   background-color: #ffffff;
