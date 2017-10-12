@@ -2980,7 +2980,7 @@ function onepress_showon_frontpage() {
 function onepress_gallery_source_validate( $validity, $value ){
 	if ( ! class_exists( 'OnePress_PLus' ) ) {
 		if ( $value != 'page' ) {
-			$validity->add('notice', esc_html__('Upgrade to OnePress Plus to unlock this feature.', 'onepress' ) );
+			$validity->add('notice', sprintf( esc_html__('Upgrade to %1s to unlock this feature.', 'onepress' ), '<a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#gallery">OnePress Plus</a>' ) );
 		}
 	}
 	return $validity;
