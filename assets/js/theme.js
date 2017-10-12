@@ -623,29 +623,17 @@ jQuery( document ).ready( function( $ ) {
         // Slider
         if ( $.fn.owlCarousel ) {
             // Slider
+            var is_rtl = onepress_js_settings.is_rtl;
             $( '.gallery-slider', $context ).owlCarousel({
                 items: 1,
-                itemsCustom: false,
-                itemsDesktop: 1,
-                itemsDesktopSmall: 1,
-                itemsTablet: 1,
-                itemsTabletSmall: false,
-                itemsMobile: 1,
-                singleItem: true,
-                itemsScaleUp: false,
-
-                slideSpeed : 200,
-                paginationSpeed : 800,
-                rewindSpeed : 1000,
-                autoPlay : 4000,
-                stopOnHover : true,
-
-                navigation : true,
-                navigationText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
-
-                pagination : false,
-                paginationNumbers : false,
-                autoHeight : true,
+                navSpeed : 800,
+                autoplaySpeed : 4000,
+                autoplayHoverPause : true,
+                rtl: ( is_rtl == 0 ) ? false : true,
+                nav : true,
+                navText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
+                dots : false,
+                autoHeight : true
             });
 
             $('.gallery-carousel', $context).each( function(){
@@ -657,26 +645,27 @@ jQuery( document ).ready( function( $ ) {
 
                 $( this ).owlCarousel({
                     items: n,
-                    itemsCustom : false,
-                    itemsDesktop : [1199, ( n > 4) ? 4 : n ],
-                    itemsDesktopSmall : [979, ( n > 3) ? 3 : n ],
-                    itemsTablet : [768, ( n > 2) ? 2 : n ],
-                    itemsTabletSmall : false,
-                    itemsMobile : [479, ( n > 2) ? 2 : n ],
-                    singleItem : false,
-                    itemsScaleUp : false,
-
-                    slideSpeed : 200,
-                    paginationSpeed : 800,
-                    rewindSpeed : 1000,
-                    autoPlay : 4000,
-                    stopOnHover : true,
-
-                    navigation : true,
-                    navigationText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
-
-                    pagination : false,
-                    paginationNumbers : false,
+                    responsive:{
+                        0:{
+                            items:  2
+                        },
+                        768:{
+                            items: ( n > 2) ? 2 : n
+                        },
+                        979:{
+                            items: ( n > 3) ? 3 : n
+                        },
+                        1199:{
+                            items: n
+                        }
+                    },
+                    rtl: ( is_rtl == 0 ) ? false : true,
+                    navSpeed : 800,
+                    autoplaySpeed : 4000,
+                    autoplayHoverPause : true,
+                    nav : true,
+                    navText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
+                    dots : false
                 });
 
             } );
