@@ -19,11 +19,14 @@ $layout = onepress_get_layout();
 
 	<div id="content" class="site-content">
 
+        <?php $onepress_page_title_disable = get_theme_mod('onepress_page_title_bar_disable'); ?>
+        <?php if ( $onepress_page_title_disable != '1' ) { ?>
 		<div class="page-header">
 			<div class="container">
 				<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 			</div>
 		</div>
+        <?php } ?>
 
 		<?php echo onepress_breadcrumb(); ?>
 

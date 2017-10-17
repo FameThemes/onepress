@@ -150,6 +150,22 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+			// Disable the page title bar
+			$wp_customize->add_setting( 'onepress_page_title_bar_disable',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_checkbox',
+					'default'           => '',
+				)
+			);
+			$wp_customize->add_control( 'onepress_page_title_bar_disable',
+				array(
+					'type'        => 'checkbox',
+					'label'       => esc_html__('Disable Page Title bar?', 'onepress'),
+					'section'     => 'onepress_global_settings',
+					'description' => esc_html__('Check this box to disable the page title bar on all pages.', 'onepress')
+				)
+			);
+
 			// Disable Animation
 			$wp_customize->add_setting( 'onepress_animation_disable',
 				array(
