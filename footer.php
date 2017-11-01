@@ -19,6 +19,8 @@
         $onepress_newsletter_title = get_theme_mod('onepress_newsletter_title', esc_html__('Join our Newsletter', 'onepress'));
         $onepress_newsletter_mailchimp = get_theme_mod('onepress_newsletter_mailchimp');
 
+        $onepress_footer_navbar_disable = get_theme_mod('onepress_footer_navbar_disable', '1');
+
         if ( $onepress_newsletter_disable != '1' || $onepress_social_disable != '1' ) : ?>
             <div class="footer-connect">
                 <div class="container">
@@ -86,14 +88,61 @@
                 </div>
             </div>
         <?php endif; ?>
-
+        
         <div class="site-info">
             <div class="container">
                 <?php if ($onepress_btt_disable != '1') : ?>
                     <div class="btt">
                         <a class="back-top-top" href="#page" title="<?php echo esc_html__('Back To Top', 'onepress') ?>"><i class="fa fa-angle-double-up wow flash" data-wow-duration="2s"></i></a>
                     </div>
+                <?php
+                endif;
+
+                /**
+                * New Footer Menu
+                *
+                * @since 1.4.4
+                */
+                $footer_columns = 0;
+                if (is_active_sidebar('onepress_footer_nav_1')) $footer_columns++;
+                if (is_active_sidebar('onepress_footer_nav_2')) $footer_columns++;
+                if (is_active_sidebar('onepress_footer_nav_3')) $footer_columns++;
+                if (is_active_sidebar('onepress_footer_nav_4')) $footer_columns++;
+
+                if ($onepress_footer_navbar_disable != '1' && $footer_columns > 0) :
+                    $footer_column_class = 'col-sm-12';
+                    if ($footer_columns == 2) $footer_column_class = 'col-sm-6';
+                    if ($footer_columns == 3) $footer_column_class = 'col-sm-4';
+                    if ($footer_columns == 4) $footer_column_class = 'col-sm-3';
+                    ?>
+                    <div class="row footer-navbar">
+                        <?php if (is_active_sidebar('onepress_footer_nav_1')) : ?>
+                        <div class="<?= $footer_column_class ?>">
+                            <?php dynamic_sidebar('onepress_footer_nav_1'); ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if (is_active_sidebar('onepress_footer_nav_2')) : ?>
+                        <div class="<?= $footer_column_class ?>">
+                            <?php dynamic_sidebar('onepress_footer_nav_2'); ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if (is_active_sidebar('onepress_footer_nav_3')) : ?>
+                        <div class="<?= $footer_column_class ?>">
+                            <?php dynamic_sidebar('onepress_footer_nav_3'); ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if (is_active_sidebar('onepress_footer_nav_4')) : ?>
+                        <div class="<?= $footer_column_class ?>">
+                            <?php dynamic_sidebar('onepress_footer_nav_4'); ?>
+                        </div>
+                        <?php endif; ?>
+                    </div>
                 <?php endif; ?>
+                <!-- Footer Menu -->
+
                 <?php
                 /**
                  * hooked onepress_footer_site_info

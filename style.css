@@ -1302,6 +1302,57 @@ h6, p, ul, ol, dl, blockquote, pre {
     left: 0;
   }
 }
+.site-footer .footer-navbar {
+  color: #bbb;
+  background: #222222;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #444;
+  margin-bottom: 30px;
+  text-align: left;
+}
+.site-footer .footer-navbar .widget .widget-title {
+  margin: 0 0 20px 0;
+  padding: 0;
+  line-height: 1.15;
+  color: #CCC;
+  text-transform: uppercase;
+}
+.site-footer .footer-navbar .widget .widget-title:before {
+  display: none;
+}
+.site-footer .footer-navbar .widget ul {
+  padding-left: 2px;
+}
+.site-footer .footer-navbar .widget ul li {
+  margin: 0 0 20px 0;
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+  list-style: none;
+}
+.site-footer .footer-navbar .widget ul li:last-child {
+  margin-bottom: 0;
+}
+.site-footer .footer-navbar .widget ul li a {
+  line-height: 1.5;
+  color: #bbb;
+  -moz-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.site-footer .footer-navbar .widget ul li a:hover {
+  color: #03c4eb;
+  text-decoration: none;
+}
+.site-footer .footer-navbar .widget ul li:before {
+  content: "\f105";
+  font-family: "FontAwesome";
+  position: absolute;
+  left: 0;
+  color: #bbb;
+}
 
 /*--------------------------------------------------------------
 5.0 Contents

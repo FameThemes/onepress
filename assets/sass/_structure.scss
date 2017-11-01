@@ -675,4 +675,60 @@
             left: 0;
         }
     }
+    .footer-navbar {
+        color: #bbb;
+        background: #222222;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #444;
+        margin-bottom: 30px;
+        text-align: left;
+        .widget {
+            .widget-title {
+                margin: 0 0 20px 0;
+                padding: 0;
+                line-height: 1.15;
+                color: #CCC;
+                text-transform: uppercase;
+            
+                &:before {
+                    display: none;
+                }
+            }
+        
+            ul {
+                padding-left: 2px;
+                li {
+                    margin: 0 0 20px 0;
+                    padding-top: 0;
+                    padding-right: 0;
+                    padding-bottom: 0;
+                    border-bottom: none;
+                    list-style: none;
+            
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+            
+                    a {
+                        line-height: 1.5;
+                        color:#bbb;
+                        @include transition(all 0.3s); //Smooth Hover Effect
+                
+                        &:hover {
+                            color: $primary;
+                            text-decoration: none;
+                        }
+                    }
+            
+                    &:before {
+                        content: "\f105";
+                        font-family: "FontAwesome";
+                        position: absolute;
+                        left: 0;
+                        color: #bbb;
+                    }
+                }
+            }
+        }
+    }
 }

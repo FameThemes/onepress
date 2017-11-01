@@ -541,6 +541,32 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+		/* Footer Settings
+		----------------------------------------------------------------------*/
+		$wp_customize->add_section( 'onepress_footer' ,
+			array(
+				'priority'    => 12,
+				'title'       => esc_html__( 'Footer', 'onepress' ),
+				'description' => '',
+				'panel'       => 'onepress_options',
+			)
+		);
+			// Disable Footer Navigation
+			$wp_customize->add_setting( 'onepress_footer_navbar_disable',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_checkbox',
+					'default'           => '0',
+				)
+			);
+			$wp_customize->add_control( 'onepress_footer_navbar_disable',
+				array(
+					'type'        => 'checkbox',
+					'label'       => esc_html__('Hide Footer Navigation?', 'onepress'),
+					'section'     => 'onepress_footer',
+					'description' => esc_html__('Check this box to hide footer navigation panel.', 'onepress')
+				)
+			);
+
 
     /* Single Settings
     ----------------------------------------------------------------------*/
@@ -567,7 +593,6 @@ function onepress_customize_register( $wp_customize ) {
                 'description' => esc_html__('Check this box to show post thumbnail on single post.', 'onepress')
             )
         );
-
         $wp_customize->add_setting( 'single_meta',
             array(
                 'sanitize_callback' => 'onepress_sanitize_checkbox',

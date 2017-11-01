@@ -159,6 +159,12 @@
             <key name='onepress_gallery_source_page' />
             <key name='onepress_gallery_desc' />
 
+            <key name='onepress_footer_navbar_disable' />
+            <key name='onepress_footer_nav_1' />
+            <key name='onepress_footer_nav_2' />
+            <key name='onepress_footer_nav_3' />
+            <key name='onepress_footer_nav_4' />
+
         </key>
     </admin-texts>
 </wpml-config>
