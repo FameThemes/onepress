@@ -1,6 +1,13 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 1.4.4
+* Added compass support for Sass
+* Added .gitignore
+* Added responsive footer navigation with 4 possible individual widgets
+* Update customizer for footer navigation
+* Fixed deprecated Sass comparison in variables.scss
+
 ## 1.4.3
 * Fix header issue.
 

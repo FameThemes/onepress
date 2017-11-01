@@ -148,6 +148,51 @@ function onepress_widgets_init() {
 		'after_title'   => '</h2>',
 	) );
 
+	// Footer Navigation 1
+	register_sidebar( array(
+		'name'			=> esc_html__( 'Footer Navigation 1', 'onepress' ),
+		'id'			=> 'onepress_footer_nav_1',
+		'description'	=> __('The widgets added in this sidebar will appear in first block from footer navigation.', 'sds'),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget' 	=> '</div>',
+		'before_title' 	=> '<h3 class="widget-title">',
+		'after_title' 	=> '</h3>',
+	));
+
+	// Footer Navigation 2
+	register_sidebar( array(
+		'name'			=> esc_html__( 'Footer Navigation 2', 'onepress' ),
+		'id'			=> 'onepress_footer_nav_2',
+		'description'	=> __('The widgets added in this sidebar will appear in second block from footer navigation.', 'sds'),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget' 	=> '</div>',
+		'before_title' 	=> '<h3 class="widget-title">',
+		'after_title' 	=> '</h3>',
+	));
+
+	// Footer Navigation 3
+	register_sidebar( array(
+		'name'			=> esc_html__( 'Footer Navigation 3', 'onepress' ),
+		'id'			=> 'onepress_footer_nav_3',
+		'description'	=> __('The widgets added in this sidebar will appear in third block from footer navigation.', 'sds'),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget' 	=> '</div>',
+		'before_title' 	=> '<h3 class="widget-title">',
+		'after_title' 	=> '</h3>',
+	));
+
+	// Footer Navigation 4
+	register_sidebar( array(
+		'name'			=> esc_html__( 'Footer Navigation 4', 'onepress' ),
+		'id'			=> 'onepress_footer_nav_4',
+		'description'	=> __('The widgets added in this sidebar will appear in fourth block from footer navigation.', 'sds'),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget' 	=> '</div>',
+		'before_title' 	=> '<h3 class="widget-title">',
+		'after_title' 	=> '</h3>',
+	));
+
+
     if ( class_exists( 'WooCommerce' ) ) {
         register_sidebar( array(
             'name'          => esc_html__( 'WooCommerce Sidebar', 'onepress' ),

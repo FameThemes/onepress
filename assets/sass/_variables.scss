@@ -141,7 +141,7 @@ $baseline-px: 16px;
 	@else {
 		$rem-values: unquote("");
 		@each $value in $px-values {
-			@if $value == 0 {
+			@if $value == 0px {
 				$rem-values: append($rem-values, $value); }
 			@else {
 				$rem-values: append($rem-values, $value / $baseline-rem); } }
