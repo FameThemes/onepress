@@ -18,8 +18,6 @@ function onepress_customize_register( $wp_customize ) {
 	require get_template_directory() . '/inc/customizer-controls.php';
 
 	// Remove default sections.
-	$wp_customize->remove_section( 'colors' );
-	$wp_customize->remove_section( 'background_image' );
 
 	// Custom WP default control & settings.
 	$wp_customize->get_section( 'title_tagline' )->title = esc_html__('Site Title, Tagline & Logo', 'onepress');
