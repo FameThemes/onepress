@@ -205,7 +205,6 @@ if ( ! function_exists( 'onepress_comment' ) ) :
  * @return void
  */
 function onepress_comment( $comment, $args, $depth ) {
-    $GLOBALS['comment'] = $comment;
     switch ( $comment->comment_type ) :
         case 'pingback' :
         case 'trackback' :
@@ -237,7 +236,7 @@ function onepress_comment( $comment, $args, $depth ) {
                             esc_url( get_comment_link( $comment->comment_ID ) ),
                             get_comment_time( 'c' ),
                             /* translators: 1: date, 2: time */
-                            sprintf( __( '%1$s', 'onepress' ), get_comment_date() )
+                            get_comment_date()
                         );
                         comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply', 'onepress' ), 'after' => '', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) );
                         edit_comment_link( __( 'Edit', 'onepress' ), '<span class="edit-link">', '</span>' );
@@ -598,6 +597,7 @@ if ( ! function_exists( 'onepress_get_section_about_data' ) ) {
                 }
             }
         }
+        $page_ids = array_filter( $page_ids );
 
         return $page_ids;
     }

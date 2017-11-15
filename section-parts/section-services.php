@@ -29,7 +29,6 @@ if ( ! empty( $page_ids ) ) {
                 <div class="row">
                     <?php
                     if ( ! empty( $page_ids ) ) {
-                        global $post;
 
                         $columns = 2;
                         switch ( $layout ) {
@@ -51,7 +50,6 @@ if ( ! empty( $page_ids ) ) {
                             $post_id = $settings['content_page'];
                             $post_id = apply_filters( 'wpml_object_id', $post_id, 'page', true );
                             $post = get_post($post_id);
-                            setup_postdata($post);
                             $settings['icon'] = trim($settings['icon']);
 
                             $media = '';
@@ -88,14 +86,14 @@ if ( ! empty( $page_ids ) ) {
                                     <?php
                                     if ( ! empty( $settings['enable_link'] ) ) {
                                         ?>
-                                        <a class="service-link" href="<?php the_permalink(); ?>"><span class="screen-reader-text"><?php the_title(); ?></span></a>
+                                        <a class="service-link" href="<?php esc_url( get_permalink( $post ) ); ?>"><span class="screen-reader-text"><?php echo get_the_title( $post ); ?></span></a>
                                         <?php
                                     }
                                     ?>
-                                    <?php if ( has_post_thumbnail() ) { ?>
+                                    <?php if ( has_post_thumbnail( $post ) ) { ?>
                                         <div class="service-thumbnail ">
                                             <?php
-                                            the_post_thumbnail('onepress-medium');
+                                            echo get_the_post_thumbnail( $post, 'onepress-medium' );
                                             ?>
                                         </div>
                                     <?php } ?>
@@ -103,8 +101,10 @@ if ( ! empty( $page_ids ) ) {
                                         echo $media;
                                     } ?>
                                     <div class="service-content">
-                                        <h4 class="service-title"><?php the_title(); ?></h4>
-                                        <?php the_excerpt(); ?>
+                                        <h4 class="service-title"><?php echo get_the_title( $post ); ?></h4>
+                                        <?php
+                                        echo apply_filters( 'the_excerpt', get_the_excerpt( $post ) );
+                                        ?>
                                     </div>
                                 </div>
                             </div>
