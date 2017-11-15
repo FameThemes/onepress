@@ -3693,8 +3693,23 @@ img.mfp-img {
  * 	Core Owl Carousel CSS File
  *	v1.3.3
  */
-/* clearfix */
-.owl-carousel .owl-wrapper:after {
+.owl-carousel {
+  display: none;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
+  /* position relative and z-index fix webkit rendering fonts issue */
+  position: relative;
+  z-index: 1;
+  /* No Js */
+  /* fix */
+}
+.owl-carousel .owl-stage {
+  position: relative;
+  -ms-touch-action: pan-Y;
+  -moz-backface-visibility: hidden;
+  /* fix firefox animation glitch */
+}
+.owl-carousel .owl-stage:after {
   content: ".";
   display: block;
   clear: both;
@@ -3702,60 +3717,27 @@ img.mfp-img {
   line-height: 0;
   height: 0;
 }
-
-/* display none until init */
-.owl-carousel {
-  display: none;
-  position: relative;
-  width: 100%;
-  -ms-touch-action: pan-y;
-}
-
-.owl-carousel .owl-wrapper {
-  display: none;
-  position: relative;
-  -webkit-transform: translate3d(0px, 0px, 0px);
-}
-
-.owl-carousel .owl-wrapper-outer {
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
-
-.owl-carousel .owl-wrapper-outer.autoHeight {
-  -webkit-transition: height 500ms ease-in-out;
-  -moz-transition: height 500ms ease-in-out;
-  -ms-transition: height 500ms ease-in-out;
-  -o-transition: height 500ms ease-in-out;
-  transition: height 500ms ease-in-out;
-}
-
-.owl-carousel .owl-item {
+.owl-carousel .owl-carousel .owl-item {
   float: left;
 }
-
-html[dir="rtl"] .owl-carousel .owl-item {
+.owl-carousel html[dir="rtl"] .owl-carousel .owl-item {
   float: right;
 }
-
-.owl-controls .owl-page,
-.owl-controls .owl-buttons div {
+.owl-carousel .owl-controls .owl-page,
+.owl-carousel .owl-controls .owl-buttons div {
   cursor: pointer;
 }
-
-.owl-controls {
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+.owl-carousel .owl-controls .owl-page .owl-stage-outer,
+.owl-carousel .owl-controls .owl-buttons div .owl-stage-outer {
+  position: relative;
+  overflow: hidden;
+  /* fix for flashing background */
+  -webkit-transform: translate3d(0px, 0px, 0px);
 }
-
-/* fix */
-.owl-carousel .owl-wrapper,
-.owl-carousel .owl-item {
+.owl-carousel .owl-controls .owl-page .owl-wrapper,
+.owl-carousel .owl-controls .owl-page .owl-item,
+.owl-carousel .owl-controls .owl-buttons div .owl-wrapper,
+.owl-carousel .owl-controls .owl-buttons div .owl-item {
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
@@ -3763,11 +3745,93 @@ html[dir="rtl"] .owl-carousel .owl-item {
   -moz-transform: translate3d(0, 0, 0);
   -ms-transform: translate3d(0, 0, 0);
 }
-
-.owl-carousel .g-item {
+.owl-carousel .owl-controls .owl-page .owl-item,
+.owl-carousel .owl-controls .owl-buttons div .owl-item {
+  position: relative;
+  min-height: 1px;
+  float: left;
+  -webkit-backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+.owl-carousel .owl-controls .owl-page .owl-item img,
+.owl-carousel .owl-controls .owl-buttons div .owl-item img {
+  display: block;
+  width: 100%;
+}
+.owl-carousel .owl-controls .owl-page .owl-nav.disabled,
+.owl-carousel .owl-controls .owl-page .owl-dots.disabled,
+.owl-carousel .owl-controls .owl-buttons div .owl-nav.disabled,
+.owl-carousel .owl-controls .owl-buttons div .owl-dots.disabled {
+  display: none;
+}
+.owl-carousel .owl-controls .owl-page .owl-nav .owl-prev,
+.owl-carousel .owl-controls .owl-page .owl-nav .owl-next,
+.owl-carousel .owl-controls .owl-page .owl-dot,
+.owl-carousel .owl-controls .owl-buttons div .owl-nav .owl-prev,
+.owl-carousel .owl-controls .owl-buttons div .owl-nav .owl-next,
+.owl-carousel .owl-controls .owl-buttons div .owl-dot {
+  cursor: pointer;
+  cursor: hand;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.owl-carousel .owl-controls .owl-page.owl-loaded,
+.owl-carousel .owl-controls .owl-buttons div.owl-loaded {
   display: block;
 }
-.owl-carousel .owl-buttons > div {
+.owl-carousel .owl-controls .owl-page.owl-loading,
+.owl-carousel .owl-controls .owl-buttons div.owl-loading {
+  opacity: 0;
+  display: block;
+}
+.owl-carousel .owl-controls .owl-page.owl-hidden,
+.owl-carousel .owl-controls .owl-buttons div.owl-hidden {
+  opacity: 0;
+}
+.owl-carousel .owl-controls .owl-page.owl-refresh .owl-item,
+.owl-carousel .owl-controls .owl-buttons div.owl-refresh .owl-item {
+  visibility: hidden;
+}
+.owl-carousel .owl-controls .owl-page.owl-drag .owl-item,
+.owl-carousel .owl-controls .owl-buttons div.owl-drag .owl-item {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.owl-carousel .owl-controls .owl-page.owl-grab,
+.owl-carousel .owl-controls .owl-buttons div.owl-grab {
+  cursor: move;
+  cursor: grab;
+}
+.owl-carousel .owl-controls .owl-page.owl-rtl,
+.owl-carousel .owl-controls .owl-buttons div.owl-rtl {
+  direction: rtl;
+}
+.owl-carousel .owl-controls .owl-page.owl-rtl .owl-item,
+.owl-carousel .owl-controls .owl-buttons div.owl-rtl .owl-item {
+  float: right;
+}
+.owl-carousel .no-js .owl-carousel {
+  display: block;
+}
+.owl-carousel .owl-carousel .owl-wrapper,
+.owl-carousel .owl-carousel .owl-item {
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+}
+.owl-carousel .owl-carousel .g-item {
+  display: block;
+}
+.owl-carousel .owl-carousel .owl-nav > div {
   position: absolute;
   top: 50%;
   background-color: rgba(0, 0, 0, 0.45);
@@ -3780,19 +3844,19 @@ html[dir="rtl"] .owl-carousel .owl-item {
   padding: 4px 10px 5px;
   transform: translateY(-50%);
 }
-.owl-carousel .owl-buttons > div:hover {
+.owl-carousel .owl-carousel .owl-nav > div:hover {
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
 }
-.owl-carousel .owl-buttons .owl-prev {
+.owl-carousel .owl-carousel .owl-nav .owl-prev {
   left: 15px;
 }
-.owl-carousel .owl-buttons .owl-prev .lg-icon::before {
+.owl-carousel .owl-carousel .owl-nav .owl-prev .lg-icon::before {
   content: "\e094";
 }
-.owl-carousel .owl-buttons .owl-next {
+.owl-carousel .owl-carousel .owl-nav .owl-next {
   right: 15px;
 }
-.owl-carousel .owl-buttons .owl-next .lg-icon::before {
+.owl-carousel .owl-carousel .owl-nav .owl-next .lg-icon::before {
   content: "\e095";
 }

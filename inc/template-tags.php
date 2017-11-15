@@ -917,7 +917,7 @@ function onepress_gallery_generate( $echo = true ){
         case 'carousel':
             $html = onepress_gallery_html( $data );
             if ( $html ) {
-                $div .= '<div data-col="'.$col.'" class="g-zoom-in gallery-carousel'.$class.'">';
+                $div .= '<div data-col="'.$col.'" class="g-zoom-in gallery-carousel owl-carousel'.$class.'">';
                 $div .= $html;
                 $div .= '</div>';
             }
@@ -925,7 +925,7 @@ function onepress_gallery_generate( $echo = true ){
         case 'slider':
             $html = onepress_gallery_html( $data , true , 'full' );
             if ( $html ) {
-                $div .= '<div class="gallery-slider'.$class.'">';
+                $div .= '<div class="gallery-slider owl-carousel'.$class.'">';
                 $div .= $html;
                 $div .= '</div>';
             }
