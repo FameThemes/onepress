@@ -75,5 +75,5 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 </section>
 <?php } ?>
 <?php endif;
-wp_reset_query();
+wp_reset_postdata();
 
