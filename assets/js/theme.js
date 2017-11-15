@@ -622,7 +622,6 @@ jQuery( document ).ready( function( $ ) {
 
         // Slider
         if ( $.fn.owlCarousel ) {
-            // Slider
             $( '.gallery-slider', $context ).owlCarousel({
                 items: 1,
                 itemsCustom: false,
@@ -646,6 +645,7 @@ jQuery( document ).ready( function( $ ) {
                 pagination : false,
                 paginationNumbers : false,
                 autoHeight : true,
+                rtl: onepress_js_settings.is_rtl ? true : false
             });
 
             $('.gallery-carousel', $context).each( function(){
@@ -677,6 +677,8 @@ jQuery( document ).ready( function( $ ) {
 
                     pagination : false,
                     paginationNumbers : false,
+
+                    rtl: onepress_js_settings.is_rtl ? true : false
                 });
 
             } );

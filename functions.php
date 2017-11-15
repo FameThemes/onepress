@@ -192,7 +192,9 @@ function onepress_scripts() {
         'hero_duration'   				 => intval( get_theme_mod( 'onepress_hero_slider_duration', 5000 ) ),
         'is_home'   					 => '',
         'gallery_enable'   				 => '',
+        'is_rtl' => is_rtl()
     );
+
     // Load gallery scripts
     $galley_disable  = get_theme_mod( 'onepress_gallery_disable' ) ==  1 ? true : false;
     $is_shop = false;

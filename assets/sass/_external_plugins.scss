@@ -933,6 +933,9 @@ button {
 .owl-carousel .owl-item{
 	float: left;
 }
+html[dir="rtl"] .owl-carousel .owl-item{
+    float: right;
+}
 .owl-controls .owl-page,
 .owl-controls .owl-buttons div{
 	cursor: pointer;

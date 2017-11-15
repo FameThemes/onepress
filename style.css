@@ -51,7 +51,7 @@ html, body {
 
 html {
   box-sizing: border-box;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
   font-size: 16px;
 }
 @media (max-width: 991px) {
@@ -642,7 +642,7 @@ h6, p, ul, ol, dl, blockquote, pre {
 }
 @media screen and (min-width: 940px) {
   .sidebar {
-    width: 25.2252252252%;
+    width: 25.22523%;
     float: left;
   }
 }
@@ -657,7 +657,7 @@ h6, p, ul, ol, dl, blockquote, pre {
     padding-left: 39px;
     border-left: 1px solid #e9e9e9;
     margin-right: 1px;
-    width: 74.7747747748%;
+    width: 74.77477%;
   }
 
   .left-sidebar .sidebar {
@@ -669,7 +669,7 @@ h6, p, ul, ol, dl, blockquote, pre {
   .right-sidebar .content-area {
     padding-right: 39px;
     border-right: 1px solid #e9e9e9;
-    width: 74.7747747748%;
+    width: 74.77477%;
   }
 
   .right-sidebar .sidebar {
@@ -1582,7 +1582,7 @@ h6, p, ul, ol, dl, blockquote, pre {
   position: relative;
 }
 #comments .comment .comment-wrapper:before {
-  border-color: rgba(0, 0, 0, 0) #f6f7f9 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+  border-color: transparent #f6f7f9 transparent transparent;
   border-style: solid;
   border-width: 0 10px 10px 0;
   content: "";
@@ -2539,7 +2539,7 @@ section > .customize-partial-edit-shortcut button {
     clear: left;
   }
   .team-members.row.team-layout-3 .team-member {
-    width: 33.3333333333%;
+    width: 33.33333%;
   }
   .team-members.row.team-layout-3 .team-member:nth-child(3n+1) {
     clear: left;
@@ -2876,7 +2876,7 @@ div.wpcf7-response-output {
   }
 
   .g-col-3 .g-item {
-    width: 33.3333333333%;
+    width: 33.33333%;
   }
   .g-col-3 .g-item:nth-child(3n+1) {
     clear: left;
@@ -2897,7 +2897,7 @@ div.wpcf7-response-output {
   }
 
   .g-col-6 .g-item {
-    width: 16.6666666667%;
+    width: 16.66667%;
   }
   .g-col-6 .g-item:nth-child(6n+1) {
     clear: left;
@@ -2919,7 +2919,7 @@ div.wpcf7-response-output {
   }
 
   .g-col-3 .g-item {
-    width: 33.3333333333%;
+    width: 33.33333%;
   }
   .g-col-3 .g-item:nth-child(3n+1) {
     clear: left;
@@ -2940,7 +2940,7 @@ div.wpcf7-response-output {
   }
 
   .g-col-6 .g-item {
-    width: 16.6666666667%;
+    width: 16.66667%;
   }
   .g-col-6 .g-item:nth-child(6n+1) {
     clear: left;
@@ -2962,7 +2962,7 @@ div.wpcf7-response-output {
   }
 
   .g-col-3 .g-item {
-    width: 33.3333333333%;
+    width: 33.33333%;
   }
   .g-col-3 .g-item:nth-child(3n+1) {
     clear: left;
@@ -2983,7 +2983,7 @@ div.wpcf7-response-output {
   }
 
   .g-col-6 .g-item {
-    width: 16.6666666667%;
+    width: 16.66667%;
   }
   .g-col-6 .g-item:nth-child(6n+1) {
     clear: left;
@@ -3231,7 +3231,7 @@ button::-moz-focus-inner {
   padding: 0;
   width: 90px;
   height: 110px;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
 }
 .mfp-arrow:active {
   margin-top: -54px;
@@ -3735,6 +3735,10 @@ img.mfp-img {
   float: left;
 }
 
+html[dir="rtl"] .owl-carousel .owl-item {
+  float: right;
+}
+
 .owl-controls .owl-page,
 .owl-controls .owl-buttons div {
   cursor: pointer;
@@ -3746,7 +3750,7 @@ img.mfp-img {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* fix */
