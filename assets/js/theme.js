@@ -620,9 +620,10 @@ jQuery( document ).ready( function( $ ) {
             } );
         }
 
+        var is_rtl = onepress_js_settings.is_rtl;
+
         // Slider
         if ( $.fn.owlCarousel ) {
-<<<<<<< HEAD
             $( '.gallery-slider', $context ).owlCarousel({
                 items: 1,
                 itemsCustom: false,
@@ -647,20 +648,6 @@ jQuery( document ).ready( function( $ ) {
                 paginationNumbers : false,
                 autoHeight : true,
                 rtl: onepress_js_settings.is_rtl ? true : false
-=======
-            // Slider
-            var is_rtl = onepress_js_settings.is_rtl;
-            $( '.gallery-slider', $context ).owlCarousel({
-                items: 1,
-                navSpeed : 800,
-                autoplaySpeed : 4000,
-                autoplayHoverPause : true,
-                rtl: ( is_rtl == 0 ) ? false : true,
-                nav : true,
-                navText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
-                dots : false,
-                autoHeight : true
->>>>>>> origin/development
             });
 
             $('.gallery-carousel', $context).each( function(){
@@ -672,7 +659,6 @@ jQuery( document ).ready( function( $ ) {
 
                 $( this ).owlCarousel({
                     items: n,
-<<<<<<< HEAD
                     itemsCustom : false,
                     itemsDesktop : [1199, ( n > 4) ? 4 : n ],
                     itemsDesktopSmall : [979, ( n > 3) ? 3 : n ],
@@ -693,9 +679,6 @@ jQuery( document ).ready( function( $ ) {
 
                     pagination : false,
                     paginationNumbers : false,
-
-                    rtl: onepress_js_settings.is_rtl ? true : false
-=======
                     responsive:{
                         0:{
                             items:  2
@@ -717,7 +700,6 @@ jQuery( document ).ready( function( $ ) {
                     nav : true,
                     navText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
                     dots : false
->>>>>>> origin/development
                 });
 
             } );

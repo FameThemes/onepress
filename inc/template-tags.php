@@ -319,10 +319,10 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              *  Custom hero section css
              */
-            $hero_bg_color = get_theme_mod( 'onepress_hero_overlay_color', '#000000' );
+            $hero_bg_color = sanitize_hex_color( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ) );
 
             // Deprecate form v 1.1.5
-            $hero_bg_color = onepress_hex_to_rgba( $hero_bg_color, get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) );
+            $hero_bg_color = onepress_hex_to_rgba( $hero_bg_color, floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) ) );
 
             ob_start();
             ?>
@@ -354,7 +354,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              * Theme Color
              */
-            $primary   = get_theme_mod( 'onepress_primary_color' );
+            $primary = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_primary_color' ) );
             if ( $primary != '' ) { ?>
                 a, .screen-reader-text:hover, .screen-reader-text:active, .screen-reader-text:focus, .header-social a, .onepress-menu a:hover,
                 .onepress-menu ul li a:hover, .onepress-menu li.onepress-current-item > a, .onepress-menu ul li.current-menu-item > a, .onepress-menu > li a.menu-actived,
@@ -394,7 +394,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              * Header background
              */
-            $header_bg_color =  get_theme_mod( 'onepress_header_bg_color' );
+            $header_bg_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_header_bg_color' ) );
             if ( $header_bg_color ) {
                 ?>
                 .site-header, .no-sticky-header.no-header-transparent .site-header {
@@ -407,7 +407,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              * Menu color
              */
-            $menu_color =  get_theme_mod( 'onepress_menu_color' );
+            $menu_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_menu_color' ) );
             if ( $menu_color ) {
                 ?>
                 .onepress-menu > li > a {
@@ -419,7 +419,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              * Menu hover color
              */
-            $menu_hover_color =  get_theme_mod( 'onepress_menu_hover_color' );
+            $menu_hover_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_menu_hover_color' ) );
             if ( $menu_hover_color ) {
                 ?>
                 .onepress-menu > li > a:hover,
@@ -436,7 +436,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              * Menu hover background color
              */
-            $menu_hover_bg =  get_theme_mod( 'onepress_menu_hover_bg_color' );
+            $menu_hover_bg = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_menu_hover_bg_color' ) );
             if ( $menu_hover_bg ) {
                 ?>
 				@media screen and (min-width: 1140px) {
@@ -459,7 +459,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			/**
              * Reponsive Mobie button color
              */
-            $menu_button_color =  get_theme_mod( 'onepress_menu_toggle_button_color' );
+            $menu_button_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_menu_toggle_button_color' ) );
             if ( $menu_button_color ) {
                 ?>
 				#nav-toggle span, #nav-toggle span::before, #nav-toggle span::after,
@@ -472,7 +472,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			/**
              * Site Title
              */
-            $onepress_logo_text_color =  get_theme_mod( 'onepress_logo_text_color' );
+            $onepress_logo_text_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_logo_text_color' ) );
             if ( $onepress_logo_text_color ) {
                 ?>
 				.site-branding .site-title, .site-branding .site-text-logo {
@@ -481,7 +481,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             <?php
             }
 
-            $onepress_footer_bg = get_theme_mod( 'onepress_footer_bg' );
+            $onepress_footer_bg = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_footer_bg' ) );
             if ( $onepress_footer_bg ) {
                 ?>
                 .site-footer {
@@ -493,7 +493,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 <?php
             }
 
-            $onepress_footer_info_bg = get_theme_mod( 'onepress_footer_info_bg' );
+            $onepress_footer_info_bg = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_footer_info_bg' ) );
             if ( $onepress_footer_info_bg ) {
                 ?>
                 .site-footer .site-info, .site-footer .btt a{

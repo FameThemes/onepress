@@ -3,7 +3,7 @@ $id       = get_theme_mod( 'onepress_about_id', esc_html__('about', 'onepress') 
 $disable  = get_theme_mod( 'onepress_about_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_about_title', esc_html__('About Us', 'onepress' ));
 $subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__('Section subtitle', 'onepress' ));
-$desc     = get_theme_mod( 'onepress_about_desc');
+$desc     = wp_kses_post( get_theme_mod( 'onepress_about_desc') );
 if ( onepress_is_selective_refresh() ) {
     $disable = false;
 }
@@ -15,7 +15,7 @@ if ( ! empty( $page_ids ) ) {
     <?php if (!$disable) { ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
         <section id="<?php if ($id != '') {
-            echo $id;
+            echo esc_attr( $id );
         }; ?>" <?php do_action('onepress_section_atts', 'about'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-about section-padding onepage-section', 'about')); ?>">
         <?php } ?>
 
@@ -29,8 +29,8 @@ if ( ! empty( $page_ids ) ) {
                     <?php if ($title != '') {
                         echo '<h2 class="section-title">' . esc_html($title) . '</h2>';
                     } ?>
-                    <?php if ($desc != '') {
-                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
+                    <?php if ( $desc != '' ) {
+                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', $desc ) . '</div>';
                     } ?>
                 </div>
                 <?php } ?>
@@ -99,7 +99,8 @@ if ( ! empty( $page_ids ) ) {
                                 <?php } ?>
                                 <?php
                                 if ( $content_source == 'excerpt' ) {
-                                    echo apply_filters( 'the_excerpt', get_the_excerpt( $post ) );
+                                    $excerpt = get_the_excerpt( $post );
+                                    echo apply_filters( 'the_excerpt', $excerpt  );
                                 } else {
                                     $content = apply_filters( 'the_content', $post->post_content );
                                     $content = str_replace( ']]>', ']]&gt;', $content );
