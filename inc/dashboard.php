@@ -8,7 +8,7 @@
  *
  * @return array|mixed|void
  */
-function onepress_get_actions_required( ) {
+function onepress_get_recommended_actions( ) {
 
     $actions = array();
     $front_page = get_option( 'page_on_front' );
@@ -55,7 +55,7 @@ function onepress_get_actions_required( ) {
 
     }
 
-    $actions = apply_filters( 'onepress_get_actions_required', $actions );
+    $actions = apply_filters( 'onepress_get_recommended_actions', $actions );
     $hide_by_click = get_option( 'onepress_actions_dismiss' );
     if ( ! is_array( $hide_by_click ) ) {
         $hide_by_click = array();
@@ -97,8 +97,8 @@ function onepress_get_actions_required( ) {
     return $return;
 }
 
-add_action('switch_theme', 'onepress_reset_actions_required');
-function onepress_reset_actions_required () {
+add_action('switch_theme', 'onepress_reset_recommended_actions');
+function onepress_reset_recommended_actions () {
     delete_option('onepress_actions_dismiss');
 }
 
@@ -123,7 +123,7 @@ add_action( 'admin_enqueue_scripts', 'onepress_admin_scripts' );
 add_action('admin_menu', 'onepress_theme_info');
 function onepress_theme_info() {
 
-    $actions = onepress_get_actions_required();
+    $actions = onepress_get_recommended_actions();
     $number_count = $actions['number_notice'];
 
     if ( $number_count > 0 ){
@@ -144,10 +144,10 @@ function onepress_theme_info() {
  * @return bool|null
  */
 function onepress_admin_notice() {
-    if ( ! function_exists( 'onepress_get_actions_required' ) ) {
+    if ( ! function_exists( 'onepress_get_recommended_actions' ) ) {
         return false;
     }
-    $actions = onepress_get_actions_required();
+    $actions = onepress_get_recommended_actions();
     $number_action = $actions['number_notice'];
 
     if ( $number_action > 0 ) {
@@ -306,11 +306,11 @@ function onepress_theme_info_page() {
         $tab = null;
     }
 
-    $actions_r = onepress_get_actions_required();
+    $actions_r = onepress_get_recommended_actions();
     $number_action = $actions_r['number_notice'];
     $actions = $actions_r['actions'];
 
-    $current_action_link =  admin_url( 'themes.php?page=ft_onepress&tab=actions_required' );
+    $current_action_link =  admin_url( 'themes.php?page=ft_onepress&tab=recommended_actions' );
 
     $recommend_plugins = get_theme_support( 'recommend-plugins' );
     if ( is_array( $recommend_plugins ) && isset( $recommend_plugins[0] ) ){
@@ -325,7 +325,7 @@ function onepress_theme_info_page() {
         <a target="_blank" href="<?php echo esc_url('https://www.famethemes.com/?utm_source=theme_dashboard_page&utm_medium=badge_link&utm_campaign=onepress'); ?>" class="famethemes-badge wp-badge"><span>FameThemes</span></a>
         <h2 class="nav-tab-wrapper">
             <a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'OnePress', 'onepress' ) ?></a>
-            <a href="?page=ft_onepress&tab=actions_required" class="nav-tab<?php echo $tab == 'actions_required' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Actions Required', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
+            <a href="?page=ft_onepress&tab=recommended_actions" class="nav-tab<?php echo $tab == 'recommended_actions' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Recommended Actions', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
             <?php if ( ! class_exists('OnePress_PLus') ) { ?>
             <a href="?page=ft_onepress&tab=free_pro" class="nav-tab<?php echo $tab == 'free_pro' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Free vs PLUS', 'onepress' ); ?></span></a>
             <?php } ?>
@@ -369,7 +369,7 @@ function onepress_theme_info_page() {
             </div>
         <?php } ?>
 
-        <?php if ( $tab == 'actions_required' ) { ?>
+        <?php if ( $tab == 'recommended_actions' ) { ?>
             <div class="action-required-tab info-tab-content">
 
                 <?php if ( is_child_theme() ){

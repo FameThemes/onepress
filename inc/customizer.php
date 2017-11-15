@@ -3013,17 +3013,17 @@ add_action( 'customize_preview_init', 'onepress_customize_preview_js', 65 );
 
 add_action( 'customize_controls_enqueue_scripts', 'opneress_customize_js_settings' );
 function opneress_customize_js_settings(){
-    if ( ! function_exists( 'onepress_get_actions_required' ) ) {
+    if ( ! function_exists( 'onepress_get_recommended_actions' ) ) {
         return;
     }
 
-    $actions = onepress_get_actions_required();
+    $actions = onepress_get_recommended_actions();
     $number_action = $actions['number_notice'];
 
     wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(
         'number_action' => $number_action,
         'is_plus_activated' => class_exists( 'OnePress_PLus' ) ? 'y' : 'n',
-        'action_url' => admin_url( 'themes.php?page=ft_onepress&tab=actions_required' ),
+        'action_url' => admin_url( 'themes.php?page=ft_onepress&tab=recommended_actions' ),
     ) );
 }
 
