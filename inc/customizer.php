@@ -233,21 +233,6 @@ function onepress_customize_register( $wp_customize ) {
                 )
             ));
 
-            // Footer Widgets Color
-            $wp_customize->add_setting( 'onepress_footer_info_bg', array(
-                'sanitize_callback' => 'sanitize_hex_color_no_hash',
-                'sanitize_js_callback' => 'maybe_hash_hex_color',
-                'default' => '',
-                'transport' => 'postMessage'
-            ) );
-            $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_info_bg',
-                array(
-                    'label'       => esc_html__( 'Footer Info Background', 'onepress' ),
-                    'section'     => 'onepress_colors_settings',
-                    'description' => '',
-                )
-            ));
-    
 
 		/* Header
 		----------------------------------------------------------------------*/
@@ -612,6 +597,169 @@ function onepress_customize_register( $wp_customize ) {
         );
 
 
+    /* Footer Settings
+    ----------------------------------------------------------------------*/
+    $wp_customize->add_section( 'onepress_footer' ,
+        array(
+            'priority'    => null,
+            'title'       => esc_html__( 'Footer', 'onepress' ),
+            'description' => '',
+            'panel'       => 'onepress_options',
+        )
+    );
+
+    $wp_customize->add_setting( 'footer_layout',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+            'transport' => 'postMessage',
+        )
+    );
+
+    $wp_customize->add_control( 'footer_layout',
+        array(
+            'type'        => 'select',
+            'label'       => esc_html__('Footer Layout', 'onepress'),
+            'section'     => 'onepress_footer',
+            'default' => '0',
+            'description' => esc_html__('Number footer columns to display.', 'onepress'),
+            'choices' => array(
+                '4' => 4,
+                '3' => 3,
+                '2' => 2,
+                '1' => 1,
+                '0' => esc_html__('Disable footer widgets', 'onepress'),
+            )
+        )
+    );
+
+    for ( $i = 1; $i<=4; $i ++ ) {
+        $df = 12;
+        if ( $i > 1 ) {
+            $_n = 12/$i;
+            $df = array();
+            for ( $j = 0; $j < $i; $j++ ) {
+                $df[ $j ] = $_n;
+            }
+            $df = join( '+', $df );
+        }
+        $wp_customize->add_setting('footer_custom_'.$i.'_columns',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default' => $df,
+                'transport' => 'postMessage',
+            )
+        );
+        $wp_customize->add_control('footer_custom_'.$i.'_columns',
+            array(
+                'label' => $i == 1 ? __('Custom footer 1 column width', 'onepress') : sprintf( __('Custom footer %s columns width', 'onepress'), $i ),
+                'section' => 'onepress_footer',
+                'description' => esc_html__('Enter int numbers and sum of them must smaller or equal 12, separated by "+"', 'onepress'),
+            )
+        );
+    }
+
+    // onepress_sanitize_color_alpha
+        $wp_customize->add_setting( 'footer_widgets_color',
+            array(
+                'sanitize_callback' => 'sanitize_hex_color',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new WP_Customize_Color_Control(
+                $wp_customize,
+                'footer_widgets_color',
+                array(
+                    'label' 		=> esc_html__('Text Color', 'onepress'),
+                    'section' 		=> 'onepress_footer',
+                )
+            )
+        );
+
+        $wp_customize->add_setting( 'footer_widgets_bg_color',
+            array(
+                'sanitize_callback' => 'sanitize_hex_color',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new WP_Customize_Color_Control(
+                $wp_customize,
+                'footer_widgets_bg_color',
+                array(
+                    'label' 		=> esc_html__('Background Color', 'onepress'),
+                    'section' 		=> 'onepress_footer',
+                )
+            )
+        );
+
+        // Footer Heading color
+        $wp_customize->add_setting( 'footer_widgets_title_color',
+            array(
+                'sanitize_callback' => 'sanitize_hex_color',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new WP_Customize_Color_Control(
+                $wp_customize,
+                'footer_widgets_title_color',
+                array(
+                    'label' 		=> esc_html__('Widget Title Color', 'onepress'),
+                    'section' 		=> 'onepress_footer',
+                )
+            )
+        );
+
+
+        $wp_customize->add_setting( 'footer_widgets_link_color',
+            array(
+                'sanitize_callback' => 'sanitize_hex_color',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new WP_Customize_Color_Control(
+                $wp_customize,
+                'footer_widgets_link_color',
+                array(
+                    'label' 		=> esc_html__('Link Color', 'onepress'),
+                    'section' 		=> 'onepress_footer',
+                )
+            )
+        );
+
+        $wp_customize->add_setting( 'footer_widgets_link_hover_color',
+            array(
+                'sanitize_callback' => 'sanitize_hex_color',
+                'default'           => '',
+            )
+        );
+        $wp_customize->add_control( new WP_Customize_Color_Control(
+                $wp_customize,
+                'footer_widgets_link_hover_color',
+                array(
+                    'label' 		=> esc_html__('Link Hover Color', 'onepress'),
+                    'section' 		=> 'onepress_footer',
+                )
+            )
+        );
+
+
+        // Footer Widgets Color
+        $wp_customize->add_setting( 'onepress_footer_info_bg', array(
+            'sanitize_callback' => 'sanitize_hex_color',
+            'sanitize_js_callback' => 'maybe_hash_hex_color',
+            'default' => '',
+        ) );
+        $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_info_bg',
+            array(
+                'label'       => esc_html__( 'Footer Info Background', 'onepress' ),
+                'section'     => 'onepress_footer',
+                'description' => '',
+            )
+        ));
+
+
+
+
 
 
     if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress < 4.7.
@@ -900,7 +1048,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'sanitize_callback' => 'onepress_sanitize_color_alpha',
 					'default'           => 'rgba(0,0,0,.3)',
-					'transport' => 'refresh', // refresh or postMessage
+					//'transport' => 'refresh', // refresh or postMessage
 				)
 			);
 			$wp_customize->add_control( new OnePress_Alpha_Color_Control(
@@ -2884,6 +3032,7 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
+
 
 
     /*------------------------------------------------------------------------*/

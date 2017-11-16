@@ -74,7 +74,6 @@
             }
         } );
     } );
-    
 
 } )( jQuery , wp.customize );
 

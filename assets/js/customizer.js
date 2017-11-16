@@ -1468,4 +1468,17 @@ jQuery( document ).ready( function( $ ) {
         }
     });
 
+
+    var display_footer_layout = function( l ){
+        $( 'li[id^="customize-control-footer_custom_"]' ).hide();
+        $( 'li[id^="customize-control-footer_custom_'+l+'_columns"]' ).show();
+    };
+
+    display_footer_layout( $( '#customize-control-footer_layout select' ).val() );
+    $( '#customize-control-footer_layout select' ).on( 'change', function ()  {
+        display_footer_layout( $( this ).val() );
+    } );
+
+
+
 } );

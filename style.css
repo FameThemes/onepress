@@ -678,6 +678,35 @@ h6, p, ul, ol, dl, blockquote, pre {
     margin-left: -1px;
   }
 }
+/**
+Footer widgets
+ */
+.footer-widgets {
+  background: #333333;
+}
+.footer-widgets table {
+  border-collapse: collapse;
+}
+.footer-widgets table > thead > tr > th, .footer-widgets table > thead > tr > td {
+  border-width: 1px;
+}
+.footer-widgets table th, .footer-widgets table td {
+  border-color: rgba(233, 233, 233, 0.4);
+}
+.footer-widgets .widget-title {
+  color: #ffffff;
+}
+.footer-widgets .widget-area .widget_categories li, .footer-widgets .widget-area .widget_archive li, .footer-widgets .widget-area .widget_meta li {
+  width: 100% !important;
+  float: none;
+}
+.footer-widgets .widget_recent_entries ul li,
+.footer-widgets .widget_recent_comments ul li {
+  border-bottom: 0px none;
+  padding: 5px 0px;
+  margin-bottom: 0px;
+}
+
 /*--------------------------------------------------------------
 4.0 Structure
 --------------------------------------------------------------*/

@@ -241,8 +241,64 @@ function onepress_customizer_partials( $wp_customize ) {
         'render_callback' => 'onepress_selective_refresh_newsletter_title',
     ) );
 
+
+    /**
+     * Footer Widgets
+     * @since 2.0.0
+     */
+    $wp_customize->selective_refresh->add_partial( 'onepress-footer-widgets', array(
+        'selector' => '#footer-widgets',
+        'settings' => array( 'footer_layout', 'footer_custom_1_columns', 'footer_custom_2_columns', 'footer_custom_3_columns', 'footer_custom_4_columns' ),
+        'render_callback' => 'onepress_footer_widgets',
+        'container_inclusive' => true
+    ) );
+
+    /**
+     * Selective Refresh style
+     * @since 2.0.0
+     */
+
+    $css_settings = array(
+        'onepress_hero_overlay_color',
+        //'onepress_hero_overlay_opacity',
+        'onepress_primary_color',
+        'onepress_header_bg_color',
+        'onepress_menu_color',
+        'onepress_menu_hover_color',
+        'onepress_menu_hover_bg_color',
+        'onepress_menu_hover_bg_color',
+        'onepress_menu_toggle_button_color',
+        'onepress_logo_text_color',
+        'onepress_footer_info_bg',
+
+        'footer_widgets_color',
+        'footer_widgets_bg_color',
+        'footer_widgets_title_color',
+        'footer_widgets_link_color',
+        'footer_widgets_link_hover_color',
+    );
+
+    foreach( $css_settings as $index => $key ) {
+        if ( $wp_customize->get_setting( $key ) ) {
+            $wp_customize->get_setting( $key )->transport = 'postMessage';
+
+        } else {
+            unset( $css_settings[ $index ] );
+        }
+    }
+
+
+
+    $wp_customize->selective_refresh->add_partial( 'onepress-style-live-css', array(
+        'selector' => '#onepress-style-inline-css',
+        'settings' => $css_settings,
+        'render_callback' => 'onepress_custom_inline_style',
+    ) );
+
+
+
 }
-add_action( 'customize_register', 'onepress_customizer_partials', 50 );
+add_action( 'customize_register', 'onepress_customizer_partials', 199 );
 
 
 

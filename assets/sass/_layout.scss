@@ -59,3 +59,33 @@
 		margin-left: -1px;
 	}
 }
+
+/**
+Footer widgets
+ */
+.footer-widgets  {
+    background: #333333;
+    table {
+        border-collapse: collapse;
+        > thead > tr > th,  > thead > tr > td {
+            border-width: 1px;
+        }
+        th, td {
+            border-color: rgba( 233, 233, 233, .4);
+
+        }
+    }
+    .widget-title {
+        color: #ffffff;
+    }
+    .widget-area .widget_categories li, .widget-area .widget_archive li, .widget-area .widget_meta li {
+        width: 100% !important;
+        float: none;
+    }
+    .widget_recent_entries ul li,
+    .widget_recent_comments ul li{
+        border-bottom: 0px none;
+        padding: 5px 0px;
+        margin-bottom: 0px;
+    }
+}

@@ -87,6 +87,14 @@
             </div>
         <?php endif; ?>
 
+
+        <?php
+        /**
+         * @since 2.0.0
+         */
+        do_action( 'onepress_before_site_info' );
+        ?>
+
         <div class="site-info">
             <div class="container">
                 <?php if ($onepress_btt_disable != '1') : ?>

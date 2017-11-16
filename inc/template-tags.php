@@ -306,8 +306,6 @@ if ( ! function_exists( 'onepress_hex_to_rgba' ) ) {
 
 
 
-add_action( 'wp_enqueue_scripts', 'onepress_custom_inline_style', 100 );
-
 if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
     /**
      * Add custom css to header
@@ -508,6 +506,39 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 <?php
             }
 
+
+            $footer_widgets_color = sanitize_hex_color( get_theme_mod( 'footer_widgets_color' ) );
+            $footer_widgets_bg_color = sanitize_hex_color( get_theme_mod( 'footer_widgets_bg_color' ) );
+            $footer_widgets_title_color = sanitize_hex_color( get_theme_mod( 'footer_widgets_title_color' ) );
+            $footer_widgets_link_color = sanitize_hex_color( get_theme_mod( 'footer_widgets_link_color' ) );
+            $footer_widgets_link_hover_color = sanitize_hex_color( get_theme_mod( 'footer_widgets_link_hover_color' ) );
+
+            ?>
+            #footer-widgets {
+                <?php
+                if ( $footer_widgets_color ) {
+                    echo "color: {$footer_widgets_color};";
+                }
+                if ( $footer_widgets_bg_color ) {
+                    echo "background-color: {$footer_widgets_bg_color};";
+                }
+                ?>
+            }
+            <?php
+            if ( $footer_widgets_title_color ) {
+                echo "#footer-widgets .widget-title{ color: {$footer_widgets_title_color}; }";
+            }
+
+            if ( $footer_widgets_link_color ) {
+                echo "#footer-widgets .sidebar .widget a{ color: {$footer_widgets_link_color}; }";
+            }
+
+            if ( $footer_widgets_link_hover_color ) {
+                echo "#footer-widgets .sidebar .widget a:hover{ color: {$footer_widgets_link_hover_color}; }";
+            }
+
+
+
             $gallery_spacing = absint( get_theme_mod( 'onepress_g_spacing', 20 ) );
 
             ?>
@@ -553,7 +584,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             }
         }
 
-        wp_add_inline_style( 'onepress-style', $css );
+       return $css;
 	}
 
 }
@@ -998,3 +1029,67 @@ if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
         return isset($GLOBALS['onepress_is_selective_refresh']) && $GLOBALS['onepress_is_selective_refresh'] ? true : false;
     }
 }
+
+if ( ! function_exists( 'onepress_footer_widgets' ) ) {
+    function onepress_footer_widgets(){
+        $footer_columns = absint( get_theme_mod( 'footer_layout' , 4 ) );
+        $max_cols = 12;
+        $layouts = 12;
+        if ( $footer_columns > 1 ){
+            $default = "12";
+            switch ( $footer_columns ) {
+                case 4:
+                    $default = '3+3+3+3';
+                    break;
+                case 3:
+                    $default = '4+4+4';
+                    break;
+                case 2:
+                    $default = '6+6';
+                    break;
+            }
+            $layouts = sanitize_text_field( get_theme_mod( 'footer_custom_'.$footer_columns.'_columns', $default ) );
+        }
+
+        $layouts = explode( '+', $layouts );
+        foreach ( $layouts as $k => $v ) {
+            $v = absint( trim( $v ) );
+            $v =  $v >= $max_cols ? $max_cols : $v;
+            $layouts[ $k ] = $v;
+        }
+
+        $have_widgets = false;
+
+        for ( $count = 0; $count < $footer_columns; $count++ ) {
+            $id = 'footer-' . ( $count + 1 );
+            if ( is_active_sidebar( $id ) ) {
+                $have_widgets = true;
+            }
+        }
+
+        if ( $footer_columns > 0 && $have_widgets ) { ?>
+            <div id="footer-widgets" class="footer-widgets section-padding ">
+                <div class="container">
+                    <div class="row">
+                        <?php
+                        for ( $count = 0; $count < $footer_columns; $count++ ) {
+                            $col = isset( $layouts[ $count ] ) ? $layouts[ $count ] : '';
+                            $id = 'footer-' . ( $count + 1 );
+                            if ( $col ) {
+                                ?>
+                                <div id="footer-<?php echo esc_attr( $count + 1 ) ?>" class="col-md-<?php echo esc_attr( $col ); ?> col-sm-12 footer-column widget-area sidebar" role="complementary">
+                                    <?php dynamic_sidebar( $id ); ?>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        <?php }  ?>
+        <?php
+    }
+}
+
+add_action( 'onepress_before_site_info', 'onepress_footer_widgets' );

@@ -160,6 +160,17 @@ function onepress_widgets_init() {
             'after_title'   => '</h2>',
         ) );
     }
+    for ( $i = 1; $i<= 4; $i++ ) {
+        register_sidebar(array(
+            'name' => sprintf( __('Footer %s', 'onepress'), $i ),
+            'id' => 'footer-'.$i,
+            'description' => '',
+            'before_widget' => '<aside id="%1$s" class="footer-widget widget %2$s">',
+            'after_widget' => '</aside>',
+            'before_title' => '<h2 class="widget-title">',
+            'after_title' => '</h2>',
+        ));
+    }
 
 }
 add_action( 'widgets_init', 'onepress_widgets_init' );
@@ -177,6 +188,9 @@ function onepress_scripts() {
 	wp_enqueue_style( 'onepress-fa', get_template_directory_uri() .'/assets/css/font-awesome.min.css', array(), '4.7.0' );
 	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', false, $version );
 	wp_enqueue_style( 'onepress-style', get_template_directory_uri().'/style.css' );
+
+    $custom_css = onepress_custom_inline_style();
+    wp_add_inline_style( 'onepress-style', $custom_css );
 
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array( 'jquery' ), $version, true );
