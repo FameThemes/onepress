@@ -86,6 +86,7 @@ if ( ! function_exists( 'onepress_setup' ) ) :
          * @since WP 4.5
          * @sin 1.2.1
          */
+
         add_theme_support( 'custom-logo', array(
             'height'      => 36,
             'width'       => 160,
