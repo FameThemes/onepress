@@ -513,7 +513,7 @@ body .wp-full-overlay{
 #customize-controls .control-section-onepress-plus .accordion-section-title:focus {
     background-color: #fff;
 }
-#customize-controls #accordion-section-onepress_order_styling.control-section-onepress-plus .accordion-section-title  {
+#customize-controls #accordion-section-onepress_order_styling_preview.control-section-onepress-plus .accordion-section-title  {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFBAMAAAB/QTvWAAAAG1BMVEXw8fTw8vTx8vTy9PXz9Pb09fb09ff5+vv///+y0VPXAAAAHElEQVR42mOo6Ehg6GgyYOhgaWBo9GhgCO1oAAA/NgZNWnETxAAAAABJRU5ErkJggg==');
     background-repeat: repeat;
 }
