@@ -625,6 +625,7 @@ jQuery( document ).ready( function( $ ) {
         // Slider
         if ( $.fn.owlCarousel ) {
             $( '.gallery-slider', $context ).owlCarousel({
+
                 items: 1,
                 itemsCustom: false,
                 itemsDesktop: 1,
@@ -641,13 +642,14 @@ jQuery( document ).ready( function( $ ) {
                 autoPlay : 4000,
                 stopOnHover : true,
 
-                navigation : true,
-                navigationText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
+                nav : true,
+                navText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
 
                 pagination : false,
                 paginationNumbers : false,
                 autoHeight : true,
-                rtl: onepress_js_settings.is_rtl ? true : false
+                rtl: ( is_rtl == 0 ) ? false : true,
+
             });
 
             $('.gallery-carousel', $context).each( function(){
@@ -658,27 +660,8 @@ jQuery( document ).ready( function( $ ) {
                 }
 
                 $( this ).owlCarousel({
+
                     items: n,
-                    itemsCustom : false,
-                    itemsDesktop : [1199, ( n > 4) ? 4 : n ],
-                    itemsDesktopSmall : [979, ( n > 3) ? 3 : n ],
-                    itemsTablet : [768, ( n > 2) ? 2 : n ],
-                    itemsTabletSmall : false,
-                    itemsMobile : [479, ( n > 2) ? 2 : n ],
-                    singleItem : false,
-                    itemsScaleUp : false,
-
-                    slideSpeed : 200,
-                    paginationSpeed : 800,
-                    rewindSpeed : 1000,
-                    autoPlay : 4000,
-                    stopOnHover : true,
-
-                    navigation : true,
-                    navigationText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
-
-                    pagination : false,
-                    paginationNumbers : false,
                     responsive:{
                         0:{
                             items:  2
@@ -700,6 +683,7 @@ jQuery( document ).ready( function( $ ) {
                     nav : true,
                     navText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
                     dots : false
+
                 });
 
             } );

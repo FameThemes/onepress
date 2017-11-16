@@ -894,6 +894,9 @@ function onepress_gallery_html( $data, $inner = true, $size = 'thumbnail' ) {
             $thumb = $photo['thumbnail'];
         }
 
+
+
+
         $html .= '<a href="'.esc_attr( $photo['full'] ).'" class="g-item" title="'.esc_attr( wp_strip_all_tags( $photo['title'] ) ).'">';
         if ( $inner ) {
             $html .= '<span class="inner">';
@@ -906,6 +909,7 @@ function onepress_gallery_html( $data, $inner = true, $size = 'thumbnail' ) {
         }
 
         $html .= '</a>';
+
         next( $data );
     }
     reset( $data );
@@ -948,7 +952,7 @@ function onepress_gallery_generate( $echo = true ){
         case 'carousel':
             $html = onepress_gallery_html( $data );
             if ( $html ) {
-                $div .= '<div data-col="'.$col.'" class="g-zoom-in gallery-carousel owl-carousel'.$class.'">';
+                $div .= '<div data-col="'.$col.'" class="g-zoom-in gallery-carousel owl-theme owl-carousel owl-carousel'.$class.'">';
                 $div .= $html;
                 $div .= '</div>';
             }
@@ -956,7 +960,7 @@ function onepress_gallery_generate( $echo = true ){
         case 'slider':
             $html = onepress_gallery_html( $data , true , 'full' );
             if ( $html ) {
-                $div .= '<div class="gallery-slider owl-carousel'.$class.'">';
+                $div .= '<div class="gallery-slider owl-theme owl-carousel owl-carousel'.$class.'">';
                 $div .= $html;
                 $div .= '</div>';
             }
