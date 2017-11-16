@@ -476,6 +476,7 @@ function onepress_customize_register( $wp_customize ) {
                         'live_title_id' => 'network', // apply for unput text and textarea only
                         'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
                         'max_item'      => 5, // Maximum item can add
+                        'limited_msg' 	=> wp_kses_post( __( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
                         'fields'    => array(
                             'network'  => array(
                                 'title' => esc_html__('Social network', 'onepress'),
@@ -943,7 +944,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'section'     => 'onepress_hero_images',
 					'type'        => 'custom_message',
-					'description' => wp_kses_post( 'Want to add <strong>background video</strong> for hero section? Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version.', 'onepress' ),
+					'description' => wp_kses_post( __( 'Want to add <strong>background video</strong> for hero section? Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version.', 'onepress' ) ),
 					'priority'    => 131,
 				)
 			));
@@ -986,7 +987,7 @@ function onepress_customize_register( $wp_customize ) {
 					array(
 						'sanitize_callback' => 'onepress_sanitize_text',
 						'mod' 				=> 'html',
-						'default'           => wp_kses_post('We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress'),
+						'default'           => wp_kses_post( __( 'We are <span class="js-rotating">OnePress | One Page | Responsive | Perfection</span>', 'onepress') ),
 					)
 				);
 				$wp_customize->add_control( new OnePress_Editor_Custom_Control(
@@ -1707,6 +1708,7 @@ function onepress_customize_register( $wp_customize ) {
 						'live_title_id' => 'content_page', // apply for unput text and textarea only
 						'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 						'max_item'      => 3, // Maximum item can add
+                        'limited_msg' 	=> wp_kses_post( __('Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
 						'fields'    => array(
 							'content_page'  => array(
 								'title' => esc_html__('Select a page', 'onepress'),
@@ -1900,6 +1902,7 @@ function onepress_customize_register( $wp_customize ) {
                 'live_title_id' => 'title', // apply for unput text and textarea only
                 'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
                 'max_item'      => 4, // Maximum item can add
+                'limited_msg' 	=> wp_kses_post( __( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
                 'fields'    => array(
                     'title'  => array(
                         'title' => esc_html__('Title', 'onepress'),
@@ -2111,7 +2114,8 @@ function onepress_customize_register( $wp_customize ) {
 					'section'       => 'onepress_service_content',
 					'live_title_id' => 'content_page', // apply for unput text and textarea only
 					'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
-					'max_item'      => 4, // Maximum item can add
+					'max_item'      => 4, // Maximum item can add,
+                    'limited_msg' 	=> wp_kses_post( __('Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
                     'fields'    => array(
 						'icon_type'  => array(
 							'title' => esc_html__('Custom icon', 'onepress'),
@@ -2274,6 +2278,7 @@ function onepress_customize_register( $wp_customize ) {
 					'live_title_id' => 'title', // apply for unput text and textarea only
 					'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
+                    'limited_msg' 	=> wp_kses_post( __('Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
                     'fields'    => array(
 						'title' => array(
 							'title' => esc_html__('Title', 'onepress'),
@@ -2451,6 +2456,7 @@ function onepress_customize_register( $wp_customize ) {
 					//'live_title_id' => 'user_id', // apply for unput text and textarea only
 					'title_format'  => esc_html__( '[live_title]', 'onepress'), // [live_title]
 					'max_item'      => 4, // Maximum item can add
+                    'limited_msg' 	=> wp_kses_post( __( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
                     'fields'    => array(
 						'user_id' => array(
 							'title' => esc_html__('User media', 'onepress'),
@@ -2889,17 +2895,27 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->register_section_type( 'OnePress_Section_Plus' );
     // Register sections.
     $wp_customize->add_section(
-        new OnePress_Section_Plus(
-            $wp_customize,
-            'onepress_order_styling_preview',
-            array(
-                'title'           => esc_html__( 'Section Order & Styling', 'onepress' ),
-                'priority'        => 129,
-                //'pro_text' => esc_html__( 'Go Pro', 'onepress' ),
-                //'pro_url'  => 'https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started'
-            )
+        'onepress_order_styling_preview',
+        array(
+            'title'           => esc_html__( 'Section Order & Styling', 'onepress' ),
+            'priority'        => 129,
         )
     );
+
+        // Plus message
+        $wp_customize->add_setting( 'onepress_order_styling_message',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_text',
+            )
+        );
+        $wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_order_styling_message',
+            array(
+                'section'     => 'onepress_news_settings',
+                'type'        => 'custom_message',
+                'section'     => 'onepress_order_styling_preview',
+                'description' => wp_kses_post( __('<h4 class="customizer-group-heading-message">Drag &amp; Drop Section Orders</h4><p class="customizer-group-heading-message">Check out the <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version for full control over the frontpage SECTIONS ORDER!</p><h4 class="customizer-group-heading-message">Advanced Section Styling</h4><p class="customizer-group-heading-message">Check out the <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version for full control over the section styling which includes background color, image, video, parallax effect, custom style and more ...</p>', 'onepress' ) )
+            )
+        ));
 
     $wp_customize->add_section(
         new OnePress_Section_Plus(
@@ -2907,40 +2923,12 @@ function onepress_customize_register( $wp_customize ) {
             'onepress_plus',
             array(
                 'title'           => esc_html__( 'OnePress Plus', 'onepress' ),
-                'priority'        => 299,
+                'priority'        => 1,
                 'pro_text' => __( 'Upgrade Now &rarr;', 'onepress' ),
                 'pro_url'  => 'https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started'
             )
         )
     );
-
-    /*
-	$wp_customize->add_section( 'onepress_order_styling' ,
-		array(
-			'priority'        => 129,
-			'title'           => esc_html__( 'Section Order & Styling', 'onepress' ),
-			'description'     => '',
-			'active_callback' => 'onepress_showon_frontpage'
-		)
-	);
-		// Plus message
-		$wp_customize->add_setting( 'onepress_order_styling_message',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_text',
-			)
-		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_order_styling_message',
-			array(
-				'section'     => 'onepress_news_settings',
-				'type'        => 'custom_message',
-				'section'     => 'onepress_order_styling',
-				'description' => wp_kses_post( 'Check out <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus version</a> for full control over <strong>section order</strong> and <strong>section styling</strong>! ', 'onepress' )
-			)
-		));
-    */
-
-
-
 
 
 		/**
