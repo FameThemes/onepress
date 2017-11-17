@@ -645,11 +645,9 @@ jQuery( document ).ready( function( $ ) {
                 nav : true,
                 navText : ["<i class='lg-icon'></i>", "<i class='lg-icon'></i>"],
 
-                pagination : false,
-                paginationNumbers : false,
                 autoHeight : true,
                 rtl: ( is_rtl == 0 ) ? false : true,
-
+                dots : false
             });
 
             $('.gallery-carousel', $context).each( function(){
