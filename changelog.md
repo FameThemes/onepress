@@ -1,6 +1,31 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 2.0.0
+* Fix hero fullscreen issue.
+* Fixed section full width z index.
+* Add rel attribute for author tag.
+* Add compare table.
+* Add show/hide page title bar close.
+* Update carousel and RTL.
+* Change Actions Required to Recommended Actions.
+* Remove wp_reset_query.
+* Fix theme Check Sniffs.
+* Add non-minified js files.
+* Fix escaping missing in several other places.
+* Removing core settings is not allowed
+* Improve Upsell.
+* Fixed div class fit-vids-style inserted into head.
+* Update latest bootstrap.
+* Add Footer widgets.
+* Fix Gallery issue.
+* Add Page setting.
+* Add option to disable preload.
+* Add about layout columns.
+* Add service icon size settings.
+* Support logo retina.
+
+
 ## 1.4.4
 * Fix hero fullscreen issue.
 
