@@ -88,4 +88,12 @@ Footer widgets
         padding: 5px 0px;
         margin-bottom: 0px;
     }
+    .sidebar {
+        .widget {
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
+
 }

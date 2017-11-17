@@ -706,6 +706,9 @@ Footer widgets
   padding: 5px 0px;
   margin-bottom: 0px;
 }
+.footer-widgets .sidebar .widget:last-child {
+  margin-bottom: 0px;
+}
 
 /*--------------------------------------------------------------
 4.0 Structure
