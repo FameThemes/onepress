@@ -57,13 +57,10 @@ class OnePress_MetaBox {
          */
 
         // Check if our nonce is set.
-        if ( ! isset( $_POST['onepress_page_settings'] ) ) {
+        if ( ! isset( $_POST['onepress_page_settings_nonce'] ) ) {
             return $post_id;
         }
 
-        if ( ! isset( $_POST['onepress_page_settings'] ) ) {
-            return $post_id;
-        }
 
         $nonce = $_POST['onepress_page_settings_nonce'];
 
@@ -89,11 +86,6 @@ class OnePress_MetaBox {
             if ( ! current_user_can( 'edit_post', $post_id ) ) {
                 return $post_id;
             }
-        }
-
-        /* OK, it's safe for us to save the data now. */
-        if ( ! isset( $_POST['onepress_page_settings'] ) ) {
-            return $post_id;
         }
 
         $settings = $_POST['onepress_page_settings'];

@@ -291,13 +291,19 @@ function onepress_customizer_partials( $wp_customize ) {
         }
     }
 
-
-
     $wp_customize->selective_refresh->add_partial( 'onepress-style-live-css', array(
         'selector' => '#onepress-style-inline-css',
         'settings' => $css_settings,
         'render_callback' => 'onepress_custom_inline_style',
     ) );
+
+
+    // Retina logo
+     $wp_customize->selective_refresh->add_partial( 'onepress_site_logo', array(
+         'selector' => '.site-branding',
+         'settings' => 'onepress_retina_logo',
+         'render_callback' => 'onepress_site_logo',
+     ) );
 
 
 
