@@ -55,6 +55,15 @@ if ( ! empty( $page_ids ) ) {
                                     $num_col = 1;
                             }
                         }
+
+                        // Layout columns
+                        $_layout = absint( get_theme_mod( 'onepress_about_layout', 3 ) );
+                        if ( $n > $_layout ) {
+                            $num_col = $_layout;
+                            $col = round( 12/ $_layout );
+                        }
+
+
                         $j = 0;
                         foreach ( $page_ids as $post_id => $settings ) {
                             $post_id = $settings['content_page'];

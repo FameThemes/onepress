@@ -1840,6 +1840,32 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		));
 
+		if ( class_exists( 'OnePress_PLus' ) ) {
+            // About column
+            $wp_customize->add_setting('onepress_about_layout',
+                array(
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'default' => 3,
+                )
+            );
+
+            $wp_customize->add_control('onepress_about_layout',
+                array(
+                    'label' => esc_html__('Layout Settings', 'onepress'),
+                    'section' => 'onepress_about_settings',
+                    'description' => '',
+                    'type' => 'select',
+                    'choices' => array(
+                        4 => esc_html__('4 Columns', 'onepress'),
+                        3 => esc_html__('3 Columns', 'onepress'),
+                        2 => esc_html__('2 Columns', 'onepress'),
+                        1 => esc_html__('1 Column', 'onepress'),
+                    ),
+                )
+            );
+        }
+
+
 
 	$wp_customize->add_section( 'onepress_about_content' ,
 		array(
@@ -1912,6 +1938,8 @@ function onepress_customize_register( $wp_customize ) {
                     ),
                 )
             );
+
+
 
 
     /*------------------------------------------------------------------------*/

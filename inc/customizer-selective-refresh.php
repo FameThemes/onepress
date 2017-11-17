@@ -178,6 +178,7 @@ function onepress_customizer_partials( $wp_customize ) {
                 'onepress_about_subtitle',
                 'onepress_about_desc',
                 'onepress_about_content_source',
+                'onepress_about_layout',
             ),
         ),
 
