@@ -85,6 +85,43 @@ function onepress_customize_register( $wp_customize ) {
             )
         );
 
+    // Retina Logo
+    $wp_customize->add_setting( 'onepress_retina_logo',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+            'transport'			=> 'postMessage'
+        )
+    );
+    $wp_customize->add_control(
+        new WP_Customize_Image_Control(
+            $wp_customize,
+            'onepress_retina_logo',
+            array(
+                'label'       => esc_html__('Retina Logo', 'onepress'),
+                'section'     => 'title_tagline',
+            )
+        )
+    );
+
+
+    // Logo Width
+    $wp_customize->add_setting( 'onepress_logo_width',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+            'transport'			=> 'postMessage'
+        )
+    );
+    $wp_customize->add_control(
+        'onepress_logo_width',
+        array(
+            'label'       => esc_html__('Logo Width In Pixel', 'onepress'),
+            'section'     => 'title_tagline',
+        )
+
+    );
+
 	/*------------------------------------------------------------------------*/
     /*  Site Options
     /*------------------------------------------------------------------------*/
@@ -2073,7 +2110,7 @@ function onepress_customize_register( $wp_customize ) {
         )
     );
 
-    // Order & Styling
+    // Features content
     $wp_customize->add_setting(
         'onepress_features_boxes',
         array(

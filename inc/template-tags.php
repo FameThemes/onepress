@@ -12,6 +12,54 @@
  * @since 1.2.1
  */
 
+
+function onepress_add_retina_logo( $html ){
+    $custom_logo_id = get_theme_mod( 'custom_logo' );
+
+    // We have a logo. Logo is go.
+    if ( $custom_logo_id ) {
+        $custom_logo_attr = array(
+            'class'    => 'custom-logo',
+            'itemprop' => 'logo',
+        );
+
+        /*
+         * If the logo alt attribute is empty, get the site title and explicitly
+         * pass it to the attributes used by wp_get_attachment_image().
+         */
+        $image_alt = get_post_meta( $custom_logo_id, '_wp_attachment_image_alt', true );
+        if ( empty( $image_alt ) ) {
+            $custom_logo_attr['alt'] = get_bloginfo( 'name', 'display' );
+        }
+
+        $retina_url = sanitize_text_field( get_theme_mod( 'onepress_retina_logo' ) ) ;
+        if ( $retina_url ) {
+            $retina_id = attachment_url_to_postid( $retina_url );
+            if ( $retina_id ){
+                $image = wp_get_attachment_image_src( $retina_id, 'full' );
+                if ( $image ) {
+                    $custom_logo_attr['srcset'] = $image[0].' 2x';
+                }
+
+            }
+        }
+
+        /*
+         * If the alt attribute is not empty, there's no need to explicitly pass
+         * it because wp_get_attachment_image() already adds the alt attribute.
+         */
+        $html = sprintf( '<a href="%1$s" class="custom-logo-link" rel="home" itemprop="url">%2$s</a>',
+            esc_url( home_url( '/' ) ),
+            wp_get_attachment_image( $custom_logo_id, 'full', false, $custom_logo_attr )
+        );
+    }
+
+    return $html;
+}
+
+add_filter( 'get_custom_logo', 'onepress_add_retina_logo', 15 );
+
+
 if ( ! function_exists( 'onepress_site_logo' ) ) {
     function onepress_site_logo(){
         $classes = array();
@@ -48,6 +96,7 @@ if ( ! function_exists( 'onepress_site_logo' ) ) {
         } else {
             $classes['desc'] = 'no-desc';
         }
+
 
         echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
     }
@@ -314,6 +363,8 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
      */
 	function onepress_custom_inline_style( ) {
 
+	        $logo_width = absint( get_theme_mod( 'onepress_logo_width' ) );
+
             /**
              *  Custom hero section css
              */
@@ -323,6 +374,11 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $hero_bg_color = onepress_hex_to_rgba( $hero_bg_color, floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) ) );
 
             ob_start();
+            if ( $logo_width > 0 ) {
+                echo ".site-logo-div img{ width: {$logo_width}px; height: auto }";
+            }
+
+
             ?>
             #main .video-section section.hero-slideshow-wrapper {
                 background: transparent;
