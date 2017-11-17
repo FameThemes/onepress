@@ -25,9 +25,18 @@
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'onepress' ); ?></a>
     <?php
     /**
-     * Hooked: onepress_site_header
-     *
-     * @see onepress_site_header
+     * @since 2.0.0
      */
-    do_action( 'onepress_site_start' );
+    $hide_header = false;
+    if ( is_page() ) {
+        $hide_header = get_post_meta( get_the_ID(), '_hide_header', true );
+    }
+    if ( ! $hide_header ) {
+        /**
+         * Hooked: onepress_site_header
+         *
+         * @see onepress_site_header
+         */
+        do_action('onepress_site_start');
+    }
     ?>

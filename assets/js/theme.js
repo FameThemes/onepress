@@ -128,34 +128,35 @@ jQuery( document ).ready( function( $ ) {
             $( 'body').removeClass( 'header-transparent' );
         }
         var header_fixed = $('.site-header').eq(0);
+        if ( header_fixed.length > 0 ) {
+            $(document).scroll(function () {
+                var header_parent = header_fixed.parent();
+                var p_to_top = header_parent.offset().top;
+                var st = $(document).scrollTop();
 
-        $( document ).scroll( function(){
-            var header_parent = header_fixed.parent();
-            var p_to_top = header_parent.offset().top;
-            var st = $( document ).scrollTop();
-
-            var topbar = $( '#wpadminbar' ).height() || 0;
-            if (  topbar > 0 ) {
-                var  topbar_pos = $( '#wpadminbar').css( 'position' );
-                if ( 'fixed' !== topbar_pos ) {
-                    topbar = 0;
+                var topbar = $('#wpadminbar').height() || 0;
+                if (topbar > 0) {
+                    var topbar_pos = $('#wpadminbar').css('position');
+                    if ('fixed' !== topbar_pos) {
+                        topbar = 0;
+                    }
                 }
-            }
-            //  if( st > p_to_top && st > 0 ) {
-            var post_check = 1;
-            if ( topbar ) {
-                post_check = 0;
-            }
-            if( st > post_check ) {
-                $wrap.addClass( 'is-fixed').removeClass( 'no-scroll' );
-                header_fixed.addClass('header-fixed');
-                header_fixed.css( 'top', topbar+'px' );
-            } else {
-                header_fixed.removeClass('header-fixed');
-                header_fixed.css( 'top', 'auto' );
-                $wrap.removeClass( 'is-fixed' ).addClass( 'no-scroll' );
-            }
-        });
+                //  if( st > p_to_top && st > 0 ) {
+                var post_check = 1;
+                if (topbar) {
+                    post_check = 0;
+                }
+                if (st > post_check) {
+                    $wrap.addClass('is-fixed').removeClass('no-scroll');
+                    header_fixed.addClass('header-fixed');
+                    header_fixed.css('top', topbar + 'px');
+                } else {
+                    header_fixed.removeClass('header-fixed');
+                    header_fixed.css('top', 'auto');
+                    $wrap.removeClass('is-fixed').addClass('no-scroll');
+                }
+            });
+        }
 
 
     }

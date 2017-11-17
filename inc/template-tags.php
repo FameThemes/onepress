@@ -1097,3 +1097,28 @@ if ( ! function_exists( 'onepress_footer_widgets' ) ) {
 }
 
 add_action( 'onepress_before_site_info', 'onepress_footer_widgets' );
+
+if ( ! function_exists( 'onepress_display_page_title' ) ) {
+    /**
+     * Display page header
+     * @since 2.0.0
+     */
+    function onepress_display_page_title(){
+        if ( ! is_page() ) {
+            return;
+        }
+        $hide_page_title = get_post_meta( get_the_ID(), '_hide_page_title', true );
+        ?>
+        <?php if ( ! $hide_page_title ){ ?>
+            <div class="page-header">
+                <div class="container">
+                    <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+                </div>
+            </div>
+            <?php onepress_breadcrumb(); ?>
+        <?php } ?>
+        <?php
+    }
+}
+
+add_action( 'onepress_page_before_content', 'onepress_display_page_title' );

@@ -398,6 +398,11 @@ endif;
 add_action( 'tgmpa_register', 'onepress_register_required_plugins' );
 
 /**
+ * Custom Metabox  for this theme.
+ */
+require get_template_directory() . '/inc/metabox.php';
+
+/**
  * Custom template tags for this theme.
  */
 require get_template_directory() . '/inc/template-tags.php';

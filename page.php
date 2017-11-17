@@ -18,18 +18,13 @@ $layout = onepress_get_layout();
 ?>
 
 	<div id="content" class="site-content">
-
-        <?php $onepress_page_title_disable = get_theme_mod('onepress_page_title_bar_disable'); ?>
-        <?php if ( $onepress_page_title_disable != '1' ) { ?>
-		<div class="page-header">
-			<div class="container">
-				<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-			</div>
-		</div>
-        <?php } ?>
-
-		<?php onepress_breadcrumb(); ?>
-
+        <?php
+        /**
+         * @since 2.0.0
+         * @see onepress_display_page_title
+         */
+        do_action( 'onepress_page_before_content' );
+        ?>
 		<div id="content-inside" class="container <?php echo esc_attr( $layout ); ?>">
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">
