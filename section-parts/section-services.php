@@ -46,6 +46,8 @@ if ( ! empty( $page_ids ) ) {
                                 break;
                         }
                         $j = 0;
+
+                        $size = sanitize_text_field( get_theme_mod( 'onepress_service_icon_size', '5x' ) );
                         foreach ($page_ids as $settings) {
                             $post_id = $settings['content_page'];
                             $post_id = apply_filters( 'wpml_object_id', $post_id, 'page', true );
@@ -65,7 +67,7 @@ if ( ! empty( $page_ids ) ) {
                                 if ( $settings['icon'] != '' && strpos($settings['icon'], 'fa') !== 0) {
                                     $settings['icon'] = 'fa-' . $settings['icon'];
                                 }
-                                $media = '<div class="service-image"><i class="fa '.esc_attr( $settings['icon'] ).' fa-5x"></i></div>';
+                                $media = '<div class="service-image"><i class="fa '.esc_attr( $settings['icon'] ).' fa-'.esc_attr( $size ).'"></i></div>';
                             }
                             if ( $layout == 12 ) {
                                 $classes = 'col-sm-12 col-lg-'.$layout;

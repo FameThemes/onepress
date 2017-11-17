@@ -2342,6 +2342,31 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
+
+        // Services icon size
+        $wp_customize->add_setting( 'onepress_service_icon_size',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_select',
+                'default'           => '5x',
+            )
+        );
+
+        $wp_customize->add_control( 'onepress_service_icon_size',
+            array(
+                'label' 		=> esc_html__('Icon Size', 'onepress'),
+                'section' 		=> 'onepress_service_content',
+                'description'   => '',
+                'type'          => 'select',
+                'choices'       => array(
+                    '5x' => esc_html__( '5x', 'onepress' ),
+                    '4x' => esc_html__( '4x', 'onepress' ),
+                    '3x' => esc_html__( '3x', 'onepress' ),
+                    '2x' => esc_html__( '2x', 'onepress' ),
+                    '1x' => esc_html__( '1x', 'onepress' ),
+                ),
+            )
+        );
+
 	/*------------------------------------------------------------------------*/
     /*  Section: Counter
     /*------------------------------------------------------------------------*/
@@ -3162,6 +3187,19 @@ function onepress_hero_fullscreen_callback ( $control ) {
     } else {
         return false;
     }
+}
+
+function onepress_sanitize_select( $input, $setting ){
+
+    //input must be a slug: lowercase alphanumeric characters, dashes and underscores are allowed only
+    $input = sanitize_key($input);
+
+    //get the list of possible select options
+    $choices = $setting->manager->get_control( $setting->id )->choices;
+
+    //return input if valid or return default option
+    return ( array_key_exists( $input, $choices ) ? $input : $setting->default );
+
 }
 
 

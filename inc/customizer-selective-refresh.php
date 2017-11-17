@@ -90,6 +90,7 @@ function onepress_customizer_partials( $wp_customize ) {
                 'onepress_services_subtitle',
                 'onepress_services_desc',
                 'onepress_service_layout',
+                'onepress_service_icon_size',
             ),
         ),
 
