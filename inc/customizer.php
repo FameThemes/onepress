@@ -866,6 +866,21 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+            // Show hero full screen
+            $wp_customize->add_setting( 'onepress_hero_disable_preload',
+                array(
+                    'sanitize_callback' => 'onepress_sanitize_checkbox',
+                    'default'           => '',
+                )
+            );
+            $wp_customize->add_control( 'onepress_hero_disable_preload',
+                array(
+                    'type'        => 'checkbox',
+                    'label'       => esc_html__('Disable Preload Icon', 'onepress'),
+                    'section'     => 'onepress_hero_settings',
+                )
+            );
+
 			// Hero content padding top
 			$wp_customize->add_setting( 'onepress_hero_pdtop',
 				array(

@@ -1,24 +1,31 @@
 
 function preload_images( images, complete_callback ) {
-    var id = '_img_loading_'+( new Date().getTime() );
-    jQuery( 'body').append( '<div id="'+id+'"></div>' );
-    jQuery.each( images, function( index, src ){
-        var img = jQuery( '<img>' );
-        img.attr( 'alt', ''  );
-        img.attr( 'class', 'image__preload'  );
-        img.css( 'display', 'none' );
-        img.attr( 'src', src );
-        jQuery( '#'+id ).append( img );
-    } );
-
-    jQuery( '#'+id ).imagesLoaded( function() {
+    if ( onepress_js_settings.hero_disable_preload ) {
         if ( complete_callback ) {
             complete_callback();
         }
-        setTimeout( function(){
-            jQuery( '#'+id ).remove();
-        }, 5000 );
-    });
+    } else {
+        var id = '_img_loading_'+( new Date().getTime() );
+        jQuery( 'body').append( '<div id="'+id+'"></div>' );
+        jQuery.each( images, function( index, src ){
+            var img = jQuery( '<img>' );
+            img.attr( 'alt', ''  );
+            img.attr( 'class', 'image__preload'  );
+            img.css( 'display', 'none' );
+            img.attr( 'src', src );
+            jQuery( '#'+id ).append( img );
+        } );
+
+        jQuery( '#'+id ).imagesLoaded( function() {
+            if ( complete_callback ) {
+                complete_callback();
+            }
+            setTimeout( function(){
+                jQuery( '#'+id ).remove();
+            }, 5000 );
+        });
+    }
+
 
 }
 

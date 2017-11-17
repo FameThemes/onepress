@@ -49,10 +49,12 @@ if ( $is_parallax ) {
 	<section  id="<?php if ( $id != '' ){ echo esc_attr( $id ); } ?>" <?php if ( ! empty ( $images) && ! $is_parallax ) { ?> data-images="<?php echo esc_attr( json_encode( $images ) ); ?>"<?php } ?>
              class="hero-slideshow-wrapper <?php echo ( $fullscreen == 1 ) ? 'hero-slideshow-fullscreen' : 'hero-slideshow-normal'; ?>">
 
-        <div class="slider-spinner">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
-        </div>
+        <?php if ( ! get_theme_mod( 'onepress_hero_disable_preload', false ) ) { ?>
+            <div class="slider-spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
+        <?php } ?>
 
         <?php
 		$layout = get_theme_mod( 'onepress_hero_layout', 1 );
