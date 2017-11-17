@@ -378,7 +378,6 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 echo ".site-logo-div img{ width: {$logo_width}px; height: auto }";
             }
 
-
             ?>
             #main .video-section section.hero-slideshow-wrapper {
                 background: transparent;
