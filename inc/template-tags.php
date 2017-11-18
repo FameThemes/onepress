@@ -535,13 +535,20 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             }
 
             $onepress_footer_bg = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_footer_bg' ) );
+            $footer_top_text = sanitize_hex_color( get_theme_mod( 'onepress_footer_top_color' ) );
             if ( $onepress_footer_bg ) {
                 ?>
                 .site-footer {
                     background-color: #<?php echo $onepress_footer_bg; ?>;
                 }
-                .site-footer .footer-connect .follow-heading {
-                    color: rgba(255, 255, 255, 0.9);
+                .site-footer .footer-connect .follow-heading, .site-footer .footer-social a {
+                    color: <?php echo ( $footer_top_text ) ? $footer_top_text: 'rgba(255, 255, 255, 0.9)'; ?>;
+                }
+                <?php
+            } elseif ( $footer_top_text ) {
+                ?>
+                .site-footer .footer-connect .follow-heading, .site-footer .footer-social a {
+                    color: <?php echo $footer_top_text; ?>;
                 }
                 <?php
             }

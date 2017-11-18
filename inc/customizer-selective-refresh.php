@@ -275,6 +275,10 @@ function onepress_customizer_partials( $wp_customize ) {
         'onepress_logo_text_color',
         'onepress_footer_info_bg',
 
+
+        'onepress_footer_bg',
+        'onepress_footer_top_color',
+
         'footer_widgets_color',
         'footer_widgets_bg_color',
         'footer_widgets_title_color',

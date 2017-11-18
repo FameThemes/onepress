@@ -10,6 +10,7 @@
 
 
     // Site footer bg
+    /*
     wp.customize( 'onepress_footer_bg', function( value ) {
         value.bind( function( to ) {
             $( '.site-footer' ).css( {
@@ -17,6 +18,7 @@
             } );
         } );
     } );
+    */
 
     // Site footer info bg
     wp.customize( 'onepress_footer_info_bg', function( value ) {

@@ -622,7 +622,21 @@ function onepress_customize_register( $wp_customize ) {
             ) );
             $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_bg',
                 array(
-                    'label'       => esc_html__( 'Footer Top Background', 'onepress' ),
+                    'label'       => esc_html__( 'Background', 'onepress' ),
+                    'section'     => 'onepres_footer_top',
+                    'description' => '',
+                )
+            ));
+
+
+            $wp_customize->add_setting( 'onepress_footer_top_color', array(
+                'sanitize_callback' => 'sanitize_hex_color',
+                'default' => '',
+                'transport' => 'postMessage'
+            ) );
+            $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_top_color',
+                array(
+                    'label'       => esc_html__( 'Text Color', 'onepress' ),
                     'section'     => 'onepres_footer_top',
                     'description' => '',
                 )
@@ -654,7 +668,7 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_control( 'footer_layout',
         array(
             'type'        => 'select',
-            'label'       => esc_html__('Footer Layout', 'onepress'),
+            'label'       => esc_html__('Layout', 'onepress'),
             'section'     => 'onepress_footer',
             'default' => '0',
             'description' => esc_html__('Number footer columns to display.', 'onepress'),
