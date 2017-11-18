@@ -255,20 +255,7 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			));
 
-            // Footer BG Color
-            $wp_customize->add_setting( 'onepress_footer_bg', array(
-                'sanitize_callback' => 'sanitize_hex_color_no_hash',
-                'sanitize_js_callback' => 'maybe_hash_hex_color',
-                'default' => '',
-                'transport' => 'postMessage'
-            ) );
-            $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_bg',
-                array(
-                    'label'       => esc_html__( 'Footer Background', 'onepress' ),
-                    'section'     => 'onepress_colors_settings',
-                    'description' => '',
-                )
-            ));
+
 
 
 		/* Header
@@ -422,12 +409,68 @@ function onepress_customize_register( $wp_customize ) {
             )
         );
 
-		/* Social Settings
+
+    /* Single Settings
+    ----------------------------------------------------------------------*/
+    $wp_customize->add_section( 'onepress_single' ,
+        array(
+            'priority'    => null,
+            'title'       => esc_html__( 'Single Post', 'onepress' ),
+            'description' => '',
+            'panel'       => 'onepress_options',
+        )
+    );
+
+    $wp_customize->add_setting( 'single_thumbnail',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_checkbox',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'single_thumbnail',
+        array(
+            'type'        => 'checkbox',
+            'label'       => esc_html__('Show single post thumbnail', 'onepress'),
+            'section'     => 'onepress_single',
+            'description' => esc_html__('Check this box to show post thumbnail on single post.', 'onepress')
+        )
+    );
+
+    $wp_customize->add_setting( 'single_meta',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_checkbox',
+            'default'           => '1',
+        )
+    );
+    $wp_customize->add_control( 'single_meta',
+        array(
+            'type'        => 'checkbox',
+            'label'       => esc_html__('Show single post meta', 'onepress'),
+            'section'     => 'onepress_single',
+            'description' => esc_html__('Check this box to show single post meta such as post date, author, category,...', 'onepress')
+        )
+    );
+
+    $wp_customize->add_setting( 'single_thumbnail',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_checkbox',
+            'default'           => '',
+        )
+    );
+    $wp_customize->add_control( 'single_thumbnail',
+        array(
+            'type'        => 'checkbox',
+            'label'       => esc_html__('Show single post thumbnail', 'onepress'),
+            'section'     => 'onepress_single',
+            'description' => esc_html__('Check this box to show featured image on single post.', 'onepress')
+        )
+    );
+
+		/* Footer top Social Settings
 		----------------------------------------------------------------------*/
-		$wp_customize->add_section( 'onepress_social' ,
+		$wp_customize->add_section( 'onepres_footer_top' ,
 			array(
-				'priority'    => 6,
-				'title'       => esc_html__( 'Social Profiles', 'onepress' ),
+				'title'       => esc_html__( 'Footer Socials', 'onepress' ),
 				'description' => '',
 				'panel'       => 'onepress_options',
 			)
@@ -444,7 +487,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'type'        => 'checkbox',
 					'label'       => esc_html__('Hide Footer Social?', 'onepress'),
-					'section'     => 'onepress_social',
+					'section'     => 'onepres_footer_top',
 					'description' => esc_html__('Check this box to hide footer social section.', 'onepress')
 				)
 			);
@@ -456,7 +499,7 @@ function onepress_customize_register( $wp_customize ) {
 			);
 			$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_social_footer_guide',
 				array(
-					'section'     => 'onepress_social',
+					'section'     => 'onepres_footer_top',
 					'type'        => 'custom_message',
 					'description' => esc_html__( 'These social profiles setting below will display at the footer of your site.', 'onepress' )
 				)
@@ -473,7 +516,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_social_footer_title',
 				array(
 					'label'       => esc_html__('Social Footer Title', 'onepress'),
-					'section'     => 'onepress_social',
+					'section'     => 'onepres_footer_top',
 					'description' => ''
 				)
 			);
@@ -494,7 +537,7 @@ function onepress_customize_register( $wp_customize ) {
                     array(
                         'label' 		=> esc_html__('Socials', 'onepress'),
                         'description'   => '',
-                        'section'       => 'onepress_social',
+                        'section'       => 'onepres_footer_top',
                         'live_title_id' => 'network', // apply for unput text and textarea only
                         'title_format'  => esc_html__('[live_title]', 'onepress'), // [live_title]
                         'max_item'      => 5, // Maximum item can add
@@ -518,16 +561,10 @@ function onepress_customize_register( $wp_customize ) {
                 )
             );
 
+
 		/* Newsletter Settings
 		----------------------------------------------------------------------*/
-		$wp_customize->add_section( 'onepress_newsletter' ,
-			array(
-				'priority'    => 9,
-				'title'       => esc_html__( 'Newsletter', 'onepress' ),
-				'description' => '',
-				'panel'       => 'onepress_options',
-			)
-		);
+
 			// Disable Newsletter
 			$wp_customize->add_setting( 'onepress_newsletter_disable',
 				array(
@@ -539,7 +576,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'type'        => 'checkbox',
 					'label'       => esc_html__('Hide Footer Newsletter?', 'onepress'),
-					'section'     => 'onepress_newsletter',
+					'section'     => 'onepres_footer_top',
 					'description' => esc_html__('Check this box to hide footer newsletter form.', 'onepress')
 				)
 			);
@@ -555,7 +592,7 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_newsletter_title',
 				array(
 					'label'       => esc_html__('Newsletter Form Title', 'onepress'),
-					'section'     => 'onepress_newsletter',
+					'section'     => 'onepres_footer_top',
 					'description' => ''
 				)
 			);
@@ -571,75 +608,36 @@ function onepress_customize_register( $wp_customize ) {
 			$wp_customize->add_control( 'onepress_newsletter_mailchimp',
 				array(
 					'label'       => esc_html__('MailChimp Action URL', 'onepress'),
-					'section'     => 'onepress_newsletter',
+					'section'     => 'onepres_footer_top',
 					'description' => __( 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>', 'onepress' )
 				)
 			);
 
-
-    /* Single Settings
-    ----------------------------------------------------------------------*/
-    $wp_customize->add_section( 'onepress_single' ,
-        array(
-            'priority'    => null,
-            'title'       => esc_html__( 'Single Post', 'onepress' ),
-            'description' => '',
-            'panel'       => 'onepress_options',
-        )
-    );
-
-        $wp_customize->add_setting( 'single_thumbnail',
-            array(
-                'sanitize_callback' => 'onepress_sanitize_checkbox',
-                'default'           => '',
-            )
-        );
-        $wp_customize->add_control( 'single_thumbnail',
-            array(
-                'type'        => 'checkbox',
-                'label'       => esc_html__('Show single post thumbnail', 'onepress'),
-                'section'     => 'onepress_single',
-                'description' => esc_html__('Check this box to show post thumbnail on single post.', 'onepress')
-            )
-        );
-
-        $wp_customize->add_setting( 'single_meta',
-            array(
-                'sanitize_callback' => 'onepress_sanitize_checkbox',
-                'default'           => '1',
-            )
-        );
-        $wp_customize->add_control( 'single_meta',
-            array(
-                'type'        => 'checkbox',
-                'label'       => esc_html__('Show single post meta', 'onepress'),
-                'section'     => 'onepress_single',
-                'description' => esc_html__('Check this box to show single post meta such as post date, author, category,...', 'onepress')
-            )
-        );
-
-        $wp_customize->add_setting( 'single_thumbnail',
-            array(
-                'sanitize_callback' => 'onepress_sanitize_checkbox',
-                'default'           => '',
-            )
-        );
-        $wp_customize->add_control( 'single_thumbnail',
-            array(
-                'type'        => 'checkbox',
-                'label'       => esc_html__('Show single post thumbnail', 'onepress'),
-                'section'     => 'onepress_single',
-                'description' => esc_html__('Check this box to show featured image on single post.', 'onepress')
-            )
-        );
+            // Footer BG Color
+            $wp_customize->add_setting( 'onepress_footer_bg', array(
+                'sanitize_callback' => 'sanitize_hex_color_no_hash',
+                'sanitize_js_callback' => 'maybe_hash_hex_color',
+                'default' => '',
+                'transport' => 'postMessage'
+            ) );
+            $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_bg',
+                array(
+                    'label'       => esc_html__( 'Footer Top Background', 'onepress' ),
+                    'section'     => 'onepres_footer_top',
+                    'description' => '',
+                )
+            ));
 
 
-    /* Footer Settings
+
+
+
+    /* Footer Widgets Settings
     ----------------------------------------------------------------------*/
     $wp_customize->add_section( 'onepress_footer' ,
         array(
             'priority'    => null,
-            'title'       => esc_html__( 'Footer', 'onepress' ),
+            'title'       => esc_html__( 'Footer Widgets', 'onepress' ),
             'description' => '',
             'panel'       => 'onepress_options',
         )
@@ -780,19 +778,32 @@ function onepress_customize_register( $wp_customize ) {
         );
 
 
-        // Footer Widgets Color
-        $wp_customize->add_setting( 'onepress_footer_info_bg', array(
-            'sanitize_callback' => 'sanitize_hex_color',
-            'sanitize_js_callback' => 'maybe_hash_hex_color',
-            'default' => '',
-        ) );
-        $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_info_bg',
-            array(
-                'label'       => esc_html__( 'Footer Info Background', 'onepress' ),
-                'section'     => 'onepress_footer',
-                'description' => '',
-            )
-        ));
+
+    /* Footer Copyright Settings
+    ----------------------------------------------------------------------*/
+    $wp_customize->add_section( 'onepress_footer_copyright' ,
+        array(
+            'priority'    => null,
+            'title'       => esc_html__( 'Footer Copyright', 'onepress' ),
+            'description' => '',
+            'panel'       => 'onepress_options',
+        )
+    );
+
+    // Footer Widgets Color
+    $wp_customize->add_setting( 'onepress_footer_info_bg', array(
+        'sanitize_callback' => 'sanitize_hex_color',
+        'sanitize_js_callback' => 'maybe_hash_hex_color',
+        'default' => '',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_info_bg',
+        array(
+            'label'       => esc_html__( 'Footer Copyright Background', 'onepress' ),
+            'section'     => 'onepress_footer_copyright',
+            'description' => '',
+        )
+    ));
+
 
 
 
