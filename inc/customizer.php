@@ -818,6 +818,20 @@ function onepress_customize_register( $wp_customize ) {
         )
     ));
 
+    // Footer Widgets Color
+    $wp_customize->add_setting( 'onepress_footer_c_color', array(
+        'sanitize_callback' => 'sanitize_hex_color',
+        'sanitize_js_callback' => 'maybe_hash_hex_color',
+        'default' => '',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_c_color',
+        array(
+            'label'       => esc_html__( 'Footer Copyright Text Color', 'onepress' ),
+            'section'     => 'onepress_footer_copyright',
+            'description' => '',
+        )
+    ));
+
 
 
 

@@ -554,16 +554,42 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             }
 
             $onepress_footer_info_bg = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_footer_info_bg' ) );
+            $c_color = sanitize_hex_color( get_theme_mod( 'onepress_footer_c_color' ) );
             if ( $onepress_footer_info_bg ) {
                 ?>
                 .site-footer .site-info, .site-footer .btt a{
                     background-color: #<?php echo $onepress_footer_info_bg; ?>;
                 }
+                <?php if ( $c_color ) { ?>
+                    .site-footer .site-info {
+                        color: <?php echo $c_color ?>;
+                        opacity: .7;
+                    }
+                    .site-footer .btt a, .site-footer .site-info a {
+                        color: <?php echo $c_color ?>;
+                        opacity: .9;
+                    }
+                    <?php
+                } else {
+                    ?>
+                    .site-footer .site-info {
+                        color: rgba(255, 255, 255, 0.7);
+                    }
+                    .site-footer .btt a, .site-footer .site-info a {
+                        color: rgba(255, 255, 255, 0.9);
+                    }
+                    <?php
+                }
+
+            } elseif( $c_color ) {
+                ?>
                 .site-footer .site-info {
-                    color: rgba(255, 255, 255, 0.7);
+                    color: <?php echo $c_color ?>;
+                    opacity: .7;
                 }
                 .site-footer .btt a, .site-footer .site-info a {
-                    color: rgba(255, 255, 255, 0.9);
+                    color: <?php echo $c_color ?>;
+                    opacity: .9;
                 }
                 <?php
             }
