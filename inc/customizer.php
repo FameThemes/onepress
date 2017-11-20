@@ -833,11 +833,6 @@ function onepress_customize_register( $wp_customize ) {
     ));
 
 
-
-
-
-
-
     if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress < 4.7.
 
                 /* Custom CSS Settings
@@ -2894,6 +2889,69 @@ function onepress_customize_register( $wp_customize ) {
 				'description'   => '',
 			)
 		);
+
+        $wp_customize->add_setting( 'onepress_news_cat',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default'           => 0,
+            )
+        );
+
+        $wp_customize->add_control( new OnePress_Category_Control(
+            $wp_customize,
+            'onepress_news_cat',
+            array(
+                'label' 		=> esc_html__('Category to show', 'onepress'),
+                'section' 		=> 'onepress_news_settings',
+                'description'   => '',
+            )
+        ));
+
+        $wp_customize->add_setting( 'onepress_news_orderby',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_select',
+                'default'           => 0,
+            )
+        );
+
+        $wp_customize->add_control(
+            'onepress_news_orderby',
+            array(
+                'label' 		=> esc_html__('Order By', 'onepress'),
+                'section' 		=> 'onepress_news_settings',
+                'type'   => 'select',
+                'choices' => array(
+                    'default' => esc_html__('Default', 'onepress'),
+                    'id' => esc_html__('ID', 'onepress'),
+                    'author' => esc_html__('Author', 'onepress'),
+                    'title' => esc_html__('Title', 'onepress'),
+                    'date' => esc_html__('Date', 'onepress'),
+                    'comment_count' => esc_html__('Comment Count', 'onepress'),
+                    'menu_order' => esc_html__('Order by Page Order', 'onepress'),
+                    'rand' => esc_html__('Random order', 'onepress'),
+                )
+            )
+        );
+
+    $wp_customize->add_setting( 'onepress_news_order',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_select',
+            'default'           => 'desc',
+        )
+    );
+
+    $wp_customize->add_control(
+        'onepress_news_order',
+        array(
+            'label' 		=> esc_html__('Order', 'onepress'),
+            'section' 		=> 'onepress_news_settings',
+            'type'   => 'select',
+            'choices' => array(
+                'desc' => esc_html__('Descending', 'onepress'),
+                'asc' => esc_html__('Ascending', 'onepress'),
+            )
+        )
+    );
 
 		// Blog Button
 		$wp_customize->add_setting( 'onepress_news_more_link',

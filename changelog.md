@@ -27,6 +27,7 @@ CHANGELOG
 * ADD: About layout columns.
 * ADD: Service icon size settings.
 * ADD: Support logo retina.
+* ADD: Category selection in News section.
 
 
 ## 1.4.4
