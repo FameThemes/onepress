@@ -65,6 +65,9 @@ Footer widgets
  */
 .footer-widgets  {
     background: #333333;
+    &.section-padding {
+        @include rem('padding', 70px 0px 50px);
+    }
     table {
         border-collapse: collapse;
         > thead > tr > th,  > thead > tr > td {

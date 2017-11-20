@@ -97,7 +97,6 @@ if ( ! function_exists( 'onepress_site_logo' ) ) {
             $classes['desc'] = 'no-desc';
         }
 
-
         echo '<div class="site-brand-inner '.esc_attr( join( ' ', $classes ) ).'">'.$html.'</div>';
     }
 }

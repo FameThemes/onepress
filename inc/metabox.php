@@ -62,7 +62,7 @@ class OnePress_MetaBox {
         }
 
 
-        $nonce = $_POST['onepress_page_settings_nonce'];
+        $nonce = sanitize_text_field( $_POST['onepress_page_settings_nonce'] );
 
         // Verify that the nonce is valid.
         if ( ! wp_verify_nonce( $nonce, 'onepress_page_settings' ) ) {
@@ -88,7 +88,7 @@ class OnePress_MetaBox {
             }
         }
 
-        $settings = $_POST['onepress_page_settings'];
+        $settings = isset( $_POST['onepress_page_settings'] ) ? wp_unslash( $_POST['onepress_page_settings'] ) : array();
         $settings = wp_parse_args( $settings, array(
             'hide_page_title' => '',
             'hide_header' => '',

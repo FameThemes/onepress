@@ -684,6 +684,10 @@ Footer widgets
 .footer-widgets {
   background: #333333;
 }
+.footer-widgets.section-padding {
+  padding: 70px 0px 50px;
+  padding:  4.375rem 0px 3.125rem;
+}
 .footer-widgets table {
   border-collapse: collapse;
 }

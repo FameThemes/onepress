@@ -249,14 +249,14 @@ function onepress_admin_dismiss_actions(){
         if ( ! is_array( $actions_dismiss ) ) {
             $actions_dismiss = array();
         }
-        $action_key = stripslashes( $_GET['onepress_action_notice'] );
+        $action_key = sanitize_text_field( $_GET['onepress_action_notice'] );
         if ( isset( $actions_dismiss[ $action_key ] ) &&  $actions_dismiss[ $action_key ] == 'hide' ){
             $actions_dismiss[ $action_key ] = 'show';
         } else {
             $actions_dismiss[ $action_key ] = 'hide';
         }
         update_option( 'onepress_actions_dismiss', $actions_dismiss );
-        $url = $_SERVER['REQUEST_URI'];
+        $url = wp_unslash( $_SERVER['REQUEST_URI'] );
         $url = remove_query_arg( 'onepress_action_notice', $url );
         wp_redirect( $url );
         die();
@@ -270,7 +270,7 @@ function onepress_admin_dismiss_actions(){
             $mods = get_option("theme_mods_" . $from);
             update_option("theme_mods_" . $to, $mods);
 
-            $url = $_SERVER['REQUEST_URI'];
+            $url = wp_unslash( $_SERVER['REQUEST_URI'] );
             $url = add_query_arg(array('copied' => 1), $url);
             wp_redirect($url);
             die();
