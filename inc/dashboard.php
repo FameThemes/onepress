@@ -294,14 +294,14 @@ function onepress_theme_info_page() {
         if ( ! is_array( $actions_dismiss ) ) {
             $actions_dismiss = array();
         }
-        $actions_dismiss[ stripslashes( $_GET['onepress_action_dismiss'] ) ] = 'dismiss';
+        $actions_dismiss[ sanitize_text_field( $_GET['onepress_action_dismiss'] ) ] = 'dismiss';
         update_option( 'onepress_actions_dismiss', $actions_dismiss );
     }
 
     // Check for current viewing tab
     $tab = null;
     if ( isset( $_GET['tab'] ) ) {
-        $tab = $_GET['tab'];
+        $tab = sanitize_text_field( $_GET['tab'] );
     } else {
         $tab = null;
     }
