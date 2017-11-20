@@ -558,15 +558,14 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 ?>
                 .site-footer .site-info, .site-footer .btt a{
                     background-color: #<?php echo $onepress_footer_info_bg; ?>;
+
                 }
                 <?php if ( $c_color ) { ?>
                     .site-footer .site-info {
                         color: <?php echo $c_color ?>;
-                        opacity: .7;
                     }
                     .site-footer .btt a, .site-footer .site-info a {
                         color: <?php echo $c_color ?>;
-                        opacity: .9;
                     }
                     <?php
                 } else {
@@ -584,11 +583,9 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 ?>
                 .site-footer .site-info {
                     color: <?php echo $c_color ?>;
-                    opacity: .7;
                 }
                 .site-footer .btt a, .site-footer .site-info a {
                     color: <?php echo $c_color ?>;
-                    opacity: .9;
                 }
                 <?php
             }
