@@ -616,6 +616,13 @@ h6, p, ul, ol, dl, blockquote, pre {
   padding-top: 40px;
 }
 
+.template-fullwidth-stretched #primary, .siteorigin-panels #primary {
+  padding: 0;
+}
+.template-fullwidth-stretched .entry-content, .siteorigin-panels .entry-content {
+  margin-bottom: 0px;
+}
+
 #secondary {
   padding-bottom: 40px;
   padding-top: 0;
@@ -724,7 +731,7 @@ Footer widgets
   position: relative;
   width: 100%;
   background: #FFFFFF;
-  z-index: 99;
+  z-index: 1000;
   -webkit-transition: all 1s ease-out;
   /* Safari */
   transition: all .5s ease-out;

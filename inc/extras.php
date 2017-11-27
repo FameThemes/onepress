@@ -33,6 +33,11 @@ function onepress_body_classes( $classes ) {
         }
     }
 
+    // Fullwidth template
+	if ( is_page_template( 'template-fullwidth-stretched.php' ) ) {
+		$classes[] = 'template-fullwidth-stretched';
+	}
+
     $classes[] = $transparent;
 
     if ( is_customize_preview() ) {
