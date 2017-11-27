@@ -12,6 +12,15 @@
     transition: all .5s ease-out;
 }
 
+.header-full-width .container {
+    max-width: auto;
+    width: auto;
+    @include for(medium-screens) {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
 .no-sticky-header {
     .site-header-wrapper {
         display: block;

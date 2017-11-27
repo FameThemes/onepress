@@ -127,7 +127,7 @@ function onepress_customize_register( $wp_customize ) {
     /*------------------------------------------------------------------------*/
 		$wp_customize->add_panel( 'onepress_options',
 			array(
-				'priority'       => 22,
+				'priority'       => 5,
 			    'capability'     => 'edit_theme_options',
 			    'theme_supports' => '',
 			    'title'          => esc_html__( 'Theme Options', 'onepress' ),
@@ -269,6 +269,77 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
+		// Header width
+		$wp_customize->add_setting( 'onepress_header_width',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => 'contained',
+				'transport' => 'postMessage',
+			)
+		);
+
+		$wp_customize->add_control( 'onepress_header_width',
+			array(
+				'type'        => 'select',
+				'label'       => esc_html__('Header Width', 'onepress'),
+				'section'     => 'onepress_header_settings',
+				'default'       => 'contained',
+				'choices' => array(
+					'full-width' => esc_html__('Full Width', 'onepress'),
+					'contained' => esc_html__('Contained', 'onepress')
+				)
+			)
+		);
+
+		// Header Transparent
+		$wp_customize->add_setting( 'onepress_header_transparent',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
+				'default'           => '',
+				'active_callback'   => 'onepress_showon_frontpage'
+			)
+		);
+		$wp_customize->add_control( 'onepress_header_transparent',
+			array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__('Header Transparent', 'onepress'),
+				'section'     => 'onepress_header_settings',
+				'description' => esc_html__('Apply for front page template only.', 'onepress')
+			)
+		);
+
+		// Vertical align menu
+		$wp_customize->add_setting( 'onepress_vertical_align_menu',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
+				'default'           => '',
+			)
+		);
+		$wp_customize->add_control( 'onepress_vertical_align_menu',
+			array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__('Center vertical align for menu', 'onepress'),
+				'section'     => 'onepress_header_settings',
+				'description' => esc_html__('If you use logo and your logo is too tall, check this box to auto vertical align menu.', 'onepress')
+			)
+		);
+
+		// Scroll to top when click to logo
+		$wp_customize->add_setting( 'onepress_header_scroll_logo',
+			array(
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
+				'default'           => 0,
+				'active_callback'   => ''
+			)
+		);
+		$wp_customize->add_control( 'onepress_header_scroll_logo',
+			array(
+				'type'        => 'checkbox',
+				'label'       => esc_html__('Scroll to top when click to the site logo or site title, only apply on front page.', 'onepress'),
+				'section'     => 'onepress_header_settings',
+			)
+		);
+
 		// Header BG Color
 		$wp_customize->add_setting( 'onepress_header_bg_color',
 			array(
@@ -361,53 +432,7 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		));
 
-		// Vertical align menu
-		$wp_customize->add_setting( 'onepress_vertical_align_menu',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_checkbox',
-				'default'           => '',
-			)
-		);
-		$wp_customize->add_control( 'onepress_vertical_align_menu',
-			array(
-				'type'        => 'checkbox',
-				'label'       => esc_html__('Center vertical align for menu', 'onepress'),
-				'section'     => 'onepress_header_settings',
-				'description' => esc_html__('If you use logo and your logo is too tall, check this box to auto vertical align menu.', 'onepress')
-			)
-		);
 
-		// Header Transparent
-        $wp_customize->add_setting( 'onepress_header_transparent',
-            array(
-                'sanitize_callback' => 'onepress_sanitize_checkbox',
-                'default'           => '',
-                'active_callback'   => 'onepress_showon_frontpage'
-            )
-        );
-        $wp_customize->add_control( 'onepress_header_transparent',
-            array(
-                'type'        => 'checkbox',
-                'label'       => esc_html__('Header Transparent', 'onepress'),
-                'section'     => 'onepress_header_settings',
-                'description' => esc_html__('Apply for front page template only.', 'onepress')
-            )
-        );
-
-        $wp_customize->add_setting( 'onepress_header_scroll_logo',
-            array(
-                'sanitize_callback' => 'onepress_sanitize_checkbox',
-                'default'           => 0,
-                'active_callback'   => ''
-            )
-        );
-        $wp_customize->add_control( 'onepress_header_scroll_logo',
-            array(
-                'type'        => 'checkbox',
-                'label'       => esc_html__('Scroll to top when click to the site logo or site title, only apply on front page.', 'onepress'),
-                'section'     => 'onepress_header_settings',
-            )
-        );
 
 
     /* Single Settings
@@ -3271,12 +3296,11 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_section(
         new OnePress_Section_Plus(
             $wp_customize,
-            'onepress_plus',
+            'onepress-plus',
             array(
-                'title'           => esc_html__( 'OnePress Plus', 'onepress' ),
-                'priority'        => 1,
-                'pro_text' => __( 'Upgrade Now &rarr;', 'onepress' ),
-                'pro_url'  => 'https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started'
+                'priority'  => 1,
+                'plus_text' => __( 'OnePress Plus Available! Take a look', 'onepress' ),
+                'plus_url'  => 'https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started'
             )
         )
     );

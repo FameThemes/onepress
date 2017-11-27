@@ -45,7 +45,7 @@ if ( ! $hide_footer ) {
                             </div>
                         <?php endif; ?>
 
-                        <div class="<?php if ($onepress_newsletter_disable == '1') {
+                        <div class="<?php if ($onepress_newsletter_disable == '1' ) {
                             echo 'col-sm-8';
                         } else {
                             echo 'col-sm-4';
@@ -59,7 +59,7 @@ if ( ! $hide_footer ) {
 
                                     $socials = onepress_get_social_profiles();
                                     /**
-                                     * New Socials profiles
+                                     * New social profiles
                                      *
                                      * @since 1.1.4
                                      * @change 1.2.1

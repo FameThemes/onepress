@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Pro customizer section.
+ * Plus customizer section.
  *
  * @since  1.0.0
  * @access public
@@ -22,15 +22,23 @@ class OnePress_Section_Plus extends WP_Customize_Section {
      * @access public
      * @var    string
      */
-    public $pro_text = '';
+    public $plus_text = '';
     /**
-     * Custom pro button URL.
+     * Custom plus section URL.
      *
      * @since  1.0.0
      * @access public
      * @var    string
      */
-    public $pro_url = '';
+    public $plus_url = '';
+	/**
+	 * Custom section ID.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string
+	 */
+	public $id = '';
     /**
      * Add custom parameters to pass to the JS via JSON.
      *
@@ -40,8 +48,9 @@ class OnePress_Section_Plus extends WP_Customize_Section {
      */
     public function json() {
         $json = parent::json();
-        $json['pro_text'] = $this->pro_text;
-        $json['pro_url']  = $this->pro_url;
+        $json['plus_text'] = $this->plus_text;
+        $json['plus_url']  = $this->plus_url;
+	    $json['id'] = $this->id;
         return $json;
     }
     /**
@@ -55,14 +64,7 @@ class OnePress_Section_Plus extends WP_Customize_Section {
 
         <li id="accordion-section-{{ data.id }}" class="accordion-section control-section control-section-{{ data.type }} cannot-expand">
 
-            <h3 class="accordion-section-title">
-                {{ data.title }}
-                <# if ( data.pro_text && data.pro_url ) { #>
-                    <a href="{{ data.pro_url }}" class="alignright" target="_blank">{{{ data.pro_text }}}</a>
-                <# } else { #>
-                    <span class="alignright dashicons dashicons-lock"></span>
-                <# } #>
-            </h3>
+            <h3><a href="{{ data.plus_url }}" target="_blank">{{{ data.plus_text }}}</a></h3>
         </li>
     <?php }
 }

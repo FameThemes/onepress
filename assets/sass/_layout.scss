@@ -64,9 +64,9 @@
 Footer widgets
  */
 .footer-widgets  {
-    background: #333333;
+    background: #050505;
     &.section-padding {
-        @include rem('padding', 70px 0px 60px);
+        @include rem('padding', 70px 0px 35px);
     }
     table {
         border-collapse: collapse;
@@ -93,9 +93,7 @@ Footer widgets
     }
     .sidebar {
         .widget {
-            &:last-child {
-                margin-bottom: 0px;
-            }
+            margin-bottom: 30px;
         }
     }
 

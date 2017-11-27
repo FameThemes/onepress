@@ -107,8 +107,9 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
      * Display site header
      */
     function onepress_site_header(){
+        $header_width = get_theme_mod( 'onepress_header_width', 'contained' );
         ?>
-        <header id="masthead" class="site-header" role="banner">
+        <header id="masthead" class="site-header <?php echo 'header-'.$header_width; ?>" role="banner">
             <div class="container">
                 <div class="site-branding">
                 <?php
