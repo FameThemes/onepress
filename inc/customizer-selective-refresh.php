@@ -290,6 +290,8 @@ function onepress_customizer_partials( $wp_customize ) {
         'onepress_hero_overlay_color',
         //'onepress_hero_overlay_opacity',
         'onepress_primary_color',
+        'onepress_menu_item_padding',
+
         'onepress_header_bg_color',
         'onepress_menu_color',
         'onepress_menu_hover_color',
@@ -298,7 +300,6 @@ function onepress_customizer_partials( $wp_customize ) {
         'onepress_menu_toggle_button_color',
         'onepress_logo_text_color',
         'onepress_footer_info_bg',
-
 
         'onepress_footer_bg',
         'onepress_footer_top_color',

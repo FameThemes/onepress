@@ -835,7 +835,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             }
         }
 
-       return $css;
+       return apply_filters( 'onepress_custom_css', $css ) ;
 	}
 
 }
