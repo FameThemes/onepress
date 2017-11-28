@@ -71,7 +71,6 @@ function onepress_add_retina_logo( $html ){
 
     }
 
-
     // We have a logo. Logo is go.
     if ( $custom_logo_id ) {
 
@@ -84,11 +83,17 @@ function onepress_add_retina_logo( $html ){
             $custom_logo_attr['alt'] = get_bloginfo( 'name', 'display' );
         }
 
+        if ( ! $t_logo_html ) {
+            $class = ' no-t-logo';
+        } else {
+            $class = ' has-t-logo';
+        }
+
         /*
          * If the alt attribute is not empty, there's no need to explicitly pass
          * it because wp_get_attachment_image() already adds the alt attribute.
          */
-        $html = sprintf( '<a href="%1$s" class="custom-logo-link" rel="home" itemprop="url">%2$s</a>',
+        $html = sprintf( '<a href="%1$s" class="custom-logo-link '.esc_attr( $class ).'" rel="home" itemprop="url">%2$s</a>',
             esc_url( home_url( '/' ) ),
             wp_get_attachment_image( $custom_logo_id, 'full', false, $custom_logo_attr ).$t_logo_html
         );

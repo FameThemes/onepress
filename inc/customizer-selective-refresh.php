@@ -336,7 +336,7 @@ function onepress_customizer_partials( $wp_customize ) {
     // Retina logo
      $wp_customize->selective_refresh->add_partial( 'onepress_site_logo', array(
          'selector' => '.site-branding',
-         'settings' => 'onepress_retina_logo',
+         'settings' => array('onepress_retina_logo', 'onepress_transparent_logo', 'onepress_transparent_retina_logo' ),
          'render_callback' => 'onepress_site_logo',
      ) );
 

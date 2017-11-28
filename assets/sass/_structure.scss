@@ -44,12 +44,15 @@
         position: fixed;
         top: 0px;
         &.no-scroll {
-            .custom-logo-transparent {
-                display: inline-block;
+            .has-t-logo {
+                .custom-logo-transparent {
+                    display: inline-block;
+                }
+                .custom-logo {
+                    display: none;
+                }
             }
-            .custom-logo {
-                display: none;
-            }
+
             #nav-toggle {
                 span {
                     background-color: #ffffff;

@@ -770,10 +770,10 @@ Footer widgets
   position: fixed;
   top: 0px;
 }
-.is-transparent .site-header.no-scroll .custom-logo-transparent {
+.is-transparent .site-header.no-scroll .has-t-logo .custom-logo-transparent {
   display: inline-block;
 }
-.is-transparent .site-header.no-scroll .custom-logo {
+.is-transparent .site-header.no-scroll .has-t-logo .custom-logo {
   display: none;
 }
 .is-transparent .site-header.no-scroll #nav-toggle span {
