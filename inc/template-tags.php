@@ -668,6 +668,8 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 
             $onepress_footer_info_bg = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_footer_info_bg' ) );
             $c_color = sanitize_hex_color( get_theme_mod( 'onepress_footer_c_color' ) );
+            $c_link_color = sanitize_hex_color( get_theme_mod( 'onepress_footer_c_link_color' ) );
+            $c_link_hover_color = sanitize_hex_color( get_theme_mod( 'onepress_footer_c_link_hover_color' ) );
             if ( $onepress_footer_info_bg ) {
                 ?>
                 .site-footer .site-info, .site-footer .btt a{
@@ -698,8 +700,20 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 .site-footer .site-info {
                     color: <?php echo $c_color ?>;
                 }
+
+                <?php
+            }
+            if ( $c_link_color ) {
+                ?>
                 .site-footer .btt a, .site-footer .site-info a {
-                    color: <?php echo $c_color ?>;
+                    color: <?php echo $c_link_color ?>;
+                }
+                <?php
+            }
+            if ( $c_link_hover_color ) {
+                ?>
+                .site-footer .btt a:hover, .site-footer .site-info a:hover {
+                    color: <?php echo $c_link_hover_color ?>;
                 }
                 <?php
             }

@@ -304,12 +304,17 @@ function onepress_customizer_partials( $wp_customize ) {
         'onepress_footer_top_color',
 
         'onepress_footer_c_color',
+        'onepress_footer_c_link_color',
+        'onepress_footer_c_link_hover_color',
 
         'footer_widgets_color',
         'footer_widgets_bg_color',
         'footer_widgets_title_color',
         'footer_widgets_link_color',
         'footer_widgets_link_hover_color',
+
+
+
     );
 
     foreach( $css_settings as $index => $key ) {

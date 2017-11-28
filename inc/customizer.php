@@ -905,7 +905,7 @@ function onepress_customize_register( $wp_customize ) {
     ) );
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_info_bg',
         array(
-            'label'       => esc_html__( 'Footer Copyright Background', 'onepress' ),
+            'label'       => esc_html__( 'Background', 'onepress' ),
             'section'     => 'onepress_footer_copyright',
             'description' => '',
         )
@@ -919,7 +919,33 @@ function onepress_customize_register( $wp_customize ) {
     ) );
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_c_color',
         array(
-            'label'       => esc_html__( 'Footer Copyright Text Color', 'onepress' ),
+            'label'       => esc_html__( 'Text Color', 'onepress' ),
+            'section'     => 'onepress_footer_copyright',
+            'description' => '',
+        )
+    ));
+
+    $wp_customize->add_setting( 'onepress_footer_c_link_color', array(
+        'sanitize_callback' => 'sanitize_hex_color',
+        'sanitize_js_callback' => 'maybe_hash_hex_color',
+        'default' => '',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_c_link_color',
+        array(
+            'label'       => esc_html__( 'Link Color', 'onepress' ),
+            'section'     => 'onepress_footer_copyright',
+            'description' => '',
+        )
+    ));
+
+    $wp_customize->add_setting( 'onepress_footer_c_link_hover_color', array(
+        'sanitize_callback' => 'sanitize_hex_color',
+        'sanitize_js_callback' => 'maybe_hash_hex_color',
+        'default' => '',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_c_link_hover_color',
+        array(
+            'label'       => esc_html__( 'Link Hover Color', 'onepress' ),
             'section'     => 'onepress_footer_copyright',
             'description' => '',
         )
