@@ -2398,6 +2398,12 @@ section > .customize-partial-edit-shortcut button {
 .section-about .about-image img {
   margin-bottom: 30px;
 }
+.section-about .section-title-area {
+  margin-bottom: 30px;
+}
+.section-about .row > div {
+  margin-top: 30px;
+}
 
 /* Section: Services
 ------------------------------*/

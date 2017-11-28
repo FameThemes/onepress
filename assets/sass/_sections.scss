@@ -483,6 +483,14 @@
 	.about-image img {
 		margin-bottom: 30px;
 	}
+    .section-title-area {
+        margin-bottom: 30px;
+    }
+    .row {
+        > div {
+            margin-top: 30px;
+        }
+    }
 }
 
 /* Section: Services
