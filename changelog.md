@@ -6,23 +6,23 @@ CHANGELOG
 * NEW: Footer widgets section.
 * NEW: Rel attribute for author tag.
 * NEW: Compare table.
-* NEW: Show/hide page title bar close.
-* NEW: Option to disable preload.
+* NEW: Show/hide page title bar.
+* NEW: Disable Hero preload icon setting.
 * NEW: About layout columns.
 * NEW: Service icon size settings.
-* NEW: Support logo retina.
+* NEW: Support retina & transparent logo.
 * NEW: Category selection in News section.
 * NEW: Page settings.
 * NEW: Footer social text color settings.
 * NEW: Footer copyright text color settings.
-* NEW: Add transparent logo.
-* NEW: Header Layout: top and below hero.
+* NEW: Header Layout: Full Width or Contained.
+* NEW: Menu position: above or below the Hero section.
 * NEW: Footer copyright link colors.
 * NEW: Hero rotating text and background color for layout 1.
 * IMPROVED: Latest bootstrap - v4.0.0-alpha.6.
 * IMPROVED: Carousel and RTL.
-* IMPROVED: Actions Required to Recommended Actions.
-* IMPROVED: Footer Social & Newsletter section to Footer Socials.
+* IMPROVED: Change Actions Required text to Recommended Actions.
+* IMPROVED: Move the Footer Social & Newsletter section to Footer Socials.
 * IMPROVED: Upsell content.
 * FIX: Hero fullscreen issue.
 * FIX: Section full width z index.
