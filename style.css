@@ -2154,6 +2154,13 @@ section > .customize-partial-edit-shortcut button {
   transform: translate(-50%, -50%);
 }
 
+.js-rotating {
+  display: none;
+}
+.js-rotating.morphext {
+  display: inline-block;
+}
+
 .is-customize-preview .slider-spinner {
   display: none !important;
 }

@@ -204,6 +204,12 @@
 	            transform: translate(-50%, -50%);
 	}
 }
+.js-rotating {
+    display: none;
+    &.morphext {
+        display: inline-block;
+    }
+}
 
 // DIsable text animation
 .is-customize-preview {
