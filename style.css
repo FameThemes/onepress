@@ -2339,6 +2339,10 @@ section > .customize-partial-edit-shortcut button {
   color: #fff;
 }
 
+.h-on-top.is-transparent #hero .container .hero__content {
+  margin-top: 75px;
+}
+
 /* Text Rotator */
 .morphext > .animated {
   display: inline-block;

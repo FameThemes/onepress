@@ -404,6 +404,15 @@
         color: #fff;
     }
 }
+.h-on-top.is-transparent {
+    #hero {
+        .container {
+            .hero__content {
+                margin-top: 75px;
+            }
+        }
+    }
+}
 
 
 /* Text Rotator */
