@@ -126,6 +126,16 @@ jQuery( document ).ready( function( $ ) {
         }
     };
 
+    var getAdminBarHeight = function(){
+        var h = 0;
+        if ( $( '#wpadminbar' ).length ) {
+            if ( $( '#wpadminbar' ).css('position') == 'fixed' ) {
+                h = $( '#wpadminbar' ).height();
+            }
+        }
+        return h;
+    };
+
 
     var stickyHeaders = (function() {
 
@@ -135,15 +145,6 @@ jQuery( document ).ready( function( $ ) {
         var setData = function( stickies, addWrap  ){
 
             var top = 0;
-            if ( $( '#wpadminbar' ).length ) {
-                if ( $( '#wpadminbar' ).css('position') == 'fixed' ) {
-                    top = $( '#wpadminbar' ).height();
-                }
-            }
-
-            if ( $( '#header-section' ).hasClass('is-transparent') ) {
-               // $( '.followWrap' ).css( 'top', top );
-            }
 
             if ( typeof addWrap === "undefined" ) {
                 addWrap = true;
@@ -198,14 +199,8 @@ jQuery( document ).ready( function( $ ) {
         };
 
         var _whenScrolling = function() {
-
             var top = 0;
-
-            if ( $( '#wpadminbar' ).length ) {
-                if ( $( '#wpadminbar' ).css('position') == 'fixed' ) {
-                    top = $( '#wpadminbar' ).height();
-                }
-            }
+            top = getAdminBarHeight();
 
             var scrollTop = $window.scrollTop();
 
@@ -524,20 +519,25 @@ jQuery( document ).ready( function( $ ) {
      */
     function hero_full_screen( no_trigger ){
         if ( $( '.hero-slideshow-fullscreen').length > 0 ) {
+            var wh = $window.height();
+            var top = getAdminBarHeight();
+            console.log( 'wh', wh );
             var $header = jQuery( '#masthead');
             var is_transparent = $header.hasClass('is-t');
             var headerH;
             var is_fixed_header;
             is_fixed_header = $header.hasClass( 'is-sticky' );
             var is_top_header = $header.hasClass( 'h-on-top' ) ? true : false;
-            if (is_top_header && !is_transparent) {
-                headerH = $header.height();
-            } else if ( is_fixed_header ) {
-                headerH = $header.height();
-            } else {
+            if ( is_transparent ) {
                 headerH = 0;
+            } else {
+                headerH = $header.height();
             }
-            jQuery('.hero-slideshow-fullscreen').css('height', (jQuery(window).height() - headerH + 1) + 'px');
+            headerH += top;
+
+            console.log( 'headerH', headerH );
+
+            jQuery('.hero-slideshow-fullscreen').css('height', ( $window.height() - headerH + 1) + 'px');
             if (  typeof  no_trigger === "undefined" || ! no_trigger ) {
                 $document.trigger( 'hero_ready' );
             }

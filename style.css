@@ -798,7 +798,7 @@ Footer widgets
     color: rgba(255, 255, 255, 0.9);
   }
 }
-.header-transparent .hero-slideshow-fullscreen .hero__content {
+.is-transparent .hero-slideshow-fullscreen .hero__content {
   padding-top: 50px;
   padding-top: 3.125rem;
 }
@@ -2328,7 +2328,7 @@ section > .customize-partial-edit-shortcut button {
   color: #fff;
 }
 
-.header-transparent #hero .container .hero__content {
+.is-transparent #hero .container .hero__content {
   margin-top: 70px;
 }
 

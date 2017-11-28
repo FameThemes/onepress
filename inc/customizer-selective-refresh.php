@@ -313,7 +313,8 @@ function onepress_customizer_partials( $wp_customize ) {
         'footer_widgets_link_color',
         'footer_widgets_link_hover_color',
 
-
+        'onepress_hcl1_r_color',
+        'onepress_hcl1_r_bg_color'
 
     );
 

@@ -1353,6 +1353,38 @@ function onepress_customize_register( $wp_customize ) {
 					)
 				));
 
+
+                $wp_customize->add_setting( 'onepress_hcl1_r_color',
+                    array(
+                        'sanitize_callback' => 'sanitize_hex_color',
+                        'default'           => null,
+                    )
+                );
+                $wp_customize->add_control( new WP_Customize_Color_Control(
+                        $wp_customize,
+                        'onepress_hcl1_r_color',
+                        array(
+                            'label' 		=> esc_html__('Rotating Text Color', 'onepress'),
+                            'section' 		=> 'onepress_hero_content_layout1'
+                        )
+                    )
+                );
+                $wp_customize->add_setting( 'onepress_hcl1_r_bg_color',
+                    array(
+                        'sanitize_callback' => 'sanitize_hex_color',
+                        'default'           => null,
+                    )
+                );
+                $wp_customize->add_control( new WP_Customize_Color_Control(
+                        $wp_customize,
+                        'onepress_hcl1_r_bg_color',
+                        array(
+                            'label' 		=> esc_html__('Rotating Text Background', 'onepress'),
+                            'section' 		=> 'onepress_hero_content_layout1'
+                        )
+                    )
+                );
+
 				// Small Text
 				$wp_customize->add_setting( 'onepress_hcl1_smalltext',
 					array(
