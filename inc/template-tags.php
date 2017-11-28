@@ -236,8 +236,10 @@ if ( ! function_exists('onepress_header' ) ) {
         $classes[] = $transparent;
 
         echo '<div id="header-section" class="' . esc_attr( join( ' ', $classes ) ) . '">';
-        if ($pos == 'below_hero') {
-            do_action('onepress_header_end');
+        if ($pos == 'below_hero' ) {
+            if ( is_page_template('template-frontpage.php') ) {
+                do_action('onepress_header_end');
+            }
         }
 
         $hide_header = false;
@@ -254,7 +256,9 @@ if ( ! function_exists('onepress_header' ) ) {
         }
 
         if ($pos != 'below_hero') {
-            do_action('onepress_header_end');
+            if ( is_page_template('template-frontpage.php') ) {
+                do_action('onepress_header_end');
+            }
         }
         echo '</div>';
     }
