@@ -472,7 +472,7 @@ function onepress_customize_register( $wp_customize ) {
                 array(
                     'label'       => esc_html__('Transparent Logo', 'onepress'),
                     'section'     => 'onepress_header_settings',
-                    'description' => esc_html__('Apply when header transparent only.', 'onepress')
+                    'description' => esc_html__('Only apply when transparent header option is checked.', 'onepress')
                 )
             )
         );
@@ -491,7 +491,7 @@ function onepress_customize_register( $wp_customize ) {
                 'onepress_transparent_retina_logo',
                 array(
                     'label'       => esc_html__('Transparent Retina Logo', 'onepress'),
-                    'description' => esc_html__('Apply when header transparent only.', 'onepress'),
+                    'description' => esc_html__('Only apply when transparent header option is checked.', 'onepress'),
                     'section'     => 'onepress_header_settings',
                 )
             )
