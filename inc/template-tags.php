@@ -488,7 +488,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 
             ob_start();
             if ( $logo_height > 0 ) {
-                echo ".site-logo-div img{ height: {$logo_height}px; width: auto }";
+                echo ".site-logo-div img{ height: {$logo_height}px; width: auto; }";
             }
 
             ?>
@@ -1322,7 +1322,11 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 add_action( 'onepress_page_before_content', 'onepress_display_page_title' );
 
 if ( ! function_exists( 'onepress_load_section' ) ) {
-
+    /**
+     * Load section
+     * @since 2.0.0
+     * @param $section_id
+     */
     function onepress_load_section( $section_id )
     {
         /**
@@ -1351,3 +1355,111 @@ if ( ! function_exists('onepress_load_hero') ) {
 
 add_action( 'onepress_header_end', 'onepress_load_hero_section' );
 
+if ( ! function_exists('onepress_subscribe_form') ) {
+    /**
+     * Display subscribe form
+     * @since 2.0.0
+     */
+    function onepress_subscribe_form()
+    {
+
+        $onepress_newsletter_title = wp_kses_post(get_theme_mod('onepress_newsletter_title', __('Join our Newsletter', 'onepress')));
+        $onepress_newsletter_mailchimp = wp_kses_post(get_theme_mod('onepress_newsletter_mailchimp'));
+
+        ?>
+        <div class="footer-subscribe">
+            <?php if ($onepress_newsletter_title != '') echo '<h5 class="follow-heading">' . $onepress_newsletter_title . '</h5>'; ?>
+            <form novalidate="" target="_blank" class="" name="mc-embedded-subscribe-form" id="mc-embedded-subscribe-form" method="post"
+                  action="<?php if ($onepress_newsletter_mailchimp != '') {
+                      echo $onepress_newsletter_mailchimp;
+                  }; ?>">
+                <input type="text" placeholder="<?php esc_attr_e('Enter your e-mail address', 'onepress'); ?>" id="mce-EMAIL" class="subs_input" name="EMAIL" value="">
+                <input type="submit" class="subs-button" value="<?php esc_attr_e('Subscribe', 'onepress'); ?>" name="subscribe">
+            </form>
+        </div>
+        <?php
+    }
+}
+if ( ! function_exists('onepress_footer_social_icons' ) ) {
+    function onepress_footer_social_icons()
+    {
+        $onepress_social_footer_title = wp_kses_post(get_theme_mod('onepress_social_footer_title', __('Keep Updated', 'onepress')));
+        ?>
+        <div class="footer-social">
+            <?php
+            if ($onepress_social_footer_title != '') {
+                echo '<h5 class="follow-heading">' . $onepress_social_footer_title . '</h5>';
+            }
+
+            $socials = onepress_get_social_profiles();
+            /**
+             * New social profiles
+             *
+             * @since 1.1.4
+             * @change 1.2.1
+             */
+            echo '<div class="footer-social-icons">';
+            if ($socials) {
+                echo $socials;
+            } else {
+                /**
+                 * Deprecated
+                 * @since 1.1.4
+                 */
+                $twitter = get_theme_mod('onepress_social_twitter');
+                $facebook = get_theme_mod('onepress_social_facebook');
+                $google = get_theme_mod('onepress_social_google');
+                $instagram = get_theme_mod('onepress_social_instagram');
+                $rss = get_theme_mod('onepress_social_rss');
+
+                if ($twitter != '') echo '<a target="_blank" href="' . esc_url($twitter) . '" title="Twitter"><i class="fa fa-twitter"></i></a>';
+                if ($facebook != '') echo '<a target="_blank" href="' . esc_url($facebook) . '" title="Facebook"><i class="fa fa-facebook"></i></a>';
+                if ($google != '') echo '<a target="_blank" href="' . esc_url($google) . '" title="Google Plus"><i class="fa fa-google-plus"></i></a>';
+                if ($instagram != '') echo '<a target="_blank" href="' . esc_url($instagram) . '" title="Instagram"><i class="fa fa-instagram"></i></a>';
+                if ($rss != '') echo '<a target="_blank" href="' . esc_url($rss) . '"><i class="fa fa-rss"></i></a>';
+            }
+            echo '</div>';
+            ?>
+        </div>
+        <?php
+    }
+}
+
+function onepress_footer_connect(){
+
+    $onepress_newsletter_disable = sanitize_text_field(get_theme_mod('onepress_newsletter_disable', '1'));
+    $onepress_social_disable = sanitize_text_field(get_theme_mod('onepress_social_disable', '1'));
+
+    if ($onepress_newsletter_disable != '1' || $onepress_social_disable != '1') : ?>
+        <div class="footer-connect">
+            <div class="container">
+                <div class="row">
+                    <?php
+                    if ( ! $onepress_newsletter_disable && ! $onepress_social_disable ) {
+                        if ( ! $onepress_newsletter_disable ) : ?>
+                            <div class="col-md-4 offset-md-2 col-sm-6 offset-md-0">
+                                <?php onepress_subscribe_form(); ?>
+                            </div>
+                        <?php endif;
+
+                        if ( ! $onepress_social_disable ) : ?>
+                            <div class="col-md-4 col-sm-6">
+                                <?php onepress_footer_social_icons(); ?>
+                            </div>
+                        <?php endif;
+                    } else {
+                        echo ' <div class="col-md-8 offset-md-2 col-sm-12 offset-md-0">';
+                        if ( ! $onepress_newsletter_disable )  {
+                            onepress_subscribe_form();
+                        } else {
+                            onepress_footer_social_icons();
+                        }
+                        echo  '</div>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    <?php endif;
+}
+add_action( 'onepress_before_site_info', 'onepress_footer_connect' );

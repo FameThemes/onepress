@@ -270,10 +270,20 @@ function onepress_customizer_partials( $wp_customize ) {
     ) );
 
     /**
+     * Footer Connect
+     * @since 2.0.0
+     */
+    $wp_customize->selective_refresh->add_partial( 'onepress-footer-connect', array(
+        'selector' => '.footer-connect',
+        'settings' => array( 'onepress_newsletter_disable', 'onepress_social_disable' ),
+        'render_callback' => 'onepress_footer_connect',
+        'container_inclusive' => true
+    ) );
+
+    /**
      * Selective Refresh style
      * @since 2.0.0
      */
-
     $css_settings = array(
         'onepress_logo_height',
 

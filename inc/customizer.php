@@ -572,6 +572,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'sanitize_callback' => 'onepress_sanitize_checkbox',
 					'default'           => '1',
+                    'transport'         => 'postMessage',
 				)
 			);
 			$wp_customize->add_control( 'onepress_social_disable',
@@ -661,6 +662,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'sanitize_callback' => 'onepress_sanitize_checkbox',
 					'default'           => '1',
+                    'transport'         => 'postMessage',
 				)
 			);
 			$wp_customize->add_control( 'onepress_newsletter_disable',
