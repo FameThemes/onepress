@@ -290,7 +290,6 @@
 		position: relative;
 		top: 50%;
 	  	transform: translateY(-50%);
-
 	}
 }
 
@@ -414,6 +413,16 @@
 			}
 		}
 	}
+}
+
+.h-on-top.no-transparent {
+    #hero {
+        .container {
+            .hero__content {
+                margin-top: 70px;
+            }
+        }
+    }
 }
 
 
