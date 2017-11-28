@@ -2,32 +2,36 @@
 CHANGELOG
 ====================================================================
 ## 2.0.0
+* NEW: Non-minified js files.
+* NEW: Footer widgets.
+* NEW: Rel attribute for author tag.
+* NEW: Compare table.
+* NEW: Show/hide page title bar close.
+* NEW: Option to disable preload.
+* NEW: About layout columns.
+* NEW: Service icon size settings.
+* NEW: Support logo retina.
+* NEW: Category selection in News section.
+* NEW: Page setting.
+* NEW: Footer social text color settings.
+* NEW: Footer copyright text color settings.
+* NEW: Add transparent logo.
+* NEW: Header Layout.
+* NEW: Footer copyright link colors.
+* UPDATE: Latest bootstrap.
+* UPDATE: Carousel and RTL.
+* IMPROVED: Actions Required to Recommended Actions.
+* IMPROVED: Footer Social & Newsletter section to Footer Socials.
 * FIX: Hero fullscreen issue.
 * FIX: Section full width z index.
-* ADD: Rel attribute for author tag.
-* ADD: Compare table.
-* ADD: Show/hide page title bar close.
-* UPDATE: Carousel and RTL.
-* CHANGE: Actions Required to Recommended Actions.
-* REMOVE: wp_reset_query.
 * FIX: Theme Check Sniffs.
-* ADD: Non-minified js files.
-* FIX: Escaping missing in several other places.
-* REMOVE: Core settings is not allowed
-* IMPROVE: Upsell content.
 * FIX: Div class fit-vids-style inserted into head.
-* UPDATE: Latest bootstrap.
-* ADD: Footer widgets.
-* CHANGE: Footer Social & Newsletter section to Footer Socials.
-* ADD: Footer social text color settings.
-* ADD: Footer copyright text color settings.
 * FIX: Gallery issue.
-* ADD: Page setting.
-* ADD: Option to disable preload.
-* ADD: About layout columns.
-* ADD: Service icon size settings.
-* ADD: Support logo retina.
-* ADD: Category selection in News section.
+* FIX: Escaping missing in several other places.
+* REMOVE: wp_reset_query.
+* REMOVE: Core settings is not allowed
+* IMPROVED: Upsell content.
+
 
 
 ## 1.4.4

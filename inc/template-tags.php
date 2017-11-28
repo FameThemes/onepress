@@ -224,9 +224,12 @@ if ( ! function_exists('onepress_header' ) ) {
         if ( onepress_is_transparent_header() ){
             $transparent = 'is-transparent';
         }
+        $pos = sanitize_text_field(get_theme_mod('onepress_header_position', 'top'));
+        if ($pos == 'below_hero') {
+            $transparent = 'no-transparent';
+        }
 
         echo '<div id="header-section" class="' . esc_attr($transparent) . '">';
-        $pos = sanitize_text_field(get_theme_mod('onepress_header_position', 'top'));
         if ($pos == 'below_hero') {
             do_action('onepress_header_end');
         }

@@ -332,15 +332,12 @@ function onepress_customizer_partials( $wp_customize ) {
         'render_callback' => 'onepress_custom_inline_style',
     ) );
 
-
     // Retina logo
      $wp_customize->selective_refresh->add_partial( 'onepress_site_logo', array(
          'selector' => '.site-branding',
          'settings' => array('onepress_retina_logo', 'onepress_transparent_logo', 'onepress_transparent_retina_logo' ),
          'render_callback' => 'onepress_site_logo',
      ) );
-
-
 
 }
 add_action( 'customize_register', 'onepress_customizer_partials', 199 );
