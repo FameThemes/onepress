@@ -19,20 +19,19 @@ CHANGELOG
 * NEW: Header Layout: top and below hero.
 * NEW: Footer copyright link colors.
 * NEW: Hero rotating text and background color for layout 1.
-* UPDATE: Latest bootstrap - v4.0.0-alpha.6.
-* UPDATE: Carousel and RTL.
+* IMPROVED: Latest bootstrap - v4.0.0-alpha.6.
+* IMPROVED: Carousel and RTL.
 * IMPROVED: Actions Required to Recommended Actions.
 * IMPROVED: Footer Social & Newsletter section to Footer Socials.
+* IMPROVED: Upsell content.
 * FIX: Hero fullscreen issue.
 * FIX: Section full width z index.
 * FIX: Theme Check Sniffs.
 * FIX: Div class fit-vids-style inserted into head.
 * FIX: Gallery issue.
 * FIX: Escaping missing in several other places.
-* REMOVE: wp_reset_query.
-* REMOVE: Core settings is not allowed
-* IMPROVED: Upsell content.
-
+* REMOVED: wp_reset_query.
+* REMOVED: Core settings is not allowed
 
 
 ## 1.4.4
