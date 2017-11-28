@@ -3,7 +3,7 @@ CHANGELOG
 ====================================================================
 ## 2.0.0
 * NEW: Non-minified js files.
-* NEW: Footer widgets.
+* NEW: Footer widgets section.
 * NEW: Rel attribute for author tag.
 * NEW: Compare table.
 * NEW: Show/hide page title bar close.
@@ -12,13 +12,14 @@ CHANGELOG
 * NEW: Service icon size settings.
 * NEW: Support logo retina.
 * NEW: Category selection in News section.
-* NEW: Page setting.
+* NEW: Page settings.
 * NEW: Footer social text color settings.
 * NEW: Footer copyright text color settings.
 * NEW: Add transparent logo.
-* NEW: Header Layout.
+* NEW: Header Layout: top and below hero.
 * NEW: Footer copyright link colors.
-* UPDATE: Latest bootstrap.
+* NEW: Hero rotating text and background color for layout 1.
+* UPDATE: Latest bootstrap - v4.0.0-alpha.6.
 * UPDATE: Carousel and RTL.
 * IMPROVED: Actions Required to Recommended Actions.
 * IMPROVED: Footer Social & Newsletter section to Footer Socials.
