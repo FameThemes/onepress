@@ -19,6 +19,7 @@ if ( ! $hide_footer ) {
         <?php
         /**
          * @since 2.0.0
+         * @see onepress_footer_widgets
          * @see onepress_footer_connect
          */
         do_action('onepress_before_site_info');

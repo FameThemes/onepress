@@ -1347,7 +1347,7 @@ if ( ! function_exists( 'onepress_footer_widgets' ) ) {
     }
 }
 
-add_action( 'onepress_before_site_info', 'onepress_footer_widgets' );
+add_action( 'onepress_before_site_info', 'onepress_footer_widgets', 15 );
 
 if ( ! function_exists( 'onepress_display_page_title' ) ) {
     /**
@@ -1513,4 +1513,4 @@ function onepress_footer_connect(){
         </div>
     <?php endif;
 }
-add_action( 'onepress_before_site_info', 'onepress_footer_connect' );
+add_action( 'onepress_before_site_info', 'onepress_footer_connect', 25 );
