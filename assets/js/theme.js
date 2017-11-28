@@ -102,6 +102,9 @@ function _to_bool( v ) {
  */
 jQuery( document ).ready( function( $ ) {
 
+    var $window     = $(window);
+    var $document = $(document);
+
     var isMobile = {
         Android: function() {
             return navigator.userAgent.match(/Android/i);
@@ -124,50 +127,115 @@ jQuery( document ).ready( function( $ ) {
     };
 
 
-    if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
-        var is_top_header = $( '#page > .site-header').length ?  true : false;
-        $('.site-header').eq(0).wrap( '<div class="site-header-wrapper">' );
-        var is_transparent = $( 'body').hasClass( 'header-transparent' );
-        $wrap =  $( '.site-header-wrapper');
-        $wrap.addClass( 'no-scroll' );
+    var stickyHeaders = (function() {
 
-        if (! is_top_header ) {
-            $( 'body').removeClass( 'header-transparent' );
-        }
-        var header_fixed = $('.site-header').eq(0);
-        if ( header_fixed.length > 0 ) {
-            $(document).scroll(function () {
-                var header_parent = header_fixed.parent();
-                var p_to_top = header_parent.offset().top;
-                var st = $(document).scrollTop();
+        var $stickies;
+        var lastScrollTop = 0;
 
-                var topbar = $('#wpadminbar').height() || 0;
-                if (topbar > 0) {
-                    var topbar_pos = $('#wpadminbar').css('position');
-                    if ('fixed' !== topbar_pos) {
-                        topbar = 0;
+        var setData = function( stickies, addWrap  ){
+
+            var top = 0;
+            if ( $( '#wpadminbar' ).length ) {
+                if ( $( '#wpadminbar' ).css('position') == 'fixed' ) {
+                    top = $( '#wpadminbar' ).height();
+                }
+            }
+
+            if ( $( '#header-section' ).hasClass('is-transparent') ) {
+               // $( '.followWrap' ).css( 'top', top );
+            }
+
+            if ( typeof addWrap === "undefined" ) {
+                addWrap = true;
+            }
+            $stickies = stickies.each(function() {
+                var $thisSticky = $(this);
+                var p = $thisSticky.parent();
+                if ( ! p.hasClass('followWrap')) {
+                    if ( addWrap ) {
+                        $thisSticky.wrap('<div class="followWrap" />');
                     }
                 }
-                //  if( st > p_to_top && st > 0 ) {
-                var post_check = 1;
-                if (topbar) {
-                    post_check = 0;
+
+                $thisSticky.parent().removeAttr('style');
+
+                $thisSticky
+                    .data('originalPosition', $thisSticky.offset().top )
+                    .data('originalHeight', $thisSticky.height() )
+                    .parent()
+                    .height($thisSticky.height());
+            });
+        };
+
+        var load = function(stickies) {
+
+            if (typeof stickies === "object" && stickies instanceof jQuery && stickies.length > 0) {
+
+                setData( stickies );
+
+                $document.off("scroll.stickies").on("scroll.stickies", function() {
+                    _whenScrolling();
+                });
+
+                $window.resize( function(){
+                    setData( stickies, false );
+                    stickies.each( function(){
+                        $( this ).removeClass("fixed").removeAttr("style");
+                    } );
+                    _whenScrolling();
+                } );
+
+                $document.on( 'header_view_changed hero_ready', function(){
+                    $( '.followWrap' ).removeAttr('style');
+                    setTimeout( function(){
+                        $( '.followWrap' ).removeAttr('style');
+                        setData( stickies, false );
+                        _whenScrolling();
+                    }, 500 );
+                } );
+
+            }
+        };
+
+        var _whenScrolling = function() {
+
+            var top = 0;
+
+            if ( $( '#wpadminbar' ).length ) {
+                if ( $( '#wpadminbar' ).css('position') == 'fixed' ) {
+                    top = $( '#wpadminbar' ).height();
                 }
-                if (st > post_check) {
-                    $wrap.addClass('is-fixed').removeClass('no-scroll');
-                    header_fixed.addClass('header-fixed');
-                    header_fixed.css('top', topbar + 'px');
+            }
+
+            var scrollTop = $window.scrollTop();
+
+            $stickies.each(function(i) {
+                var $thisSticky = $(this),
+                    $stickyPosition = $thisSticky.data('originalPosition');
+                if ( scrollTop === 0 ) {
+                    $thisSticky.addClass('no-scroll');
+                }
+                if ( $stickyPosition - top <= scrollTop ) {
+                    if ( scrollTop > 0 ) {
+                        $thisSticky.removeClass( 'no-scroll' );
+                    }
+                    $thisSticky.addClass("header-fixed");
+                    $thisSticky.css("top", top );
                 } else {
-                    header_fixed.removeClass('header-fixed');
-                    header_fixed.css('top', 'auto');
-                    $wrap.removeClass('is-fixed').addClass('no-scroll');
+                    $thisSticky.removeClass("header-fixed").removeAttr("style").addClass('no-scroll');
                 }
             });
-        }
+        };
 
-
-    }
-
+        return {
+            load: load
+        };
+    })();
+    stickyHeaders.load($("#masthead.is-sticky"));
+    // When Header Panel rendered by customizer
+    $document.on( 'header_view_changed', function(){
+        stickyHeaders.load($("#masthead.is-sticky"));
+    } );
 
 
     /*
@@ -175,13 +243,12 @@ jQuery( document ).ready( function( $ ) {
      *
      * Smooth scroll for navigation and other elements
      */
-
     var mobile_max_width =  1140; // Media max width for mobile
     var main_navigation = jQuery('.main-navigation .onepress-menu');
     var stite_header =  $( '.site-header' );
 
     // Initialise Menu Toggle
-    jQuery('#nav-toggle').on('click', function(event){
+    $document.on('click', '#nav-toggle', function(event){
         event.preventDefault();
         jQuery('#nav-toggle').toggleClass('nav-is-visible');
         main_navigation.toggleClass("onepress-menu-mobile");
@@ -213,7 +280,7 @@ jQuery( document ).ready( function( $ ) {
         jQuery(this).prepend('<div class="nav-toggle-subarrow"><i class="fa fa-angle-down"></i></div>');
     });
 
-    jQuery('.nav-toggle-subarrow, .nav-toggle-subarrow .nav-toggle-subarrow').click(
+    $document.on('click','.nav-toggle-subarrow, .nav-toggle-subarrow .nav-toggle-subarrow',
         function () {
             jQuery(this).parent().toggleClass("nav-toggle-dropdown");
         }
@@ -289,12 +356,12 @@ jQuery( document ).ready( function( $ ) {
     }
 
     // Add active class to menu when scroll to active section.
-    var _scroll_top = jQuery(window).scrollTop();
+    var _scroll_top = $window.scrollTop();
     jQuery( window ).scroll(function() {
         var currentNode = null;
 
         if ( ! window.current_nav_item ) {
-            var current_top = jQuery( window ).scrollTop();
+            var current_top = $window.scrollTop();
 
             if ( onepress_js_settings.onepress_disable_sticky_header != '1' ) {
                 h = jQuery('#wpadminbar').height() + jQuery('.site-header').height();
@@ -399,20 +466,28 @@ jQuery( document ).ready( function( $ ) {
         wow.init();
     }
 
-    /**
-     * Text rotator
-     */
-    jQuery(".js-rotating").Morphext({
-        // The [in] animation type. Refer to Animate.css for a list of available animations.
-        animation: onepress_js_settings.hero_animation,
-        // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
-        separator: "|",
-        // The delay between the changing of each phrase in milliseconds.
-        speed: parseInt( onepress_js_settings.hero_speed ),
-        complete: function () {
-            // Called after the entrance animation is executed.
-        }
-    });
+    var text_rotator = function(){
+        /**
+         * Text rotator
+         */
+        jQuery(".js-rotating").Morphext({
+            // The [in] animation type. Refer to Animate.css for a list of available animations.
+            animation: onepress_js_settings.hero_animation,
+            // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
+            separator: "|",
+            // The delay between the changing of each phrase in milliseconds.
+            speed: parseInt( onepress_js_settings.hero_speed ),
+            complete: function () {
+                // Called after the entrance animation is executed.
+            }
+        });
+    };
+
+    text_rotator();
+
+    $document.on( 'header_view_changed', function(){
+        text_rotator();
+    } );
 
     /**
      * Responsive Videos
@@ -447,27 +522,40 @@ jQuery( document ).ready( function( $ ) {
     /**
      * Section: Hero Full Screen Slideshow
      */
-    function hero_full_screen(){
+    function hero_full_screen( no_trigger ){
         if ( $( '.hero-slideshow-fullscreen').length > 0 ) {
-            var is_transparent = jQuery('body').hasClass('header-transparent');
+            var $header = jQuery( '#masthead');
+            var is_transparent = $header.hasClass('is-t');
             var headerH;
             var is_fixed_header;
-            is_fixed_header = jQuery( 'body').hasClass( 'sticky-header' );
-            var is_top_header = jQuery('#page > .site-header').length ? true : false;
+            is_fixed_header = $header.hasClass( 'is-sticky' );
+            var is_top_header = $header.hasClass( 'h-on-top' ) ? true : false;
             if (is_top_header && !is_transparent) {
-                headerH = jQuery('.site-header').height();
+                headerH = $header.height();
             } else if ( is_fixed_header ) {
-                headerH = jQuery('.site-header').height();
+                headerH = $header.height();
             } else {
                 headerH = 0;
             }
             jQuery('.hero-slideshow-fullscreen').css('height', (jQuery(window).height() - headerH + 1) + 'px');
+            if (  typeof  no_trigger === "undefined" || ! no_trigger ) {
+                $document.trigger( 'hero_ready' );
+            }
+
         }
     }
     jQuery(window).on('resize', function (){
         hero_full_screen();
     });
     hero_full_screen();
+
+    $document.on( 'header_view_changed', function(){
+        hero_full_screen();
+    } );
+
+    $document.on( 'hero_ready', function(){
+        hero_full_screen( true );
+    } );
 
     /**
      * Hero sliders

@@ -10,6 +10,15 @@
     z-index: 1000;
     -webkit-transition: all 1s ease-out; /* Safari */
     transition: all .5s ease-out;
+    &.header-fixed {
+        top: 0px;
+        left: 0px;
+        position: fixed;
+        box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
+    }
+    .custom-logo-transparent {
+        display: none;
+    }
 }
 
 .header-full-width .container {
@@ -21,85 +30,59 @@
     }
 }
 
-.no-sticky-header {
-    .site-header-wrapper {
+.is-transparent {
+    .followWrap {
+        z-index: 99;
+        width: 100%;
+        background: transparent;
+        position: absolute;
+        top: 0px;
         display: block;
-        height: 75px;
     }
     .site-header {
         background: transparent;
-    }
-}
-
-.sticky-header {
-    &.no-header-transparent {
-        .site-header-wrapper {
-            display: block;
-            height: 75px;
-        }
-    }
-}
-
-
-.no-sticky-header.header-transparent .site-header {
-    #nav-toggle {
-        span {
-            background-color: #ffffff;
-            &::before, &::after {
-                background-color: #ffffff;
+        position: fixed;
+        top: 0px;
+        &.no-scroll {
+            .custom-logo-transparent {
+                display: inline-block;
+            }
+            .custom-logo {
+                display: none;
+            }
+            #nav-toggle {
+                span {
+                    background-color: #ffffff;
+                    &::before, &::after {
+                        background-color: #ffffff;
+                    }
+                }
+                &.nav-is-visible {
+                    span {
+                        background-color: transparent;
+                    }
+                }
             }
         }
-        &.nav-is-visible {
-            span {
-                background-color: transparent;
-            }
-        }
-    }
-}
-
-.header-transparent .no-scroll .site-header {
-    background: transparent;
-    position: fixed;
-    #nav-toggle {
-        span {
-            background-color: #ffffff;
-            &::before, &::after {
-                background-color: #ffffff;
-            }
-        }
-        &.nav-is-visible {
-            span {
-                background-color: transparent;
+        &.header-fixed {
+            background: #FFFFFF;
+            &.no-scroll {
+                background: transparent;
+                box-shadow: none;
             }
         }
     }
+
 }
 
 @include for(large-screens) {
-    .header-transparent .no-scroll .site-header {
+    .is-transparent .no-scroll.site-header {
         .onepress-menu > li > a {
             color: rgba(255, 255, 255, 0.9);
         }
     }
 }
 
-.no-sticky-header.page-template-template-frontpage.header-transparent .site-header {
-    background: transparent;
-    position: absolute;
-}
-
-.site-header.header-fixed {
-    box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
-}
-
-.sticky-header #page > .site-header, .sticky-header .header-fixed {
-    position: fixed;
-}
-
-.sticky-header .header-fixed {
-    top: 0px;
-    left: 0px;
-}
 
 .header-transparent .hero-slideshow-fullscreen .hero__content {
     @include rem('padding-top', 50px);

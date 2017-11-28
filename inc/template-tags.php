@@ -16,12 +16,64 @@
 function onepress_add_retina_logo( $html ){
     $custom_logo_id = get_theme_mod( 'custom_logo' );
 
-    // We have a logo. Logo is go.
-    if ( $custom_logo_id ) {
-        $custom_logo_attr = array(
-            'class'    => 'custom-logo',
+    $custom_logo_attr = array(
+        'class'    => 'custom-logo',
+        'itemprop' => 'logo',
+    );
+    $image_retina_url = false;
+    $retina_id = false;
+    $retina_url = sanitize_text_field( get_theme_mod( 'onepress_retina_logo' ) ) ;
+    if ( $retina_url ) {
+        $retina_id = attachment_url_to_postid( $retina_url );
+        if ( $retina_id ){
+            $image_retina_url = wp_get_attachment_image_src( $retina_id, 'full' );
+            if ( $image_retina_url ) {
+                $custom_logo_attr['srcset'] = $image_retina_url[0].' 2x';
+            }
+
+        }
+    }
+
+    if( ! $custom_logo_id ) {
+        $custom_logo_id = $retina_id;
+    }
+
+    $t_logo_html = '';
+
+    if ( onepress_is_transparent_header() ){
+        $t_logo = sanitize_text_field( get_theme_mod( 'onepress_transparent_logo' ) ) ;
+        $t_logo_r = sanitize_text_field( get_theme_mod( 'onepress_transparent_retina_logo' ) ) ;
+        $t_logo_attr = array(
+            'class'    => 'custom-logo-transparent',
             'itemprop' => 'logo',
         );
+
+        if ( $t_logo_r ) {
+            $t_logo_r = attachment_url_to_postid( $t_logo_r );
+            if ( $t_logo_r ){
+                $image_tr_url = wp_get_attachment_image_src( $t_logo_r, 'full' );
+                if ( $image_tr_url ) {
+                    $t_logo_attr['srcset'] = $image_tr_url[0].' 2x';
+                }
+            }
+        }
+
+        if ( $t_logo ) {
+            $t_logo = attachment_url_to_postid( $t_logo );
+        }
+        if ( ! $t_logo ) {
+            $t_logo = $t_logo_r;
+        }
+
+        if ( $t_logo ){
+            $t_logo_html = wp_get_attachment_image( $t_logo, 'full', false, $t_logo_attr );
+        }
+
+    }
+
+
+    // We have a logo. Logo is go.
+    if ( $custom_logo_id ) {
 
         /*
          * If the logo alt attribute is empty, get the site title and explicitly
@@ -32,25 +84,13 @@ function onepress_add_retina_logo( $html ){
             $custom_logo_attr['alt'] = get_bloginfo( 'name', 'display' );
         }
 
-        $retina_url = sanitize_text_field( get_theme_mod( 'onepress_retina_logo' ) ) ;
-        if ( $retina_url ) {
-            $retina_id = attachment_url_to_postid( $retina_url );
-            if ( $retina_id ){
-                $image = wp_get_attachment_image_src( $retina_id, 'full' );
-                if ( $image ) {
-                    $custom_logo_attr['srcset'] = $image[0].' 2x';
-                }
-
-            }
-        }
-
         /*
          * If the alt attribute is not empty, there's no need to explicitly pass
          * it because wp_get_attachment_image() already adds the alt attribute.
          */
         $html = sprintf( '<a href="%1$s" class="custom-logo-link" rel="home" itemprop="url">%2$s</a>',
             esc_url( home_url( '/' ) ),
-            wp_get_attachment_image( $custom_logo_id, 'full', false, $custom_logo_attr )
+            wp_get_attachment_image( $custom_logo_id, 'full', false, $custom_logo_attr ).$t_logo_html
         );
     }
 
@@ -101,6 +141,19 @@ if ( ! function_exists( 'onepress_site_logo' ) ) {
     }
 }
 
+if ( ! function_exists( 'onepress_is_transparent_header' ) ) {
+    function onepress_is_transparent_header()
+    {
+        $check = false;
+        if (is_front_page() && is_page_template('template-frontpage.php')) {
+            if (get_theme_mod('onepress_header_transparent')) {
+                $check = true;
+            }
+        }
+        return $check;
+    }
+}
+
 add_action( 'onepress_site_start', 'onepress_site_header' );
 if ( ! function_exists( 'onepress_site_header' ) ) {
     /**
@@ -108,8 +161,30 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
      */
     function onepress_site_header(){
         $header_width = get_theme_mod( 'onepress_header_width', 'contained' );
+        $is_disable_sticky = sanitize_text_field( get_theme_mod( 'onepress_sticky_header_disable' ) );
+        $classes = array(
+            'site-header',  'header-'.$header_width,
+        );
+
+        if ( $is_disable_sticky !=  1 ) {
+            $classes[] ='is-sticky no-scroll';
+        }
+
+        $transparent = 'no-t';
+        if ( onepress_is_transparent_header() ){
+            $transparent = 'is-t';
+        }
+        $classes[] = $transparent;
+
+        $pos = sanitize_text_field(get_theme_mod('onepress_header_position', 'top'));
+        if ($pos == 'below_hero') {
+            $classes[] = 'h-below-hero';
+        } else {
+            $classes[] = 'h-on-top';
+        }
+
         ?>
-        <header id="masthead" class="site-header <?php echo 'header-'.$header_width; ?>" role="banner">
+        <header id="masthead" class="<?php echo esc_attr( join(' ', $classes ) ); ?>" role="banner">
             <div class="container">
                 <div class="site-branding">
                 <?php
@@ -130,6 +205,44 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
             </div>
         </header><!-- #masthead -->
         <?php
+    }
+}
+
+if ( ! function_exists('onepress_header' ) ) {
+    /**
+     * @since 2.0.0
+     */
+    function onepress_header()
+    {
+        // onepress_header_transparent
+        $transparent = 'no-transparent';
+        if ( onepress_is_transparent_header() ){
+            $transparent = 'is-transparent';
+        }
+
+        echo '<div id="header-section" class="' . esc_attr($transparent) . '">';
+        $pos = sanitize_text_field(get_theme_mod('onepress_header_position', 'top'));
+        if ($pos == 'below_hero') {
+            do_action('onepress_header_end');
+        }
+
+        $hide_header = false;
+        if (is_page()) {
+            $hide_header = get_post_meta(get_the_ID(), '_hide_header', true);
+        }
+        if (!$hide_header) {
+            /**
+             * Hooked: onepress_site_header
+             *
+             * @see onepress_site_header
+             */
+            do_action('onepress_site_start');
+        }
+
+        if ($pos != 'below_hero') {
+            do_action('onepress_header_end');
+        }
+        echo '</div>';
     }
 }
 
@@ -363,7 +476,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
      */
 	function onepress_custom_inline_style( ) {
 
-	        $logo_width = absint( get_theme_mod( 'onepress_logo_width' ) );
+	        $logo_height= absint( get_theme_mod( 'onepress_logo_height' ) );
 
             /**
              *  Custom hero section css
@@ -374,8 +487,8 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $hero_bg_color = onepress_hex_to_rgba( $hero_bg_color, floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) ) );
 
             ob_start();
-            if ( $logo_width > 0 ) {
-                echo ".site-logo-div img{ width: {$logo_width}px; height: auto }";
+            if ( $logo_height > 0 ) {
+                echo ".site-logo-div img{ height: {$logo_height}px; width: auto }";
             }
 
             ?>
@@ -450,7 +563,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $header_bg_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_header_bg_color' ) );
             if ( $header_bg_color ) {
                 ?>
-                .site-header, .no-sticky-header.no-header-transparent .site-header {
+                .site-header, .is-transparent .site-header {
                     background: #<?php echo $header_bg_color; ?>;
                     border-bottom: 0px none;
                 }
@@ -1207,3 +1320,34 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 }
 
 add_action( 'onepress_page_before_content', 'onepress_display_page_title' );
+
+if ( ! function_exists( 'onepress_load_section' ) ) {
+
+    function onepress_load_section( $section_id )
+    {
+        /**
+         * Hook before section
+         */
+        do_action('onepress_before_section_' . $section_id);
+        do_action('onepress_before_section_part', $section_id);
+
+        get_template_part('section-parts/section', $section_id );
+
+        /**
+         * Hook after section
+         */
+        do_action('onepress_after_section_part', $section_id);
+        do_action('onepress_after_section_' . $section_id);
+    }
+}
+
+if ( ! function_exists('onepress_load_hero') ) {
+    function onepress_load_hero_section(){
+        if ( is_page_template('template-frontpage.php') ) {
+            onepress_load_section( 'hero' );
+        }
+    }
+}
+
+add_action( 'onepress_header_end', 'onepress_load_hero_section' );
+

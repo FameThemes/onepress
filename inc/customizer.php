@@ -106,7 +106,7 @@ function onepress_customize_register( $wp_customize ) {
 
 
     // Logo Width
-    $wp_customize->add_setting( 'onepress_logo_width',
+    $wp_customize->add_setting( 'onepress_logo_height',
         array(
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
@@ -114,9 +114,9 @@ function onepress_customize_register( $wp_customize ) {
         )
     );
     $wp_customize->add_control(
-        'onepress_logo_width',
+        'onepress_logo_height',
         array(
-            'label'       => esc_html__('Logo Width In Pixel', 'onepress'),
+            'label'       => esc_html__('Logo Height In Pixel', 'onepress'),
             'section'     => 'title_tagline',
         )
 
@@ -168,21 +168,6 @@ function onepress_customize_register( $wp_customize ) {
                 )
             );
 
-			// Disable Sticky Header
-			$wp_customize->add_setting( 'onepress_sticky_header_disable',
-				array(
-					'sanitize_callback' => 'onepress_sanitize_checkbox',
-					'default'           => '',
-				)
-			);
-			$wp_customize->add_control( 'onepress_sticky_header_disable',
-				array(
-					'type'        => 'checkbox',
-					'label'       => esc_html__('Disable Sticky Header?', 'onepress'),
-					'section'     => 'onepress_global_settings',
-					'description' => esc_html__('Check this box to disable sticky header when scroll.', 'onepress')
-				)
-			);
 
 			// Disable the page title bar
 			$wp_customize->add_setting( 'onepress_page_title_bar_disable',
@@ -256,8 +241,6 @@ function onepress_customize_register( $wp_customize ) {
 			));
 
 
-
-
 		/* Header
 		----------------------------------------------------------------------*/
 		$wp_customize->add_section( 'onepress_header_settings' ,
@@ -269,44 +252,67 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		);
 
-		// Header width
-		$wp_customize->add_setting( 'onepress_header_width',
-			array(
-				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => 'contained',
-				'transport' => 'postMessage',
-			)
-		);
+        // Header width
+        $wp_customize->add_setting( 'onepress_header_width',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default'           => 'contained',
+                'transport' => 'postMessage',
+            )
+        );
 
-		$wp_customize->add_control( 'onepress_header_width',
-			array(
-				'type'        => 'select',
-				'label'       => esc_html__('Header Width', 'onepress'),
-				'section'     => 'onepress_header_settings',
-				'default'       => 'contained',
-				'choices' => array(
-					'full-width' => esc_html__('Full Width', 'onepress'),
-					'contained' => esc_html__('Contained', 'onepress')
-				)
-			)
-		);
+        $wp_customize->add_control( 'onepress_header_width',
+            array(
+                'type'        => 'select',
+                'label'       => esc_html__('Header Width', 'onepress'),
+                'section'     => 'onepress_header_settings',
+                'choices' => array(
+                    'full-width' => esc_html__('Full Width', 'onepress'),
+                    'contained' => esc_html__('Contained', 'onepress')
+                )
+            )
+        );
 
-		// Header Transparent
-		$wp_customize->add_setting( 'onepress_header_transparent',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_checkbox',
-				'default'           => '',
-				'active_callback'   => 'onepress_showon_frontpage'
-			)
-		);
-		$wp_customize->add_control( 'onepress_header_transparent',
-			array(
-				'type'        => 'checkbox',
-				'label'       => esc_html__('Header Transparent', 'onepress'),
-				'section'     => 'onepress_header_settings',
-				'description' => esc_html__('Apply for front page template only.', 'onepress')
-			)
-		);
+        // Header Layout
+        $wp_customize->add_setting( 'onepress_header_position',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default'           => 'top',
+                'transport' => 'postMessage',
+                'active_callback' => 'onepress_showon_frontpage'
+            )
+        );
+
+        $wp_customize->add_control( 'onepress_header_position',
+            array(
+                'type'        => 'select',
+                'label'       => esc_html__('Header Position', 'onepress'),
+                'section'     => 'onepress_header_settings',
+                'choices' => array(
+                    'top' => esc_html__('Top', 'onepress'),
+                    'below_hero' => esc_html__('Below Hero Slider', 'onepress')
+                )
+            )
+        );
+
+        // Disable Sticky Header
+        $wp_customize->add_setting( 'onepress_sticky_header_disable',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_checkbox',
+                'default'           => '',
+                'transport' => 'postMessage',
+            )
+        );
+        $wp_customize->add_control( 'onepress_sticky_header_disable',
+            array(
+                'type'        => 'checkbox',
+                'label'       => esc_html__('Disable Sticky Header?', 'onepress'),
+                'section'     => 'onepress_header_settings',
+                'description' => esc_html__('Check this box to disable sticky header when scroll.', 'onepress')
+            )
+        );
+
+
 
 		// Vertical align menu
 		$wp_customize->add_setting( 'onepress_vertical_align_menu',
@@ -431,6 +437,66 @@ function onepress_customize_register( $wp_customize ) {
 				'description' => '',
 			)
 		));
+
+
+        // Header Transparent
+        $wp_customize->add_setting( 'onepress_header_transparent',
+            array(
+                'sanitize_callback' => 'onepress_sanitize_checkbox',
+                'default'           => '',
+                'active_callback'   => 'onepress_showon_frontpage',
+                'transport' => 'postMessage',
+            )
+        );
+        $wp_customize->add_control( 'onepress_header_transparent',
+            array(
+                'type'        => 'checkbox',
+                'label'       => esc_html__('Header Transparent', 'onepress'),
+                'section'     => 'onepress_header_settings',
+                'description' => esc_html__('Apply for front page template only.', 'onepress')
+            )
+        );
+
+        // Transparent Logo
+        $wp_customize->add_setting( 'onepress_transparent_logo',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default'           => '',
+                'transport'			=> 'postMessage'
+            )
+        );
+        $wp_customize->add_control(
+            new WP_Customize_Image_Control(
+                $wp_customize,
+                'onepress_transparent_logo',
+                array(
+                    'label'       => esc_html__('Transparent Logo', 'onepress'),
+                    'section'     => 'onepress_header_settings',
+                    'description' => esc_html__('Apply when header transparent only.', 'onepress')
+                )
+            )
+        );
+
+        // Transparent Retina Logo
+        $wp_customize->add_setting( 'onepress_transparent_retina_logo',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default'           => '',
+                'transport'			=> 'postMessage'
+            )
+        );
+        $wp_customize->add_control(
+            new WP_Customize_Image_Control(
+                $wp_customize,
+                'onepress_transparent_retina_logo',
+                array(
+                    'label'       => esc_html__('Transparent Retina Logo', 'onepress'),
+                    'description' => esc_html__('Apply when header transparent only.', 'onepress'),
+                    'section'     => 'onepress_header_settings',
+                )
+            )
+        );
+
 
 
 
@@ -1936,7 +2002,7 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		));
 
-		if ( class_exists( 'OnePress_PLus' ) ) {
+		if ( class_exists( 'OnePress_Plus' ) ) {
             // About column
             $wp_customize->add_setting('onepress_about_layout',
                 array(
@@ -3396,7 +3462,7 @@ function onepress_showon_frontpage() {
 }
 
 function onepress_gallery_source_validate( $validity, $value ){
-	if ( ! class_exists( 'OnePress_PLus' ) ) {
+	if ( ! class_exists( 'OnePress_Plus' ) ) {
 		if ( $value != 'page' ) {
 			$validity->add('notice', sprintf( esc_html__('Upgrade to %1s to unlock this feature.', 'onepress' ), '<a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#gallery">OnePress Plus</a>' ) );
 		}
@@ -3424,7 +3490,7 @@ function opneress_customize_js_settings(){
 
     wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(
         'number_action' => $number_action,
-        'is_plus_activated' => class_exists( 'OnePress_PLus' ) ? 'y' : 'n',
+        'is_plus_activated' => class_exists( 'OnePress_Plus' ) ? 'y' : 'n',
         'action_url' => admin_url( 'themes.php?page=ft_onepress&tab=recommended_actions' ),
     ) );
 }

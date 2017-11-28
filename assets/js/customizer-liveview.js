@@ -77,5 +77,16 @@
         } );
     } );
 
+
+    wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {
+
+        if (  settings.partial.id  == 'onepress-header-section' ) {
+            $( document ) .trigger( 'header_view_changed',[ settings.partial.id ] );
+        }
+
+        $( document ) .trigger( 'selectiveRefresh-rendered',[ settings.partial.id ] );
+    } );
+
+
 } )( jQuery , wp.customize );
 

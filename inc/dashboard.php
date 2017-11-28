@@ -326,7 +326,7 @@ function onepress_theme_info_page() {
         <h2 class="nav-tab-wrapper">
             <a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'OnePress', 'onepress' ) ?></a>
             <a href="?page=ft_onepress&tab=recommended_actions" class="nav-tab<?php echo $tab == 'recommended_actions' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Recommended Actions', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
-            <?php if ( ! class_exists('OnePress_PLus') ) { ?>
+            <?php if ( ! class_exists('OnePress_Plus') ) { ?>
             <a href="?page=ft_onepress&tab=free_pro" class="nav-tab<?php echo $tab == 'free_pro' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Free vs PLUS', 'onepress' ); ?></span></a>
             <?php } ?>
             <a href="?page=ft_onepress&tab=demo-data-importer" class="nav-tab<?php echo $tab == 'demo-data-importer' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'One Click Demo Import', 'onepress' ); ?></span></a>
@@ -487,7 +487,7 @@ function onepress_theme_info_page() {
             </div>
         <?php } ?>
 
-	    <?php if ( ! class_exists('OnePress_PLus') ) { ?>
+	    <?php if ( ! class_exists('OnePress_Plus') ) { ?>
 	    <?php if ( $tab == 'free_pro' ) { ?>
             <div id="free_pro" class="freepro-tab-content info-tab-content">
                 <table class="free-pro-table">

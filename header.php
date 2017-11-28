@@ -27,16 +27,5 @@
     /**
      * @since 2.0.0
      */
-    $hide_header = false;
-    if ( is_page() ) {
-        $hide_header = get_post_meta( get_the_ID(), '_hide_header', true );
-    }
-    if ( ! $hide_header ) {
-        /**
-         * Hooked: onepress_site_header
-         *
-         * @see onepress_site_header
-         */
-        do_action('onepress_site_start');
-    }
+    onepress_header();
     ?>
