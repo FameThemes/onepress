@@ -173,6 +173,8 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
 
         if ( $is_disable_sticky !=  1 ) {
             $classes[] ='is-sticky no-scroll';
+        } else {
+            $classes[] ='no-sticky no-scroll';
         }
 
         $transparent = 'no-t';

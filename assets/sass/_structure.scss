@@ -10,15 +10,18 @@
     z-index: 1000;
     -webkit-transition: all 1s ease-out; /* Safari */
     transition: all .5s ease-out;
+    box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
     &.header-fixed {
         top: 0px;
         left: 0px;
         position: fixed;
-        box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
     }
     .custom-logo-transparent {
         display: none;
     }
+}
+.followWrap {
+    display: block;
 }
 
 .header-full-width .container {
@@ -43,7 +46,12 @@
         background: transparent;
         position: fixed;
         top: 0px;
+        &.no-sticky {
+            position: absolute;
+            top: auto;
+        }
         &.no-scroll {
+            box-shadow: none;
             .has-t-logo {
                 .custom-logo-transparent {
                     display: inline-block;

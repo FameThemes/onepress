@@ -735,15 +735,19 @@ Footer widgets
   -webkit-transition: all 1s ease-out;
   /* Safari */
   transition: all .5s ease-out;
+  box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
 }
 .site-header.header-fixed {
   top: 0px;
   left: 0px;
   position: fixed;
-  box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
 }
 .site-header .custom-logo-transparent {
   display: none;
+}
+
+.followWrap {
+  display: block;
 }
 
 .header-full-width .container {
@@ -769,6 +773,13 @@ Footer widgets
   background: transparent;
   position: fixed;
   top: 0px;
+}
+.is-transparent .site-header.no-sticky {
+  position: absolute;
+  top: auto;
+}
+.is-transparent .site-header.no-scroll {
+  box-shadow: none;
 }
 .is-transparent .site-header.no-scroll .has-t-logo .custom-logo-transparent {
   display: inline-block;
