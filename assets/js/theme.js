@@ -521,23 +521,16 @@ jQuery( document ).ready( function( $ ) {
         if ( $( '.hero-slideshow-fullscreen').length > 0 ) {
             var wh = $window.height();
             var top = getAdminBarHeight();
-            console.log( 'wh', wh );
             var $header = jQuery( '#masthead');
             var is_transparent = $header.hasClass('is-t');
             var headerH;
-            var is_fixed_header;
-            is_fixed_header = $header.hasClass( 'is-sticky' );
-            var is_top_header = $header.hasClass( 'h-on-top' ) ? true : false;
             if ( is_transparent ) {
                 headerH = 0;
             } else {
                 headerH = $header.height();
             }
             headerH += top;
-
-            console.log( 'headerH', headerH );
-
-            jQuery('.hero-slideshow-fullscreen').css('height', ( $window.height() - headerH + 1) + 'px');
+            jQuery('.hero-slideshow-fullscreen').css('height', ( wh - headerH + 1) + 'px');
             if (  typeof  no_trigger === "undefined" || ! no_trigger ) {
                 $document.trigger( 'hero_ready' );
             }
