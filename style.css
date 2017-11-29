@@ -1187,11 +1187,6 @@ Footer widgets
   margin-top: -1px;
 }
 
-.blog .site-content,
-.single-post .site-content {
-  margin-top: 0;
-}
-
 .site-content.no-border {
   border-top: none;
 }
@@ -1239,6 +1234,25 @@ Footer widgets
   font-size: 2.5rem;
   font-weight: 800;
   color: #ffffff;
+}
+.page-header.page--cover .entry-tagline {
+  color: #ffffff;
+  font-style: italic;
+}
+@media screen and (min-width: 1140px) {
+  .page-header.page--cover .entry-tagline {
+    font-size: 22px;
+  }
+}
+@media screen and (max-width: 940px) {
+  .page-header.page--cover .entry-tagline {
+    font-size: 18px;
+  }
+}
+@media screen and (max-width: 720px) {
+  .page-header.page--cover .entry-tagline {
+    font-size: 14px;
+  }
 }
 
 /* Footer

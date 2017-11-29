@@ -18,7 +18,7 @@ $layout = onepress_get_layout();
 ?>
 
 	<div id="content" class="site-content">
-        <?php
+       <?php
         /**
          * @since 2.0.0
          * @see onepress_display_page_title

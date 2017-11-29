@@ -515,11 +515,6 @@
     //padding-top: 74px;
 }
 
-.blog .site-content,
-.single-post .site-content {
-    margin-top: 0;
-}
-
 .site-content.no-border {
     border-top: none;
 }
@@ -564,6 +559,19 @@
             font-size: 2.5rem;
             font-weight: 800;
             color: #ffffff;
+        }
+        .entry-tagline {
+            color: #ffffff;
+            font-style: italic;
+            @include for( large-screens ){
+                font-size: 22px;
+            }
+            @include for( screens-medium ){
+                font-size: 18px;
+            }
+            @include for( screens-small ){
+                font-size: 14px;
+            }
         }
     }
 }
