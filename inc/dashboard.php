@@ -379,7 +379,7 @@ function onepress_theme_info_page() {
                         <p>
                            <strong> <?php printf( esc_html__(  'You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress' ) ,  $child_theme->Name ); ?></strong>
                         </p>
-                        <p><?php printf( esc_html__(  'Child theme uses it’s own theme setting name, would you like to copy setting data from parent theme to this child theme?', 'onepress' ) ); ?></p>
+                        <p><?php printf( esc_html__(  "Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'onepress' ) ); ?></p>
                         <p>
 
                         <?php

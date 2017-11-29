@@ -20,6 +20,7 @@ CHANGELOG
 * NEW: Menu item padding.
 * NEW: Footer copyright link colors.
 * NEW: Hero rotating text and background color for layout 1.
+* NEW: Add an option to disable default google theme in theme.
 * IMPROVED: Latest bootstrap - v4.0.0-alpha.6.
 * IMPROVED: Carousel and RTL.
 * IMPROVED: Change Actions Required text to Recommended Actions.

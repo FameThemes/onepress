@@ -218,6 +218,23 @@ function onepress_customize_register( $wp_customize ) {
 				)
 			);
 
+            // Disable Google Font
+            $wp_customize->add_setting( 'onepress_disable_g_font',
+                array(
+                    'sanitize_callback' => 'onepress_sanitize_checkbox',
+                    'default'           => '',
+                    'transport'			=> 'postMessage'
+                )
+            );
+            $wp_customize->add_control( 'onepress_disable_g_font',
+                array(
+                    'type'        => 'checkbox',
+                    'label'       => esc_html__('Disable Google Fonts', 'onepress'),
+                    'section'     => 'onepress_global_settings',
+                    'description' => esc_html__('Check this if you want to disable default google fonts in theme.', 'onepress')
+                )
+            );
+
 
 		/* Colors
 		----------------------------------------------------------------------*/

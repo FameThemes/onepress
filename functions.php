@@ -183,7 +183,10 @@ function onepress_scripts() {
     $theme = wp_get_theme( 'onepress' );
     $version = $theme->get( 'Version' );
 
-	wp_enqueue_style( 'onepress-fonts', onepress_fonts_url(), array(), $version );
+    if ( ! get_theme_mod( 'onepress_disable_g_font' ) ) {
+        wp_enqueue_style('onepress-fonts', onepress_fonts_url(), array(), $version);
+    }
+
 	wp_enqueue_style( 'onepress-animate', get_template_directory_uri() .'/assets/css/animate.min.css', array(), $version );
 	wp_enqueue_style( 'onepress-fa', get_template_directory_uri() .'/assets/css/font-awesome.min.css', array(), '4.7.0' );
 	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', false, $version );
