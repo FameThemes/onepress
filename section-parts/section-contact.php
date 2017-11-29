@@ -17,11 +17,11 @@ if ( onepress_is_selective_refresh() ) {
 }
 
 if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_address_title || $onepress_contact_phone || $onepress_contact_email || $onepress_contact_fax ) {
-    $desc = get_theme_mod( 'onepress_contact_desc' );
+    $desc = wp_kses_post( get_theme_mod( 'onepress_contact_desc' ) );
     ?>
     <?php if (!$onepress_contact_disable) : ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ($onepress_contact_id != '') echo $onepress_contact_id; ?>" <?php do_action('onepress_section_atts', 'counter'); ?>
+        <section id="<?php if ($onepress_contact_id != '') { echo esc_attr( $onepress_contact_id ); }; ?>" <?php do_action('onepress_section_atts', 'counter'); ?>
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-contact section-padding  section-meta onepage-section', 'contact')); ?>">
         <?php } ?>
             <?php do_action('onepress_section_before_inner', 'contact'); ?>
@@ -31,7 +31,7 @@ if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_addres
                     <?php if ($onepress_contact_subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($onepress_contact_subtitle) . '</h5>'; ?>
                     <?php if ($onepress_contact_title != '') echo '<h2 class="section-title">' . esc_html($onepress_contact_title) . '</h2>'; ?>
                     <?php if ( $desc ) {
-                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
+                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', $desc ) . '</div>';
                     } ?>
                 </div>
                 <?php } ?>

@@ -16,26 +16,11 @@ get_header(); ?>
 			if ( ! has_action( 'onepress_frontpage_section_parts' ) ) {
 
 				$sections = apply_filters( 'onepress_frontpage_sections_order', array(
-                    'hero', 'features', 'about', 'services', 'videolightbox', 'gallery', 'counter', 'team',  'news', 'contact'
+                    'features', 'about', 'services', 'videolightbox', 'gallery', 'counter', 'team',  'news', 'contact'
                 ) );
 
 				foreach ( $sections as $section ){
-                    /**
-                     * Hook before section
-                     */
-                    do_action('onepress_before_section_'.$section );
-                    do_action( 'onepress_before_section_part', $section );
-
-                    /**
-                     * Load section template part
-                     */
-					get_template_part( 'section-parts/section', $section );
-
-                    /**
-                     * Hook after section
-                     */
-                    do_action('onepress_after_section_part', $section );
-                    do_action('onepress_after_section_'.$section );
+                    onepress_load_section( $section );
 				}
 
 			} else {

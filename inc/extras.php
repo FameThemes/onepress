@@ -19,21 +19,10 @@ function onepress_body_classes( $classes ) {
 		$classes[] = 'group-blog';
 	}
 
-	$onepress_sticky_header = get_theme_mod( 'onepress_sticky_header_disable' );
-	if ( $onepress_sticky_header == '' ) {
-		$classes[] = 'sticky-header';
-	} else {
-        $classes[] = 'no-sticky-header';
-    }
-    // onepress_header_transparent
-    $transparent =  'no-header-transparent';
-    if ( is_front_page() && is_page_template( 'template-frontpage.php' ) ) {
-        if ( get_theme_mod( 'onepress_header_transparent' ) ) {
-            $transparent  = 'header-transparent';
-        }
-    }
-
-    $classes[] = $transparent;
+    // Fullwidth template
+	if ( is_page_template( 'template-fullwidth-stretched.php' ) ) {
+		$classes[] = 'template-fullwidth-stretched';
+	}
 
     if ( is_customize_preview() ) {
         $classes[ ] = 'is-customize-preview';
@@ -129,9 +118,6 @@ if ( ! function_exists( 'onepress_get_layout' ) ) {
     }
 }
 
-
-
-
 /**
  * Woocommerce Support
  */
@@ -147,5 +133,12 @@ if ( class_exists( 'WooCommerce' ) ) {
         return $number;
     }
 
+}
+
+/**
+ * Support Elementor plugin
+ */
+if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
+	define( 'ELEMENTOR_PARTNER_ID', 2123 );
 }
 

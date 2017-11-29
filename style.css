@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design. The theme overall is an elegant and classic one, a fine example of Bootstrap 4 WordPress theme which compatibility with latest version of WooCommerce. (Live preview : http://www.famethemes.com/preview/?theme=OnePress)
-Version: 1.4.3
+Version: 2.0.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -616,6 +616,13 @@ h6, p, ul, ol, dl, blockquote, pre {
   padding-top: 40px;
 }
 
+.template-fullwidth-stretched #primary, .siteorigin-panels #primary {
+  padding: 0;
+}
+.template-fullwidth-stretched .entry-content, .siteorigin-panels .entry-content {
+  margin-bottom: 0px;
+}
+
 #secondary {
   padding-bottom: 40px;
   padding-top: 0;
@@ -678,6 +685,42 @@ h6, p, ul, ol, dl, blockquote, pre {
     margin-left: -1px;
   }
 }
+/**
+Footer widgets
+ */
+.footer-widgets {
+  background: #050505;
+}
+.footer-widgets.section-padding {
+  padding: 70px 0px 35px;
+  padding:  4.375rem 0px 2.1875rem;
+}
+.footer-widgets table {
+  border-collapse: collapse;
+}
+.footer-widgets table > thead > tr > th, .footer-widgets table > thead > tr > td {
+  border-width: 1px;
+}
+.footer-widgets table th, .footer-widgets table td {
+  border-color: rgba(233, 233, 233, 0.4);
+}
+.footer-widgets .widget-title {
+  color: #ffffff;
+}
+.footer-widgets .widget-area .widget_categories li, .footer-widgets .widget-area .widget_archive li, .footer-widgets .widget-area .widget_meta li {
+  width: 100% !important;
+  float: none;
+}
+.footer-widgets .widget_recent_entries ul li,
+.footer-widgets .widget_recent_comments ul li {
+  border-bottom: 0px none;
+  padding: 5px 0px;
+  margin-bottom: 0px;
+}
+.footer-widgets .sidebar .widget {
+  margin-bottom: 30px;
+}
+
 /*--------------------------------------------------------------
 4.0 Structure
 --------------------------------------------------------------*/
@@ -688,73 +731,85 @@ h6, p, ul, ol, dl, blockquote, pre {
   position: relative;
   width: 100%;
   background: #FFFFFF;
-  z-index: 99;
+  z-index: 1000;
   -webkit-transition: all 1s ease-out;
   /* Safari */
   transition: all .5s ease-out;
+  box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
 }
-
-.no-sticky-header .site-header-wrapper {
-  display: block;
-  height: 75px;
-}
-.no-sticky-header .site-header {
-  background: transparent;
-}
-
-.sticky-header.no-header-transparent .site-header-wrapper {
-  display: block;
-  height: 75px;
-}
-
-.no-sticky-header.header-transparent .site-header #nav-toggle span {
-  background-color: #ffffff;
-}
-.no-sticky-header.header-transparent .site-header #nav-toggle span::before, .no-sticky-header.header-transparent .site-header #nav-toggle span::after {
-  background-color: #ffffff;
-}
-.no-sticky-header.header-transparent .site-header #nav-toggle.nav-is-visible span {
-  background-color: transparent;
-}
-
-.header-transparent .no-scroll .site-header {
-  background: transparent;
+.site-header.header-fixed {
+  top: 0px;
+  left: 0px;
   position: fixed;
 }
-.header-transparent .no-scroll .site-header #nav-toggle span {
+.site-header .custom-logo-transparent {
+  display: none;
+}
+
+.followWrap {
+  display: block;
+}
+
+.header-full-width .container {
+  max-width: auto;
+  width: auto;
+}
+@media screen and (min-width: 940px) {
+  .header-full-width .container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+.is-transparent .followWrap {
+  z-index: 99;
+  width: 100%;
+  background: transparent;
+  position: absolute;
+  top: 0px;
+  display: block;
+}
+.is-transparent .site-header {
+  background: transparent;
+  position: fixed;
+  top: 0px;
+}
+.is-transparent .site-header.no-sticky {
+  position: absolute;
+  top: auto;
+}
+.is-transparent .site-header.no-scroll {
+  box-shadow: none;
+}
+.is-transparent .site-header.no-scroll .has-t-logo .custom-logo-transparent {
+  display: inline-block;
+}
+.is-transparent .site-header.no-scroll .has-t-logo .custom-logo {
+  display: none;
+}
+.is-transparent .site-header.no-scroll #nav-toggle span {
   background-color: #ffffff;
 }
-.header-transparent .no-scroll .site-header #nav-toggle span::before, .header-transparent .no-scroll .site-header #nav-toggle span::after {
+.is-transparent .site-header.no-scroll #nav-toggle span::before, .is-transparent .site-header.no-scroll #nav-toggle span::after {
   background-color: #ffffff;
 }
-.header-transparent .no-scroll .site-header #nav-toggle.nav-is-visible span {
+.is-transparent .site-header.no-scroll #nav-toggle.nav-is-visible span {
   background-color: transparent;
+}
+.is-transparent .site-header.header-fixed {
+  background: #FFFFFF;
+}
+.is-transparent .site-header.header-fixed.no-scroll {
+  background: transparent;
+  box-shadow: none;
 }
 
 @media screen and (min-width: 1140px) {
-  .header-transparent .no-scroll .site-header .onepress-menu > li > a {
+  .is-transparent .no-scroll.site-header .onepress-menu > li > a {
     color: rgba(255, 255, 255, 0.9);
   }
 }
-.no-sticky-header.page-template-template-frontpage.header-transparent .site-header {
-  background: transparent;
-  position: absolute;
-}
-
-.site-header.header-fixed {
-  box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
-}
-
-.sticky-header #page > .site-header, .sticky-header .header-fixed {
-  position: fixed;
-}
-
-.sticky-header .header-fixed {
-  top: 0px;
-  left: 0px;
-}
-
-.header-transparent .hero-slideshow-fullscreen .hero__content {
+.is-transparent .hero-slideshow-fullscreen .hero__content {
   padding-top: 50px;
   padding-top: 3.125rem;
 }
@@ -1132,13 +1187,13 @@ h6, p, ul, ol, dl, blockquote, pre {
   margin-top: -1px;
 }
 
+.site-content.no-border {
+  border-top: none;
+}
+
 .blog .site-content,
 .single-post .site-content {
   margin-top: 0;
-}
-
-.site-content.no-border {
-  border-top: none;
 }
 
 .page-header {
@@ -1156,6 +1211,54 @@ h6, p, ul, ol, dl, blockquote, pre {
 }
 .page-header p {
   margin: 6px 0px 0px 0px;
+}
+.page-header.page--cover {
+  position: relative;
+  padding: 13% 0px;
+  text-align: center;
+  border-top: 0 none;
+  border-bottom: 0 none;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.page-header.page--cover:before {
+  position: absolute;
+  top: 0px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: block;
+  background: rgba(0, 0, 0, 0.3);
+  content: " ";
+}
+.page-header.page--cover .entry-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+.page-header.page--cover .entry-tagline {
+  color: #ffffff;
+  font-style: italic;
+  font-weight: 300;
+}
+@media screen and (min-width: 1140px) {
+  .page-header.page--cover .entry-tagline {
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 940px) {
+  .page-header.page--cover .entry-tagline {
+    font-size: 18px;
+  }
+}
+@media screen and (max-width: 720px) {
+  .page-header.page--cover .entry-tagline {
+    font-size: 16px;
+  }
 }
 
 /* Footer
@@ -1937,6 +2040,7 @@ section > .customize-partial-edit-shortcut button {
   content: " ";
   z-index: 1;
 }
+.onepage-section .container-fluid,
 .onepage-section .container {
   position: relative;
   z-index: 5;
@@ -2096,6 +2200,13 @@ section > .customize-partial-edit-shortcut button {
   margin: 0px;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.js-rotating {
+  display: none;
+}
+.js-rotating.morphext {
+  display: inline-block;
 }
 
 .is-customize-preview .slider-spinner {
@@ -2283,8 +2394,8 @@ section > .customize-partial-edit-shortcut button {
   color: #fff;
 }
 
-.header-transparent #hero .container .hero__content {
-  margin-top: 70px;
+.h-on-top.is-transparent #hero .container .hero__content {
+  margin-top: 75px;
 }
 
 /* Text Rotator */
@@ -2337,6 +2448,12 @@ section > .customize-partial-edit-shortcut button {
 }
 .section-about .about-image img {
   margin-bottom: 30px;
+}
+.section-about .section-title-area {
+  margin-bottom: 30px;
+}
+.section-about .row > div {
+  margin-top: 30px;
 }
 
 /* Section: Services
@@ -3688,12 +3805,32 @@ img.mfp-img {
 }
 
 /* Coursel and slider */
-/*
- * 	Core Owl Carousel CSS File
- *	v1.3.3
+/**
+ * Owl Carousel v2.3.0
+ * Copyright 2013-2017 David Deutsch
+ * Licensed under  ()
  */
-/* clearfix */
-.owl-carousel .owl-wrapper:after {
+/*
+ *  Owl Carousel - Core
+ */
+.owl-carousel {
+  display: none;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
+  /* position relative and z-index fix webkit rendering fonts issue */
+  position: relative;
+  z-index: 1;
+}
+
+.owl-carousel .owl-stage {
+  position: relative;
+  -ms-touch-action: pan-Y;
+  touch-action: manipulation;
+  -moz-backface-visibility: hidden;
+  /* fix firefox animation glitch */
+}
+
+.owl-carousel .owl-stage:after {
   content: ".";
   display: block;
   clear: both;
@@ -3702,53 +3839,13 @@ img.mfp-img {
   height: 0;
 }
 
-/* display none until init */
-.owl-carousel {
-  display: none;
+.owl-carousel .owl-stage-outer {
   position: relative;
-  width: 100%;
-  -ms-touch-action: pan-y;
-}
-
-.owl-carousel .owl-wrapper {
-  display: none;
-  position: relative;
+  overflow: hidden;
+  /* fix for flashing background */
   -webkit-transform: translate3d(0px, 0px, 0px);
 }
 
-.owl-carousel .owl-wrapper-outer {
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
-
-.owl-carousel .owl-wrapper-outer.autoHeight {
-  -webkit-transition: height 500ms ease-in-out;
-  -moz-transition: height 500ms ease-in-out;
-  -ms-transition: height 500ms ease-in-out;
-  -o-transition: height 500ms ease-in-out;
-  transition: height 500ms ease-in-out;
-}
-
-.owl-carousel .owl-item {
-  float: left;
-}
-
-.owl-controls .owl-page,
-.owl-controls .owl-buttons div {
-  cursor: pointer;
-}
-
-.owl-controls {
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* fix */
 .owl-carousel .owl-wrapper,
 .owl-carousel .owl-item {
   -webkit-backface-visibility: hidden;
@@ -3759,10 +3856,189 @@ img.mfp-img {
   -ms-transform: translate3d(0, 0, 0);
 }
 
-.owl-carousel .g-item {
+.owl-carousel .owl-item {
+  position: relative;
+  min-height: 1px;
+  float: left;
+  -webkit-backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.owl-carousel .owl-item img {
+  display: block;
+  width: 100%;
+}
+
+.owl-carousel .owl-nav.disabled,
+.owl-carousel .owl-dots.disabled {
+  display: none;
+}
+
+.owl-carousel .owl-nav .owl-prev,
+.owl-carousel .owl-nav .owl-next,
+.owl-carousel .owl-dot {
+  cursor: pointer;
+  cursor: hand;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.owl-carousel .owl-nav button.owl-prev,
+.owl-carousel .owl-nav button.owl-next,
+.owl-carousel button.owl-dot {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0 !important;
+  font: inherit;
+}
+
+.owl-carousel.owl-loaded {
   display: block;
 }
-.owl-carousel .owl-buttons > div {
+
+.owl-carousel.owl-loading {
+  opacity: 0;
+  display: block;
+}
+
+.owl-carousel.owl-hidden {
+  opacity: 0;
+}
+
+.owl-carousel.owl-refresh .owl-item {
+  visibility: hidden;
+}
+
+.owl-carousel.owl-drag .owl-item {
+  -ms-touch-action: none;
+  touch-action: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.owl-carousel.owl-grab {
+  cursor: move;
+  cursor: grab;
+}
+
+.owl-carousel.owl-rtl {
+  direction: rtl;
+}
+
+.owl-carousel.owl-rtl .owl-item {
+  float: right;
+}
+
+/* No Js */
+.no-js .owl-carousel {
+  display: block;
+}
+
+/*
+ *  Owl Carousel - Animate Plugin
+ */
+.owl-carousel .animated {
+  -webkit-animation-duration: 1000ms;
+  animation-duration: 1000ms;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.owl-carousel .owl-animated-in {
+  z-index: 0;
+}
+
+.owl-carousel .owl-animated-out {
+  z-index: 1;
+}
+
+.owl-carousel .fadeOut {
+  -webkit-animation-name: fadeOut;
+  animation-name: fadeOut;
+}
+
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+/*
+ * 	Owl Carousel - Auto Height Plugin
+ */
+.owl-height {
+  transition: height 500ms ease-in-out;
+}
+
+/*
+ * 	Owl Carousel - Lazy Load Plugin
+ */
+.owl-carousel .owl-item .owl-lazy {
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.owl-carousel .owl-item img.owl-lazy {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/*
+ * 	Owl Carousel - Video Plugin
+ */
+.owl-carousel .owl-video-wrapper {
+  position: relative;
+  height: 100%;
+  background: #000;
+}
+
+.owl-carousel .owl-video-playing .owl-video-tn,
+.owl-carousel .owl-video-playing .owl-video-play-icon {
+  display: none;
+}
+
+.owl-carousel .owl-video-tn {
+  opacity: 0;
+  height: 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: opacity 400ms ease;
+}
+
+.owl-carousel .owl-video-frame {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+}
+
+/**
+ * Owl Carousel v2.2.1
+ * Copyright 2013-2017 David Deutsch
+ * Licensed under  ()
+ */
+/*
+ * 	Default theme - Owl Carousel CSS File
+ */
+.owl-theme .owl-nav > div {
   position: absolute;
   top: 50%;
   background-color: rgba(0, 0, 0, 0.45);
@@ -3775,19 +4051,77 @@ img.mfp-img {
   padding: 4px 10px 5px;
   transform: translateY(-50%);
 }
-.owl-carousel .owl-buttons > div:hover {
+.owl-theme .owl-nav > div:hover {
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
 }
-.owl-carousel .owl-buttons .owl-prev {
+.owl-theme .owl-nav .owl-prev {
   left: 15px;
 }
-.owl-carousel .owl-buttons .owl-prev .lg-icon::before {
+.owl-theme .owl-nav .owl-prev .lg-icon::before {
   content: "\e094";
 }
-.owl-carousel .owl-buttons .owl-next {
+.owl-theme .owl-nav .owl-next {
   right: 15px;
 }
-.owl-carousel .owl-buttons .owl-next .lg-icon::before {
+.owl-theme .owl-nav .owl-next .lg-icon::before {
   content: "\e095";
+}
+
+.owl-theme .owl-nav {
+  margin-top: 0px;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.owl-theme .owl-nav [class*='owl-'] {
+  color: #FFF;
+  font-size: 14px;
+  margin: 5px;
+  padding: 4px 7px;
+  background: #D6D6D6;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.owl-theme .owl-nav [class*='owl-']:hover {
+  background: #869791;
+  color: #FFF;
+  text-decoration: none;
+}
+
+.owl-theme .owl-nav .disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.owl-theme .owl-nav.disabled + .owl-dots {
+  margin-top: 10px;
+}
+
+.owl-theme .owl-dots {
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.owl-theme .owl-dots .owl-dot {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+}
+
+.owl-theme .owl-dots .owl-dot span {
+  width: 10px;
+  height: 10px;
+  margin: 5px 7px;
+  background: #D6D6D6;
+  display: block;
+  -webkit-backface-visibility: visible;
+  transition: opacity 200ms ease;
+  border-radius: 30px;
+}
+
+.owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
+  background: #869791;
 }

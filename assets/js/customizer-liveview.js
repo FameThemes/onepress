@@ -10,6 +10,7 @@
 
 
     // Site footer bg
+    /*
     wp.customize( 'onepress_footer_bg', function( value ) {
         value.bind( function( to ) {
             $( '.site-footer' ).css( {
@@ -17,6 +18,7 @@
             } );
         } );
     } );
+    */
 
     // Site footer info bg
     wp.customize( 'onepress_footer_info_bg', function( value ) {
@@ -74,7 +76,23 @@
             }
         } );
     } );
-    
+
+    $( window ).resize( function(){
+        var css_code = $( '#onepress-style-inline-css' ).html();
+        // Fix Chrome Lost CSS When resize ??
+        $( '#onepress-style-inline-css' ).html( css_code );
+    });
+
+
+    wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {
+
+        if (  settings.partial.id  == 'onepress-header-section' ) {
+            $( document ) .trigger( 'header_view_changed',[ settings.partial.id ] );
+        }
+
+        $( document ) .trigger( 'selectiveRefresh-rendered',[ settings.partial.id ] );
+    } );
+
 
 } )( jQuery , wp.customize );
 

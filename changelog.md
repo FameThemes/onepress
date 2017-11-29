@@ -1,6 +1,46 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 2.0.0
+* NEW: Non-minified js files.
+* NEW: Footer widgets section.
+* NEW: Rel attribute for author tag.
+* NEW: Compare table.
+* NEW: Show/hide page title bar.
+* NEW: Disable Hero preload icon setting.
+* NEW: About layout columns.
+* NEW: Service icon size settings.
+* NEW: Support retina & transparent logo.
+* NEW: Support transparent site title and tagline text colors.
+* NEW: Category selection in News section.
+* NEW: Page settings.
+* NEW: Footer social text color settings.
+* NEW: Footer copyright text color settings.
+* NEW: Header Layout: Full Width or Contained.
+* NEW: Menu position: above or below the Hero section.
+* NEW: Menu item padding.
+* NEW: Footer copyright link colors.
+* NEW: Hero rotating text and background color for layout 1.
+* NEW: Add an option to disable default google theme in theme.
+* NEW: Add page header cover.
+* IMPROVED: Latest bootstrap - v4.0.0-alpha.6.
+* IMPROVED: Carousel and RTL.
+* IMPROVED: Change Actions Required text to Recommended Actions.
+* IMPROVED: Move the Footer Social & Newsletter section to Footer Socials.
+* IMPROVED: Upsell content.
+* FIX: Hero fullscreen issue.
+* FIX: Section full width z index.
+* FIX: Theme Check Sniffs.
+* FIX: Div class fit-vids-style inserted into head.
+* FIX: Gallery issue.
+* FIX: Escaping missing in several other places.
+* REMOVED: wp_reset_query.
+* REMOVED: Core settings is not allowed
+
+
+## 1.4.4
+* Fix hero fullscreen issue.
+
 ## 1.4.3
 * Fix header issue.
 

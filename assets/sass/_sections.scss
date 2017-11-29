@@ -25,6 +25,7 @@
 		content: " ";
 		z-index: 1;
 	}
+    .container-fluid,
 	.container {
 		position: relative;
 		z-index: 5;
@@ -203,6 +204,12 @@
 	            transform: translate(-50%, -50%);
 	}
 }
+.js-rotating {
+    display: none;
+    &.morphext {
+        display: inline-block;
+    }
+}
 
 // DIsable text animation
 .is-customize-preview {
@@ -289,7 +296,6 @@
 		position: relative;
 		top: 50%;
 	  	transform: translateY(-50%);
-
 	}
 }
 
@@ -404,16 +410,14 @@
         color: #fff;
     }
 }
-
-.header-transparent {
-	#hero {
-		.container {
-			.hero__content {
-				margin-top: 70px;
-			}
-
-		}
-	}
+.h-on-top.is-transparent {
+    #hero {
+        .container {
+            .hero__content {
+                margin-top: 75px;
+            }
+        }
+    }
 }
 
 
@@ -474,6 +478,14 @@
 	.about-image img {
 		margin-bottom: 30px;
 	}
+    .section-title-area {
+        margin-bottom: 30px;
+    }
+    .row {
+        > div {
+            margin-top: 30px;
+        }
+    }
 }
 
 /* Section: Services

@@ -1,5 +1,73 @@
 <?php
 
+/**
+ * Plus customizer section.
+ *
+ * @since  1.0.0
+ * @access public
+ */
+class OnePress_Section_Plus extends WP_Customize_Section {
+    /**
+     * The type of customize section being rendered.
+     *
+     * @since  1.0.0
+     * @access public
+     * @var    string
+     */
+    public $type = 'onepress-plus';
+    /**
+     * Custom button text to output.
+     *
+     * @since  1.0.0
+     * @access public
+     * @var    string
+     */
+    public $plus_text = '';
+    /**
+     * Custom plus section URL.
+     *
+     * @since  1.0.0
+     * @access public
+     * @var    string
+     */
+    public $plus_url = '';
+	/**
+	 * Custom section ID.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string
+	 */
+	public $id = '';
+    /**
+     * Add custom parameters to pass to the JS via JSON.
+     *
+     * @since  1.0.0
+     * @access public
+     * @return void
+     */
+    public function json() {
+        $json = parent::json();
+        $json['plus_text'] = $this->plus_text;
+        $json['plus_url']  = $this->plus_url;
+	    $json['id'] = $this->id;
+        return $json;
+    }
+    /**
+     * Outputs the Underscore.js template.
+     *
+     * @since  1.0.0
+     * @access public
+     * @return void
+     */
+    protected function render_template() { ?>
+
+        <li id="accordion-section-{{ data.id }}" class="accordion-section control-section control-section-{{ data.type }} cannot-expand">
+
+            <h3><a href="{{ data.plus_url }}" target="_blank">{{{ data.plus_text }}}</a></h3>
+        </li>
+    <?php }
+}
 
 /*-----------------------------------------------------------------------------------*/
 /*  OnePress Customizer Controls
@@ -55,163 +123,7 @@ class OnePress_Theme_Support extends WP_Customize_Control {
 	}
 }
 
-if ( ! function_exists( 'onepress_sanitize_checkbox' ) ) {
-    function onepress_sanitize_checkbox( $input ) {
-        if ( $input == 1 ) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-}
 
-/**
- * Sanitize CSS code
- *
- * @param $string
- * @return string
- */
-function onepress_sanitize_css($string) {
-    $string = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $string );
-    $string = strip_tags($string);
-    return trim( $string );
-}
-
-
-function onepress_sanitize_color_alpha( $color ){
-    $color = str_replace( '#', '', $color );
-    if ( '' === $color ){
-        return '';
-    }
-
-    // 3 or 6 hex digits, or the empty string.
-    if ( preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', '#' . $color ) ) {
-        // convert to rgb
-        $colour = $color;
-        if ( strlen( $colour ) == 6 ) {
-            list( $r, $g, $b ) = array( $colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5] );
-        } elseif ( strlen( $colour ) == 3 ) {
-            list( $r, $g, $b ) = array( $colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2] );
-        } else {
-            return false;
-        }
-        $r = hexdec( $r );
-        $g = hexdec( $g );
-        $b = hexdec( $b );
-        return 'rgba('.join( ',', array( 'r' => $r, 'g' => $g, 'b' => $b, 'a' => 1 ) ).')';
-
-    }
-
-    return strpos( trim( $color ), 'rgb' ) !== false ?  $color : false;
-}
-
-
-/**
- * Sanitize repeatable data
- *
- * @param $input
- * @param $setting object $wp_customize
- * @return bool|mixed|string|void
- */
-function onepress_sanitize_repeatable_data_field( $input , $setting ){
-    $control = $setting->manager->get_control( $setting->id );
-
-    $fields = $control->fields;
-    if ( is_string( $input ) ) {
-        $input = json_decode( wp_unslash( $input ) , true );
-    }
-    $data = wp_parse_args( $input, array() );
-
-    if ( ! is_array( $data ) ) {
-        return false;
-    }
-    if ( ! isset( $data['_items'] ) ) {
-        return  false;
-    }
-    $data = $data['_items'];
-
-    foreach( $data as $i => $item_data ){
-        foreach( $item_data as $id => $value ){
-
-            if ( isset( $fields[ $id ] ) ){
-                switch( strtolower( $fields[ $id ]['type'] ) ) {
-                    case 'text':
-                        $data[ $i ][ $id ] = sanitize_text_field( $value );
-                        break;
-                    case 'textarea':
-                    case 'editor':
-                        $data[ $i ][ $id ] = wp_kses_post( $value );
-                        break;
-                    case 'color':
-                        $data[ $i ][ $id ] = sanitize_hex_color_no_hash( $value );
-                        break;
-                    case 'coloralpha':
-                        $data[ $i ][ $id ] = onepress_sanitize_color_alpha( $value );
-                        break;
-                    case 'checkbox':
-                        $data[ $i ][ $id ] =  onepress_sanitize_checkbox( $value );
-                        break;
-                    case 'select':
-                        $data[ $i ][ $id ] = '';
-                        if ( is_array( $fields[ $id ]['options'] ) && ! empty( $fields[ $id ]['options'] ) ){
-                            // if is multiple choices
-                            if ( is_array( $value ) ) {
-                                foreach ( $value as $k => $v ) {
-                                    if ( isset( $fields[ $id ]['options'][ $v ] ) ) {
-                                        $value [ $k ] =  $v;
-                                    }
-                                }
-                                $data[ $i ][ $id ] = $value;
-                            }else { // is single choice
-                                if (  isset( $fields[ $id ]['options'][ $value ] ) ) {
-                                    $data[ $i ][ $id ] = $value;
-                                }
-                            }
-                        }
-
-                        break;
-                    case 'radio':
-                        $data[ $i ][ $id ] = sanitize_text_field( $value );
-                        break;
-                    case 'media':
-                        $value = wp_parse_args( $value,
-                            array(
-                                'url' => '',
-                                'id'=> false
-                            )
-                        );
-                        $value['id'] = absint( $value['id'] );
-                        $data[ $i ][ $id ]['url'] = sanitize_text_field( $value['url'] );
-
-                        if ( $url = wp_get_attachment_url( $value['id'] ) ) {
-                            $data[ $i ][ $id ]['id']   = $value['id'];
-                            $data[ $i ][ $id ]['url']  = $url;
-                        } else {
-                            $data[ $i ][ $id ]['id'] = '';
-                        }
-
-                        break;
-                    default:
-                        $data[ $i ][ $id ] = wp_kses_post( $value );
-                }
-
-            }else {
-                $data[ $i ][ $id ] = wp_kses_post( $value );
-            }
-
-            if ( count( $data[ $i ] ) !=  count( $fields ) ) {
-                foreach ( $fields as $k => $f ){
-                    if ( ! isset( $data[ $i ][ $k ] ) ) {
-                        $data[ $i ][ $k ] = '';
-                    }
-                }
-            }
-
-        }
-    }
-
-    return $data;
-}
 
 
 class OnePress_Editor_Custom_Control extends WP_Customize_Control
@@ -319,10 +231,10 @@ class OnePress_Alpha_Color_Control extends WP_Customize_Control {
         <label>
             <?php // Output the label and description if they were passed in.
             if ( isset( $this->label ) && '' !== $this->label ) {
-                echo '<span class="customize-control-title">' . sanitize_text_field( $this->label ) . '</span>';
+                echo '<span class="customize-control-title">' . esc_html( $this->label ) . '</span>';
             }
             if ( isset( $this->description ) && '' !== $this->description ) {
-                echo '<span class="description customize-control-description">' . sanitize_text_field( $this->description ) . '</span>';
+                echo '<span class="description customize-control-description">' . esc_html( $this->description ) . '</span>';
             } ?>
             <input class="alpha-color-control" type="text" data-show-opacity="<?php echo $show_opacity; ?>" data-palette="<?php echo esc_attr( $palette ); ?>" data-default-color="<?php echo esc_attr( $this->settings['default']->default ); ?>" <?php $this->link(); ?>  />
         </label>
@@ -688,6 +600,56 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 
     }
 
+}
+
+
+/**
+ * Class OnPress_Dropdown_Category_Control
+ * @since 2.0.0
+ */
+class OnePress_Category_Control extends WP_Customize_Control {
+
+    public $type = 'dropdown-category';
+
+    protected $dropdown_args = false;
+
+    protected function render_content() {
+        ?><label><?php
+
+        if ( ! empty( $this->label ) ) :
+            ?><span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span><?php
+        endif;
+
+        if ( ! empty( $this->description ) ) :
+            ?><span class="description customize-control-description"><?php echo $this->description; ?></span><?php
+        endif;
+
+        $dropdown_args = wp_parse_args( $this->dropdown_args, array(
+            'taxonomy'          => 'category',
+            'show_option_none'  => '',
+            'selected'          => $this->value(),
+            'show_option_all'   => __( 'All', 'onepress' ),
+            'orderby'           => 'id',
+            'order'             => 'ASC',
+            'show_count'        => 1,
+            'hide_empty'        => 1,
+            'child_of'          => 0,
+            'depth'             => 0,
+            'tab_index'         => 0,
+            'hide_if_empty'     => false,
+            'option_none_value' => 0,
+            'value_field'       => 'term_id',
+        ) );
+
+        $dropdown_args['echo'] = false;
+
+        $dropdown = wp_dropdown_categories( $dropdown_args );
+        $dropdown = str_replace( '<select', '<select ' . $this->get_link(), $dropdown );
+        echo $dropdown;
+
+        ?></label><?php
+
+    }
 }
 
 

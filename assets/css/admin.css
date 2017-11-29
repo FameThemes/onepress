@@ -9,7 +9,7 @@
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFUAAABVCAYAAAA49ahaAAAAAXNSR0IArs4c6QAAAYpJREFUeAHt2jGKA0EUxFCP8f2vPDM4VKyCDuSsEmHefifNXvf7+fRRBb5qrdhfINTBIYQa6kBgkOxSQx0IDJJdaqgDgUGySw11IDBIdqmhDgQGyS411IHAINmlhjoQGCR/RvN6P0bnhIbxaN/Pf/CXDDXUgcAg2aWGOhAYJLvUUAcCg2SXGupAYJDsUkMdCAySXWqoA4FBsksNdSAwSHapA1Tlkdr4XsbjsPE9jEaXaiiiESpAjBmqoYhGqAAxZqiGIhqhAsSYoRqKaIQKEGOGaiiiESpAjBmqoYhGqAAxZqiGIhqhAsSYoRqKaIQKEGMe80h9yn9jG4/lXapxmmiEChBjhmooohEqQIwZqqGIRqgAMWaohiIaoQLEmKEaimiEChBjhmooohEqQIwZqqGIRqgAMWaohiIaoQLEmMc8UhuPwwaI0ehSDUU0QgWIMUM1FNEIFSDGDNVQRCNUgBgzVEMRjVABYsxQDUU0QgWIMUM1FNEIFSDGDNVQRCNUgBgzVEMRjVABYswHs34UpggOW5wAAAAASUVORK5CYII=') !important;
     background-position: no-repeat scroll center 24px;
     background-repeat: no-repeat;
-    background-size: 85px 85px;
+    background-size: 65px 65px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     color: #78c8e6;
     display: inline-block;
@@ -17,10 +17,10 @@
     font-weight: 600;
     height: 40px;
     margin: 5px 0 0;
-    padding-top: 120px;
+    padding-top: 100px;
     text-align: center;
     text-rendering: optimizelegibility;
-    width: 150px;
+    width: 130px;
     text-decoration: none;
 }
 
@@ -66,6 +66,40 @@
 
 .theme_info .theme_link {
 	margin-bottom: 30px;
+}
+#free_pro .free-pro-table {
+    width: 100%;
+    border-spacing: 0;
+}
+#free_pro .free-pro-table td {
+    padding: 10px 0 15px;
+    border-top: 1px solid #ccc;
+}
+#free_pro .free-pro-table th {
+    padding-bottom: 20px;
+}
+#free_pro .free-pro-table h3,
+#free_pro .free-pro-table td p {
+    margin: 0;
+}
+#free_pro .free-pro-table .only-lite, #free_pro .free-pro-table .only-pro {
+    width: 15%;
+    text-align: center;
+}
+#free_pro .free-pro-table .only-lite .dashicons-before:before,
+#free_pro .free-pro-table .only-pro .dashicons-before:before {
+    width: 35px;
+    height: 35px;
+    font-size: 35px;
+}
+#free_pro .free-pro-table .only-lite .dashicons-before:before {
+    color: #00a878;
+}
+#free_pro .free-pro-table .only-pro .dashicons-before:before {
+    color: #ff3439;
+}
+#free_pro .ti-about-page-text-center {
+    text-align: center;
 }
 
 .clearfix:after {

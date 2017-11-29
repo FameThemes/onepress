@@ -1,3 +1,19 @@
+( function( api ) {
+
+    // Extends our custom "example-1" section.
+    api.sectionConstructor['onepress-plus'] = api.Section.extend( {
+
+        // No events for this type of section.
+        attachEvents: function () {},
+
+        // Always make the section active.
+        isContextuallyActive: function () {
+            return true;
+        }
+    } );
+
+} )( wp.customize );
+
 // COLOR ALPHA -----------------------------
 
 /**
@@ -1267,10 +1283,6 @@ jQuery( window ).ready( function( $ ){
         if (onepress_customizer_settings.number_action > 0) {
             $('.control-section-themes h3.accordion-section-title').append('<a class="theme-action-count" href="' + onepress_customizer_settings.action_url + '">' + onepress_customizer_settings.number_action + '</a>');
         }
-        if ( onepress_customizer_settings.is_plus_activated !== 'y' ) {
-            $('#customize-info .accordion-section-title').append('<a target="_blank" style="text-transform: uppercase; background: #D54E21; color: #fff; font-size: 10px; line-height: 14px; padding: 2px 5px; display: inline-block;" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">Upgrade to OnePress plus</a>');
-            $( '#accordion-section-onepress_order_styling > .accordion-section-title').append( '<span class="onepress-notice">Plus</span>' );
-        }
     }
 
     /**
@@ -1455,5 +1467,18 @@ jQuery( document ).ready( function( $ ) {
             }
         }
     });
+
+
+    var display_footer_layout = function( l ){
+        $( 'li[id^="customize-control-footer_custom_"]' ).hide();
+        $( 'li[id^="customize-control-footer_custom_'+l+'_columns"]' ).show();
+    };
+
+    display_footer_layout( $( '#customize-control-footer_layout select' ).val() );
+    $( '#customize-control-footer_layout select' ).on( 'change', function ()  {
+        display_footer_layout( $( this ).val() );
+    } );
+
+
 
 } );

@@ -3,7 +3,7 @@ $id        = get_theme_mod( 'onepress_news_id', esc_html__('news', 'onepress') )
 $disable   = get_theme_mod( 'onepress_news_disable' ) == 1 ? true : false;
 $title     = get_theme_mod( 'onepress_news_title', esc_html__('Latest News', 'onepress' ));
 $subtitle  = get_theme_mod( 'onepress_news_subtitle', esc_html__('Section subtitle', 'onepress' ));
-$number    = get_theme_mod( 'onepress_news_number', '3' );
+$number    = absint( get_theme_mod( 'onepress_news_number', '3' ) );
 $more_link = get_theme_mod( 'onepress_news_more_link', '#' );
 $more_text = get_theme_mod( 'onepress_news_more_text', esc_html__('Read Our Blog', 'onepress' ));
 if ( onepress_is_selective_refresh() ) {
@@ -15,7 +15,7 @@ if ( onepress_is_selective_refresh() ) {
 $desc = get_theme_mod( 'onepress_news_desc' );
 ?>
 <?php if ( ! onepress_is_selective_refresh() ){ ?>
-<section id="<?php if ( $id != '' ) echo $id; ?>" <?php do_action( 'onepress_section_atts', 'news' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-news section-padding onepage-section', 'news' ) ); ?>">
+<section id="<?php if ( $id != '' ) { echo esc_attr( $id ); } ?>" <?php do_action( 'onepress_section_atts', 'news' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-news section-padding onepage-section', 'news' ) ); ?>">
 <?php } ?>
     <?php do_action( 'onepress_section_before_inner', 'news' ); ?>
 	<div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'news' ) ); ?>">
@@ -33,12 +33,28 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 				<div class="col-sm-12">
 					<div class="blog-entry wow slideInUp">
 						<?php
-						$query = new WP_Query(
-							array(
-								'posts_per_page' => $number,
-								'suppress_filters' => 0,
-							)
-						);
+
+                        $cat = absint( get_theme_mod( 'onepress_news_cat' ) );
+                        $orderby = sanitize_text_field( get_theme_mod('onepress_news_orderby') );
+                        $order = sanitize_text_field( get_theme_mod('onepress_news_order') );
+
+                        $args = array(
+                            'posts_per_page' => $number,
+                            'suppress_filters' => 0,
+                        );
+                        if ( $cat > 0 ) {
+                            $args['category__in'] = array( $cat );
+                        }
+
+                        if ( $orderby && $orderby != 'default' ) {
+                            $args['orderby'] = $orderby;
+                        }
+
+                        if ( $order) {
+                            $args['order'] = $order;
+                        }
+
+						$query = new WP_Query( $args );
 						?>
 						<?php if ( $query->have_posts() ) : ?>
 
@@ -75,5 +91,5 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 </section>
 <?php } ?>
 <?php endif;
-wp_reset_query();
+wp_reset_postdata();
 

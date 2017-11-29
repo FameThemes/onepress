@@ -5,18 +5,18 @@
  * @package OnePress
  */
 
-get_header(); ?>
+get_header();
 
+/**
+ * @since 2.0.0
+ * @see onepress_display_page_title
+ */
+do_action( 'onepress_page_before_content' );
+?>
 	<div id="content" class="site-content">
-
-		<div class="page-header">
-			<div class="container">
-				<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-			</div>
-		</div>
-
-        <?php echo onepress_breadcrumb(); ?>
-
+        <?php
+        onepress_breadcrumb();
+        ?>
 		<div id="content-inside" class="container left-sidebar">
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">

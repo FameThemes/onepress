@@ -8,7 +8,7 @@
  *
  * @return array|mixed|void
  */
-function onepress_get_actions_required( ) {
+function onepress_get_recommended_actions( ) {
 
     $actions = array();
     $front_page = get_option( 'page_on_front' );
@@ -55,7 +55,7 @@ function onepress_get_actions_required( ) {
 
     }
 
-    $actions = apply_filters( 'onepress_get_actions_required', $actions );
+    $actions = apply_filters( 'onepress_get_recommended_actions', $actions );
     $hide_by_click = get_option( 'onepress_actions_dismiss' );
     if ( ! is_array( $hide_by_click ) ) {
         $hide_by_click = array();
@@ -97,8 +97,8 @@ function onepress_get_actions_required( ) {
     return $return;
 }
 
-add_action('switch_theme', 'onepress_reset_actions_required');
-function onepress_reset_actions_required () {
+add_action('switch_theme', 'onepress_reset_recommended_actions');
+function onepress_reset_recommended_actions () {
     delete_option('onepress_actions_dismiss');
 }
 
@@ -123,7 +123,7 @@ add_action( 'admin_enqueue_scripts', 'onepress_admin_scripts' );
 add_action('admin_menu', 'onepress_theme_info');
 function onepress_theme_info() {
 
-    $actions = onepress_get_actions_required();
+    $actions = onepress_get_recommended_actions();
     $number_count = $actions['number_notice'];
 
     if ( $number_count > 0 ){
@@ -144,10 +144,10 @@ function onepress_theme_info() {
  * @return bool|null
  */
 function onepress_admin_notice() {
-    if ( ! function_exists( 'onepress_get_actions_required' ) ) {
+    if ( ! function_exists( 'onepress_get_recommended_actions' ) ) {
         return false;
     }
-    $actions = onepress_get_actions_required();
+    $actions = onepress_get_recommended_actions();
     $number_action = $actions['number_notice'];
 
     if ( $number_action > 0 ) {
@@ -249,14 +249,14 @@ function onepress_admin_dismiss_actions(){
         if ( ! is_array( $actions_dismiss ) ) {
             $actions_dismiss = array();
         }
-        $action_key = stripslashes( $_GET['onepress_action_notice'] );
+        $action_key = sanitize_text_field( $_GET['onepress_action_notice'] );
         if ( isset( $actions_dismiss[ $action_key ] ) &&  $actions_dismiss[ $action_key ] == 'hide' ){
             $actions_dismiss[ $action_key ] = 'show';
         } else {
             $actions_dismiss[ $action_key ] = 'hide';
         }
         update_option( 'onepress_actions_dismiss', $actions_dismiss );
-        $url = $_SERVER['REQUEST_URI'];
+        $url = wp_unslash( $_SERVER['REQUEST_URI'] );
         $url = remove_query_arg( 'onepress_action_notice', $url );
         wp_redirect( $url );
         die();
@@ -270,7 +270,7 @@ function onepress_admin_dismiss_actions(){
             $mods = get_option("theme_mods_" . $from);
             update_option("theme_mods_" . $to, $mods);
 
-            $url = $_SERVER['REQUEST_URI'];
+            $url = wp_unslash( $_SERVER['REQUEST_URI'] );
             $url = add_query_arg(array('copied' => 1), $url);
             wp_redirect($url);
             die();
@@ -294,23 +294,23 @@ function onepress_theme_info_page() {
         if ( ! is_array( $actions_dismiss ) ) {
             $actions_dismiss = array();
         }
-        $actions_dismiss[ stripslashes( $_GET['onepress_action_dismiss'] ) ] = 'dismiss';
+        $actions_dismiss[ sanitize_text_field( $_GET['onepress_action_dismiss'] ) ] = 'dismiss';
         update_option( 'onepress_actions_dismiss', $actions_dismiss );
     }
 
     // Check for current viewing tab
     $tab = null;
     if ( isset( $_GET['tab'] ) ) {
-        $tab = $_GET['tab'];
+        $tab = sanitize_text_field( $_GET['tab'] );
     } else {
         $tab = null;
     }
 
-    $actions_r = onepress_get_actions_required();
+    $actions_r = onepress_get_recommended_actions();
     $number_action = $actions_r['number_notice'];
     $actions = $actions_r['actions'];
 
-    $current_action_link =  admin_url( 'themes.php?page=ft_onepress&tab=actions_required' );
+    $current_action_link =  admin_url( 'themes.php?page=ft_onepress&tab=recommended_actions' );
 
     $recommend_plugins = get_theme_support( 'recommend-plugins' );
     if ( is_array( $recommend_plugins ) && isset( $recommend_plugins[0] ) ){
@@ -322,10 +322,13 @@ function onepress_theme_info_page() {
     <div class="wrap about-wrap theme_info_wrapper">
         <h1><?php printf(esc_html__('Welcome to OnePress - Version %1s', 'onepress'), $theme_data->Version ); ?></h1>
         <div class="about-text"><?php esc_html_e( 'OnePress is a creative and flexible WordPress ONE PAGE theme well suited for business, portfolio, digital agency, product showcase, freelancers websites.', 'onepress' ); ?></div>
-        <a target="_blank" href="<?php echo esc_url('http://www.famethemes.com/?utm_source=theme_dashboard_page&utm_medium=badge_link&utm_campaign=theme_admin'); ?>" class="famethemes-badge wp-badge"><span>FameThemes</span></a>
+        <a target="_blank" href="<?php echo esc_url('https://www.famethemes.com/?utm_source=theme_dashboard_page&utm_medium=badge_link&utm_campaign=onepress'); ?>" class="famethemes-badge wp-badge"><span>FameThemes</span></a>
         <h2 class="nav-tab-wrapper">
             <a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'OnePress', 'onepress' ) ?></a>
-            <a href="?page=ft_onepress&tab=actions_required" class="nav-tab<?php echo $tab == 'actions_required' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Actions Required', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
+            <a href="?page=ft_onepress&tab=recommended_actions" class="nav-tab<?php echo $tab == 'recommended_actions' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Recommended Actions', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
+            <?php if ( ! class_exists('OnePress_Plus') ) { ?>
+            <a href="?page=ft_onepress&tab=free_pro" class="nav-tab<?php echo $tab == 'free_pro' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Free vs PLUS', 'onepress' ); ?></span></a>
+            <?php } ?>
             <a href="?page=ft_onepress&tab=demo-data-importer" class="nav-tab<?php echo $tab == 'demo-data-importer' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'One Click Demo Import', 'onepress' ); ?></span></a>
             <?php do_action( 'onepress_admin_more_tabs' ); ?>
         </h2>
@@ -366,7 +369,7 @@ function onepress_theme_info_page() {
             </div>
         <?php } ?>
 
-        <?php if ( $tab == 'actions_required' ) { ?>
+        <?php if ( $tab == 'recommended_actions' ) { ?>
             <div class="action-required-tab info-tab-content">
 
                 <?php if ( is_child_theme() ){
@@ -376,7 +379,7 @@ function onepress_theme_info_page() {
                         <p>
                            <strong> <?php printf( esc_html__(  'You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress' ) ,  $child_theme->Name ); ?></strong>
                         </p>
-                        <p><?php printf( esc_html__(  'Child theme uses it’s own theme setting name, would you like to copy setting data from parent theme to this child theme?', 'onepress' ) ); ?></p>
+                        <p><?php printf( esc_html__(  "Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'onepress' ) ); ?></p>
                         <p>
 
                         <?php
@@ -483,6 +486,208 @@ function onepress_theme_info_page() {
                 <?php } ?>
             </div>
         <?php } ?>
+
+	    <?php if ( ! class_exists('OnePress_Plus') ) { ?>
+	    <?php if ( $tab == 'free_pro' ) { ?>
+            <div id="free_pro" class="freepro-tab-content info-tab-content">
+                <table class="free-pro-table">
+                    <thead><tr><th></th><th>OnePress</th><th>OnePress Plus</th></tr></thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <h4>WooCommerce Support</h4>
+                        </td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4>Hero Section</h4>
+                        </td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>- Full Screen</h5>
+                        </td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h5>- Background Video</h5>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>- Background Slides</h5>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before ">2</span></td>
+                        <td class="only-lite"><span class="dashicons-before">Unlimited</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>About Section</h4>
+                        </td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>- Number of items</h5>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before ">3</span></td>
+                        <td class="only-lite"><span class="dashicons-before">Unlimited</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Service Section</h4>
+                        </td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>- Number of items</h5>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before ">4</span></td>
+                        <td class="only-lite"><span class="dashicons-before">Unlimited</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Counter Section</h4>
+                        </td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>- Number of counter items</h5>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before ">4</span></td>
+                        <td class="only-lite"><span class="dashicons-before">Unlimited</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Team Section</h4>
+                        </td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>- Number of members</h5>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before ">4</span></td>
+                        <td class="only-lite"><span class="dashicons-before">Unlimited</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Latest News Section</h4>
+                        </td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Contact Section</h4>
+                        </td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Drag and drop section orders</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Add New Section</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Styling for all sections</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Google Map Section</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4>Pricing Section</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Testimonial Section</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Call To Action Section</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Projects Section</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Typography Options</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4>Footer Copyright Editor</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h4>24/7 Priority Support</h4>
+                        </td>
+                        <td class="only-pro"><span class="dashicons-before dashicons-no-alt"></span></td>
+                        <td class="only-lite"><span class="dashicons-before dashicons-yes"></span></td>
+                    </tr>
+
+
+                    <tr class="ti-about-page-text-center"><td></td><td colspan="2"><a href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_dashboard&utm_medium=compare_table&utm_campaign=onepress" target="_blank" class="button button-primary button-hero"><?php esc_attr_e('Get OnePress Plus now!', 'onepress') ?></a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+	    <?php } ?>
+	    <?php } ?>
 
         <?php if ( $tab == 'demo-data-importer' ) { ?>
             <div class="demo-import-tab-content info-tab-content">

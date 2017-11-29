@@ -86,6 +86,7 @@ if ( ! function_exists( 'onepress_setup' ) ) :
          * @since WP 4.5
          * @sin 1.2.1
          */
+
         add_theme_support( 'custom-logo', array(
             'height'      => 36,
             'width'       => 160,
@@ -159,6 +160,17 @@ function onepress_widgets_init() {
             'after_title'   => '</h2>',
         ) );
     }
+    for ( $i = 1; $i<= 4; $i++ ) {
+        register_sidebar(array(
+            'name' => sprintf( __('Footer %s', 'onepress'), $i ),
+            'id' => 'footer-'.$i,
+            'description' => '',
+            'before_widget' => '<aside id="%1$s" class="footer-widget widget %2$s">',
+            'after_widget' => '</aside>',
+            'before_title' => '<h2 class="widget-title">',
+            'after_title' => '</h2>',
+        ));
+    }
 
 }
 add_action( 'widgets_init', 'onepress_widgets_init' );
@@ -171,11 +183,17 @@ function onepress_scripts() {
     $theme = wp_get_theme( 'onepress' );
     $version = $theme->get( 'Version' );
 
-	wp_enqueue_style( 'onepress-fonts', onepress_fonts_url(), array(), $version );
+    if ( ! get_theme_mod( 'onepress_disable_g_font' ) ) {
+        wp_enqueue_style('onepress-fonts', onepress_fonts_url(), array(), $version);
+    }
+
 	wp_enqueue_style( 'onepress-animate', get_template_directory_uri() .'/assets/css/animate.min.css', array(), $version );
 	wp_enqueue_style( 'onepress-fa', get_template_directory_uri() .'/assets/css/font-awesome.min.css', array(), '4.7.0' );
 	wp_enqueue_style( 'onepress-bootstrap', get_template_directory_uri() .'/assets/css/bootstrap.min.css', false, $version );
 	wp_enqueue_style( 'onepress-style', get_template_directory_uri().'/style.css' );
+
+    $custom_css = onepress_custom_inline_style();
+    wp_add_inline_style( 'onepress-style', $custom_css );
 
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array( 'jquery' ), $version, true );
@@ -190,9 +208,12 @@ function onepress_scripts() {
         'hero_speed'   					 => intval( get_theme_mod( 'onepress_hero_option_speed', 5000 ) ),
         'hero_fade'   					 => intval( get_theme_mod( 'onepress_hero_slider_fade', 750 ) ),
         'hero_duration'   				 => intval( get_theme_mod( 'onepress_hero_slider_duration', 5000 ) ),
+        'hero_disable_preload'   		 => get_theme_mod( 'onepress_hero_disable_preload', false ) ? true : false ,
         'is_home'   					 => '',
         'gallery_enable'   				 => '',
+        'is_rtl' => is_rtl()
     );
+
     // Load gallery scripts
     $galley_disable  = get_theme_mod( 'onepress_gallery_disable' ) ==  1 ? true : false;
     $is_shop = false;
@@ -379,6 +400,13 @@ if ( ! function_exists( 'onepress_register_required_plugins' ) ) :
 
 endif;
 add_action( 'tgmpa_register', 'onepress_register_required_plugins' );
+
+require get_template_directory() . '/inc/sanitize.php';
+
+/**
+ * Custom Metabox  for this theme.
+ */
+require get_template_directory() . '/inc/metabox.php';
 
 /**
  * Custom template tags for this theme.

@@ -14,7 +14,7 @@ if ( ! empty( $page_ids ) ) {
     ?>
     <?php if (!$disable) : ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ($id != '') echo $id; ?>" <?php do_action('onepress_section_atts', 'services'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>"><?php } ?>
+        <section id="<?php if ($id != '') { echo esc_attr( $id ); } ?>" <?php do_action('onepress_section_atts', 'services'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>"><?php } ?>
             <?php do_action('onepress_section_before_inner', 'services'); ?>
             <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'services' ) ); ?>">
                 <?php if ( $title ||  $subtitle || $desc ){ ?>
@@ -29,7 +29,6 @@ if ( ! empty( $page_ids ) ) {
                 <div class="row">
                     <?php
                     if ( ! empty( $page_ids ) ) {
-                        global $post;
 
                         $columns = 2;
                         switch ( $layout ) {
@@ -47,11 +46,12 @@ if ( ! empty( $page_ids ) ) {
                                 break;
                         }
                         $j = 0;
+
+                        $size = sanitize_text_field( get_theme_mod( 'onepress_service_icon_size', '5x' ) );
                         foreach ($page_ids as $settings) {
                             $post_id = $settings['content_page'];
                             $post_id = apply_filters( 'wpml_object_id', $post_id, 'page', true );
                             $post = get_post($post_id);
-                            setup_postdata($post);
                             $settings['icon'] = trim($settings['icon']);
 
                             $media = '';
@@ -67,7 +67,7 @@ if ( ! empty( $page_ids ) ) {
                                 if ( $settings['icon'] != '' && strpos($settings['icon'], 'fa') !== 0) {
                                     $settings['icon'] = 'fa-' . $settings['icon'];
                                 }
-                                $media = '<div class="service-image"><i class="fa '.esc_attr( $settings['icon'] ).' fa-5x"></i></div>';
+                                $media = '<div class="service-image"><i class="fa '.esc_attr( $settings['icon'] ).' fa-'.esc_attr( $size ).'"></i></div>';
                             }
                             if ( $layout == 12 ) {
                                 $classes = 'col-sm-12 col-lg-'.$layout;
@@ -88,14 +88,14 @@ if ( ! empty( $page_ids ) ) {
                                     <?php
                                     if ( ! empty( $settings['enable_link'] ) ) {
                                         ?>
-                                        <a class="service-link" href="<?php the_permalink(); ?>"><span class="screen-reader-text"><?php the_title(); ?></span></a>
+                                        <a class="service-link" href="<?php esc_url( get_permalink( $post ) ); ?>"><span class="screen-reader-text"><?php echo get_the_title( $post ); ?></span></a>
                                         <?php
                                     }
                                     ?>
-                                    <?php if ( has_post_thumbnail() ) { ?>
+                                    <?php if ( has_post_thumbnail( $post ) ) { ?>
                                         <div class="service-thumbnail ">
                                             <?php
-                                            the_post_thumbnail('onepress-medium');
+                                            echo get_the_post_thumbnail( $post, 'onepress-medium' );
                                             ?>
                                         </div>
                                     <?php } ?>
@@ -103,8 +103,10 @@ if ( ! empty( $page_ids ) ) {
                                         echo $media;
                                     } ?>
                                     <div class="service-content">
-                                        <h4 class="service-title"><?php the_title(); ?></h4>
-                                        <?php the_excerpt(); ?>
+                                        <h4 class="service-title"><?php echo get_the_title( $post ); ?></h4>
+                                        <?php
+                                        echo apply_filters( 'the_excerpt', get_the_excerpt( $post ) );
+                                        ?>
                                     </div>
                                 </div>
                             </div>

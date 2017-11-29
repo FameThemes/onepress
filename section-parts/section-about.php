@@ -3,7 +3,7 @@ $id       = get_theme_mod( 'onepress_about_id', esc_html__('about', 'onepress') 
 $disable  = get_theme_mod( 'onepress_about_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_about_title', esc_html__('About Us', 'onepress' ));
 $subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__('Section subtitle', 'onepress' ));
-$desc     = get_theme_mod( 'onepress_about_desc');
+$desc     = wp_kses_post( get_theme_mod( 'onepress_about_desc') );
 if ( onepress_is_selective_refresh() ) {
     $disable = false;
 }
@@ -15,7 +15,7 @@ if ( ! empty( $page_ids ) ) {
     <?php if (!$disable) { ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
         <section id="<?php if ($id != '') {
-            echo $id;
+            echo esc_attr( $id );
         }; ?>" <?php do_action('onepress_section_atts', 'about'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-about section-padding onepage-section', 'about')); ?>">
         <?php } ?>
 
@@ -29,8 +29,8 @@ if ( ! empty( $page_ids ) ) {
                     <?php if ($title != '') {
                         echo '<h2 class="section-title">' . esc_html($title) . '</h2>';
                     } ?>
-                    <?php if ($desc != '') {
-                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
+                    <?php if ( $desc != '' ) {
+                        echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', $desc ) . '</div>';
                     } ?>
                 </div>
                 <?php } ?>
@@ -55,13 +55,20 @@ if ( ! empty( $page_ids ) ) {
                                     $num_col = 1;
                             }
                         }
+
+                        // Layout columns
+                        $_layout = absint( get_theme_mod( 'onepress_about_layout', 3 ) );
+                        if ( $n > $_layout ) {
+                            $num_col = $_layout;
+                            $col = round( 12/ $_layout );
+                        }
+
+
                         $j = 0;
-                        global $post;
                         foreach ( $page_ids as $post_id => $settings ) {
                             $post_id = $settings['content_page'];
                             $post_id = apply_filters( 'wpml_object_id', $post_id, 'page', true );
                             $post = get_post( $post_id );
-                            setup_postdata( $post );
                             $class = 'col-lg-' . $col;
                             if ($n == 1) {
                                 $class .= ' col-sm-12 ';
@@ -76,12 +83,12 @@ if ( ! empty( $page_ids ) ) {
                             }
                             ?>
                             <div class="<?php echo esc_attr($class); ?> wow slideInUp">
-                                <?php if (has_post_thumbnail()) { ?>
+                                <?php if ( has_post_thumbnail( $post ) ) { ?>
                                     <div class="about-image"><?php
                                         if ($settings['enable_link']) {
-                                            echo '<a href="' . get_permalink($post) . '">';
+                                            echo '<a href="' . esc_url( get_permalink( $post )  ). '">';
                                         }
-                                        the_post_thumbnail('onepress-medium');
+                                        echo get_the_post_thumbnail( $post, 'onepress-medium' );
                                         if ($settings['enable_link']) {
                                             echo '</a>';
                                         }
@@ -89,13 +96,10 @@ if ( ! empty( $page_ids ) ) {
                                 <?php } ?>
                                 <?php if (!$settings['hide_title']) { ?>
                                     <h3><?php
-
                                         if ($settings['enable_link']) {
-                                            echo '<a href="' . get_permalink($post) . '">';
+                                            echo '<a href="' .esc_url( get_permalink($post) ). '">';
                                         }
-
-                                        the_title();
-
+                                        echo get_the_title( $post );
                                         if ($settings['enable_link']) {
                                             echo '</a>';
                                         }
@@ -104,9 +108,12 @@ if ( ! empty( $page_ids ) ) {
                                 <?php } ?>
                                 <?php
                                 if ( $content_source == 'excerpt' ) {
-                                    the_excerpt();
+                                    $excerpt = get_the_excerpt( $post );
+                                    echo apply_filters( 'the_excerpt', $excerpt  );
                                 } else {
-                                    the_content();
+                                    $content = apply_filters( 'the_content', $post->post_content );
+                                    $content = str_replace( ']]>', ']]&gt;', $content );
+                                    echo $content;
                                 }
 
                                 ?>
