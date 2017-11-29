@@ -287,6 +287,10 @@ function onepress_customizer_partials( $wp_customize ) {
     $css_settings = array(
         'onepress_logo_height',
 
+        'onepress_transparent_site_title_c',
+        'onepress_transparent_tag_title_c',
+        'onepress_logo_height',
+
         'onepress_hero_overlay_color',
         //'onepress_hero_overlay_opacity',
         'onepress_primary_color',

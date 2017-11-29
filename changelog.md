@@ -11,6 +11,7 @@ CHANGELOG
 * NEW: About layout columns.
 * NEW: Service icon size settings.
 * NEW: Support retina & transparent logo.
+* NEW: Support transparent site title and tagline text colors.
 * NEW: Category selection in News section.
 * NEW: Page settings.
 * NEW: Footer social text color settings.

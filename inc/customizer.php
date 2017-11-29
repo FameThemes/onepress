@@ -514,6 +514,37 @@ function onepress_customize_register( $wp_customize ) {
             )
         );
 
+        $wp_customize->add_setting( 'onepress_transparent_site_title_c',
+            array(
+                'sanitize_callback' => 'sanitize_hex_color',
+                'default' => ''
+            ) );
+        $wp_customize->add_control( new WP_Customize_Color_Control(
+            $wp_customize,
+            'onepress_transparent_site_title_c',
+            array(
+                'label'       => esc_html__( 'Transparent Site Title Color', 'onepress' ),
+                'section'     => 'onepress_header_settings',
+                'description' => '',
+            )
+        ));
+
+        $wp_customize->add_setting( 'onepress_transparent_tag_title_c',
+            array(
+                'sanitize_callback' => 'sanitize_hex_color',
+                'default' => ''
+            )
+        );
+        $wp_customize->add_control( new WP_Customize_Color_Control(
+            $wp_customize,
+            'onepress_transparent_tag_title_c',
+            array(
+                'label'       => esc_html__( 'Transparent Tagline Color', 'onepress' ),
+                'section'     => 'onepress_header_settings',
+                'description' => '',
+            )
+        ));
+
 
     /* Navigation Settings
     ----------------------------------------------------------------------*/
