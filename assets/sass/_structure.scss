@@ -519,6 +519,11 @@
     border-top: none;
 }
 
+.blog .site-content,
+.single-post .site-content {
+    margin-top: 0;
+}
+
 .page-header {
     padding: 30px 0px;
     border-top: 1px solid $border;

@@ -258,7 +258,6 @@ if ( ! function_exists('onepress_header' ) ) {
         echo '<div id="header-section" class="' . esc_attr( join( ' ', $classes ) ) . '">';
 
             do_action('onepress_header_section_start');
-
             if ($pos == 'below_hero' ) {
                 if ( is_page_template('template-frontpage.php') ) {
                     do_action('onepress_header_end');
@@ -1457,7 +1456,6 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
                     ?>
                 </div>
             </div>
-            <?php onepress_breadcrumb(); ?>
         <?php } ?>
         <?php
     }

@@ -15,16 +15,16 @@
 get_header();
 
 $layout = onepress_get_layout();
-?>
 
+/**
+ * @since 2.0.0
+ * @see onepress_display_page_title
+ */
+do_action( 'onepress_page_before_content' );
+
+?>
 	<div id="content" class="site-content">
-       <?php
-        /**
-         * @since 2.0.0
-         * @see onepress_display_page_title
-         */
-        do_action( 'onepress_page_before_content' );
-        ?>
+        <?php onepress_breadcrumb(); ?>
 		<div id="content-inside" class="container <?php echo esc_attr( $layout ); ?>">
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">
