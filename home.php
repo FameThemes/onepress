@@ -17,9 +17,6 @@ $layout = onepress_get_layout();
 ?>
 
 	<div id="content" class="site-content">
-
-		<?php onepress_breadcrumb(); ?>
-
         <?php
         /**
          * @since 2.0.0

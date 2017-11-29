@@ -1238,10 +1238,11 @@ Footer widgets
 .page-header.page--cover .entry-tagline {
   color: #ffffff;
   font-style: italic;
+  font-weight: 300;
 }
 @media screen and (min-width: 1140px) {
   .page-header.page--cover .entry-tagline {
-    font-size: 22px;
+    font-size: 20px;
   }
 }
 @media screen and (max-width: 940px) {
@@ -1251,7 +1252,7 @@ Footer widgets
 }
 @media screen and (max-width: 720px) {
   .page-header.page--cover .entry-tagline {
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
