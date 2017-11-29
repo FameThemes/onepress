@@ -401,6 +401,8 @@ if ( ! function_exists( 'onepress_register_required_plugins' ) ) :
 endif;
 add_action( 'tgmpa_register', 'onepress_register_required_plugins' );
 
+require get_template_directory() . '/inc/sanitize.php';
+
 /**
  * Custom Metabox  for this theme.
  */

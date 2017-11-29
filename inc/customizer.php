@@ -540,6 +540,82 @@ function onepress_customize_register( $wp_customize ) {
         )
     );
 
+    /* Page Settings
+   ----------------------------------------------------------------------*/
+    $wp_customize->add_section( 'onepress_page' ,
+        array(
+            'priority'    => null,
+            'title'       => esc_html__( 'Page Cover', 'onepress' ),
+            'description' => '',
+            'panel'       => 'onepress_options',
+        )
+    );
+    $wp_customize->add_setting( 'onepress_page_cover_pd_top',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+            'transport' => 'postMessage'
+        )
+    );
+    $wp_customize->add_control( 'onepress_page_cover_pd_top',
+        array(
+            'label'       => esc_html__('Padding Top', 'onepress'),
+            'description'       => esc_html__('The page cover padding top in percent (%).', 'onepress'),
+            'section'     => 'onepress_page',
+        )
+    );
+
+    $wp_customize->add_setting( 'onepress_page_cover_pd_bottom',
+        array(
+            'sanitize_callback' => 'sanitize_text_field',
+            'default'           => '',
+            'transport' => 'postMessage'
+        )
+    );
+    $wp_customize->add_control( 'onepress_page_cover_pd_bottom',
+        array(
+            'label'       => esc_html__('Padding Bottom', 'onepress'),
+            'description'       => esc_html__('The page cover padding bottom in percent (%).', 'onepress'),
+            'section'     => 'onepress_page',
+        )
+    );
+
+    $wp_customize->add_setting( 'onepress_page_cover_color',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_color_alpha',
+            'default'           => null,
+            'transport' => 'postMessage'
+        )
+    );
+    $wp_customize->add_control( new OnePress_Alpha_Color_Control(
+            $wp_customize,
+            'onepress_page_cover_color',
+            array(
+                'label' 		=> esc_html__('Color', 'onepress'),
+                'section' 		=> 'onepress_page',
+            )
+        )
+    );
+
+    // Overlay color
+    $wp_customize->add_setting( 'onepress_page_cover_overlay',
+        array(
+            'sanitize_callback' => 'onepress_sanitize_color_alpha',
+            'default'           => 'rgba(0,0,0,.3)',
+            'transport' => 'postMessage'
+        )
+    );
+    $wp_customize->add_control( new OnePress_Alpha_Color_Control(
+            $wp_customize,
+            'onepress_page_cover_overlay',
+            array(
+                'label' 		=> esc_html__('Background Overlay Color', 'onepress'),
+                'section' 		=> 'onepress_page',
+            )
+        )
+    );
+
+
 
 
     /* Single Settings
@@ -3486,90 +3562,6 @@ add_action( 'customize_register', 'onepress_customize_register' );
 require get_template_directory() . '/inc/customizer-selective-refresh.php';
 
 
-/*------------------------------------------------------------------------*/
-/*  OnePress Sanitize Functions.
-/*------------------------------------------------------------------------*/
-
-function onepress_sanitize_file_url( $file_url ) {
-	$output = '';
-	$filetype = wp_check_filetype( $file_url );
-	if ( $filetype["ext"] ) {
-		$output = esc_url( $file_url );
-	}
-	return $output;
-}
-
-
-/**
- * Conditional to show more hero settings
- *
- * @param $control
- * @return bool
- */
-function onepress_hero_fullscreen_callback ( $control ) {
-	if ( $control->manager->get_setting('onepress_hero_fullscreen')->value() == '' ) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function onepress_sanitize_select( $input, $setting ){
-
-    //input must be a slug: lowercase alphanumeric characters, dashes and underscores are allowed only
-    $input = sanitize_key($input);
-
-    //get the list of possible select options
-    $choices = $setting->manager->get_control( $setting->id )->choices;
-
-    //return input if valid or return default option
-    return ( array_key_exists( $input, $choices ) ? $input : $setting->default );
-
-}
-
-
-function onepress_sanitize_number( $input ) {
-    return balanceTags( $input );
-}
-
-function onepress_sanitize_hex_color( $color ) {
-	if ( $color === '' ) {
-		return '';
-	}
-	if ( preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', $color ) ) {
-		return $color;
-	}
-	return null;
-}
-
-function onepress_sanitize_checkbox( $input ) {
-    if ( $input == 1 ) {
-		return 1;
-    } else {
-		return 0;
-    }
-}
-
-function onepress_sanitize_text( $string ) {
-	return wp_kses_post( balanceTags( $string ) );
-}
-
-function onepress_sanitize_html_input( $string ) {
-	return wp_kses_allowed_html( $string );
-}
-
-function onepress_showon_frontpage() {
-	return is_page_template( 'template-frontpage.php' );
-}
-
-function onepress_gallery_source_validate( $validity, $value ){
-	if ( ! class_exists( 'OnePress_Plus' ) ) {
-		if ( $value != 'page' ) {
-			$validity->add('notice', sprintf( esc_html__('Upgrade to %1s to unlock this feature.', 'onepress' ), '<a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#gallery">OnePress Plus</a>' ) );
-		}
-	}
-	return $validity;
-}
 /**
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
