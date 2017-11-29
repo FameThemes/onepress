@@ -575,6 +575,12 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 <?php }
             } // End $primary
 
+            $menu_padding = get_theme_mod( 'onepress_menu_item_padding' );
+            if ( $menu_padding ) {
+                $menu_padding = absint( $menu_padding );
+                echo ".onepress-menu a{ padding-left: {$menu_padding}px; padding-right: {$menu_padding}px;  }";
+            }
+
             /**
              * Header background
              */

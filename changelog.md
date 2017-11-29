@@ -17,6 +17,7 @@ CHANGELOG
 * NEW: Footer copyright text color settings.
 * NEW: Header Layout: Full Width or Contained.
 * NEW: Menu position: above or below the Hero section.
+* NEW: Menu item padding.
 * NEW: Footer copyright link colors.
 * NEW: Hero rotating text and background color for layout 1.
 * IMPROVED: Latest bootstrap - v4.0.0-alpha.6.
