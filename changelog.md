@@ -23,6 +23,7 @@ CHANGELOG
 * NEW: Hero rotating text and background color for layout 1.
 * NEW: Add an option to disable default google theme in theme.
 * NEW: Add page header cover.
+* IMPROVED: Testimonials default color.
 * IMPROVED: Latest bootstrap - v4.0.0-alpha.6.
 * IMPROVED: Carousel and RTL.
 * IMPROVED: Change Actions Required text to Recommended Actions.
