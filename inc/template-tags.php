@@ -1336,6 +1336,11 @@ add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
  * Breadcrumb NavXT Compatibility.
  */
 function onepress_breadcrumb() {
+    if ( is_page() ) {
+        if ( get_post_meta( get_the_ID(), '_hide_breadcrumb', true ) ) {
+            return ;
+        }
+    }
 	if ( function_exists('bcn_display') ) {
         ?>
         <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
