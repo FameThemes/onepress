@@ -7,6 +7,7 @@ CHANGELOG
 * FIXED: Permalink issue for service items.
 * FIXED: Update header transparent color.
 * FIXED: Site identity colors.
+* FIXED: Page title when header is transparent issue.
 
 ## 2.0.0
 * NEW: Non-minified js files.
