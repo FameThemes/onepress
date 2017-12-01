@@ -522,7 +522,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              *  Custom hero section css
              */
-            $hero_bg_color = sanitize_hex_color( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ) );
+            $hero_bg_color = onepress_sanitize_color_alpha( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ) );
 
             // Deprecate form v 1.1.5
             $hero_bg_color = onepress_hex_to_rgba( $hero_bg_color, floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) ) );
@@ -622,7 +622,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             }
 
 
-            $cover_color = onepress_sanitize_color_alpha( get_theme_mod( 'onepress_page_cover_color' ) );
+            $cover_color = sanitize_hex_color( get_theme_mod( 'onepress_page_cover_color' ) );
             if ( $cover_color ) {
                 echo " .page-header.page--cover .entry-title { color: {$cover_color}; }";
             }
@@ -646,7 +646,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $header_bg_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_header_bg_color' ) );
             if ( $header_bg_color ) {
                 ?>
-                .site-header, .is-transparent .site-header {
+                .site-header, .is-transparent .site-header.header-fixed {
                     background: #<?php echo $header_bg_color; ?>;
                     border-bottom: 0px none;
                 }
@@ -728,6 +728,10 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 					color: #<?php echo $onepress_logo_text_color; ?>;
 				}
             <?php
+            }
+            $onepress_site_tagline_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_tagline_text_color' ) );
+            if ( $onepress_site_tagline_color ) {
+                echo ".site-branding .site-description { color: #{$onepress_site_tagline_color};  } ";
             }
 
 
@@ -1332,6 +1336,11 @@ add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
  * Breadcrumb NavXT Compatibility.
  */
 function onepress_breadcrumb() {
+    if ( is_page() ) {
+        if ( get_post_meta( get_the_ID(), '_hide_breadcrumb', true ) ) {
+            return ;
+        }
+    }
 	if ( function_exists('bcn_display') ) {
         ?>
         <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
@@ -1441,6 +1450,11 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
             $classes[] = 'page--cover';
             $img = get_the_post_thumbnail_url($page_id, 'full' );
         }
+
+        if ( onepress_is_transparent_header() ){
+            $classes[] = 'is-t-above';
+        }
+
         ?>
         <?php if ( ! $hide_page_title ){ ?>
             <div class="<?php echo esc_attr( join(' ', $classes ) ); ?>"<?php echo ( $img ) ? ' style="background-image: url(\''.esc_url( $img ).'\')" ': ''; ?>>
@@ -1449,9 +1463,12 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
                     echo '<h1 class="entry-title">';
                     echo get_the_title( $page_id );
                     echo '</h1>';
-                    $excerpt = get_the_excerpt( $page_id );
-                    if ( $excerpt ) {
-                        echo '<div class="entry-tagline">'.$excerpt.'</div>';
+                    $post = get_post( $page_id );
+                    if ( $post->post_excerpt ) {
+                        $excerpt = get_the_excerpt( $page_id );
+                        if ( $excerpt ) {
+                            echo '<div class="entry-tagline">'.$excerpt.'</div>';
+                        }
                     }
                     ?>
                 </div>

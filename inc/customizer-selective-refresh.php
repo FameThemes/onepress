@@ -286,6 +286,8 @@ function onepress_customizer_partials( $wp_customize ) {
      */
     $css_settings = array(
         'onepress_logo_height',
+        'onepress_tagline_text_color',
+        'onepress_logo_text_color',
 
         'onepress_transparent_site_title_c',
         'onepress_transparent_tag_title_c',
@@ -308,9 +310,8 @@ function onepress_customizer_partials( $wp_customize ) {
         'onepress_menu_hover_bg_color',
         'onepress_menu_hover_bg_color',
         'onepress_menu_toggle_button_color',
-        'onepress_logo_text_color',
-        'onepress_footer_info_bg',
 
+        'onepress_footer_info_bg',
         'onepress_footer_bg',
         'onepress_footer_top_color',
 

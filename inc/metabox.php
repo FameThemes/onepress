@@ -93,6 +93,7 @@ class OnePress_MetaBox {
             'hide_page_title' => '',
             'hide_header' => '',
             'hide_footer' => '',
+            'hide_breadcrumb' => '',
         ) );
 
         foreach( $settings as $key => $value ) {
@@ -117,6 +118,7 @@ class OnePress_MetaBox {
             'hide_page_title' => '',
             'hide_header' => '',
             'hide_footer' => '',
+            'hide_breadcrumb' => '',
         );
 
         foreach( $values as $key => $value ) {
@@ -136,6 +138,11 @@ class OnePress_MetaBox {
         <p>
             <label>
                 <input type="checkbox" name="onepress_page_settings[hide_footer]" <?php checked( $values['hide_footer'], 1 ); ?> value="1"> <?php _e( 'Hide footer on this page.', 'onepress' ); ?>
+            </label>
+        </p>
+        <p>
+            <label>
+                <input type="checkbox" name="onepress_page_settings[hide_breadcrumb]" <?php checked( $values['hide_breadcrumb'], 1 ); ?> value="1"> <?php _e( 'Hide breadcrumb.', 'onepress' ); ?>
             </label>
         </p>
         <?php

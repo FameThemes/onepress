@@ -378,6 +378,20 @@ function onepress_customize_register( $wp_customize ) {
 			)
 		));
 
+        $wp_customize->add_setting( 'onepress_tagline_text_color',
+            array(
+                'sanitize_callback' => 'sanitize_hex_color_no_hash',
+                'sanitize_js_callback' => 'maybe_hash_hex_color',
+                'default' => ''
+            ) );
+        $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_tagline_text_color',
+            array(
+                'label'       => esc_html__( 'Site Tagline Color', 'onepress' ),
+                'section'     => 'onepress_header_settings',
+                'description' => esc_html__( 'Only set if display site tagline.', 'onepress' ),
+            )
+        ));
+
 		// Header Menu Color
 		$wp_customize->add_setting( 'onepress_menu_color',
 			array(
@@ -523,7 +537,7 @@ function onepress_customize_register( $wp_customize ) {
             $wp_customize,
             'onepress_transparent_tag_title_c',
             array(
-                'label'       => esc_html__( 'Transparent Tagline Color', 'onepress' ),
+                'label'       => esc_html__( 'Transparent Site Tagline Color', 'onepress' ),
                 'section'     => 'onepress_header_settings',
                 'description' => '',
             )
@@ -614,12 +628,12 @@ function onepress_customize_register( $wp_customize ) {
 
     $wp_customize->add_setting( 'onepress_page_cover_color',
         array(
-            'sanitize_callback' => 'onepress_sanitize_color_alpha',
+            'sanitize_callback' => 'sanitize_hex_color',
             'default'           => null,
             'transport' => 'postMessage'
         )
     );
-    $wp_customize->add_control( new OnePress_Alpha_Color_Control(
+    $wp_customize->add_control( new WP_Customize_Color_Control(
             $wp_customize,
             'onepress_page_cover_color',
             array(
@@ -633,7 +647,7 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'onepress_page_cover_overlay',
         array(
             'sanitize_callback' => 'onepress_sanitize_color_alpha',
-            'default'           => 'rgba(0,0,0,.3)',
+            //'default'           => 'rgba(0,0,0,.3)',
             'transport' => 'postMessage'
         )
     );
