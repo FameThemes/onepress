@@ -52,6 +52,7 @@ if ( ! empty( $page_ids ) ) {
                             $post_id = $settings['content_page'];
                             $post_id = apply_filters( 'wpml_object_id', $post_id, 'page', true );
                             $post = get_post($post_id);
+                            setup_postdata( $post );
                             $settings['icon'] = trim($settings['icon']);
 
                             $media = '';
