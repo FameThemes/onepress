@@ -1450,6 +1450,11 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
             $classes[] = 'page--cover';
             $img = get_the_post_thumbnail_url($page_id, 'full' );
         }
+
+        if ( onepress_is_transparent_header() ){
+            $classes[] = 'is-t-above';
+        }
+
         ?>
         <?php if ( ! $hide_page_title ){ ?>
             <div class="<?php echo esc_attr( join(' ', $classes ) ); ?>"<?php echo ( $img ) ? ' style="background-image: url(\''.esc_url( $img ).'\')" ': ''; ?>>

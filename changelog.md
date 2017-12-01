@@ -2,6 +2,7 @@
 CHANGELOG
 ====================================================================
 ## 2.0.1
+* NEW: Add an option to hide breadcrumb on page.
 * FIXED: Hero background overlay.
 * FIXED: Permalink issue for service items.
 * FIXED: Update header transparent color.
