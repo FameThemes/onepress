@@ -88,7 +88,7 @@ if ( ! empty( $page_ids ) ) {
                                     <?php
                                     if ( ! empty( $settings['enable_link'] ) ) {
                                         ?>
-                                        <a class="service-link" href="<?php esc_url( get_permalink( $post ) ); ?>"><span class="screen-reader-text"><?php echo get_the_title( $post ); ?></span></a>
+                                        <a class="service-link" href="<?php the_permalink(); ?>"><span class="screen-reader-text"><?php echo get_the_title( $post ); ?></span></a>
                                         <?php
                                     }
                                     ?>
