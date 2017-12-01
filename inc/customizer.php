@@ -647,7 +647,7 @@ function onepress_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'onepress_page_cover_overlay',
         array(
             'sanitize_callback' => 'onepress_sanitize_color_alpha',
-            'default'           => 'rgba(0,0,0,.3)',
+            //'default'           => 'rgba(0,0,0,.3)',
             'transport' => 'postMessage'
         )
     );

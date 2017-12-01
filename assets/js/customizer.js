@@ -178,6 +178,18 @@
 					$transparency.css( 'background-color', ui.color.toString( 'no-alpha' ) );
 					$input.trigger( 'color_change' );
 				},
+                clear: function(){
+                    var key = $input.attr( 'data-customize-setting-link' ) || '';
+                    if( key && key !== '' ) {
+                        if (typeof wp.customize != 'undefined') {
+                            wp.customize(key, function (obj) {
+                                obj.set('');
+                            });
+                        }
+                    }
+                    $input.val('');
+                    $input.trigger( 'color_change' );
+                },
 				palettes: palette // Use the passed in palette.
 			};
 
