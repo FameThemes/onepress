@@ -522,7 +522,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              *  Custom hero section css
              */
-            $hero_bg_color = onepress_sanitize_color_alpha( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ), .3 );
+            $hero_bg_color = onepress_hex_to_rgba( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ), .3 );
 
             // Deprecate form v 1.1.5
             $hero_bg_color = onepress_hex_to_rgba( $hero_bg_color, floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) ) );
