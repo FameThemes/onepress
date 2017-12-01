@@ -269,6 +269,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
     public $defined_values = null;
     public $id_key = null;
     public $limited_msg = null;
+    public $add_text = null;
 
 
     public function __construct( $manager, $id, $args = array() )
@@ -417,7 +418,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
             <ul class="list-repeatable"></ul>
         </div>
         <div class="repeatable-actions">
-            <span class="button-secondary add-new-repeat-item"><?php _e( 'Add an item', 'onepress' ); ?></span>
+            <span class="button-secondary add-new-repeat-item"><?php echo ( $this->add_text ) ? esc_html( $this->add_text ) : __( 'Add an item', 'onepress' ); ?></span>
         </div>
         <?php
     }
@@ -447,13 +448,13 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
                                 <# if ( field.type ){ #>
 
                                     <#
-                                    if ( field.required  && field.required.length >= 3 ) {
+                                    if ( ! _.isEmpty( field.required  ) ) {
                                         #>
-                                        <div class="conditionize item item-{{ field.type }} item-{{ field.id }}" data-cond-option="{{ field.required[0] }}" data-cond-operator="{{ field.required[1] }}" data-cond-value="{{ field.required[2] }}" >
+                                        <div data-field-id="{{ field.id }}" class="field--item conditionize item item-{{ field.type }} item-{{ field.id }}" data-cond="{{ JSON.stringify( field.required ) }}" >
                                         <#
                                     } else {
                                         #>
-                                        <div class="item item-{{ field.type }} item-{{ field.id }}" >
+                                        <div data-field-id="{{ field.id }}"  class="field--item item item-{{ field.type }} item-{{ field.id }}" >
                                         <#
                                     }
                                     #>

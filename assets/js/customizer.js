@@ -14,6 +14,107 @@
 
 } )( wp.customize );
 
+
+/*
+  jQuery deparam is an extraction of the deparam method from Ben Alman's jQuery BBQ
+  http://benalman.com/projects/jquery-bbq-plugin/
+*/
+(function ($) {
+    $.deparam = function (params, coerce) {
+        var obj = {},
+            coerce_types = { 'true': !0, 'false': !1, 'null': null };
+
+        // Iterate over all name=value pairs.
+        $.each(params.replace(/\+/g, ' ').split('&'), function (j,v) {
+            var param = v.split('='),
+                key = decodeURIComponent(param[0]),
+                val,
+                cur = obj,
+                i = 0,
+
+                // If key is more complex than 'foo', like 'a[]' or 'a[b][c]', split it
+                // into its component parts.
+                keys = key.split(']['),
+                keys_last = keys.length - 1;
+
+            // If the first keys part contains [ and the last ends with ], then []
+            // are correctly balanced.
+            if (/\[/.test(keys[0]) && /\]$/.test(keys[keys_last])) {
+                // Remove the trailing ] from the last keys part.
+                keys[keys_last] = keys[keys_last].replace(/\]$/, '');
+
+                // Split first keys part into two parts on the [ and add them back onto
+                // the beginning of the keys array.
+                keys = keys.shift().split('[').concat(keys);
+
+                keys_last = keys.length - 1;
+            } else {
+                // Basic 'foo' style key.
+                keys_last = 0;
+            }
+
+            // Are we dealing with a name=value pair, or just a name?
+            if (param.length === 2) {
+                val = decodeURIComponent(param[1]);
+
+                // Coerce values.
+                if (coerce) {
+                    val = val && !isNaN(val)              ? +val              // number
+                        : val === 'undefined'             ? undefined         // undefined
+                            : coerce_types[val] !== undefined ? coerce_types[val] // true, false, null
+                                : val;                                                // string
+                }
+
+                if ( keys_last ) {
+                    // Complex key, build deep object structure based on a few rules:
+                    // * The 'cur' pointer starts at the object top-level.
+                    // * [] = array push (n is set to array length), [n] = array if n is
+                    //   numeric, otherwise object.
+                    // * If at the last keys part, set the value.
+                    // * For each keys part, if the current level is undefined create an
+                    //   object or array based on the type of the next keys part.
+                    // * Move the 'cur' pointer to the next level.
+                    // * Rinse & repeat.
+                    for (; i <= keys_last; i++) {
+                        key = keys[i] === '' ? cur.length : keys[i];
+                        cur = cur[key] = i < keys_last
+                            ? cur[key] || (keys[i+1] && isNaN(keys[i+1]) ? {} : [])
+                            : val;
+                    }
+
+                } else {
+                    // Simple key, even simpler rules, since only scalars and shallow
+                    // arrays are allowed.
+
+                    if ($.isArray(obj[key])) {
+                        // val is already an array, so push on the next value.
+                        obj[key].push( val );
+
+                    } else if (obj[key] !== undefined) {
+                        // val isn't an array, but since a second value has been specified,
+                        // convert val into an array.
+                        obj[key] = [obj[key], val];
+
+                    } else {
+                        // val is a scalar.
+                        obj[key] = val;
+                    }
+                }
+
+            } else if (key) {
+                // No value was defined, so set something meaningful.
+                obj[key] = coerce
+                    ? undefined
+                    : '';
+            }
+        });
+
+        return obj;
+    };
+})(jQuery);
+
+
+
 // COLOR ALPHA -----------------------------
 
 /**
@@ -358,6 +459,97 @@
 			}
 		},
 
+        compare: function( value1, cond, value2 ){
+            var equal = false;
+            var _v;
+            switch ( cond ) {
+                case '===':
+                    equal = ( value1 === value2 ) ? true : false;
+                    break;
+                case '>':
+                    equal = ( value1 > value2 ) ? true : false;
+                    break;
+                case '<':
+                    equal = ( value1 < value2 ) ? true : false;
+                    break;
+                case '!=':
+                    equal = ( value1 != value2 ) ? true : false;
+                    break;
+                case 'empty':
+                    _v =  _.clone( value1 );
+                    if ( _.isObject( _v ) || _.isArray( _v ) ) {
+                        _.each( _v, function ( v, i ) {
+                            if ( _.isEmpty( v ) ) {
+                                delete _v[ i ];
+                            }
+                        } );
+
+                        equal = _.isEmpty( _v ) ? true: false;
+                    } else {
+                        equal = _.isNull( _v ) || _v == '' ? true : false;
+                    }
+
+
+                    break;
+                case 'not_empty':
+                    _v =  _.clone( value1 );
+                    if ( _.isObject( _v ) || _.isArray( _v ) ) {
+                        _.each( _v, function ( v, i ) {
+                            if ( _.isEmpty( v ) ) {
+                                delete _v[ i ];
+                            }
+                        } )
+                    }
+                    equal = _.isEmpty( _v ) ? false : true;
+                    break;
+                default:
+                    equal = ( value1 == value2 ) ? true : false;
+
+            }
+            return equal;
+        },
+        multiple_compare: function( list, values ){
+            var control = this;
+            var check = true;
+            try {
+                var test =  list[0];
+                check = true;
+                if ( _.isString( test ) ) {
+                    check = false;
+                    var cond = list[1];
+                    var cond_val = list[2];
+                    var value;
+                    if ( ! _.isUndefined( values[ test ] ) ) {
+                        value = values[ test ];
+                        check = control.compare( value, cond, cond_val );
+                    }
+
+                } else if ( _.isArray( test ) ) {
+                    check  = true;
+                    _.each( list, function( req ) {
+                        var cond_key = req[0];
+                        var cond_cond = req[1];
+                        var cond_val = req[2];
+                        var t_val = values[ cond_key ];
+
+                        if ( _.isUndefined( t_val ) ) {
+                            t_val = '';
+                        }
+
+                        if ( ! control.compare( t_val, cond_cond, cond_val ) ) {
+                            check = false;
+                        }
+                    } );
+
+                }
+            } catch  ( e ) {
+                check = false;
+            }
+
+
+            return check;
+        },
+
 		conditionize: function( $context ){
 			var control = this;
 
@@ -366,46 +558,43 @@
 			}
 			$context.addClass( 'conditionized' );
 
+            var $fields  = $( '.field--item', $context );
+
 			$context.on( 'change condition_check', 'input, select, textarea', function( e ) {
-				var id =  $( this ).attr( 'data-live-id' ) || '';
 
-				if ( id !== '' && $( '.conditionize[data-cond-option="'+id+'"]', $context ) .length > 0 ) {
-					var v = '';
-					if ( $( this ).is( 'input[type="checkbox"]' ) ) {
-						if ( $( this ).is( ':checked' ) ){
-							v =  $( this ).val();
-						} else {
-							v = 0;
-						}
-					} else if ( $( this ).is( 'input[type="radio"]' ) ) {
-						if ( $( this ).is( ':checked' ) ){
-							v =  $( this).val();
-						}
-					} else {
-						v = $( this).val();
-					}
+                var f = $('.form', $context );
+                var data = $('input, textarea, select', f).serialize();
+                data =  jQuery.deparam(  data  );
+                var fieldData = {};
+                if ( _.isObject( data ) ) {
+                    _.each( data._items, function( value){
+                        fieldData = value;
+                    } );
+                }
 
-					$( '.conditionize[data-cond-option="'+id+'"]', $context ).each( function(){
+                $fields.each( function( ) {
+                    var $field = $(this);
+                    var check = true;
+                    var req = $field.attr('data-cond') || false;
 
-						var $section = $(this);
-						var listenFor = $(this).attr('data-cond-value');
-						var operator = $(this).attr('data-cond-operator') ? $(this).attr('data-cond-operator') : '==';
+                    if ( !_.isUndefined( req ) && req ) {
+                        req = JSON.parse( req );
+                        check = control.multiple_compare( req, fieldData );
+                        if ( ! check ) {
+                            $field.hide().addClass( 'cond-hide' ).removeClass( 'cond-show' );
+                        } else {
+                            $field.slideDown().removeClass( 'cond-hide' ).addClass('cond-show');
+                        }
+                    }
+                });
 
-						if ( control.eval( v, listenFor, operator ) ) {
-							$section.slideDown().addClass( 'cond-show').removeClass( 'cond-hide' );
-							$section.trigger( 'condition_show' );
-						} else {
-							$section.slideUp().removeClass( 'cond-show').addClass( 'cond-hide' );
-							$section.trigger( 'condition_hide' );
-						}
- 					} );
-				}
+
 			} );
 
 			/**
 			 * Current support one level only
 			 */
-			$('input, select, textarea', $context ).trigger( 'condition_check' );
+			$('input, select, textarea', $context ).eq(0).trigger( 'condition_check' );
 		},
 
 		remove_editor: function( $context ){},
