@@ -1,6 +1,10 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 2.0.1
+* FIXED: Hero background overlay.
+* FIXED: Permalink issue for service items.
+
 ## 2.0.0
 * NEW: Non-minified js files.
 * NEW: Footer widgets section.
