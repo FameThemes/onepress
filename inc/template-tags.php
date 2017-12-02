@@ -155,6 +155,9 @@ if ( ! function_exists( 'onepress_is_transparent_header' ) ) {
                 $check = true;
             }
         } elseif ( is_page() &&  has_post_thumbnail() ) {
+            if ( ! get_post_meta( get_the_ID(),'_cover' , true ) ) {
+                return false;
+            }
             if ( get_theme_mod( 'onepress_page_title_bar_disable' ) == 1  ) {
                 return false;
             }
@@ -169,6 +172,11 @@ if ( ! function_exists( 'onepress_is_transparent_header' ) ) {
             }
 
             $new_page = get_option( 'page_for_posts' );
+            if ( ! get_post_meta( $new_page,'_cover' , true ) ) {
+                return false;
+            }
+
+
             if ( has_post_thumbnail( $new_page ) ) {
                 if ( get_theme_mod('onepress_header_transparent')) {
                     $check = true;
