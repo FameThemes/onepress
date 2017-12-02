@@ -28,6 +28,13 @@ function onepress_body_classes( $classes ) {
         $classes[ ] = 'is-customize-preview';
     }
 
+    if ( is_page() ) {
+        $hide_page_title = get_post_meta( get_the_ID(), '_hide_page_title', true);
+        if ( $hide_page_title ) {
+            $classes[ ] = 'hiding-page-title';
+        }
+    }
+
 	return $classes;
 }
 add_filter( 'body_class', 'onepress_body_classes' );

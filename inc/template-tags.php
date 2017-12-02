@@ -1443,16 +1443,19 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
             $page_id = get_option( 'page_for_posts' );
         }
 
-        $hide_page_title = get_post_meta( $page_id, '_hide_page_title', true );
-        $classes= array( 'page-header' );
+        $classes = array('page-header');
         $img = '';
-        if ( has_post_thumbnail( $page_id ) ){
-            $classes[] = 'page--cover';
-            $img = get_the_post_thumbnail_url($page_id, 'full' );
-        }
+        $hide_page_title = get_post_meta($page_id, '_hide_page_title', true);
+        if ( get_post_meta( $page_id,'_cover' , true ) ) {
 
-        if ( onepress_is_transparent_header() ){
-            $classes[] = 'is-t-above';
+            if (has_post_thumbnail($page_id)) {
+                $classes[] = 'page--cover';
+                $img = get_the_post_thumbnail_url($page_id, 'full');
+            }
+
+            if (onepress_is_transparent_header()) {
+                $classes[] = 'is-t-above';
+            }
         }
 
         ?>
@@ -1463,13 +1466,6 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
                     echo '<h1 class="entry-title">';
                     echo get_the_title( $page_id );
                     echo '</h1>';
-                    $post = get_post( $page_id );
-                    if ( $post->post_excerpt ) {
-                        $excerpt = get_the_excerpt( $page_id );
-                        if ( $excerpt ) {
-                            echo '<div class="entry-tagline">'.$excerpt.'</div>';
-                        }
-                    }
                     ?>
                 </div>
             </div>
