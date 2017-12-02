@@ -129,12 +129,12 @@ class OnePress_MetaBox {
         ?>
         <p>
             <label>
-                <input type="checkbox" name="onepress_page_settings[hide_header]" <?php checked( $values['hide_header'], 1 ); ?> value="1"> <?php _e( 'Hide header on this page.', 'onepress' ); ?>
+                <input type="checkbox" name="onepress_page_settings[hide_header]" <?php checked( $values['hide_header'], 1 ); ?> value="1"> <?php _e( 'Hide header.', 'onepress' ); ?>
             </label>
         </p>
         <p>
             <label>
-                <input type="checkbox" name="onepress_page_settings[hide_page_title]" <?php checked( $values['hide_page_title'], 1 ); ?> value="1"> <?php _e( 'Hide page title area on this page.', 'onepress' ); ?>
+                <input type="checkbox" name="onepress_page_settings[hide_page_title]" <?php checked( $values['hide_page_title'], 1 ); ?> value="1"> <?php _e( 'Hide page title area.', 'onepress' ); ?>
             </label>
         </p>
 
@@ -150,7 +150,7 @@ class OnePress_MetaBox {
         </p>
         <p>
             <label>
-                <input type="checkbox" name="onepress_page_settings[hide_footer]" <?php checked( $values['hide_footer'], 1 ); ?> value="1"> <?php _e( 'Hide footer on this page.', 'onepress' ); ?>
+                <input type="checkbox" name="onepress_page_settings[hide_footer]" <?php checked( $values['hide_footer'], 1 ); ?> value="1"> <?php _e( 'Hide footer.', 'onepress' ); ?>
             </label>
         </p>
         <?php
