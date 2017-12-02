@@ -1474,6 +1474,16 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
                     echo '<h1 class="entry-title">';
                     echo get_the_title( $page_id );
                     echo '</h1>';
+
+                    if ( get_post_meta( $page_id, '_show_excerpt', true ) ) {
+                        $post = get_post($page_id);
+                        if ($post->post_excerpt) {
+                            $excerpt = get_the_excerpt($page_id);
+                            if ($excerpt) {
+                                echo '<div class="entry-tagline">' . $excerpt . '</div>';
+                            }
+                        }
+                    }
                     ?>
                 </div>
             </div>
