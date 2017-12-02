@@ -155,6 +155,9 @@ if ( ! function_exists( 'onepress_is_transparent_header' ) ) {
                 $check = true;
             }
         } elseif ( is_page() &&  has_post_thumbnail() ) {
+            if ( ! get_post_meta( get_the_ID(),'_cover' , true ) ) {
+                return false;
+            }
             if ( get_theme_mod( 'onepress_page_title_bar_disable' ) == 1  ) {
                 return false;
             }
@@ -169,6 +172,11 @@ if ( ! function_exists( 'onepress_is_transparent_header' ) ) {
             }
 
             $new_page = get_option( 'page_for_posts' );
+            if ( ! get_post_meta( $new_page,'_cover' , true ) ) {
+                return false;
+            }
+
+
             if ( has_post_thumbnail( $new_page ) ) {
                 if ( get_theme_mod('onepress_header_transparent')) {
                     $check = true;
@@ -522,7 +530,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             /**
              *  Custom hero section css
              */
-            $hero_bg_color = onepress_sanitize_color_alpha( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ) );
+            $hero_bg_color = onepress_hex_to_rgba( get_theme_mod( 'onepress_hero_overlay_color', '#000000' ), .3 );
 
             // Deprecate form v 1.1.5
             $hero_bg_color = onepress_hex_to_rgba( $hero_bg_color, floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) ) );
@@ -1443,16 +1451,19 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
             $page_id = get_option( 'page_for_posts' );
         }
 
-        $hide_page_title = get_post_meta( $page_id, '_hide_page_title', true );
-        $classes= array( 'page-header' );
+        $classes = array('page-header');
         $img = '';
-        if ( has_post_thumbnail( $page_id ) ){
-            $classes[] = 'page--cover';
-            $img = get_the_post_thumbnail_url($page_id, 'full' );
-        }
+        $hide_page_title = get_post_meta($page_id, '_hide_page_title', true);
+        if ( get_post_meta( $page_id,'_cover' , true ) ) {
 
-        if ( onepress_is_transparent_header() ){
-            $classes[] = 'is-t-above';
+            if (has_post_thumbnail($page_id)) {
+                $classes[] = 'page--cover';
+                $img = get_the_post_thumbnail_url($page_id, 'full');
+            }
+
+            if (onepress_is_transparent_header()) {
+                $classes[] = 'is-t-above';
+            }
         }
 
         ?>
@@ -1463,11 +1474,14 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
                     echo '<h1 class="entry-title">';
                     echo get_the_title( $page_id );
                     echo '</h1>';
-                    $post = get_post( $page_id );
-                    if ( $post->post_excerpt ) {
-                        $excerpt = get_the_excerpt( $page_id );
-                        if ( $excerpt ) {
-                            echo '<div class="entry-tagline">'.$excerpt.'</div>';
+
+                    if ( get_post_meta( $page_id, '_show_excerpt', true ) ) {
+                        $post = get_post($page_id);
+                        if ($post->post_excerpt) {
+                            $excerpt = get_the_excerpt($page_id);
+                            if ($excerpt) {
+                                echo '<div class="entry-tagline">' . $excerpt . '</div>';
+                            }
                         }
                     }
                     ?>

@@ -1,6 +1,13 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 2.0.2
+* NEW: Option to enable page header cover.
+* NEW: Option to display page excerpt as header cover description.
+* FIXED: Page header cover issue, hide by default.
+* REMOVED: Page header excerpt.
+* IMPROVED: Customize control JS.
+
 ## 2.0.1
 * NEW: Add an option to hide breadcrumb on page.
 * FIXED: Hero background overlay.
