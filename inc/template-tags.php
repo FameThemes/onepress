@@ -542,11 +542,11 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 
             $t_site_name_color = sanitize_hex_color( get_theme_mod( 'onepress_transparent_site_title_c' ) );
             if ( $t_site_name_color ) {
-                echo " .is-transparent .site-header.no-scroll .site-title, .is-transparent .site-header.no-scroll .site-title .site-text-logo { color: {$t_site_name_color}; }";
+                echo "#page .is-transparent .site-header.no-scroll .site-title, #page .is-transparent .site-header.no-scroll .site-title .site-text-logo { color: {$t_site_name_color}; }";
             }
             $t_tagline_color = sanitize_hex_color( get_theme_mod( 'onepress_transparent_tag_title_c' ) );
             if ( $t_tagline_color ) {
-                echo " .is-transparent .site-header.no-scroll .site-description { color: {$t_tagline_color}; }";
+                echo "#page .is-transparent .site-header.no-scroll .site-description { color: {$t_tagline_color}; }";
             }
 
             ?>
@@ -732,14 +732,14 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $onepress_logo_text_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_logo_text_color' ) );
             if ( $onepress_logo_text_color ) {
                 ?>
-				.site-branding .site-title, .site-branding .site-text-logo {
+				#page .site-branding .site-title, #page .site-branding .site-text-logo {
 					color: #<?php echo $onepress_logo_text_color; ?>;
 				}
             <?php
             }
             $onepress_site_tagline_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_tagline_text_color' ) );
             if ( $onepress_site_tagline_color ) {
-                echo ".site-branding .site-description { color: #{$onepress_site_tagline_color};  } ";
+                echo "#page .site-branding .site-description { color: #{$onepress_site_tagline_color};  } ";
             }
 
 
