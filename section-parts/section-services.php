@@ -8,7 +8,7 @@ $page_ids =  onepress_get_section_services_data();
 if ( onepress_is_selective_refresh() ) {
     $disable = false;
 }
-if ( ! empty( $page_ids ) ) {
+
     $layout = intval( get_theme_mod( 'onepress_service_layout', 6 ) );
     $desc = get_theme_mod( 'onepress_services_desc' );
     ?>
@@ -122,4 +122,4 @@ if ( ! empty( $page_ids ) ) {
         </section>
         <?php } ?>
     <?php endif;
-}
+
