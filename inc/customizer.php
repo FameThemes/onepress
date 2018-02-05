@@ -776,7 +776,7 @@ function onepress_customize_register( $wp_customize ) {
 				array(
 					'section'     => 'onepres_footer_top',
 					'type'        => 'custom_message',
-					'description' => esc_html__( 'These social profiles setting below will display at the footer of your site.', 'onepress' )
+					'description' => esc_html__( 'The social profiles specified below will be displayed in the footer of your site.', 'onepress' )
 				)
 			));
 
@@ -2668,7 +2668,7 @@ function onepress_customize_register( $wp_customize ) {
 
         $wp_customize->add_control( 'onepress_service_layout',
             array(
-                'label' 		=> esc_html__('Services Layout Setting', 'onepress'),
+                'label' 		=> esc_html__('Services Layout Settings', 'onepress'),
                 'section' 		=> 'onepress_service_settings',
                 'description'   => '',
                 'type'          => 'select',
@@ -3036,7 +3036,7 @@ function onepress_customize_register( $wp_customize ) {
 
         $wp_customize->add_control( 'onepress_team_layout',
             array(
-                'label' 		=> esc_html__('Team Layout Setting', 'onepress'),
+                'label' 		=> esc_html__('Team Layout Settings', 'onepress'),
                 'section' 		=> 'onepress_team_settings',
                 'description'   => '',
                 'type'          => 'select',
@@ -3598,7 +3598,7 @@ function onepress_customize_register( $wp_customize ) {
                 'section'     => 'onepress_news_settings',
                 'type'        => 'custom_message',
                 'section'     => 'onepress_order_styling_preview',
-                'description' => __('<h4 class="customizer-group-heading-message">Drag &amp; Drop Section Orders</h4><p class="customizer-group-heading-message">Check out the <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version for full control over the frontpage SECTIONS ORDER!</p><h4 class="customizer-group-heading-message">Advanced Section Styling</h4><p class="customizer-group-heading-message">Check out the <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version for full control over the section styling which includes background color, image, video, parallax effect, custom style and more ...</p>', 'onepress' )
+                'description' => __('<h4 class="customizer-group-heading-message">Drag &amp; Drop Section Orders</h4><p class="customizer-group-heading-message">Check out the <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version for full control over the frontpage SECTIONS ORDER!</p><h4 class="customizer-group-heading-message">Advandced Section Styling</h4><p class="customizer-group-heading-message">Check out the <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version for full control over the section styling which includes background color, image, video, parallax effect, custom style and more ...</p>', 'onepress' )
             )
         ));
 

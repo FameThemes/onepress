@@ -402,7 +402,7 @@ function onepress_theme_info_page() {
                         <input type="submit" class="button button-secondary" value="<?php esc_attr_e( 'Copy now', 'onepress' ); ?>">
                         </p>
                         <?php if ( isset( $_GET['copied'] ) && $_GET['copied'] == 1 ) { ?>
-                            <p><?php esc_html_e( 'Your settings copied.', 'onepress' ); ?></p>
+                            <p><?php esc_html_e( 'Your settings were copied.', 'onepress' ); ?></p>
                         <?php } ?>
                     </form>
 
@@ -481,7 +481,7 @@ function onepress_theme_info_page() {
                     <?php } ?>
                     <?php do_action( 'onepress_more_required_details', $actions ); ?>
                 <?php  } else { ?>
-                    <h3><?php  printf( __( 'Keep update with %s', 'onepress' ) , $theme_data->Name ); ?></h3>
+                    <h3><?php  printf( __( 'Keep %s updated', 'onepress' ) , $theme_data->Name ); ?></h3>
                     <p><?php _e( 'Hooray! There are no required actions for you right now.', 'onepress' ); ?></p>
                 <?php } ?>
             </div>
