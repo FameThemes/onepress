@@ -69,15 +69,33 @@ endif;
  * @return false|string
  */
 if ( ! function_exists( 'onepress_get_media_url' ) ) {
-    function onepress_get_media_url($media = array())
+    function onepress_get_media_url($media = array(), $size = 'full' )
     {
-        $media = wp_parse_args($media, array('url' => '', 'id' => ''));
+        $media = wp_parse_args( $media, array('url' => '', 'id' => ''));
         $url = '';
         if ($media['id'] != '') {
-            $url = wp_get_attachment_url($media['id']);
+            if ( strpos( get_post_mime_type( $media['id'] ), 'image' ) !== false ) {
+                $image = wp_get_attachment_image_src( $media['id'],  $size );
+                if ( $image ){
+                    $url = $image[0];
+                }
+            } else {
+                $url = wp_get_attachment_url( $media['id'] );
+            }
         }
+
         if ($url == '' && $media['url'] != '') {
-            $url = $media['url'];
+            $id = attachment_url_to_postid( $media['url'] );
+            if ( $id ) {
+                if ( strpos( get_post_mime_type( $id ), 'image' ) !== false ) {
+                    $image = wp_get_attachment_image_src( $id,  $size );
+                    if ( $image ){
+                        $url = $image[0];
+                    }
+                } else {
+                    $url = wp_get_attachment_url( $id );
+                }
+            }
         }
         return $url;
     }
