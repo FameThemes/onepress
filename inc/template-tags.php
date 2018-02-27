@@ -276,6 +276,11 @@ if ( ! function_exists('onepress_header' ) ) {
             if (is_page()) {
                 $hide_header = get_post_meta(get_the_ID(), '_hide_header', true);
             }
+
+            if ( onepress_is_wc_active() ) {
+                $hide_header = get_post_meta(wc_get_page_id('shop' ), '_hide_header', true);
+            }
+
             if (!$hide_header) {
                 /**
                  * Hooked: onepress_site_header
@@ -1438,29 +1443,42 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
      */
     function onepress_display_page_title(){
         if ( get_theme_mod( 'onepress_page_title_bar_disable' ) == 1  ) {
+            var_dump( 'đâs' );
             return;
         }
 
-        if ( ! is_page() && ! is_home() ) {
-            return;
+        $return = false;
+
+        if ( ! is_singular() && ! is_home() ) {
+            $return = true;
         }
 
-        if ( is_page(  ) ) {
+        if ( is_page() ) {
             $page_id = get_the_ID();
         } else {
             $page_id = get_option( 'page_for_posts' );
         }
 
+        if ( onepress_is_wc_active() ) {
+            if ( is_shop() ) {
+                $page_id =  wc_get_page_id('shop');
+                $return = false;
+            }
+        }
+
+        if ( $return ) {
+            return ;
+        }
+
         $classes = array('page-header');
         $img = '';
         $hide_page_title = get_post_meta($page_id, '_hide_page_title', true);
-        if ( get_post_meta( $page_id,'_cover' , true ) ) {
 
+        if ( get_post_meta( $page_id,'_cover' , true ) ) {
             if (has_post_thumbnail($page_id)) {
                 $classes[] = 'page--cover';
                 $img = get_the_post_thumbnail_url($page_id, 'full');
             }
-
             if (onepress_is_transparent_header()) {
                 $classes[] = 'is-t-above';
             }

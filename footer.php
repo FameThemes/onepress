@@ -10,9 +10,19 @@
  */
 
 $hide_footer = false;
+$page_id = get_the_ID();
+
 if ( is_page() ){
-    $hide_footer = get_post_meta( get_the_ID(), '_hide_footer', true );
+    $hide_footer = get_post_meta( $page_id, '_hide_footer', true );
 }
+
+if ( onepress_is_wc_active() ) {
+    if ( is_shop() ) {
+        $page_id =  wc_get_page_id('shop');
+        $hide_footer = get_post_meta( $page_id, '_hide_footer', true );
+    }
+}
+
 if ( ! $hide_footer ) {
     ?>
     <footer id="colophon" class="site-footer" role="contentinfo">
