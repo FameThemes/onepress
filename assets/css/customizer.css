@@ -64,8 +64,10 @@ li#accordion-panel-onepress_typo > .accordion-section-title
     display: block;
 }
 .list-repeatable .wp-picker-holder {
-    position: absolute;
     z-index: 99;
+}
+.list-repeatable .wp-picker-container.wp-picker-active label{
+    display: inline-block;
 }
 .list-repeatable .item{
     margin-bottom: 15px;
