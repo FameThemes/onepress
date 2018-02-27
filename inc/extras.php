@@ -95,6 +95,8 @@ if ( ! function_exists( 'onepress_get_media_url' ) ) {
                 } else {
                     $url = wp_get_attachment_url( $id );
                 }
+            } else {
+                $url = $media['url'];
             }
         }
         return $url;

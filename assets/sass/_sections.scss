@@ -629,7 +629,8 @@
 		-moz-background-size: cover;
 		background-size: cover;
 		background-repeat: no-repeat;
-		background-attachment: scroll;
+		//background-attachment: scroll;
+		background-attachment: fixed;
 		background-position: 50% 0;
 	}
 
