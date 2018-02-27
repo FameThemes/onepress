@@ -273,12 +273,18 @@ if ( ! function_exists('onepress_header' ) ) {
             }
 
             $hide_header = false;
-            if (is_page()) {
-                $hide_header = get_post_meta(get_the_ID(), '_hide_header', true);
+            $page_id = false;
+            if ( is_singular() || is_page() ) {
+                $page_id = get_the_ID();
+            }
+            if ( onepress_is_wc_active() ) {
+                if ( is_shop() ) {
+                    $page_id = wc_get_page_id('shop');
+                }
             }
 
-            if ( onepress_is_wc_active() ) {
-                $hide_header = get_post_meta(wc_get_page_id('shop' ), '_hide_header', true);
+            if ( $page_id ) {
+                $hide_header = get_post_meta($page_id, '_hide_header', true);
             }
 
             if (!$hide_header) {

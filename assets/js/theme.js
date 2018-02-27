@@ -611,7 +611,7 @@ jQuery( document ).ready( function( $ ) {
             }
         } );
     }
-    
+
     function parallaxPosition( direction ){
         /*
         var top = $( window ).scrollTop();
