@@ -69,15 +69,35 @@ endif;
  * @return false|string
  */
 if ( ! function_exists( 'onepress_get_media_url' ) ) {
-    function onepress_get_media_url($media = array())
+    function onepress_get_media_url($media = array(), $size = 'full' )
     {
-        $media = wp_parse_args($media, array('url' => '', 'id' => ''));
+        $media = wp_parse_args( $media, array('url' => '', 'id' => ''));
         $url = '';
         if ($media['id'] != '') {
-            $url = wp_get_attachment_url($media['id']);
+            if ( strpos( get_post_mime_type( $media['id'] ), 'image' ) !== false ) {
+                $image = wp_get_attachment_image_src( $media['id'],  $size );
+                if ( $image ){
+                    $url = $image[0];
+                }
+            } else {
+                $url = wp_get_attachment_url( $media['id'] );
+            }
         }
+
         if ($url == '' && $media['url'] != '') {
-            $url = $media['url'];
+            $id = attachment_url_to_postid( $media['url'] );
+            if ( $id ) {
+                if ( strpos( get_post_mime_type( $id ), 'image' ) !== false ) {
+                    $image = wp_get_attachment_image_src( $id,  $size );
+                    if ( $image ){
+                        $url = $image[0];
+                    }
+                } else {
+                    $url = wp_get_attachment_url( $id );
+                }
+            } else {
+                $url = $media['url'];
+            }
         }
         return $url;
     }
@@ -110,10 +130,20 @@ add_filter( 'onepress_the_content', 'capital_P_dangit' );
 add_filter( 'onepress_the_content', 'do_shortcode' );
 add_filter( 'onepress_the_content', 'convert_smilies' );
 
+
+if ( ! function_exists( 'onepress_is_wc' ) ) {
+    function onepress_is_wc_active(){
+        if ( function_exists( 'is_woocommerce' ) ) {
+           return true;
+        }
+        return false;
+    }
+}
+
 if ( ! function_exists( 'onepress_get_layout' ) ) {
     function onepress_get_layout( $default = 'right-sidebar' ) {
         $layout = get_theme_mod( 'onepress_layout', $default );
-        if ( function_exists( 'is_woocommerce' ) ) {
+        if ( onepress_is_wc_active() ) {
             if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() || is_wc_endpoint_url() ) {
                 $is_active_sidebar = is_active_sidebar( 'sidebar-shop' );
                 if ( ! $is_active_sidebar ) {

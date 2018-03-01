@@ -1,6 +1,17 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 2.0.3
+* UPDATED: update counter js library to version 2.1.0.
+* IMPROVED: String translation texts.
+* IMPROVED: Section about.
+* IMPROVED: Section services, show section title + description in case without service items.
+* IMPROVED: Customize control JS.
+* FIXED: Page setting does not work on Shop page.
+* FIXED: Jetpack's CDN for all images compatible.
+* FIXED: Hero parallax issue.
+* FIXED: Site title & tagline color.
+  
 ## 2.0.2
 * NEW: Option to enable page header cover.
 * NEW: Option to display page excerpt as header cover description.

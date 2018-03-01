@@ -466,6 +466,9 @@
                 case '===':
                     equal = ( value1 === value2 ) ? true : false;
                     break;
+                case 'in':
+                    return value2.indexOf(value1) == -1 ? false : true;
+                    break;
                 case '>':
                     equal = ( value1 > value2 ) ? true : false;
                     break;

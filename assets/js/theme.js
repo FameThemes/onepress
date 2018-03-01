@@ -611,13 +611,14 @@ jQuery( document ).ready( function( $ ) {
             }
         } );
     }
+
     function parallaxPosition( direction ){
+        /*
         var top = $( window ).scrollTop();
         var wh = $( window).height();
         $('.section-parallax, .parallax-hero').each( function(  ){
             var $el = $( this );
             var w = $el.width();
-            //var sh = $el.height();
             var r = .3;
             if ( wh > w ) {
                 r = .3;
@@ -631,10 +632,17 @@ jQuery( document ).ready( function( $ ) {
                 var diff, bgTop;
                 diff = top - offsetTop;
                 bgTop = diff * r;
+                bgTop = - bgTop;
+                if ( bgTop > 0) {
+                    bgTop = - 10;
+                }
                 $( '.parallax-bg', $el ) .css( 'background-position', '50% '+( bgTop )+'px' );
             }
 
         } );
+
+        console.log( 'parallax-stopped' );
+        */
     }
 
     $(window).scroll(function(e){

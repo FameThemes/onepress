@@ -10,7 +10,7 @@ if ( onepress_is_selective_refresh() ) {
 // Get data
 $page_ids =  onepress_get_section_about_data();
 $content_source = get_theme_mod( 'onepress_about_content_source' );
-if ( ! empty( $page_ids ) ) {
+
     ?>
     <?php if (!$disable) { ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
@@ -130,4 +130,4 @@ if ( ! empty( $page_ids ) ) {
         </section>
         <?php } ?>
     <?php }
-}
+
