@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 2.0.4
+* REMOVED: Remove debug test.
+
 ## 2.0.3
 * UPDATED: update counter js library to version 2.1.0.
 * IMPROVED: String translation texts.

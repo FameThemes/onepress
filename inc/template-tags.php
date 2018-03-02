@@ -1446,7 +1446,6 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
      */
     function onepress_display_page_title(){
         if ( get_theme_mod( 'onepress_page_title_bar_disable' ) == 1  ) {
-            var_dump( 'đâs' );
             return;
         }
 
