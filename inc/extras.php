@@ -131,7 +131,7 @@ add_filter( 'onepress_the_content', 'do_shortcode' );
 add_filter( 'onepress_the_content', 'convert_smilies' );
 
 
-if ( ! function_exists( 'onepress_is_wc' ) ) {
+if ( ! function_exists( 'onepress_is_wc_active' ) ) {
     function onepress_is_wc_active(){
         if ( function_exists( 'is_woocommerce' ) ) {
            return true;
@@ -139,6 +139,18 @@ if ( ! function_exists( 'onepress_is_wc' ) ) {
         return false;
     }
 }
+
+if ( ! function_exists( 'onepress_is_wc_archive' ) ) {
+	function onepress_is_wc_archive(){
+		if ( function_exists( 'is_product_category' ) || function_exists('is_product_tag') ) {
+			if ( is_product_category() || is_product_tag() ) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
 
 if ( ! function_exists( 'onepress_get_layout' ) ) {
     function onepress_get_layout( $default = 'right-sidebar' ) {
