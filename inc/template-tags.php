@@ -1462,8 +1462,8 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
            if ( is_shop() ) {
                 $page_id =  wc_get_page_id('shop');
                 $return = false;
-               $is_shop = true;
-            }
+                $is_shop = true;
+           }
         }
 
         if ( $return ) {
