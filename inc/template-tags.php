@@ -1463,15 +1463,18 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
         }
 
         $el = 'h1';
-
-        if ( onepress_is_wc_active() ) {
-           if ( is_shop() || is_product_category() || is_product_tag() || is_singular('product') ) {
-                $page_id =  wc_get_page_id('shop');
-                $return = false;
-                if ( is_singular( 'product' ) ) {
+        $apply_shop = false;
+        $is_single_product = false;
+        if (onepress_is_wc_active()) {
+            if (is_shop() || is_product_category() || is_product_tag() || is_singular('product')) {
+                $page_id = wc_get_page_id('shop');
+                if ( is_singular('product') ) {
                     $el = 'h2';
+                    $is_single_product =  true;
+                    $apply_shop = get_post_meta( $page_id, '_wc_apply_product', true );
                 }
-           }
+                $return = false;
+            }
         }
 
         if ( $return ) {
@@ -1480,17 +1483,47 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 
         $classes = array('page-header');
         $img = '';
-        $hide_page_title = get_post_meta($page_id, '_hide_page_title', true);
+        $hide_page_title = get_post_meta( $page_id, '_hide_page_title', true);
 
-        if ( get_post_meta( $page_id,'_cover' , true ) ) {
-            if (has_post_thumbnail($page_id)) {
-                $classes[] = 'page--cover';
-                $img = get_the_post_thumbnail_url($page_id, 'full');
-            }
-            if (onepress_is_transparent_header()) {
-                $classes[] = 'is-t-above';
+        if ( ! $is_single_product || ( $apply_shop && $is_single_product )  ) {
+            if ( get_post_meta( $page_id,'_cover' , true ) ) {
+                if (has_post_thumbnail($page_id)) {
+                    $classes[] = 'page--cover';
+                    $img = get_the_post_thumbnail_url($page_id, 'full');
+                }
+                if (onepress_is_transparent_header()) {
+                    $classes[] = 'is-t-above';
+                }
             }
         }
+
+        $excerpt = '';
+        if ( onepress_is_wc_archive() ) {
+            $title = get_the_archive_title();
+            $excerpt = category_description();
+
+            $term = get_queried_object();
+            $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
+            $t_image = wp_get_attachment_url($thumbnail_id);
+            if ($t_image) {
+                $img = $t_image;
+            }
+
+        } else {
+            $title = get_the_title( $page_id );
+            if ( get_post_meta( $page_id, '_show_excerpt', true ) ) {
+                $post = get_post($page_id);
+                if ($post->post_excerpt) {
+                    $excerpt = get_the_excerpt($page_id);
+                }
+            }
+        }
+        if ( ! $apply_shop && $is_single_product ) {
+            $excerpt = '';
+        }
+
+
+
 
         ?>
         <?php if ( ! $hide_page_title ){ ?>
@@ -1498,24 +1531,9 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
                 <div class="container">
                     <?php
                     // WPCS: XSS OK.
-                    echo '<'.$el.' class="entry-title">';
-
-                    if ( onepress_is_wc_archive() ) {
-		                    the_archive_title();
-                    } else {
-	                    echo get_the_title( $page_id );
-                    }
-                    // WPCS: XSS OK.
-                    echo '</'.$el.'>';
-
-                    if ( get_post_meta( $page_id, '_show_excerpt', true ) ) {
-                        $post = get_post($page_id);
-                        if ($post->post_excerpt) {
-                            $excerpt = get_the_excerpt($page_id);
-                            if ($excerpt) {
-                                echo '<div class="entry-tagline">' . $excerpt . '</div>';
-                            }
-                        }
+                    echo '<'.$el.' class="entry-title">'.$title.'</'.$el.'>';
+                    if ($excerpt) {
+                        echo '<div class="entry-tagline">' . $excerpt . '</div>';
                     }
                     ?>
                 </div>

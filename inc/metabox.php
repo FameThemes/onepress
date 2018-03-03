@@ -96,6 +96,7 @@ class OnePress_MetaBox {
             'hide_breadcrumb' => '',
             'cover' => '',
             'show_excerpt' => '',
+            'wc_apply_product' => '',
         ) );
 
         foreach( $settings as $key => $value ) {
@@ -123,6 +124,7 @@ class OnePress_MetaBox {
             'hide_breadcrumb' => '',
             'cover' => '',
             'show_excerpt' => '',
+            'wc_apply_product' => '',
         );
 
         foreach( $values as $key => $value ) {
@@ -163,5 +165,18 @@ class OnePress_MetaBox {
             </label>
         </p>
         <?php
+        if ( onepress_is_wc_active() ) {
+            if (  wc_get_page_id('shop') == $post->ID ) {
+                ?>
+                <p>
+                    <label>
+                        <input type="checkbox" name="onepress_page_settings[wc_apply_product]" <?php checked( $values['wc_apply_product'], 1 ); ?> value="1"> <?php _e( 'Apply header cover settings for single product.', 'onepress' ); ?>
+                    </label>
+                </p>
+                <?php
+            }
+        }
+
+
     }
 }
