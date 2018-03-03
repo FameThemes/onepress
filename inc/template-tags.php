@@ -1491,7 +1491,7 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
                     <?php
                     echo '<h1 class="entry-title">';
 
-                    if ( onepress_is_wc_archive() && $is_shop ) {
+                    if ( onepress_is_wc_archive() ) {
 		                    the_archive_title();
                     } else {
 	                    echo get_the_title( $page_id );
