@@ -1457,10 +1457,12 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
             $page_id = get_the_ID();
         }
 
+        $is_shop = false;
         if ( onepress_is_wc_active() ) {
            if ( is_shop() ) {
                 $page_id =  wc_get_page_id('shop');
                 $return = false;
+               $is_shop = true;
             }
         }
 
@@ -1489,7 +1491,7 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
                     <?php
                     echo '<h1 class="entry-title">';
 
-                    if ( onepress_is_wc_archive() ) {
+                    if ( onepress_is_wc_archive() && $is_shop ) {
 		                    the_archive_title();
                     } else {
 	                    echo get_the_title( $page_id );
