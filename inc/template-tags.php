@@ -1351,10 +1351,15 @@ add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
 /**
  * Breadcrumb NavXT Compatibility.
  */
-function onepress_breadcrumb() {
-    if ( is_page() ) {
-        if ( get_post_meta( get_the_ID(), '_hide_breadcrumb', true ) ) {
-            return ;
+function onepress_breadcrumb( $post_id = null ) {
+    if ( ! $post_id ) {
+        if ( is_page() ) {
+            $post_id = get_the_ID();
+        }
+    }
+    if ( $post_id ) {
+        if ( get_post_meta( $post_id, '_hide_breadcrumb', true)) {
+            return;
         }
     }
 	if ( function_exists('bcn_display') ) {
@@ -1457,12 +1462,15 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
             $page_id = get_the_ID();
         }
 
-        $is_shop = false;
+        $el = 'h1';
+
         if ( onepress_is_wc_active() ) {
-           if ( is_shop() ) {
+           if ( is_shop() || is_product_category() || is_product_tag() || is_singular('product') ) {
                 $page_id =  wc_get_page_id('shop');
                 $return = false;
-                $is_shop = true;
+                if ( is_singular( 'product' ) ) {
+                    $el = 'h2';
+                }
            }
         }
 
@@ -1489,15 +1497,16 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
             <div class="<?php echo esc_attr( join(' ', $classes ) ); ?>"<?php echo ( $img ) ? ' style="background-image: url(\''.esc_url( $img ).'\')" ': ''; ?>>
                 <div class="container">
                     <?php
-                    echo '<h1 class="entry-title">';
+                    // WPCS: XSS OK.
+                    echo '<'.$el.' class="entry-title">';
 
                     if ( onepress_is_wc_archive() ) {
 		                    the_archive_title();
                     } else {
 	                    echo get_the_title( $page_id );
                     }
-
-                    echo '</h1>';
+                    // WPCS: XSS OK.
+                    echo '</'.$el.'>';
 
                     if ( get_post_meta( $page_id, '_show_excerpt', true ) ) {
                         $post = get_post($page_id);
