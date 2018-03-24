@@ -600,8 +600,8 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 {
                     color: #<?php echo $primary; ?>;
                 }
-                input[type="reset"], input[type="submit"], input[type="submit"], .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .section-testimonials .card-theme-primary,
-				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt
+                input[type="reset"], input[type="submit"], input[type="submit"], input[type="reset"]:hover, input[type="submit"]:hover, input[type="submit"]:hover .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .section-testimonials .card-theme-primary,
+				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt, .pirate-forms-submit-button, .pirate-forms-submit-button:hover
                 {
                     background: #<?php echo $primary; ?>;
                 }

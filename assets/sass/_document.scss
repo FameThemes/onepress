@@ -318,7 +318,7 @@ fieldset{
 	border: 1px solid $border;
 }
 
-input[type="reset"],input[type="submit"],input[type="submit"] {
+input[type="reset"],input[type="submit"],input[type="submit"], .pirate-forms-submit-button {
 
 	cursor: pointer;
 	background: $primary;
@@ -338,6 +338,7 @@ input[type="reset"],input[type="submit"],input[type="submit"] {
 	font-size: 13px;
 	&:hover {
 		opacity: 0.8;
+        background: $primary;
 	}
 
 }
