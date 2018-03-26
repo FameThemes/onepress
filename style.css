@@ -2596,7 +2596,7 @@ section > .customize-partial-edit-shortcut button {
   -moz-background-size: cover;
   background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: scroll;
   background-position: 50% 0;
 }
 .section-parallax .parallax-bg:before, #parallax-hero .parallax-bg:before {
