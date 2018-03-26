@@ -398,7 +398,7 @@ jQuery( document ).ready( function( $ ) {
     });
 
     // Other scroll to elements
-    jQuery('.hero-slideshow-wrapper a[href*="#"]:not([href="#"]), .parallax-content a[href*="#"]:not([href="#"]), .back-top-top').on('click', function(event){
+    jQuery('.hero-slideshow-wrapper a[href*="#"]:not([href="#"]), .parallax-content a[href*="#"]:not([href="#"]), .back-to-top').on('click', function(event){
         event.preventDefault();
         smoothScroll( jQuery( this.hash ) );
     });

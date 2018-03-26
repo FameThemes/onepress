@@ -709,6 +709,7 @@
         top: -25px;
         transition: all 0.2s linear 0s;
         width: 50px;
+        z-index: 99;
         -webkit-transform: rotate(-45deg);
         -moz-transform: rotate(-45deg);
         -ms-transform: rotate(-45deg);
