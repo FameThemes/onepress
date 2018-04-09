@@ -636,6 +636,17 @@
         min-height: 100%;
         display: block;
 
+        &.no-img {
+            height: 120%;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-attachment: scroll;
+            background-position: 50% 0;
+        }
+
         -webkit-background-size: 100% auto;
         -moz-background-size: 100% auto;
         background-size: 100% auto;

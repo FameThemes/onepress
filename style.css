@@ -2625,6 +2625,16 @@ section > .customize-partial-edit-shortcut button {
   height: auto;
   max-width: 9999999px;
 }
+.section-parallax .parallax-bg.no-img, #parallax-hero .parallax-bg.no-img {
+  height: 120%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-attachment: scroll;
+  background-position: 50% 0;
+}
 
 .parallax_bg_overlay {
   position: absolute;

@@ -81,7 +81,7 @@ module.exports = function( grunt ) {
                     '!package-lock.json',
                     '!phpcs.xml.dist'
                 ],
-                dest: 'dist/'
+                dest: 'onepress/'
             }
         },
 
@@ -94,7 +94,7 @@ module.exports = function( grunt ) {
                 files: [
                     {
                         src: [
-                            './dist/**'
+                            './onepress/**'
                         ]
 
                     }

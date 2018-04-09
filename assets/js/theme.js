@@ -618,19 +618,45 @@ jQuery( document ).ready( function( $ ) {
         $('.section-parallax, .parallax-hero').each( function(  ){
             var $el = $( this );
             var pl = $( '.parallax-bg', $el );
-            
+
             var w = $el.width();
             var h = $el.height();
-            var containerHeight = h > 0 ? h : 500;
-            var imgHeight = $( 'img', pl ).height();
-            var parallaxDist = imgHeight - containerHeight;
-            var bottom = $el.offset().top + containerHeight;
-            var top = $el.offset().top;
-            var windowHeight = window.innerHeight;
-            var windowBottom = scrollTop + windowHeight;
-            var percentScrolled = (windowBottom - top) / (containerHeight + windowHeight);
-            var parallax = parallaxDist * percentScrolled;
-            pl.find('img').css( 'top', '-'+( parallax )+'px' );
+            var img = $( 'img', pl );
+
+            if ( img.length ) {
+                var containerHeight = h > 0 ? h : 500;
+                var imgHeight = $('img', pl).height();
+                var parallaxDist = imgHeight - containerHeight;
+                var bottom = $el.offset().top + containerHeight;
+                var top = $el.offset().top;
+                var windowHeight = window.innerHeight;
+                var windowBottom = scrollTop + windowHeight;
+                var percentScrolled = (windowBottom - top) / (containerHeight + windowHeight);
+                var parallax = parallaxDist * percentScrolled;
+                pl.find('img').css('top', '-' + ( parallax ) + 'px');
+            } else {
+
+                //var sh = $el.height();
+                var r = .3;
+                if ( wh > w ) {
+                    r = .3;
+                } else {
+                    r = .6;
+                }
+
+                $( '.parallax-bg', $el ).addClass( 'no-img' );
+
+                var is_inview = $el.data( 'inview' );
+                if ( is_inview ) {
+                    var offsetTop = $el.offset().top;
+                    var diff, bgTop;
+                    diff = scrollTop - offsetTop;
+                    bgTop = diff * r;
+                    $( '.parallax-bg', $el ) .css( 'background-position', '50% '+( bgTop )+'px' );
+                }
+
+            }
+
 
         } );
         
@@ -648,22 +674,25 @@ jQuery( document ).ready( function( $ ) {
         parallaxPosition( );
     });
 
+
+    parallaxPosition();
     $(window).resize( function(){
-       // parrallaxHeight();
         parallaxPosition( );
     } );
-
-   // parrallaxHeight();
 
 
     // Parallax hero
     $('.parallax-hero').each(function () {
         var hero = $(this);
         hero.addClass('loading');
-        $('.parallax-bg', hero).imagesLoaded({background: true}, function () {
+
+        var bg = true;
+        if ( hero.find('img').length > 0)  {
+            bg = false;
+        }
+        $('.parallax-bg', hero).imagesLoaded({background: bg }, function () {
             hero.find('.hero-slideshow-wrapper').addClass('loaded');
             hero.removeClass('loading');
-
             setTimeout(function () {
                 hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
             }, 600);
@@ -675,8 +704,12 @@ jQuery( document ).ready( function( $ ) {
     });
 
     $('.section-parallax').each(function () {
-        var s = $(this);
-        $('.parallax-bg', s).imagesLoaded({background: true}, function () {
+        var hero = $(this);
+        var bg = true;
+        if ( hero.find('img').length > 0)  {
+            bg = false;
+        }
+        $('.parallax-bg', s).imagesLoaded({background: bg}, function () {
 
         }).fail(function (instance) {
 

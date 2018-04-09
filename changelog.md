@@ -5,6 +5,7 @@ CHANGELOG
 * NEW: Support PirateForms.
 * IMPROVED: Header cover on single product.
 * IMPROVED: WooCommerce header title.
+* IMPROVED: Add hook for section parts.
 * FIXED: Title on single post & WooCommerce category.
 * FIXED: Section background parallax effect.
 * FIXED: Parallax issue.
