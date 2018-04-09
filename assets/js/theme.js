@@ -26,7 +26,6 @@ function preload_images( images, complete_callback ) {
         });
     }
 
-
 }
 
 function _to_number( string ) {
@@ -602,23 +601,35 @@ jQuery( document ).ready( function( $ ) {
             $('.parallax-bg', $el ).height( '' );
             var w = $el.width();
             var h = $el.height();
-            if ( h == 0 ) {
-                h = 1;
+            if ( h <= 500 ) {
+                h = 500;
             }
+
+            /*
             if ( h < w ) {
                 h = h * 2.0;
                 $('.parallax-bg', $el).height(h);
             }
+            */
+
+            h = h * 2.0;
+            $('.parallax-bg', $el).height(h);
+
         } );
     }
 
     function parallaxPosition( direction ){
 
-        var top = $( window ).scrollTop();
+        var scrollTop = $( window ).scrollTop();
+        //var top = $( window ).scrollTop();
         var wh = $( window).height();
         $('.section-parallax, .parallax-hero').each( function(  ){
             var $el = $( this );
+            var pl = $( '.parallax-bg', $el );
+
+            /*
             var w = $el.width();
+            var h = $el.height();
             //var sh = $el.height();
             var r = .3;
             if ( wh > w ) {
@@ -633,11 +644,48 @@ jQuery( document ).ready( function( $ ) {
                 var diff, bgTop;
                 diff = top - offsetTop;
                 bgTop = diff * r;
+                console.log( 'bgTop', bgTop );
+                if( bgTop > h ) {
+                    bgTop = h;
+                }
+                console.log( 'bgTop', bgTop );
                 $( '.parallax-bg', $el ) .css( 'background-position', '50% '+( bgTop )+'px' );
             }
+            */
+
+            //-----------------------------
+            var w = $el.width();
+            var h = $el.height();
+
+            var containerHeight = h > 0 ? h : 500;
+            var imgHeight = pl.height();
+            var parallaxDist = imgHeight - containerHeight;
+            var bottom = $el.offset().top + containerHeight;
+            var top = $el.offset().top;
+            var windowHeight = window.innerHeight;
+            var windowBottom = scrollTop + windowHeight;
+            var percentScrolled = (windowBottom - top) / (containerHeight + windowHeight);
+            var parallax = parallaxDist * percentScrolled;
+            console.log( 'percentScrolled: '+$el.attr( 'id' ), percentScrolled );
+            console.log( 'parallaxDist: '+$el.attr( 'id' ), parallaxDist );
+
+            var _top = containerHeight*percentScrolled;
+
+            ///pl.css( 'transform', 'translate3D(-50%, '+parallax+'px, 0)' );
+            //pl.css( 'transform', 'translate3D(-50%, '+parallax+'px, 0)' );
+            //pl .css( 'background-position', '50% '+( parallax )+'px' );
+            pl .css( 'top', '-'+( _top )+'px' );
+            //-----------------------------
+
+
+
+
+
+
+
+
 
         } );
-      
         
     }
 
