@@ -618,11 +618,9 @@ jQuery( document ).ready( function( $ ) {
         $('.section-parallax, .parallax-hero').each( function(  ){
             var $el = $( this );
             var pl = $( '.parallax-bg', $el );
-
-            //-----------------------------
+            
             var w = $el.width();
             var h = $el.height();
-            var r = .3;
             var containerHeight = h > 0 ? h : 500;
             var imgHeight = $( 'img', pl ).height();
             var parallaxDist = imgHeight - containerHeight;
@@ -632,9 +630,6 @@ jQuery( document ).ready( function( $ ) {
             var windowBottom = scrollTop + windowHeight;
             var percentScrolled = (windowBottom - top) / (containerHeight + windowHeight);
             var parallax = parallaxDist * percentScrolled;
-            var _top = containerHeight*percentScrolled;
-           // _top = _top*r;
-            console.log( 'imgHeight: '+$el.attr( 'id' ), imgHeight );
             pl.find('img').css( 'top', '-'+( parallax )+'px' );
 
         } );
