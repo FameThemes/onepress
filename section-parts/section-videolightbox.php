@@ -12,7 +12,7 @@ if ( ( ! $disable && ( $video || $heading ) )  || onepress_is_selective_refresh(
     if ( ! onepress_is_selective_refresh() ){
         if ( $image ) {
             echo '<div class="section-parallax">';
-            echo ' <div class="parallax-bg" data-stellar-ratio="0.2" data-stellar-offset-parent="true" style="background-image: url('.esc_url( $image ).');"></div>';
+            echo ' <div class="parallax-bg"><img src="'.esc_url( $image ).'" alt=""></div>';
         }
     ?>
     <section id="<?php if ($id != '') echo esc_attr( $id ); ?>" <?php do_action('onepress_section_atts', 'videolightbox'); ?>

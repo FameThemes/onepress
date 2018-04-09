@@ -601,18 +601,10 @@ jQuery( document ).ready( function( $ ) {
             $('.parallax-bg', $el ).height( '' );
             var w = $el.width();
             var h = $el.height();
-            if ( h <= 500 ) {
+            if ( h <= 0 ) {
                 h = 500;
             }
-
-            /*
-            if ( h < w ) {
-                h = h * 2.0;
-                $('.parallax-bg', $el).height(h);
-            }
-            */
-
-            h = h * 2.0;
+            h = h * 1.5;
             $('.parallax-bg', $el).height(h);
 
         } );
@@ -627,38 +619,12 @@ jQuery( document ).ready( function( $ ) {
             var $el = $( this );
             var pl = $( '.parallax-bg', $el );
 
-            /*
-            var w = $el.width();
-            var h = $el.height();
-            //var sh = $el.height();
-            var r = .3;
-            if ( wh > w ) {
-                r = .3;
-            } else {
-                r = .6;
-            }
-
-            var is_inview = $el.data( 'inview' );
-            if ( is_inview ) {
-                var offsetTop = $el.offset().top;
-                var diff, bgTop;
-                diff = top - offsetTop;
-                bgTop = diff * r;
-                console.log( 'bgTop', bgTop );
-                if( bgTop > h ) {
-                    bgTop = h;
-                }
-                console.log( 'bgTop', bgTop );
-                $( '.parallax-bg', $el ) .css( 'background-position', '50% '+( bgTop )+'px' );
-            }
-            */
-
             //-----------------------------
             var w = $el.width();
             var h = $el.height();
-
+            var r = .3;
             var containerHeight = h > 0 ? h : 500;
-            var imgHeight = pl.height();
+            var imgHeight = $( 'img', pl ).height();
             var parallaxDist = imgHeight - containerHeight;
             var bottom = $el.offset().top + containerHeight;
             var top = $el.offset().top;
@@ -666,24 +632,10 @@ jQuery( document ).ready( function( $ ) {
             var windowBottom = scrollTop + windowHeight;
             var percentScrolled = (windowBottom - top) / (containerHeight + windowHeight);
             var parallax = parallaxDist * percentScrolled;
-            console.log( 'percentScrolled: '+$el.attr( 'id' ), percentScrolled );
-            console.log( 'parallaxDist: '+$el.attr( 'id' ), parallaxDist );
-
             var _top = containerHeight*percentScrolled;
-
-            ///pl.css( 'transform', 'translate3D(-50%, '+parallax+'px, 0)' );
-            //pl.css( 'transform', 'translate3D(-50%, '+parallax+'px, 0)' );
-            //pl .css( 'background-position', '50% '+( parallax )+'px' );
-            pl .css( 'top', '-'+( _top )+'px' );
-            //-----------------------------
-
-
-
-
-
-
-
-
+           // _top = _top*r;
+            console.log( 'imgHeight: '+$el.attr( 'id' ), imgHeight );
+            pl.find('img').css( 'top', '-'+( parallax )+'px' );
 
         } );
         
@@ -702,11 +654,11 @@ jQuery( document ).ready( function( $ ) {
     });
 
     $(window).resize( function(){
-        parrallaxHeight();
+       // parrallaxHeight();
         parallaxPosition( );
     } );
 
-    parrallaxHeight();
+   // parrallaxHeight();
 
 
     // Parallax hero

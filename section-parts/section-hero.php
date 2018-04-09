@@ -41,7 +41,7 @@ $is_parallax =  get_theme_mod( 'onepress_hero_parallax' ) == 1 && ! empty( $imag
 
 if ( $is_parallax ) {
     echo '<div id="parallax-hero" class="parallax-hero parallax-window" >';
-    echo '<div class="parallax-bg" style="background-image: url('.esc_url( $images[0]).');" data-stellar-ratio="0.1" data-stellar-offset-parent="true"></div>';
+    echo '<div class="parallax-bg"><img src="'.esc_url( $images[0]  ).'" alt=""></div>';
 }
 
 ?>
