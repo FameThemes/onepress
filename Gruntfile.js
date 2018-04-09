@@ -82,7 +82,7 @@ module.exports = function( grunt ) {
                     '!package-lock.json',
                     '!phpcs.xml.dist'
                 ],
-                dest: 'customify-sites/'
+                dest: 'dist/'
             }
         },
 
