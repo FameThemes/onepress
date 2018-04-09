@@ -45,7 +45,6 @@ module.exports = function( grunt ) {
                     'assets/sass/*.scss'
                 ],
                 tasks: [
-                    //'sass',
                     'css'
                 ]
             }
