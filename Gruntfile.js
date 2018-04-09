@@ -103,7 +103,7 @@ module.exports = function( grunt ) {
         },
 
         clean: {
-            main: ["dist"],
+            main: ["onepress"],
             zip: ["*.zip"]
 
         },
