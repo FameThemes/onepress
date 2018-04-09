@@ -1,6 +1,9 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+## 2.0.6
+* FIXED: JS error issue.
+
 ## 2.0.5
 * NEW: Support PirateForms.
 * IMPROVED: Header cover on single product.

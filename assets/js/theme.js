@@ -709,7 +709,7 @@ jQuery( document ).ready( function( $ ) {
         if ( hero.find('img').length > 0)  {
             bg = false;
         }
-        $('.parallax-bg', s).imagesLoaded({background: bg}, function () {
+        $('.parallax-bg', hero ).imagesLoaded({background: bg}, function () {
 
         }).fail(function (instance) {
 

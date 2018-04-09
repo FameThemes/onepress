@@ -236,6 +236,7 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
                     'image' => ''
                 ) );
                 extract( $args );
+                var_dump( $args );
 
                 if (  $video_url || $video_webm_url || $video_ogv_url ) {
                     ?>
@@ -258,7 +259,7 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
                 if ( $enable_parallax == 1 ) {
                     $class = 'section-parallax';
                     if( $section_id == 'hero' ){
-                        $class .=' parallax-hero';
+                        $class =' parallax-hero';
                     }
                     echo '<div id="parallax-'.esc_attr( $section_id ).'" class="'.esc_attr( $class ).'">';
                     echo ' <div class="parallax-bg""><img src="'.esc_url( $image ).'" alt=""></div>';

@@ -1,6 +1,6 @@
 {
     "name": "customify-pro",
-    "version": "2.0.5",
+    "version": "2.0.6",
     "main": "Gruntfile.js",
     "engines": {
         "node": ">= 0.10.0"
