@@ -236,8 +236,6 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
                     'image' => ''
                 ) );
                 extract( $args );
-                var_dump( $args );
-
                 if (  $video_url || $video_webm_url || $video_ogv_url ) {
                     ?>
                 <div class="video-section"
