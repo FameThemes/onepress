@@ -7,6 +7,7 @@ CHANGELOG
 * IMPROVED: WooCommerce header title.
 * FIXED: Title on single post & WooCommerce category.
 * FIXED: Section background parallax effect.
+* FIXED: Parallax issue.
 * FIXED: Back to top button z-index.
 
 ## 2.0.4
