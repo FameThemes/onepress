@@ -439,8 +439,6 @@ img {
 
 .wp-caption .wp-caption-text,
 .wp-caption-dd {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	font-size: 12px;
 	font-style: italic;
@@ -475,56 +473,48 @@ img {
 
 .gallery-columns-2 .gallery-item {
 	max-width: 48%;
-	max-width: -webkit-calc(50% - 14px);
 	max-width:         calc(50% - 14px);
 	width: auto;
 }
 
 .gallery-columns-3 .gallery-item {
 	max-width: 32%;
-	max-width: -webkit-calc(33.3% - 11px);
 	max-width:         calc(33.3% - 11px);
 	width: auto;
 }
 
 .gallery-columns-4 .gallery-item {
 	max-width: 23%;
-	max-width: -webkit-calc(25% - 9px);
 	max-width:         calc(25% - 9px);
 	width: auto;
 }
 
 .gallery-columns-5 .gallery-item {
 	max-width: 19%;
-	max-width: -webkit-calc(20% - 8px);
 	max-width:         calc(20% - 8px);
 	width: auto;
 }
 
 .gallery-columns-6 .gallery-item {
 	max-width: 15%;
-	max-width: -webkit-calc(16.7% - 7px);
 	max-width:         calc(16.7% - 7px);
 	width: auto;
 }
 
 .gallery-columns-7 .gallery-item {
 	max-width: 13%;
-	max-width: -webkit-calc(14.28% - 7px);
 	max-width:         calc(14.28% - 7px);
 	width: auto;
 }
 
 .gallery-columns-8 .gallery-item {
 	max-width: 11%;
-	max-width: -webkit-calc(12.5% - 6px);
 	max-width:         calc(12.5% - 6px);
 	width: auto;
 }
 
 .gallery-columns-9 .gallery-item {
 	max-width: 9%;
-	max-width: -webkit-calc(11.1% - 6px);
 	max-width:         calc(11.1% - 6px);
 	width: auto;
 }
@@ -555,8 +545,6 @@ img {
 
 .gallery .gallery-caption {
 	background-color: rgba(0, 0, 0, 0.7);
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing:    border-box;
 	box-sizing:         border-box;
 	color: #fff;
 	font-size: 12px;
