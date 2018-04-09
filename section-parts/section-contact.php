@@ -52,10 +52,9 @@ if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_addres
                     <?php endif; ?>
 
                     <div class="col-sm-6 wow slideInUp">
-                        <br>
                         <?php
                         if ($onepress_contact_text != '') {
-                            echo apply_filters( 'onepress_the_content', wp_kses_post( $onepress_contact_text ) );
+                            echo apply_filters( 'onepress_the_content', wp_kses_post( trim( $onepress_contact_text ) ) );
                         }
                         ?>
                         <br><br>

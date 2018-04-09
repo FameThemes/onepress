@@ -3433,7 +3433,7 @@ function onepress_customize_register( $wp_customize ) {
 			array(
 				'section'     => 'onepress_contact_content',
 				'type'        => 'custom_message',
-				'description' => wp_kses_post( 'In order to display contact form please install <a target="_blank" href="https://wordpress.org/plugins/contact-form-7/">Contact Form 7</a> plugin and then copy the contact form shortcode and paste it here, the shortcode will be like this <code>[contact-form-7 id="xxxx" title="Example Contact Form"]</code>', 'onepress' )
+				'description' => wp_kses_post( 'In order to display contact form please install <a target="_blank" href="https://vi.wordpress.org/plugins/pirate-forms/">PirateForms</a> plugin and then copy the contact form shortcode and paste it here, the shortcode will be like this <code>[pirate_forms]</code>', 'onepress' )
 			)
 		));
 
@@ -3446,7 +3446,7 @@ function onepress_customize_register( $wp_customize ) {
 		);
 		$wp_customize->add_control( 'onepress_contact_cf7',
 			array(
-				'label'     	=> esc_html__('Contact Form 7 Shortcode.', 'onepress'),
+				'label'     	=> esc_html__('Contact Form Shortcode.', 'onepress'),
 				'section' 		=> 'onepress_contact_content',
 				'description'   => '',
 			)

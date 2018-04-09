@@ -20,7 +20,7 @@ do_action( 'onepress_page_before_content' );
 	<div id="content" class="site-content">
 		<?php
         if ( !  $hide_breadcrumb ) {
-            onepress_breadcrumb();
+            onepress_breadcrumb( wc_get_page_id('shop') );
         }
 		?>
 

@@ -1222,3 +1222,31 @@ button {
 .owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
     background: #869791;
 }
+
+/* Pirate Forms */
+.pirate_forms {
+    .pirate-forms-fields-container {
+        .form_field_wrap {
+            width: 100%;
+            max-width: 100%;
+            padding: 0px;
+            .form-control {
+                border-radius: 0px;
+            }
+            .pirate-forms-submit-button {
+                display: block;
+                width: 100%;
+            }
+        }
+    }
+    .contact_message_wrap {
+        #pirate-forms-contact-message {
+            border-radius: 0px;
+            background-color: #f2f2f2;
+            border: 0 none;
+            min-height: 245px;
+            max-height: 999px;
+        }
+    }
+
+}

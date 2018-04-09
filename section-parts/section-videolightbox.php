@@ -7,19 +7,10 @@ if ( onepress_is_selective_refresh() ) {
     $disable = false;
 }
 if ( ( ! $disable && ( $video || $heading ) )  || onepress_is_selective_refresh() ) {
-
-    $image    = get_theme_mod( 'onepress_videolightbox_image' );
-    if ( ! onepress_is_selective_refresh() ){
-        if ( $image ) {
-            echo '<div class="section-parallax">';
-            echo ' <div class="parallax-bg" data-stellar-ratio="0.2" data-stellar-offset-parent="true" style="background-image: url('.esc_url( $image ).');"></div>';
-        }
     ?>
     <section id="<?php if ($id != '') echo esc_attr( $id ); ?>" <?php do_action('onepress_section_atts', 'videolightbox'); ?>
          class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-videolightbox section-padding section-padding-larger section-inverse onepage-section', 'videolightbox')); ?>">
-
-    <?php } ?>
-
+<?php } ?>
         <?php do_action('onepress_section_before_inner', 'videolightbox'); ?>
         <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'videolightbox' ) ); ?>">
             <?php if ( $video ) { ?>
@@ -34,15 +25,6 @@ if ( ( ! $disable && ( $video || $heading ) )  || onepress_is_selective_refresh(
             <?php } ?>
         </div>
         <?php do_action('onepress_section_after_inner', 'videolightbox'); ?>
-
-        <?php if ( ! onepress_is_selective_refresh() ) { ?>
-
+<?php if ( ( ! $disable && ( $video || $heading ) )  || onepress_is_selective_refresh() ) { ?>
     </section>
-        <?php
-        if ( $image ) {
-            echo '</div>';
-        }
-    }?>
-
-<?php
-}
+<?php } ?>

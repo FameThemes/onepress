@@ -600,8 +600,8 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 {
                     color: #<?php echo $primary; ?>;
                 }
-                input[type="reset"], input[type="submit"], input[type="submit"], .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .section-testimonials .card-theme-primary,
-				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt
+                input[type="reset"], input[type="submit"], input[type="submit"], input[type="reset"]:hover, input[type="submit"]:hover, input[type="submit"]:hover .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .section-testimonials .card-theme-primary,
+				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt, .pirate-forms-submit-button, .pirate-forms-submit-button:hover
                 {
                     background: #<?php echo $primary; ?>;
                 }
@@ -1351,10 +1351,15 @@ add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
 /**
  * Breadcrumb NavXT Compatibility.
  */
-function onepress_breadcrumb() {
-    if ( is_page() ) {
-        if ( get_post_meta( get_the_ID(), '_hide_breadcrumb', true ) ) {
-            return ;
+function onepress_breadcrumb( $post_id = null ) {
+    if ( ! $post_id ) {
+        if ( is_page() ) {
+            $post_id = get_the_ID();
+        }
+    }
+    if ( $post_id ) {
+        if ( get_post_meta( $post_id, '_hide_breadcrumb', true)) {
+            return;
         }
     }
 	if ( function_exists('bcn_display') ) {
@@ -1451,19 +1456,23 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 
         $return = false;
 
-        if ( ! is_singular() && ! is_home() ) {
-            $return = true;
-        }
-
-        if ( is_page() ) {
-            $page_id = get_the_ID();
-        } else {
+        if ( is_home() ) {
             $page_id = get_option( 'page_for_posts' );
+        } else {
+            $page_id = get_the_ID();
         }
 
-        if ( onepress_is_wc_active() ) {
-            if ( is_shop() ) {
-                $page_id =  wc_get_page_id('shop');
+        $el = 'h1';
+        $apply_shop = false;
+        $is_single_product = false;
+        if (onepress_is_wc_active()) {
+            if (is_shop() || is_product_category() || is_product_tag() || is_singular('product')) {
+                $page_id = wc_get_page_id('shop');
+                if ( is_singular('product') ) {
+                    $el = 'h2';
+                    $is_single_product =  true;
+                    $apply_shop = get_post_meta( $page_id, '_wc_apply_product', true );
+                }
                 $return = false;
             }
         }
@@ -1474,35 +1483,57 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 
         $classes = array('page-header');
         $img = '';
-        $hide_page_title = get_post_meta($page_id, '_hide_page_title', true);
+        $hide_page_title = get_post_meta( $page_id, '_hide_page_title', true);
 
-        if ( get_post_meta( $page_id,'_cover' , true ) ) {
-            if (has_post_thumbnail($page_id)) {
-                $classes[] = 'page--cover';
-                $img = get_the_post_thumbnail_url($page_id, 'full');
-            }
-            if (onepress_is_transparent_header()) {
-                $classes[] = 'is-t-above';
+        if ( ! $is_single_product || ( $apply_shop && $is_single_product )  ) {
+            if ( get_post_meta( $page_id,'_cover' , true ) ) {
+                if (has_post_thumbnail($page_id)) {
+                    $classes[] = 'page--cover';
+                    $img = get_the_post_thumbnail_url($page_id, 'full');
+                }
+                if (onepress_is_transparent_header()) {
+                    $classes[] = 'is-t-above';
+                }
             }
         }
+
+        $excerpt = '';
+        if ( onepress_is_wc_archive() ) {
+            $title = get_the_archive_title();
+            $excerpt = category_description();
+
+            $term = get_queried_object();
+            $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
+            $t_image = wp_get_attachment_url($thumbnail_id);
+            if ($t_image) {
+                $img = $t_image;
+            }
+
+        } else {
+            $title = get_the_title( $page_id );
+            if ( get_post_meta( $page_id, '_show_excerpt', true ) ) {
+                $post = get_post($page_id);
+                if ($post->post_excerpt) {
+                    $excerpt = get_the_excerpt($page_id);
+                }
+            }
+        }
+        if ( ! $apply_shop && $is_single_product ) {
+            $excerpt = '';
+        }
+
+
+
 
         ?>
         <?php if ( ! $hide_page_title ){ ?>
             <div class="<?php echo esc_attr( join(' ', $classes ) ); ?>"<?php echo ( $img ) ? ' style="background-image: url(\''.esc_url( $img ).'\')" ': ''; ?>>
                 <div class="container">
                     <?php
-                    echo '<h1 class="entry-title">';
-                    echo get_the_title( $page_id );
-                    echo '</h1>';
-
-                    if ( get_post_meta( $page_id, '_show_excerpt', true ) ) {
-                        $post = get_post($page_id);
-                        if ($post->post_excerpt) {
-                            $excerpt = get_the_excerpt($page_id);
-                            if ($excerpt) {
-                                echo '<div class="entry-tagline">' . $excerpt . '</div>';
-                            }
-                        }
+                    // WPCS: XSS OK.
+                    echo '<'.$el.' class="entry-title">'.$title.'</'.$el.'>';
+                    if ($excerpt) {
+                        echo '<div class="entry-tagline">' . $excerpt . '</div>';
                     }
                     ?>
                 </div>
@@ -1526,14 +1557,19 @@ if ( ! function_exists( 'onepress_load_section' ) ) {
          * Hook before section
          */
         do_action('onepress_before_section_' . $section_id);
-        do_action('onepress_before_section_part', $section_id);
+        if ( $section_id != 'hero' ) {
+            do_action('onepress_before_section_part', $section_id);
+        }
+
 
         get_template_part('section-parts/section', $section_id );
 
         /**
          * Hook after section
          */
-        do_action('onepress_after_section_part', $section_id);
+        if ( $section_id != 'hero' ) {
+            do_action('onepress_after_section_part', $section_id);
+        }
         do_action('onepress_after_section_' . $section_id);
     }
 }

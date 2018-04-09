@@ -38,11 +38,17 @@ if ( empty( $images ) ){
 }
 
 $is_parallax =  get_theme_mod( 'onepress_hero_parallax' ) == 1 && ! empty( $images ) ;
-
+$hook_args = array();
 if ( $is_parallax ) {
-    echo '<div id="parallax-hero" class="parallax-hero parallax-window" >';
-    echo '<div class="parallax-bg" style="background-image: url('.esc_url( $images[0]).');" data-stellar-ratio="0.1" data-stellar-offset-parent="true"></div>';
+    $hook_args = array(
+        'image' => $images[0],
+        'alpha' => '',
+        'enable_parallax' => 1,
+        '_bg_type' => 'image'
+    );
 }
+
+do_action('onepress_before_section_part', 'hero',  $hook_args );
 
 ?>
 <?php if ( ! $disable && ! empty ( $images ) ) : ?>
@@ -101,7 +107,4 @@ if ( $is_parallax ) {
 	</section>
 <?php endif;
 
-if ( $is_parallax ) {
-
-    echo '</div>'; // end parallax
-}
+do_action('onepress_after_section_part', 'hero',  $hook_args );

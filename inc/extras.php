@@ -131,7 +131,7 @@ add_filter( 'onepress_the_content', 'do_shortcode' );
 add_filter( 'onepress_the_content', 'convert_smilies' );
 
 
-if ( ! function_exists( 'onepress_is_wc' ) ) {
+if ( ! function_exists( 'onepress_is_wc_active' ) ) {
     function onepress_is_wc_active(){
         if ( function_exists( 'is_woocommerce' ) ) {
            return true;
@@ -139,6 +139,18 @@ if ( ! function_exists( 'onepress_is_wc' ) ) {
         return false;
     }
 }
+
+if ( ! function_exists( 'onepress_is_wc_archive' ) ) {
+	function onepress_is_wc_archive(){
+		if ( function_exists( 'is_product_category' ) || function_exists('is_product_tag') ) {
+			if ( is_product_category() || is_product_tag() ) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
 
 if ( ! function_exists( 'onepress_get_layout' ) ) {
     function onepress_get_layout( $default = 'right-sidebar' ) {
@@ -178,4 +190,141 @@ if ( class_exists( 'WooCommerce' ) ) {
 if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
 	define( 'ELEMENTOR_PARTNER_ID', 2123 );
 }
+
+if ( ! function_exists('onepress_get_video_lightbox_image') ) {
+    /**
+     * @since 2.0.5
+     * @return string
+     */
+    function onepress_get_video_lightbox_image()
+    {
+        $image = get_theme_mod('onepress_videolightbox_image');
+        return $image;
+    }
+}
+
+
+if ( ! function_exists( 'onepress_before_section' ) ) {
+    /**
+     * @since 2.0.5
+     *
+     * @param $section_id
+     * @param array $args
+     */
+    function onepress_before_section( $section_id, $args = array() ){
+        if ( ! isset( $args['_bg_type'] ) ) {
+            $args['_bg_type'] = '';
+        }
+
+        if ( ! class_exists( 'OnePress_Plus' ) ) {
+            if ( $section_id == 'videolightbox' ) {
+                $image = onepress_get_video_lightbox_image();
+                if ( $image || onepress_is_selective_refresh() ) {
+                    echo '<div class="section-parallax">';
+                    echo ' <div class="parallax-bg"><img src="' . esc_url($image) . '" alt=""></div>';
+                }
+                return ;
+            }
+        }
+
+        switch( $args['_bg_type'] ) {
+            case 'video':
+                $args = wp_parse_args( $args, array(
+                    'video_url' => '',
+                    'video_webm_url' => '',
+                    'video_ogv_url' => '',
+                    'image' => ''
+                ) );
+                extract( $args );
+
+                if (  $video_url || $video_webm_url || $video_ogv_url ) {
+                    ?>
+                <div class="video-section"
+                     data-mp4="<?php echo esc_url( $video_url ); ?>"
+                     data-webm="<?php echo esc_url( $video_webm_url ); ?>"
+                     data-ogv="<?php echo esc_url( $video_ogv_url ); ?>"
+                     data-bg="<?php echo esc_attr( $image ); ?>">
+                    <?php
+                }
+                break;
+
+            case 'image':
+                $args = wp_parse_args( $args, array(
+                    'image' => '',
+                    'alpha' => '',
+                    'enable_parallax' => ''
+                ) );
+                extract( $args );
+                if ( $enable_parallax == 1 ) {
+                    $class = 'section-parallax';
+                    if( $section_id == 'hero' ){
+                        $class .=' parallax-hero';
+                    }
+                    echo '<div id="parallax-'.esc_attr( $section_id ).'" class="'.esc_attr( $class ).'">';
+                    echo ' <div class="parallax-bg""><img src="'.esc_url( $image ).'" alt=""></div>';
+                } else if ( $image || $alpha ) { // image bg
+                    echo '<div id="bgimage-'.esc_attr( $section_id ).'" class="bgimage-alpha bgimage-'.esc_attr( $section_id ).'">';
+                }
+                break;
+        }// end switch
+    }
+}
+
+if ( ! function_exists( 'onepress_after_section' ) ) {
+    /**
+     * @since 2.0.5
+     *
+     * @param null $section_id
+     * @param array $args
+     */
+    function onepress_after_section( $section_id = null, $args = array() ){
+        if ( ! isset( $args['_bg_type'] ) ) {
+            $args['_bg_type'] = '';
+        }
+
+        if ( ! class_exists( 'OnePress_Plus' ) ) {
+            if ( $section_id == 'videolightbox' ) {
+                $image = onepress_get_video_lightbox_image();
+                if ( $image || onepress_is_selective_refresh() ) {
+                    echo '</div>';
+                }
+                return ;
+            }
+        }
+
+        switch( $args['_bg_type'] ) {
+            case 'video':
+                $args = wp_parse_args( $args, array(
+                    'video_url' => '',
+                    'video_webm_url' => '',
+                    'video_ogv_url' => ''
+                ) );
+                extract( $args );
+
+                if (  $video_url || $video_webm_url || $video_ogv_url ) {
+                    echo '</div>';
+                }
+                break;
+
+                case 'image':
+
+                $args = wp_parse_args($args, array(
+                    'image'           => '',
+                    'alpha'           => '',
+                    'enable_parallax' => ''
+                ));
+                extract($args);
+                if ($enable_parallax == 1) {
+                    echo '</div>';
+                } else if ($image || $alpha) { // image bg
+                    echo '</div>';
+                }
+                break;
+        }// end switch
+    }
+}
+
+add_action( 'onepress_before_section_part', 'onepress_before_section', 10, 2 );
+add_action( 'onepress_after_section_part', 'onepress_after_section', 10, 2 );
+
 
