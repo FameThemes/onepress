@@ -11,8 +11,6 @@
  * Display header brand
  * @since 1.2.1
  */
-
-
 function onepress_add_retina_logo( $html ){
     $custom_logo_id = get_theme_mod( 'custom_logo' );
 
@@ -1462,7 +1460,7 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
             $page_id = get_the_ID();
         }
         $el = 'h1';
-        if ( is_single() ) {
+        if ( is_singular('post') ) {
             if ( ! apply_filters( 'onepress_single_show_page_header', false ) ) {
                 return;
             }
@@ -1473,15 +1471,21 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 
         $apply_shop = false;
         $is_single_product = false;
+
         if (onepress_is_wc_active()) {
-            if (is_shop() || is_product_category() || is_product_tag() || is_singular('product')) {
+            if (is_shop() || is_product_category() || is_product_tag() || is_product() || is_singular('product') || is_product_taxonomy() ) {
+
                 $page_id = wc_get_page_id('shop');
-                if ( is_singular('product') ) {
+                if ( is_product() ) {
                     $el = 'h2';
-                    $is_single_product =  true;
+                    $is_single_product = true;
                     $apply_shop = get_post_meta( $page_id, '_wc_apply_product', true );
                 }
                 $return = false;
+
+                remove_action('woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10);
+                remove_action('woocommerce_archive_description', 'woocommerce_product_archive_description', 10);
+                add_action( 'woocommerce_show_page_title', '__return_false', 95 );
             }
         }
 
@@ -1529,11 +1533,6 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
         if ( ! $apply_shop && $is_single_product ) {
             $excerpt = '';
         }
-
-
-
-
-
 
         ?>
         <?php if ( ! $hide_page_title ){ ?>
