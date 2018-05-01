@@ -1461,8 +1461,16 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
         } else {
             $page_id = get_the_ID();
         }
-
         $el = 'h1';
+        if ( is_single() ) {
+            if ( ! apply_filters( 'onepress_single_show_page_header', false ) ) {
+                return;
+            }
+            $page_id = get_option( 'page_for_posts' );
+            $el = 'h2';
+        }
+
+
         $apply_shop = false;
         $is_single_product = false;
         if (onepress_is_wc_active()) {
@@ -1521,6 +1529,8 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
         if ( ! $apply_shop && $is_single_product ) {
             $excerpt = '';
         }
+
+
 
 
 
