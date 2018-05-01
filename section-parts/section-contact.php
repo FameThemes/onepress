@@ -45,7 +45,7 @@ if ( $onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_addres
                             <div class="contact-form col-sm-6 wow slideInUp">
                                 <br>
                                 <small>
-                                    <i><?php printf(esc_html__('You can install %1$s plugin and go to Customizer &rarr; Section: Contact &rarr; Section Content to show a working contact form here.', 'onepress'), '<a href="' . esc_url('https://wordpress.org/plugins/contact-form-7/', 'onepress') . '" target="_blank">Contact Form 7</a>'); ?></i>
+                                    <i><?php printf(esc_html__('You can install %1$s plugin and go to Customizer &rarr; Section: Contact &rarr; Section Content to show a working contact form here.', 'onepress'), '<a href="' . esc_url('https://wordpress.org/plugins/pirate-forms/', 'onepress') . '" target="_blank">Contact Form 7</a>'); ?></i>
                                 </small>
                             </div>
                         <?php } ?>
