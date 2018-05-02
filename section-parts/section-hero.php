@@ -94,8 +94,8 @@ do_action('onepress_before_section_part', 'hero',  $hook_args );
 
                 $btn_1_target = get_theme_mod( 'onepress_hcl1_btn1_target' );
 				$btn_2_target = get_theme_mod( 'onepress_hcl1_btn2_target' );
-				$target_1 = ( $btn_1_target == 1 ) ? ' target="_blank" ' : '';
-				$target_2 = ( $btn_2_target == 1 ) ? ' target="_blank" ' : '';
+				$target_1 = ( $btn_1_target == 1 ) ? 'target="_blank"' : '';
+				$target_2 = ( $btn_2_target == 1 ) ? 'target="_blank"' : '';
 
 				?>
 				<div class="container"<?php echo $hero_content_style; ?>>
