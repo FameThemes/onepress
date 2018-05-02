@@ -1637,6 +1637,19 @@ function onepress_customize_register( $wp_customize ) {
                         )
 					)
 				);
+				$wp_customize->add_setting( 'onepress_hcl1_btn1_target',
+					array(
+						'sanitize_callback' => 'onepress_sanitize_checkbox',
+						'default'           => null,
+					)
+				);
+				$wp_customize->add_control( 'onepress_hcl1_btn1_target',
+					array(
+						'label' 		=> __('Open Button #1 In New Window', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1',
+						'type'          => 'checkbox',
+					)
+				);
 
 				// Button #2 Text
 				$wp_customize->add_setting( 'onepress_hcl1_btn2_text',
@@ -1666,7 +1679,7 @@ function onepress_customize_register( $wp_customize ) {
 					)
 				);
 
-                // Button #1 Style
+                // Button #2 Style
                 $wp_customize->add_setting( 'onepress_hcl1_btn2_style',
                     array(
                         'sanitize_callback' => 'onepress_sanitize_text',
@@ -1690,6 +1703,19 @@ function onepress_customize_register( $wp_customize ) {
                         )
                     )
                 );
+				$wp_customize->add_setting( 'onepress_hcl1_btn2_target',
+					array(
+						'sanitize_callback' => 'onepress_sanitize_checkbox',
+						'default'           => null,
+					)
+				);
+				$wp_customize->add_control( 'onepress_hcl1_btn2_target',
+					array(
+						'label' 		=> __('Open Button #2 In New Window', 'onepress'),
+						'section' 		=> 'onepress_hero_content_layout1',
+						'type'          => 'checkbox',
+					)
+				);
 
 
 				/* Layout 2 ---- */
