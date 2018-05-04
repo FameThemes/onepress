@@ -2,6 +2,7 @@
 CHANGELOG
 ====================================================================
 # 2.0.7
+* NEW: Add hero button target.
 * FIXED: Duplicate title on single post.
 * FIXED: Duplicate title on product archive.
 * FIXED: Contact form issue.
