@@ -98,9 +98,9 @@ if ( ! function_exists( 'onepress_setup' ) ) :
 
         // Recommend plugins
         add_theme_support( 'recommend-plugins', array(
-            'contact-form-7' => array(
-                'name' => esc_html__( 'Contact Form 7', 'onepress' ),
-                'active_filename' => 'contact-form-7/wp-contact-form-7.php',
+            'pirate-forms' => array(
+                'name' => esc_html__( 'Pirate Forms', 'onepress' ),
+                'active_filename' => 'pirate-forms/pirate-forms.php',
             ),
             'famethemes-demo-importer' => array(
                 'name' => esc_html__( 'Famethemes Demo Importer', 'onepress' ),
@@ -334,11 +334,10 @@ if ( ! function_exists( 'onepress_register_required_plugins' ) ) :
 		 */
 		$plugins = array(
 			array(
-				'name'               => 'Contact Form 7', // The plugin name.
-				'slug'               => 'contact-form-7', // The plugin slug (typically the folder name).
+				'name'               => 'Pirate Forms', // The plugin name.
+				'slug'               => 'pirate-forms', // The plugin slug (typically the folder name).
 				'source'             => '', // The plugin source.
 				'required'           => false, // If false, the plugin is only 'recommended' instead of required.
-				'version'            => '4.2', // E.g. 1.0.0. If set, the active plugin must be this version or higher.
 				'force_activation'   => false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch.
 				'force_deactivation' => false, // If true, plugin is deactivated upon theme switch, useful for theme-specific plugins.
 				'external_url'       => '', // If set, overrides default API URL and points to an external URL.
