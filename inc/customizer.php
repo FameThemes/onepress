@@ -3459,7 +3459,7 @@ function onepress_customize_register( $wp_customize ) {
 			array(
 				'section'     => 'onepress_contact_content',
 				'type'        => 'custom_message',
-				'description' => wp_kses_post( 'In order to display contact form please install <a target="_blank" href="https://vi.wordpress.org/plugins/pirate-forms/">PirateForms</a> plugin and then copy the contact form shortcode and paste it here, the shortcode will be like this <code>[pirate_forms]</code>', 'onepress' )
+				'description' => wp_kses_post( 'Paste your form shortcode from contact form plugin here, e.g <code>[pirate_forms]</code>', 'onepress' )
 			)
 		));
 
