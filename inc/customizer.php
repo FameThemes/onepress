@@ -1532,7 +1532,7 @@ function onepress_customize_register( $wp_customize ) {
 					array(
 						'label' 		=> esc_html__('Large Text', 'onepress'),
 						'section' 		=> 'onepress_hero_content_layout1',
-						'description'   => esc_html__('Text Rotating Guide: Put your rotate texts separate by "|" into <span class="js-rotating">...</span>, go to Customizer->Site Option->Animate to control rotate animation.', 'onepress'),
+						'description'   => esc_html__('Text Rotating Guide: Put your rotate texts separate by "|" into <span class="js-rotating">...</span>, go to Customizer -> Theme Options -> Section: Hero -> Hero Settings to control rotate animation.', 'onepress'),
 					)
 				));
 
