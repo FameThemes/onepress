@@ -725,20 +725,6 @@ function onepress_customize_register( $wp_customize ) {
         )
     );
 
-    $wp_customize->add_setting( 'single_thumbnail',
-        array(
-            'sanitize_callback' => 'onepress_sanitize_checkbox',
-            'default'           => '',
-        )
-    );
-    $wp_customize->add_control( 'single_thumbnail',
-        array(
-            'type'        => 'checkbox',
-            'label'       => esc_html__('Show single post thumbnail', 'onepress'),
-            'section'     => 'onepress_single',
-            'description' => esc_html__('Check this box to show featured image on single post.', 'onepress')
-        )
-    );
 
 		/* Footer top Social Settings
 		----------------------------------------------------------------------*/
