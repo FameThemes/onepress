@@ -70,7 +70,7 @@ function onepress_admin_switch_theme_notice(){
     $current_screen = get_current_screen();
     $class = 'onepress-notice';
     if ( $current_screen && $current_screen->id != 'appearance_page_ft_onepress' ) {
-        $class .= ' updated';
+        $class .= ' notice notice-warning';
     }
     ?>
     <div class="<?php echo esc_attr( $class ); ?>">
@@ -88,7 +88,7 @@ function onepress_admin_switch_theme_notice(){
  */
 function onepress_add_admin_switch_theme_notice(){
     $current_screen = get_current_screen();
-    if ( $current_screen && $current_screen->id == 'appearance_page_ft_onepress' ) {
+    if ( $current_screen && $current_screen->id == 'appearance_page_ft_onepress' || $current_screen->base != 'themes' ) {
         return;
     }
     onepress_admin_switch_theme_notice();

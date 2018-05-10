@@ -219,7 +219,7 @@
     box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
     margin: 5px 15px 2px;
     padding: 1px 12px;
-    border-left: 4px solid #46b450;
+    border-left: 4px solid #ffb900  !important;
 }
 .theme_info_wrapper .onepress-notice{
     margin: 15px 0px;
