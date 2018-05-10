@@ -213,3 +213,22 @@
     margin-right: 10px;
 }
 
+
+.onepress-notice {
+    background: #fff;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    margin: 5px 15px 2px;
+    padding: 1px 15px 10px;
+    border-left: 4px solid #ffb900  !important;
+}
+.onepress-notice div {
+	margin-top: -10px;
+	margin-bottom: 20px;
+	line-height: 1.6;
+}
+.onepress-notice .button-dismiss {
+	margin-left: 10px;
+}
+.theme_info_wrapper .onepress-notice{
+    margin: 15px 0px;
+}

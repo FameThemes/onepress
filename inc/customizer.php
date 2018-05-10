@@ -512,6 +512,23 @@ function onepress_customize_register( $wp_customize ) {
             )
         );
 
+    /**
+     * @since 2.0.8
+     */
+        $wp_customize->add_setting( 'onepress_transparent_logo_height',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default' => ''
+            )
+        );
+        $wp_customize->add_control( 'onepress_transparent_logo_height',
+           array(
+               'label'       => esc_html__( 'Transparent Logo Height in Pixel', 'onepress' ),
+               'section'     => 'onepress_header_settings',
+               'description' => '',
+           )
+        );
+
         $wp_customize->add_setting( 'onepress_transparent_site_title_c',
             array(
                 'sanitize_callback' => 'sanitize_hex_color',
@@ -725,20 +742,6 @@ function onepress_customize_register( $wp_customize ) {
         )
     );
 
-    $wp_customize->add_setting( 'single_thumbnail',
-        array(
-            'sanitize_callback' => 'onepress_sanitize_checkbox',
-            'default'           => '',
-        )
-    );
-    $wp_customize->add_control( 'single_thumbnail',
-        array(
-            'type'        => 'checkbox',
-            'label'       => esc_html__('Show single post thumbnail', 'onepress'),
-            'section'     => 'onepress_single',
-            'description' => esc_html__('Check this box to show featured image on single post.', 'onepress')
-        )
-    );
 
 		/* Footer top Social Settings
 		----------------------------------------------------------------------*/

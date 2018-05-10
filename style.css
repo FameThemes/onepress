@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design. The theme overall is an elegant and classic one, a fine example of Bootstrap 4 WordPress theme which compatibility with latest version of WooCommerce. (Live preview : http://www.famethemes.com/preview/?theme=OnePress)
-Version: 2.0.7
+Version: 2.0.8
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -2183,6 +2183,60 @@ section > .customize-partial-edit-shortcut button {
       transform: translateY(0);
 }
 .hero-slideshow-wrapper .slider-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 9999999;
+  margin: 0px;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+}
+
+.animation-disable .hero-slideshow-wrapper {
+  /* Loading icon */
+}
+.animation-disable .hero-slideshow-wrapper .hero__content .hero-large-text, .animation-disable .hero-slideshow-wrapper .hero__content .hero-small-text, .animation-disable .hero-slideshow-wrapper .hero__content .btn {
+  -webkit-transform: translateY(0px);
+  -ms-transform: translateY(0px);
+      transform: translateY(0px);
+}
+.animation-disable .hero-slideshow-wrapper .hero__content .hero-large-text {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.animation-disable .hero-slideshow-wrapper .hero__content .hero-small-text {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.animation-disable .hero-slideshow-wrapper .hero__content .btn {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-large-text, .animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-small-text, .animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .btn {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-large-text {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-small-text {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .btn {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.animation-disable .hero-slideshow-wrapper .slider-spinner {
   position: absolute;
   top: 50%;
   left: 50%;
