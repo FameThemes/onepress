@@ -2,8 +2,9 @@
 CHANGELOG
 ====================================================================
 # 2.0.8
-* NEW: Logo transparent height settings.
-* FIXED: Disable hero animation.
+* NEW: Setting height for transparent logo.
+* IMPROVED: Small strings corrections.
+* FIXED: Include hero animation in global animation setting.
 
 # 2.0.7
 * NEW: Add hero button target.
