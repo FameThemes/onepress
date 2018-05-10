@@ -1,6 +1,10 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+# 2.0.8
+* NEW: Logo transparent height settings.
+* FIXED: Disable hero animation.
+
 # 2.0.7
 * NEW: Add hero button target.
 * FIXED: Duplicate title on single post.

@@ -200,6 +200,66 @@
         transform: translate(-50%, -50%);
     }
 }
+.animation-disable {
+    .hero-slideshow-wrapper {
+        .hero__content {
+            .hero-large-text, .hero-small-text, .btn {
+                -webkit-transform: translateY(0px);
+                transform: translateY(0px);
+            }
+            .hero-large-text {
+                -webkit-transition-delay: 0s; /* Safari */
+                transition-delay: 0s;
+            }
+            .hero-small-text {
+                -webkit-transition-delay: 0s; /* Safari */
+                transition-delay: 0s;
+            }
+            .btn {
+                -webkit-transition-delay: 0s; /* Safari */
+                transition-delay: 0s;
+            }
+
+        }
+
+        &.loaded {
+            .container {
+                .hero__content {
+                    &:hover {
+                        .hero-large-text, .hero-small-text, .btn {
+                            -webkit-transition-delay: 0s; /* Safari */
+                            transition-delay: 0s;
+                        }
+                        .hero-large-text {
+                            -webkit-transition-delay: 0s; /* Safari */
+                            transition-delay: 0s;
+                        }
+                        .hero-small-text {
+                            -webkit-transition-delay: 0s; /* Safari */
+                            transition-delay: 0s;
+                        }
+                        .btn {
+                            -webkit-transition-delay: 0s; /* Safari */
+                            transition-delay: 0s;
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Loading icon */
+        .slider-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 9999999;
+            margin: 0px;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
 
 .js-rotating {
     display: none;

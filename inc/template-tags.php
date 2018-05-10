@@ -535,6 +535,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 	function onepress_custom_inline_style( ) {
 
 	        $logo_height= absint( get_theme_mod( 'onepress_logo_height' ) );
+	        $logo_tran_height= absint( get_theme_mod( 'onepress_transparent_logo_height' ) );
 
             /**
              *  Custom hero section css
@@ -545,8 +546,13 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             $hero_bg_color = onepress_hex_to_rgba( $hero_bg_color, floatval( get_theme_mod( 'onepress_hero_overlay_opacity' , .3 ) ) );
 
             ob_start();
+
             if ( $logo_height > 0 ) {
                 echo ".site-logo-div img{ height: {$logo_height}px; width: auto; }";
+            }
+
+            if ( $logo_tran_height ) {
+                echo ".site-logo-div img.custom-logo-transparent{ height: {$logo_tran_height}px; width: auto; }";
             }
 
             $t_site_name_color = sanitize_hex_color( get_theme_mod( 'onepress_transparent_site_title_c' ) );
@@ -771,9 +777,6 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 }
                 <?php
             }
-
-
-
 
             $onepress_footer_bg = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_footer_bg' ) );
             $footer_top_text = sanitize_hex_color( get_theme_mod( 'onepress_footer_top_color' ) );

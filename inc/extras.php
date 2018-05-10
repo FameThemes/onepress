@@ -35,6 +35,10 @@ function onepress_body_classes( $classes ) {
         }
     }
 
+    if( get_theme_mod( 'onepress_animation_disable' ) ) {
+	    $classes[ ] = 'animation-disable';
+    }
+
 	return $classes;
 }
 add_filter( 'body_class', 'onepress_body_classes' );

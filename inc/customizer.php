@@ -512,6 +512,23 @@ function onepress_customize_register( $wp_customize ) {
             )
         );
 
+    /**
+     * @since 2.0.8
+     */
+        $wp_customize->add_setting( 'onepress_transparent_logo_height',
+            array(
+                'sanitize_callback' => 'sanitize_text_field',
+                'default' => ''
+            )
+        );
+        $wp_customize->add_control( 'onepress_transparent_logo_height',
+           array(
+               'label'       => esc_html__( 'Transparent Logo Height in Pixel', 'onepress' ),
+               'section'     => 'onepress_header_settings',
+               'description' => '',
+           )
+        );
+
         $wp_customize->add_setting( 'onepress_transparent_site_title_c',
             array(
                 'sanitize_callback' => 'sanitize_hex_color',

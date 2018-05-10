@@ -286,6 +286,7 @@ function onepress_customizer_partials( $wp_customize ) {
      */
     $css_settings = array(
         'onepress_logo_height',
+        'onepress_transparent_logo_height',
         'onepress_tagline_text_color',
         'onepress_logo_text_color',
 
