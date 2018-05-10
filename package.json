@@ -1,6 +1,6 @@
 {
   "name": "onepress",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "main": "Gruntfile.js",
   "engines": {
     "node": ">= 0.10.0"
