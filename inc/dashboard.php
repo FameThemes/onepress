@@ -74,10 +74,11 @@ function onepress_admin_switch_theme_notice(){
     }
     ?>
     <div class="<?php echo esc_attr( $class ); ?>">
-        <p><?php _e( 'Checkout Customify - improved version of OnePress', 'onepress' ); ?></p>
-        <p>
-            <a href="<?php echo esc_url( $url ); ?>" class="onepress-install-swt button button-primary"><?php _e( 'Install Now', 'onepress' ); ?></a>
-            <a href="<?php echo esc_url( $dismiss_url ); ?>" class="onepress-dismiss-swt  button-secondary"><?php _e( 'No, Thank you', 'onepress' ); ?></a>
+        <h4><?php _e('Meet Customify - the improved version of OnePress theme by the same team!', 'onepress') ?></h4>
+        <div class="notice-text"><?php _e( 'Customify is both a WordPress Theme and a WordPress Theme Editor. It’s a powerful styling platform that ensures exceptional design control over your website’s looks and feel. The most highlight feature is the <strong>comprehensive Header & Footer builder</strong>.', 'onepress' ); ?></div>
+        <p style="margin-top: 20px;">
+            <a href="<?php echo esc_url( $url ); ?>" class="onepress-install-swt button button-primary"><?php _e( 'Install Customify Now', 'onepress' ); ?></a>
+            <a href="<?php echo esc_url( $dismiss_url ); ?>" class="onepress-dismiss-swt  button-secondary button-dismiss"><?php _e( 'Don\'t show this again', 'onepress' ); ?></a>
         </p>
     </div>
     <?php
