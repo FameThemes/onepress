@@ -1234,11 +1234,12 @@ function onepress_gallery_html( $data, $inner = true, $size = 'thumbnail' ) {
             $thumb = $photo['thumbnail'];
         }
 
-        $html .= '<a href="'.esc_attr( $photo['full'] ).'" class="g-item" title="'.esc_attr( wp_strip_all_tags( $photo['title'] ) ).'">';
+        $title = wp_strip_all_tags( $photo['title'] );
+        $html .= '<a href="'.esc_attr( $photo['full'] ).'" class="g-item" title="'.esc_attr( $title ).'">';
         if ( $inner ) {
             $html .= '<span class="inner">';
                 $html .= '<span class="inner-content">';
-                $html .= '<img src="'.esc_url( $thumb ).'" alt="">';
+                $html .= '<img src="'.esc_url( $thumb ).'" alt="'.esc_attr( $title ).'">';
                 $html .= '</span>';
             $html .= '</span>';
         } else {
