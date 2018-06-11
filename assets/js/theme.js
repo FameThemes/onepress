@@ -646,7 +646,7 @@ jQuery( document ).ready( function( $ ) {
                     max_width = ww;
                 }
 
-                if( max_width > ww*2 ) {
+                if( max_width > ww*2 && imageNaturalHeight > containerHeight * 2) {
                     max_width = max_width - ww;
                 }
 
