@@ -1,6 +1,10 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+# 2.0.9
+* FIXED: Issue hero image resize not properly.
+* FIXED: Parallax does not rescale image anymore.
+
 # 2.0.8
 * NEW: Setting height for transparent logo.
 * IMPROVED: Small strings corrections.

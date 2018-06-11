@@ -654,7 +654,7 @@ jQuery( document ).ready( function( $ ) {
                 if ( l < 0 ) {
                     l = 0;
                 }
-                
+
                 img.css( {
                     top: '-' + ( parallaxTop ) + 'px',
                     left: '-' + ( l ) + 'px',
