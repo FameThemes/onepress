@@ -264,7 +264,7 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
                         $class =' parallax-hero';
                     }
                     echo '<div id="parallax-'.esc_attr( $section_id ).'" class="'.esc_attr( $class ).'">';
-                    echo ' <div class="parallax-bg""><img src="'.esc_url( $image ).'" alt=""></div>';
+                    echo ' <div class="parallax-bg"><img src="'.esc_url( $image ).'" alt=""></div>';
                 } else if ( $image || $alpha ) { // image bg
                     echo '<div id="bgimage-'.esc_attr( $section_id ).'" class="bgimage-alpha bgimage-'.esc_attr( $section_id ).'">';
                 }
