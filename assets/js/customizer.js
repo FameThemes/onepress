@@ -1096,7 +1096,12 @@
                     if (  typeof settings === 'object' ) {
                         if ( typeof settings.mod === 'string' && settings.mod === 'html' ){
                             //console.log( settings.mod  );
-                            switchEditors.go( id, settings.mod );
+                            try {
+                                switchEditors.go( id, settings.mod );
+                            } catch(e){
+
+                            }
+
                         }
                         // editor.theme.resizeTo('100%', 500);
                         if( typeof settings.init_instance_callback === "function" ) {
