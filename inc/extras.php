@@ -223,9 +223,11 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
         if ( ! class_exists( 'OnePress_Plus' ) ) {
             if ( $section_id == 'videolightbox' ) {
                 $image = onepress_get_video_lightbox_image();
+                $image_url = wp_get_attachment_image_url($image, 'full');
+			    $image_alt = get_post_meta( $image, '_wp_attachment_image_alt', true);
                 if ( $image || onepress_is_selective_refresh() ) {
                     echo '<div class="section-parallax">';
-                    echo ' <div class="parallax-bg"><img src="' . esc_url($image) . '" alt=""></div>';
+                    echo ' <div class="parallax-bg"><img src="' . esc_url($image_url) . '" alt="'. esc_attr( $image_alt ).'"></div>';
                 }
                 return ;
             }

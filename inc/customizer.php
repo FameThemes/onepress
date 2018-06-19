@@ -1850,11 +1850,11 @@ function onepress_customize_register( $wp_customize ) {
     // Parallax image
     $wp_customize->add_setting( 'onepress_videolightbox_image',
         array(
-            'sanitize_callback' => 'esc_url_raw',
+            'sanitize_callback' => 'onepress_sanitize_number',
             'default'           => '',
         )
     );
-    $wp_customize->add_control( new WP_Customize_Image_Control(
+    $wp_customize->add_control( new WP_Customize_Media_Control(
         $wp_customize,
         'onepress_videolightbox_image',
         array(
