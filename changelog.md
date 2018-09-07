@@ -4,6 +4,7 @@ CHANGELOG
 
 # 2.1.0
 * NEW: Disable disable archive prefix.
+* NEW: Item content source for Service section.
 * IMPROVED: Improved News section.
 * IMPROVED: Re-Structure customize configs.
 
@@ -52,7 +53,7 @@ CHANGELOG
 * FIXED: Jetpack's CDN for all images compatible.
 * FIXED: Hero parallax issue.
 * FIXED: Site title & tagline color.
-  
+
 ## 2.0.2
 * NEW: Option to enable page header cover.
 * NEW: Option to display page excerpt as header cover description.
