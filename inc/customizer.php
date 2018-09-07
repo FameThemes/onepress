@@ -79,8 +79,18 @@ function onepress_customize_register( $wp_customize ) {
 	 */
 	// Site Identity.
 	require_once $path. '/inc/customize-configs/site-identity.php';
+
 	//Site Options
-	require_once $path. '/inc/customize-configs/site-options.php';
+	require_once $path. '/inc/customize-configs/options.php';
+	require_once $path. '/inc/customize-configs/options-global.php';
+	require_once $path. '/inc/customize-configs/options-colors.php';
+	require_once $path. '/inc/customize-configs/options-header.php';
+	require_once $path. '/inc/customize-configs/options-navigation.php';
+	require_once $path. '/inc/customize-configs/options-page.php';
+	require_once $path. '/inc/customize-configs/options-blog-posts.php';
+	require_once $path. '/inc/customize-configs/options-single.php';
+	require_once $path. '/inc/customize-configs/options-footer.php';
+
 	// Section Hero
 	require_once $path. '/inc/customize-configs/section-hero.php';
 	// Section Hero
