@@ -263,7 +263,7 @@ $wp_customize->add_control( new OnePress_Pages_Control(
 	array(
 		'label'       => esc_html__( 'More News link', 'onepress' ),
 		'section'     => 'onepress_news_settings',
-		'description' => '',
+		'description' => esc_html__( 'It should be your blog page link.', 'onepress' )
 	)
 ) );
 
