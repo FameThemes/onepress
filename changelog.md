@@ -1,6 +1,13 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+
+# 2.1.0
+* NEW: Disable disable archive prefix.
+* IMPROVED: Improved News section.
+* IMPROVED: Re-Structure customize configs.
+
+
 # 2.0.9
 * IMPROVED: Add alt title for gallery images.
 * FIXED: Issue hero image resize not properly.
