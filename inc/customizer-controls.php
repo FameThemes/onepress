@@ -705,7 +705,7 @@ function onepres_customizer_control_scripts(){
     wp_enqueue_script( 'wp-color-picker' );
     wp_enqueue_style( 'wp-color-picker' );
 
-    wp_enqueue_script( 'onepress-customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-controls', 'wp-color-picker' ) );
+    wp_enqueue_script( 'onepress-customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-controls', 'wp-color-picker' ), time() );
     wp_enqueue_style( 'onepress-customizer',  get_template_directory_uri() . '/assets/css/customizer.css' );
 
 }
