@@ -32,6 +32,7 @@ $wp_customize->add_setting( 'onepress_layout',
 		//'transport'			=> 'postMessage'
 	)
 );
+
 $wp_customize->add_control( 'onepress_layout',
 	array(
 		'type'        => 'select',

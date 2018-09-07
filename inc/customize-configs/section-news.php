@@ -111,6 +111,66 @@ $wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_
 	)
 ) );
 
+/**
+ * @since 2.1.0
+ */
+$wp_customize->add_setting( 'onepress_news_hide_meta',
+	array(
+		'sanitize_callback' => 'sanitize_text_field',
+		'default'           => false,
+	)
+);
+$wp_customize->add_control( 'onepress_news_hide_meta',
+	array(
+		'label'       => esc_html__( 'Hide post categories', 'onepress' ),
+		'section'     => 'onepress_news_settings',
+		'type' => 'checkbox',
+		'description' => '',
+	)
+);
+
+/**
+ * @since 2.1.0
+ */
+$wp_customize->add_setting( 'onepress_news_excerpt_type',
+	array(
+		'sanitize_callback' => 'sanitize_text_field',
+		'default'           => 'custom',
+	)
+);
+$wp_customize->add_control( 'onepress_news_excerpt_type',
+	array(
+		'label'       => esc_html__( 'Custom excerpt length', 'onepress' ),
+		'section'     => 'onepress_news_settings',
+		'type' => 'select',
+		'choices' => array(
+			'custom' => __( 'Custom', 'onepress' ),
+			'excerpt' => __( 'Use excerpt metabox', 'onepress' ),
+			'more_tag' => __( 'Strip excerpt by more tag', 'onepress' ),
+			'content' => __( 'Full content', 'onepress' ),
+		),
+		'description' => '',
+	)
+);
+
+/**
+ * @since 2.1.0
+ */
+$wp_customize->add_setting( 'onepress_news_excerpt_length',
+	array(
+		'sanitize_callback' => 'sanitize_text_field',
+		'default'           => '',
+	)
+);
+$wp_customize->add_control( 'onepress_news_excerpt_length',
+	array(
+		'label'       => esc_html__( 'Custom excerpt length', 'onepress' ),
+		'section'     => 'onepress_news_settings',
+		'description' => '',
+	)
+);
+
+
 // Number of post to show.
 $wp_customize->add_setting( 'onepress_news_number',
 	array(
@@ -216,3 +276,4 @@ $wp_customize->add_control( 'onepress_news_more_text',
 		'description' => '',
 	)
 );
+

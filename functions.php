@@ -400,6 +400,146 @@ if ( ! function_exists( 'onepress_register_required_plugins' ) ) :
 endif;
 add_action( 'tgmpa_register', 'onepress_register_required_plugins' );
 
+/**
+ * Glabel OnePress loop properties
+ * @since 2.1.0
+ */
+global $onepress_loop_props;
+$onepress_loop_props = array();
+
+/**
+ * Set onepress loop property
+ *
+ * @since 2.1.0
+ *
+ * @param $prop
+ * @param $value
+ */
+function onepress_loop_set_prop( $prop, $value ) {
+	global $onepress_loop_props;
+	$onepress_loop_props[ $prop ] = $value;
+}
+
+
+/**
+ * Get onepress loop property
+ *
+ * @since 2.1.0
+ *
+ * @param $prop
+ * @param bool $default
+ *
+ * @return bool|mixed
+ */
+function onepress_loop_get_prop( $prop, $default = false ) {
+	global $onepress_loop_props;
+	if ( isset( $onepress_loop_props[ $prop ] ) ) {
+		return  apply_filters( 'onepress_loop_get_prop', $onepress_loop_props[ $prop ], $prop );
+	}
+	
+	return apply_filters( 'onepress_loop_get_prop', $default, $prop );
+}
+
+/**
+ * Remove onepress loop property
+ *
+ * @since 2.1.0
+ *
+ * @param $prop
+ */
+function onepress_loop_remove_prop( $prop ) {
+	global $onepress_loop_props;
+	if ( isset( $onepress_loop_props[ $prop ] ) ) {
+		unset( $onepress_loop_props[ $prop ] );
+	}
+
+}
+
+/**
+ * Trim the excerpt with custom length
+ *
+ * @since 2.1.0
+ *
+ * @see wp_trim_excerpt
+ * @param $text
+ * @param null $excerpt_length
+ * @return string
+ */
+function onepress_trim_excerpt( $text, $excerpt_length = null ){
+	$text = strip_shortcodes( $text );
+	/** This filter is documented in wp-includes/post-template.php */
+	$text = apply_filters( 'the_content', $text );
+	$text = str_replace(']]>', ']]&gt;', $text);
+
+	if ( ! $excerpt_length ) {
+		/**
+		 * Filters the number of words in an excerpt.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param int $number The number of words. Default 55.
+		 */
+		$excerpt_length = apply_filters('excerpt_length', 55 );
+	}
+
+
+	/**
+	 * Filters the string in the "more" link displayed after a trimmed excerpt.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param string $more_string The string shown within the more link.
+	 */
+	$excerpt_more = apply_filters( 'excerpt_more', ' ' . '&hellip;' );
+
+	return wp_trim_words( $text, $excerpt_length, $excerpt_more );
+
+}
+
+/**
+ * Display the excerpt
+ *
+ * @param string $type
+ * @param bool $length
+ */
+function onepress_the_excerpt( $type = false, $length = false ){
+
+	$type = onepress_loop_get_prop( 'excerpt_type', 'excerpt' ) ;
+	$length = onepress_loop_get_prop( 'excerpt_length', false );
+
+	switch ( $type ) {
+		case 'excerpt':
+			the_excerpt();
+			break;
+		case  'more_tag':
+			the_content('',  true );
+			break;
+		case 'content':
+			the_content( '', false );
+			break;
+		default:
+			$text= '';
+			global $post;
+			if ( $post ) {
+				if ( $post->post_excerpt ) {
+					$text = $post->post_excerpt;
+				} else {
+					$text = $post->post_content;
+				}
+			}
+			$excerpt = onepress_trim_excerpt( $text, $length );
+			if ( $excerpt ) {
+				// WPCS: XSS OK.
+				echo apply_filters( 'the_excerpt', $excerpt );
+			} else {
+				the_excerpt();
+			}
+	}
+}
+
+/**
+ * Load Sanitize
+ */
 require get_template_directory() . '/inc/sanitize.php';
 
 /**

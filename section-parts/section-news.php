@@ -37,6 +37,15 @@ $desc = get_theme_mod( 'onepress_news_desc' );
                         $cat = absint( get_theme_mod( 'onepress_news_cat' ) );
                         $orderby = sanitize_text_field( get_theme_mod('onepress_news_orderby') );
                         $order = sanitize_text_field( get_theme_mod('onepress_news_order') );
+                        $hide_meta = sanitize_text_field( get_theme_mod( 'onepress_news_hide_meta' ), false );
+                        $excerpt_length = absint( get_theme_mod( 'onepress_news_excerpt_length' ) );
+                        $excerpt_type =  get_theme_mod( 'onepress_news_excerpt_type', 'custom' ) ;
+                        if ( $hide_meta ) {
+                            onepress_loop_set_prop( 'show_meta', false );
+                        }
+
+						onepress_loop_set_prop( 'excerpt_length', $excerpt_length );
+						onepress_loop_set_prop( 'excerpt_type', $excerpt_type );
 
                         $args = array(
                             'posts_per_page' => $number,
@@ -55,6 +64,7 @@ $desc = get_theme_mod( 'onepress_news_desc' );
                         }
 
 						$query = new WP_Query( $args );
+
 						?>
 						<?php if ( $query->have_posts() ) : ?>
 
@@ -72,9 +82,17 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 							<?php endwhile; ?>
 						<?php else : ?>
 							<?php get_template_part( 'template-parts/content', 'none' ); ?>
-						<?php endif; ?>
+						<?php endif;
 
-						<?php if ( $more_link != '' ) { ?>
+
+						if ( $hide_meta ) {
+							onepress_loop_remove_prop( 'show_meta' );
+						}
+
+						onepress_loop_remove_prop( 'excerpt_length' );
+						onepress_loop_remove_prop( 'excerpt_type' );
+
+						if ( $more_link != '' ) { ?>
 						<div class="all-news">
 							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url($more_link) ?>"><?php if ( $more_text != '' ) echo esc_html( $more_text ); ?></a>
 						</div>
