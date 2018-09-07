@@ -28,7 +28,7 @@ function onepress_customizer_load_template( $template_names ){
             break;
         }
     }
-    
+
     return $located;
 }
 
@@ -91,6 +91,7 @@ function onepress_customizer_partials( $wp_customize ) {
                 'onepress_services_desc',
                 'onepress_service_layout',
                 'onepress_service_icon_size',
+                'onepress_service_content_source'
             ),
         ),
 

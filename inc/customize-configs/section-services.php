@@ -212,3 +212,24 @@ $wp_customize->add_control( 'onepress_service_icon_size',
 		),
 	)
 );
+
+// Service content source
+$wp_customize->add_setting( 'onepress_service_content_source',
+	array(
+		'sanitize_callback' => 'sanitize_text_field',
+		'default'           => 'excerpt',
+	)
+);
+
+$wp_customize->add_control( 'onepress_service_content_source',
+	array(
+		'label'       => esc_html__( 'Item content source', 'onepress' ),
+		'section'     => 'onepress_service_content',
+		'description' => '',
+		'type'        => 'select',
+		'choices'     => array(
+			'content' => esc_html__( 'Full Page Content', 'onepress' ),
+			'excerpt' => esc_html__( 'Page Excerpt', 'onepress' ),
+		),
+	)
+);
