@@ -4,7 +4,7 @@ $disable   = get_theme_mod( 'onepress_news_disable' ) == 1 ? true : false;
 $title     = get_theme_mod( 'onepress_news_title', esc_html__('Latest News', 'onepress' ));
 $subtitle  = get_theme_mod( 'onepress_news_subtitle', esc_html__('Section subtitle', 'onepress' ));
 $number    = absint( get_theme_mod( 'onepress_news_number', '3' ) );
-$more_link = get_theme_mod( 'onepress_news_more_link', '#' );
+$more_link = get_theme_mod( 'onepress_news_more_link', '' );
 $more_text = get_theme_mod( 'onepress_news_more_text', esc_html__('Read Our Blog', 'onepress' ));
 if ( onepress_is_selective_refresh() ) {
     $disable = false;
@@ -92,9 +92,11 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 						onepress_loop_remove_prop( 'excerpt_length' );
 						onepress_loop_remove_prop( 'excerpt_type' );
 
-						if ( $more_link != '' ) { ?>
+						if ( $more_link != '' ) {
+                            $more_text = ( $more_text == '' ) ? get_the_title( $more_link ) : $more_text;
+                        ?>
 						<div class="all-news">
-							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url($more_link) ?>"><?php if ( $more_text != '' ) echo esc_html( $more_text ); ?></a>
+							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url( get_permalink($more_link) ) ?>"><?php if ( $more_text != '' ) echo esc_html( $more_text ); ?></a>
 						</div>
 						<?php } ?>
 
@@ -110,4 +112,3 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 <?php } ?>
 <?php endif;
 wp_reset_postdata();
-
