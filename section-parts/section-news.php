@@ -117,10 +117,10 @@ if ( onepress_is_selective_refresh() ) {
 							$label = $more_text;
 						}
 
-						if ( $more_link != '' ) {
+						if ( $link != '' && $label != '' ) {
                         ?>
 						<div class="all-news">
-							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url( $more_link ) ?>"><?php echo esc_html( $label ); ?></a>
+							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url( $link ) ?>"><?php echo esc_html( $label ); ?></a>
 						</div>
 						<?php } ?>
 
