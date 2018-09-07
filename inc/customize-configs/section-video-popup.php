@@ -99,3 +99,5 @@ $wp_customize->add_control( new WP_Customize_Media_Control(
 		'section' 		=> 'onepress_videolightbox_settings',
 	)
 ));
+
+onepress_add_upsell_for_section( $wp_customize, 'onepress_videolightbox_settings' );

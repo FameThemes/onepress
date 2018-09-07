@@ -123,6 +123,8 @@ if ( class_exists( 'OnePress_Plus' ) ) {
 	);
 }
 
+onepress_add_upsell_for_section( $wp_customize , 'onepress_about_settings' );
+
 
 $wp_customize->add_section( 'onepress_about_content',
 	array(
@@ -133,7 +135,7 @@ $wp_customize->add_section( 'onepress_about_content',
 	)
 );
 
-// Order & Stlying
+// About Items
 $wp_customize->add_setting(
 	'onepress_about_boxes',
 	array(

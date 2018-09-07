@@ -5,6 +5,30 @@
  * @package OnePress
  */
 
+/**
+ * Add upsell message for section
+ *
+ * @return string
+ */
+function onepress_add_upsell_for_section( $wp_customize, $section_id ){
+	if ( apply_filters( 'onepress_add_upsell_for_section', true, $section_id ) ) {
+
+		$name =  $section_id.'__upsell';
+		$wp_customize->add_setting( $name,
+			array(
+				'sanitize_callback' => 'onepress_sanitize_text',
+			)
+		);
+		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, $name,
+			array(
+				'type'        => 'custom_message',
+				'section'     => $section_id,
+				'description' => __('<h4 class="customizer-group-heading-message">Advanced Section Styling</h4><p class="customizer-group-heading-message">Check out the <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version for full control over the section styling which includes background color, image, video, parallax effect, custom style and more ...</p>', 'onepress' )
+			)
+		));
+	}
+}
+
 
 /**
  * Add postMessage support for site title and description for the Theme Customizer.
@@ -59,6 +83,8 @@ function onepress_customize_register( $wp_customize ) {
 	require_once $path. '/inc/customize-configs/site-options.php';
 	// Section Hero
 	require_once $path. '/inc/customize-configs/section-hero.php';
+	// Section Hero
+	require_once $path. '/inc/customize-configs/section-about.php';
 	// Video Popup
 	require_once $path. '/inc/customize-configs/section-video-popup.php';
 	// Section Gallery

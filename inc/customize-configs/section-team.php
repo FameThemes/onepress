@@ -119,6 +119,8 @@ $wp_customize->add_control( 'onepress_team_layout',
 	)
 );
 
+onepress_add_upsell_for_section( $wp_customize, 'onepress_team_settings' );
+
 $wp_customize->add_section( 'onepress_team_content' ,
 	array(
 		'priority'    => 6,

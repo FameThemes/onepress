@@ -299,3 +299,5 @@ $wp_customize->add_control( 'onepress_news_more_text',
 		'description' => '',
 	)
 );
+
+onepress_add_upsell_for_section( $wp_customize, 'onepress_news_settings' );

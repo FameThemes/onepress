@@ -98,6 +98,10 @@ $wp_customize->add_control( new OnePress_Editor_Custom_Control(
 	)
 ) );
 
+
+onepress_add_upsell_for_section( $wp_customize, 'onepress_gallery_settings' );
+
+
 $wp_customize->add_section( 'onepress_gallery_content',
 	array(
 		'priority'    => 6,

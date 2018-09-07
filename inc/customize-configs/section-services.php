@@ -123,6 +123,9 @@ $wp_customize->add_control( 'onepress_service_layout',
 );
 
 
+onepress_add_upsell_for_section( $wp_customize, 'onepress_service_settings' );
+
+
 $wp_customize->add_section( 'onepress_service_content',
 	array(
 		'priority'    => 6,
