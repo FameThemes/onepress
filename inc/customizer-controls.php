@@ -660,6 +660,7 @@ class OnePress_Category_Control extends WP_Customize_Control {
 class OnePress_Pages_Control extends WP_Customize_Control {
 
     public $type = 'dropdown-category';
+    public $show_option_none = 'dropdown-category';
 
     protected $dropdown_args = false;
 
@@ -676,7 +677,7 @@ class OnePress_Pages_Control extends WP_Customize_Control {
 
         $dropdown_args = wp_parse_args( $this->dropdown_args, array(
             'selected'          => $this->value(),
-            'show_option_none'   => __( 'None', 'onepress' ),
+            'show_option_none'   => $this->show_option_none,
             'orderby'           => 'id',
             'order'             => 'ASC'
         ));

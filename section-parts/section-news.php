@@ -1,18 +1,22 @@
 <?php
 $id        = get_theme_mod( 'onepress_news_id', esc_html__('news', 'onepress') );
 $disable   = get_theme_mod( 'onepress_news_disable' ) == 1 ? true : false;
-$title     = get_theme_mod( 'onepress_news_title', esc_html__('Latest News', 'onepress' ));
-$subtitle  = get_theme_mod( 'onepress_news_subtitle', esc_html__('Section subtitle', 'onepress' ));
-$number    = absint( get_theme_mod( 'onepress_news_number', '3' ) );
-$more_link = get_theme_mod( 'onepress_news_more_link', '' );
-$more_text = get_theme_mod( 'onepress_news_more_text', esc_html__('Read Our Blog', 'onepress' ));
+
 if ( onepress_is_selective_refresh() ) {
     $disable = false;
 }
 ?>
 <?php if ( ! $disable  ) :
 
-$desc = get_theme_mod( 'onepress_news_desc' );
+
+	$title     = get_theme_mod( 'onepress_news_title', esc_html__('Latest News', 'onepress' ));
+	$subtitle  = get_theme_mod( 'onepress_news_subtitle', esc_html__('Section subtitle', 'onepress' ));
+	$number    = absint( get_theme_mod( 'onepress_news_number', '3' ) );
+	$more_page = get_theme_mod( 'onepress_news_more_page', '' );
+	$more_link = get_theme_mod( 'onepress_news_more_link', '' );
+	$more_text = get_theme_mod( 'onepress_news_more_text', esc_html__('Read Our Blog', 'onepress' ));
+    $desc = get_theme_mod( 'onepress_news_desc' );
+
 ?>
 <?php if ( ! onepress_is_selective_refresh() ){ ?>
 <section id="<?php if ( $id != '' ) { echo esc_attr( $id ); } ?>" <?php do_action( 'onepress_section_atts', 'news' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-news section-padding onepage-section', 'news' ) ); ?>">
@@ -92,11 +96,31 @@ $desc = get_theme_mod( 'onepress_news_desc' );
 						onepress_loop_remove_prop( 'excerpt_length' );
 						onepress_loop_remove_prop( 'excerpt_type' );
 
+						$link = '';
+						$label = '';
+
+						if ( $more_page ) {
+						    $page = get_post( $more_page );
+						    if( $page ) {
+							    $link = get_permalink( $page );
+							    if ( ! $more_text ) {
+								    $label = $page->post_title;
+                                }
+                            }
+                        }
+
+                        if ( ! $link ) {
+	                        $link = $more_link;
+                        }
+
+						if ( ! $label ) {
+							$label = $more_text;
+						}
+
 						if ( $more_link != '' ) {
-                            $more_text = ( $more_text == '' ) ? get_the_title( $more_link ) : $more_text;
                         ?>
 						<div class="all-news">
-							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url( get_permalink($more_link) ) ?>"><?php if ( $more_text != '' ) echo esc_html( $more_text ); ?></a>
+							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url( $more_link ) ?>"><?php echo esc_html( $label ); ?></a>
 						</div>
 						<?php } ?>
 

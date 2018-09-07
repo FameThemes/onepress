@@ -250,7 +250,8 @@ $wp_customize->add_control(
 );
 
 // Blog Button
-$wp_customize->add_setting( 'onepress_news_more_link',
+
+$wp_customize->add_setting( 'onepress_news_more_page',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => '',
@@ -259,13 +260,31 @@ $wp_customize->add_setting( 'onepress_news_more_link',
 
 $wp_customize->add_control( new OnePress_Pages_Control(
 	$wp_customize,
-	'onepress_news_more_link',
+	'onepress_news_more_page',
 	array(
-		'label'       => esc_html__( 'More News link', 'onepress' ),
+		'label'       => esc_html__( 'More News Page', 'onepress' ),
 		'section'     => 'onepress_news_settings',
+		'show_option_none' =>  esc_html__( 'Custom Link', 'onepress' ),
 		'description' => esc_html__( 'It should be your blog page link.', 'onepress' )
 	)
 ) );
+
+
+$wp_customize->add_setting( 'onepress_news_more_link',
+	array(
+		'sanitize_callback' => 'sanitize_text_field',
+		'default'           => '',
+	)
+);
+
+$wp_customize->add_control(
+	'onepress_news_more_link',
+	array(
+		'label'       => esc_html__( 'Custom More News link', 'onepress' ),
+		'section'     => 'onepress_news_settings'
+	)
+);
+
 
 $wp_customize->add_setting( 'onepress_news_more_text',
 	array(

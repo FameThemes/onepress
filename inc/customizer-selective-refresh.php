@@ -130,6 +130,7 @@ function onepress_customizer_partials( $wp_customize ) {
 
                 'onepress_news_hide_meta', // @since  2.1.0
                 'onepress_news_excerpt_length', // @since  2.1.0
+                'onepress_news_more_page', // @since  2.1.0
 
                 'onepress_news_cat',
                 'onepress_news_orderby',
