@@ -12,9 +12,12 @@
     position: fixed;
     top: 50%;
     right: 48px;
+    @include for(screens-medium) {
+        right: 10px;
+    }
     font-size: 12px;
     transform: translate(0, -50%);
-    z-index: 9000;
+    z-index: 600;
     color:  #333;
     text-transform: uppercase;
     &.c-bully--inversed {
@@ -22,8 +25,6 @@
     }
 
 }
-
-
 
 .c-bully__ {
     &bullet {

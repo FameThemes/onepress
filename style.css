@@ -4240,9 +4240,14 @@ img.mfp-img {
   right: 48px;
   font-size: 12px;
   transform: translate(0, -50%);
-  z-index: 9000;
+  z-index: 600;
   color: #333;
   text-transform: uppercase;
+}
+@media screen and (max-width: 940px) {
+  .c-bully {
+    right: 10px;
+  }
 }
 .c-bully.c-bully--inversed {
   color: #FFF;

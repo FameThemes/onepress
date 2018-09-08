@@ -59,8 +59,6 @@
 
                     }
 
-
-
                     if ( count !== current ) {
                         var activeBullet = $bully.find( '#bully__'+lastItemId );
                         var bullyOffset = $bully.offset();
@@ -179,7 +177,7 @@
                     $target = $( 'html, body' );
 
                 if ( self.options.scrollDuration == 0 ) {
-                    $target.scrollTop( self.offset.top );
+                    $target.scrollTop(  this._calcTop( self.offset.top )  );
                     return;
                 }
 
