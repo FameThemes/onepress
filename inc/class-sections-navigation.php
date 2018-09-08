@@ -162,7 +162,7 @@ class Onepress_Dots_Navigation {
 			$wp_customize->add_setting( $name,
 				array(
 					'sanitize_callback' => 'onepress_sanitize_checkbox',
-					'default'           => 1,
+					'default'           => $args['default'],
 					//'transport'         => 'postMessage'
 				)
 			);
@@ -244,7 +244,7 @@ class Onepress_Dots_Navigation {
 		if ( get_theme_mod( $this->get_name( '__enable' ), false ) ) {
 			$color = sanitize_hex_color_no_hash( get_theme_mod( $this->get_name( '__color' ) ) );
 			if ( $color ) {
-				$code .= " body .c-bully { color: #{$color}; } ";
+				$code .= " .c-bully { color: #{$color}; } ";
 			}
 		}
 		return $code;
