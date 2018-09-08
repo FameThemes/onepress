@@ -10,6 +10,11 @@ class Onepress_Dots_Navigation {
 	static $_instance = null;
 	private $key = 'onepress_sections_nav_';
 
+	/**
+	 * Get instance
+	 *
+	 * @return null|Onepress_Dots_Navigation
+	 */
 	static function get_instance(){
 		if ( is_null( self::$_instance ) ){
 			self::$_instance = new self();
@@ -17,6 +22,11 @@ class Onepress_Dots_Navigation {
 		return self::$_instance;
 	}
 
+	/**
+	 * Get sections
+	 *
+	 * @return array
+	 */
 	function get_sections(){
 
 		$sorted_sections = apply_filters( 'onepress_frontpage_sections_order', array(
@@ -91,15 +101,28 @@ class Onepress_Dots_Navigation {
 				$new[ $id ] = $sections_config[ $id ];
 			}
 		}
-
+		// Filter to add more custom sections here
 		return apply_filters( 'onepress_sections_navigation_get_sections', $new );
 
 	}
 
+	/**
+	 * Get setting name
+	 *
+	 * @param $id
+	 *
+	 * @return string
+	 */
 	function get_name( $id ) {
 		return $this->key.$id;
 	}
 
+	/**
+	 * Add customize config
+	 *
+	 * @param $wp_customize
+	 * @param $section_id
+	 */
 	function add_customize( $wp_customize, $section_id ){
 
 		$wp_customize->add_setting( $this->get_name( '__enable' ),
@@ -227,6 +250,12 @@ class Onepress_Dots_Navigation {
 
 	}
 
+	/**
+	 *
+	 * Get sections settings
+	 *
+	 * @return array
+	 */
 	function get_settings(){
 
 		$data = apply_filters( 'onepress_dots_navigation_get_settings', false );
@@ -266,6 +295,10 @@ class Onepress_Dots_Navigation {
 		return $data;
 	}
 
+	/**
+	 * Add scripts
+	 * load only enabled
+	 */
 	function scripts(){
 		if ( get_theme_mod( $this->get_name( '__enable' ), false ) ) {
 			if ( is_front_page() ) {
@@ -278,6 +311,13 @@ class Onepress_Dots_Navigation {
 		}
 	}
 
+	/**
+	 * Add custom style
+	 * load only enabled
+	 * @param $code
+	 *
+	 * @return string
+	 */
 	function custom_style( $code ){
 		if ( get_theme_mod( $this->get_name( '__enable' ), false ) ) {
 			$color = sanitize_hex_color_no_hash( get_theme_mod( $this->get_name( '__color' ) ) );
@@ -293,6 +333,9 @@ class Onepress_Dots_Navigation {
 		return $code;
 	}
 
+	/**
+	 * Inits
+	 */
 	function init(){
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
 		add_action( 'onepress_custom_css', array( $this, 'custom_style' ) );
