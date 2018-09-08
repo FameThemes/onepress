@@ -17,13 +17,14 @@
     z-index: 9000;
     color:  #333;
     text-transform: uppercase;
+    &.c-bully--inversed {
+        color:  #FFF;
+    }
 
 }
-/*
-.c-bully--inversed {
-    color:  #FFF;
-}
-*/
+
+
+
 .c-bully__ {
     &bullet {
         padding: 0.5em;

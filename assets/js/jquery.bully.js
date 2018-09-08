@@ -24,27 +24,43 @@
                 if ( frameRendered !== true ) {
 
                     var count = 0,
-                        inverse = false;
+                        inverse = true;
 
                     var lastItemId = false;
                     var top = 0;
                     if ($( '#masthead' ).hasClass( 'is-sticky' ) ) {
                         top = $( '#masthead' ).outerHeight();
                     }
-
+                    console.log( '----------------', lastItemId );
                     $.each( elements, function( i, element ) {
                         if ( lastScrollY >= element.offset.top - top - windowHeight / 2 ) {
                             count = count + 1;
                             inverse = lastScrollY < element.offset.top - top + element.height - windowHeight / 2;
                             lastItemId = element.element.id;
+                            console.log( 'lastItemId', lastItemId );
                         }
 
                     } );
 
+                    /*
                     if ( inversed !== inverse ) {
                         inversed = inverse;
                         $bully.toggleClass( 'c-bully--inversed', inversed );
                     }
+                    */
+
+                    // New insverse
+                    if ( lastItemId && typeof Onepress_Bully.sections[ lastItemId ] !== "undefined" ) {
+                        console.log(  '==: ' + lastItemId, Onepress_Bully.sections[ lastItemId ].inverse );
+                        if ( Onepress_Bully.sections[ lastItemId ].inverse ) {
+                            $bully.addClass( 'c-bully--inversed' );
+                        } else {
+                            $bully.removeClass( 'c-bully--inversed' );
+                        }
+
+                    }
+
+
 
                     if ( count !== current ) {
                         var activeBullet = $bully.find( '#bully__'+lastItemId );

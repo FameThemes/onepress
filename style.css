@@ -4244,12 +4244,10 @@ img.mfp-img {
   color: #333;
   text-transform: uppercase;
 }
-
-/*
-.c-bully--inversed {
-    color:  #FFF;
+.c-bully.c-bully--inversed {
+  color: #FFF;
 }
-*/
+
 .c-bully__bullet {
   padding: 0.5em;
   opacity: 0;

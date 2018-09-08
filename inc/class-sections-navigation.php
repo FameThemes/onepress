@@ -26,23 +26,27 @@ class Onepress_Dots_Navigation {
 		$sections_config = array(
 			'hero' => array(
 				'label' => __( 'Section: Hero', 'onepress' ),
-				'title' => '',
-				'default' => false
+				'title' => __( 'Home', 'onepress' ),
+				'default' => 1,
+				'inverse' => 1,
 			),
 			'about' => array(
 				'label' => __( 'Section: About', 'onepress' ),
 				'title' => __( 'About Us', 'onepress' ),
-				'default' => 1
+				'default' => 1,
+				'inverse' => false,
 			),
 			'contact' => array(
 				'label' =>  __( 'Section: Contact', 'onepress' ),
 				'title' => __( 'Get in touch', 'onepress' ),
-				'default' => 1
+				'default' => 1,
+
 			),
 			'counter' => array(
 				'label' => __( 'Section: Counter', 'onepress' ),
 				'title' => __( 'Our Numbers', 'onepress' ),
-				'default' => ''
+				'default' => 1,
+				'inverse' => 1,
 			),
 			'features' => array(
 				'label' => __( 'Section: Features', 'onepress' ),
@@ -72,7 +76,8 @@ class Onepress_Dots_Navigation {
 			'videolightbox' => array(
 				'label' => __( 'Section: Video Lightbox', 'onepress' ),
 				'title' => '',
-				'default' => ''
+				'default' => 1,
+				'inverse' => 1,
 			),
 		);
 
@@ -134,7 +139,21 @@ class Onepress_Dots_Navigation {
 		) );
 		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, $this->get_name( '__color' ),
 			array(
-				'label'       => esc_html__( 'Dots Color', 'onepress' ),
+				'label'       => esc_html__( 'Dots color', 'onepress' ),
+				'section'     => $section_id,
+				'description' => '',
+			)
+		) );
+
+		// Color Settings
+		$wp_customize->add_setting( $this->get_name( '__color2' ), array(
+			'sanitize_callback'    => 'sanitize_hex_color_no_hash',
+			'sanitize_js_callback' => 'maybe_hash_hex_color',
+			'default'              => ''
+		) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, $this->get_name( '__color2' ),
+			array(
+				'label'       => esc_html__( 'Dots inverse color', 'onepress' ),
 				'section'     => $section_id,
 				'description' => '',
 			)
@@ -174,6 +193,21 @@ class Onepress_Dots_Navigation {
 				)
 			);
 
+			$wp_customize->add_setting( $name.'_inverse',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_checkbox',
+					'default'           => isset( $args['inverse'] ) ? $args['inverse'] : false,
+					//'transport'         => 'postMessage'
+				)
+			);
+			$wp_customize->add_control( $name.'_inverse',
+				array(
+					'label'       => __( 'Inverse dots color', 'onepress' ),
+					'section'     => $section_id,
+					'type'        => 'checkbox',
+				)
+			);
+
 
 			$wp_customize->add_setting( $name.'_label',
 				array(
@@ -190,7 +224,6 @@ class Onepress_Dots_Navigation {
 			);
 
 		}
-
 
 	}
 
@@ -211,8 +244,13 @@ class Onepress_Dots_Navigation {
 				$name   = $this->get_name( $id );
 				$enable = get_theme_mod( $name, $args['default'] );
 				if ( $enable ) {
-					$data[ $id ] = array(
-						'id'     => $id,
+					$el_id = sanitize_text_field( get_theme_mod( 'onepress_'.$id.'_id', $id, false ) );
+					if ( ! $el_id ) {
+						$el_id = $id;
+					}
+					$data[ $el_id ] = array(
+						'id'     => $el_id,
+						'inverse' => get_theme_mod( $this->get_name( $id.'_inverse'), isset( $args['inverse'] ) ? $args['inverse'] : false  ),
 						'enable' => get_theme_mod( $name, $args['default'] ),
 						'title'  => get_theme_mod( 'onepress_' . $id . '_title', $args['title'] ),
 					);
@@ -245,6 +283,11 @@ class Onepress_Dots_Navigation {
 			$color = sanitize_hex_color_no_hash( get_theme_mod( $this->get_name( '__color' ) ) );
 			if ( $color ) {
 				$code .= " .c-bully { color: #{$color}; } ";
+			}
+
+			$color2 = sanitize_hex_color_no_hash( get_theme_mod( $this->get_name( '__color2' ) ) );
+			if ( $color2 ) {
+				$code .= " .c-bully.c-bully--inversed { color: #{$color2}; } ";
 			}
 		}
 		return $code;
