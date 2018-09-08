@@ -10,6 +10,7 @@ CHANGELOG
 * NEW: Custom excerpt length. See in Customizer -> Section News.
 * IMPROVED: Improved More Posts button link in News section. 
 * IMPROVED: Re-Structure customize configs.
+* IMPROVED: Re-Structure customize controls.
 
 
 # 2.0.9
