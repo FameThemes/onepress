@@ -8,7 +8,7 @@
  */
 class Onepress_Dots_Navigation {
 	static $_instance = null;
-	private $key = 'onepress_dots_nav_';
+	private $key = 'onepress_sections_nav_';
 
 	static function get_instance(){
 		if ( is_null( self::$_instance ) ){
@@ -86,7 +86,7 @@ class Onepress_Dots_Navigation {
 				$new[ $id ] = $sections_config[ $id ];
 			}
 		}
-		
+
 		return apply_filters( 'onepress_sections_navigation_get_sections', $new );
 
 	}
@@ -97,13 +97,13 @@ class Onepress_Dots_Navigation {
 
 	function add_customize( $wp_customize, $section_id ){
 
-		$wp_customize->add_setting( $section_id.'_enable',
+		$wp_customize->add_setting( $this->get_name( '__enable' ),
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
 				'default'           => false,
 			)
 		);
-		$wp_customize->add_control(  $section_id.'_enable',
+		$wp_customize->add_control(  $this->get_name( '__enable' ),
 			array(
 				'label'       => __( 'Enable section navigation', 'onepress' ),
 				'section'     => $section_id,
@@ -111,21 +111,37 @@ class Onepress_Dots_Navigation {
 			)
 		);
 
-		$wp_customize->add_setting( $section_id.'_enable_label',
+		$wp_customize->add_setting( $this->get_name( '__enable_label' ),
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
 				'default'           => 1,
 			)
 		);
-		$wp_customize->add_control(  $section_id.'_enable_label',
+		$wp_customize->add_control( $this->get_name( '__enable_label' ),
 			array(
-				'label'       => __( 'Enable navigation label', 'onepress' ),
+				'label'       => __( 'Enable navigation labels', 'onepress' ),
+				'description'       => __( 'By default navigation label is section title.', 'onepress' ),
 				'section'     => $section_id,
 				'type'        => 'checkbox',
 			)
 		);
 
+		// Color Settings
+		$wp_customize->add_setting( $this->get_name( '__color' ), array(
+			'sanitize_callback'    => 'sanitize_hex_color_no_hash',
+			'sanitize_js_callback' => 'maybe_hash_hex_color',
+			'default'              => ''
+		) );
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, $this->get_name( '__color' ),
+			array(
+				'label'       => esc_html__( 'Dots Color', 'onepress' ),
+				'section'     => $section_id,
+				'description' => '',
+			)
+		) );
 
+
+		// Section Settings
 		foreach ( $this->get_sections() as $id => $args ) {
 
 			$name = $this->get_name( $id );
@@ -152,7 +168,7 @@ class Onepress_Dots_Navigation {
 			);
 			$wp_customize->add_control( $name,
 				array(
-					'label'       => __( 'Enable dot navigation', 'onepress' ),
+					'label'       => __( 'Enable section navigation', 'onepress' ),
 					'section'     => $section_id,
 					'type'        => 'checkbox',
 				)
@@ -168,7 +184,7 @@ class Onepress_Dots_Navigation {
 			);
 			$wp_customize->add_control( $name.'_label',
 				array(
-					'label'       => __( 'Custom Label', 'OnePress' ),
+					'label'       => __( 'Custom navigation label', 'OnePress' ),
 					'section'     => $section_id,
 				)
 			);
@@ -213,19 +229,30 @@ class Onepress_Dots_Navigation {
 	}
 
 	function scripts(){
-		if ( get_theme_mod( 'onepress_dots_nav_enable', false ) ) {
+		if ( get_theme_mod( $this->get_name( '__enable' ), false ) ) {
 			if ( is_front_page() ) {
 				wp_enqueue_script( 'jquery.bully', get_template_directory_uri() . '/assets/js/jquery.bully.js', array( 'jquery' ), false, true );
 				wp_localize_script( 'jquery.bully', 'Onepress_Bully', array(
-					'enable_label' => get_theme_mod( 'onepress_dots_nav_enable_label', true ) ?  true : false,
+					'enable_label' => get_theme_mod( $this->get_name( '__enable_label' ), true ) ?  true : false,
 					'sections' => $this->get_settings()
 				) );
 			}
 		}
 	}
 
+	function custom_style( $code ){
+		if ( get_theme_mod( $this->get_name( '__enable' ), false ) ) {
+			$color = sanitize_hex_color_no_hash( get_theme_mod( $this->get_name( '__color' ) ) );
+			if ( $color ) {
+				$code .= " body .c-bully { color: #{$color}; } ";
+			}
+		}
+		return $code;
+	}
+
 	function init(){
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
+		add_action( 'onepress_custom_css', array( $this, 'custom_style' ) );
 	}
 
 }

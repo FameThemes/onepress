@@ -13,5 +13,3 @@ $wp_customize->add_section( 'onepress_sections_nav',
 );
 
 Onepress_Dots_Navigation::get_instance()->add_customize( $wp_customize, 'onepress_sections_nav' );
-
-

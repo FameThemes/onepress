@@ -3,6 +3,7 @@ CHANGELOG
 ====================================================================
 
 # 2.1.0
+* NEW: Sections navigation.
 * NEW: Disable disable archive prefix option. See in Customizer -> Theme Options -> Blog Pots.
 * NEW: Item content source for Service section.
 * NEW: Hide post categories of News section. See in Customizer -> Section News.

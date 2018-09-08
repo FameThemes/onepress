@@ -204,7 +204,7 @@
 jQuery( document ).ready( function( $ ){
    $.each( Onepress_Bully.sections, function( id, args ){
         $( '#'+id ).bully({
-            scrollPerSecond: 1000,
+            scrollPerSecond: 3000,
         });
    } );
 } );
