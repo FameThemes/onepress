@@ -309,9 +309,6 @@ class Onepress_Dots_Navigation {
 				) );
 			}
 
-
-			wp_add_inline_style( 'onepress-style', $this->custom_style() );
-
 		}
 	}
 
@@ -334,6 +331,7 @@ class Onepress_Dots_Navigation {
 				$code .= "body .c-bully.c-bully--inversed { color: #{$color2}; } ";
 			}
 		}
+
 		return $code;
 	}
 
@@ -342,7 +340,7 @@ class Onepress_Dots_Navigation {
 	 */
 	function init(){
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
-		//add_action( 'onepress_custom_css', array( $this, 'custom_style' ) );
+		add_action( 'onepress_custom_css', array( $this, 'custom_style' ) );
 	}
 
 }

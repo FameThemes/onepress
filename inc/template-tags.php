@@ -902,6 +902,9 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
         if ( trim( $css ) == "" ) {
             return ;
         }
+
+		$css = apply_filters( 'onepress_custom_css', $css ) ;
+
         $css = preg_replace(
             array(
                 // Remove comment(s)
@@ -924,7 +927,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             }
         }
 
-       return apply_filters( 'onepress_custom_css', $css ) ;
+       return $css ;
 	}
 
 }

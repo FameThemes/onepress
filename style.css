@@ -4237,7 +4237,7 @@ img.mfp-img {
 .c-bully {
   position: fixed;
   top: 50%;
-  right: 48px;
+  right: 28px;
   font-size: 12px;
   transform: translate(0, -50%);
   z-index: 600;

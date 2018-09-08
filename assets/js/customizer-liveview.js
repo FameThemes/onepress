@@ -78,9 +78,9 @@
     } );
 
     $( window ).resize( function(){
-        var css_code = $( '#onepress-style-inline-css' ).html();
+       // var css_code = $( '#onepress-style-inline-css' ).html();
         // Fix Chrome Lost CSS When resize ??
-        $( '#onepress-style-inline-css' ).html( css_code );
+       // $( '#onepress-style-inline-css' ).html( css_code );
     });
 
 

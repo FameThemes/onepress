@@ -11,7 +11,7 @@
 .c-bully {
     position: fixed;
     top: 50%;
-    right: 48px;
+    right: 28px;
     @include for(screens-medium) {
         right: 10px;
     }
