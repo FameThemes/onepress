@@ -475,7 +475,7 @@ require get_template_directory() . '/inc/extras.php';
  * Dots Navigation class
  * @since 2.1.0
  */
-require get_template_directory() . '/inc/class-dots-navigation.php';
+require get_template_directory() . '/inc/class-sections-navigation.php';
 
 /**
  * Customizer additions.

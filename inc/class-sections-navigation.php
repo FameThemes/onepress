@@ -79,13 +79,15 @@ class Onepress_Dots_Navigation {
 		$new = array(
 			'hero' => $sections_config['hero']
 		);
+
+
 		foreach ( $sorted_sections as $id ) {
-			if ( isset( $sorted_sections[ $id ] ) ) {
+			if ( isset( $sections_config[ $id ] ) ) {
 				$new[ $id ] = $sections_config[ $id ];
 			}
 		}
-
-		return apply_filters( 'onepress_dots_navigation_get_sections', $new );
+		
+		return apply_filters( 'onepress_sections_navigation_get_sections', $new );
 
 	}
 
@@ -103,7 +105,7 @@ class Onepress_Dots_Navigation {
 		);
 		$wp_customize->add_control(  $section_id.'_enable',
 			array(
-				'label'       => __( 'Enable dots navigation', 'onepress' ),
+				'label'       => __( 'Enable section navigation', 'onepress' ),
 				'section'     => $section_id,
 				'type'        => 'checkbox',
 			)
@@ -123,23 +125,23 @@ class Onepress_Dots_Navigation {
 			)
 		);
 
-		// Show dots message
-		$wp_customize->add_setting( $section_id.'_em',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_text',
-			)
-		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize,  $section_id.'_em',
-			array(
-				'type'        => 'custom_message',
-				'section'     => $section_id,
-				'description' => '<strong>'.__( 'Enable dots nav for sections', 'onepress' ).'</strong>',
-			)
-		));
 
 		foreach ( $this->get_sections() as $id => $args ) {
 
 			$name = $this->get_name( $id );
+
+			$wp_customize->add_setting( $id.'_em',
+				array(
+					'sanitize_callback' => 'onepress_sanitize_text',
+				)
+			);
+			$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize,  $id.'_em',
+				array(
+					'type'        => 'custom_message',
+					'section'     => $section_id,
+					'description' => '<div class="onepress-c-heading">'.esc_html( $args['label'] ).'</div>',
+				)
+			));
 
 			$wp_customize->add_setting( $name,
 				array(
@@ -150,47 +152,28 @@ class Onepress_Dots_Navigation {
 			);
 			$wp_customize->add_control( $name,
 				array(
-					'label'       => $args['label'],
+					'label'       => __( 'Enable dot navigation', 'onepress' ),
 					'section'     => $section_id,
 					'type'        => 'checkbox',
 				)
 			);
-		}
-
-		// Show dots message
-		$wp_customize->add_setting( $section_id.'_custom_title_m',
-			array(
-				'sanitize_callback' => 'onepress_sanitize_text',
-			)
-		);
-		$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize,  $section_id.'_custom_title_m',
-			array(
-				'type'        => 'custom_message',
-				'section'     => $section_id,
-				'description' => '<h3>'.__( 'Custom Navigation Labels', 'onepress' ).'</h3>',
-			)
-		));
 
 
-		foreach ( $this->get_sections() as $id => $args ) {
-
-			$name = $this->get_name( $id.'_label' );
-
-			$wp_customize->add_setting( $name,
+			$wp_customize->add_setting( $name.'_label',
 				array(
 					'sanitize_callback' => 'sanitize_text_field',
 					'default'           => '',
 					//'transport'         => 'postMessage'
 				)
 			);
-			$wp_customize->add_control( $name,
+			$wp_customize->add_control( $name.'_label',
 				array(
-					'label'       => $args['label'],
+					'label'       => __( 'Custom Label', 'OnePress' ),
 					'section'     => $section_id,
 				)
 			);
-		}
 
+		}
 
 
 	}

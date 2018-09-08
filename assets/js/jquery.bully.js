@@ -83,12 +83,14 @@
         function staggerClass( $elements, classname, timeout ) {
 
             $.each( $elements, function( i, obj ) {
-
+                obj.$bullet.addClass( classname );
+                /*
                 var stagger = i * timeout;
 
                 setTimeout( function() {
                     obj.$bullet.addClass( classname );
                 }, stagger );
+                */
             } );
         }
 
@@ -201,6 +203,8 @@
 //init Bullly
 jQuery( document ).ready( function( $ ){
    $.each( Onepress_Bully.sections, function( id, args ){
-        $( '#'+id ).bully();
+        $( '#'+id ).bully({
+            scrollPerSecond: 1000,
+        });
    } );
 } );

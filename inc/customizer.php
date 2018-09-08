@@ -86,7 +86,7 @@ function onepress_customize_register( $wp_customize ) {
 	require_once $path. '/inc/customize-configs/options-colors.php';
 	require_once $path. '/inc/customize-configs/options-header.php';
 	require_once $path. '/inc/customize-configs/options-navigation.php';
-	require_once $path. '/inc/customize-configs/options-dots-navigation.php';
+	require_once $path. '/inc/customize-configs/options-sections-navigation.php';
 	require_once $path. '/inc/customize-configs/options-page.php';
 	require_once $path. '/inc/customize-configs/options-blog-posts.php';
 	require_once $path. '/inc/customize-configs/options-single.php';
