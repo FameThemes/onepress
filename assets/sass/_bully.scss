@@ -42,33 +42,35 @@
 
     &title {
         position: absolute;
-        right: 35px;
-        top: 0px;
+        right: 26px;
+        top: 1px;
         left: auto;
-        background: rgba( 0,0,0, .6 );
-        padding: 3px 10px;
+        background: rgba( 0,0,0, .7 );
+        padding: 1px 10px;
+        border-radius: 2px;
         transition: all 0.2s ease-out;
         display: block;
         opacity: 0;
         white-space: nowrap;
         color: rgba( 255, 255, 255, .8);
         transform: scale(.6);
-        &::after {
-            content: '';
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 13px 0 13px 13px;
-            border-color: transparent transparent transparent rgba(0, 0, 0, .6);
-            display: inline-block;
-            position: absolute;
-            right: 0px;
-            top: 50%;
-            transform: translate(100%, -50%);
-            border-radius: 2px;
-            border-top-right-radius: 1px;
-            border-bottom-right-radius: 1px;
-        }
+
+        //&::after {
+        //    content: '';
+        //    width: 0;
+        //    height: 0;
+        //    border-style: solid;
+        //    border-width: 13px 0 13px 13px;
+        //    border-color: transparent transparent transparent rgba(0, 0, 0, .6);
+        //    display: inline-block;
+        //    position: absolute;
+        //    right: 0px;
+        //    top: 50%;
+        //    transform: translate(100%, -50%);
+        //    border-radius: 2px;
+        //    border-top-right-radius: 1px;
+        //    border-bottom-right-radius: 1px;
+        //}
     }
 
 }

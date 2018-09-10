@@ -37,57 +37,63 @@ class Onepress_Dots_Navigation {
 			'hero' => array(
 				'label' => __( 'Section: Hero', 'onepress' ),
 				'title' => __( 'Home', 'onepress' ),
-				'default' => 1,
-				'inverse' => 1,
+				'default' => false,
+				'inverse' => false,
 			),
 			'about' => array(
 				'label' => __( 'Section: About', 'onepress' ),
 				'title' => __( 'About Us', 'onepress' ),
-				'default' => 1,
+				'default' => false,
 				'inverse' => false,
 			),
 			'contact' => array(
 				'label' =>  __( 'Section: Contact', 'onepress' ),
 				'title' => __( 'Get in touch', 'onepress' ),
-				'default' => 1,
+				'default' => false,
+				'inverse' => false,
 
 			),
 			'counter' => array(
 				'label' => __( 'Section: Counter', 'onepress' ),
 				'title' => __( 'Our Numbers', 'onepress' ),
-				'default' => 1,
-				'inverse' => 1,
+				'default' => false,
+				'inverse' => false,
 			),
 			'features' => array(
 				'label' => __( 'Section: Features', 'onepress' ),
 				'title' => __( 'Features', 'onepress' ),
-				'default' => 1
+				'default' => false,
+				'inverse' => false,
 			),
 			'gallery' => array(
 				'label' => __( 'Section: Gallery', 'onepress' ),
 				'title' => __( 'Gallery', 'onepress' ),
-				'default' => 1
+				'default' => false,
+				'inverse' => false,
 			),
 			'news' => array(
 				'label' => __( 'Section: News', 'onepress' ),
 				'title' => __( 'Latest News', 'onepress' ),
-				'default' => 1
+				'default' => false,
+				'inverse' => false,
 			),
 			'services' => array(
 				'label' => __( 'Section: Services', 'onepress' ),
 				'title' => __( 'Our Services', 'onepress' ),
-				'default' => 1
+				'default' => false,
+				'inverse' => false,
 			),
 			'team' => array(
 				'label' => __( 'Section: Team', 'onepress' ),
 				'title' => __( 'Our Team', 'onepress' ),
-				'default' => 1
+				'default' => false,
+				'inverse' => false,
 			),
 			'videolightbox' => array(
 				'label' => __( 'Section: Video Lightbox', 'onepress' ),
 				'title' => '',
-				'default' => 1,
-				'inverse' => 1,
+				'default' => false,
+				'inverse' => false,
 			),
 		);
 
@@ -133,7 +139,7 @@ class Onepress_Dots_Navigation {
 		);
 		$wp_customize->add_control(  $this->get_name( '__enable' ),
 			array(
-				'label'       => __( 'Enable section navigation', 'onepress' ),
+				'label'       => __( 'Enable in section navigation', 'onepress' ),
 				'section'     => $section_id,
 				'type'        => 'checkbox',
 			)
@@ -210,7 +216,7 @@ class Onepress_Dots_Navigation {
 			);
 			$wp_customize->add_control( $name,
 				array(
-					'label'       => __( 'Enable section navigation', 'onepress' ),
+					'label'       => __( 'Enable in section navigation', 'onepress' ),
 					'section'     => $section_id,
 					'type'        => 'checkbox',
 				)
