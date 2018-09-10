@@ -323,12 +323,15 @@ class Onepress_Dots_Navigation {
 		if ( get_theme_mod( $this->get_name( '__enable' ), false ) ) {
 			$color = sanitize_hex_color_no_hash( get_theme_mod( $this->get_name( '__color' ) ) );
 			if ( $color ) {
-				$code .= "body .c-bully { color: #{$color}; } ";
+				$code .= " body .c-bully { color: #{$color}; } ";
 			}
 
 			$color2 = sanitize_hex_color_no_hash( get_theme_mod( $this->get_name( '__color2' ) ) );
 			if ( $color2 ) {
-				$code .= "body .c-bully.c-bully--inversed { color: #{$color2}; } ";
+				$code .= " body .c-bully.c-bully--inversed { color: #{$color2}; } ";
+			}
+			if ( is_customize_preview() ) {
+				//die( 'loadmoe' );
 			}
 		}
 
@@ -340,7 +343,7 @@ class Onepress_Dots_Navigation {
 	 */
 	function init(){
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
-		add_action( 'onepress_custom_css', array( $this, 'custom_style' ) );
+		add_filter( 'onepress_custom_css', array( $this, 'custom_style' ) );
 	}
 
 }

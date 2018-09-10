@@ -78,10 +78,16 @@
     } );
 
     $( window ).resize( function(){
-       // var css_code = $( '#onepress-style-inline-css' ).html();
+         var css_code = $( '#onepress-style-inline-css' ).html();
         // Fix Chrome Lost CSS When resize ??
-       // $( '#onepress-style-inline-css' ).html( css_code );
+        $( '#onepress-style-inline-css' ).html( css_code );
     });
+
+    setTimeout( function(){
+        var css_code = $( '#onepress-style-inline-css' ).html();
+        // Fix Chrome Lost CSS When resize ??
+        $( '#onepress-style-inline-css' ).html( css_code );
+    }, 200 );
 
 
     wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {

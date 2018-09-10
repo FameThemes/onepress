@@ -351,6 +351,7 @@ function onepress_customizer_partials( $wp_customize ) {
     $wp_customize->selective_refresh->add_partial( 'onepress-style-live-css', array(
         'selector' => '#onepress-style-inline-css',
         'settings' => $css_settings,
+        'container_inclusive' => false,
         'render_callback' => 'onepress_custom_inline_style',
     ) );
 
