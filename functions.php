@@ -253,8 +253,9 @@ function onepress_scripts() {
         wp_enqueue_style('onepress-gallery-lightgallery', get_template_directory_uri() . '/assets/css/lightgallery.css');
     }
 
-	wp_enqueue_script( 'onepress-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+    wp_enqueue_script( 'onepress-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );
+
+    if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 
@@ -312,94 +313,147 @@ if ( ! function_exists( 'onepress_fonts_url' ) ) :
 endif;
 
 
-if ( ! function_exists( 'onepress_register_required_plugins' ) ) :
-	/**
-	 * Register the required plugins for this theme.
-	 *
-	 * In this example, we register five plugins:
-	 * - one included with the TGMPA library
-	 * - two from an external source, one from an arbitrary source, one from a GitHub repository
-	 * - two from the .org repo, where one demonstrates the use of the `is_callable` argument
-	 *
-	 * The variable passed to tgmpa_register_plugins() should be an array of plugin
-	 * arrays.
-	 *
-	 * This function is hooked into tgmpa_init, which is fired within the
-	 * TGM_Plugin_Activation class constructor.
-	 */
-	function onepress_register_required_plugins() {
-		/*
-		 * Array of plugin arrays. Required keys are name and slug.
-		 * If the source is NOT from the .org repo, then source is also required.
-		 */
-		$plugins = array(
-			array(
-				'name'               => 'Pirate Forms', // The plugin name.
-				'slug'               => 'pirate-forms', // The plugin slug (typically the folder name).
-				'source'             => '', // The plugin source.
-				'required'           => false, // If false, the plugin is only 'recommended' instead of required.
-				'force_activation'   => false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch.
-				'force_deactivation' => false, // If true, plugin is deactivated upon theme switch, useful for theme-specific plugins.
-				'external_url'       => '', // If set, overrides default API URL and points to an external URL.
-			),
-		);
 
-		/*
-		 * Array of configuration settings. Amend each line as needed.
-		 *
-		 * TGMPA will start providing localized text strings soon. If you already have translations of our standard
-		 * strings available, please help us make TGMPA even better by giving us access to these translations or by
-		 * sending in a pull-request with .po file(s) with the translations.
-		 *
-		 * Only uncomment the strings in the config array if you want to customize the strings.
-		 */
-		$config = array(
-			'id'           => 'tgmpa',                 // Unique ID for hashing notices for multiple instances of TGMPA.
-			'default_path' => '',                      // Default absolute path to bundled plugins.
-			'menu'         => 'tgmpa-install-plugins', // Menu slug.
-			'parent_slug'  => 'themes.php',            // Parent menu slug.
-			'capability'   => 'edit_theme_options',    // Capability needed to view plugin install page, should be a capability associated with the parent menu used.
-			'has_notices'  => true,                    // Show admin notices or not.
-			'dismissable'  => true,                    // If false, a user cannot dismiss the nag message.
-			'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
-			'is_automatic' => false,                   // Automatically activate plugins after installation or not.
-			'message'      => '',                      // Message to output right before the plugins table.
+/**
+ * Glabel OnePress loop properties
+ * @since 2.1.0
+ */
+global $onepress_loop_props;
+$onepress_loop_props = array();
 
-			'strings'      => array(
-				'page_title'                      => esc_html__( 'Install Required Plugins', 'onepress' ),
-				'menu_title'                      => esc_html__( 'Install Plugins', 'onepress' ),
-				'installing'                      => esc_html__( 'Installing Plugin: %s', 'onepress' ), // %s = plugin name.
-				'oops'                            => esc_html__( 'Something went wrong with the plugin API.', 'onepress' ),
-				'notice_can_install_required'     => _n_noop( 'This theme requires the following plugin: %1$s.', 'This theme requires the following plugins: %1$s.', 'onepress' ), // %1$s = plugin name(s).
-				'notice_can_install_recommended'  => _n_noop( 'This theme recommends the following plugin: %1$s.', 'This theme recommends the following plugins: %1$s.', 'onepress' ), // %1$s = plugin name(s).
-				'notice_cannot_install'           => _n_noop( 'Sorry, but you do not have the correct permissions to install the %1$s plugin.', 'Sorry, but you do not have the correct permissions to install the %1$s plugins.', 'onepress' ), // %1$s = plugin name(s).
-				'notice_ask_to_update'            => _n_noop( 'The following plugin needs to be updated to its latest version to ensure maximum compatibility with this theme: %1$s.', 'The following plugins need to be updated to their latest version to ensure maximum compatibility with this theme: %1$s.', 'onepress' ), // %1$s = plugin name(s).
-				'notice_ask_to_update_maybe'      => _n_noop( 'There is an update available for: %1$s.', 'There are updates available for the following plugins: %1$s.', 'onepress' ), // %1$s = plugin name(s).
-				'notice_cannot_update'            => _n_noop( 'Sorry, but you do not have the correct permissions to update the %1$s plugin.', 'Sorry, but you do not have the correct permissions to update the %1$s plugins.', 'onepress' ), // %1$s = plugin name(s).
-				'notice_can_activate_required'    => _n_noop( 'The following required plugin is currently inactive: %1$s.', 'The following required plugins are currently inactive: %1$s.', 'onepress' ), // %1$s = plugin name(s).
-				'notice_can_activate_recommended' => _n_noop( 'The following recommended plugin is currently inactive: %1$s.', 'The following recommended plugins are currently inactive: %1$s.', 'onepress' ), // %1$s = plugin name(s).
-				'notice_cannot_activate'          => _n_noop( 'Sorry, but you do not have the correct permissions to activate the %1$s plugin.', 'Sorry, but you do not have the correct permissions to activate the %1$s plugins.', 'onepress' ), // %1$s = plugin name(s).
-				'install_link'                    => _n_noop( 'Begin installing plugin', 'Begin installing plugins', 'onepress' ),
-				'update_link' 					  => _n_noop( 'Begin updating plugin', 'Begin updating plugins', 'onepress' ),
-				'activate_link'                   => _n_noop( 'Begin activating plugin', 'Begin activating plugins', 'onepress' ),
-				'return'                          => esc_html__( 'Return to Required Plugins Installer', 'onepress' ),
-				'plugin_activated'                => esc_html__( 'Plugin activated successfully.', 'onepress' ),
-				'activated_successfully'          => esc_html__( 'The following plugin was activated successfully:', 'onepress' ),
-				'plugin_already_active'           => esc_html__( 'No action taken. Plugin %1$s was already active.', 'onepress' ),  // %1$s = plugin name(s).
-				'plugin_needs_higher_version'     => esc_html__( 'Plugin not activated. A higher version of %s is needed for this theme. Please update the plugin.', 'onepress' ),  // %1$s = plugin name(s).
-				'complete'                        => esc_html__( 'All plugins installed and activated successfully. %1$s', 'onepress' ), // %s = dashboard link.
-				'contact_admin'                   => esc_html__( 'Please contact the administrator of this site for help.', 'onepress' ),
-				'nag_type'                        => 'updated', // Determines admin notice type - can only be 'updated', 'update-nag' or 'error'.
-			),
+/**
+ * Set onepress loop property
+ *
+ * @since 2.1.0
+ *
+ * @param $prop
+ * @param $value
+ */
+function onepress_loop_set_prop( $prop, $value ) {
+	global $onepress_loop_props;
+	$onepress_loop_props[ $prop ] = $value;
+}
 
-		);
 
-		tgmpa( $plugins, $config );
+/**
+ * Get onepress loop property
+ *
+ * @since 2.1.0
+ *
+ * @param $prop
+ * @param bool $default
+ *
+ * @return bool|mixed
+ */
+function onepress_loop_get_prop( $prop, $default = false ) {
+	global $onepress_loop_props;
+	if ( isset( $onepress_loop_props[ $prop ] ) ) {
+		return  apply_filters( 'onepress_loop_get_prop', $onepress_loop_props[ $prop ], $prop );
+	}
+	
+	return apply_filters( 'onepress_loop_get_prop', $default, $prop );
+}
+
+/**
+ * Remove onepress loop property
+ *
+ * @since 2.1.0
+ *
+ * @param $prop
+ */
+function onepress_loop_remove_prop( $prop ) {
+	global $onepress_loop_props;
+	if ( isset( $onepress_loop_props[ $prop ] ) ) {
+		unset( $onepress_loop_props[ $prop ] );
 	}
 
-endif;
-add_action( 'tgmpa_register', 'onepress_register_required_plugins' );
+}
 
+/**
+ * Trim the excerpt with custom length
+ *
+ * @since 2.1.0
+ *
+ * @see wp_trim_excerpt
+ * @param $text
+ * @param null $excerpt_length
+ * @return string
+ */
+function onepress_trim_excerpt( $text, $excerpt_length = null ){
+	$text = strip_shortcodes( $text );
+	/** This filter is documented in wp-includes/post-template.php */
+	$text = apply_filters( 'the_content', $text );
+	$text = str_replace(']]>', ']]&gt;', $text);
+
+	if ( ! $excerpt_length ) {
+		/**
+		 * Filters the number of words in an excerpt.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param int $number The number of words. Default 55.
+		 */
+		$excerpt_length = apply_filters('excerpt_length', 55 );
+	}
+
+
+	/**
+	 * Filters the string in the "more" link displayed after a trimmed excerpt.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @param string $more_string The string shown within the more link.
+	 */
+	$excerpt_more = apply_filters( 'excerpt_more', ' ' . '&hellip;' );
+
+	return wp_trim_words( $text, $excerpt_length, $excerpt_more );
+
+}
+
+/**
+ * Display the excerpt
+ *
+ * @param string $type
+ * @param bool $length
+ */
+function onepress_the_excerpt( $type = false, $length = false ){
+
+	$type = onepress_loop_get_prop( 'excerpt_type', 'excerpt' ) ;
+	$length = onepress_loop_get_prop( 'excerpt_length', false );
+
+	switch ( $type ) {
+		case 'excerpt':
+			the_excerpt();
+			break;
+		case  'more_tag':
+			the_content('',  true );
+			break;
+		case 'content':
+			the_content( '', false );
+			break;
+		default:
+			$text= '';
+			global $post;
+			if ( $post ) {
+				if ( $post->post_excerpt ) {
+					$text = $post->post_excerpt;
+				} else {
+					$text = $post->post_content;
+				}
+			}
+			$excerpt = onepress_trim_excerpt( $text, $length );
+			if ( $excerpt ) {
+				// WPCS: XSS OK.
+				echo apply_filters( 'the_excerpt', $excerpt );
+			} else {
+				the_excerpt();
+			}
+	}
+}
+
+/**
+ * Load Sanitize
+ */
 require get_template_directory() . '/inc/sanitize.php';
 
 /**
@@ -416,6 +470,12 @@ require get_template_directory() . '/inc/template-tags.php';
  * Custom functions that act independently of the theme templates.
  */
 require get_template_directory() . '/inc/extras.php';
+
+/**
+ * Dots Navigation class
+ * @since 2.1.0
+ */
+require get_template_directory() . '/inc/class-sections-navigation.php';
 
 /**
  * Customizer additions.

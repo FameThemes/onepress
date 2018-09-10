@@ -1,6 +1,23 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+
+# 2.1.0
+* NEW: Sections navigation.
+* NEW: Disable disable archive prefix option. See in Customizer -> Theme Options -> Blog Pots.
+* NEW: Item content source for Service section.
+* NEW: Hide post categories of News section. See in Customizer -> Section News.
+* NEW: Custom excerpt length. See in Customizer -> Section News.
+* IMPROVED: Improved More Posts button link in News section. 
+* IMPROVED: Re-Structure customize configs.
+* IMPROVED: Re-Structure customize controls.
+
+
+# 2.0.9
+* IMPROVED: Add alt title for gallery images.
+* FIXED: Issue hero image resize not properly.
+* FIXED: Parallax does not rescale image anymore.
+
 # 2.0.8
 * NEW: Setting height for transparent logo.
 * IMPROVED: Small strings corrections.
@@ -40,7 +57,7 @@ CHANGELOG
 * FIXED: Jetpack's CDN for all images compatible.
 * FIXED: Hero parallax issue.
 * FIXED: Site title & tagline color.
-  
+
 ## 2.0.2
 * NEW: Option to enable page header cover.
 * NEW: Option to display page excerpt as header cover description.

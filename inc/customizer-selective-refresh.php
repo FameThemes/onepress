@@ -28,7 +28,7 @@ function onepress_customizer_load_template( $template_names ){
             break;
         }
     }
-    
+
     return $located;
 }
 
@@ -91,6 +91,7 @@ function onepress_customizer_partials( $wp_customize ) {
                 'onepress_services_desc',
                 'onepress_service_layout',
                 'onepress_service_icon_size',
+                'onepress_service_content_source'
             ),
         ),
 
@@ -126,6 +127,10 @@ function onepress_customizer_partials( $wp_customize ) {
                 'onepress_news_number',
                 'onepress_news_more_link',
                 'onepress_news_more_text',
+
+                'onepress_news_hide_meta', // @since  2.1.0
+                'onepress_news_excerpt_length', // @since  2.1.0
+                'onepress_news_more_page', // @since  2.1.0
 
                 'onepress_news_cat',
                 'onepress_news_orderby',
@@ -327,7 +332,10 @@ function onepress_customizer_partials( $wp_customize ) {
         'footer_widgets_link_hover_color',
 
         'onepress_hcl1_r_color',
-        'onepress_hcl1_r_bg_color'
+        'onepress_hcl1_r_bg_color',
+
+	    'onepress_sections_nav___color',
+	    'onepress_sections_nav___color2',
 
     );
 
@@ -343,6 +351,7 @@ function onepress_customizer_partials( $wp_customize ) {
     $wp_customize->selective_refresh->add_partial( 'onepress-style-live-css', array(
         'selector' => '#onepress-style-inline-css',
         'settings' => $css_settings,
+        'container_inclusive' => false,
         'render_callback' => 'onepress_custom_inline_style',
     ) );
 

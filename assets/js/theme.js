@@ -615,6 +615,7 @@ jQuery( document ).ready( function( $ ) {
         var scrollTop = $( window ).scrollTop();
         //var top = $( window ).scrollTop();
         var wh = $( window).height();
+        var ww = $( window).width();
         $('.section-parallax, .parallax-hero').each( function(  ){
             var $el = $( this );
             var pl = $( '.parallax-bg', $el );
@@ -624,16 +625,43 @@ jQuery( document ).ready( function( $ ) {
             var img = $( 'img', pl );
 
             if ( img.length ) {
+
+                var imageNaturalWidth = img.prop('naturalWidth');
+                var imageNaturalHeight = img.prop('naturalHeight');
+
                 var containerHeight = h > 0 ? h : 500;
-                var imgHeight = $('img', pl).height();
+                var imgHeight = img.height();
                 var parallaxDist = imgHeight - containerHeight;
-                var bottom = $el.offset().top + containerHeight;
-                var top = $el.offset().top;
+                var top =  $el.offset().top;
                 var windowHeight = window.innerHeight;
                 var windowBottom = scrollTop + windowHeight;
                 var percentScrolled = (windowBottom - top) / (containerHeight + windowHeight);
-                var parallax = parallaxDist * percentScrolled;
-                pl.find('img').css('top', '-' + ( parallax ) + 'px');
+
+                var parallaxTop = parallaxDist * percentScrolled;
+                var l;
+                var max_width = imageNaturalWidth;
+
+                if ( imageNaturalWidth > w ){
+                } else {
+                    max_width = ww;
+                }
+
+                if( max_width > ww*2 && imageNaturalHeight > containerHeight * 2) {
+                    max_width = max_width - ww;
+                }
+
+                l = (max_width - ww ) / 2;
+                if ( l < 0 ) {
+                    l = 0;
+                }
+
+                img.css( {
+                    top: '-' + ( parallaxTop ) + 'px',
+                    left: '-' + ( l ) + 'px',
+                    //maxWidth: ww+'px'
+                    maxWidth: max_width+'px'
+                });
+
             } else {
 
                 //var sh = $el.height();

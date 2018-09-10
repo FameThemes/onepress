@@ -467,7 +467,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
                 a = a + '&' + $.param(this.core.s.vkPlayerParams);
             }
 
-            video = '<iframe class="lg-video-object lg-vk ' + addClass + '" width="560" height="315" src="http://vk.com/video_ext.php?' + isVideo.vk[1] + a + '" frameborder="0" allowfullscreen></iframe>';
+            video = '<iframe class="lg-video-object lg-vk ' + addClass + '" width="560" height="315" src="https://vk.com/video_ext.php?' + isVideo.vk[1] + a + '" frameborder="0" allowfullscreen></iframe>';
 
         }
 
@@ -628,9 +628,3 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
         });
     }
 }));
-
-
-
-
-
-

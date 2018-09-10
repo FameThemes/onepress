@@ -23,23 +23,58 @@
 	</div>
 
 	<div class="list-article-content">
-		<div class="list-article-meta">
-			<?php the_category(' / '); ?>
-		</div>
+		<?php
+		/**
+		 * Hook before article content
+         * @since 2.1.0
+		 */
+        do_action('onepress_loop_content_before');
+		/**
+		 * Condition to show meta
+         * @since 2.1.0
+		 */
+        if ( onepress_loop_get_prop( 'show_meta', true ) ) { ?>
+            <div class="list-article-meta">
+				<?php the_category(' / '); ?>
+            </div>
+       <?php } ?>
+        <?php
+        /**
+         * Condition to show title
+         * @since 2.1.0
+         */
+        if ( onepress_loop_get_prop( 'show_title', true ) ) { ?>
 		<header class="entry-header">
 			<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
 		</header><!-- .entry-header -->
+        <?php } ?>
+		<?php
+		/**
+		 * Condition to show excerpt
+		 * @since 2.1.0
+		 */
+		if ( onepress_loop_get_prop( 'show_excerpt', true ) ) { ?>
 		<div class="entry-excerpt">
 			<?php
-				the_excerpt();
-			?>
-			<?php
-				wp_link_pages( array(
-					'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'onepress' ),
-					'after'  => '</div>',
-				) );
-			?>
+			/**
+			 * @since 2.1.0
+			 */
+            onepress_the_excerpt(  );
+
+            wp_link_pages( array(
+                'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'onepress' ),
+                'after'  => '</div>',
+            ) );
+            ?>
 		</div><!-- .entry-content -->
+		<?php } ?>
+        <?php
+        /**
+         * Hook after article content
+         * @since 2.1.0
+         */
+        do_action('onepress_loop_content_after');
+        ?>
 	</div>
 
 </article><!-- #post-## -->

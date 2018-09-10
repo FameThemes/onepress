@@ -1,0 +1,138 @@
+/**
+* JQuery Bullly
+* @see https://github.com/pixelgrade/rellax/blob/gh-pages/assets/css/bully.css
+ */
+[class*="c-bully"],
+[class*="c-bully"]:before,
+[class*="c-bully"]:after {
+    box-sizing: border-box;
+}
+
+.c-bully {
+    position: fixed;
+    top: 50%;
+    right: 28px;
+    @include for(screens-medium) {
+        right: 10px;
+    }
+    font-size: 12px;
+    transform: translate(0, -50%);
+    z-index: 600;
+    color:  #333;
+    text-transform: uppercase;
+    &.c-bully--inversed {
+        color:  #FFF;
+    }
+
+}
+
+.c-bully__ {
+    &bullet {
+        padding: 0.5em;
+        opacity: 0;
+        cursor: pointer;
+        position: relative;
+        &:hover {
+            .c-bully__title {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    }
+
+    &title {
+        position: absolute;
+        right: 26px;
+        top: 1px;
+        left: auto;
+        background: rgba( 0,0,0, .7 );
+        padding: 1px 10px;
+        border-radius: 2px;
+        transition: all 0.2s ease-out;
+        display: block;
+        opacity: 0;
+        white-space: nowrap;
+        color: rgba( 255, 255, 255, .8);
+        transform: scale(.6);
+
+        //&::after {
+        //    content: '';
+        //    width: 0;
+        //    height: 0;
+        //    border-style: solid;
+        //    border-width: 13px 0 13px 13px;
+        //    border-color: transparent transparent transparent rgba(0, 0, 0, .6);
+        //    display: inline-block;
+        //    position: absolute;
+        //    right: 0px;
+        //    top: 50%;
+        //    transform: translate(100%, -50%);
+        //    border-radius: 2px;
+        //    border-top-right-radius: 1px;
+        //    border-bottom-right-radius: 1px;
+        //}
+    }
+
+}
+
+.c-bully__bullet:after {
+    content: "";
+
+    display: block;
+    width: 1em;
+    height: 1em;
+
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    will-change: transform;
+}
+
+.c-bully__bullet--active {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    transition: top 0.2s ease-out;
+}
+
+.c-bully__bullet--active:before {
+    content: "";
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 14px;
+    transform: translate(-50%, -50%);
+    background: currentColor;
+    border-radius: 50%;
+
+}
+
+.c-bully__bullet--active:after {
+    border-color: transparent;
+}
+
+.c-bully__bullet--pop {
+    animation: bully-pop 0.6s cubic-bezier(0.485, 1.630, 0.430, 2) forwards, fade-in 0.2s 0.2s ease-out forwards;
+}
+
+.c-bully__bullet--squash {
+    opacity: 1;
+    animation: bully-squash 0.2s ease-out forwards;
+}
+
+@keyframes fade-in {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+}
+
+@keyframes bully-pop {
+    50% { transform: scale(0.7); }
+    100% { transform: scale(1); }
+}
+
+@keyframes bully-squash {
+    50% { transform: scale(0.6, 1.8) }
+    100% { transform: scale(1) }
+}

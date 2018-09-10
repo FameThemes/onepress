@@ -35,68 +35,6 @@ function onepress_maybe_show_switch_theme_notice(){
 
 
 /**
- * @since 2.0.8
- */
-function onepress_admin_switch_theme_notice(){
-
-    if ( isset( $_GET['dismiss'], $_GET['_nonce'] ) && $_GET['dismiss'] == 1 ) {
-        if ( wp_verify_nonce( sanitize_text_field( $_GET['_nonce'] ), 'onepress_dismiss_switch_theme_notice' ) ) {
-            update_option( 'onepress_dismiss_switch_theme_notice', 1 );
-            return;
-        }
-    }
-
-    $show = onepress_maybe_show_switch_theme_notice();
-    if ( ! $show ) {
-        update_option( 'onepress_dismiss_switch_theme_notice', 1 );
-        return;
-    }
-
-    // Theme slug here
-    $theme_slug = 'customify';
-
-    $install_url = add_query_arg( array(
-        'action' => 'install-theme',
-        'theme'  => $theme_slug,
-    ), self_admin_url( 'update.php' ) );
-    $url  = wp_nonce_url( $install_url, 'install-theme_' . $theme_slug );
-
-    $dismiss_url = add_query_arg( array(
-        'page' => 'ft_onepress',
-        'dismiss' => '1',
-        '_nonce'  => wp_create_nonce( 'onepress_dismiss_switch_theme_notice' ),
-    ), self_admin_url( 'themes.php' ) );
-
-    $current_screen = get_current_screen();
-    $class = 'onepress-notice';
-    if ( $current_screen && $current_screen->id != 'appearance_page_ft_onepress' ) {
-        $class .= ' notice notice-warning';
-    }
-    ?>
-    <div class="<?php echo esc_attr( $class ); ?>">
-        <h4><?php _e('Meet Customify - the improved version of OnePress theme by the same team!', 'onepress') ?></h4>
-        <div class="notice-text"><?php _e( 'Customify is both a WordPress Theme and a WordPress Theme Editor. It’s a powerful styling platform that ensures exceptional design control over your website’s looks and feel. The most highlight feature is the <strong>comprehensive Header & Footer builder</strong>.', 'onepress' ); ?></div>
-        <p style="margin-top: 20px;">
-            <a href="<?php echo esc_url( $url ); ?>" class="onepress-install-swt button button-primary"><?php _e( 'Install Customify Now', 'onepress' ); ?></a>
-            <a href="<?php echo esc_url( $dismiss_url ); ?>" class="onepress-dismiss-swt  button-secondary button-dismiss"><?php _e( 'Don\'t show this again', 'onepress' ); ?></a>
-        </p>
-    </div>
-    <?php
-}
-
-/**
- * *since 2.0.8
- */
-function onepress_add_admin_switch_theme_notice(){
-    $current_screen = get_current_screen();
-    if ( $current_screen && $current_screen->id == 'appearance_page_ft_onepress' || $current_screen->base != 'themes' ) {
-        return;
-    }
-    onepress_admin_switch_theme_notice();
-}
-add_action( 'admin_notices', 'onepress_add_admin_switch_theme_notice', 15 );
-
-/**
  * Get theme actions required
  *
  * @return array|mixed|void
@@ -418,7 +356,6 @@ function onepress_theme_info_page() {
         <a target="_blank" href="<?php echo esc_url('https://www.famethemes.com/?utm_source=theme_dashboard_page&utm_medium=badge_link&utm_campaign=onepress'); ?>" class="famethemes-badge wp-badge"><span>FameThemes</span></a>
 
         <hr class="wp-header-end">
-        <?php onepress_admin_switch_theme_notice(); ?>
 
         <h2 class="nav-tab-wrapper">
             <a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'OnePress', 'onepress' ) ?></a>
@@ -478,7 +415,6 @@ function onepress_theme_info_page() {
                         </p>
                         <p><?php printf( esc_html__(  "Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'onepress' ) ); ?></p>
                         <p>
-
                         <?php
 
                         $select = '<select name="copy_from">';

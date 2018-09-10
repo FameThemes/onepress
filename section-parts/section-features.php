@@ -41,8 +41,9 @@ if ( !$disable && !empty( $data ) ) {
                 ) );
                 if ( $f['icon_type'] == 'image' && $f['image'] ){
                     $url = onepress_get_media_url( $f['image'] );
+	                $image_alt = get_post_meta( $f['image']['id'], '_wp_attachment_image_alt', true);
                     if ( $url ) {
-                        $media = '<span class="icon-image"><img src="'.esc_url( $url ).'" alt=""></span>';
+                        $media = '<span class="icon-image"><img src="'.esc_url( $url ).'" alt="'. $image_alt .'"></span>';
                     }
                 } else if ( $f['icon'] ) {
                     $f['icon'] = trim( $f['icon'] );
