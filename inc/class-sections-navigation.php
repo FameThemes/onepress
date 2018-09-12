@@ -269,7 +269,7 @@ class Onepress_Dots_Navigation {
 			return $data;
 		}
 
-		$data = [];
+		$data = array();
 		$sections = $this->get_sections();
 		foreach ( $sections as $id => $args ) {
 
