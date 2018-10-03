@@ -896,6 +896,14 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                 margin: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
             }
         <?php
+        $content_width = absint( get_theme_mod( 'single_layout_content_width' ) ); //
+        if ( $content_width > 0 ) {
+	        $value = $content_width.'px';
+            echo '.single-post .site-main { max-width: '.$value.'; margin-left: auto; margin-right: auto; }';
+
+        }
+        ?>
+        <?php
 
         $css = ob_get_clean();
 

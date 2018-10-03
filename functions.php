@@ -117,6 +117,15 @@ if ( ! function_exists( 'onepress_setup' ) ) :
         add_theme_support( 'wc-product-gallery-lightbox' );
         add_theme_support( 'wc-product-gallery-slider' );
 
+
+		/**
+		 * Add support for Gutenberg.
+		 *
+		 * @link https://wordpress.org/gutenberg/handbook/reference/theme-support/
+		 */
+
+		add_theme_support( 'align-wide' );
+
 	}
 endif;
 add_action( 'after_setup_theme', 'onepress_setup' );
@@ -129,7 +138,16 @@ add_action( 'after_setup_theme', 'onepress_setup' );
  * @global int $content_width
  */
 function onepress_content_width() {
-	$GLOBALS['content_width'] = apply_filters( 'onepress_content_width', 800 );
+	/**
+	 * Support dynamic content width
+	 *
+	 * @since 2.1.1
+	 */
+	$width = absint( get_theme_mod( 'single_layout_content_width' ) );
+	if ( $width <=  0 ) {
+		$width = 800;
+	}
+	$GLOBALS['content_width'] = apply_filters( 'onepress_content_width', $width );
 }
 add_action( 'after_setup_theme', 'onepress_content_width', 0 );
 
