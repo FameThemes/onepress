@@ -452,6 +452,12 @@ function onepress_the_excerpt( $type = false, $length = false ){
 }
 
 /**
+ * Config class
+ * @since 2.1.1
+ */
+require get_template_directory() . '/inc/class-config.php';
+
+/**
  * Load Sanitize
  */
 require get_template_directory() . '/inc/sanitize.php';
@@ -485,4 +491,4 @@ require get_template_directory() . '/inc/customizer.php';
 /**
  * Add theme info page
  */
-require get_template_directory() . '/inc/dashboard.php';
+require get_template_directory() . '/inc/admin/dashboard.php';
