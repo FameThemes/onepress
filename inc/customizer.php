@@ -141,6 +141,14 @@ function onepress_customize_register( $wp_customize ) {
 	 */
 	do_action( 'onepress_customize_after_register', $wp_customize );
 
+	/**
+	 * Move WC Panel to bottom
+	 * @since 2.1.1
+	 */
+	if ( onepress_is_wc_active() ) {
+		$wp_customize->get_panel( 'woocommerce' )->priority = 300;
+	}
+
 }
 add_action( 'customize_register', 'onepress_customize_register' );
 /**
