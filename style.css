@@ -4291,7 +4291,7 @@ div.wpforms-container .wpforms-form .wpforms-field textarea:focus {
   background: #e9e9e9;
 }
 div.wpforms-container .wpforms-form .wpforms-field textarea {
-  min-height: 245px;
+  min-height: 215px;
 }
 div.wpforms-container .wpforms-form button[type=submit] {
   width: 100%;
