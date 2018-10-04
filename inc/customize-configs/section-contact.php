@@ -120,7 +120,7 @@ $wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_
 	array(
 		'section'     => 'onepress_contact_content',
 		'type'        => 'custom_message',
-		'description' => wp_kses_post( 'Paste your form shortcode from contact form plugin here, e.g <code>[pirate_forms]</code>', 'onepress' )
+		'description' => wp_kses_post( 'Paste your form shortcode from contact form plugin here, e.g <code>[wpforms  id="123"]</code>', 'onepress' )
 	)
 ));
 

@@ -376,7 +376,8 @@ fieldset {
   border: 1px solid #e9e9e9;
 }
 
-input[type="reset"], input[type="submit"], input[type="submit"], .pirate-forms-submit-button {
+input[type="reset"], input[type="submit"], input[type="submit"],
+.pirate-forms-submit-button, .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit {
   cursor: pointer;
   background: #03c4eb;
   border: none;
@@ -396,9 +397,11 @@ input[type="reset"], input[type="submit"], input[type="submit"], .pirate-forms-s
   font-weight: 600;
   font-size: 13px;
 }
-input[type="reset"]:hover, input[type="submit"]:hover, input[type="submit"]:hover, .pirate-forms-submit-button:hover {
+input[type="reset"]:hover, input[type="submit"]:hover, input[type="submit"]:hover,
+.pirate-forms-submit-button:hover, .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit:hover {
   opacity: 0.8;
   background: #03c4eb;
+  border: none;
 }
 
 input[type="button"]:hover, input[type="button"]:focus, input[type="reset"]:hover,
@@ -4201,6 +4204,99 @@ img.mfp-img {
 
 .owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
   background: #869791;
+}
+
+/* WP FORMS */
+div.wpforms-container .wpforms-form .wpforms-field-row.wpforms-field-medium {
+  max-width: 100% !important;
+}
+div.wpforms-container .wpforms-form .wpforms-field input[type=date],
+div.wpforms-container .wpforms-form .wpforms-field input[type=datetime],
+div.wpforms-container .wpforms-form .wpforms-field input[type=datetime-local],
+div.wpforms-container .wpforms-form .wpforms-field input[type=email],
+div.wpforms-container .wpforms-form .wpforms-field input[type=month],
+div.wpforms-container .wpforms-form .wpforms-field input[type=number],
+div.wpforms-container .wpforms-form .wpforms-field input[type=password],
+div.wpforms-container .wpforms-form .wpforms-field input[type=range],
+div.wpforms-container .wpforms-form .wpforms-field input[type=search],
+div.wpforms-container .wpforms-form .wpforms-field input[type=tel],
+div.wpforms-container .wpforms-form .wpforms-field input[type=text],
+div.wpforms-container .wpforms-form .wpforms-field input[type=time],
+div.wpforms-container .wpforms-form .wpforms-field input[type=url],
+div.wpforms-container .wpforms-form .wpforms-field input[type=week],
+div.wpforms-container .wpforms-form .wpforms-field select,
+div.wpforms-container .wpforms-form .wpforms-field textarea {
+  padding: 10px;
+  max-width: 100%;
+  border: 0px;
+  font-size: 15px;
+  font-weight: normal;
+  line-height: 22px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  -o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #fff;
+  box-sizing: border-box;
+  color: #000000;
+  border-bottom: 1px solid #fff;
+}
+div.wpforms-container .wpforms-form .wpforms-field input[type=date]:hover, div.wpforms-container .wpforms-form .wpforms-field input[type=date]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=datetime]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=datetime]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=datetime-local]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=datetime-local]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=email]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=email]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=month]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=month]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=number]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=number]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=password]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=password]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=range]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=range]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=search]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=search]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=tel]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=tel]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=text]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=text]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=time]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=time]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=url]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=url]:focus,
+div.wpforms-container .wpforms-form .wpforms-field input[type=week]:hover,
+div.wpforms-container .wpforms-form .wpforms-field input[type=week]:focus,
+div.wpforms-container .wpforms-form .wpforms-field select:hover,
+div.wpforms-container .wpforms-form .wpforms-field select:focus,
+div.wpforms-container .wpforms-form .wpforms-field textarea:hover,
+div.wpforms-container .wpforms-form .wpforms-field textarea:focus {
+  border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  -o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  border-color: #EBEBEB;
+  border-bottom: 1px solid #fff !important;
+  background: #e9e9e9;
+}
+div.wpforms-container .wpforms-form .wpforms-field textarea {
+  min-height: 245px;
+}
+div.wpforms-container .wpforms-form button[type=submit] {
+  width: 100%;
+  text-align: center;
+  display: block;
 }
 
 /* Pirate Forms */

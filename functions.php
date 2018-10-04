@@ -98,9 +98,9 @@ if ( ! function_exists( 'onepress_setup' ) ) :
 
         // Recommend plugins
         add_theme_support( 'recommend-plugins', array(
-            'pirate-forms' => array(
-                'name' => esc_html__( 'Pirate Forms', 'onepress' ),
-                'active_filename' => 'pirate-forms/pirate-forms.php',
+            'wpforms-lite' => array(
+                'name' => esc_html__( 'WPForms', 'onepress' ),
+                'active_filename' => 'wpforms-lite/wpforms.php',
             ),
             'famethemes-demo-importer' => array(
                 'name' => esc_html__( 'Famethemes Demo Importer', 'onepress' ),

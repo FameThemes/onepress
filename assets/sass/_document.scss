@@ -318,7 +318,9 @@ fieldset{
 	border: 1px solid $border;
 }
 
-input[type="reset"],input[type="submit"],input[type="submit"], .pirate-forms-submit-button {
+input[type="reset"],input[type="submit"],input[type="submit"],
+/* 3rd plugins support */
+.pirate-forms-submit-button,  .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit {
 
 	cursor: pointer;
 	background: $primary;
@@ -339,6 +341,7 @@ input[type="reset"],input[type="submit"],input[type="submit"], .pirate-forms-sub
 	&:hover {
 		opacity: 0.8;
         background: $primary;
+		border: none;
 	}
 
 }
