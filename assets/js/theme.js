@@ -478,7 +478,9 @@ jQuery( document ).ready( function( $ ) {
     /**
      * Responsive Videos
      */
-    jQuery('.site-content').fitVids();
+    jQuery('.site-content').fitVids({
+        ignore: '.wp-block-embed iframe, .wp-block-embed object'
+    });
 
 
     /**

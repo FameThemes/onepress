@@ -186,16 +186,28 @@ function onepress_hero_fullscreen_callback ( $control ) {
     }
 }
 
-function onepress_sanitize_select( $input, $setting ){
+/**
+ * Sanitize select choices
+ *
+ * @param $input
+ * @param null $setting
+ *
+ * @return string
+ */
+function onepress_sanitize_select( $input, $setting = null){
 
     //input must be a slug: lowercase alphanumeric characters, dashes and underscores are allowed only
     $input = sanitize_key($input);
 
     //get the list of possible select options
-    $choices = $setting->manager->get_control( $setting->id )->choices;
+	if ( $setting ) {
+		$choices = $setting->manager->get_control( $setting->id )->choices;
 
-    //return input if valid or return default option
-    return ( array_key_exists( $input, $choices ) ? $input : $setting->default );
+		//return input if valid or return default option
+		return ( array_key_exists( $input, $choices ) ? $input : $setting->default );
+	} else {
+		return $input;
+	}
 
 }
 

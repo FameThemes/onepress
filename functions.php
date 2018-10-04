@@ -98,9 +98,9 @@ if ( ! function_exists( 'onepress_setup' ) ) :
 
         // Recommend plugins
         add_theme_support( 'recommend-plugins', array(
-            'pirate-forms' => array(
-                'name' => esc_html__( 'Pirate Forms', 'onepress' ),
-                'active_filename' => 'pirate-forms/pirate-forms.php',
+            'wpforms-lite' => array(
+                'name' => esc_html__( 'WPForms', 'onepress' ),
+                'active_filename' => 'wpforms-lite/wpforms.php',
             ),
             'famethemes-demo-importer' => array(
                 'name' => esc_html__( 'Famethemes Demo Importer', 'onepress' ),
@@ -117,6 +117,15 @@ if ( ! function_exists( 'onepress_setup' ) ) :
         add_theme_support( 'wc-product-gallery-lightbox' );
         add_theme_support( 'wc-product-gallery-slider' );
 
+
+		/**
+		 * Add support for Gutenberg.
+		 *
+		 * @link https://wordpress.org/gutenberg/handbook/reference/theme-support/
+		 */
+
+		add_theme_support( 'align-wide' );
+
 	}
 endif;
 add_action( 'after_setup_theme', 'onepress_setup' );
@@ -129,7 +138,16 @@ add_action( 'after_setup_theme', 'onepress_setup' );
  * @global int $content_width
  */
 function onepress_content_width() {
-	$GLOBALS['content_width'] = apply_filters( 'onepress_content_width', 800 );
+	/**
+	 * Support dynamic content width
+	 *
+	 * @since 2.1.1
+	 */
+	$width = absint( get_theme_mod( 'single_layout_content_width' ) );
+	if ( $width <=  0 ) {
+		$width = 800;
+	}
+	$GLOBALS['content_width'] = apply_filters( 'onepress_content_width', $width );
 }
 add_action( 'after_setup_theme', 'onepress_content_width', 0 );
 
@@ -452,6 +470,12 @@ function onepress_the_excerpt( $type = false, $length = false ){
 }
 
 /**
+ * Config class
+ * @since 2.1.1
+ */
+require get_template_directory() . '/inc/class-config.php';
+
+/**
  * Load Sanitize
  */
 require get_template_directory() . '/inc/sanitize.php';
@@ -485,4 +509,4 @@ require get_template_directory() . '/inc/customizer.php';
 /**
  * Add theme info page
  */
-require get_template_directory() . '/inc/dashboard.php';
+require get_template_directory() . '/inc/admin/dashboard.php';

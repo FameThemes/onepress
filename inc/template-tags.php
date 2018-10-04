@@ -605,7 +605,11 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
                     color: #<?php echo $primary; ?>;
                 }
                 input[type="reset"], input[type="submit"], input[type="submit"], input[type="reset"]:hover, input[type="submit"]:hover, input[type="submit"]:hover .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .section-testimonials .card-theme-primary,
-				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt, .pirate-forms-submit-button, .pirate-forms-submit-button:hover
+				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt,
+                .pirate-forms-submit-button, .pirate-forms-submit-button:hover, input[type="reset"], input[type="submit"], input[type="submit"], .pirate-forms-submit-button,
+                .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit,
+                .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit:hover
+
                 {
                     background: #<?php echo $primary; ?>;
                 }
@@ -895,6 +899,14 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
             .gallery-grid, .gallery-masonry {
                 margin: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
             }
+        <?php
+        $content_width = absint( get_theme_mod( 'single_layout_content_width' ) ); //
+        if ( $content_width > 0 ) {
+	        $value = $content_width.'px';
+            echo '.single-post .site-main { max-width: '.$value.'; margin-left: auto; margin-right: auto; }';
+
+        }
+        ?>
         <?php
 
         $css = ob_get_clean();

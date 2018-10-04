@@ -92,12 +92,31 @@ function onepress_customize_register( $wp_customize ) {
 	require_once $path. '/inc/customize-configs/options-single.php';
 	require_once $path. '/inc/customize-configs/options-footer.php';
 
+	/**
+	 * @since 2.1.1
+	 * Load sections if enabled
+	 */
+	$sections = Onepress_Config::get_sections();
+
+
+	foreach( $sections as $key => $section ) {
+
+		if ( Onepress_Config::is_section_active( $key ) ) {
+			$file = $path. '/inc/customize-configs/section-'.$key.'.php';
+			if ( file_exists( $file ) ) {
+				require_once $file;
+			}
+		}
+
+	}
+
+	/*
 	// Section Hero
 	require_once $path. '/inc/customize-configs/section-hero.php';
 	// Section Hero
 	require_once $path. '/inc/customize-configs/section-about.php';
 	// Video Popup
-	require_once $path. '/inc/customize-configs/section-video-popup.php';
+	require_once $path. '/inc/customize-configs/section-videolightbox.php';
 	// Section Gallery
 	require_once $path. '/inc/customize-configs/section-gallery.php';
 	// Section Features
@@ -112,6 +131,8 @@ function onepress_customize_register( $wp_customize ) {
 	require_once $path. '/inc/customize-configs/section-news.php';
 	// Section Contact
 	require_once $path. '/inc/customize-configs/section-contact.php';
+	*/
+
 	// Section Up sell
 	require_once $path. '/inc/customize-configs/section-upsell.php';
 	
@@ -119,6 +140,14 @@ function onepress_customize_register( $wp_customize ) {
 	 * Hook to add other customize
 	 */
 	do_action( 'onepress_customize_after_register', $wp_customize );
+
+	/**
+	 * Move WC Panel to bottom
+	 * @since 2.1.1
+	 */
+	if ( onepress_is_wc_active() ) {
+		$wp_customize->get_panel( 'woocommerce' )->priority = 300;
+	}
 
 }
 add_action( 'customize_register', 'onepress_customize_register' );
@@ -140,11 +169,11 @@ add_action( 'customize_preview_init', 'onepress_customize_preview_js', 65 );
 
 add_action( 'customize_controls_enqueue_scripts', 'opneress_customize_js_settings' );
 function opneress_customize_js_settings(){
-    if ( ! function_exists( 'onepress_get_recommended_actions' ) ) {
+    if ( ! class_exists( 'Onepress_Dashboard' ) ) {
         return;
     }
 
-    $actions = onepress_get_recommended_actions();
+    $actions = Onepress_Dashboard::get_instance()->get_recommended_actions();
     $number_action = $actions['number_notice'];
 
     wp_localize_script( 'customize-controls', 'onepress_customizer_settings', array(

@@ -20,7 +20,15 @@ get_header(); ?>
                 ) );
 
 				foreach ( $sections as $section ){
-                    onepress_load_section( $section );
+					/**
+                     * Load section if active
+                     *
+					 * @since 2.1.1
+					 */
+				    if ( Onepress_Config::is_section_active( $section ) ) {
+					    onepress_load_section( $section );
+                    }
+
 				}
 
 			} else {
