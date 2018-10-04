@@ -970,15 +970,6 @@ button {
     user-select: none;
 }
 
-.owl-carousel .owl-nav button.owl-prev,
-.owl-carousel .owl-nav button.owl-next,
-.owl-carousel button.owl-dot {
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0 !important;
-    font: inherit;
-}
 
 .owl-carousel.owl-loaded {
     display: block;
@@ -1128,9 +1119,10 @@ button {
 /*
  * 	Default theme - Owl Carousel CSS File
  */
-.owl-theme {
+.owl-carousel.owl-theme {
+    position: relative;
     .owl-nav {
-        > div {
+        button {
             position: absolute;
             top: 50%;
             background-color: rgba(0, 0, 0, 0.45);
@@ -1142,10 +1134,11 @@ button {
             margin-top: 0px;
             padding: 4px 10px 5px;
             transform: translateY(-50%);
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.6);
-                color: #fff;
-            }
+        }
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
         }
         .owl-prev {
             left: 15px;
@@ -1155,6 +1148,7 @@ button {
                 }
             }
         }
+
         .owl-next {
             right: 15px;
             .lg-icon {

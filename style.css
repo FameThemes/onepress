@@ -3964,16 +3964,6 @@ img.mfp-img {
   user-select: none;
 }
 
-.owl-carousel .owl-nav button.owl-prev,
-.owl-carousel .owl-nav button.owl-next,
-.owl-carousel button.owl-dot {
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0 !important;
-  font: inherit;
-}
-
 .owl-carousel.owl-loaded {
   display: block;
 }
@@ -4115,7 +4105,10 @@ img.mfp-img {
 /*
  * 	Default theme - Owl Carousel CSS File
  */
-.owl-theme .owl-nav > div {
+.owl-carousel.owl-theme {
+  position: relative;
+}
+.owl-carousel.owl-theme .owl-nav button {
   position: absolute;
   top: 50%;
   background-color: rgba(0, 0, 0, 0.45);
@@ -4128,20 +4121,20 @@ img.mfp-img {
   padding: 4px 10px 5px;
   transform: translateY(-50%);
 }
-.owl-theme .owl-nav > div:hover {
+.owl-carousel.owl-theme .owl-nav:hover {
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
 }
-.owl-theme .owl-nav .owl-prev {
+.owl-carousel.owl-theme .owl-nav .owl-prev {
   left: 15px;
 }
-.owl-theme .owl-nav .owl-prev .lg-icon::before {
+.owl-carousel.owl-theme .owl-nav .owl-prev .lg-icon::before {
   content: "\e094";
 }
-.owl-theme .owl-nav .owl-next {
+.owl-carousel.owl-theme .owl-nav .owl-next {
   right: 15px;
 }
-.owl-theme .owl-nav .owl-next .lg-icon::before {
+.owl-carousel.owl-theme .owl-nav .owl-next .lg-icon::before {
   content: "\e095";
 }
 
