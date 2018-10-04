@@ -1119,7 +1119,7 @@ button {
 /*
  * 	Default theme - Owl Carousel CSS File
  */
-.owl-carousel.owl-theme {
+.owl-theme {
     position: relative;
     .owl-nav {
         button {
@@ -1134,6 +1134,11 @@ button {
             margin-top: 0px;
             padding: 4px 10px 5px;
             transform: translateY(-50%);
+            border: 0px none;
+            &:focus{
+                box-shadow: none;
+                outline: none;
+            }
         }
 
         &:hover {
@@ -1165,12 +1170,11 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
-.owl-theme .owl-nav [class*='owl-'] {
+.gallery-carousel.owl-theme .owl-nav [class*='owl-'] {
     color: #FFF;
     font-size: 14px;
     margin: 5px;
     padding: 4px 7px;
-    background: #D6D6D6;
     display: inline-block;
     cursor: pointer;
     border-radius: 3px;

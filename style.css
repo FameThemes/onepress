@@ -4105,10 +4105,10 @@ img.mfp-img {
 /*
  * 	Default theme - Owl Carousel CSS File
  */
-.owl-carousel.owl-theme {
+.owl-theme {
   position: relative;
 }
-.owl-carousel.owl-theme .owl-nav button {
+.owl-theme .owl-nav button {
   position: absolute;
   top: 50%;
   background-color: rgba(0, 0, 0, 0.45);
@@ -4120,21 +4120,26 @@ img.mfp-img {
   margin-top: 0px;
   padding: 4px 10px 5px;
   transform: translateY(-50%);
+  border: 0px none;
 }
-.owl-carousel.owl-theme .owl-nav:hover {
+.owl-theme .owl-nav button:focus {
+  box-shadow: none;
+  outline: none;
+}
+.owl-theme .owl-nav:hover {
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
 }
-.owl-carousel.owl-theme .owl-nav .owl-prev {
+.owl-theme .owl-nav .owl-prev {
   left: 15px;
 }
-.owl-carousel.owl-theme .owl-nav .owl-prev .lg-icon::before {
+.owl-theme .owl-nav .owl-prev .lg-icon::before {
   content: "\e094";
 }
-.owl-carousel.owl-theme .owl-nav .owl-next {
+.owl-theme .owl-nav .owl-next {
   right: 15px;
 }
-.owl-carousel.owl-theme .owl-nav .owl-next .lg-icon::before {
+.owl-theme .owl-nav .owl-next .lg-icon::before {
   content: "\e095";
 }
 
@@ -4144,12 +4149,11 @@ img.mfp-img {
   -webkit-tap-highlight-color: transparent;
 }
 
-.owl-theme .owl-nav [class*='owl-'] {
+.gallery-carousel.owl-theme .owl-nav [class*='owl-'] {
   color: #FFF;
   font-size: 14px;
   margin: 5px;
   padding: 4px 7px;
-  background: #D6D6D6;
   display: inline-block;
   cursor: pointer;
   border-radius: 3px;
