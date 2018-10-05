@@ -1835,6 +1835,15 @@ Footer widgets
 .btn:active, .btn:focus {
   outline: none;
 }
+.btn.btn-secondary-outline {
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.9);
+}
+.btn.btn-secondary-outline:hover {
+  background: #FFF;
+  color: #333;
+}
 
 .btn-lg {
   font-size: 17px;
@@ -2358,15 +2367,6 @@ section > .customize-partial-edit-shortcut button {
 .hero__content p {
   margin-bottom: 20px;
   margin-bottom: 1.25rem;
-}
-.hero__content .btn-secondary-outline {
-  box-shadow: none;
-  border-color: rgba(255, 255, 255, 0.9);
-  color: rgba(255, 255, 255, 0.9);
-}
-.hero__content .btn-secondary-outline:hover {
-  background: #FFF;
-  color: #333;
 }
 
 /* Hero Content Style 2. */
@@ -4186,6 +4186,11 @@ img.mfp-img {
   display: inline-block;
   zoom: 1;
   *display: inline;
+  background: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border: 0px none;
+  padding: 0px;
 }
 
 .owl-theme .owl-dots .owl-dot span {
