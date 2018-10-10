@@ -393,15 +393,7 @@
     p {
         @include rem('margin-bottom', 20px);
     }
-    .btn-secondary-outline {
-        box-shadow: none;
-        border-color: rgba(255, 255, 255, 0.9);
-        color: rgba(255, 255, 255, 0.9);
-        &:hover {
-            background: #FFF;
-            color: #333;
-        }
-    }
+
 }
 
 /* Hero Content Style 2. */

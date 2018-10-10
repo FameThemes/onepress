@@ -1835,6 +1835,15 @@ Footer widgets
 .btn:active, .btn:focus {
   outline: none;
 }
+.btn.btn-secondary-outline {
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.9);
+}
+.btn.btn-secondary-outline:hover {
+  background: #FFF;
+  color: #333;
+}
 
 .btn-lg {
   font-size: 17px;
@@ -2385,15 +2394,6 @@ section > .customize-partial-edit-shortcut button {
 .hero__content p {
   margin-bottom: 20px;
   margin-bottom: 1.25rem;
-}
-.hero__content .btn-secondary-outline {
-  box-shadow: none;
-  border-color: rgba(255, 255, 255, 0.9);
-  color: rgba(255, 255, 255, 0.9);
-}
-.hero__content .btn-secondary-outline:hover {
-  background: #FFF;
-  color: #333;
 }
 
 /* Hero Content Style 2. */
@@ -3994,16 +3994,6 @@ img.mfp-img {
   user-select: none;
 }
 
-.owl-carousel .owl-nav button.owl-prev,
-.owl-carousel .owl-nav button.owl-next,
-.owl-carousel button.owl-dot {
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0 !important;
-  font: inherit;
-}
-
 .owl-carousel.owl-loaded {
   display: block;
 }
@@ -4145,7 +4135,10 @@ img.mfp-img {
 /*
  * 	Default theme - Owl Carousel CSS File
  */
-.owl-theme .owl-nav > div {
+.owl-theme {
+  position: relative;
+}
+.owl-theme .owl-nav button {
   position: absolute;
   top: 50%;
   background-color: rgba(0, 0, 0, 0.45);
@@ -4157,8 +4150,13 @@ img.mfp-img {
   margin-top: 0px;
   padding: 4px 10px 5px;
   transform: translateY(-50%);
+  border: 0px none;
 }
-.owl-theme .owl-nav > div:hover {
+.owl-theme .owl-nav button:focus {
+  box-shadow: none;
+  outline: none;
+}
+.owl-theme .owl-nav:hover {
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
 }
@@ -4181,12 +4179,11 @@ img.mfp-img {
   -webkit-tap-highlight-color: transparent;
 }
 
-.owl-theme .owl-nav [class*='owl-'] {
+.gallery-carousel.owl-theme .owl-nav [class*='owl-'] {
   color: #FFF;
   font-size: 14px;
   margin: 5px;
   padding: 4px 7px;
-  background: #D6D6D6;
   display: inline-block;
   cursor: pointer;
   border-radius: 3px;
@@ -4216,6 +4213,11 @@ img.mfp-img {
   display: inline-block;
   zoom: 1;
   *display: inline;
+  background: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border: 0px none;
+  padding: 0px;
 }
 
 .owl-theme .owl-dots .owl-dot span {
