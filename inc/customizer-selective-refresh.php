@@ -336,6 +336,8 @@ function onepress_customizer_partials( $wp_customize ) {
 
 	    'onepress_sections_nav___color',
 	    'onepress_sections_nav___color2',
+	    'onepress_sections_nav___label_bg',
+	    'onepress_sections_nav___label_color',
 
     );
 

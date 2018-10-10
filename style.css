@@ -2335,6 +2335,11 @@ section > .customize-partial-edit-shortcut button {
   /* Safari */
   transition-delay: 0s;
 }
+.is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content:hover .hcl2-content {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
 .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content .hero-large-text,
 .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content .hero-small-text,
 .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content .btn,
@@ -4368,3 +4373,5 @@ img.mfp-img {
     transform: scale(1);
   }
 }
+
+/*# sourceMappingURL=style.css.map */

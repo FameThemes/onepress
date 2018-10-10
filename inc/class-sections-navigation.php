@@ -188,6 +188,32 @@ class Onepress_Dots_Navigation {
 			)
 		) );
 
+		// Color Settings
+		$wp_customize->add_setting( $this->get_name( '__label_bg' ), array(
+			'sanitize_callback'    => 'onepress_sanitize_color_alpha',
+			'default'              => ''
+		) );
+		$wp_customize->add_control( new OnePress_Alpha_Color_Control( $wp_customize, $this->get_name( '__label_bg' ),
+			array(
+				'label'       => esc_html__( 'Label Background', 'onepress' ),
+				'section'     => $section_id,
+				'description' => '',
+			)
+		) );
+
+		// Color Settings
+		$wp_customize->add_setting( $this->get_name( '__label_color' ), array(
+			'sanitize_callback'    => 'onepress_sanitize_color_alpha',
+			'default'              => ''
+		) );
+		$wp_customize->add_control( new OnePress_Alpha_Color_Control( $wp_customize, $this->get_name( '__label_color' ),
+			array(
+				'label'       => esc_html__( 'Label Color', 'onepress' ),
+				'section'     => $section_id,
+				'description' => '',
+			)
+		) );
+
 
 		// Section Settings
 		foreach ( $this->get_sections() as $id => $args ) {
@@ -336,6 +362,21 @@ class Onepress_Dots_Navigation {
 			if ( $color2 ) {
 				$code .= " body .c-bully.c-bully--inversed { color: #{$color2}; } ";
 			}
+
+			$bg = get_theme_mod( $this->get_name( '__label_bg' ) );
+			$bg_color = onepress_sanitize_color_alpha( $bg );
+
+			if ( $bg_color ) {
+				$code .= " body .c-bully .c-bully__title { background-color: {$bg_color}; } ";
+			}
+
+			$color =  get_theme_mod( $this->get_name( '__label_color' ) );
+			$color = onepress_sanitize_color_alpha( $color );
+
+			if ( $color ) {
+				$code .= " body .c-bully .c-bully__title { color: {$color}; } ";
+			}
+
 			if ( is_customize_preview() ) {
 				//die( 'loadmoe' );
 			}
