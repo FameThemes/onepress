@@ -2153,7 +2153,8 @@ section > .customize-partial-edit-shortcut button {
   display: block;
   content: "";
 }
-.hero-slideshow-wrapper .hero__content .hero-large-text, .hero-slideshow-wrapper .hero__content .hero-small-text, .hero-slideshow-wrapper .hero__content .btn {
+.hero-slideshow-wrapper .hero__content .hero-large-text, .hero-slideshow-wrapper .hero__content .hero-small-text, .hero-slideshow-wrapper .hero__content .btn,
+.hero-slideshow-wrapper .hero__content .hcl2-content {
   visibility: hidden;
   opacity: 0;
   -webkit-transform: translateY(100px);
@@ -2176,6 +2177,11 @@ section > .customize-partial-edit-shortcut button {
   /* Safari */
   transition-delay: 1s;
 }
+.hero-slideshow-wrapper .hero__content .hcl2-content {
+  -webkit-transition-delay: 0.7s;
+  /* Safari */
+  transition-delay: 0.7s;
+}
 .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-large-text, .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-small-text, .hero-slideshow-wrapper.loaded .container .hero__content:hover .btn {
   -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
@@ -2197,7 +2203,7 @@ section > .customize-partial-edit-shortcut button {
 }
 .hero-slideshow-wrapper.loaded .container .hero__content .hero-large-text,
 .hero-slideshow-wrapper.loaded .container .hero__content .hero-small-text,
-.hero-slideshow-wrapper.loaded .container .hero__content .btn {
+.hero-slideshow-wrapper.loaded .container .hero__content .btn, .hero-slideshow-wrapper.loaded .container .hero__content .hcl2-content {
   visibility: visible;
   opacity: 1;
   -webkit-transform: translateY(0);
@@ -2216,7 +2222,7 @@ section > .customize-partial-edit-shortcut button {
 .animation-disable .hero-slideshow-wrapper {
   /* Loading icon */
 }
-.animation-disable .hero-slideshow-wrapper .hero__content .hero-large-text, .animation-disable .hero-slideshow-wrapper .hero__content .hero-small-text, .animation-disable .hero-slideshow-wrapper .hero__content .btn {
+.animation-disable .hero-slideshow-wrapper .hero__content .hero-large-text, .animation-disable .hero-slideshow-wrapper .hero__content .hero-small-text, .animation-disable .hero-slideshow-wrapper .hero__content .btn, .animation-disable .hero-slideshow-wrapper .hero__content .hcl2-content {
   -webkit-transform: translateY(0px);
   transform: translateY(0px);
 }
@@ -2235,7 +2241,12 @@ section > .customize-partial-edit-shortcut button {
   /* Safari */
   transition-delay: 0s;
 }
-.animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-large-text, .animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-small-text, .animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .btn {
+.animation-disable .hero-slideshow-wrapper .hero__content .hcl2-content {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-large-text, .animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-small-text, .animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .btn, .animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hcl2-content {
   -webkit-transition-delay: 0s;
   /* Safari */
   transition-delay: 0s;
@@ -2251,6 +2262,11 @@ section > .customize-partial-edit-shortcut button {
   transition-delay: 0s;
 }
 .animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .btn {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.animation-disable .hero-slideshow-wrapper.loaded .container .hero__content:hover .hcl2-content {
   -webkit-transition-delay: 0s;
   /* Safari */
   transition-delay: 0s;
@@ -2275,7 +2291,7 @@ section > .customize-partial-edit-shortcut button {
 .is-customize-preview .slider-spinner {
   display: none !important;
 }
-.is-customize-preview .hero-slideshow-wrapper .hero__content .hero-large-text, .is-customize-preview .hero-slideshow-wrapper .hero__content .hero-small-text, .is-customize-preview .hero-slideshow-wrapper .hero__content .btn {
+.is-customize-preview .hero-slideshow-wrapper .hero__content .hero-large-text, .is-customize-preview .hero-slideshow-wrapper .hero__content .hero-small-text, .is-customize-preview .hero-slideshow-wrapper .hero__content .btn, .is-customize-preview .hero-slideshow-wrapper .hero__content .hcl2-content {
   visibility: visible;
   opacity: 1;
   -webkit-transform: translateY(0px);
@@ -2298,7 +2314,12 @@ section > .customize-partial-edit-shortcut button {
   /* Safari */
   transition-delay: 0s;
 }
-.is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-large-text, .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-small-text, .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content:hover .btn {
+.is-customize-preview .hero-slideshow-wrapper .hero__content .hcl2-content {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
+.is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-large-text, .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content:hover .hero-small-text, .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content:hover .btn, .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content:hover .hcl2-content {
   -webkit-transition-duration: 0s;
   transition-duration: 0s;
 }
@@ -2317,9 +2338,15 @@ section > .customize-partial-edit-shortcut button {
   /* Safari */
   transition-delay: 0s;
 }
+.is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content:hover .hcl2-content {
+  -webkit-transition-delay: 0s;
+  /* Safari */
+  transition-delay: 0s;
+}
 .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content .hero-large-text,
 .is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content .hero-small-text,
-.is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content .btn {
+.is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content .btn,
+.is-customize-preview .hero-slideshow-wrapper.loaded .container .hero__content .hcl2-content {
   visibility: visible;
   opacity: 1;
   -webkit-transform: translateY(0);
