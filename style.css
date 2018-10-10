@@ -4207,6 +4207,12 @@ img.mfp-img {
 }
 
 /* WP FORMS */
+div.wpforms-container .wpforms-form .wpforms-field .wpforms-field-label, div.wpforms-container .wpforms-form .wpforms-field .wpforms-field-sublabel {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
 div.wpforms-container .wpforms-form .wpforms-field-row.wpforms-field-medium {
   max-width: 100% !important;
 }

@@ -1226,6 +1226,15 @@ button {
 div.wpforms-container {
     .wpforms-form {
 
+        .wpforms-field {
+            .wpforms-field-label, .wpforms-field-sublabel {
+                text-transform: uppercase;
+                font-size: 11px;
+                letter-spacing: 2px;
+                font-weight: 600;
+            }
+        }
+
         .wpforms-field-row {
             &.wpforms-field-medium {
                 max-width: 100% !important;
