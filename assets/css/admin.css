@@ -253,9 +253,12 @@
 }
 
 .admin-section-header {
+    display: -webkit-box;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    -webkit-box-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+            align-items: center;
 }
 .see-only .admin-section-header{
     padding-left: 35px;
@@ -280,8 +283,10 @@
     margin-bottom: 0px;
 }
 .onepress-admin-section label {
+    display: -webkit-box;
     display: flex;
-    align-items: center;
+    -webkit-box-align: center;
+            align-items: center;
     font-weight: 500;
 }
 
@@ -316,6 +321,7 @@
     left: 0px;
     bottom: 0px;
     background-color: white;
+    -webkit-transition: .4s;
     transition: .4s;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
 }
