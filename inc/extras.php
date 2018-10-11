@@ -218,6 +218,13 @@ if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
 	define( 'ELEMENTOR_PARTNER_ID', 2123 );
 }
 
+/**
+ * Support WPForms plugin
+ */
+if ( ! defined( 'WPFORMS_SHAREASALE_ID' ) ) {
+	define( 'WPFORMS_SHAREASALE_ID', '1816909' );
+}
+
 if ( ! function_exists('onepress_get_video_lightbox_image') ) {
     /**
      * @since 2.0.5
