@@ -11,9 +11,6 @@ CHANGELOG
 * IMPROVED: Misc control issue.
 * IMPROVED: Theme style.
 
-# 2.1.1
-* NEW: Sections manager.
-
 # 2.1.0
 * NEW: Sections navigation.
 * NEW: Disable disable archive prefix option. See in Customizer -> Theme Options -> Blog Pots.
