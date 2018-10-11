@@ -169,7 +169,7 @@ class Onepress_Dashboard {
 
 		echo '<div class="onepress-admin-sections-wrapper">';
 	    echo '<h3>'.__( 'Customizer Sections', 'onepress' ).'</h3>';
-	    echo '<p class="description">'.__( 'Disable the Customizer sections that you do not need anymore to load it faster. Your settings is still saved.', 'onepress' ).'</p>';
+	    echo '<p class="description">'.__( 'Disable the Customizer sections that you do not need anymore to load it faster. Your settings are still saved.', 'onepress' ).'</p>';
 
 	    echo '<form method="post" action="?page=ft_onepress" class="onepress-admin-sections-form">';
 	    echo '<div class="onepress-admin-sections">';
