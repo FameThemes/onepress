@@ -144,7 +144,7 @@ class Onepress_Dashboard {
 		                <?php echo $section['label']; // WPCS: XSS OK. ?>
                     </label>
 	                <?php if ( $see_only ) { ?>
-                        <span class="note-bubble"><?php _e( 'Plus', 'onepress' ); ?></span>
+                        <span class="note-bubble"><?php _e( 'Plus Feature', 'onepress' ); ?></span>
 	                <?php } ?>
                 </div>
             </div>
@@ -168,8 +168,8 @@ class Onepress_Dashboard {
         }
 
 		echo '<div class="onepress-admin-sections-wrapper">';
-	    echo '<h3>'.__( 'Customizer Sections', 'onepress' ).'</h3>';
-	    echo '<p class="description">'.__( 'Disable the Customizer sections that you do not need anymore to load it faster. Your settings are still saved.', 'onepress' ).'</p>';
+	    echo '<h3>'.__( 'Customizer Section Manager', 'onepress' ).'</h3>';
+	    echo '<p class="description">'.__( 'Disable (or enable) unused sections to improve Customizer loading speed. Your section settings is still saved.', 'onepress' ).'</p>';
 
 	    echo '<form method="post" action="?page=ft_onepress" class="onepress-admin-sections-form">';
 	    echo '<div class="onepress-admin-sections">';

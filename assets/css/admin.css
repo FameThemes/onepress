@@ -237,7 +237,7 @@
 .onepress-admin-sections-wrapper {
     background: #fff;
     padding: 15px;
-    border: 1px solid #dddddd;
+    border: 1px solid #e5e5e5;
 }
 .onepress-admin-sections {
     margin: 15px -15px 0;
@@ -245,11 +245,11 @@
 }
 
 .onepress-admin-section:first-child .onepress-admin-section-inner {
-    border-top: 1px solid #dddddd;
+    border-top: 1px solid #EEEEEE;
 }
 .onepress-admin-section-inner {
     padding: 15px;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #EEEEEE;
 }
 
 .admin-section-header {
@@ -269,7 +269,6 @@
     margin: 0px;
 }
 .note-bubble {
-    text-transform: uppercase;
     font-size: 12px;
 }
 
@@ -290,8 +289,8 @@
 .switch-button {
     position: relative;
     display: inline-block;
-    width: 25px;
-    height: 15px;
+    width: 30px;
+    height: 16px;
     margin: 0px 10px 0px 0px;
 }
 
@@ -304,7 +303,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #dedede;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -312,17 +311,17 @@
 .switch-slider:before {
     position: absolute;
     content: "";
-    height: 15px;
-    width: 15px;
+    height: 16px;
+    width: 16px;
     left: 0px;
-    bottom: -1px;
+    bottom: 0px;
     background-color: white;
     transition: .4s;
-    border: 1px solid #dddddd;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
 }
 
 input:checked + .switch-slider {
-  /*background: #fff;*/
+  background: #89c12d;
 }
 
 input:disabled + .switch-slider {
@@ -336,7 +335,7 @@ input:focus + .switch-slider {
 
 input:checked + .switch-slider:before {
     left: calc( 100% - 16px );
-    background-color: #46b450;
+    /*background-color: #46b450;*/
 }
 
 /* Rounded sliders */
