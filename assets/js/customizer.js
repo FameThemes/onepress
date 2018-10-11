@@ -958,7 +958,7 @@
                 //Special check element
                 $('[data-live-id="section_id"]', $context).each(function () {
                     $(this).closest('.repeatable-customize-control').addClass('section-' + $(this).val());
-                    if ($(this).val() === 'map') {
+                    if ($(this).val() === 'map' || $(this).val()  === 'slider' ) {
                         $context.addClass('show-display-field-only');
                     }
                 });

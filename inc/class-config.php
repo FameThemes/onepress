@@ -55,7 +55,6 @@ class Onepress_Config {
 				'label' => __( 'Section: Call to Action', 'onepress' ),
 				'title' => __( '', 'onepress-plus' ),
 				'default' => false,
-				'default' => false,
 				'inverse' => false,
 			),
 			'map' => array(
