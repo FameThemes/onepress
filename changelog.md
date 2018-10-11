@@ -3,6 +3,7 @@ CHANGELOG
 ====================================================================
 # 2.1.1
 * NEW: Sections navigation label color settings.
+* FIXED: Remove deprecated jQuery function #319.
 
 # 2.1.1
 * NEW: Sections manager.
