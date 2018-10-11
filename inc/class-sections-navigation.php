@@ -205,7 +205,7 @@ class Onepress_Dots_Navigation {
 				);
 				$wp_customize->add_control( $name . '_label',
 					array(
-						'label'   => __( 'Custom navigation label', 'OnePress' ),
+						'label'   => __( 'Custom navigation label', 'onepress' ),
 						'section' => $section_id,
 					)
 				);
