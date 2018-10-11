@@ -45,6 +45,14 @@ class Onepress_Config {
 
 	static function get_plus_sections(){
 		$plugin_sections = array(
+
+			'slider' => array(
+				'label' => __( 'Section: Slider', 'onepress' ),
+				'title' => __( 'Slider', 'onepress' ),
+				'default' => false,
+				'inverse' => false,
+			),
+
 			'clients' => array(
 				'label' => __( 'Section: Clients', 'onepress' ),
 				'title' => __( 'Our Clients', 'onepress' ),
