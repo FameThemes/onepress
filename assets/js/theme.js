@@ -389,7 +389,7 @@ jQuery( document ).ready( function( $ ) {
     });
 
     // Move to the right section on page load.
-    jQuery(window).load(function(){
+    jQuery(window).on( 'load', function(){
         var urlCurrent = location.hash;
         if ( jQuery( urlCurrent ).length > 0 ) {
             smoothScroll( urlCurrent );
