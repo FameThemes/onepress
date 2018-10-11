@@ -103,8 +103,8 @@ li#accordion-panel-onepress_typo > .accordion-section-title
 }
 
 /* Special element */
-.repeatable-customize-control.show-display-field-only .widget-content .item{
-    display: none;
+.repeatable-customize-control.show-display-field-only .widget-content .item:not(.item-show_section){
+    display: none !important;
 }
 
 /*
@@ -586,4 +586,13 @@ body .wp-full-overlay{
     font-weight: 500;
     font-size: 12px;
     color: #FFFFFF;
+}
+
+.repeatable-customize-control.visibility-hidden {
+    height: 0px !important;
+    display: block !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    padding: 0px !important;
+    margin: 0px !important;
 }
