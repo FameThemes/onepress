@@ -341,6 +341,11 @@ function onepress_customizer_partials( $wp_customize ) {
 
     );
 
+	/**
+	 * @since 2.1.1
+	 */
+	$css_settings = apply_filters( 'onepress_selective_refresh_css_settings', $css_settings );
+
     foreach( $css_settings as $index => $key ) {
         if ( $wp_customize->get_setting( $key ) ) {
             $wp_customize->get_setting( $key )->transport = 'postMessage';
