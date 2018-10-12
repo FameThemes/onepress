@@ -23,31 +23,34 @@
             function update() {
                 if ( frameRendered !== true ) {
 
-                    var count = 0,
-                        inverse = true;
+                    var count = 0;
 
                     var lastItemId = false;
-                    var top = 0;
-                    if ($( '#masthead' ).hasClass( 'is-sticky' ) ) {
-                        top = $( '#masthead' ).outerHeight();
-                    }
 
-                    $.each( elements, function( i, element ) {
-                        if ( lastScrollY >= element.offset.top - top - windowHeight / 2 ) {
-                            count = count + 1;
-                            inverse = lastScrollY < element.offset.top - top + element.height - windowHeight / 2;
-                            lastItemId = element.element.id;
+                    // Ty to to find item that bully over
+                    var _bt =  $bully.offset().top;
+                    var _bh = $bully.height();
+                    var _bb = _bh + _bt;
+
+                    $.each( Onepress_Bully.sections, function( id, arg ) {
+                        var element = $( '#'+ id );
+
+                        if ( element.length ) {
+
+                            var _et = element.offset().top  ;
+                            var _eh = element.height();
+                            var _eb = _eh + _et;
+
+                            if (  _et <= _bt || _bb >= _eb  || ( _bb >= _et && _eb > _bb ) ) {
+                                lastItemId = id;
+                                if ( arg.enable ) {
+                                    count = count + 1;
+                                }
+                            }
 
                         }
-
                     } );
 
-                    /*
-                    if ( inversed !== inverse ) {
-                        inversed = inverse;
-                        $bully.toggleClass( 'c-bully--inversed', inversed );
-                    }
-                    */
 
                     // New insverse
                     if ( lastItemId && typeof Onepress_Bully.sections[ lastItemId ] !== "undefined" ) {
@@ -204,6 +207,7 @@
         $.fn.bully.defaults = {
             scrollDuration: 'auto',
             scrollPerSecond: 4000,
+            sections: {}
         };
 
         $window.on( 'rellax load', reloadAll );
@@ -213,11 +217,13 @@
 )( jQuery, window, document );
 
 
-//init Bullly
+//Init Bully
 jQuery( document ).ready( function( $ ){
    $.each( Onepress_Bully.sections, function( id, args ){
-        $( '#'+id ).bully({
-            scrollPerSecond: 3000,
-        });
+       if ( args.enable ) {
+           $('#' + id).bully({
+               scrollPerSecond: 3000,
+           });
+       }
    } );
 } );

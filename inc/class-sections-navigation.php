@@ -240,23 +240,23 @@ class Onepress_Dots_Navigation {
 				     || ( isset( $args['show_section'] ) && $args['show_section'] )
 				) {
 					$name   = $this->get_name( $id );
-					$enable = get_theme_mod( $name, $args['default'] );
-					if ( $enable ) {
-						$el_id = sanitize_text_field( get_theme_mod( 'onepress_' . $id . '_id', $id, false ) );
-						if ( ! $el_id ) {
-							$el_id = $id;
-						}
-						$data[ $el_id ] = array(
-							'id'      => $el_id,
-							'inverse' => get_theme_mod( $this->get_name( $id . '_inverse' ), isset( $args['inverse'] ) ? $args['inverse'] : false ),
-							'enable'  => get_theme_mod( $name, $args['default'] ),
-							'title'   => get_theme_mod( 'onepress_' . $id . '_title', $args['title'] ),
-						);
-						$custom_title   = get_theme_mod( $this->get_name( $id . '_label' ), false );
-						if ( $custom_title ) {
-							$data[ $id ]['title'] = $custom_title;
-						}
+					//$enable = get_theme_mod( $name, $args['default'] );
+
+					$el_id = sanitize_text_field( get_theme_mod( 'onepress_' . $id . '_id', $id, false ) );
+					if ( ! $el_id ) {
+						$el_id = $id;
 					}
+					$data[ $el_id ] = array(
+						'id'      => $el_id,
+						'inverse' => get_theme_mod( $this->get_name( $id . '_inverse' ), isset( $args['inverse'] ) ? $args['inverse'] : false ),
+						'enable'  => get_theme_mod( $name, $args['default'] ) ? true :false,
+						'title'   => get_theme_mod( 'onepress_' . $id . '_title', $args['title'] ),
+					);
+					$custom_title   = get_theme_mod( $this->get_name( $id . '_label' ), false );
+					if ( $custom_title ) {
+						$data[ $id ]['title'] = $custom_title;
+					}
+
 				}
 			}
 
