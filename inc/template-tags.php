@@ -344,6 +344,9 @@ if ( ! function_exists( 'onepress_entry_footer' ) ) {
      */
     function onepress_entry_footer()
     {
+
+        ob_start();
+
         // Hide category and tag text for pages.
         if ('post' === get_post_type()) {
             /* translators: used between list items, there is a space after the comma */
@@ -363,6 +366,16 @@ if ( ! function_exists( 'onepress_entry_footer' ) ) {
             echo '<span class="comments-link">';
             comments_popup_link(esc_html__('Leave a comment', 'onepress'), esc_html__('1 Comment', 'onepress'), esc_html__('% Comments', 'onepress'));
             echo '</span>';
+        }
+
+        $content = ob_get_contents();
+        ob_clean();
+        ob_end_flush();
+
+        if ( $content ){
+	         echo '<footer class="entry-footer">';
+	        echo $content; // // WPCS: XSS OK.
+	        echo '</footer><!-- .entry-footer -->';
         }
 
     }
