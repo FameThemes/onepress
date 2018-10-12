@@ -6,6 +6,7 @@ CHANGELOG
 * NEW: Support WPForm plugin.
 * NEW: Support Gutenberg.
 * NEW: Sections navigation label color settings.
+* NEW: Support inverse dots color even section not enable.
 * FIXED: Remove deprecated jQuery function #319.
 * IMPROVED: Theme customize api.
 * IMPROVED: Misc control issue.
