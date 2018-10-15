@@ -958,7 +958,7 @@
                 //Special check element
                 $('[data-live-id="section_id"]', $context).each(function () {
                     $(this).closest('.repeatable-customize-control').addClass('section-' + $(this).val());
-                    if ($(this).val() === 'map') {
+                    if ($(this).val() === 'map' || $(this).val()  === 'slider' ) {
                         $context.addClass('show-display-field-only');
                     }
                 });
@@ -1004,23 +1004,39 @@
 
             /**
              * Create existing items
+             * @changed 2.1.1
              */
 
-            _templateData = $.extend(true, {}, control.params.fields);
-            var _templateData;
-
             $.each(values, function (i, _values) {
-
+                var _templateData = $.extend(true, {}, control.params.fields);
                 _values = values[i];
                 if (_values) {
                     for (var j in _values) {
+
+
+                        if ( typeof _templateData[j] === "undefined"  ) {
+                            _templateData[j] = {};
+                        }
+
+                        _templateData[j].value = _values[j];
+                        /*
                         if (_templateData.hasOwnProperty(j) && _values.hasOwnProperty(j)) {
                             _templateData[j].value = _values[j];
                         }
+                        */
                     }
                 }
 
                 var $html = $(control.template(_templateData));
+                if ( control.id === 'onepress_section_order_styling') {
+                    if (  typeof  _templateData.__visibility !== "undefined" ) {
+                        if (  _templateData.__visibility.value === 'hidden' ) {
+                            $html.addClass( 'visibility-hidden' );
+                        }
+                    }
+                }
+
+
                 $('.list-repeatable', control.container).append($html);
                 control.intItem($html);
                 control.actions($html);

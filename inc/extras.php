@@ -11,6 +11,7 @@
  * Adds custom classes to the array of body classes.
  *
  * @param array $classes Classes for the body element.
+ *
  * @return array
  */
 function onepress_body_classes( $classes ) {
@@ -70,6 +71,7 @@ endif;
  * Get media from a variable
  *
  * @param array $media
+ *
  * @return false|string
  */
 if ( ! function_exists( 'onepress_get_media_url' ) ) {
@@ -157,6 +159,13 @@ if ( ! function_exists( 'onepress_is_wc_archive' ) ) {
 
 
 if ( ! function_exists( 'onepress_get_layout' ) ) {
+    /**
+     *
+     *
+     * @param string $default
+     *
+     * @return string|void
+     */
     function onepress_get_layout( $default = 'right-sidebar' ) {
         $layout = get_theme_mod( 'onepress_layout', $default );
         if ( onepress_is_wc_active() ) {
@@ -167,9 +176,23 @@ if ( ! function_exists( 'onepress_get_layout' ) ) {
                 }
             }
         }
+
+        /**
+         * Support single layout
+         *
+         * @since 2.1.1
+         */
+        if ( is_singular( 'post' ) ) {
+            $single_layout =  get_theme_mod( 'single_layout', 'default' );
+            if ( $single_layout != '' && $single_layout != 'default' ) {
+                $layout = $single_layout;
+            }
+        }
+
         return apply_filters( 'onepress_get_layout', $layout, $default );
     }
 }
+
 
 /**
  * Woocommerce Support
@@ -193,6 +216,13 @@ if ( class_exists( 'WooCommerce' ) ) {
  */
 if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
 	define( 'ELEMENTOR_PARTNER_ID', 2123 );
+}
+
+/**
+ * Support WPForms plugin
+ */
+if ( ! defined( 'WPFORMS_SHAREASALE_ID' ) ) {
+	define( 'WPFORMS_SHAREASALE_ID', '1816909' );
 }
 
 if ( ! function_exists('onepress_get_video_lightbox_image') ) {

@@ -130,7 +130,8 @@
     }
 
     .hero__content {
-        .hero-large-text, .hero-small-text, .btn {
+        .hero-large-text, .hero-small-text, .btn,
+        .hcl2-content {
             visibility: hidden;
             opacity: 0;
             -webkit-transform: translateY(100px);
@@ -149,6 +150,10 @@
         .btn {
             -webkit-transition-delay: 1s; /* Safari */
             transition-delay: 1s;
+        }
+        .hcl2-content {
+            -webkit-transition-delay: 0.7s; /* Safari */
+            transition-delay: 0.7s;
         }
 
     }
@@ -178,7 +183,7 @@
 
                 .hero-large-text,
                 .hero-small-text,
-                .btn {
+                .btn, .hcl2-content {
                     visibility: visible;
                     opacity: 1;
                     -webkit-transform: translateY(0);
@@ -203,7 +208,7 @@
 .animation-disable {
     .hero-slideshow-wrapper {
         .hero__content {
-            .hero-large-text, .hero-small-text, .btn {
+            .hero-large-text, .hero-small-text, .btn, .hcl2-content {
                 -webkit-transform: translateY(0px);
                 transform: translateY(0px);
             }
@@ -219,6 +224,10 @@
                 -webkit-transition-delay: 0s; /* Safari */
                 transition-delay: 0s;
             }
+            .hcl2-content {
+                -webkit-transition-delay: 0s; /* Safari */
+                transition-delay: 0s;
+            }
 
         }
 
@@ -226,7 +235,7 @@
             .container {
                 .hero__content {
                     &:hover {
-                        .hero-large-text, .hero-small-text, .btn {
+                        .hero-large-text, .hero-small-text, .btn, .hcl2-content {
                             -webkit-transition-delay: 0s; /* Safari */
                             transition-delay: 0s;
                         }
@@ -239,6 +248,10 @@
                             transition-delay: 0s;
                         }
                         .btn {
+                            -webkit-transition-delay: 0s; /* Safari */
+                            transition-delay: 0s;
+                        }
+                        .hcl2-content {
                             -webkit-transition-delay: 0s; /* Safari */
                             transition-delay: 0s;
                         }
@@ -276,7 +289,7 @@
     .hero-slideshow-wrapper {
 
         .hero__content {
-            .hero-large-text, .hero-small-text, .btn {
+            .hero-large-text, .hero-small-text, .btn, .hcl2-content {
                 visibility: visible;
                 opacity: 1;
                 -webkit-transform: translateY(0px);
@@ -296,6 +309,10 @@
                 -webkit-transition-delay: 0s; /* Safari */
                 transition-delay: 0s;
             }
+            .hcl2-content {
+                -webkit-transition-delay: 0s; /* Safari */
+                transition-delay: 0s;
+            }
 
         }
 
@@ -304,7 +321,7 @@
                 .hero__content {
 
                     &:hover {
-                        .hero-large-text, .hero-small-text, .btn {
+                        .hero-large-text, .hero-small-text, .btn, .hcl2-content {
                             -webkit-transition-duration: 0s;
                             transition-duration: 0s;
                         }
@@ -320,11 +337,16 @@
                             -webkit-transition-delay: 0s; /* Safari */
                             transition-delay: 0s;
                         }
+                        .hcl2-content {
+                            -webkit-transition-delay: 0s; /* Safari */
+                            transition-delay: 0s;
+                        }
                     }
 
                     .hero-large-text,
                     .hero-small-text,
-                    .btn {
+                    .btn,
+                    .hcl2-content {
                         visibility: visible;
                         opacity: 1;
                         -webkit-transform: translateY(0);
@@ -371,15 +393,7 @@
     p {
         @include rem('margin-bottom', 20px);
     }
-    .btn-secondary-outline {
-        box-shadow: none;
-        border-color: rgba(255, 255, 255, 0.9);
-        color: rgba(255, 255, 255, 0.9);
-        &:hover {
-            background: #FFF;
-            color: #333;
-        }
-    }
+
 }
 
 /* Hero Content Style 2. */

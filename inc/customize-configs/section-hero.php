@@ -140,7 +140,6 @@ foreach ( $animations_css as $v ) {
 	if ( $v ){
 		$animations[ $v ]= $v;
 	}
-
 }
 
 $wp_customize->add_control(

@@ -336,8 +336,15 @@ function onepress_customizer_partials( $wp_customize ) {
 
 	    'onepress_sections_nav___color',
 	    'onepress_sections_nav___color2',
+	    'onepress_sections_nav___label_bg',
+	    'onepress_sections_nav___label_color',
 
     );
+
+	/**
+	 * @since 2.1.1
+	 */
+	$css_settings = apply_filters( 'onepress_selective_refresh_css_settings', $css_settings );
 
     foreach( $css_settings as $index => $key ) {
         if ( $wp_customize->get_setting( $key ) ) {

@@ -10,6 +10,7 @@ class OnePress_Misc_Control extends WP_Customize_Control {
 	public $description = '';
 	public $group = '';
 
+
 	/**
 	 * Render the description and title for the sections
 	 */
@@ -18,7 +19,7 @@ class OnePress_Misc_Control extends WP_Customize_Control {
 			default:
 
 			case 'heading':
-				echo '<span class="customize-control-title">' . $this->title . '</span>';
+				echo '<span class="customize-control-title">' . $this->label . '</span>';
 				break;
 
 			case 'custom_message' :
