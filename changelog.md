@@ -1,9 +1,16 @@
 ====================================================================
 CHANGELOG
 ====================================================================
-# 2.1.1
+# 2.2.0
+* NEW: Front page sections manager.
+* NEW: Support WPForm plugin.
+* NEW: Support Gutenberg.
 * NEW: Sections navigation label color settings.
+* NEW: Support inverse dots color even section not enable.
 * FIXED: Remove deprecated jQuery function #319.
+* IMPROVED: Theme customize api.
+* IMPROVED: Misc control issue.
+* IMPROVED: Theme style.
 
 # 2.1.0
 * NEW: Sections navigation.

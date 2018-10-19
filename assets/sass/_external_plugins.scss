@@ -7,46 +7,46 @@
 ////////////////////////
 
 // overlay
-$mfp-overlay-color:                   #0b0b0b;                    // Color of overlay screen
-$mfp-overlay-opacity:                 0.8;                        // Opacity of overlay screen
-$mfp-shadow:                          0 0 8px rgba(0, 0, 0, 0.6); // Shadow on image or iframe
+$mfp-overlay-color: #0b0b0b; // Color of overlay screen
+$mfp-overlay-opacity: 0.8; // Opacity of overlay screen
+$mfp-shadow: 0 0 8px rgba(0, 0, 0, 0.6); // Shadow on image or iframe
 
 // spacing
-$mfp-popup-padding-left:              8px;                        // Padding from left and from right side
-$mfp-popup-padding-left-mobile:       6px;                        // Same as above, but is applied when width of window is less than 800px
+$mfp-popup-padding-left: 8px; // Padding from left and from right side
+$mfp-popup-padding-left-mobile: 6px; // Same as above, but is applied when width of window is less than 800px
 
-$mfp-z-index-base:                    1040;                        // Base z-index of popup
+$mfp-z-index-base: 1040; // Base z-index of popup
 
 // controls
-$mfp-include-arrows:                  true;                       // Include styles for nav arrows
-$mfp-controls-opacity:                0.65;                       // Opacity of controls
-$mfp-controls-color:                  #FFF;                       // Color of controls
-$mfp-controls-border-color:           #3F3F3F;                    // Border color of controls
-$mfp-inner-close-icon-color:          #333;                       // Color of close button when inside
-$mfp-controls-text-color:             #CCC;                       // Color of preloader and "1 of X" indicator
-$mfp-controls-text-color-hover:       #FFF;                       // Hover color of preloader and "1 of X" indicator
-$mfp-IE7support:                      true;                       // Very basic IE7 support
+$mfp-include-arrows: true; // Include styles for nav arrows
+$mfp-controls-opacity: 0.65; // Opacity of controls
+$mfp-controls-color: #FFF; // Color of controls
+$mfp-controls-border-color: #3F3F3F; // Border color of controls
+$mfp-inner-close-icon-color: #333; // Color of close button when inside
+$mfp-controls-text-color: #CCC; // Color of preloader and "1 of X" indicator
+$mfp-controls-text-color-hover: #FFF; // Hover color of preloader and "1 of X" indicator
+$mfp-IE7support: true; // Very basic IE7 support
 
 // Iframe-type options
-$mfp-include-iframe-type:             true;                       // Enable Iframe-type popups
-$mfp-iframe-padding-top:              40px;                       // Iframe padding top
-$mfp-iframe-background:               #000;                       // Background color of iframes
-$mfp-iframe-max-width:                900px;                      // Maximum width of iframes
-$mfp-iframe-ratio:                    9/16;                       // Ratio of iframe (9/16 = widescreen, 3/4 = standard, etc.)
+$mfp-include-iframe-type: true; // Enable Iframe-type popups
+$mfp-iframe-padding-top: 40px; // Iframe padding top
+$mfp-iframe-background: #000; // Background color of iframes
+$mfp-iframe-max-width: 900px; // Maximum width of iframes
+$mfp-iframe-ratio: 9/16; // Ratio of iframe (9/16 = widescreen, 3/4 = standard, etc.)
 
 // Image-type options
-$mfp-include-image-type:              true;                       // Enable Image-type popups
-$mfp-image-background:                #444 !default;
-$mfp-image-padding-top:               40px;                       // Image padding top
-$mfp-image-padding-bottom:            40px;                       // Image padding bottom
-$mfp-include-mobile-layout-for-image: true;                       // Removes paddings from top and bottom
+$mfp-include-image-type: true; // Enable Image-type popups
+$mfp-image-background: #444 !default;
+$mfp-image-padding-top: 40px; // Image padding top
+$mfp-image-padding-bottom: 40px; // Image padding bottom
+$mfp-include-mobile-layout-for-image: true; // Removes paddings from top and bottom
 
 // Image caption options
-$mfp-caption-title-color:             #F3F3F3;                    // Caption title color
-$mfp-caption-subtitle-color:          #BDBDBD;                    // Caption subtitle color
+$mfp-caption-title-color: #F3F3F3; // Caption title color
+$mfp-caption-subtitle-color: #BDBDBD; // Caption subtitle color
 
 // A11y
-$mfp-use-visuallyhidden:              false;
+$mfp-use-visuallyhidden: false;
 
 ////////////////////////
 //
@@ -71,48 +71,46 @@ $mfp-use-visuallyhidden:              false;
 //
 ////////////////////////
 
-
-
 ////////////////////////
 // 1. Default Settings
 ////////////////////////
 
-$mfp-overlay-color:                   #0b0b0b !default;
-$mfp-overlay-opacity:                 0.8 !default;
-$mfp-shadow:                          0 0 8px rgba(0, 0, 0, 0.6) !default; // shadow on image or iframe
-$mfp-popup-padding-left:              8px !default; // Padding from left and from right side
-$mfp-popup-padding-left-mobile:       6px !default; // Same as above, but is applied when width of window is less than 800px
+$mfp-overlay-color: #0b0b0b !default;
+$mfp-overlay-opacity: 0.8 !default;
+$mfp-shadow: 0 0 8px rgba(0, 0, 0, 0.6) !default; // shadow on image or iframe
+$mfp-popup-padding-left: 8px !default; // Padding from left and from right side
+$mfp-popup-padding-left-mobile: 6px !default; // Same as above, but is applied when width of window is less than 800px
 
-$mfp-z-index-base:                    1040 !default; // Base z-index of popup
-$mfp-include-arrows:                  true !default; // include styles for nav arrows
-$mfp-controls-opacity:                0.65 !default;
-$mfp-controls-color:                  #FFF !default;
-$mfp-controls-border-color:           #3F3F3F !default;
-$mfp-inner-close-icon-color:          #333 !default;
-$mfp-controls-text-color:             #CCC !default; // Color of preloader and "1 of X" indicator
-$mfp-controls-text-color-hover:       #FFF !default;
-$mfp-IE7support:                      true !default; // Very basic IE7 support
+$mfp-z-index-base: 1040 !default; // Base z-index of popup
+$mfp-include-arrows: true !default; // include styles for nav arrows
+$mfp-controls-opacity: 0.65 !default;
+$mfp-controls-color: #FFF !default;
+$mfp-controls-border-color: #3F3F3F !default;
+$mfp-inner-close-icon-color: #333 !default;
+$mfp-controls-text-color: #CCC !default; // Color of preloader and "1 of X" indicator
+$mfp-controls-text-color-hover: #FFF !default;
+$mfp-IE7support: true !default; // Very basic IE7 support
 
 // Iframe-type options
-$mfp-include-iframe-type:             true !default;
-$mfp-iframe-padding-top:              40px !default;
-$mfp-iframe-background:               #000 !default;
-$mfp-iframe-max-width:                900px !default;
-$mfp-iframe-ratio:                    9/16 !default;
+$mfp-include-iframe-type: true !default;
+$mfp-iframe-padding-top: 40px !default;
+$mfp-iframe-background: #000 !default;
+$mfp-iframe-max-width: 900px !default;
+$mfp-iframe-ratio: 9/16 !default;
 
 // Image-type options
-$mfp-include-image-type:              true !default;
-$mfp-image-background:                #444 !default;
-$mfp-image-padding-top:               40px !default;
-$mfp-image-padding-bottom:            40px !default;
+$mfp-include-image-type: true !default;
+$mfp-image-background: #444 !default;
+$mfp-image-padding-top: 40px !default;
+$mfp-image-padding-bottom: 40px !default;
 $mfp-include-mobile-layout-for-image: true !default; // Removes paddings from top and bottom
 
 // Image caption options
-$mfp-caption-title-color:             #F3F3F3 !default;
-$mfp-caption-subtitle-color:          #BDBDBD !default;
+$mfp-caption-title-color: #F3F3F3 !default;
+$mfp-caption-subtitle-color: #BDBDBD !default;
 
 // A11y
-$mfp-use-visuallyhidden:              false !default; // Hide content from browsers, but make it available for screen readers
+$mfp-use-visuallyhidden: false !default; // Hide content from browsers, but make it available for screen readers
 
 ////////////////////////
 // 2. General styles
@@ -970,15 +968,6 @@ button {
     user-select: none;
 }
 
-.owl-carousel .owl-nav button.owl-prev,
-.owl-carousel .owl-nav button.owl-next,
-.owl-carousel button.owl-dot {
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0 !important;
-    font: inherit;
-}
 
 .owl-carousel.owl-loaded {
     display: block;
@@ -1098,7 +1087,6 @@ button {
 
 }
 
-
 .owl-carousel .owl-video-playing .owl-video-tn,
 .owl-carousel .owl-video-playing .owl-video-play-icon {
     display: none;
@@ -1129,8 +1117,9 @@ button {
  * 	Default theme - Owl Carousel CSS File
  */
 .owl-theme {
+    position: relative;
     .owl-nav {
-        > div {
+        button {
             position: absolute;
             top: 50%;
             background-color: rgba(0, 0, 0, 0.45);
@@ -1142,10 +1131,16 @@ button {
             margin-top: 0px;
             padding: 4px 10px 5px;
             transform: translateY(-50%);
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.6);
-                color: #fff;
+            border: 0px none;
+            &:focus{
+                box-shadow: none;
+                outline: none;
             }
+        }
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
         }
         .owl-prev {
             left: 15px;
@@ -1155,6 +1150,7 @@ button {
                 }
             }
         }
+
         .owl-next {
             right: 15px;
             .lg-icon {
@@ -1165,18 +1161,18 @@ button {
         }
     }
 }
+
 .owl-theme .owl-nav {
     margin-top: 0px;
     text-align: center;
     -webkit-tap-highlight-color: transparent;
 }
 
-.owl-theme .owl-nav [class*='owl-'] {
+.gallery-carousel.owl-theme .owl-nav [class*='owl-'] {
     color: #FFF;
     font-size: 14px;
     margin: 5px;
     padding: 4px 7px;
-    background: #D6D6D6;
     display: inline-block;
     cursor: pointer;
     border-radius: 3px;
@@ -1206,6 +1202,11 @@ button {
     display: inline-block;
     zoom: 1;
     *display: inline;
+    background: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    border: 0px none;
+    padding: 0px;
 }
 
 .owl-theme .owl-dots .owl-dot span {
@@ -1221,6 +1222,93 @@ button {
 
 .owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
     background: #869791;
+}
+
+/* WP FORMS */
+
+div.wpforms-container {
+    .wpforms-form {
+
+        .wpforms-field {
+            .wpforms-field-label, .wpforms-field-sublabel {
+                text-transform: uppercase;
+                font-size: 11px;
+                letter-spacing: 2px;
+                font-weight: 600;
+            }
+        }
+
+        .wpforms-field-row {
+            &.wpforms-field-medium {
+                max-width: 100% !important;
+            }
+        }
+
+        .wpforms-field {
+            input[type=date],
+            input[type=datetime],
+            input[type=datetime-local],
+            input[type=email],
+            input[type=month],
+            input[type=number],
+            input[type=password],
+            input[type=range],
+            input[type=search],
+            input[type=tel],
+            input[type=text],
+            input[type=time],
+            input[type=url],
+            input[type=week],
+            select,
+            textarea {
+
+                padding: 10px;
+                max-width: 100%;
+                border: 0px;
+                font-size: 15px;
+                font-weight: normal;
+                line-height: 22px;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+                -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+                -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+                -o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+                transition: all 0.2s linear;
+                -moz-transition: all 0.2s linear;
+                -webkit-transition: all 0.2s linear;
+                -o-transition: all 0.2s linear;
+                background-color: #f2f2f2;
+                border-bottom: 1px solid #fff;
+                box-sizing: border-box;
+                color: #000000;
+                border-bottom: 1px solid #fff;
+                &:hover, &:focus {
+                    border: none;
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+                    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+                    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+                    -o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+                    transition: all 0.2s linear;
+                    -moz-transition: all 0.2s linear;
+                    -webkit-transition: all 0.2s linear;
+                    -o-transition: all 0.2s linear;
+                    border-color: #EBEBEB;
+                    border-bottom: 1px solid #fff !important;
+                    background: #e9e9e9;
+                }
+            }
+            textarea {
+                min-height: 215px;
+            }
+        }
+
+        button[type=submit] {
+            width: 100%;
+            text-align: center;
+            display: block;
+        }
+
+
+    }
 }
 
 /* Pirate Forms */

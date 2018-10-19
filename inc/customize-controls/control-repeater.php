@@ -127,6 +127,20 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 			$value = $this->merge_data( $value, $this->defined_values );
 		}
 
+		/**
+		 * @since 2.1.1
+		 */
+		if ( $this->id_key == 'section_id' ) {
+		    foreach ( ( array ) $value as $k => $v ) {
+
+		        if ( ! Onepress_Config::is_section_active( $v['section_id'] ) ) {
+			        $value[ $k ]['__visibility'] = 'hidden';
+                } else {
+			        $value[ $k ]['__visibility'] = '';
+                }
+            }
+        }
+
 		$this->json['live_title_id'] = $this->live_title_id;
 		$this->json['title_format']  = $this->title_format;
 		$this->json['max_item']      = $this->max_item;

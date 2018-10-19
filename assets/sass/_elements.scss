@@ -11,6 +11,16 @@
     &:active, &:focus {
         outline: none;
     }
+
+    &.btn-secondary-outline {
+        box-shadow: none;
+        border-color: rgba(255, 255, 255, 0.9);
+        color: rgba(255, 255, 255, 0.9);
+        &:hover {
+            background: #FFF;
+            color: #333;
+        }
+    }
 }
 
 .btn-lg {
