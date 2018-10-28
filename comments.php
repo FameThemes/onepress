@@ -27,25 +27,25 @@ if ( post_password_required() ) {
 	<?php if ( have_comments() ) : ?>
 		<h3 class="comments-title">
 			<?php
-                $n = get_comments_number();
-                if ( 1 === $n ) {
-                    printf( esc_html__( 'One thought on &ldquo;%2$s&rdquo;', 'onepress' ), '<span>' . get_the_title() . '</span>' );
-                } else {
-                    // WPCS: XSS OK.
-                    printf(
-                    /* translators: 1: number of comments, 2: post title */
-                        _nx(
-                            '%1$s thought on &ldquo;%2$s&rdquo;',
-                            '%1$s thoughts on &ldquo;%2$s&rdquo;',
-                            $n,
-                            'comments title',
-                            'onepress'
-                        ),
-                        number_format_i18n( $n ),
-                        '<span>' . get_the_title() . '</span>'
-                    );
+				$n = get_comments_number();
+			if ( 1 === $n ) {
+				printf( esc_html__( 'One thought on &ldquo;%2$s&rdquo;', 'onepress' ), '<span>' . get_the_title() . '</span>' );
+			} else {
+				// WPCS: XSS OK.
+				printf(
+					/* translators: 1: number of comments, 2: post title */
+					_nx(
+						'%1$s thought on &ldquo;%2$s&rdquo;',
+						'%1$s thoughts on &ldquo;%2$s&rdquo;',
+						$n,
+						'comments title',
+						'onepress'
+					),
+					number_format_i18n( $n ),
+					'<span>' . get_the_title() . '</span>'
+				);
 
-                }
+			}
 
 			?>
 		</h3>
@@ -64,9 +64,11 @@ if ( post_password_required() ) {
 
 		<ol class="comment-list">
 			<?php
-				wp_list_comments( array(
-					'callback' => 'onepress_comment',
-				) );
+				wp_list_comments(
+					array(
+						'callback' => 'onepress_comment',
+					)
+				);
 			?>
 		</ol><!-- .comment-list -->
 
@@ -86,8 +88,8 @@ if ( post_password_required() ) {
 
 	<?php
 		// If comments are closed and there are comments, let's leave a little note, shall we?
-		if ( ! comments_open() && get_comments_number() && post_type_supports( get_post_type(), 'comments' ) ) :
-	?>
+	if ( ! comments_open() && get_comments_number() && post_type_supports( get_post_type(), 'comments' ) ) :
+		?>
 		<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'onepress' ); ?></p>
 	<?php endif; ?>
 

@@ -1,6 +1,6 @@
 <?php
 /**
- *Template Name: Full Width - Contained Content
+ * Template Name: Full Width - Contained Content
  *
  * @package OnePress
  */
@@ -14,9 +14,7 @@ get_header();
 do_action( 'onepress_page_before_content' );
 ?>
 	<div id="content" class="site-content">
-        <?php
-        onepress_breadcrumb();
-        ?>
+		<?php onepress_breadcrumb(); ?>
 		<div id="content-inside" class="container no-sidebar">
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">
@@ -26,10 +24,10 @@ do_action( 'onepress_page_before_content' );
 						<?php get_template_part( 'template-parts/content', 'page' ); ?>
 
 						<?php
-							// If comments are open or we have at least one comment, load up the comment template.
-							if ( comments_open() || get_comments_number() ) :
-								comments_template();
-							endif;
+						// If comments are open or we have at least one comment, load up the comment template.
+						if ( comments_open() || get_comments_number() ) :
+							comments_template();
+						endif;
 						?>
 
 					<?php endwhile; // End of the loop. ?>

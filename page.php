@@ -24,7 +24,7 @@ do_action( 'onepress_page_before_content' );
 
 ?>
 	<div id="content" class="site-content">
-        <?php onepress_breadcrumb(); ?>
+		<?php onepress_breadcrumb(); ?>
 		<div id="content-inside" class="container <?php echo esc_attr( $layout ); ?>">
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">
@@ -35,8 +35,8 @@ do_action( 'onepress_page_before_content' );
 
 						<?php
 							// If comments are open or we have at least one comment, load up the comment template.
-							if ( comments_open() || get_comments_number() ) :
-								comments_template();
+						if ( comments_open() || get_comments_number() ) :
+							comments_template();
 							endif;
 						?>
 
@@ -45,9 +45,9 @@ do_action( 'onepress_page_before_content' );
 				</main><!-- #main -->
 			</div><!-- #primary -->
 
-            <?php if ( $layout != 'no-sidebar' ) { ?>
-                <?php get_sidebar(); ?>
-            <?php } ?>
+			<?php if ( $layout != 'no-sidebar' ) { ?>
+				<?php get_sidebar(); ?>
+			<?php } ?>
 
 		</div><!--#content-inside -->
 	</div><!-- #content -->

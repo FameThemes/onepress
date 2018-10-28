@@ -56,9 +56,9 @@ $layout = onepress_get_layout();
 
 				</main><!-- #main -->
 			</div><!-- #primary -->
-            <?php if ( $layout != 'no-sidebar' ) { ?>
-			<?php get_sidebar(); ?>
-            <?php } ?>
+			<?php if ( $layout != 'no-sidebar' ) { ?>
+				<?php get_sidebar(); ?>
+			<?php } ?>
 
 		</div><!--#content-inside -->
 	</div><!-- #content -->
