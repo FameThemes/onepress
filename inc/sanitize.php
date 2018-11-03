@@ -3,16 +3,6 @@
  *  OnePress Sanitize Functions.
  */
 
-if ( ! function_exists( 'onepress_sanitize_checkbox' ) ) {
-	function onepress_sanitize_checkbox( $input ) {
-		if ( 1 == $input ) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
-}
-
 /**
  * Sanitize CSS code
  *
