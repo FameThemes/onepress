@@ -1,7 +1,6 @@
-====================================================================
-CHANGELOG
-====================================================================
-# 2.2.0
+# CHANGELOG
+
+## 2.2.0
 * NEW: Front page sections manager.
 * NEW: Support WPForm plugin.
 * NEW: Support Gutenberg.
@@ -12,7 +11,7 @@ CHANGELOG
 * IMPROVED: Misc control issue.
 * IMPROVED: Theme style.
 
-# 2.1.0
+## 2.1.0
 * NEW: Sections navigation.
 * NEW: Disable disable archive prefix option. See in Customizer -> Theme Options -> Blog Pots.
 * NEW: Item content source for Service section.
@@ -23,23 +22,22 @@ CHANGELOG
 * IMPROVED: Re-Structure customize controls.
 
 
-# 2.0.9
+## 2.0.9
 * IMPROVED: Add alt title for gallery images.
 * FIXED: Issue hero image resize not properly.
 * FIXED: Parallax does not rescale image anymore.
 
-# 2.0.8
+## 2.0.8
 * NEW: Setting height for transparent logo.
 * IMPROVED: Small strings corrections.
 * FIXED: Include hero animation in global animation setting.
 * FIXED: Remove duplicate single post thumbnail setting.
 
-# 2.0.7
+## 2.0.7
 * NEW: Add hero button target.
 * FIXED: Duplicate title on single post.
 * FIXED: Duplicate title on product archive.
 * FIXED: Contact form issue.
-
 
 ## 2.0.6
 * FIXED: JS error issue.
