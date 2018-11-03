@@ -1,4 +1,9 @@
 <?php
+/**
+ * Selective Refresh for Customizer
+ *
+ * @package OnePress\Customizer
+ */
 
 /**
  * Load section template
@@ -17,14 +22,14 @@ function onepress_customizer_load_template( $template_names ) {
 			continue;
 		}
 
-		if ( $is_child && file_exists( get_stylesheet_directory() . '/' . $template_name ) ) {  // Child them
+		if ( $is_child && file_exists( get_stylesheet_directory() . '/' . $template_name ) ) {  // Child theme
 			$located = get_stylesheet_directory() . '/' . $template_name;
 			break;
 
 		} elseif ( defined( 'ONEPRESS_PLUS_PATH' ) && file_exists( ONEPRESS_PLUS_PATH . $template_name ) ) { // Check part in the plugin
 			$located = ONEPRESS_PLUS_PATH . $template_name;
 			break;
-		} elseif ( file_exists( get_template_directory() . '/' . $template_name ) ) { // current_theme
+		} elseif ( file_exists( get_template_directory() . '/' . $template_name ) ) { // Current theme
 			$located = get_template_directory() . '/' . $template_name;
 			break;
 		}
@@ -59,7 +64,7 @@ function onepress_get_customizer_section_content( $section_tpl, $section = array
  *
  * @since 1.2.1
  *
- * @param $wp_customize
+ * @param WP_Customize_Manager $wp_customize
  */
 function onepress_customizer_partials( $wp_customize ) {
 
