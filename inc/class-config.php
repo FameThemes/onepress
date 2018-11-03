@@ -31,7 +31,7 @@ class Onepress_Config {
 		if ( is_array( $submitted_data ) ) {
 			$data = array();
 			foreach ( $sections as $k => $s ) {
-				$data[ $k ] = isset( $submitted_data['section_'.$k] ) && $submitted_data['section_'.$k] == 1 ? 1 : false;
+				$data[ $k ] = isset( $submitted_data['section_'.$k] ) && 1 == $submitted_data['section_'.$k] ? 1 : false;
 			}
 
 			update_option( self::$key, $data );

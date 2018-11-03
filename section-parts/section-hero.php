@@ -10,7 +10,7 @@ if ( onepress_is_selective_refresh() ) {
 }
 
 $hero_content_style = '';
-if ( $fullscreen != '1' ) {
+if ( '1' != $fullscreen ) {
 	$hero_content_style = ' style="padding-top: '. $pdtop .'%; padding-bottom: '. $pdbottom .'%;"';
 }
 
@@ -52,8 +52,8 @@ do_action('onepress_before_section_part', 'hero',  $hook_args );
 
 ?>
 <?php if ( ! $disable && ! empty ( $images ) ) : ?>
-	<section  id="<?php if ( $id != '' ){ echo esc_attr( $id ); } ?>" <?php if ( ! empty ( $images) && ! $is_parallax ) { ?> data-images="<?php echo esc_attr( json_encode( $images ) ); ?>"<?php } ?>
-             class="hero-slideshow-wrapper <?php echo ( $fullscreen == 1 ) ? 'hero-slideshow-fullscreen' : 'hero-slideshow-normal'; ?>">
+	<section  id="<?php if ( '' != $id ){ echo esc_attr( $id ); } ?>" <?php if ( ! empty ( $images) && ! $is_parallax ) { ?> data-images="<?php echo esc_attr( json_encode( $images ) ); ?>"<?php } ?>
+             class="hero-slideshow-wrapper <?php echo ( 1 == $fullscreen ) ? 'hero-slideshow-fullscreen' : 'hero-slideshow-normal'; ?>">
 
         <?php if ( ! get_theme_mod( 'onepress_hero_disable_preload', false ) ) { ?>
             <div class="slider-spinner">
@@ -94,16 +94,16 @@ do_action('onepress_before_section_part', 'hero',  $hook_args );
 
                 $btn_1_target = get_theme_mod( 'onepress_hcl1_btn1_target' );
 				$btn_2_target = get_theme_mod( 'onepress_hcl1_btn2_target' );
-				$target_1 = ( $btn_1_target == 1 ) ? 'target="_blank"' : '';
-				$target_2 = ( $btn_2_target == 1 ) ? 'target="_blank"' : '';
+				$target_1 = ( 1 == $btn_1_target ) ? 'target="_blank"' : '';
+				$target_2 = ( 1 == $btn_2_target ) ? 'target="_blank"' : '';
 
 				?>
 				<div class="container"<?php echo $hero_content_style; ?>>
 					<div class="hero__content hero-content-style<?php echo esc_attr( $layout ); ?>">
-						<?php if ($hcl1_largetext != '') echo '<h2 class="hero-large-text">' . wp_kses_post($hcl1_largetext) . '</h2>'; ?>
-						<?php if ($hcl1_smalltext != '') echo '<p class="hero-small-text"> ' . do_shortcode( wp_kses_post( $hcl1_smalltext ) ) . '</p>' ?>
-						<?php if ($hcl1_btn1_text != '' && $hcl1_btn1_link != '') echo '<a '. $target_1 .' href="' . esc_url($hcl1_btn1_link) . '" class="btn '.esc_attr( $btn_1_style ).' btn-lg">' . wp_kses_post($hcl1_btn1_text) . '</a>'; ?>
-						<?php if ($hcl1_btn2_text != '' && $hcl1_btn2_link != '') echo '<a '. $target_2 .' href="' . esc_url($hcl1_btn2_link) . '" class="btn '.esc_attr( $btn_2_style ).' btn-lg">' . wp_kses_post($hcl1_btn2_text) . '</a>'; ?>
+						<?php if ('' != $hcl1_largetext) echo '<h2 class="hero-large-text">' . wp_kses_post($hcl1_largetext) . '</h2>'; ?>
+						<?php if ('' != $hcl1_smalltext) echo '<p class="hero-small-text"> ' . do_shortcode( wp_kses_post( $hcl1_smalltext ) ) . '</p>' ?>
+						<?php if ('' != $hcl1_btn1_text && '' != $hcl1_btn1_link) echo '<a '. $target_1 .' href="' . esc_url($hcl1_btn1_link) . '" class="btn '.esc_attr( $btn_1_style ).' btn-lg">' . wp_kses_post($hcl1_btn1_text) . '</a>'; ?>
+						<?php if ('' != $hcl1_btn2_text && '' != $hcl1_btn2_link) echo '<a '. $target_2 .' href="' . esc_url($hcl1_btn2_link) . '" class="btn '.esc_attr( $btn_2_style ).' btn-lg">' . wp_kses_post($hcl1_btn2_text) . '</a>'; ?>
 					</div>
 				</div>
 				<?php

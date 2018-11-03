@@ -41,7 +41,7 @@ do_action( 'onepress_page_before_content' );
 				</main><!-- #main -->
 			</div><!-- #primary -->
 
-            <?php if ( $layout != 'no-sidebar' ) { ?>
+            <?php if ( 'no-sidebar' != $layout ) { ?>
                 <?php get_sidebar(); ?>
             <?php } ?>
 

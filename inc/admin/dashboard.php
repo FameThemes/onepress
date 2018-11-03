@@ -67,7 +67,7 @@ class Onepress_Dashboard {
 	 * Enqueue scripts for admin page only: Theme info page
 	 */
 	function admin_scripts( $hook ) {
-		if ( $hook === 'widgets.php' || $hook === 'appearance_page_ft_onepress'  ) {
+		if ( 'widgets.php' === $hook || 'appearance_page_ft_onepress' === $hook ) {
 			wp_enqueue_style( 'onepress-admin-css', get_template_directory_uri() . '/assets/css/admin.css' );
 			// Add recommend plugin css
 			wp_enqueue_style( 'plugin-install' );
@@ -232,11 +232,11 @@ class Onepress_Dashboard {
 
             <h2 class="nav-tab-wrapper">
                 <a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Overview', 'onepress' ) ?></a>
-                <a href="?page=ft_onepress&tab=recommended_actions" class="nav-tab<?php echo $tab == 'recommended_actions' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Recommended Actions', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
+                <a href="?page=ft_onepress&tab=recommended_actions" class="nav-tab<?php echo 'recommended_actions' == $tab ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Recommended Actions', 'onepress' ); echo ( $number_action > 0 ) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
                 <?php if ( ! class_exists('OnePress_Plus') ) { ?>
-                    <a href="?page=ft_onepress&tab=free_pro" class="nav-tab<?php echo $tab == 'free_pro' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Free vs PLUS', 'onepress' ); ?></span></a>
+                    <a href="?page=ft_onepress&tab=free_pro" class="nav-tab<?php echo 'free_pro' == $tab ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Free vs PLUS', 'onepress' ); ?></span></a>
 				<?php } ?>
-                <a href="?page=ft_onepress&tab=demo-data-importer" class="nav-tab<?php echo $tab == 'demo-data-importer' ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Demo Import', 'onepress' ); ?></span></a>
+                <a href="?page=ft_onepress&tab=demo-data-importer" class="nav-tab<?php echo 'demo-data-importer' == $tab ? ' nav-tab-active' : null; ?>"><?php esc_html_e( 'Demo Import', 'onepress' ); ?></span></a>
 				<?php do_action( 'onepress_admin_more_tabs', $tab ); ?>
             </h2>
 
@@ -279,7 +279,7 @@ class Onepress_Dashboard {
                 </div>
 			<?php } ?>
 
-			<?php if ( $tab == 'recommended_actions' ) { ?>
+			<?php if ( 'recommended_actions' == $tab ) { ?>
                 <div class="action-required-tab info-tab-content">
 
 					<?php if ( is_child_theme() ){
@@ -310,7 +310,7 @@ class Onepress_Dashboard {
 								?>
                                 <input type="submit" class="button button-secondary" value="<?php esc_attr_e( 'Copy now', 'onepress' ); ?>">
                             </p>
-							<?php if ( isset( $_GET['copied'] ) && $_GET['copied'] == 1 ) { ?>
+							<?php if ( isset( $_GET['copied'] ) && 1 == $_GET['copied'] ) { ?>
                                 <p><?php esc_html_e( 'Your settings were copied.', 'onepress' ); ?></p>
 							<?php } ?>
                         </form>
@@ -319,10 +319,10 @@ class Onepress_Dashboard {
 					<?php if ( $actions_r['number_active']  > 0 ) { ?>
 						<?php $actions = wp_parse_args( $actions, array( 'page_on_front' => '', 'page_template' ) ) ?>
 
-						<?php if ( $actions['recommend_plugins'] == 'active' ) {  ?>
+						<?php if ( 'active' == $actions['recommend_plugins'] ) {  ?>
                             <div id="plugin-filter" class="recommend-plugins action-required">
                                 <a  title="" class="dismiss" href="<?php echo add_query_arg( array( 'onepress_action_notice' => 'recommend_plugins' ), $current_action_link ); ?>">
-									<?php if ( $actions_r['hide_by_click']['recommend_plugins'] == 'hide' ) { ?>
+									<?php if ( 'hide' == $actions_r['hide_by_click']['recommend_plugins'] ) { ?>
                                         <span class="dashicons dashicons-hidden"></span>
 									<?php } else { ?>
                                         <span class="dashicons  dashicons-visibility"></span>
@@ -336,10 +336,10 @@ class Onepress_Dashboard {
 						<?php } ?>
 
 
-						<?php if ( $actions['page_on_front'] == 'active' ) {  ?>
+						<?php if ( 'active' == $actions['page_on_front'] ) {  ?>
                             <div class="theme_link  action-required">
                                 <a title="<?php  esc_attr_e( 'Dismiss', 'onepress' ); ?>" class="dismiss" href="<?php echo add_query_arg( array( 'onepress_action_notice' => 'page_on_front' ), $current_action_link ); ?>">
-									<?php if ( $actions_r['hide_by_click']['page_on_front'] == 'hide' ) { ?>
+									<?php if ( 'hide' == $actions_r['hide_by_click']['page_on_front'] ) { ?>
                                         <span class="dashicons dashicons-hidden"></span>
 									<?php } else { ?>
                                         <span class="dashicons  dashicons-visibility"></span>
@@ -355,10 +355,10 @@ class Onepress_Dashboard {
                             </div>
 						<?php } ?>
 
-						<?php if ( $actions['page_template'] == 'active' ) {  ?>
+						<?php if ( 'active' == $actions['page_template'] ) {  ?>
                             <div class="theme_link  action-required">
                                 <a  title="<?php  esc_attr_e( 'Dismiss', 'onepress' ); ?>" class="dismiss" href="<?php echo add_query_arg( array( 'onepress_action_notice' => 'page_template' ), $current_action_link ); ?>">
-									<?php if ( $actions_r['hide_by_click']['page_template'] == 'hide' ) { ?>
+									<?php if ( 'hide' == $actions_r['hide_by_click']['page_template'] ) { ?>
                                         <span class="dashicons dashicons-hidden"></span>
 									<?php } else { ?>
                                         <span class="dashicons  dashicons-visibility"></span>
@@ -397,7 +397,7 @@ class Onepress_Dashboard {
 			<?php } ?>
 
 			<?php if ( ! class_exists('OnePress_Plus') ) { ?>
-				<?php if ( $tab == 'free_pro' ) { ?>
+				<?php if ( 'free_pro' == $tab ) { ?>
                     <div id="free_pro" class="freepro-tab-content info-tab-content">
                         <table class="free-pro-table">
                             <thead><tr><th></th><th>OnePress</th><th>OnePress Plus</th></tr></thead>
@@ -598,7 +598,7 @@ class Onepress_Dashboard {
 				<?php } ?>
 			<?php } ?>
 
-			<?php if ( $tab == 'demo-data-importer' ) { ?>
+			<?php if ( 'demo-data-importer' == $tab ) { ?>
                 <div class="demo-import-tab-content info-tab-content">
 					<?php if ( has_action( 'onepress_demo_import_content_tab' ) ) {
 						do_action( 'onepress_demo_import_content_tab' );
@@ -752,7 +752,7 @@ class Onepress_Dashboard {
 				$actions_dismiss = array();
 			}
 			$action_key = sanitize_text_field( $_GET['onepress_action_notice'] );
-			if ( isset( $actions_dismiss[ $action_key ] ) &&  $actions_dismiss[ $action_key ] == 'hide' ){
+			if ( isset( $actions_dismiss[ $action_key ] ) &&  'hide' == $actions_dismiss[ $action_key ] ){
 				$actions_dismiss[ $action_key ] = 'show';
 			} else {
 				$actions_dismiss[ $action_key ] = 'hide';
@@ -847,15 +847,15 @@ class Onepress_Dashboard {
 				$hide_by_click[ $k ] = false;
 			}
 
-			if ( $v == 'active' ) {
+			if ( 'active' == $v ) {
 				$n_active ++ ;
 				$number_notice ++ ;
 				if ( $hide_by_click[ $k ] ) {
-					if ( $hide_by_click[ $k ] == 'hide' ) {
+					if ( 'hide' == $hide_by_click[ $k ] ) {
 						$number_notice -- ;
 					}
 				}
-			} else if ( $v == 'dismiss' ) {
+			} else if ( 'dismiss' == $v ) {
 				$n_dismiss ++ ;
 			}
 

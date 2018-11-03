@@ -11,15 +11,15 @@ if ( !$disable && !empty( $data ) ) {
     $desc = get_theme_mod( 'onepress_features_desc' );
 ?>
 <?php if ( ! onepress_is_selective_refresh() ){ ?>
-<section id="<?php if ( $id != '') { echo esc_attr( $id ); } ?>" <?php do_action('onepress_section_atts', 'features'); ?>
+<section id="<?php if ( '' != $id) { echo esc_attr( $id ); } ?>" <?php do_action('onepress_section_atts', 'features'); ?>
          class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-features section-padding section-meta onepage-section', 'features')); ?>">
 <?php } ?>
     <?php do_action('onepress_section_before_inner', 'features'); ?>
     <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'features' ) ); ?>">
         <?php if ( $title ||  $subtitle || $desc ){ ?>
         <div class="section-title-area">
-            <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
-            <?php if ($title != '') echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
+            <?php if ('' != $subtitle) echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
+            <?php if ('' != $title) echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
             <?php if ( $desc ) {
                 echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
             } ?>
@@ -39,7 +39,7 @@ if ( !$disable && !empty( $data ) ) {
                     'title' => '',
                     'desc' => '',
                 ) );
-                if ( $f['icon_type'] == 'image' && $f['image'] ){
+                if ( 'image' == $f['icon_type'] && $f['image'] ){
                     $url = onepress_get_media_url( $f['image'] );
 	                $image_alt = get_post_meta( $f['image']['id'], '_wp_attachment_image_alt', true);
                     if ( $url ) {

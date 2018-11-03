@@ -233,7 +233,7 @@ for ( $i = 1; $i <= 4; $i ++ ) {
 	);
 	$wp_customize->add_control( 'footer_custom_' . $i . '_columns',
 		array(
-			'label'       => $i == 1 ? __( 'Custom footer 1 column width', 'onepress' ) : sprintf( __( 'Custom footer %s columns width', 'onepress' ), $i ),
+			'label'       => 1 == $i ? __( 'Custom footer 1 column width', 'onepress' ) : sprintf( __( 'Custom footer %s columns width', 'onepress' ), $i ),
 			'section'     => 'onepress_footer',
 			'description' => esc_html__( 'Enter int numbers and sum of them must smaller or equal 12, separated by "+"', 'onepress' ),
 		)

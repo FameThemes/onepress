@@ -198,7 +198,7 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
             'site-header',  'header-'.$header_width,
         );
 
-        if ( $is_disable_sticky !=  1 ) {
+        if ( 1 != $is_disable_sticky ) {
             $classes[] ='is-sticky no-scroll';
         } else {
             $classes[] ='no-sticky no-scroll';
@@ -211,7 +211,7 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
         $classes[] = $transparent;
 
         $pos = sanitize_text_field(get_theme_mod('onepress_header_position', 'top'));
-        if ($pos == 'below_hero') {
+        if ('below_hero' == $pos) {
             $classes[] = 'h-below-hero';
         } else {
             $classes[] = 'h-on-top';
@@ -252,7 +252,7 @@ if ( ! function_exists('onepress_header' ) ) {
             $transparent = 'is-transparent';
         }
         $pos = sanitize_text_field(get_theme_mod('onepress_header_position', 'top'));
-        if ($pos == 'below_hero') {
+        if ('below_hero' == $pos) {
             $transparent = 'no-transparent';
             $classes[] = 'h-below-hero';
         } else {
@@ -264,7 +264,7 @@ if ( ! function_exists('onepress_header' ) ) {
         echo '<div id="header-section" class="' . esc_attr( join( ' ', $classes ) ) . '">';
 
             do_action('onepress_header_section_start');
-            if ($pos == 'below_hero' ) {
+            if ('below_hero' == $pos ) {
                 if ( is_page_template('template-frontpage.php') ) {
                     do_action('onepress_header_end');
                 }
@@ -294,7 +294,7 @@ if ( ! function_exists('onepress_header' ) ) {
                 do_action('onepress_site_start');
             }
 
-            if ( $pos != 'below_hero') {
+            if ( 'below_hero' != $pos) {
                 if ( is_page_template('template-frontpage.php') ) {
                     do_action('onepress_header_end');
                 }
@@ -607,7 +607,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
              * Theme Color
              */
             $primary = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_primary_color' ) );
-            if ( $primary != '' ) { ?>
+            if ( '' != $primary ) { ?>
                 a, .screen-reader-text:hover, .screen-reader-text:active, .screen-reader-text:focus, .header-social a, .onepress-menu a:hover,
                 .onepress-menu ul li a:hover, .onepress-menu li.onepress-current-item > a, .onepress-menu ul li.current-menu-item > a, .onepress-menu > li a.menu-actived,
                 .onepress-menu.onepress-menu-mobile li.onepress-current-item > a, .site-footer a, .site-footer .footer-social a:hover, .site-footer .btt a:hover,

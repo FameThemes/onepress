@@ -15,13 +15,13 @@ if ( onepress_is_selective_refresh() ) {
     ?>
     <?php if (!$disable) : ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ($id != '') { echo esc_attr( $id ); } ?>" <?php do_action('onepress_section_atts', 'services'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>"><?php } ?>
+        <section id="<?php if ('' != $id) { echo esc_attr( $id ); } ?>" <?php do_action('onepress_section_atts', 'services'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>"><?php } ?>
             <?php do_action('onepress_section_before_inner', 'services'); ?>
             <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'services' ) ); ?>">
                 <?php if ( $title ||  $subtitle || $desc ){ ?>
                 <div class="section-title-area">
-                    <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
-                    <?php if ($title != '') echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
+                    <?php if ('' != $subtitle) echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
+                    <?php if ('' != $title) echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
                     <?php if ( $desc ) {
                         echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
                     } ?>
@@ -58,7 +58,7 @@ if ( onepress_is_selective_refresh() ) {
 
                             $media = '';
 
-                            if ( $settings['icon_type'] == 'image' && $settings['image'] ){
+                            if ( 'image' == $settings['icon_type'] && $settings['image'] ){
                                 $url = onepress_get_media_url( $settings['image'] );
                                 if ( $url ) {
                                     $media = '<div class="service-image icon-image"><img src="'.esc_url( $url ).'" alt=""></div>';
@@ -66,12 +66,12 @@ if ( onepress_is_selective_refresh() ) {
                             } else if ( $settings['icon'] ) {
                                 $settings['icon'] = trim( $settings['icon'] );
                                 //Get/Set social icons
-                                if ( $settings['icon'] != '' && strpos($settings['icon'], 'fa') !== 0) {
+                                if ( '' != $settings['icon'] && strpos($settings['icon'], 'fa') !== 0) {
                                     $settings['icon'] = 'fa-' . $settings['icon'];
                                 }
                                 $media = '<div class="service-image"><i class="fa '.esc_attr( $settings['icon'] ).' fa-'.esc_attr( $size ).'"></i></div>';
                             }
-                            if ( $layout == 12 ) {
+                            if ( 12 == $layout ) {
                                 $classes = 'col-sm-12 col-lg-'.$layout;
                             } else {
                                 $classes = 'col-sm-6 col-lg-'.$layout;
@@ -101,12 +101,12 @@ if ( onepress_is_selective_refresh() ) {
                                             ?>
                                         </div>
                                     <?php } ?>
-                                    <?php if ( $media != '' ) {
+                                    <?php if ( '' != $media ) {
                                         echo $media;
                                     } ?>
                                     <div class="service-content">
                                         <h4 class="service-title"><?php echo get_the_title( $post ); ?></h4>
-                                        <?php if( $content_source == 'content' ) the_content(); else the_excerpt() ?>
+                                        <?php if( 'content' == $content_source ) the_content(); else the_excerpt() ?>
                                     </div>
                                 </div>
                             </div>

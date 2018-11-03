@@ -16,15 +16,15 @@ if ( ! empty( $user_ids ) ) {
     ?>
     <?php if ( ! $disable ) : ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ($id != '') { echo esc_attr( $id ); }; ?>" <?php do_action('onepress_section_atts', 'team'); ?>
+        <section id="<?php if ('' != $id) { echo esc_attr( $id ); }; ?>" <?php do_action('onepress_section_atts', 'team'); ?>
                  class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-team section-padding section-meta onepage-section', 'team')); ?>">
         <?php } ?>
             <?php do_action('onepress_section_before_inner', 'team'); ?>
             <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'team' ) ); ?>">
                 <?php if ( $title || $subtitle || $desc ){ ?>
                 <div class="section-title-area">
-                    <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
-                    <?php if ($title != '') echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
+                    <?php if ('' != $subtitle) echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
+                    <?php if ('' != $title) echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
                     <?php if ( $desc ) {
                         echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
                     } ?>

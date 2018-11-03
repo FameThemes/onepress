@@ -39,7 +39,7 @@ if ( ! $hide_footer ) {
 
         <div class="site-info">
             <div class="container">
-                <?php if ($onepress_btt_disable != '1') : ?>
+                <?php if ('1' != $onepress_btt_disable) : ?>
                     <div class="btt">
                         <a class="back-to-top" href="#page" title="<?php echo esc_html__('Back To Top', 'onepress') ?>"><i class="fa fa-angle-double-up wow flash" data-wow-duration="2s"></i></a>
                     </div>

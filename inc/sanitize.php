@@ -5,7 +5,7 @@
 
 if ( ! function_exists( 'onepress_sanitize_checkbox' ) ) {
     function onepress_sanitize_checkbox( $input ) {
-        if ( $input == 1 ) {
+        if ( 1 == $input ) {
             return 1;
         } else {
             return 0;
@@ -217,7 +217,7 @@ function onepress_sanitize_number( $input ) {
 }
 
 function onepress_sanitize_hex_color( $color ) {
-    if ( $color === '' ) {
+    if ( '' == $color ) {
         return '';
     }
     if ( preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', $color ) ) {
@@ -227,7 +227,7 @@ function onepress_sanitize_hex_color( $color ) {
 }
 
 function onepress_sanitize_checkbox( $input ) {
-    if ( $input == 1 ) {
+    if ( 1 == $input ) {
         return 1;
     } else {
         return 0;
@@ -248,7 +248,7 @@ function onepress_showon_frontpage() {
 
 function onepress_gallery_source_validate( $validity, $value ){
     if ( ! class_exists( 'OnePress_Plus' ) ) {
-        if ( $value != 'page' ) {
+        if ( 'page' != $value ) {
             $validity->add('notice', sprintf( esc_html__('Upgrade to %1s to unlock this feature.', 'onepress' ), '<a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#gallery">OnePress Plus</a>' ) );
         }
     }

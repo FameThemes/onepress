@@ -79,7 +79,7 @@ if ( ! function_exists( 'onepress_get_media_url' ) ) {
     {
         $media = wp_parse_args( $media, array('url' => '', 'id' => ''));
         $url = '';
-        if ($media['id'] != '') {
+        if ('' != $media['id']) {
             if ( strpos( get_post_mime_type( $media['id'] ), 'image' ) !== false ) {
                 $image = wp_get_attachment_image_src( $media['id'],  $size );
                 if ( $image ){
@@ -90,7 +90,7 @@ if ( ! function_exists( 'onepress_get_media_url' ) ) {
             }
         }
 
-        if ($url == '' && $media['url'] != '') {
+        if ('' == $url && '' != $media['url']) {
             $id = attachment_url_to_postid( $media['url'] );
             if ( $id ) {
                 if ( strpos( get_post_mime_type( $id ), 'image' ) !== false ) {
@@ -184,7 +184,7 @@ if ( ! function_exists( 'onepress_get_layout' ) ) {
          */
         if ( is_singular( 'post' ) ) {
             $single_layout =  get_theme_mod( 'single_layout', 'default' );
-            if ( $single_layout != '' && $single_layout != 'default' ) {
+            if ( '' != $single_layout && 'default' != $single_layout ) {
                 $layout = $single_layout;
             }
         }
@@ -251,7 +251,7 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
         }
 
         if ( ! class_exists( 'OnePress_Plus' ) ) {
-            if ( $section_id == 'videolightbox' ) {
+            if ( 'videolightbox' == $section_id ) {
                 $image = onepress_get_video_lightbox_image();
                 $image_url = wp_get_attachment_image_url($image, 'full');
 			    $image_alt = get_post_meta( $image, '_wp_attachment_image_alt', true);
@@ -290,9 +290,9 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
                     'enable_parallax' => ''
                 ) );
                 extract( $args );
-                if ( $enable_parallax == 1 ) {
+                if ( 1 == $enable_parallax ) {
                     $class = 'section-parallax';
-                    if( $section_id == 'hero' ){
+                    if( 'hero' == $section_id ){
                         $class =' parallax-hero';
                     }
                     echo '<div id="parallax-'.esc_attr( $section_id ).'" class="'.esc_attr( $class ).'">';
@@ -318,7 +318,7 @@ if ( ! function_exists( 'onepress_after_section' ) ) {
         }
 
         if ( ! class_exists( 'OnePress_Plus' ) ) {
-            if ( $section_id == 'videolightbox' ) {
+            if ( 'videolightbox' == $section_id ) {
                 $image = onepress_get_video_lightbox_image();
                 if ( $image || onepress_is_selective_refresh() ) {
                     echo '</div>';
@@ -349,7 +349,7 @@ if ( ! function_exists( 'onepress_after_section' ) ) {
                     'enable_parallax' => ''
                 ));
                 extract($args);
-                if ($enable_parallax == 1) {
+                if (1 == $enable_parallax) {
                     echo '</div>';
                 } else if ($image || $alpha) { // image bg
                     echo '</div>';

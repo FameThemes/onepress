@@ -50,13 +50,13 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 		$this->live_title_id = isset( $args['live_title_id'] ) ? $args['live_title_id'] : false;
 		$this->defined_values = isset( $args['defined_values'] ) ? $args['defined_values'] : false;
 		$this->id_key = isset( $args['id_key'] ) ? $args['id_key'] : false;
-		if ( isset( $args['title_format'] ) && $args['title_format'] != '' ) {
+		if ( isset( $args['title_format'] ) && '' != $args['title_format'] ) {
 			$this->title_format = $args['title_format'];
 		} else {
 			$this->title_format = '';
 		}
 
-		if ( isset( $args['limited_msg'] ) && $args['limited_msg'] != '' ) {
+		if ( isset( $args['limited_msg'] ) && '' != $args['limited_msg'] ) {
 			$this->limited_msg = $args['limited_msg'];
 		} else {
 			$this->limited_msg = '';
@@ -66,14 +66,14 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 			$args['max_item'] = 0;
 		}
 
-		if ( ! isset( $args['allow_unlimited'] ) || $args['allow_unlimited'] != false ) {
+		if ( ! isset( $args['allow_unlimited'] ) || false != $args['allow_unlimited'] ) {
 			$this->max_item =  apply_filters( 'onepress_reepeatable_max_item', absint( $args['max_item'] ) );
 		}  else {
 			$this->max_item = absint( $args['max_item'] );
 		}
 
-		$this->changeable =  isset(  $args['changeable'] ) && $args['changeable'] == 'no' ? 'no' : 'yes';
-		$this->default_empty_title =  isset(  $args['default_empty_title'] ) && $args['default_empty_title'] != '' ? $args['default_empty_title'] : esc_html__( 'Item', 'onepress' );
+		$this->changeable =  isset(  $args['changeable'] ) && 'no' == $args['changeable'] ? 'no' : 'yes';
+		$this->default_empty_title =  isset(  $args['default_empty_title'] ) && '' != $args['default_empty_title'] ? $args['default_empty_title'] : esc_html__( 'Item', 'onepress' );
 
 	}
 
@@ -95,7 +95,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 		foreach ( $array_value as $k => $a ) {
 
 			if ( is_array( $a ) ) {
-				if ( isset ( $a[ $this->id_key ]  ) && $a[ $this->id_key ] != '' ) {
+				if ( isset ( $a[ $this->id_key ]  ) && '' != $a[ $this->id_key ] ) {
 					$new_array[ $a[ $this->id_key ] ] = $a;
 				} else {
 					$new_array[ $k ] = $a;
@@ -130,7 +130,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 		/**
 		 * @since 2.1.1
 		 */
-		if ( $this->id_key == 'section_id' ) {
+		if ( 'section_id' == $this->id_key ) {
 		    foreach ( ( array ) $value as $k => $v ) {
 
 		        if ( ! Onepress_Config::is_section_active( $v['section_id'] ) ) {

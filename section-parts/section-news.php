@@ -19,14 +19,14 @@ if ( onepress_is_selective_refresh() ) {
 
 ?>
 <?php if ( ! onepress_is_selective_refresh() ){ ?>
-<section id="<?php if ( $id != '' ) { echo esc_attr( $id ); } ?>" <?php do_action( 'onepress_section_atts', 'news' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-news section-padding onepage-section', 'news' ) ); ?>">
+<section id="<?php if ( '' != $id ) { echo esc_attr( $id ); } ?>" <?php do_action( 'onepress_section_atts', 'news' ); ?> class="<?php echo esc_attr( apply_filters( 'onepress_section_class', 'section-news section-padding onepage-section', 'news' ) ); ?>">
 <?php } ?>
     <?php do_action( 'onepress_section_before_inner', 'news' ); ?>
 	<div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'news' ) ); ?>">
 		<?php if ( $title ||  $subtitle ||  $desc ) { ?>
 		<div class="section-title-area">
-			<?php if ( $subtitle != '' ) echo '<h5 class="section-subtitle">' . esc_html( $subtitle ) . '</h5>'; ?>
-			<?php if ( $title != '' ) echo '<h2 class="section-title">' . esc_html( $title ) . '</h2>'; ?>
+			<?php if ( '' != $subtitle ) echo '<h5 class="section-subtitle">' . esc_html( $subtitle ) . '</h5>'; ?>
+			<?php if ( '' != $title ) echo '<h2 class="section-title">' . esc_html( $title ) . '</h2>'; ?>
             <?php if ( $desc ) {
                 echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
             } ?>
@@ -59,7 +59,7 @@ if ( onepress_is_selective_refresh() ) {
                             $args['category__in'] = array( $cat );
                         }
 
-                        if ( $orderby && $orderby != 'default' ) {
+                        if ( $orderby && 'default' != $orderby ) {
                             $args['orderby'] = $orderby;
                         }
 
@@ -117,7 +117,7 @@ if ( onepress_is_selective_refresh() ) {
 							$label = $more_text;
 						}
 
-						if ( $link != '' && $label != '' ) {
+						if ( '' != $link && '' != $label ) {
                         ?>
 						<div class="all-news">
 							<a class="btn btn-theme-primary-outline" href="<?php echo esc_url( $link ) ?>"><?php echo esc_html( $label ); ?></a>

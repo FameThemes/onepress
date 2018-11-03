@@ -56,7 +56,7 @@ $layout = onepress_get_layout();
 
 				</main><!-- #main -->
 			</div><!-- #primary -->
-            <?php if ( $layout != 'no-sidebar' ) { ?>
+            <?php if ( 'no-sidebar' != $layout ) { ?>
 			<?php get_sidebar(); ?>
             <?php } ?>
 

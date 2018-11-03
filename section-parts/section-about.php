@@ -14,7 +14,7 @@ $content_source = get_theme_mod( 'onepress_about_content_source' );
     ?>
     <?php if (!$disable) { ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ($id != '') {
+        <section id="<?php if ('' != $id) {
             echo esc_attr( $id );
         }; ?>" <?php do_action('onepress_section_atts', 'about'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-about section-padding onepage-section', 'about')); ?>">
         <?php } ?>
@@ -23,13 +23,13 @@ $content_source = get_theme_mod( 'onepress_about_content_source' );
             <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'about' ) ); ?>">
                 <?php if ( $title || $subtitle || $desc ){ ?>
                 <div class="section-title-area">
-                    <?php if ($subtitle != '') {
+                    <?php if ('' != $subtitle) {
                         echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>';
                     } ?>
-                    <?php if ($title != '') {
+                    <?php if ('' != $title) {
                         echo '<h2 class="section-title">' . esc_html($title) . '</h2>';
                     } ?>
-                    <?php if ( $desc != '' ) {
+                    <?php if ( '' != $desc ) {
                         echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', $desc ) . '</div>';
                     } ?>
                 </div>
@@ -70,7 +70,7 @@ $content_source = get_theme_mod( 'onepress_about_content_source' );
                             $post_id = apply_filters( 'wpml_object_id', $post_id, 'page', true );
                             $post = get_post( $post_id );
                             $class = 'col-lg-' . $col;
-                            if ($n == 1) {
+                            if (1 == $n) {
                                 $class .= ' col-sm-12 ';
                             } else {
                                 $class .= ' col-sm-6 ';
@@ -107,7 +107,7 @@ $content_source = get_theme_mod( 'onepress_about_content_source' );
                                         ?></h3>
                                 <?php } ?>
                                 <?php
-                                if ( $content_source == 'excerpt' ) {
+                                if ( 'excerpt' == $content_source ) {
                                     $excerpt = get_the_excerpt( $post );
                                     echo apply_filters( 'the_excerpt', $excerpt  );
                                 } else {

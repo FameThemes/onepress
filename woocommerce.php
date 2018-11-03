@@ -31,7 +31,7 @@ do_action( 'onepress_page_before_content' );
 				</main><!-- #main -->
 			</div><!-- #primary -->
             <?php if ( $is_active_sidebar ) { ?>
-                <?php if ( $layout != 'no-sidebar' ) { ?>
+                <?php if ( 'no-sidebar' != $layout ) { ?>
                     <div id="secondary" class="widget-area sidebar" role="complementary">
                         <?php dynamic_sidebar( 'sidebar-shop' ); ?>
                     </div><!-- #secondary -->
