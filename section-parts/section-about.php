@@ -14,9 +14,8 @@ $content_source = get_theme_mod( 'onepress_about_content_source' );
     ?>
     <?php if (!$disable) { ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ('' != $id) {
-            echo esc_attr( $id );
-        }; ?>" <?php do_action('onepress_section_atts', 'about'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-about section-padding onepage-section', 'about')); ?>">
+        <section id="<?php echo esc_attr( $id ); ?>" <?php do_action('onepress_section_atts', 'about'); ?>
+					class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-about section-padding onepage-section', 'about')); ?>">
         <?php } ?>
 
             <?php do_action('onepress_section_before_inner', 'about'); ?>

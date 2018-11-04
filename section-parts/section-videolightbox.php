@@ -10,7 +10,7 @@ if ( onepress_is_selective_refresh() ) {
 if ( ! $disable ) {
     if ( (!$disable && ($video || $heading)) || onepress_is_selective_refresh()) {
         ?>
-        <section id="<?php if ('' != $id) echo esc_attr($id); ?>" <?php do_action('onepress_section_atts', 'videolightbox'); ?>
+        <section id="<?php echo esc_attr( $id ); ?>" <?php do_action('onepress_section_atts', 'videolightbox'); ?>
         class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-videolightbox section-padding section-padding-larger section-inverse onepage-section', 'videolightbox')); ?>">
     <?php } ?>
     <?php do_action('onepress_section_before_inner', 'videolightbox'); ?>

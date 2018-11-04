@@ -15,7 +15,7 @@ if ( onepress_is_selective_refresh() ) {
     ?>
     <?php if (!$disable) : ?>
         <?php if ( ! onepress_is_selective_refresh() ){ ?>
-        <section id="<?php if ('' != $id) { echo esc_attr( $id ); } ?>" <?php do_action('onepress_section_atts', 'services'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>"><?php } ?>
+        <section id="<?php echo esc_attr( $id ); ?>" <?php do_action('onepress_section_atts', 'services'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-services section-padding section-meta onepage-section', 'services')); ?>"><?php } ?>
             <?php do_action('onepress_section_before_inner', 'services'); ?>
             <div class="<?php echo esc_attr( apply_filters( 'onepress_section_container_class', 'container', 'services' ) ); ?>">
                 <?php if ( $title ||  $subtitle || $desc ){ ?>

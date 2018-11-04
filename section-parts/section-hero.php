@@ -52,7 +52,7 @@ do_action('onepress_before_section_part', 'hero',  $hook_args );
 
 ?>
 <?php if ( ! $disable && ! empty ( $images ) ) : ?>
-	<section  id="<?php if ( '' != $id ){ echo esc_attr( $id ); } ?>" <?php if ( ! empty ( $images) && ! $is_parallax ) { ?> data-images="<?php echo esc_attr( json_encode( $images ) ); ?>"<?php } ?>
+	<section  id="<?php esc_attr( $id ); ?>" <?php if ( ! empty ( $images) && ! $is_parallax ) { ?> data-images="<?php echo esc_attr( json_encode( $images ) ); ?>"<?php } ?>
              class="hero-slideshow-wrapper <?php echo ( 1 == $fullscreen ) ? 'hero-slideshow-fullscreen' : 'hero-slideshow-normal'; ?>">
 
         <?php if ( ! get_theme_mod( 'onepress_hero_disable_preload', false ) ) { ?>
