@@ -1,4 +1,9 @@
 <?php
+/**
+ * Builds the Page settings meta box.
+ *
+ * @package OnePress\MetaBox
+ */
 
 /**
  * Calls the class on the post edit screen.
