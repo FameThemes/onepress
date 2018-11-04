@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying the counter section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
+
 $id       = get_theme_mod( 'onepress_counter_id', esc_html__( 'counter', 'onepress' ) );
 $disable  = get_theme_mod( 'onepress_counter_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_counter_title', esc_html__( 'Our Numbers', 'onepress' ) );

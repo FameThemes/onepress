@@ -1,4 +1,11 @@
 <?php
+/**
+ * Template part for displaying the video lightbox section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
 $id      = get_theme_mod( 'onepress_videolightbox_id', 'videolightbox' );
 $disable = get_theme_mod( 'onepress_videolightbox_disable' ) == 1 ? true : false;
 $heading = get_theme_mod( 'onepress_videolightbox_title' );

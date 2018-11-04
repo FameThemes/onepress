@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying the features section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
+
 $id       = get_theme_mod( 'onepress_features_id', esc_html__( 'features', 'onepress' ) );
 $disable  = get_theme_mod( 'onepress_features_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_features_title', esc_html__( 'Features', 'onepress' ) );

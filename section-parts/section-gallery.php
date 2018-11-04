@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying the gallery section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
+
 $id       = get_theme_mod( 'onepress_gallery_id', esc_html__( 'gallery', 'onepress' ) );
 $disable  = get_theme_mod( 'onepress_gallery_disable', 1 ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_gallery_title', esc_html__( 'Gallery', 'onepress' ) );

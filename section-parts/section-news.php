@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying the news section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
+
 $id      = get_theme_mod( 'onepress_news_id', esc_html__( 'news', 'onepress' ) );
 $disable = get_theme_mod( 'onepress_news_disable' ) == 1 ? true : false;
 

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Template part for displaying the team section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
 $id       = get_theme_mod( 'onepress_team_id', esc_html__( 'team', 'onepress' ) );
 $disable  = get_theme_mod( 'onepress_team_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_team_title', esc_html__( 'Our Team', 'onepress' ) );

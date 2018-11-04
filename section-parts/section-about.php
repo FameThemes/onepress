@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying the about section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
+
 $id       = get_theme_mod( 'onepress_about_id', esc_html__( 'about', 'onepress' ) );
 $disable  = get_theme_mod( 'onepress_about_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_about_title', esc_html__( 'About Us', 'onepress' ) );

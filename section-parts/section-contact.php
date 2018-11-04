@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying the contact section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
+
 $onepress_contact_id            = get_theme_mod( 'onepress_contact_id', esc_html__( 'contact', 'onepress' ) );
 $onepress_contact_disable       = get_theme_mod( 'onepress_contact_disable' ) == 1 ? true : false;
 $onepress_contact_title         = get_theme_mod( 'onepress_contact_title', esc_html__( 'Get in touch', 'onepress' ) );

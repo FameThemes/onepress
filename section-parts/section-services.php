@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying the services section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
+
 $id       = get_theme_mod( 'onepress_services_id', esc_html__( 'services', 'onepress' ) );
 $disable  = get_theme_mod( 'onepress_services_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_services_title', esc_html__( 'Our Services', 'onepress' ) );

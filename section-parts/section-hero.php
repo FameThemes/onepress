@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying the hero section.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package OnePress
+ */
+
 $id         = get_theme_mod( 'onepress_hero_id', esc_html__( 'hero', 'onepress' ) );
 $disable    = sanitize_text_field( get_theme_mod( 'onepress_hero_disable' ) ) == 1 ? true : false;
 $fullscreen = sanitize_text_field( get_theme_mod( 'onepress_hero_fullscreen' ) );
