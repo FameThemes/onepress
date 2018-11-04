@@ -1,6 +1,6 @@
 <?php
 /**
- *Template Name: Full Width - Stretched Content
+ * Template Name: Full Width - Stretched Content
  *
  * @package OnePress
  */
@@ -14,9 +14,9 @@ get_header();
 do_action( 'onepress_page_before_content' );
 ?>
 <div id="content" class="site-content">
-	<?php
-    onepress_breadcrumb();
-	?>
+
+	<?php onepress_breadcrumb(); ?>
+
 	<div id="content-inside" class="no-sidebar">
 		<div id="primary" class="content-area">
 			<main id="main" class="site-main" role="main">
