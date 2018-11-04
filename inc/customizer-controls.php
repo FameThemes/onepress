@@ -1,5 +1,11 @@
 <?php
 /**
+ * Customizer Controls
+ *
+ * @package OnePress\Customizer
+ */
+
+/**
  * Load Controls Files
  */
 require_once get_template_directory() . '/inc/customize-controls/section-plus.php';
@@ -11,7 +17,6 @@ require_once get_template_directory() . '/inc/customize-controls/control-color-a
 require_once get_template_directory() . '/inc/customize-controls/control-repeater.php';
 require_once get_template_directory() . '/inc/customize-controls/control-category.php';
 require_once get_template_directory() . '/inc/customize-controls/control-pages.php';
-
 
 class OnePress_Editor_Scripts {
 
