@@ -1,7 +1,9 @@
 <?php
-/* Navigation Settings
+/*
+ Navigation Settings
 ----------------------------------------------------------------------*/
-$wp_customize->add_section( 'onepress_nav',
+$wp_customize->add_section(
+	'onepress_nav',
 	array(
 		'priority'    => null,
 		'title'       => esc_html__( 'Navigation', 'onepress' ),
@@ -9,14 +11,16 @@ $wp_customize->add_section( 'onepress_nav',
 		'panel'       => 'onepress_options',
 	)
 );
-$wp_customize->add_setting( 'onepress_menu_item_padding',
+$wp_customize->add_setting(
+	'onepress_menu_item_padding',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => '',
-		'transport'         => 'postMessage'
+		'transport'         => 'postMessage',
 	)
 );
-$wp_customize->add_control( 'onepress_menu_item_padding',
+$wp_customize->add_control(
+	'onepress_menu_item_padding',
 	array(
 		'label'       => esc_html__( 'Menu Item Padding', 'onepress' ),
 		'description' => esc_html__( 'Padding left and right for Navigation items (pixels).', 'onepress' ),

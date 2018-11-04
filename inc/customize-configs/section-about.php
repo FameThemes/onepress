@@ -2,16 +2,18 @@
 /**
  * Section: About
  */
-$wp_customize->add_panel( 'onepress_about',
+$wp_customize->add_panel(
+	'onepress_about',
 	array(
 		'priority'        => 160,
 		'title'           => esc_html__( 'Section: About', 'onepress' ),
 		'description'     => '',
-		'active_callback' => 'onepress_showon_frontpage'
+		'active_callback' => 'onepress_showon_frontpage',
 	)
 );
 
-$wp_customize->add_section( 'onepress_about_settings',
+$wp_customize->add_section(
+	'onepress_about_settings',
 	array(
 		'priority'    => 3,
 		'title'       => esc_html__( 'Section Settings', 'onepress' ),
@@ -21,13 +23,15 @@ $wp_customize->add_section( 'onepress_about_settings',
 );
 
 // Show Content
-$wp_customize->add_setting( 'onepress_about_disable',
+$wp_customize->add_setting(
+	'onepress_about_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
 		'default'           => '',
 	)
 );
-$wp_customize->add_control( 'onepress_about_disable',
+$wp_customize->add_control(
+	'onepress_about_disable',
 	array(
 		'type'        => 'checkbox',
 		'label'       => esc_html__( 'Hide this section?', 'onepress' ),
@@ -37,28 +41,32 @@ $wp_customize->add_control( 'onepress_about_disable',
 );
 
 // Section ID
-$wp_customize->add_setting( 'onepress_about_id',
+$wp_customize->add_setting(
+	'onepress_about_id',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_text',
 		'default'           => esc_html__( 'about', 'onepress' ),
 	)
 );
-$wp_customize->add_control( 'onepress_about_id',
+$wp_customize->add_control(
+	'onepress_about_id',
 	array(
 		'label'       => esc_html__( 'Section ID:', 'onepress' ),
 		'section'     => 'onepress_about_settings',
-		'description' => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
+		'description' => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' ),
 	)
 );
 
 // Title
-$wp_customize->add_setting( 'onepress_about_title',
+$wp_customize->add_setting(
+	'onepress_about_title',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => esc_html__( 'About Us', 'onepress' ),
 	)
 );
-$wp_customize->add_control( 'onepress_about_title',
+$wp_customize->add_control(
+	'onepress_about_title',
 	array(
 		'label'       => esc_html__( 'Section Title', 'onepress' ),
 		'section'     => 'onepress_about_settings',
@@ -67,13 +75,15 @@ $wp_customize->add_control( 'onepress_about_title',
 );
 
 // Sub Title
-$wp_customize->add_setting( 'onepress_about_subtitle',
+$wp_customize->add_setting(
+	'onepress_about_subtitle',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => esc_html__( 'Section subtitle', 'onepress' ),
 	)
 );
-$wp_customize->add_control( 'onepress_about_subtitle',
+$wp_customize->add_control(
+	'onepress_about_subtitle',
 	array(
 		'label'       => esc_html__( 'Section Subtitle', 'onepress' ),
 		'section'     => 'onepress_about_settings',
@@ -82,32 +92,37 @@ $wp_customize->add_control( 'onepress_about_subtitle',
 );
 
 // Description
-$wp_customize->add_setting( 'onepress_about_desc',
+$wp_customize->add_setting(
+	'onepress_about_desc',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_text',
 		'default'           => '',
 	)
 );
-$wp_customize->add_control( new OnePress_Editor_Custom_Control(
-	$wp_customize,
-	'onepress_about_desc',
-	array(
-		'label'       => esc_html__( 'Section Description', 'onepress' ),
-		'section'     => 'onepress_about_settings',
-		'description' => '',
+$wp_customize->add_control(
+	new OnePress_Editor_Custom_Control(
+		$wp_customize,
+		'onepress_about_desc',
+		array(
+			'label'       => esc_html__( 'Section Description', 'onepress' ),
+			'section'     => 'onepress_about_settings',
+			'description' => '',
+		)
 	)
-) );
+);
 
 if ( class_exists( 'OnePress_Plus' ) ) {
 	// About column
-	$wp_customize->add_setting( 'onepress_about_layout',
+	$wp_customize->add_setting(
+		'onepress_about_layout',
 		array(
 			'sanitize_callback' => 'sanitize_text_field',
 			'default'           => 3,
 		)
 	);
 
-	$wp_customize->add_control( 'onepress_about_layout',
+	$wp_customize->add_control(
+		'onepress_about_layout',
 		array(
 			'label'       => esc_html__( 'Layout Settings', 'onepress' ),
 			'section'     => 'onepress_about_settings',
@@ -123,10 +138,11 @@ if ( class_exists( 'OnePress_Plus' ) ) {
 	);
 }
 
-onepress_add_upsell_for_section( $wp_customize , 'onepress_about_settings' );
+onepress_add_upsell_for_section( $wp_customize, 'onepress_about_settings' );
 
 
-$wp_customize->add_section( 'onepress_about_content',
+$wp_customize->add_section(
+	'onepress_about_content',
 	array(
 		'priority'    => 6,
 		'title'       => esc_html__( 'Section Content', 'onepress' ),
@@ -139,11 +155,11 @@ $wp_customize->add_section( 'onepress_about_content',
 $wp_customize->add_setting(
 	'onepress_about_boxes',
 	array(
-		//'default' => '',
+		// 'default' => '',
 		'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 		'transport'         => 'refresh', // refresh or postMessage
-	) );
-
+	)
+);
 
 $wp_customize->add_control(
 	new Onepress_Customize_Repeatable_Control(
@@ -161,7 +177,7 @@ $wp_customize->add_control(
 				'content_page' => array(
 					'title'   => esc_html__( 'Select a page', 'onepress' ),
 					'type'    => 'select',
-					'options' => $option_pages
+					'options' => $option_pages,
 				),
 				'hide_title'   => array(
 					'title' => esc_html__( 'Hide item title', 'onepress' ),
@@ -178,14 +194,16 @@ $wp_customize->add_control(
 );
 
 // About content source
-$wp_customize->add_setting( 'onepress_about_content_source',
+$wp_customize->add_setting(
+	'onepress_about_content_source',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => 'content',
 	)
 );
 
-$wp_customize->add_control( 'onepress_about_content_source',
+$wp_customize->add_control(
+	'onepress_about_content_source',
 	array(
 		'label'       => esc_html__( 'Item content source', 'onepress' ),
 		'section'     => 'onepress_about_content',

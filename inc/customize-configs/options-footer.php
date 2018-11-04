@@ -1,7 +1,9 @@
 <?php
-/* Footer top Social Settings
+/*
+ Footer top Social Settings
 ----------------------------------------------------------------------*/
-$wp_customize->add_section( 'onepres_footer_top',
+$wp_customize->add_section(
+	'onepres_footer_top',
 	array(
 		'title'       => esc_html__( 'Footer Socials', 'onepress' ),
 		'description' => '',
@@ -10,48 +12,56 @@ $wp_customize->add_section( 'onepres_footer_top',
 );
 
 // Disable Social
-$wp_customize->add_setting( 'onepress_social_disable',
+$wp_customize->add_setting(
+	'onepress_social_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
 		'default'           => '1',
 		'transport'         => 'postMessage',
 	)
 );
-$wp_customize->add_control( 'onepress_social_disable',
+$wp_customize->add_control(
+	'onepress_social_disable',
 	array(
 		'type'        => 'checkbox',
 		'label'       => esc_html__( 'Hide Footer Social?', 'onepress' ),
 		'section'     => 'onepres_footer_top',
-		'description' => esc_html__( 'Check this box to hide footer social section.', 'onepress' )
+		'description' => esc_html__( 'Check this box to hide footer social section.', 'onepress' ),
 	)
 );
 
-$wp_customize->add_setting( 'onepress_social_footer_guide',
+$wp_customize->add_setting(
+	'onepress_social_footer_guide',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text'
+		'sanitize_callback' => 'onepress_sanitize_text',
 	)
 );
-$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_social_footer_guide',
-	array(
-		'section'     => 'onepres_footer_top',
-		'type'        => 'custom_message',
-		'description' => esc_html__( 'The social profiles specified below will be displayed in the footer of your site.', 'onepress' )
+$wp_customize->add_control(
+	new OnePress_Misc_Control(
+		$wp_customize, 'onepress_social_footer_guide',
+		array(
+			'section'     => 'onepres_footer_top',
+			'type'        => 'custom_message',
+			'description' => esc_html__( 'The social profiles specified below will be displayed in the footer of your site.', 'onepress' ),
+		)
 	)
-) );
+);
 
 // Footer Social Title
-$wp_customize->add_setting( 'onepress_social_footer_title',
+$wp_customize->add_setting(
+	'onepress_social_footer_title',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => esc_html__( 'Keep Updated', 'onepress' ),
 		'transport'         => 'postMessage',
 	)
 );
-$wp_customize->add_control( 'onepress_social_footer_title',
+$wp_customize->add_control(
+	'onepress_social_footer_title',
 	array(
 		'label'       => esc_html__( 'Social Footer Title', 'onepress' ),
 		'section'     => 'onepres_footer_top',
-		'description' => ''
+		'description' => '',
 	)
 );
 
@@ -59,10 +69,11 @@ $wp_customize->add_control( 'onepress_social_footer_title',
 $wp_customize->add_setting(
 	'onepress_social_profiles',
 	array(
-		//'default' => '',
+		// 'default' => '',
 		'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 		'transport'         => 'postMessage', // refresh or postMessage
-	) );
+	)
+);
 
 $wp_customize->add_control(
 	new Onepress_Customize_Repeatable_Control(
@@ -96,91 +107,110 @@ $wp_customize->add_control(
 );
 
 
-/* Newsletter Settings
+/*
+ Newsletter Settings
 ----------------------------------------------------------------------*/
 
 // Disable Newsletter
-$wp_customize->add_setting( 'onepress_newsletter_disable',
+$wp_customize->add_setting(
+	'onepress_newsletter_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
 		'default'           => '1',
 		'transport'         => 'postMessage',
 	)
 );
-$wp_customize->add_control( 'onepress_newsletter_disable',
+$wp_customize->add_control(
+	'onepress_newsletter_disable',
 	array(
 		'type'        => 'checkbox',
 		'label'       => esc_html__( 'Hide Footer Newsletter?', 'onepress' ),
 		'section'     => 'onepres_footer_top',
-		'description' => esc_html__( 'Check this box to hide footer newsletter form.', 'onepress' )
+		'description' => esc_html__( 'Check this box to hide footer newsletter form.', 'onepress' ),
 	)
 );
 
 // Mailchimp Form Title
-$wp_customize->add_setting( 'onepress_newsletter_title',
+$wp_customize->add_setting(
+	'onepress_newsletter_title',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => esc_html__( 'Join our Newsletter', 'onepress' ),
 		'transport'         => 'postMessage', // refresh or postMessage
 	)
 );
-$wp_customize->add_control( 'onepress_newsletter_title',
+$wp_customize->add_control(
+	'onepress_newsletter_title',
 	array(
 		'label'       => esc_html__( 'Newsletter Form Title', 'onepress' ),
 		'section'     => 'onepres_footer_top',
-		'description' => ''
+		'description' => '',
 	)
 );
 
 // Mailchimp action url
-$wp_customize->add_setting( 'onepress_newsletter_mailchimp',
+$wp_customize->add_setting(
+	'onepress_newsletter_mailchimp',
 	array(
 		'sanitize_callback' => 'esc_url',
 		'default'           => '',
 		'transport'         => 'postMessage', // refresh or postMessage
 	)
 );
-$wp_customize->add_control( 'onepress_newsletter_mailchimp',
+$wp_customize->add_control(
+	'onepress_newsletter_mailchimp',
 	array(
 		'label'       => esc_html__( 'MailChimp Action URL', 'onepress' ),
 		'section'     => 'onepres_footer_top',
-		'description' => __( 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>', 'onepress' )
+		'description' => __( 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>', 'onepress' ),
 	)
 );
 
 // Footer BG Color
-$wp_customize->add_setting( 'onepress_footer_bg', array(
-	'sanitize_callback'    => 'sanitize_hex_color_no_hash',
-	'sanitize_js_callback' => 'maybe_hash_hex_color',
-	'default'              => '',
-	'transport'            => 'postMessage'
-) );
-$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_bg',
-	array(
-		'label'       => esc_html__( 'Background', 'onepress' ),
-		'section'     => 'onepres_footer_top',
-		'description' => '',
+$wp_customize->add_setting(
+	'onepress_footer_bg', array(
+		'sanitize_callback'    => 'sanitize_hex_color_no_hash',
+		'sanitize_js_callback' => 'maybe_hash_hex_color',
+		'default'              => '',
+		'transport'            => 'postMessage',
 	)
-) );
-
-
-$wp_customize->add_setting( 'onepress_footer_top_color', array(
-	'sanitize_callback' => 'sanitize_hex_color',
-	'default'           => '',
-	'transport'         => 'postMessage'
-) );
-$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_top_color',
-	array(
-		'label'       => esc_html__( 'Text Color', 'onepress' ),
-		'section'     => 'onepres_footer_top',
-		'description' => '',
+);
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
+		$wp_customize, 'onepress_footer_bg',
+		array(
+			'label'       => esc_html__( 'Background', 'onepress' ),
+			'section'     => 'onepres_footer_top',
+			'description' => '',
+		)
 	)
-) );
+);
 
 
-/* Footer Widgets Settings
+$wp_customize->add_setting(
+	'onepress_footer_top_color', array(
+		'sanitize_callback' => 'sanitize_hex_color',
+		'default'           => '',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
+		$wp_customize, 'onepress_footer_top_color',
+		array(
+			'label'       => esc_html__( 'Text Color', 'onepress' ),
+			'section'     => 'onepres_footer_top',
+			'description' => '',
+		)
+	)
+);
+
+
+/*
+ Footer Widgets Settings
 ----------------------------------------------------------------------*/
-$wp_customize->add_section( 'onepress_footer',
+$wp_customize->add_section(
+	'onepress_footer',
 	array(
 		'priority'    => null,
 		'title'       => esc_html__( 'Footer Widgets', 'onepress' ),
@@ -189,7 +219,8 @@ $wp_customize->add_section( 'onepress_footer',
 	)
 );
 
-$wp_customize->add_setting( 'footer_layout',
+$wp_customize->add_setting(
+	'footer_layout',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => '',
@@ -197,7 +228,8 @@ $wp_customize->add_setting( 'footer_layout',
 	)
 );
 
-$wp_customize->add_control( 'footer_layout',
+$wp_customize->add_control(
+	'footer_layout',
 	array(
 		'type'        => 'select',
 		'label'       => esc_html__( 'Layout', 'onepress' ),
@@ -210,7 +242,7 @@ $wp_customize->add_control( 'footer_layout',
 			'2' => 2,
 			'1' => 1,
 			'0' => esc_html__( 'Disable footer widgets', 'onepress' ),
-		)
+		),
 	)
 );
 
@@ -224,14 +256,16 @@ for ( $i = 1; $i <= 4; $i ++ ) {
 		}
 		$df = join( '+', $df );
 	}
-	$wp_customize->add_setting( 'footer_custom_' . $i . '_columns',
+	$wp_customize->add_setting(
+		'footer_custom_' . $i . '_columns',
 		array(
 			'sanitize_callback' => 'sanitize_text_field',
 			'default'           => $df,
 			'transport'         => 'postMessage',
 		)
 	);
-	$wp_customize->add_control( 'footer_custom_' . $i . '_columns',
+	$wp_customize->add_control(
+		'footer_custom_' . $i . '_columns',
 		array(
 			'label'       => 1 == $i ? __( 'Custom footer 1 column width', 'onepress' ) : sprintf( __( 'Custom footer %s columns width', 'onepress' ), $i ),
 			'section'     => 'onepress_footer',
@@ -241,13 +275,15 @@ for ( $i = 1; $i <= 4; $i ++ ) {
 }
 
 // onepress_sanitize_color_alpha
-$wp_customize->add_setting( 'footer_widgets_color',
+$wp_customize->add_setting(
+	'footer_widgets_color',
 	array(
 		'sanitize_callback' => 'sanitize_hex_color',
 		'default'           => '',
 	)
 );
-$wp_customize->add_control( new WP_Customize_Color_Control(
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
 		$wp_customize,
 		'footer_widgets_color',
 		array(
@@ -257,13 +293,15 @@ $wp_customize->add_control( new WP_Customize_Color_Control(
 	)
 );
 
-$wp_customize->add_setting( 'footer_widgets_bg_color',
+$wp_customize->add_setting(
+	'footer_widgets_bg_color',
 	array(
 		'sanitize_callback' => 'sanitize_hex_color',
 		'default'           => '',
 	)
 );
-$wp_customize->add_control( new WP_Customize_Color_Control(
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
 		$wp_customize,
 		'footer_widgets_bg_color',
 		array(
@@ -274,13 +312,15 @@ $wp_customize->add_control( new WP_Customize_Color_Control(
 );
 
 // Footer Heading color
-$wp_customize->add_setting( 'footer_widgets_title_color',
+$wp_customize->add_setting(
+	'footer_widgets_title_color',
 	array(
 		'sanitize_callback' => 'sanitize_hex_color',
 		'default'           => '',
 	)
 );
-$wp_customize->add_control( new WP_Customize_Color_Control(
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
 		$wp_customize,
 		'footer_widgets_title_color',
 		array(
@@ -291,13 +331,15 @@ $wp_customize->add_control( new WP_Customize_Color_Control(
 );
 
 
-$wp_customize->add_setting( 'footer_widgets_link_color',
+$wp_customize->add_setting(
+	'footer_widgets_link_color',
 	array(
 		'sanitize_callback' => 'sanitize_hex_color',
 		'default'           => '',
 	)
 );
-$wp_customize->add_control( new WP_Customize_Color_Control(
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
 		$wp_customize,
 		'footer_widgets_link_color',
 		array(
@@ -307,13 +349,15 @@ $wp_customize->add_control( new WP_Customize_Color_Control(
 	)
 );
 
-$wp_customize->add_setting( 'footer_widgets_link_hover_color',
+$wp_customize->add_setting(
+	'footer_widgets_link_hover_color',
 	array(
 		'sanitize_callback' => 'sanitize_hex_color',
 		'default'           => '',
 	)
 );
-$wp_customize->add_control( new WP_Customize_Color_Control(
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
 		$wp_customize,
 		'footer_widgets_link_hover_color',
 		array(
@@ -324,9 +368,11 @@ $wp_customize->add_control( new WP_Customize_Color_Control(
 );
 
 
-/* Footer Copyright Settings
+/*
+ Footer Copyright Settings
 ----------------------------------------------------------------------*/
-$wp_customize->add_section( 'onepress_footer_copyright',
+$wp_customize->add_section(
+	'onepress_footer_copyright',
 	array(
 		'priority'    => null,
 		'title'       => esc_html__( 'Footer Copyright', 'onepress' ),
@@ -336,55 +382,75 @@ $wp_customize->add_section( 'onepress_footer_copyright',
 );
 
 // Footer Widgets Color
-$wp_customize->add_setting( 'onepress_footer_info_bg', array(
-	'sanitize_callback'    => 'sanitize_hex_color',
-	'sanitize_js_callback' => 'maybe_hash_hex_color',
-	'default'              => '',
-) );
-$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_info_bg',
-	array(
-		'label'       => esc_html__( 'Background', 'onepress' ),
-		'section'     => 'onepress_footer_copyright',
-		'description' => '',
+$wp_customize->add_setting(
+	'onepress_footer_info_bg', array(
+		'sanitize_callback'    => 'sanitize_hex_color',
+		'sanitize_js_callback' => 'maybe_hash_hex_color',
+		'default'              => '',
 	)
-) );
+);
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
+		$wp_customize, 'onepress_footer_info_bg',
+		array(
+			'label'       => esc_html__( 'Background', 'onepress' ),
+			'section'     => 'onepress_footer_copyright',
+			'description' => '',
+		)
+	)
+);
 
 // Footer Widgets Color
-$wp_customize->add_setting( 'onepress_footer_c_color', array(
-	'sanitize_callback'    => 'sanitize_hex_color',
-	'sanitize_js_callback' => 'maybe_hash_hex_color',
-	'default'              => '',
-) );
-$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_c_color',
-	array(
-		'label'       => esc_html__( 'Text Color', 'onepress' ),
-		'section'     => 'onepress_footer_copyright',
-		'description' => '',
+$wp_customize->add_setting(
+	'onepress_footer_c_color', array(
+		'sanitize_callback'    => 'sanitize_hex_color',
+		'sanitize_js_callback' => 'maybe_hash_hex_color',
+		'default'              => '',
 	)
-) );
+);
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
+		$wp_customize, 'onepress_footer_c_color',
+		array(
+			'label'       => esc_html__( 'Text Color', 'onepress' ),
+			'section'     => 'onepress_footer_copyright',
+			'description' => '',
+		)
+	)
+);
 
-$wp_customize->add_setting( 'onepress_footer_c_link_color', array(
-	'sanitize_callback'    => 'sanitize_hex_color',
-	'sanitize_js_callback' => 'maybe_hash_hex_color',
-	'default'              => '',
-) );
-$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_c_link_color',
-	array(
-		'label'       => esc_html__( 'Link Color', 'onepress' ),
-		'section'     => 'onepress_footer_copyright',
-		'description' => '',
+$wp_customize->add_setting(
+	'onepress_footer_c_link_color', array(
+		'sanitize_callback'    => 'sanitize_hex_color',
+		'sanitize_js_callback' => 'maybe_hash_hex_color',
+		'default'              => '',
 	)
-) );
+);
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
+		$wp_customize, 'onepress_footer_c_link_color',
+		array(
+			'label'       => esc_html__( 'Link Color', 'onepress' ),
+			'section'     => 'onepress_footer_copyright',
+			'description' => '',
+		)
+	)
+);
 
-$wp_customize->add_setting( 'onepress_footer_c_link_hover_color', array(
-	'sanitize_callback'    => 'sanitize_hex_color',
-	'sanitize_js_callback' => 'maybe_hash_hex_color',
-	'default'              => '',
-) );
-$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'onepress_footer_c_link_hover_color',
-	array(
-		'label'       => esc_html__( 'Link Hover Color', 'onepress' ),
-		'section'     => 'onepress_footer_copyright',
-		'description' => '',
+$wp_customize->add_setting(
+	'onepress_footer_c_link_hover_color', array(
+		'sanitize_callback'    => 'sanitize_hex_color',
+		'sanitize_js_callback' => 'maybe_hash_hex_color',
+		'default'              => '',
 	)
-) );
+);
+$wp_customize->add_control(
+	new WP_Customize_Color_Control(
+		$wp_customize, 'onepress_footer_c_link_hover_color',
+		array(
+			'label'       => esc_html__( 'Link Hover Color', 'onepress' ),
+			'section'     => 'onepress_footer_copyright',
+			'description' => '',
+		)
+	)
+);

@@ -1,9 +1,11 @@
 <?php
 /**
- *  Dots Navigation Settings
+ * Dots Navigation Settings
+ *
  * @since 2.1.0
  */
-$wp_customize->add_section( 'onepress_sections_nav',
+$wp_customize->add_section(
+	'onepress_sections_nav',
 	array(
 		'priority'    => null,
 		'title'       => esc_html__( 'Sections Navigation', 'onepress' ),

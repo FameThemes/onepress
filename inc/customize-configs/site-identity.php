@@ -5,7 +5,8 @@
 
 $is_old_logo = get_theme_mod( 'onepress_site_image_logo' );
 
-$wp_customize->add_setting( 'onepress_hide_sitetitle',
+$wp_customize->add_setting(
+	'onepress_hide_sitetitle',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
 		'default'           => $is_old_logo ? 1 : 0,
@@ -20,7 +21,8 @@ $wp_customize->add_control(
 	)
 );
 
-$wp_customize->add_setting( 'onepress_hide_tagline',
+$wp_customize->add_setting(
+	'onepress_hide_tagline',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
 		'default'           => $is_old_logo ? 1 : 0,
@@ -37,11 +39,12 @@ $wp_customize->add_control(
 );
 
 // Retina Logo
-$wp_customize->add_setting( 'onepress_retina_logo',
+$wp_customize->add_setting(
+	'onepress_retina_logo',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => '',
-		'transport'         => 'postMessage'
+		'transport'         => 'postMessage',
 	)
 );
 $wp_customize->add_control(
@@ -57,11 +60,12 @@ $wp_customize->add_control(
 
 
 // Logo Width
-$wp_customize->add_setting( 'onepress_logo_height',
+$wp_customize->add_setting(
+	'onepress_logo_height',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => '',
-		'transport'         => 'postMessage'
+		'transport'         => 'postMessage',
 	)
 );
 $wp_customize->add_control(
@@ -70,5 +74,4 @@ $wp_customize->add_control(
 		'label'   => esc_html__( 'Logo Height In Pixel', 'onepress' ),
 		'section' => 'title_tagline',
 	)
-
 );
