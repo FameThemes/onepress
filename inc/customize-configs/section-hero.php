@@ -239,7 +239,7 @@ $wp_customize->add_setting(
 	'onepress_hero_images',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
-		'transport'         => 'refresh', // refresh or postMessage
+		'transport'         => 'refresh',
 		'default'           => json_encode(
 			array(
 				array(
@@ -287,7 +287,7 @@ $wp_customize->add_setting(
 	array(
 		'sanitize_callback' => 'onepress_sanitize_color_alpha',
 		'default'           => 'rgba(0,0,0,.3)',
-		// 'transport' => 'refresh', // refresh or postMessage
+		// 'transport' => 'refresh',
 	)
 );
 $wp_customize->add_control(
@@ -309,7 +309,7 @@ $wp_customize->add_setting(
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
 		'default'           => 0,
-		'transport'         => 'refresh', // refresh or postMessage
+		'transport'         => 'refresh',
 	)
 );
 $wp_customize->add_control(

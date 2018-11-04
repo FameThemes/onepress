@@ -131,7 +131,7 @@ $wp_customize->add_setting(
 	'onepress_counter_boxes',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
-		'transport'         => 'refresh', // refresh or postMessage
+		'transport'         => 'refresh',
 	)
 );
 
@@ -146,7 +146,7 @@ $wp_customize->add_control(
 			'section'       => 'onepress_counter_content',
 			'live_title_id' => 'title', // apply for unput text and textarea only
 			'title_format'  => esc_html__( '[live_title]', 'onepress' ), // [live_title]
-			'max_item'      => 4, // Maximum item can add
+			'max_item'      => 4, // Maximum number of addable items in free version.
 			'limited_msg'   => wp_kses_post( __( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
 			'fields'        => array(
 				'title'       => array(
