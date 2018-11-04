@@ -6,6 +6,7 @@
  * @since Unknown
  */
 
+// Add settings section.
 $wp_customize->add_section(
 	'onepress_single',
 	array(
@@ -16,7 +17,7 @@ $wp_customize->add_section(
 	)
 );
 
-
+// Layout (sidebar) setting.
 $wp_customize->add_setting(
 	'single_layout',
 	array(
@@ -24,6 +25,8 @@ $wp_customize->add_setting(
 		'default'           => 'default',
 	)
 );
+
+// Layout (sidebar) control.
 $wp_customize->add_control(
 	'single_layout',
 	array(
@@ -39,7 +42,7 @@ $wp_customize->add_control(
 	)
 );
 
-
+// Max. content width setting.
 $wp_customize->add_setting(
 	'single_layout_content_width',
 	array(
@@ -47,6 +50,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Max. content width control.
 $wp_customize->add_control(
 	'single_layout_content_width',
 	array(
@@ -57,8 +62,7 @@ $wp_customize->add_control(
 	)
 );
 
-
-
+// Show single post thumbnail setting.
 $wp_customize->add_setting(
 	'single_thumbnail',
 	array(
@@ -66,6 +70,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Show single post thumbnail control.
 $wp_customize->add_control(
 	'single_thumbnail',
 	array(
@@ -76,6 +82,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Show single post meta setting.
 $wp_customize->add_setting(
 	'single_meta',
 	array(
@@ -83,6 +90,8 @@ $wp_customize->add_setting(
 		'default'           => '1',
 	)
 );
+
+// Show single post meta control.
 $wp_customize->add_control(
 	'single_meta',
 	array(

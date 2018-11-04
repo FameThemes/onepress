@@ -1,11 +1,12 @@
 <?php
 /**
- * Global Theme Optio
+ * Global Theme Options
  *
  * @package OnePress\Customizer
  * @since Unknown
  */
 
+// Add settings section.
 $wp_customize->add_section(
 	'onepress_global_settings',
 	array(
@@ -16,7 +17,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Sidebar settings
+// Site layout (sidebar) setting.
 $wp_customize->add_setting(
 	'onepress_layout',
 	array(
@@ -26,6 +27,7 @@ $wp_customize->add_setting(
 	)
 );
 
+// Site layout (sidebar) control.
 $wp_customize->add_control(
 	'onepress_layout',
 	array(
@@ -41,7 +43,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Disable Animation
+// Disable animation setting.
 $wp_customize->add_setting(
 	'onepress_animation_disable',
 	array(
@@ -49,6 +51,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Disable animation control.
 $wp_customize->add_control(
 	'onepress_animation_disable',
 	array(
@@ -59,7 +63,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Disable Animation
+// Disable back to top button setting.
 $wp_customize->add_setting(
 	'onepress_btt_disable',
 	array(
@@ -68,6 +72,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Disable back to top button control.
 $wp_customize->add_control(
 	'onepress_btt_disable',
 	array(
@@ -78,7 +84,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Disable Google Font
+// Disable Google Fonts setting.
 $wp_customize->add_setting(
 	'onepress_disable_g_font',
 	array(
@@ -87,6 +93,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Disable Google Fonts control.
 $wp_customize->add_control(
 	'onepress_disable_g_font',
 	array(

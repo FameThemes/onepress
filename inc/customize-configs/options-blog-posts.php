@@ -6,6 +6,7 @@
  * @since 2.1.0
  */
 
+// Add 'Blog Posts' section.
 $wp_customize->add_section(
 	'onepress_blog_posts',
 	array(
@@ -16,6 +17,7 @@ $wp_customize->add_section(
 	)
 );
 
+// Disable archive prefix setting.
 $wp_customize->add_setting(
 	'onepress_disable_archive_prefix',
 	array(
@@ -23,6 +25,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Disable archive prefix control.
 $wp_customize->add_control(
 	'onepress_disable_archive_prefix',
 	array(

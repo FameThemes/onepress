@@ -6,6 +6,7 @@
  * @since 2.1.0
  */
 
+// Add settings section.
 $wp_customize->add_section(
 	'onepress_sections_nav',
 	array(
@@ -16,4 +17,5 @@ $wp_customize->add_section(
 	)
 );
 
+// Dots navigation settings and controls.
 Onepress_Dots_Navigation::get_instance()->add_customize( $wp_customize, 'onepress_sections_nav' );

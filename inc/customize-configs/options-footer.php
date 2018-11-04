@@ -8,6 +8,7 @@
  * @since Unknown
  */
 
+// Add 'Footer Social' section.
 $wp_customize->add_section(
 	'onepres_footer_top',
 	array(
@@ -17,7 +18,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Disable Social
+// Footer Social: Disable 'Footer Social' setting.
 $wp_customize->add_setting(
 	'onepress_social_disable',
 	array(
@@ -26,6 +27,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Footer Social: Disable 'Footer Social' control.
 $wp_customize->add_control(
 	'onepress_social_disable',
 	array(
@@ -36,12 +39,15 @@ $wp_customize->add_control(
 	)
 );
 
+// Footer Social: Add explanatory text setting.
 $wp_customize->add_setting(
 	'onepress_social_footer_guide',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_text',
 	)
 );
+
+// Footer Social: Add explanatory text control.
 $wp_customize->add_control(
 	new OnePress_Misc_Control(
 		$wp_customize, 'onepress_social_footer_guide',
@@ -53,7 +59,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Footer Social Title
+// Footer Social: Title setting.
 $wp_customize->add_setting(
 	'onepress_social_footer_title',
 	array(
@@ -62,6 +68,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Footer Social: Title control.
 $wp_customize->add_control(
 	'onepress_social_footer_title',
 	array(
@@ -71,16 +79,17 @@ $wp_customize->add_control(
 	)
 );
 
-// Socials
+// Footer Social: Social profiles setting.
 $wp_customize->add_setting(
 	'onepress_social_profiles',
 	array(
 		// 'default' => '',
 		'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
-		'transport'         => 'postMessage', // refresh or postMessage
+		'transport'         => 'postMessage',
 	)
 );
 
+// Footer Social: Social profiles control.
 $wp_customize->add_control(
 	new Onepress_Customize_Repeatable_Control(
 		$wp_customize,
@@ -90,8 +99,8 @@ $wp_customize->add_control(
 			'description'   => '',
 			'section'       => 'onepres_footer_top',
 			'live_title_id' => 'network', // apply for unput text and textarea only
-			'title_format'  => esc_html__( '[live_title]', 'onepress' ), // [live_title]
-			'max_item'      => 5, // Maximum item can add
+			'title_format'  => esc_html__( '[live_title]', 'onepress' ),
+			'max_item'      => 5, // Maximum number of addable items in free version.
 			'limited_msg'   => wp_kses_post( __( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
 			'fields'        => array(
 				'network' => array(
@@ -112,12 +121,7 @@ $wp_customize->add_control(
 	)
 );
 
-
-/*
- Newsletter Settings
-----------------------------------------------------------------------*/
-
-// Disable Newsletter
+// Footer Social: Disable newsletter setting.
 $wp_customize->add_setting(
 	'onepress_newsletter_disable',
 	array(
@@ -126,6 +130,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Footer Social: Disable newsletter control.
 $wp_customize->add_control(
 	'onepress_newsletter_disable',
 	array(
@@ -136,15 +142,17 @@ $wp_customize->add_control(
 	)
 );
 
-// Mailchimp Form Title
+// Footer Social: Newsletter form title setting.
 $wp_customize->add_setting(
 	'onepress_newsletter_title',
 	array(
 		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => esc_html__( 'Join our Newsletter', 'onepress' ),
-		'transport'         => 'postMessage', // refresh or postMessage
+		'transport'         => 'postMessage',
 	)
 );
+
+// Footer Social: Newsletter form title control.
 $wp_customize->add_control(
 	'onepress_newsletter_title',
 	array(
@@ -154,15 +162,17 @@ $wp_customize->add_control(
 	)
 );
 
-// Mailchimp action url
+// Footer Social: Mailchimp action url setting.
 $wp_customize->add_setting(
 	'onepress_newsletter_mailchimp',
 	array(
 		'sanitize_callback' => 'esc_url',
 		'default'           => '',
-		'transport'         => 'postMessage', // refresh or postMessage
+		'transport'         => 'postMessage',
 	)
 );
+
+// Footer Social: Mailchimp action url control.
 $wp_customize->add_control(
 	'onepress_newsletter_mailchimp',
 	array(
@@ -172,7 +182,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Footer BG Color
+// Footer Social: Background color setting.
 $wp_customize->add_setting(
 	'onepress_footer_bg', array(
 		'sanitize_callback'    => 'sanitize_hex_color_no_hash',
@@ -181,6 +191,8 @@ $wp_customize->add_setting(
 		'transport'            => 'postMessage',
 	)
 );
+
+// Footer Social: Background color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_footer_bg',
@@ -192,7 +204,7 @@ $wp_customize->add_control(
 	)
 );
 
-
+// Footer Social: Text color setting.
 $wp_customize->add_setting(
 	'onepress_footer_top_color', array(
 		'sanitize_callback' => 'sanitize_hex_color',
@@ -200,6 +212,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Footer Social: Text color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_footer_top_color',
@@ -212,9 +226,7 @@ $wp_customize->add_control(
 );
 
 
-/*
- Footer Widgets Settings
-----------------------------------------------------------------------*/
+// Add 'Footer Widgets' section.
 $wp_customize->add_section(
 	'onepress_footer',
 	array(
@@ -225,6 +237,7 @@ $wp_customize->add_section(
 	)
 );
 
+// Footer Widgets: Layout (column width) setting.
 $wp_customize->add_setting(
 	'footer_layout',
 	array(
@@ -234,6 +247,7 @@ $wp_customize->add_setting(
 	)
 );
 
+// Footer Widgets: Layout (column width) control.
 $wp_customize->add_control(
 	'footer_layout',
 	array(
@@ -280,7 +294,7 @@ for ( $i = 1; $i <= 4; $i ++ ) {
 	);
 }
 
-// onepress_sanitize_color_alpha
+// Footer Widgets: Text color setting.
 $wp_customize->add_setting(
 	'footer_widgets_color',
 	array(
@@ -288,6 +302,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Footer Widgets: Text color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize,
@@ -299,6 +315,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Footer Widgets: Background color setting.
 $wp_customize->add_setting(
 	'footer_widgets_bg_color',
 	array(
@@ -306,6 +323,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Footer Widgets: Background color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize,
@@ -317,7 +336,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Footer Heading color
+// Footer Widgets: Widget title color setting.
 $wp_customize->add_setting(
 	'footer_widgets_title_color',
 	array(
@@ -325,6 +344,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Footer Widgets: Widget title color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize,
@@ -336,7 +357,7 @@ $wp_customize->add_control(
 	)
 );
 
-
+// Footer Widgets: Link color setting.
 $wp_customize->add_setting(
 	'footer_widgets_link_color',
 	array(
@@ -344,6 +365,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Footer Widgets: Link color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize,
@@ -355,6 +378,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Footer Widgets: Link hover color setting.
 $wp_customize->add_setting(
 	'footer_widgets_link_hover_color',
 	array(
@@ -362,6 +386,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Footer Widgets: Link hover color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize,
@@ -373,10 +399,7 @@ $wp_customize->add_control(
 	)
 );
 
-
-/*
- Footer Copyright Settings
-----------------------------------------------------------------------*/
+// Add 'Footer Copyright' section.
 $wp_customize->add_section(
 	'onepress_footer_copyright',
 	array(
@@ -387,7 +410,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Footer Widgets Color
+// Footer Copyright: Background color setting.
 $wp_customize->add_setting(
 	'onepress_footer_info_bg', array(
 		'sanitize_callback'    => 'sanitize_hex_color',
@@ -395,6 +418,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Footer Copyright: Background color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_footer_info_bg',
@@ -406,7 +431,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Footer Widgets Color
+// Footer Copyright: Text color setting.
 $wp_customize->add_setting(
 	'onepress_footer_c_color', array(
 		'sanitize_callback'    => 'sanitize_hex_color',
@@ -414,6 +439,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Footer Copyright: Text color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_footer_c_color',
@@ -425,6 +452,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Footer Copyright: Link color setting.
 $wp_customize->add_setting(
 	'onepress_footer_c_link_color', array(
 		'sanitize_callback'    => 'sanitize_hex_color',
@@ -432,6 +460,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Footer Copyright: Link color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_footer_c_link_color',
@@ -443,6 +473,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Footer Copyright: Link hover color setting.
 $wp_customize->add_setting(
 	'onepress_footer_c_link_hover_color', array(
 		'sanitize_callback'    => 'sanitize_hex_color',
@@ -450,6 +481,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Footer Copyright: Link hover color setting.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_footer_c_link_hover_color',

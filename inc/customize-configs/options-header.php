@@ -3,9 +3,11 @@
  * Theme Option: Header.
  *
  * @package OnePress\Customizer
+ * @since 2.0.8 Added transparent logo height.
  * @since Unknown
  */
 
+// Add settings section.
 $wp_customize->add_section(
 	'onepress_header_settings',
 	array(
@@ -16,7 +18,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Header width
+// Header width (contained/full width) settings.
 $wp_customize->add_setting(
 	'onepress_header_width',
 	array(
@@ -26,6 +28,7 @@ $wp_customize->add_setting(
 	)
 );
 
+// Header width (contained/full width) control.
 $wp_customize->add_control(
 	'onepress_header_width',
 	array(
@@ -39,7 +42,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Header Layout
+// Header position setting.
 $wp_customize->add_setting(
 	'onepress_header_position',
 	array(
@@ -50,6 +53,7 @@ $wp_customize->add_setting(
 	)
 );
 
+// Header position control.
 $wp_customize->add_control(
 	'onepress_header_position',
 	array(
@@ -63,7 +67,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Disable Sticky Header
+// Disable Sticky Header setting.
 $wp_customize->add_setting(
 	'onepress_sticky_header_disable',
 	array(
@@ -72,6 +76,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Disable Sticky Header control.
 $wp_customize->add_control(
 	'onepress_sticky_header_disable',
 	array(
@@ -82,7 +88,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Vertical align menu
+// Center menu vertically setting.
 $wp_customize->add_setting(
 	'onepress_vertical_align_menu',
 	array(
@@ -90,6 +96,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Center menu vertically control.
 $wp_customize->add_control(
 	'onepress_vertical_align_menu',
 	array(
@@ -100,7 +108,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Scroll to top when click to logo
+// Scroll to top when clicking on logo setting.
 $wp_customize->add_setting(
 	'onepress_header_scroll_logo',
 	array(
@@ -109,6 +117,8 @@ $wp_customize->add_setting(
 		'active_callback'   => '',
 	)
 );
+
+// Scroll to top when clicking on logo control.
 $wp_customize->add_control(
 	'onepress_header_scroll_logo',
 	array(
@@ -118,7 +128,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Header BG Color
+// Header background color setting.
 $wp_customize->add_setting(
 	'onepress_header_bg_color',
 	array(
@@ -127,6 +137,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Header background color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_header_bg_color',
@@ -138,7 +150,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Site Title Color
+// Site Title Color setting.
 $wp_customize->add_setting(
 	'onepress_logo_text_color',
 	array(
@@ -147,6 +159,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Site Title Color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_logo_text_color',
@@ -158,6 +172,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Site Tagline Color setting.
 $wp_customize->add_setting(
 	'onepress_tagline_text_color',
 	array(
@@ -166,6 +181,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Site Tagline Color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_tagline_text_color',
@@ -177,7 +194,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Header Menu Color
+// Menu link color setting.
 $wp_customize->add_setting(
 	'onepress_menu_color',
 	array(
@@ -186,6 +203,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Menu link color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_menu_color',
@@ -197,7 +216,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Header Menu Hover Color
+// Menu link hover and active color setting.
 $wp_customize->add_setting(
 	'onepress_menu_hover_color',
 	array(
@@ -206,6 +225,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Menu link hover and active color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_menu_hover_color',
@@ -218,7 +239,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Header Menu Hover BG Color
+// Menu link hover and active background color setting.
 $wp_customize->add_setting(
 	'onepress_menu_hover_bg_color',
 	array(
@@ -227,6 +248,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Menu link hover and active background color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_menu_hover_bg_color',
@@ -238,7 +261,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Responsive Mobile button color
+// Toggle menu button color setting.
 $wp_customize->add_setting(
 	'onepress_menu_toggle_button_color',
 	array(
@@ -247,6 +270,8 @@ $wp_customize->add_setting(
 		'default'              => '',
 	)
 );
+
+// Toggle menu button color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_menu_toggle_button_color',
@@ -258,8 +283,7 @@ $wp_customize->add_control(
 	)
 );
 
-
-// Header Transparent
+// Enable transparent header setting.
 $wp_customize->add_setting(
 	'onepress_header_transparent',
 	array(
@@ -269,6 +293,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Enable transparent header control.
 $wp_customize->add_control(
 	'onepress_header_transparent',
 	array(
@@ -279,7 +305,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Transparent Logo
+// Transparent header logo setting.
 $wp_customize->add_setting(
 	'onepress_transparent_logo',
 	array(
@@ -288,6 +314,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Transparent header logo control.
 $wp_customize->add_control(
 	new WP_Customize_Image_Control(
 		$wp_customize,
@@ -300,7 +328,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Transparent Retina Logo
+// Transparent header retina logo setting.
 $wp_customize->add_setting(
 	'onepress_transparent_retina_logo',
 	array(
@@ -309,6 +337,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Transparent header retina logo control.
 $wp_customize->add_control(
 	new WP_Customize_Image_Control(
 		$wp_customize,
@@ -321,9 +351,7 @@ $wp_customize->add_control(
 	)
 );
 
-/**
- * @since 2.0.8
- */
+// Transparent header logo height setting.
 $wp_customize->add_setting(
 	'onepress_transparent_logo_height',
 	array(
@@ -331,6 +359,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Transparent header logo height control.
 $wp_customize->add_control(
 	'onepress_transparent_logo_height',
 	array(
@@ -340,6 +370,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Transparent header site title color setting.
 $wp_customize->add_setting(
 	'onepress_transparent_site_title_c',
 	array(
@@ -347,6 +378,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Transparent header site title color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize,
@@ -359,6 +392,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Transparent header tagline color setting.
 $wp_customize->add_setting(
 	'onepress_transparent_tag_title_c',
 	array(
@@ -366,6 +400,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Transparent header tagline color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize,

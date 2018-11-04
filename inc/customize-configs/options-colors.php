@@ -6,6 +6,7 @@
  * @since Unknown
  */
 
+// Add 'Site Colors' section.
 $wp_customize->add_section(
 	'onepress_colors_settings',
 	array(
@@ -16,7 +17,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Primary Color
+// Primary Color setting.
 $wp_customize->add_setting(
 	'onepress_primary_color', array(
 		'sanitize_callback'    => 'sanitize_hex_color_no_hash',
@@ -24,6 +25,8 @@ $wp_customize->add_setting(
 		'default'              => '#03c4eb',
 	)
 );
+
+// Primary Color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_primary_color',

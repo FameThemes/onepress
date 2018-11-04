@@ -6,6 +6,7 @@
  * @since Unknown
  */
 
+// Add settings section.
 $wp_customize->add_section(
 	'onepress_nav',
 	array(
@@ -15,6 +16,8 @@ $wp_customize->add_section(
 		'panel'       => 'onepress_options',
 	)
 );
+
+// Menu item padding setting.
 $wp_customize->add_setting(
 	'onepress_menu_item_padding',
 	array(
@@ -23,6 +26,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Menu item padding control.
 $wp_customize->add_control(
 	'onepress_menu_item_padding',
 	array(

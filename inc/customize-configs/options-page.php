@@ -6,6 +6,7 @@
  * @since Unknown
  */
 
+// Add settings section.
 $wp_customize->add_section(
 	'onepress_page',
 	array(
@@ -16,7 +17,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Disable the page title bar
+// Disable the page title bar setting.
 $wp_customize->add_setting(
 	'onepress_page_title_bar_disable',
 	array(
@@ -24,6 +25,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Disable the page title bar control.
 $wp_customize->add_control(
 	'onepress_page_title_bar_disable',
 	array(
@@ -34,6 +37,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Page cover padding top setting.
 $wp_customize->add_setting(
 	'onepress_page_cover_pd_top',
 	array(
@@ -42,6 +46,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Page cover padding top control.
 $wp_customize->add_control(
 	'onepress_page_cover_pd_top',
 	array(
@@ -51,6 +57,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Page cover padding bottom setting.
 $wp_customize->add_setting(
 	'onepress_page_cover_pd_bottom',
 	array(
@@ -59,6 +66,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Page cover padding bottom control.
 $wp_customize->add_control(
 	'onepress_page_cover_pd_bottom',
 	array(
@@ -68,6 +77,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Page cover color setting.
 $wp_customize->add_setting(
 	'onepress_page_cover_color',
 	array(
@@ -76,6 +86,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Page cover color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize,
@@ -87,7 +99,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Overlay color
+// Background overlay color setting.
 $wp_customize->add_setting(
 	'onepress_page_cover_overlay',
 	array(
@@ -96,6 +108,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Background overlay color control.
 $wp_customize->add_control(
 	new OnePress_Alpha_Color_Control(
 		$wp_customize,
@@ -107,6 +121,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Content alignment setting.
 $wp_customize->add_setting(
 	'onepress_page_cover_align',
 	array(
@@ -115,6 +130,8 @@ $wp_customize->add_setting(
 		'transport'         => 'postMessage',
 	)
 );
+
+// Content alignment control.
 $wp_customize->add_control(
 	'onepress_page_cover_align',
 	array(
