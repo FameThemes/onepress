@@ -482,7 +482,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// Footer Copyright: Link hover color setting.
+// Footer Copyright: Link hover color control.
 $wp_customize->add_control(
 	new WP_Customize_Color_Control(
 		$wp_customize, 'onepress_footer_c_link_hover_color',
