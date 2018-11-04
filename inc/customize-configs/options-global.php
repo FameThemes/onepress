@@ -1,7 +1,11 @@
 <?php
-/*
- Global Settings
-----------------------------------------------------------------------*/
+/**
+ * Global Theme Optio
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
+ */
+
 $wp_customize->add_section(
 	'onepress_global_settings',
 	array(

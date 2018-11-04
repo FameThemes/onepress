@@ -1,7 +1,11 @@
 <?php
-/*
- Navigation Settings
-----------------------------------------------------------------------*/
+/**
+ * Theme Option: Navigation.
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
+ */
+
 $wp_customize->add_section(
 	'onepress_nav',
 	array(

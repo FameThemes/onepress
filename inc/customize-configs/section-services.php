@@ -1,7 +1,11 @@
 <?php
 /**
  * Section: Services
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
  */
+
 $wp_customize->add_panel(
 	'onepress_services',
 	array(

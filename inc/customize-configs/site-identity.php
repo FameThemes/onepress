@@ -1,6 +1,9 @@
 <?php
 /**
- * Site Identity.
+ * Site Identity
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
  */
 
 $is_old_logo = get_theme_mod( 'onepress_site_image_logo' );

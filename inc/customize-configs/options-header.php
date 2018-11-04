@@ -1,7 +1,11 @@
 <?php
-/*
- Header
-----------------------------------------------------------------------*/
+/**
+ * Theme Option: Header.
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
+ */
+
 $wp_customize->add_section(
 	'onepress_header_settings',
 	array(

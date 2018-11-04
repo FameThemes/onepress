@@ -1,9 +1,11 @@
 <?php
-/*
-------------------------------------------------------------------------*/
-/*
-  Section: Video Popup
-/*------------------------------------------------------------------------*/
+/**
+ * Section: Video Lightbox
+ *
+ * @package OnePress\Customizer
+ * @since 1.1.1
+ */
+
 $wp_customize->add_panel(
 	'onepress_videolightbox',
 	array(

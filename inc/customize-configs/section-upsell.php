@@ -1,8 +1,10 @@
 <?php
 /**
  * Section: Order & Styling - PLUS VERSION
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
  */
-
 
 // Register custom section types.
 $wp_customize->register_section_type( 'OnePress_Section_Plus' );

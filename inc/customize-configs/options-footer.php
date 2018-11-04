@@ -1,7 +1,13 @@
 <?php
-/*
- Footer top Social Settings
-----------------------------------------------------------------------*/
+/**
+ * Theme Option: Footer.
+ *
+ * Customizer settings for Footer Social, Footer Widgets and Footer Copyright.
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
+ */
+
 $wp_customize->add_section(
 	'onepres_footer_top',
 	array(

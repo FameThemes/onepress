@@ -1,7 +1,11 @@
 <?php
 /**
  * Section: Features
+ *
+ * @package OnePress\Customizer
+ * @since 1.1.5
  */
+
 $wp_customize->add_panel(
 	'onepress_features',
 	array(

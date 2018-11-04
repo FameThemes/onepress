@@ -1,9 +1,10 @@
 <?php
-/*
-------------------------------------------------------------------------*/
-/*
-  Section: Hero
-/*------------------------------------------------------------------------*/
+/**
+ * Section: Hero
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
+ */
 
 $wp_customize->add_panel(
 	'onepress_hero_panel',

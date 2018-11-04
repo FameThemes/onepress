@@ -1,8 +1,11 @@
 <?php
+/**
+ * Theme Option: Single Post
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
+ */
 
-/*
- Single Settings
-----------------------------------------------------------------------*/
 $wp_customize->add_section(
 	'onepress_single',
 	array(

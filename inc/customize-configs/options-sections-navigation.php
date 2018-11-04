@@ -1,9 +1,11 @@
 <?php
 /**
- * Dots Navigation Settings
+ * Theme Option: Section Navigation
  *
+ * @package OnePress\Customizer
  * @since 2.1.0
  */
+
 $wp_customize->add_section(
 	'onepress_sections_nav',
 	array(

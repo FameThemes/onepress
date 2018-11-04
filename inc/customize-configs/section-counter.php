@@ -1,7 +1,11 @@
 <?php
 /**
  * Section: Counter
+ *
+ * @package OnePress\Customizer
+ * @since 1.0.4
  */
+
 $wp_customize->add_panel(
 	'onepress_counter',
 	array(

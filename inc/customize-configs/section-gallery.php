@@ -1,7 +1,11 @@
 <?php
 /**
  * Section: Gallery
+ *
+ * @package OnePress\Customizer
+ * @since 1.2.6
  */
+
 $wp_customize->add_panel(
 	'onepress_gallery',
 	array(

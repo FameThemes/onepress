@@ -1,9 +1,9 @@
 <?php
 /**
- * Blog Post Settings
+ * Theme Option: Blog Posts
  *
+ * @package OnePress\Customizer
  * @since 2.1.0
- * ----------------------------------------------------------------------
  */
 
 $wp_customize->add_section(

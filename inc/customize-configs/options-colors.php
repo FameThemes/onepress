@@ -1,7 +1,11 @@
 <?php
-/*
-Colors
-----------------------------------------------------------------------*/
+/**
+ * Theme Option: Site Colors
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
+ */
+
 $wp_customize->add_section(
 	'onepress_colors_settings',
 	array(

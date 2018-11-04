@@ -1,6 +1,9 @@
 <?php
 /**
  * Site Options
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
  */
 
 $wp_customize->add_panel(

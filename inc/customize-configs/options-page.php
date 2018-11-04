@@ -1,8 +1,11 @@
 <?php
+/**
+ * Theme Option: Page Title Area.
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
+ */
 
-/*
- Page Settings
-----------------------------------------------------------------------*/
 $wp_customize->add_section(
 	'onepress_page',
 	array(
