@@ -164,7 +164,6 @@ function onepress_sanitize_file_url( $file_url ) {
 	return $output;
 }
 
-
 /**
  * Conditional to show more hero settings
  *
