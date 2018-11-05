@@ -56,6 +56,14 @@ if ( $is_parallax ) {
 	);
 }
 
+/**
+ * Fires before section part
+ *
+ * @param string $section_id The ID of the section.
+ * @param array $args Array of arguments.
+ *
+ * @see onepress_before_section
+ */
 do_action( 'onepress_before_section_part', 'hero', $hook_args );
 
 ?>
@@ -149,4 +157,12 @@ do_action( 'onepress_before_section_part', 'hero', $hook_args );
 	<?php
 endif;
 
+/**
+ * Fires after section part
+ *
+ * @param string $section_id The ID of the section.
+ * @param array $args Array of arguments.
+ *
+ * @see onepress_after_section
+ */
 do_action( 'onepress_after_section_part', 'hero', $hook_args );
