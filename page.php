@@ -17,6 +17,8 @@ get_header();
 $layout = onepress_get_layout();
 
 /**
+ * Fires after header section and before content
+ *
  * @since 2.0.0
  * @see onepress_display_page_title
  */

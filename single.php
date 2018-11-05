@@ -10,10 +10,7 @@
 get_header();
 $layout = onepress_get_layout();
 
-/**
- * @since 2.0.0
- * @see onepress_display_page_title
- */
+/** This action is documented in page.php */
 do_action( 'onepress_page_before_content' );
 ?>
 

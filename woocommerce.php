@@ -10,10 +10,8 @@ get_header();
 $is_active_sidebar = is_active_sidebar( 'sidebar-shop' );
 $layout            = onepress_get_layout();
 $hide_breadcrumb   = get_post_meta( wc_get_page_id( 'shop' ), '_hide_breadcrumb', true );
-/**
- * @since 2.0.0
- * @see onepress_display_page_title
- */
+
+/** This action is documented in page.php */
 do_action( 'onepress_page_before_content' );
 ?>
 
