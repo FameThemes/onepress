@@ -28,6 +28,8 @@ if ( ! $hide_footer ) {
 	<footer id="colophon" class="site-footer" role="contentinfo">
 		<?php
 		/**
+		 * Fires before the site info
+		 *
 		 * @since 2.0.0
 		 * @see onepress_footer_widgets
 		 * @see onepress_footer_connect
@@ -45,8 +47,9 @@ if ( ! $hide_footer ) {
 				<?php endif; ?>
 				<?php
 				/**
-				 * hooked onepress_footer_site_info
+				 * Fires inside the site info before the back to top button
 				 *
+				 * @since 1.1.3
 				 * @see onepress_footer_site_info
 				 */
 				do_action( 'onepress_footer_site_info' );
@@ -59,8 +62,9 @@ if ( ! $hide_footer ) {
 }
 
 /**
- * Hooked: onepress_site_footer
+ * Fires after the site footer
  *
+ * @since 1.1.5
  * @see onepress_site_footer
  */
 do_action( 'onepress_site_end' );
