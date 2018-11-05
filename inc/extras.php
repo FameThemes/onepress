@@ -44,7 +44,6 @@ function onepress_body_classes( $classes ) {
 }
 add_filter( 'body_class', 'onepress_body_classes' );
 
-
 if ( ! function_exists( 'onepress_custom_excerpt_length' ) ) :
 	/**
 	 * Custom excerpt length for the theme
@@ -55,7 +54,6 @@ if ( ! function_exists( 'onepress_custom_excerpt_length' ) ) :
 	add_filter( 'excerpt_length', 'onepress_custom_excerpt_length', 999 );
 endif;
 
-
 if ( ! function_exists( 'onepress_new_excerpt_more' ) ) :
 	/**
 	 * Remove […] string using Filters
@@ -65,7 +63,6 @@ if ( ! function_exists( 'onepress_new_excerpt_more' ) ) :
 	}
 	add_filter( 'excerpt_more', 'onepress_new_excerpt_more' );
 endif;
-
 
 /**
  * Get media from a variable
@@ -140,7 +137,6 @@ add_filter( 'onepress_the_content', 'wp_make_content_images_responsive' );
 add_filter( 'onepress_the_content', 'capital_P_dangit' );
 add_filter( 'onepress_the_content', 'do_shortcode' );
 add_filter( 'onepress_the_content', 'convert_smilies' );
-
 
 if ( ! function_exists( 'onepress_is_wc_active' ) ) {
 	function onepress_is_wc_active() {
@@ -369,7 +365,6 @@ if ( ! function_exists( 'onepress_after_section' ) ) {
 add_action( 'onepress_before_section_part', 'onepress_before_section', 10, 2 );
 add_action( 'onepress_after_section_part', 'onepress_after_section', 10, 2 );
 
-
 /**
  * Retrieve the archive title based on the queried object.
  *
@@ -430,37 +425,35 @@ if ( onepress_is_wc_active() ) {
 
 			} else {
 
-				?>
-				<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
-				<div class="entry-header">
-					<h1 class="page-title entry-title"><?php woocommerce_page_title(); ?></h1>
-				</div>
-				<?php endif; ?>
+				if ( apply_filters( 'woocommerce_show_page_title', true ) ) :
+					?>
+					<div class="entry-header">
+						<h1 class="page-title entry-title"><?php woocommerce_page_title(); ?></h1>
+					</div>
+					<?php
+				endif;
 
-				<?php do_action( 'woocommerce_archive_description' ); ?>
+				do_action( 'woocommerce_archive_description' );
 
-				<?php if ( have_posts() ) : ?>
+				if ( have_posts() ) :
 
-					<?php do_action( 'woocommerce_before_shop_loop' ); ?>
+					do_action( 'woocommerce_before_shop_loop' );
 
-					<?php woocommerce_product_loop_start(); ?>
+					woocommerce_product_loop_start();
 
-					<?php if ( wc_get_loop_prop( 'total' ) ) : ?>
-						<?php while ( have_posts() ) : ?>
-							<?php the_post(); ?>
-							<?php wc_get_template_part( 'content', 'product' ); ?>
-						<?php endwhile; ?>
-					<?php endif; ?>
+					if ( wc_get_loop_prop( 'total' ) ) :
+						while ( have_posts() ) :
+							the_post();
+							wc_get_template_part( 'content', 'product' );
+						endwhile;
+					endif;
 
-					<?php woocommerce_product_loop_end(); ?>
+					woocommerce_product_loop_end();
 
-					<?php do_action( 'woocommerce_after_shop_loop' ); ?>
+					do_action( 'woocommerce_after_shop_loop' );
 
-				<?php else : ?>
-
-					<?php do_action( 'woocommerce_no_products_found' ); ?>
-
-				<?php
+				else :
+					do_action( 'woocommerce_no_products_found' );
 				endif;
 
 			}
