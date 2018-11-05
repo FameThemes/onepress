@@ -1,17 +1,15 @@
 <?php
 /**
- * The front page template file.
+ * The blog posts index template file.
  *
- * The front-page.php template file is used to render your site’s front page,
- * whether the front page displays the blog posts index (mentioned above) or a static page.
- * The front page template takes precedence over the blog posts index (home.php) template.
+ * The template file home.php is used to render the blog posts index, whether
+ * it is being used as the front page or on separate static page.
  *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#front-page-display
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#home-page-display
  *
  * @package OnePress
+ * @since 1.0.4
  */
-
-get_header();
 
 $layout = onepress_get_layout();
 
@@ -39,12 +37,12 @@ do_action( 'onepress_page_before_content' );
 
 					<?php
 
-						/*
-						 * Include the Post-Format-specific template for the content.
-						 * If you want to override this in a child theme, then include a file
-						 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-						 */
-						get_template_part( 'template-parts/content', get_post_format() );
+					/*
+					 * Include the Post-Format-specific template for the content.
+					 * If you want to override this in a child theme, then include a file
+					 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
+					 */
+					get_template_part( 'template-parts/content', get_post_format() );
 					?>
 
 				<?php endwhile; ?>
