@@ -270,14 +270,14 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
 						'image'          => '',
 					)
 				);
-				extract( $args );
-				if ( $video_url || $video_webm_url || $video_ogv_url ) {
+
+				if ( $args['video_url'] || $args['video_webm_url'] || $args['video_ogv_url'] ) {
 					?>
 					<div class="video-section"
-						data-mp4="<?php echo esc_url( $video_url ); ?>"
-						data-webm="<?php echo esc_url( $video_webm_url ); ?>"
-						data-ogv="<?php echo esc_url( $video_ogv_url ); ?>"
-						data-bg="<?php echo esc_attr( $image ); ?>">
+						data-mp4="<?php echo esc_url( $args['video_url'] ); ?>"
+						data-webm="<?php echo esc_url( $args['video_webm_url'] ); ?>"
+						data-ogv="<?php echo esc_url( $args['video_ogv_url'] ); ?>"
+						data-bg="<?php echo esc_attr( $args['image'] ); ?>">
 					<?php
 				}
 				break;
@@ -290,15 +290,15 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
 						'enable_parallax' => '',
 					)
 				);
-				extract( $args );
-				if ( 1 == $enable_parallax ) {
+
+				if ( $args['enable_parallax'] ) {
 					$class = 'section-parallax';
 					if ( 'hero' == $section_id ) {
 						$class = 'parallax-hero';
 					}
 					echo '<div id="parallax-' . esc_attr( $section_id ) . '" class="' . esc_attr( $class ) . '">';
-					echo '<div class="parallax-bg"><img src="' . esc_url( $image ) . '" alt=""></div>';
-				} elseif ( $image || $alpha ) { // image bg
+					echo '<div class="parallax-bg"><img src="' . esc_url( $args['image'] ) . '" alt=""></div>';
+				} elseif ( $args['image'] || $args['alpha'] ) { // image bg
 					echo '<div id="bgimage-' . esc_attr( $section_id ) . '" class="bgimage-alpha bgimage-' . esc_attr( $section_id ) . '">';
 				}
 				break;
@@ -310,7 +310,7 @@ if ( ! function_exists( 'onepress_after_section' ) ) {
 	/**
 	 * @since 2.0.5
 	 *
-	 * @param null  $section_id
+	 * @param string|null $section_id (Optional) The section ID. Default value: null.
 	 * @param array $args
 	 */
 	function onepress_after_section( $section_id = null, $args = array() ) {
@@ -337,9 +337,9 @@ if ( ! function_exists( 'onepress_after_section' ) ) {
 						'video_ogv_url'  => '',
 					)
 				);
-				extract( $args );
 
-				if ( $video_url || $video_webm_url || $video_ogv_url ) {
+
+				if ( $args['video_url'] || $args['video_webm_url'] || $args['video_ogv_url'] ) {
 					echo '</div>';
 				}
 				break;
@@ -352,10 +352,10 @@ if ( ! function_exists( 'onepress_after_section' ) ) {
 						'enable_parallax' => '',
 					)
 				);
-				extract( $args );
-				if ( 1 == $enable_parallax ) {
+
+				if ( $args['enable_parallax'] ) {
 					echo '</div>';
-				} elseif ( $image || $alpha ) { // image bg
+				} elseif ( $args['image'] || $args['alpha'] ) { // image bg
 					echo '</div>';
 				}
 				break;
