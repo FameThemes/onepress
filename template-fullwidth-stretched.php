@@ -2,7 +2,12 @@
 /**
  * Template Name: Full Width - Stretched Content
  *
- * @package OnePress
+ * The page template for displaying fluid full width pages.
+ *
+ * @link https://developer.wordpress.org/themes/template-files-section/page-template-files/
+ *
+ * @package OnePress\Page_Templates
+ * @since 2.0.0
  */
 
 get_header();

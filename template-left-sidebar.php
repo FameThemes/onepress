@@ -2,7 +2,11 @@
 /**
  * Template Name: Left Sidebar
  *
- * @package OnePress
+ * The page template for displaying pages with left sidebar.
+ *
+ * @link https://developer.wordpress.org/themes/template-files-section/page-template-files/
+ *
+ * @package OnePress\Page_Templates
  */
 
 get_header();

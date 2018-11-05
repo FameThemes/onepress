@@ -2,7 +2,12 @@
 /**
  * Template Name: Frontpage
  *
- * @package OnePress
+ * The page template for displaying the frontpage.
+ *
+ * @link https://developer.wordpress.org/themes/template-files-section/page-template-files/
+ *
+ * @package OnePress\Page_Templates
+ *
  * @since 2.1.1 Only load sections if they are active
  * @since 1.0.4 Moved from front-page.php
  * @since 1.0.0
