@@ -207,16 +207,6 @@ function onepress_sanitize_number( $input ) {
 	return balanceTags( $input );
 }
 
-function onepress_sanitize_hex_color( $color ) {
-	if ( '' == $color ) {
-		return '';
-	}
-	if ( preg_match( '|^#([A-Fa-f0-9]{3}){1,2}$|', $color ) ) {
-		return $color;
-	}
-	return null;
-}
-
 function onepress_sanitize_checkbox( $input ) {
 	if ( 1 == $input ) {
 		return 1;
