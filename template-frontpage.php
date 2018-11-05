@@ -3,7 +3,8 @@
  * Template Name: Frontpage
  *
  * @package OnePress
- * @since 2.1.1 Load section if active
+ * @since 2.1.1 Only load sections if they are active
+ * @since 1.0.4 Moved from front-page.php
  * @since 1.0.0
  */
 
@@ -12,7 +13,11 @@ get_header(); ?>
 <div id="content" class="site-content">
 	<main id="main" class="site-main" role="main">
 		<?php
-
+		/**
+		 * Fires inside the main container before the section parts on the frontpage
+		 *
+		 * @since 1.1.3
+		 */
 		do_action( 'onepress_frontpage_before_section_parts' );
 
 		if ( ! has_action( 'onepress_frontpage_section_parts' ) ) {
@@ -38,9 +43,19 @@ get_header(); ?>
 				}
 			}
 		} else {
+			/**
+			 * Fires inside the main container on the frontpage
+			 *
+			 * @since 1.0.4
+			 */
 			do_action( 'onepress_frontpage_section_parts' );
 		}
 
+		/**
+		 * Fires inside the main container after the section parts on the frontpage
+		 *
+		 * @since 1.1.3
+		 */
 		do_action( 'onepress_frontpage_after_section_parts' );
 
 		?>
