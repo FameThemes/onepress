@@ -160,14 +160,17 @@ if ( ! function_exists( 'onepress_is_wc_archive' ) ) {
 
 if ( ! function_exists( 'onepress_get_layout' ) ) {
 	/**
+	 * Retrieve the layout option
 	 *
-	 *
-	 * @param string $default
-	 *
+	 * @since 2.1.1 Support for single post layout added.
+	 * @since 1.3.8
+	 * @param string $default (Optional) Default value: 'right-sidebar'.
 	 * @return string|void
 	 */
 	function onepress_get_layout( $default = 'right-sidebar' ) {
 		$layout = get_theme_mod( 'onepress_layout', $default );
+
+		// Get WooCommerce layout.
 		if ( onepress_is_wc_active() ) {
 			if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() || is_wc_endpoint_url() ) {
 				$is_active_sidebar = is_active_sidebar( 'sidebar-shop' );
@@ -177,11 +180,7 @@ if ( ! function_exists( 'onepress_get_layout' ) ) {
 			}
 		}
 
-		/**
-		 * Support single layout
-		 *
-		 * @since 2.1.1
-		 */
+		// Get single post layout.
 		if ( is_singular( 'post' ) ) {
 			$single_layout = get_theme_mod( 'single_layout', 'default' );
 			if ( '' != $single_layout && 'default' != $single_layout ) {
@@ -225,8 +224,10 @@ if ( ! defined( 'WPFORMS_SHAREASALE_ID' ) ) {
 
 if ( ! function_exists( 'onepress_get_video_lightbox_image' ) ) {
 	/**
+	 * Retrieve the ID of the video lightbox background image
+	 *
 	 * @since 2.0.5
-	 * @return string
+	 * @return integer
 	 */
 	function onepress_get_video_lightbox_image() {
 		$image = get_theme_mod( 'onepress_videolightbox_image' );
@@ -293,15 +294,15 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
 				if ( 1 == $enable_parallax ) {
 					$class = 'section-parallax';
 					if ( 'hero' == $section_id ) {
-						$class = ' parallax-hero';
+						$class = 'parallax-hero';
 					}
 					echo '<div id="parallax-' . esc_attr( $section_id ) . '" class="' . esc_attr( $class ) . '">';
-					echo ' <div class="parallax-bg"><img src="' . esc_url( $image ) . '" alt=""></div>';
+					echo '<div class="parallax-bg"><img src="' . esc_url( $image ) . '" alt=""></div>';
 				} elseif ( $image || $alpha ) { // image bg
 					echo '<div id="bgimage-' . esc_attr( $section_id ) . '" class="bgimage-alpha bgimage-' . esc_attr( $section_id ) . '">';
 				}
 				break;
-		}// end switch
+		} // end switch
 	}
 }
 
@@ -401,7 +402,7 @@ add_filter( 'get_the_archive_title', 'onepress_get_the_archive_title', 15 );
 if ( onepress_is_wc_active() ) {
 	/**
 	 * Template pages
-	*/
+	 */
 
 	if ( ! function_exists( 'woocommerce_content' ) ) {
 
