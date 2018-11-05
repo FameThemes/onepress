@@ -3,6 +3,8 @@
  * Template Name: Frontpage
  *
  * @package OnePress
+ * @since 2.1.1 Load section if active
+ * @since 1.0.0
  */
 
 get_header(); ?>
@@ -30,11 +32,7 @@ get_header(); ?>
 			);
 
 			foreach ( $sections as $section ) {
-				/**
-				 * Load section if active
-				 *
-				 * @since 2.1.1
-				 */
+				// Load section if active.
 				if ( Onepress_Config::is_section_active( $section ) ) {
 					onepress_load_section( $section );
 				}
