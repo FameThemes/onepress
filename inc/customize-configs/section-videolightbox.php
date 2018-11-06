@@ -103,7 +103,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_videolightbox_image',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_number',
+		'sanitize_callback' => 'absint',
 		'default'           => '',
 	)
 );
