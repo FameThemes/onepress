@@ -1,6 +1,8 @@
 <?php
 /**
- *  OnePress Sanitize Functions.
+ * OnePress Sanitize Functions.
+ *
+ * @package OnePress
  */
 
 /**
