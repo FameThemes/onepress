@@ -19,7 +19,7 @@ if ( ! $disable ) :
 
 	$title     = get_theme_mod( 'onepress_news_title', esc_html__( 'Latest News', 'onepress' ) );
 	$subtitle  = get_theme_mod( 'onepress_news_subtitle', esc_html__( 'Section subtitle', 'onepress' ) );
-	$number    = absint( get_theme_mod( 'onepress_news_number', '3' ) );
+	$number    = get_theme_mod( 'onepress_news_number', '3' );
 	$more_page = get_theme_mod( 'onepress_news_more_page', '' );
 	$more_link = get_theme_mod( 'onepress_news_more_link', '' );
 	$more_text = get_theme_mod( 'onepress_news_more_text', esc_html__( 'Read Our Blog', 'onepress' ) );
