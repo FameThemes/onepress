@@ -30,29 +30,25 @@ get_header(); ?>
 		<section id="primary" class="content-area">
 			<main id="main" class="site-main" role="main">
 
-			<?php if ( have_posts() ) : ?>
+				<?php
+				if ( have_posts() ) {
+					while ( have_posts() ) { // Start of the loop.
+						the_post();
 
-				<?php /* Start the Loop */ ?>
-				<?php while ( have_posts() ) : the_post(); ?>
+						/*
+						 * Run the loop for the search to output the results.
+						 * If you want to overload this in a child theme then include a file
+						 * called content-search.php and that will be used instead.
+						 */
+						get_template_part( 'template-parts/content', 'search' );
+					} // End of the loop.
 
-					<?php
-					/**
-					 * Run the loop for the search to output the results.
-					 * If you want to overload this in a child theme then include a file
-					 * called content-search.php and that will be used instead.
-					 */
-					get_template_part( 'template-parts/content', 'search' );
-					?>
+					the_posts_navigation();
 
-				<?php endwhile; ?>
-
-				<?php the_posts_navigation(); ?>
-
-			<?php else : ?>
-
-				<?php get_template_part( 'template-parts/content', 'none' ); ?>
-
-			<?php endif; ?>
+				} else {
+					get_template_part( 'template-parts/content', 'none' );
+				}
+				?>
 
 			</main><!-- #main -->
 		</section><!-- #primary -->
