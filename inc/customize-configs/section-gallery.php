@@ -157,7 +157,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_gallery_source_page',
 	array(
-		'sanitize_callback' => 'absint',
+		'sanitize_callback' => 'onepress_sanitize_number',
 		'default'           => '',
 	)
 );
