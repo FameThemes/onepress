@@ -183,8 +183,8 @@ function onepress_hero_fullscreen_callback( $control ) {
 /**
  * Sanitize select choices
  *
- * @param $input
- * @param null  $setting
+ * @param mixed                $input   The value to sanitize.
+ * @param WP_Customize_Setting $setting WP_Customize_Setting instance.
  *
  * @return string
  */
