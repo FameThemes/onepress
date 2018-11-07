@@ -166,7 +166,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_newsletter_mailchimp',
 	array(
-		'sanitize_callback' => 'esc_url',
+		'sanitize_callback' => 'esc_url_raw',
 		'default'           => '',
 		'transport'         => 'postMessage',
 	)
