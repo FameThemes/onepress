@@ -52,22 +52,22 @@ class Onepress_Dots_Navigation {
 	/**
 	 * Add customize config
 	 *
-	 * @param $wp_customize
-	 * @param $section_id
+	 * @param WP_Customize_Manager $wp_customize The Customizer object.
+	 * @param string               $section_id   The section ID.
 	 */
 	function add_customize( $wp_customize, $section_id ) {
 
 		$wp_customize->add_setting(
 			$this->get_name( '__enable' ),
 			array(
-				'sanitize_callback' => 'onepress_sanitize_text',
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
 				'default'           => false,
 			)
 		);
 		$wp_customize->add_control(
 			$this->get_name( '__enable' ),
 			array(
-				'label'   => __( 'Enable in section navigation', 'onepress' ),
+				'label'   => esc_html__( 'Enable in section navigation', 'onepress' ),
 				'section' => $section_id,
 				'type'    => 'checkbox',
 			)
@@ -76,15 +76,15 @@ class Onepress_Dots_Navigation {
 		$wp_customize->add_setting(
 			$this->get_name( '__enable_label' ),
 			array(
-				'sanitize_callback' => 'onepress_sanitize_text',
+				'sanitize_callback' => 'onepress_sanitize_checkbox',
 				'default'           => 1,
 			)
 		);
 		$wp_customize->add_control(
 			$this->get_name( '__enable_label' ),
 			array(
-				'label'       => __( 'Enable navigation labels', 'onepress' ),
-				'description' => __( 'By default navigation label is section title.', 'onepress' ),
+				'label'       => esc_html__( 'Enable navigation labels', 'onepress' ),
+				'description' => esc_html__( 'By default navigation label is section title.', 'onepress' ),
 				'section'     => $section_id,
 				'type'        => 'checkbox',
 			)
@@ -202,7 +202,7 @@ class Onepress_Dots_Navigation {
 				$wp_customize->add_control(
 					$name,
 					array(
-						'label'   => __( 'Enable in section navigation', 'onepress' ),
+						'label'   => esc_html__( 'Enable in section navigation', 'onepress' ),
 						'section' => $section_id,
 						'type'    => 'checkbox',
 					)
@@ -219,7 +219,7 @@ class Onepress_Dots_Navigation {
 				$wp_customize->add_control(
 					$name . '_inverse',
 					array(
-						'label'   => __( 'Inverse dots color', 'onepress' ),
+						'label'   => esc_html__( 'Inverse dots color', 'onepress' ),
 						'section' => $section_id,
 						'type'    => 'checkbox',
 					)
@@ -236,7 +236,7 @@ class Onepress_Dots_Navigation {
 				$wp_customize->add_control(
 					$name . '_label',
 					array(
-						'label'   => __( 'Custom navigation label', 'onepress' ),
+						'label'   => esc_html__( 'Custom navigation label', 'onepress' ),
 						'section' => $section_id,
 					)
 				);
@@ -270,8 +270,7 @@ class Onepress_Dots_Navigation {
 				if ( ! get_theme_mod( 'onepress_' . $id . '_disable', false )
 					|| ( isset( $args['show_section'] ) && $args['show_section'] )
 				) {
-					$name = $this->get_name( $id );
-					// $enable = get_theme_mod( $name, $args['default'] );
+					$name  = $this->get_name( $id );
 					$el_id = sanitize_text_field( get_theme_mod( 'onepress_' . $id . '_id', $id, false ) );
 					if ( ! $el_id ) {
 						$el_id = $id;
