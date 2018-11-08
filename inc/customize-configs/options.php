@@ -20,9 +20,7 @@ $wp_customize->add_panel(
 
 if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress < 4.7.
 
-	/*
-	 Custom CSS Settings
-	----------------------------------------------------------------------*/
+	// Add Custom CSS section
 	$wp_customize->add_section(
 		'onepress_custom_code',
 		array(
@@ -31,7 +29,7 @@ if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress 
 		)
 	);
 
-
+	// Custom CSS Setting
 	$wp_customize->add_setting(
 		'onepress_custom_css',
 		array(
@@ -41,6 +39,7 @@ if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress 
 		)
 	);
 
+	// Custom CSS Setting
 	$wp_customize->add_control(
 		'onepress_custom_css',
 		array(
