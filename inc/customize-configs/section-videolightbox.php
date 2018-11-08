@@ -48,7 +48,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_videolightbox_id',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
+		'sanitize_callback' => 'sanitize_key',
 		'default'           => 'videolightbox',
 	)
 );

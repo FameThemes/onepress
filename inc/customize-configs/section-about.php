@@ -31,7 +31,7 @@ $wp_customize->add_setting(
 	'onepress_about_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 	)
 );
 $wp_customize->add_control(
@@ -48,7 +48,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_about_id',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
+		'sanitize_callback' => 'sanitize_key',
 		'default'           => esc_html__( 'about', 'onepress' ),
 	)
 );
@@ -120,7 +120,7 @@ if ( class_exists( 'OnePress_Plus' ) ) {
 	$wp_customize->add_setting(
 		'onepress_about_layout',
 		array(
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => 'onepress_sanitize_select',
 			'default'           => 3,
 		)
 	);
@@ -201,7 +201,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_about_content_source',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'content',
 	)
 );
