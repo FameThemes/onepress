@@ -21,9 +21,8 @@ $wp_customize->add_section(
 $wp_customize->add_setting(
 	'onepress_layout',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'right-sidebar',
-		// 'transport'           => 'postMessage'
 	)
 );
 
@@ -68,7 +67,7 @@ $wp_customize->add_setting(
 	'onepress_btt_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 		'transport'         => 'postMessage',
 	)
 );
@@ -89,7 +88,7 @@ $wp_customize->add_setting(
 	'onepress_disable_g_font',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 		'transport'         => 'postMessage',
 	)
 );
