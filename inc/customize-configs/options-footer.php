@@ -23,7 +23,7 @@ $wp_customize->add_setting(
 	'onepress_social_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '1',
+		'default'           => 1,
 		'transport'         => 'postMessage',
 	)
 );
@@ -83,7 +83,6 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_social_profiles',
 	array(
-		// 'default' => '',
 		'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 		'transport'         => 'postMessage',
 	)
@@ -126,7 +125,7 @@ $wp_customize->add_setting(
 	'onepress_newsletter_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '1',
+		'default'           => 1,
 		'transport'         => 'postMessage',
 	)
 );
@@ -178,7 +177,7 @@ $wp_customize->add_control(
 	array(
 		'label'       => esc_html__( 'MailChimp Action URL', 'onepress' ),
 		'section'     => 'onepres_footer_top',
-		'description' => __( 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>', 'onepress' ),
+		'description' => wp_kses_post( __( 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>', 'onepress' ) ),
 	)
 );
 
@@ -287,7 +286,7 @@ for ( $i = 1; $i <= 4; $i ++ ) {
 	$wp_customize->add_control(
 		'footer_custom_' . $i . '_columns',
 		array(
-			'label'       => 1 == $i ? __( 'Custom footer 1 column width', 'onepress' ) : sprintf( __( 'Custom footer %s columns width', 'onepress' ), $i ),
+			'label'       => 1 == $i ? esc_html__( 'Custom footer 1 column width', 'onepress' ) : sprintf( esc_html__( 'Custom footer %s columns width', 'onepress' ), $i ),
 			'section'     => 'onepress_footer',
 			'description' => esc_html__( 'Enter int numbers and sum of them must smaller or equal 12, separated by "+"', 'onepress' ),
 		)
