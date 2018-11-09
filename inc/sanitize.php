@@ -268,3 +268,20 @@ function onepress_validate_posint( $validity, $value ) {
 	}
 	return $validity;
 }
+
+/**
+ * Validate email.
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $value    Value of the setting.
+ * @return WP_error|true
+ */
+function onepress_validate_email( $validity, $value ) {
+	if ( '' === ( trim( $value ) ) ) {
+		return $validity;
+	}
+	if ( false === is_email( $value ) ) {
+		$validity->add( 'nae', 'Not a valid email address.' );
+	}
+	return $validity;
+}
