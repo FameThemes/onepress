@@ -237,3 +237,34 @@ function onepress_gallery_source_validate( $validity, $value ) {
 	}
 	return $validity;
 }
+
+/**
+ * Sanizite positive integer.
+ *
+ * @param mixed $value Value of the setting.
+ * @return int|void A positve integer.
+ */
+function onepress_sanitize_posint( $value ) {
+	return ! empty( absint( $value ) ) ? absint( $value ) : '';
+}
+
+/**
+ * Validate positive integer.
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $value    Value of the setting.
+ * @return WP_error|true
+ */
+function onepress_validate_posint( $validity, $value ) {
+	if ( '' === ( trim( $value ) ) ) {
+		return $validity;
+	}
+	if ( is_numeric( $value ) ) {
+		if ( ! filter_var( $value, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) ) {
+			$validity->add( 'napi', 'Not a positive integer.' );
+		}
+	} else {
+		$validity->add( 'nan', 'Not a number.' );
+	}
+	return $validity;
+}
