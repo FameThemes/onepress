@@ -24,7 +24,7 @@ function onepress_add_upsell_for_section( $wp_customize, $section_id ) {
 			new OnePress_Misc_Control(
 				$wp_customize, $name,
 				array(
-					'type'        => 'custom_message',
+					'type'        => 'notice-info',
 					'section'     => $section_id,
 					'description' => __( '<h4 class="customizer-group-heading-message">Advanced Section Styling</h4><p class="customizer-group-heading-message">Check out the <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version for full control over the section styling which includes background color, image, video, parallax effect, custom style and more ...</p>', 'onepress' ),
 				)
