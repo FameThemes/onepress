@@ -141,26 +141,6 @@ $wp_customize->add_section(
 	)
 );
 
-// Contact Content: Contact form guide setting.
-$wp_customize->add_setting(
-	'onepress_contact_cf7_guide',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-	)
-);
-
-// Contact Content: Contact from guide control.
-$wp_customize->add_control(
-	new OnePress_Misc_Control(
-		$wp_customize, 'onepress_contact_cf7_guide',
-		array(
-			'section'     => 'onepress_contact_content',
-			'type'        => 'custom_message',
-			'description' => wp_kses_post( 'Paste your form shortcode from contact form plugin here, e.g <code>[wpforms  id="123"]</code>', 'onepress' ),
-		)
-	)
-);
-
 // Contact Content: Contact from shortcode setting.
 $wp_customize->add_setting(
 	'onepress_contact_cf7',
@@ -176,7 +156,7 @@ $wp_customize->add_control(
 	array(
 		'label'       => esc_html__( 'Contact Form Shortcode.', 'onepress' ),
 		'section'     => 'onepress_contact_content',
-		'description' => '',
+		'description' => wp_kses_post( 'Paste your form shortcode from contact form plugin here, e.g <code>[wpforms  id="123"]</code>', 'onepress' ),
 	)
 );
 
