@@ -28,94 +28,20 @@ $wp_customize->add_section(
 	)
 );
 
-// Section Settings: Show Content.
-$wp_customize->add_setting(
-	'onepress_features_disable',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control(
-	'onepress_features_disable',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Hide this section?', 'onepress' ),
-		'section'     => 'onepress_features_settings',
-		'description' => esc_html__( 'Check this box to hide this section.', 'onepress' ),
-	)
-);
+// Section Settings: Show Content setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'disable' );
 
-// Section Settings: Section ID.
-$wp_customize->add_setting(
-	'onepress_features_id',
-	array(
-		'sanitize_callback' => 'sanitize_key',
-		'default'           => esc_html__( 'features', 'onepress' ),
-	)
-);
-$wp_customize->add_control(
-	'onepress_features_id',
-	array(
-		'label'       => esc_html__( 'Section ID:', 'onepress' ),
-		'section'     => 'onepress_features_settings',
-		'description' => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' ),
-	)
-);
+// Section Settings: Section ID setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'id' );
 
-// Section Settings: Title.
-$wp_customize->add_setting(
-	'onepress_features_title',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'Features', 'onepress' ),
-	)
-);
-$wp_customize->add_control(
-	'onepress_features_title',
-	array(
-		'label'       => esc_html__( 'Section Title', 'onepress' ),
-		'section'     => 'onepress_features_settings',
-		'description' => '',
-	)
-);
+// Section Settings: Title setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'title' );
 
-// Section Settings: Sub Title.
-$wp_customize->add_setting(
-	'onepress_features_subtitle',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'Section subtitle', 'onepress' ),
-	)
-);
-$wp_customize->add_control(
-	'onepress_features_subtitle',
-	array(
-		'label'       => esc_html__( 'Section Subtitle', 'onepress' ),
-		'section'     => 'onepress_features_settings',
-		'description' => '',
-	)
-);
+// Section Settings: Subtitle setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'subtitle' );
 
-// Section Settings: Description.
-$wp_customize->add_setting(
-	'onepress_features_desc',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Editor_Custom_Control(
-		$wp_customize,
-		'onepress_features_desc',
-		array(
-			'label'       => esc_html__( 'Section Description', 'onepress' ),
-			'section'     => 'onepress_features_settings',
-			'description' => '',
-		)
-	)
-);
+// Section Settings: Section description setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'desc' );
 
 // Section Settings: Features layout.
 $wp_customize->add_setting(
@@ -125,7 +51,6 @@ $wp_customize->add_setting(
 		'default'           => '3',
 	)
 );
-
 $wp_customize->add_control(
 	'onepress_features_layout',
 	array(
@@ -141,7 +66,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Add upsell setting & control.
+// Section Settings: Upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_features_settings' );
 
 // Add Section Content section.
@@ -212,7 +137,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Section Content: About content source.
+// Section Content: Content source.
 $wp_customize->add_setting(
 	'onepress_about_content_source',
 	array(
