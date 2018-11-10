@@ -326,3 +326,23 @@ function onepress_validate_gallery_shortcode( $validity, $page_id ) {
 	}
 	return $validity;
 }
+
+/**
+ * Validate non-negative integer.
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $value    Value of the setting.
+ * @return WP_error|true
+ */
+function onepress_validate_absint( $validity, $value ) {
+	if ( '' === ( trim( $value ) ) ) {
+		$validity->add( 'required', esc_html__( 'Required', 'onepress' ) );
+	} elseif ( is_numeric( $value ) ) {
+		if ( false === filter_var( $value, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 0 ) ) ) ) {
+			$validity->add( 'nanni', esc_html__( 'Must be larger than or equal to 0.', 'onepress' ) );
+		}
+	} else {
+		$validity->add( 'nan', esc_html__( 'Not a number.', 'onepress' ) );
+	}
+	return $validity;
+}
