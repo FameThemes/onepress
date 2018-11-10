@@ -261,10 +261,10 @@ function onepress_validate_posint( $validity, $value ) {
 	}
 	if ( is_numeric( $value ) ) {
 		if ( ! filter_var( $value, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) ) {
-			$validity->add( 'napi', 'Not a positive integer.' );
+			$validity->add( 'napi', esc_html__( 'Not a positive integer.', 'onepress' ) );
 		}
 	} else {
-		$validity->add( 'nan', 'Not a number.' );
+		$validity->add( 'nan', esc_html__( 'Not a number.', 'onepress' ) );
 	}
 	return $validity;
 }
@@ -281,7 +281,7 @@ function onepress_validate_email( $validity, $value ) {
 		return $validity;
 	}
 	if ( false === is_email( $value ) ) {
-		$validity->add( 'nae', 'Not a valid email address.' );
+		$validity->add( 'nae', esc_html__( 'Not a valid email address.', 'onepress' ) );
 	}
 	return $validity;
 }
