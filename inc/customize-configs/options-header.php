@@ -22,7 +22,7 @@ $wp_customize->add_section(
 $wp_customize->add_setting(
 	'onepress_header_width',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'contained',
 		'transport'         => 'postMessage',
 	)
@@ -46,7 +46,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_header_position',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'top',
 		'transport'         => 'postMessage',
 		'active_callback'   => 'onepress_showon_frontpage',
@@ -72,7 +72,7 @@ $wp_customize->add_setting(
 	'onepress_sticky_header_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 		'transport'         => 'postMessage',
 	)
 );
@@ -93,7 +93,7 @@ $wp_customize->add_setting(
 	'onepress_vertical_align_menu',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 	)
 );
 
@@ -288,7 +288,7 @@ $wp_customize->add_setting(
 	'onepress_header_transparent',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 		'active_callback'   => 'onepress_showon_frontpage',
 		'transport'         => 'postMessage',
 	)
@@ -309,7 +309,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_transparent_logo',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'esc_url_raw',
 		'default'           => '',
 		'transport'         => 'postMessage',
 	)
@@ -332,7 +332,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_transparent_retina_logo',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'esc_url_raw',
 		'default'           => '',
 		'transport'         => 'postMessage',
 	)
@@ -355,7 +355,8 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_transparent_logo_height',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_posint',
+		'validate_callback' => 'onepress_validate_posint',
 		'default'           => '',
 	)
 );
