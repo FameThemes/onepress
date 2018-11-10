@@ -17,7 +17,7 @@ $wp_customize->add_panel(
 	)
 );
 
-// Add About settings section.
+// Add Section Settings section.
 $wp_customize->add_section(
 	'onepress_about_settings',
 	array(
@@ -28,107 +28,23 @@ $wp_customize->add_section(
 	)
 );
 
-// About Settings: Show Content setting.
-$wp_customize->add_setting(
-	'onepress_about_disable',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => 0,
-	)
-);
+// Section Settings: Show Content setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'disable' );
 
-// About Settings: Show Content control.
-$wp_customize->add_control(
-	'onepress_about_disable',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Hide this section?', 'onepress' ),
-		'section'     => 'onepress_about_settings',
-		'description' => esc_html__( 'Check this box to hide this section.', 'onepress' ),
-	)
-);
+// Section Settings: Section ID setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'id' );
 
-// About Settings: Section ID setting.
-$wp_customize->add_setting(
-	'onepress_about_id',
-	array(
-		'sanitize_callback' => 'sanitize_key',
-		'default'           => esc_html__( 'about', 'onepress' ),
-	)
-);
+// Section Settings: Title setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'title' );
 
-// About Settings: Section ID control.
-$wp_customize->add_control(
-	'onepress_about_id',
-	array(
-		'label'       => esc_html__( 'Section ID:', 'onepress' ),
-		'section'     => 'onepress_about_settings',
-		'description' => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' ),
-	)
-);
+// Section Settings: Subtitle setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'subtitle' );
 
-// About Settings: Title setting.
-$wp_customize->add_setting(
-	'onepress_about_title',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'About Us', 'onepress' ),
-	)
-);
-
-// About Settings: Title control.
-$wp_customize->add_control(
-	'onepress_about_title',
-	array(
-		'label'       => esc_html__( 'Section Title', 'onepress' ),
-		'section'     => 'onepress_about_settings',
-		'description' => '',
-	)
-);
-
-// About Settings: Sub Title setting.
-$wp_customize->add_setting(
-	'onepress_about_subtitle',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'Section subtitle', 'onepress' ),
-	)
-);
-
-// About Settings: Sub Title control.
-$wp_customize->add_control(
-	'onepress_about_subtitle',
-	array(
-		'label'       => esc_html__( 'Section Subtitle', 'onepress' ),
-		'section'     => 'onepress_about_settings',
-		'description' => '',
-	)
-);
-
-// About Settings: Description setting.
-$wp_customize->add_setting(
-	'onepress_about_desc',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => '',
-	)
-);
-
-// About Settings: Description control.
-$wp_customize->add_control(
-	new OnePress_Editor_Custom_Control(
-		$wp_customize,
-		'onepress_about_desc',
-		array(
-			'label'       => esc_html__( 'Section Description', 'onepress' ),
-			'section'     => 'onepress_about_settings',
-			'description' => '',
-		)
-	)
-);
+// Section Settings: Section description setting.
+onepress_add_section_main_setting( $wp_customize, 'about', 'desc' );
 
 if ( class_exists( 'OnePress_Plus' ) ) {
-	// About Settings: Layout setting.
+	// Section Settings: Layout setting.
 	$wp_customize->add_setting(
 		'onepress_about_layout',
 		array(
@@ -137,7 +53,7 @@ if ( class_exists( 'OnePress_Plus' ) ) {
 		)
 	);
 
-	// About Settings: Layout control.
+	// Section Settings: Layout control.
 	$wp_customize->add_control(
 		'onepress_about_layout',
 		array(
@@ -155,10 +71,10 @@ if ( class_exists( 'OnePress_Plus' ) ) {
 	);
 }
 
-// Add upsell setting & control.
+// Section Settings: Upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_about_settings' );
 
-// Add About content section.
+// Add Section Content section.
 $wp_customize->add_section(
 	'onepress_about_content',
 	array(
@@ -169,7 +85,7 @@ $wp_customize->add_section(
 	)
 );
 
-// About content: Items setting.
+// Section Content: Items setting.
 $wp_customize->add_setting(
 	'onepress_about_boxes',
 	array(
@@ -178,7 +94,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// About content: Items control.
+// Section Content: Items control.
 $wp_customize->add_control(
 	new Onepress_Customize_Repeatable_Control(
 		$wp_customize,
@@ -211,7 +127,7 @@ $wp_customize->add_control(
 	)
 );
 
-// About content: Content source setting.
+// Section Content: Content source setting.
 $wp_customize->add_setting(
 	'onepress_about_content_source',
 	array(
@@ -220,7 +136,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// About content: Content source control.
+// Section Content: Content source control.
 $wp_customize->add_control(
 	'onepress_about_content_source',
 	array(
