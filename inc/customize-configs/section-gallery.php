@@ -6,6 +6,7 @@
  * @since 1.2.6
  */
 
+// Add settings panel.
 $wp_customize->add_panel(
 	'onepress_gallery',
 	array(
@@ -16,6 +17,7 @@ $wp_customize->add_panel(
 	)
 );
 
+// Add Section Settings section.
 $wp_customize->add_section(
 	'onepress_gallery_settings',
 	array(
@@ -26,7 +28,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Show Content
+// Section Settings: Show Content.
 $wp_customize->add_setting(
 	'onepress_gallery_disable',
 	array(
@@ -44,7 +46,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Section ID
+// Section Settings: Section ID.
 $wp_customize->add_setting(
 	'onepress_gallery_id',
 	array(
@@ -61,7 +63,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Title
+// Section Settings: Title.
 $wp_customize->add_setting(
 	'onepress_gallery_title',
 	array(
@@ -78,7 +80,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Sub Title
+// Section Settings: Sub Title.
 $wp_customize->add_setting(
 	'onepress_gallery_subtitle',
 	array(
@@ -95,7 +97,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Description
+// Section Settings: Description.
 $wp_customize->add_setting(
 	'onepress_gallery_desc',
 	array(
@@ -115,10 +117,10 @@ $wp_customize->add_control(
 	)
 );
 
-
+// Add upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_gallery_settings' );
 
-
+// Add Section Content section.
 $wp_customize->add_section(
 	'onepress_gallery_content',
 	array(
@@ -128,7 +130,8 @@ $wp_customize->add_section(
 		'panel'       => 'onepress_gallery',
 	)
 );
-// Gallery Source
+
+// Section Content: Gallery Source.
 $wp_customize->add_setting(
 	'onepress_gallery_source',
 	array(
@@ -153,7 +156,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Source page settings
+// Section Content: Source page.
 $wp_customize->add_setting(
 	'onepress_gallery_source_page',
 	array(
@@ -173,8 +176,7 @@ $wp_customize->add_control(
 	)
 );
 
-
-// Gallery Layout
+// Section Content: Gallery Layout.
 $wp_customize->add_setting(
 	'onepress_gallery_layout',
 	array(
@@ -196,7 +198,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Gallery Display
+// Section Content: Gallery Display.
 $wp_customize->add_setting(
 	'onepress_gallery_display',
 	array(
@@ -221,7 +223,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Gallery grid spacing
+// Section Content: Gallery grid spacing.
 $wp_customize->add_setting(
 	'onepress_g_spacing',
 	array(
@@ -239,7 +241,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Gallery grid spacing
+// Section Content: Row height.
 $wp_customize->add_setting(
 	'onepress_g_row_height',
 	array(
@@ -257,7 +259,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Gallery grid gird col
+// Section Content: Number of grid columns.
 $wp_customize->add_setting(
 	'onepress_g_col',
 	array(
@@ -284,7 +286,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Gallery max number
+// Section Content: Max. number of gallery items.
 $wp_customize->add_setting(
 	'onepress_g_number',
 	array(
@@ -300,7 +302,8 @@ $wp_customize->add_control(
 		'priority' => 65,
 	)
 );
-// Gallery grid spacing
+
+// Section Content: Enable lightbox.
 $wp_customize->add_setting(
 	'onepress_g_lightbox',
 	array(
@@ -318,7 +321,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Gallery readmore link
+// Section Content: Read more link.
 $wp_customize->add_setting(
 	'onepress_g_readmore_link',
 	array(
@@ -336,6 +339,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Section Content: Read more text.
 $wp_customize->add_setting(
 	'onepress_g_readmore_text',
 	array(
