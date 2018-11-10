@@ -190,14 +190,14 @@ function onepress_hero_fullscreen_callback( $control ) {
  */
 function onepress_sanitize_select( $input, $setting = null ) {
 
-	// input must be a slug: lowercase alphanumeric characters, dashes and underscores are allowed only
+	// Input must be a slug: lowercase alphanumeric characters, dashes and underscores are allowed only.
 	$input = sanitize_key( $input );
 
-	// get the list of possible select options
+	// Get the list of possible select options.
 	if ( $setting ) {
 		$choices = $setting->manager->get_control( $setting->id )->choices;
 
-		// return input if valid or return default option
+		// Return input if valid or return default option.
 		return ( array_key_exists( $input, $choices ) ? $input : $setting->default );
 	} else {
 		return $input;
@@ -306,6 +306,23 @@ function onepress_validate_shortcode( $validity, $value ) {
 		if ( ! shortcode_exists( $shortcode[0] ) ) {
 			$validity->add( 'shortcode_existence', esc_html__( 'Shortcode does not exist.', 'onepress' ) );
 		}
+	}
+	return $validity;
+}
+
+/**
+ * Validate gallery shortcode.
+ *
+ * Validates that the page content contains a gallery shortcode.
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $page_id  The ID of the selected page.
+ * @return WP_error|true
+ */
+function onepress_validate_gallery_shortcode( $validity, $page_id ) {
+	$page = get_post( $page_id );
+	if ( ! has_shortcode( $page->post_content, 'gallery' ) ) {
+		$validity->add( 'shortcode_existence', esc_html__( 'Page does not contain a gallery shortcode.', 'onepress' ) );
 	}
 	return $validity;
 }
