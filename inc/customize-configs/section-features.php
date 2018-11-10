@@ -136,25 +136,3 @@ $wp_customize->add_control(
 		)
 	)
 );
-
-// Section Content: Content source.
-$wp_customize->add_setting(
-	'onepress_about_content_source',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_select',
-		'default'           => 'content',
-	)
-);
-$wp_customize->add_control(
-	'onepress_about_content_source',
-	array(
-		'label'       => esc_html__( 'Item content source', 'onepress' ),
-		'section'     => 'onepress_about_content',
-		'description' => '',
-		'type'        => 'select',
-		'choices'     => array(
-			'content' => esc_html__( 'Full Page Content', 'onepress' ),
-			'excerpt' => esc_html__( 'Page Excerpt', 'onepress' ),
-		),
-	)
-);
