@@ -21,7 +21,8 @@ $wp_customize->add_section(
 $wp_customize->add_setting(
 	'onepress_menu_item_padding',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_posint',
+		'validate_callback' => 'onepress_validate_posint',
 		'default'           => '',
 		'transport'         => 'postMessage',
 	)
