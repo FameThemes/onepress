@@ -1,25 +1,50 @@
 <?php
+/**
+ * Custom Customizer Control for displaying a HTML dropdown list of categories.
+ *
+ * @package OnePress\Customizer
+ * @since 2.0.0
+ */
 
 /**
- * Class OnPress_Dropdown_Category_Control
+ * Class OnePress_Dropdown_Category_Control
+ *
  * @since 2.0.0
+ *
+ * @see WP_Customize_Control
  */
 class OnePress_Category_Control extends WP_Customize_Control {
 
+	/**
+	 * Control type.
+	 *
+	 * @since 2.0.0
+	 * @var string
+	 */
 	public $type = 'dropdown-category';
 
-	protected $dropdown_args = false;
+	/**
+	 * Arguments for the dropdown list of categories.
+	 *
+	 * @var array
+	 */
+	protected $dropdown_args = array();
 
+	/**
+	 * Render the control's content
+	 *
+	 * @since 2.0.0
+	 */
 	protected function render_content() {
-		?><label><?php
+		echo '<label>';
 
-		if ( ! empty( $this->label ) ) :
-			?><span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span><?php
-		endif;
+		if ( ! empty( $this->label ) ) {
+			echo '<span class="customize-control-title">' . esc_html( $this->label ) . '</span>';
+		}
 
-		if ( ! empty( $this->description ) ) :
-			?><span class="description customize-control-description"><?php echo $this->description; ?></span><?php
-		endif;
+		if ( ! empty( $this->description ) ) {
+			echo '<span class="description customize-control-description">' . wp_kses_post( $this->description ) . '</span>';
+		}
 
 		$dropdown_args = wp_parse_args( $this->dropdown_args, array(
 			'taxonomy'          => 'category',
@@ -44,7 +69,6 @@ class OnePress_Category_Control extends WP_Customize_Control {
 		$dropdown = str_replace( '<select', '<select ' . $this->get_link(), $dropdown );
 		echo $dropdown;
 
-		?></label><?php
-
+		echo '</label>';
 	}
 }
