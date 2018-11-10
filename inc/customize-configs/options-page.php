@@ -22,7 +22,7 @@ $wp_customize->add_setting(
 	'onepress_page_title_bar_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 	)
 );
 
@@ -41,7 +41,8 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_page_cover_pd_top',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_posint',
+		'validate_callback' => 'onepress_validate_posint',
 		'default'           => '',
 		'transport'         => 'postMessage',
 	)
@@ -61,7 +62,8 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_page_cover_pd_bottom',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_posint',
+		'validate_callback' => 'onepress_validate_posint',
 		'default'           => '',
 		'transport'         => 'postMessage',
 	)
@@ -125,7 +127,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_page_cover_align',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'center',
 		'transport'         => 'postMessage',
 	)
