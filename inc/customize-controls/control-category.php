@@ -26,6 +26,7 @@ class OnePress_Category_Control extends WP_Customize_Control {
 	/**
 	 * Arguments for the dropdown list of categories.
 	 *
+	 * @since 2.0.0
 	 * @var array
 	 */
 	protected $dropdown_args = array();
