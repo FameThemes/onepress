@@ -6,6 +6,7 @@
  * @since 1.1.5
  */
 
+// Add settings panel.
 $wp_customize->add_panel(
 	'onepress_features',
 	array(
@@ -16,6 +17,7 @@ $wp_customize->add_panel(
 	)
 );
 
+// Add Section Settings section.
 $wp_customize->add_section(
 	'onepress_features_settings',
 	array(
@@ -26,7 +28,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Show Content
+// Section Settings: Show Content.
 $wp_customize->add_setting(
 	'onepress_features_disable',
 	array(
@@ -44,7 +46,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Section ID
+// Section Settings: Section ID.
 $wp_customize->add_setting(
 	'onepress_features_id',
 	array(
@@ -61,7 +63,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Title
+// Section Settings: Title.
 $wp_customize->add_setting(
 	'onepress_features_title',
 	array(
@@ -78,7 +80,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Sub Title
+// Section Settings: Sub Title.
 $wp_customize->add_setting(
 	'onepress_features_subtitle',
 	array(
@@ -95,7 +97,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Description
+// Section Settings: Description.
 $wp_customize->add_setting(
 	'onepress_features_desc',
 	array(
@@ -115,11 +117,11 @@ $wp_customize->add_control(
 	)
 );
 
-// Features layout
+// Section Settings: Features layout.
 $wp_customize->add_setting(
 	'onepress_features_layout',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => '3',
 	)
 );
@@ -139,10 +141,10 @@ $wp_customize->add_control(
 	)
 );
 
-
+// Add upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_features_settings' );
 
-
+// Add Section Content section.
 $wp_customize->add_section(
 	'onepress_features_content',
 	array(
@@ -153,16 +155,14 @@ $wp_customize->add_section(
 	)
 );
 
-// Features content
+// Section Content: Features content.
 $wp_customize->add_setting(
 	'onepress_features_boxes',
 	array(
-		// 'default' => '',
 		'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 		'transport'         => 'refresh',
 	)
 );
-
 $wp_customize->add_control(
 	new Onepress_Customize_Repeatable_Control(
 		$wp_customize,
@@ -172,7 +172,7 @@ $wp_customize->add_control(
 			'description'   => '',
 			'section'       => 'onepress_features_content',
 			'live_title_id' => 'title', // apply for unput text and textarea only
-			'title_format'  => esc_html__( '[live_title]', 'onepress' ), // [live_title]
+			'title_format'  => esc_html__( '[live_title]', 'onepress' ),
 			'max_item'      => 4, // Maximum number of addable items in free version.
 			'limited_msg'   => wp_kses_post( __( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
 			'fields'        => array(
@@ -212,15 +212,14 @@ $wp_customize->add_control(
 	)
 );
 
-// About content source
+// Section Content: About content source.
 $wp_customize->add_setting(
 	'onepress_about_content_source',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'content',
 	)
 );
-
 $wp_customize->add_control(
 	'onepress_about_content_source',
 	array(
