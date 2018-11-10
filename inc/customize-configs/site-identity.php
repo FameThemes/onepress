@@ -45,7 +45,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_retina_logo',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'esc_raw_url',
 		'default'           => '',
 		'transport'         => 'postMessage',
 	)
@@ -66,7 +66,8 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_logo_height',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_posint',
+		'validate_callback' => 'onepress_validate_posint',
 		'default'           => '',
 		'transport'         => 'postMessage',
 	)
