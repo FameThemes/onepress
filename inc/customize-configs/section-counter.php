@@ -6,6 +6,7 @@
  * @since 1.0.4
  */
 
+// Add settings panel.
 $wp_customize->add_panel(
 	'onepress_counter',
 	array(
@@ -16,6 +17,7 @@ $wp_customize->add_panel(
 	)
 );
 
+// Add Section Settings section.
 $wp_customize->add_section(
 	'onepress_counter_settings',
 	array(
@@ -25,14 +27,17 @@ $wp_customize->add_section(
 		'panel'       => 'onepress_counter',
 	)
 );
-// Show Content
+
+// Section Settings: Show Content setting.
 $wp_customize->add_setting(
 	'onepress_counter_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 	)
 );
+
+// Section Settings: Show Content control.
 $wp_customize->add_control(
 	'onepress_counter_disable',
 	array(
@@ -43,7 +48,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Section ID
+// Section Settings: Section ID setting.
 $wp_customize->add_setting(
 	'onepress_counter_id',
 	array(
@@ -51,6 +56,8 @@ $wp_customize->add_setting(
 		'default'           => esc_html__( 'counter', 'onepress' ),
 	)
 );
+
+// Section Settings: Section ID control.
 $wp_customize->add_control(
 	'onepress_counter_id',
 	array(
@@ -60,7 +67,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Title
+// Section Settings: Title setting.
 $wp_customize->add_setting(
 	'onepress_counter_title',
 	array(
@@ -68,6 +75,8 @@ $wp_customize->add_setting(
 		'default'           => esc_html__( 'Our Numbers', 'onepress' ),
 	)
 );
+
+// Section Settings: Title control.
 $wp_customize->add_control(
 	'onepress_counter_title',
 	array(
@@ -77,7 +86,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Sub Title
+// Section Settings: Sub Title setting.
 $wp_customize->add_setting(
 	'onepress_counter_subtitle',
 	array(
@@ -85,6 +94,8 @@ $wp_customize->add_setting(
 		'default'           => esc_html__( 'Section subtitle', 'onepress' ),
 	)
 );
+
+// Section Settings: Sub Title control.
 $wp_customize->add_control(
 	'onepress_counter_subtitle',
 	array(
@@ -94,7 +105,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Description
+// Section Settings: Description setting.
 $wp_customize->add_setting(
 	'onepress_counter_desc',
 	array(
@@ -102,6 +113,8 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
+
+// Section Settings: Description control.
 $wp_customize->add_control(
 	new OnePress_Editor_Custom_Control(
 		$wp_customize,
@@ -114,8 +127,10 @@ $wp_customize->add_control(
 	)
 );
 
+// Add upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_counter_settings' );
 
+// Add Section Content section.
 $wp_customize->add_section(
 	'onepress_counter_content',
 	array(
@@ -126,7 +141,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Order & Styling
+// Section Content: Order & Styling setting.
 $wp_customize->add_setting(
 	'onepress_counter_boxes',
 	array(
@@ -135,7 +150,7 @@ $wp_customize->add_setting(
 	)
 );
 
-
+// Section Content: Order & Styling control.
 $wp_customize->add_control(
 	new Onepress_Customize_Repeatable_Control(
 		$wp_customize,
@@ -145,7 +160,7 @@ $wp_customize->add_control(
 			'description'   => '',
 			'section'       => 'onepress_counter_content',
 			'live_title_id' => 'title', // apply for unput text and textarea only
-			'title_format'  => esc_html__( '[live_title]', 'onepress' ), // [live_title]
+			'title_format'  => esc_html__( '[live_title]', 'onepress' ),
 			'max_item'      => 4, // Maximum number of addable items in free version.
 			'limited_msg'   => wp_kses_post( __( 'Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> to be able to add more items and unlock other premium features!', 'onepress' ) ),
 			'fields'        => array(
