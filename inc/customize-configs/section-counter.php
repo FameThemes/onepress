@@ -29,105 +29,21 @@ $wp_customize->add_section(
 );
 
 // Section Settings: Show Content setting.
-$wp_customize->add_setting(
-	'onepress_counter_disable',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => 0,
-	)
-);
-
-// Section Settings: Show Content control.
-$wp_customize->add_control(
-	'onepress_counter_disable',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Hide this section?', 'onepress' ),
-		'section'     => 'onepress_counter_settings',
-		'description' => esc_html__( 'Check this box to hide this section.', 'onepress' ),
-	)
-);
+onepress_add_section_main_setting( $wp_customize, 'counter', 'disable' );
 
 // Section Settings: Section ID setting.
-$wp_customize->add_setting(
-	'onepress_counter_id',
-	array(
-		'sanitize_callback' => 'sanitize_key',
-		'default'           => esc_html__( 'counter', 'onepress' ),
-	)
-);
-
-// Section Settings: Section ID control.
-$wp_customize->add_control(
-	'onepress_counter_id',
-	array(
-		'label'       => esc_html__( 'Section ID:', 'onepress' ),
-		'section'     => 'onepress_counter_settings',
-		'description' => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' ),
-	)
-);
+onepress_add_section_main_setting( $wp_customize, 'counter', 'id' );
 
 // Section Settings: Title setting.
-$wp_customize->add_setting(
-	'onepress_counter_title',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'Our Numbers', 'onepress' ),
-	)
-);
+onepress_add_section_main_setting( $wp_customize, 'counter', 'title' );
 
-// Section Settings: Title control.
-$wp_customize->add_control(
-	'onepress_counter_title',
-	array(
-		'label'       => esc_html__( 'Section Title', 'onepress' ),
-		'section'     => 'onepress_counter_settings',
-		'description' => '',
-	)
-);
+// Section Settings: Subtitle setting.
+onepress_add_section_main_setting( $wp_customize, 'counter', 'subtitle' );
 
-// Section Settings: Sub Title setting.
-$wp_customize->add_setting(
-	'onepress_counter_subtitle',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'Section subtitle', 'onepress' ),
-	)
-);
+// Section Settings: Section description setting.
+onepress_add_section_main_setting( $wp_customize, 'counter', 'desc' );
 
-// Section Settings: Sub Title control.
-$wp_customize->add_control(
-	'onepress_counter_subtitle',
-	array(
-		'label'       => esc_html__( 'Section Subtitle', 'onepress' ),
-		'section'     => 'onepress_counter_settings',
-		'description' => '',
-	)
-);
-
-// Section Settings: Description setting.
-$wp_customize->add_setting(
-	'onepress_counter_desc',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => '',
-	)
-);
-
-// Section Settings: Description control.
-$wp_customize->add_control(
-	new OnePress_Editor_Custom_Control(
-		$wp_customize,
-		'onepress_counter_desc',
-		array(
-			'label'       => esc_html__( 'Section Description', 'onepress' ),
-			'section'     => 'onepress_counter_settings',
-			'description' => '',
-		)
-	)
-);
-
-// Add upsell setting & control.
+// Section Settings: Upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_counter_settings' );
 
 // Add Section Content section.
