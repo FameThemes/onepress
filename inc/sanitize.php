@@ -285,3 +285,27 @@ function onepress_validate_email( $validity, $value ) {
 	}
 	return $validity;
 }
+
+/**
+ * Validate shortcode.
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $value    Value of the setting.
+ * @return WP_error|true
+ */
+function onepress_validate_shortcode( $validity, $value ) {
+	$value = trim( $value );
+
+	if ( '' === ( trim( $value ) ) ) {
+		return $validity;
+	}
+	if ( '[' !== $value[0] || ']' !== substr( $value, -1 ) ) {
+		$validity->add( 'nasc', esc_html__( 'Not a valid shortcode.', 'onepress' ) );
+	} else {
+		$shortcode = explode( ' ', str_replace( array( '[', ']' ), '', $value ) );
+		if ( ! shortcode_exists( $shortcode[0] ) ) {
+			$validity->add( 'shortcode_existence', esc_html__( 'Shortcode does not exist.', 'onepress' ) );
+		}
+	}
+	return $validity;
+}
