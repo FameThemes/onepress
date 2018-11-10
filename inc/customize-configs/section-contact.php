@@ -28,109 +28,25 @@ $wp_customize->add_section(
 	)
 );
 
-// Contact Settings: Show Content setting.
-$wp_customize->add_setting(
-	'onepress_contact_disable',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => 0,
-	)
-);
+// Section Settings: Show Content setting.
+onepress_add_section_main_setting( $wp_customize, 'contact', 'disable' );
 
-// Contact Settings: Show Content control.
-$wp_customize->add_control(
-	'onepress_contact_disable',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Hide this section?', 'onepress' ),
-		'section'     => 'onepress_contact_settings',
-		'description' => esc_html__( 'Check this box to hide this section.', 'onepress' ),
-	)
-);
+// Section Settings: Section ID setting.
+onepress_add_section_main_setting( $wp_customize, 'contact', 'id' );
 
-// Contact Settings: Section ID setting.
-$wp_customize->add_setting(
-	'onepress_contact_id',
-	array(
-		'sanitize_callback' => 'sanitize_key',
-		'default'           => esc_html__( 'contact', 'onepress' ),
-	)
-);
+// Section Settings: Title setting.
+onepress_add_section_main_setting( $wp_customize, 'contact', 'title' );
 
-// Contact Settings: Section ID control.
-$wp_customize->add_control(
-	'onepress_contact_id',
-	array(
-		'label'       => esc_html__( 'Section ID:', 'onepress' ),
-		'section'     => 'onepress_contact_settings',
-		'description' => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' ),
-	)
-);
+// Section Settings: Subtitle setting.
+onepress_add_section_main_setting( $wp_customize, 'contact', 'subtitle' );
 
-// Contact Settings: Title setting.
-$wp_customize->add_setting(
-	'onepress_contact_title',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'Get in touch', 'onepress' ),
-	)
-);
+// Section Settings: Section description setting.
+onepress_add_section_main_setting( $wp_customize, 'contact', 'desc' );
 
-// Contact Settings: Title control.
-$wp_customize->add_control(
-	'onepress_contact_title',
-	array(
-		'label'       => esc_html__( 'Section Title', 'onepress' ),
-		'section'     => 'onepress_contact_settings',
-		'description' => '',
-	)
-);
-
-// Contact Settings: Sub Title setting.
-$wp_customize->add_setting(
-	'onepress_contact_subtitle',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'Section subtitle', 'onepress' ),
-	)
-);
-
-// Contact Settings: Sub Title control.
-$wp_customize->add_control(
-	'onepress_contact_subtitle',
-	array(
-		'label'       => esc_html__( 'Section Subtitle', 'onepress' ),
-		'section'     => 'onepress_contact_settings',
-		'description' => '',
-	)
-);
-
-// Contact Settings: Description setting.
-$wp_customize->add_setting(
-	'onepress_contact_desc',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => '',
-	)
-);
-
-// Contact Settings: Description control.
-$wp_customize->add_control(
-	new OnePress_Editor_Custom_Control(
-		$wp_customize,
-		'onepress_contact_desc',
-		array(
-			'label'       => esc_html__( 'Section Description', 'onepress' ),
-			'section'     => 'onepress_contact_settings',
-			'description' => '',
-		)
-	)
-);
-
-// Add upsell setting & control.
+// Section Settings: Upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_contact_settings' );
 
-// Add Contact Content section.
+// Add Section Content section.
 $wp_customize->add_section(
 	'onepress_contact_content',
 	array(
@@ -141,7 +57,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Contact Content: Contact from shortcode setting.
+// Section Content: Contact from shortcode setting.
 $wp_customize->add_setting(
 	'onepress_contact_cf7',
 	array(
@@ -151,7 +67,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// Contact Content: Contact from shortcode control.
+// Section Content: Contact from shortcode control.
 $wp_customize->add_control(
 	'onepress_contact_cf7',
 	array(
@@ -161,7 +77,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Contact Content: Disable contact from setting.
+// Section Content: Disable contact from setting.
 $wp_customize->add_setting(
 	'onepress_contact_cf7_disable',
 	array(
@@ -170,7 +86,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// Contact Content: Disable contact from control.
+// Section Content: Disable contact from control.
 $wp_customize->add_control(
 	'onepress_contact_cf7_disable',
 	array(
@@ -181,7 +97,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Contact Content: Text setting.
+// Section Content: Text setting.
 $wp_customize->add_setting(
 	'onepress_contact_text',
 	array(
@@ -190,7 +106,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// Contact Content: Text control.
+// Section Content: Text control.
 $wp_customize->add_control(
 	new OnePress_Editor_Custom_Control(
 		$wp_customize,
@@ -215,7 +131,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Contact Content: Contact box title setting.
+// Section Content: Contact box title setting.
 $wp_customize->add_setting(
 	'onepress_contact_address_title',
 	array(
@@ -224,7 +140,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// Contact Content: Contact box title control.
+// Section Content: Contact box title control.
 $wp_customize->add_control(
 	'onepress_contact_address_title',
 	array(
@@ -234,7 +150,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Contact Content: Address setting.
+// Section Content: Address setting.
 $wp_customize->add_setting(
 	'onepress_contact_address',
 	array(
@@ -243,7 +159,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// Contact Content: Address control.
+// Section Content: Address control.
 $wp_customize->add_control(
 	'onepress_contact_address',
 	array(
@@ -253,7 +169,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Contact Content: Phone setting.
+// Section Content: Phone setting.
 $wp_customize->add_setting(
 	'onepress_contact_phone',
 	array(
@@ -262,7 +178,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// Contact Content: Phone control.
+// Section Content: Phone control.
 $wp_customize->add_control(
 	'onepress_contact_phone',
 	array(
@@ -272,7 +188,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Contact Content: Email setting.
+// Section Content: Email setting.
 $wp_customize->add_setting(
 	'onepress_contact_email',
 	array(
@@ -282,7 +198,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// Contact Content: Email control.
+// Section Content: Email control.
 $wp_customize->add_control(
 	'onepress_contact_email',
 	array(
@@ -292,7 +208,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Contact Content: Fax setting.
+// Section Content: Fax setting.
 $wp_customize->add_setting(
 	'onepress_contact_fax',
 	array(
@@ -301,7 +217,7 @@ $wp_customize->add_setting(
 	)
 );
 
-// Contact Content: Fax control.
+// Section Content: Fax control.
 $wp_customize->add_control(
 	'onepress_contact_fax',
 	array(
