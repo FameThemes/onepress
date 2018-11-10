@@ -145,7 +145,8 @@ $wp_customize->add_section(
 $wp_customize->add_setting(
 	'onepress_contact_cf7',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
+		'sanitize_callback' => 'sanitize_text_field',
+		'validate_callback' => 'onepress_validate_shortcode',
 		'default'           => '',
 	)
 );
@@ -202,7 +203,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Add Horizontal line
+// Add Horizontal line.
 $wp_customize->add_setting( 'onepress_contact_text_hr', array( 'sanitize_callback' => 'onepress_sanitize_text' ) );
 $wp_customize->add_control(
 	new OnePress_Misc_Control(
