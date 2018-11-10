@@ -127,7 +127,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Add upsell section.
+// Add upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_contact_settings' );
 
 // Add Contact Content section.

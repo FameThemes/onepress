@@ -155,7 +155,7 @@ if ( class_exists( 'OnePress_Plus' ) ) {
 	);
 }
 
-// Add upsell section.
+// Add upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_about_settings' );
 
 // Add About content section.
