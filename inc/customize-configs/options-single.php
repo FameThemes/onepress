@@ -46,7 +46,8 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'single_layout_content_width',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_posint',
+		'validate_callback' => 'onepress_validate_posint',
 		'default'           => '',
 	)
 );
@@ -67,7 +68,7 @@ $wp_customize->add_setting(
 	'single_thumbnail',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 	)
 );
 
@@ -87,7 +88,7 @@ $wp_customize->add_setting(
 	'single_meta',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '1',
+		'default'           => 1,
 	)
 );
 
