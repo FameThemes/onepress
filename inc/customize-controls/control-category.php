@@ -62,9 +62,8 @@ class OnePress_Category_Control extends WP_Customize_Control {
 			'hide_if_empty'     => false,
 			'option_none_value' => 0,
 			'value_field'       => 'term_id',
+			'echo'              => false,
 		) );
-
-		$dropdown_args['echo'] = false;
 
 		$dropdown = wp_dropdown_categories( $dropdown_args );
 		$dropdown = str_replace( '<select', '<select ' . $this->get_link(), $dropdown );
