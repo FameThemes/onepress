@@ -6,6 +6,31 @@
  */
 
 /**
+ * Add horizontal line
+ *
+ * @param WP_Customize_Manager $wp_customize Theme Customizer object.
+ * @param string               $setting_id A unique slug-like ID for the theme setting.
+ * @param string               $section_id Any Customizer section.
+ */
+function onepress_add_hr_setting( $wp_customize, $setting_id, $section_id ) {
+	$wp_customize->add_setting(
+		$setting_id,
+		array(
+			'sanitize_callback' => 'onepress_sanitize_text',
+		)
+	);
+	$wp_customize->add_control(
+		new OnePress_Misc_Control(
+			$wp_customize, $setting_id,
+			array(
+				'section' => $section_id,
+				'type'    => 'hr',
+			)
+		)
+	);
+}
+
+/**
  * Add main setting for sections
  *
  * Adds the disable, id, title, subtitle, description setting for a given
