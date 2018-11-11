@@ -6,6 +6,7 @@
  * @since 1.1.1
  */
 
+// Add settings panel.
 $wp_customize->add_panel(
 	'onepress_videolightbox',
 	array(
@@ -16,6 +17,7 @@ $wp_customize->add_panel(
 	)
 );
 
+// Add Section Settings section.
 $wp_customize->add_section(
 	'onepress_videolightbox_settings',
 	array(
@@ -26,42 +28,13 @@ $wp_customize->add_section(
 	)
 );
 
-// Show Content
-$wp_customize->add_setting(
-	'onepress_videolightbox_disable',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control(
-	'onepress_videolightbox_disable',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Hide this section?', 'onepress' ),
-		'section'     => 'onepress_videolightbox_settings',
-		'description' => esc_html__( 'Check this box to hide this section.', 'onepress' ),
-	)
-);
+// Section Settings: Show Content setting.
+onepress_add_section_main_setting( $wp_customize, 'videolightbox', 'disable' );
 
-// Section ID
-$wp_customize->add_setting(
-	'onepress_videolightbox_id',
-	array(
-		'sanitize_callback' => 'sanitize_key',
-		'default'           => 'videolightbox',
-	)
-);
-$wp_customize->add_control(
-	'onepress_videolightbox_id',
-	array(
-		'label'       => esc_html__( 'Section ID:', 'onepress' ),
-		'section'     => 'onepress_videolightbox_settings',
-		'description' => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' ),
-	)
-);
+// Section Settings: Section ID setting.
+onepress_add_section_main_setting( $wp_customize, 'videolightbox', 'id' );
 
-// Title
+// Section Settings: Title.
 $wp_customize->add_setting(
 	'onepress_videolightbox_title',
 	array(
@@ -69,7 +42,6 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
-
 $wp_customize->add_control(
 	new OnePress_Editor_Custom_Control(
 		$wp_customize,
@@ -82,7 +54,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Video URL
+// Section Settings: Video URL.
 $wp_customize->add_setting(
 	'onepress_videolightbox_url',
 	array(
@@ -99,7 +71,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Parallax image
+// Section Settings: Parallax image
 $wp_customize->add_setting(
 	'onepress_videolightbox_image',
 	array(
@@ -118,4 +90,5 @@ $wp_customize->add_control(
 	)
 );
 
+// Section Settings: Upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_videolightbox_settings' );
