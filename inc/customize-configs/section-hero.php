@@ -6,6 +6,7 @@
  * @since Unknown
  */
 
+// Add settings panel.
 $wp_customize->add_panel(
 	'onepress_hero_panel',
 	array(
@@ -16,7 +17,7 @@ $wp_customize->add_panel(
 	)
 );
 
-// Hero settings
+// Add Hero Settings section.
 $wp_customize->add_section(
 	'onepress_hero_settings',
 	array(
@@ -27,46 +28,18 @@ $wp_customize->add_section(
 	)
 );
 
-// Show section
-$wp_customize->add_setting(
-	'onepress_hero_disable',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control(
-	'onepress_hero_disable',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Hide this section?', 'onepress' ),
-		'section'     => 'onepress_hero_settings',
-		'description' => esc_html__( 'Check this box to hide this section.', 'onepress' ),
-	)
-);
-// Section ID
-$wp_customize->add_setting(
-	'onepress_hero_id',
-	array(
-		'sanitize_callback' => 'sanitize_key',
-		'default'           => esc_html__( 'hero', 'onepress' ),
-	)
-);
-$wp_customize->add_control(
-	'onepress_hero_id',
-	array(
-		'label'       => esc_html__( 'Section ID:', 'onepress' ),
-		'section'     => 'onepress_hero_settings',
-		'description' => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' ),
-	)
-);
+// Section Settings: Show Content setting.
+onepress_add_section_main_setting( $wp_customize, 'hero', 'disable' );
 
-// Show hero full screen
+// Section Settings: Section ID setting.
+onepress_add_section_main_setting( $wp_customize, 'hero', 'id' );
+
+// Hero Settings: Show hero full screen.
 $wp_customize->add_setting(
 	'onepress_hero_fullscreen',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 	)
 );
 $wp_customize->add_control(
@@ -79,12 +52,12 @@ $wp_customize->add_control(
 	)
 );
 
-// Show hero full screen
+// Hero Settings: Disable preload.
 $wp_customize->add_setting(
 	'onepress_hero_disable_preload',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
+		'default'           => 0,
 	)
 );
 $wp_customize->add_control(
@@ -96,12 +69,13 @@ $wp_customize->add_control(
 	)
 );
 
-// Hero content padding top
+// Hero Settings: Padding top.
 $wp_customize->add_setting(
 	'onepress_hero_pdtop',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => esc_html__( '10', 'onepress' ),
+		'sanitize_callback' => 'onepress_sanizite_nonneg_float',
+		'validate_callback' => 'onepress_validate_required_nonneg_float',
+		'default'           => 10,
 	)
 );
 $wp_customize->add_control(
@@ -114,12 +88,13 @@ $wp_customize->add_control(
 	)
 );
 
-// Hero content padding bottom
+// Hero Settings: Padding bottom.
 $wp_customize->add_setting(
 	'onepress_hero_pdbotom',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => esc_html__( '10', 'onepress' ),
+		'sanitize_callback' => 'onepress_sanizite_nonneg_float',
+		'validate_callback' => 'onepress_validate_required_nonneg_float',
+		'default'           => 10,
 	)
 );
 $wp_customize->add_control(
@@ -132,53 +107,33 @@ $wp_customize->add_control(
 	)
 );
 
-
-/*
- Hero options
-----------------------------------------------------------------------*/
-
+// Hero Settings: Text animation type.
 $wp_customize->add_setting(
 	'onepress_hero_option_animation',
 	array(
 		'default'           => 'flipInX',
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 	)
 );
-
-/**
- * @see https://github.com/daneden/animate.css
- */
-
-$animations_css = 'bounce flash pulse rubberBand shake headShake swing tada wobble jello bounceIn bounceInDown bounceInLeft bounceInRight bounceInUp bounceOut bounceOutDown bounceOutLeft bounceOutRight bounceOutUp fadeIn fadeInDown fadeInDownBig fadeInLeft fadeInLeftBig fadeInRight fadeInRightBig fadeInUp fadeInUpBig fadeOut fadeOutDown fadeOutDownBig fadeOutLeft fadeOutLeftBig fadeOutRight fadeOutRightBig fadeOutUp fadeOutUpBig flipInX flipInY flipOutX flipOutY lightSpeedIn lightSpeedOut rotateIn rotateInDownLeft rotateInDownRight rotateInUpLeft rotateInUpRight rotateOut rotateOutDownLeft rotateOutDownRight rotateOutUpLeft rotateOutUpRight hinge rollIn rollOut zoomIn zoomInDown zoomInLeft zoomInRight zoomInUp zoomOut zoomOutDown zoomOutLeft zoomOutRight zoomOutUp slideInDown slideInLeft slideInRight slideInUp slideOutDown slideOutLeft slideOutRight slideOutUp';
-
-$animations_css = explode( ' ', $animations_css );
-$animations     = array();
-foreach ( $animations_css as $v ) {
-	$v = trim( $v );
-	if ( $v ) {
-		$animations[ $v ] = $v;
-	}
-}
-
 $wp_customize->add_control(
 	'onepress_hero_option_animation',
 	array(
-		'label'   => __( 'Text animation', 'onepress' ),
+		'label'   => esc_html( __( 'Text animation', 'onepress' ) ),
 		'section' => 'onepress_hero_settings',
 		'type'    => 'select',
-		'choices' => $animations,
+		'choices' => onepress_get_animatecss_choices(),
 	)
 );
 
-
+// Hero Settings: Text animation speed.
 $wp_customize->add_setting(
 	'onepress_hero_option_speed',
 	array(
-		'default'           => '5000',
-		'sanitize_callback' => 'sanitize_text_field',
+		'default'           => 5000,
+		'sanitize_callback' => 'onepress_intval',
+		'validate_callback' => 'onepress_validate_required_int',
 	)
 );
-
 $wp_customize->add_control(
 	'onepress_hero_option_speed',
 	array(
@@ -188,32 +143,33 @@ $wp_customize->add_control(
 	)
 );
 
-
+// Hero Settings: Slider animation speed.
 $wp_customize->add_setting(
 	'onepress_hero_slider_fade',
 	array(
-		'default'           => '750',
-		'sanitize_callback' => 'sanitize_text_field',
+		'default'           => 750,
+		'sanitize_callback' => 'onepress_intval',
+		'validate_callback' => 'onepress_validate_required_int',
 	)
 );
-
 $wp_customize->add_control(
 	'onepress_hero_slider_fade',
 	array(
-		'label'       => __( 'Slider animation speed', 'onepress' ),
+		'label'       => esc_html__( 'Slider animation speed', 'onepress' ),
 		'description' => esc_html__( 'This is the speed at which the image will fade in. Integers in milliseconds are accepted.', 'onepress' ),
 		'section'     => 'onepress_hero_settings',
 	)
 );
 
+// Hero Settings: Slider duration.
 $wp_customize->add_setting(
 	'onepress_hero_slider_duration',
 	array(
-		'default'           => '5000',
-		'sanitize_callback' => 'sanitize_text_field',
+		'default'           => 5000,
+		'sanitize_callback' => 'absint',
+		'validate_callback' => 'onepress_validate_required_absint',
 	)
 );
-
 $wp_customize->add_control(
 	'onepress_hero_slider_duration',
 	array(
@@ -223,8 +179,7 @@ $wp_customize->add_control(
 	)
 );
 
-
-
+// Add Hero Background Media section.
 $wp_customize->add_section(
 	'onepress_hero_images',
 	array(
@@ -235,12 +190,13 @@ $wp_customize->add_section(
 	)
 );
 
+// Hero Background Media: Items.
 $wp_customize->add_setting(
 	'onepress_hero_images',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_repeatable_data_field',
 		'transport'         => 'refresh',
-		'default'           => json_encode(
+		'default'           => wp_json_encode(
 			array(
 				array(
 					'image' => array(
@@ -252,7 +208,6 @@ $wp_customize->add_setting(
 		),
 	)
 );
-
 $wp_customize->add_control(
 	new Onepress_Customize_Repeatable_Control(
 		$wp_customize,
@@ -263,8 +218,7 @@ $wp_customize->add_control(
 			'priority'     => 40,
 			'section'      => 'onepress_hero_images',
 			'title_format' => esc_html__( 'Background', 'onepress' ), // [live_title]
-			'max_item'     => 2, // Maximum item can add
-
+			'max_item'     => 2, // Maximum number of addable items.
 			'fields'       => array(
 				'image' => array(
 					'title'   => esc_html__( 'Background Image', 'onepress' ),
@@ -274,36 +228,12 @@ $wp_customize->add_control(
 						'id'  => '',
 					),
 				),
-
 			),
-
 		)
 	)
 );
 
-// Overlay color
-$wp_customize->add_setting(
-	'onepress_hero_overlay_color',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_color_alpha',
-		'default'           => 'rgba(0,0,0,.3)',
-		// 'transport' => 'refresh',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Alpha_Color_Control(
-		$wp_customize,
-		'onepress_hero_overlay_color',
-		array(
-			'label'    => esc_html__( 'Background Overlay Color', 'onepress' ),
-			'section'  => 'onepress_hero_images',
-			'priority' => 130,
-		)
-	)
-);
-
-
-// Parallax
+// Hero Background Media: Enable Parallax.
 $wp_customize->add_setting(
 	'onepress_hero_parallax',
 	array(
@@ -323,7 +253,27 @@ $wp_customize->add_control(
 	)
 );
 
-// Background Video
+// Hero Background Media: Overlay color.
+$wp_customize->add_setting(
+	'onepress_hero_overlay_color',
+	array(
+		'sanitize_callback' => 'onepress_sanitize_color_alpha',
+		'default'           => 'rgba(0,0,0,.3)',
+	)
+);
+$wp_customize->add_control(
+	new OnePress_Alpha_Color_Control(
+		$wp_customize,
+		'onepress_hero_overlay_color',
+		array(
+			'label'    => esc_html__( 'Background Overlay Color', 'onepress' ),
+			'section'  => 'onepress_hero_images',
+			'priority' => 130,
+		)
+	)
+);
+
+// Hero Background Media: Upsell Background Video.
 $wp_customize->add_setting(
 	'onepress_hero_videobackground_upsell',
 	array(
@@ -335,15 +285,14 @@ $wp_customize->add_control(
 		$wp_customize, 'onepress_hero_videobackground_upsell',
 		array(
 			'section'     => 'onepress_hero_images',
-			'type'        => 'custom_message',
+			'type'        => 'notice-info',
 			'description' => wp_kses_post( __( 'Want to add <strong>background video</strong> for hero section? Upgrade to <a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#get-started">OnePress Plus</a> version.', 'onepress' ) ),
 			'priority'    => 131,
 		)
 	)
 );
 
-
-
+// Add Hero Content Layout section.
 $wp_customize->add_section(
 	'onepress_hero_content_layout1',
 	array(
@@ -355,11 +304,11 @@ $wp_customize->add_section(
 	)
 );
 
-// Hero Layout
+// Hero Content Layout: Hero Layout.
 $wp_customize->add_setting(
 	'onepress_hero_layout',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => '1',
 	)
 );
@@ -376,8 +325,8 @@ $wp_customize->add_control(
 		),
 	)
 );
-// For Hero layout ------------------------
-// Large Text
+
+// Hero Content Layout/Layout 1: Large Text.
 $wp_customize->add_setting(
 	'onepress_hcl1_largetext',
 	array(
@@ -398,7 +347,7 @@ $wp_customize->add_control(
 	)
 );
 
-
+// Hero Content Layout/Layout 1: Rotating text color.
 $wp_customize->add_setting(
 	'onepress_hcl1_r_color',
 	array(
@@ -416,6 +365,8 @@ $wp_customize->add_control(
 		)
 	)
 );
+
+// Hero Content Layout/Layout 1: Rotating text background color.
 $wp_customize->add_setting(
 	'onepress_hcl1_r_bg_color',
 	array(
@@ -434,12 +385,12 @@ $wp_customize->add_control(
 	)
 );
 
-// Small Text
+// Hero Content Layout/Layout 1: Small text.
 $wp_customize->add_setting(
 	'onepress_hcl1_smalltext',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => wp_kses_post( 'Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.', 'onepress' ),
+		'default'           => 'Morbi tempus porta nunc <strong>pharetra quisque</strong> ligula imperdiet posuere<br> vitae felis proin sagittis leo ac tellus blandit sollicitudin quisque vitae placerat.',
 	)
 );
 $wp_customize->add_control(
@@ -455,7 +406,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Button #1 Text
+// Hero Content Layout/Layout 1: Button #1 text.
 $wp_customize->add_setting(
 	'onepress_hcl1_btn1_text',
 	array(
@@ -471,12 +422,12 @@ $wp_customize->add_control(
 	)
 );
 
-// Button #1 Link
+// Hero Content Layout/Layout 1: Button #1 link.
 $wp_customize->add_setting(
 	'onepress_hcl1_btn1_link',
 	array(
-		'sanitize_callback' => 'esc_url',
-		'default'           => esc_url( home_url( '/' ) ) . esc_html__( '#about', 'onepress' ),
+		'sanitize_callback' => 'esc_url_raw',
+		'default'           => esc_url( home_url( '/#about' ) ),
 	)
 );
 $wp_customize->add_control(
@@ -486,11 +437,12 @@ $wp_customize->add_control(
 		'section' => 'onepress_hero_content_layout1',
 	)
 );
-// Button #1 Style
+
+// Hero Content Layout/Layout 1: Button #1 style.
 $wp_customize->add_setting(
 	'onepress_hcl1_btn1_style',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'btn-theme-primary',
 	)
 );
@@ -512,6 +464,8 @@ $wp_customize->add_control(
 		),
 	)
 );
+
+// Hero Content Layout/Layout 1: Button #1 target.
 $wp_customize->add_setting(
 	'onepress_hcl1_btn1_target',
 	array(
@@ -528,7 +482,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Button #2 Text
+// Hero Content Layout/Layout 1: Button #2 text.
 $wp_customize->add_setting(
 	'onepress_hcl1_btn2_text',
 	array(
@@ -544,12 +498,12 @@ $wp_customize->add_control(
 	)
 );
 
-// Button #2 Link
+// Hero Content Layout/Layout 1: Button #2 link.
 $wp_customize->add_setting(
 	'onepress_hcl1_btn2_link',
 	array(
-		'sanitize_callback' => 'esc_url',
-		'default'           => esc_url( home_url( '/' ) ) . esc_html__( '#contact', 'onepress' ),
+		'sanitize_callback' => 'esc_url_raw',
+		'default'           => esc_url( home_url( '/#contact' ) ),
 	)
 );
 $wp_customize->add_control(
@@ -560,11 +514,11 @@ $wp_customize->add_control(
 	)
 );
 
-// Button #2 Style
+// Hero Content Layout/Layout 1: Button #2 style.
 $wp_customize->add_setting(
 	'onepress_hcl1_btn2_style',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'btn-secondary-outline',
 	)
 );
@@ -586,6 +540,8 @@ $wp_customize->add_control(
 		),
 	)
 );
+
+// Hero Content Layout/Layout 1: Button #2 target.
 $wp_customize->add_setting(
 	'onepress_hcl1_btn2_target',
 	array(
@@ -603,9 +559,7 @@ $wp_customize->add_control(
 );
 
 
-/* Layout 2 ---- */
-
-// Layout 22 content text
+// Hero Content Layout/Layout 2: Text.
 $wp_customize->add_setting(
 	'onepress_hcl2_content',
 	array(
@@ -626,11 +580,11 @@ $wp_customize->add_control(
 	)
 );
 
-// Layout 2 image
+// Hero Content Layout/Layout 2: Image.
 $wp_customize->add_setting(
 	'onepress_hcl2_image',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
+		'sanitize_callback' => 'esc_url_raw',
 		'mod'               => 'html',
 		'default'           => get_template_directory_uri() . '/assets/images/onepress_responsive.png',
 	)
@@ -646,6 +600,3 @@ $wp_customize->add_control(
 		)
 	)
 );
-
-
-// END For Hero layout ------------------------
