@@ -3,9 +3,12 @@
  * Section: News
  *
  * @package OnePress\Customizer
+ * @since 2.1.0 Added option to hide post categories.
+ *              Added options to choose the excerpt length.
  * @since Unknown
  */
 
+// Add settings panel.
 $wp_customize->add_panel(
 	'onepress_news',
 	array(
@@ -16,6 +19,7 @@ $wp_customize->add_panel(
 	)
 );
 
+// Add Section Settings section.
 $wp_customize->add_section(
 	'onepress_news_settings',
 	array(
@@ -26,120 +30,30 @@ $wp_customize->add_section(
 	)
 );
 
-// Show Content
-$wp_customize->add_setting(
-	'onepress_news_disable',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control(
-	'onepress_news_disable',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Hide this section?', 'onepress' ),
-		'section'     => 'onepress_news_settings',
-		'description' => esc_html__( 'Check this box to hide this section.', 'onepress' ),
-	)
-);
+// Show Content setting.
+onepress_add_section_main_setting( $wp_customize, 'news', 'disable' );
 
-// Section ID
-$wp_customize->add_setting(
-	'onepress_news_id',
-	array(
-		'sanitize_callback' => 'sanitize_key',,
-		'default'           => esc_html__( 'news', 'onepress' ),
-	)
-);
-$wp_customize->add_control(
-	'onepress_news_id',
-	array(
-		'label'       => esc_html__( 'Section ID:', 'onepress' ),
-		'section'     => 'onepress_news_settings',
-		'description' => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' ),
-	)
-);
+// Section ID setting.
+onepress_add_section_main_setting( $wp_customize, 'news', 'id' );
 
-// Title
-$wp_customize->add_setting(
-	'onepress_news_title',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'Latest News', 'onepress' ),
-	)
-);
-$wp_customize->add_control(
-	'onepress_news_title',
-	array(
-		'label'       => esc_html__( 'Section Title', 'onepress' ),
-		'section'     => 'onepress_news_settings',
-		'description' => '',
-	)
-);
+// Title setting.
+onepress_add_section_main_setting( $wp_customize, 'news', 'title' );
 
-// Sub Title
-$wp_customize->add_setting(
-	'onepress_news_subtitle',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__( 'Section subtitle', 'onepress' ),
-	)
-);
-$wp_customize->add_control(
-	'onepress_news_subtitle',
-	array(
-		'label'       => esc_html__( 'Section Subtitle', 'onepress' ),
-		'section'     => 'onepress_news_settings',
-		'description' => '',
-	)
-);
+// Subtitle setting.
+onepress_add_section_main_setting( $wp_customize, 'news', 'subtitle' );
 
-// Description
-$wp_customize->add_setting(
-	'onepress_news_desc',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Editor_Custom_Control(
-		$wp_customize,
-		'onepress_news_desc',
-		array(
-			'label'       => esc_html__( 'Section Description', 'onepress' ),
-			'section'     => 'onepress_news_settings',
-			'description' => '',
-		)
-	)
-);
+// Section description setting.
+onepress_add_section_main_setting( $wp_customize, 'news', 'desc' );
 
-// hr
-$wp_customize->add_setting(
-	'onepress_news_settings_hr',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Misc_Control(
-		$wp_customize, 'onepress_news_settings_hr',
-		array(
-			'section' => 'onepress_news_settings',
-			'type'    => 'hr',
-		)
-	)
-);
+// Add horizontal line.
+onepress_add_hr_setting( $wp_customize, 'onepress_news_settings_hr', 'onepress_news_settings' );
 
-/**
- * @since 2.1.0
- */
+// Hide post categories.
 $wp_customize->add_setting(
 	'onepress_news_hide_meta',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => false,
+		'sanitize_callback' => 'onepress_sanitize_checkbox',
+		'default'           => 0,
 	)
 );
 $wp_customize->add_control(
@@ -152,13 +66,11 @@ $wp_customize->add_control(
 	)
 );
 
-/**
- * @since 2.1.0
- */
+// Excerpt Length: Choices
 $wp_customize->add_setting(
 	'onepress_news_excerpt_type',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'custom',
 	)
 );
@@ -178,9 +90,7 @@ $wp_customize->add_control(
 	)
 );
 
-/**
- * @since 2.1.0
- */
+// Excerpt Length: Custom
 $wp_customize->add_setting(
 	'onepress_news_excerpt_length',
 	array(
@@ -197,12 +107,12 @@ $wp_customize->add_control(
 	)
 );
 
-
 // Number of post to show.
 $wp_customize->add_setting(
 	'onepress_news_number',
 	array(
-		'sanitize_callback' => 'absint',
+		'sanitize_callback' => 'onepress_sanitize_posint',
+		'validate_callback' => 'onepress_validate_posint',
 		'default'           => '3',
 	)
 );
@@ -215,14 +125,14 @@ $wp_customize->add_control(
 	)
 );
 
+// Post category to show.
 $wp_customize->add_setting(
 	'onepress_news_cat',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'absint',
 		'default'           => 0,
 	)
 );
-
 $wp_customize->add_control(
 	new OnePress_Category_Control(
 		$wp_customize,
@@ -235,14 +145,14 @@ $wp_customize->add_control(
 	)
 );
 
+// Order by.
 $wp_customize->add_setting(
 	'onepress_news_orderby',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_select',
-		'default'           => 0,
+		'default'           => 'default',
 	)
 );
-
 $wp_customize->add_control(
 	'onepress_news_orderby',
 	array(
@@ -262,6 +172,7 @@ $wp_customize->add_control(
 	)
 );
 
+// Ascending or descending order.
 $wp_customize->add_setting(
 	'onepress_news_order',
 	array(
@@ -269,7 +180,6 @@ $wp_customize->add_setting(
 		'default'           => 'desc',
 	)
 );
-
 $wp_customize->add_control(
 	'onepress_news_order',
 	array(
@@ -283,7 +193,7 @@ $wp_customize->add_control(
 	)
 );
 
-// Blog Button
+// Read More Button: Page.
 $wp_customize->add_setting(
 	'onepress_news_more_page',
 	array(
@@ -291,7 +201,6 @@ $wp_customize->add_setting(
 		'default'           => '',
 	)
 );
-
 $wp_customize->add_control(
 	new OnePress_Pages_Control(
 		$wp_customize,
@@ -305,15 +214,14 @@ $wp_customize->add_control(
 	)
 );
 
-
+// Read More Button: Custom link.
 $wp_customize->add_setting(
 	'onepress_news_more_link',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'esc_url_raw',
 		'default'           => '',
 	)
 );
-
 $wp_customize->add_control(
 	'onepress_news_more_link',
 	array(
@@ -322,7 +230,7 @@ $wp_customize->add_control(
 	)
 );
 
-
+// Read More Button: Custom link text.
 $wp_customize->add_setting(
 	'onepress_news_more_text',
 	array(
@@ -339,4 +247,5 @@ $wp_customize->add_control(
 	)
 );
 
+// Add upsell setting & control.
 onepress_add_upsell_for_section( $wp_customize, 'onepress_news_settings' );
