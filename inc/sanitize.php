@@ -8,8 +8,8 @@
 /**
  * Sanitize CSS code
  *
- * @param $string
- * @return string
+ * @param string $string Value of the setting.
+ * @return string Sanitized CSS.
  */
 function onepress_sanitize_css( $string ) {
 	$string = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $string );
@@ -25,7 +25,7 @@ function onepress_sanitize_color_alpha( $color ) {
 
 	// 3 or 6 hex digits, or the empty string.
 	if ( preg_match( '|^#([A-Fa-f0-9]{3}){1,2}$|', '#' . $color ) ) {
-		// convert to rgb
+		// Convert to rgb.
 		$colour = $color;
 		if ( strlen( $colour ) == 6 ) {
 			list( $r, $g, $b ) = array( $colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5] );
@@ -54,8 +54,8 @@ function onepress_sanitize_color_alpha( $color ) {
 /**
  * Sanitize repeatable data
  *
- * @param $input
- * @param $setting object $wp_customize
+ * @param mixed                $input   Value of the setting.
+ * @param WP_Customize_Setting $setting WP_Customize_Setting instance.
  * @return bool|mixed|string|void
  */
 function onepress_sanitize_repeatable_data_field( $input, $setting ) {
@@ -156,20 +156,10 @@ function onepress_sanitize_repeatable_data_field( $input, $setting ) {
 	return $data;
 }
 
-
-function onepress_sanitize_file_url( $file_url ) {
-	$output   = '';
-	$filetype = wp_check_filetype( $file_url );
-	if ( $filetype['ext'] ) {
-		$output = esc_url( $file_url );
-	}
-	return $output;
-}
-
 /**
  * Conditional to show more hero settings
  *
- * @param $control
+ * @param object $control Control object.
  * @return bool
  */
 function onepress_hero_fullscreen_callback( $control ) {
@@ -204,11 +194,12 @@ function onepress_sanitize_select( $input, $setting = null ) {
 	}
 
 }
-
-function onepress_sanitize_number( $input ) {
-	return balanceTags( $input );
-}
-
+/**
+ * Sanitize checkbox.
+ *
+ * @param mixed $input Value of the setting.
+ * @return bool True if checked.
+ */
 function onepress_sanitize_checkbox( $input ) {
 	if ( 1 == $input ) {
 		return 1;
@@ -217,18 +208,34 @@ function onepress_sanitize_checkbox( $input ) {
 	}
 }
 
+/**
+ * Sanitize text
+ *
+ * Sanitize content for allowed HTML tags for post content and balance tags.
+ *
+ * @param mixed $string Value of the setting.
+ * @return string Filtered post content with allowed HTML tags and attributes.
+ */
 function onepress_sanitize_text( $string ) {
 	return wp_kses_post( balanceTags( $string ) );
 }
 
-function onepress_sanitize_html_input( $string ) {
-	return wp_kses_allowed_html( $string );
-}
-
+/**
+ * Callback to show on frontpage template only.
+ *
+ * @return bool True on success, false on failure.
+ */
 function onepress_showon_frontpage() {
 	return is_page_template( 'template-frontpage.php' );
 }
 
+/**
+ * Validate gallery source.
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $value    Value of the setting.
+ * @return WP_error|true
+ */
 function onepress_gallery_source_validate( $validity, $value ) {
 	if ( ! class_exists( 'OnePress_Plus' ) ) {
 		if ( 'page' != $value ) {
@@ -242,14 +249,26 @@ function onepress_gallery_source_validate( $validity, $value ) {
  * Sanizite positive integer.
  *
  * @param mixed $value Value of the setting.
- * @return int|void A positve integer.
+ * @return int|string A positve integer or empty string.
  */
 function onepress_sanitize_posint( $value ) {
 	return ! empty( absint( $value ) ) ? absint( $value ) : '';
 }
 
 /**
- * Validate positive integer.
+ * Sanizite required positive integer.
+ *
+ * @param mixed $value Value of the setting.
+ * @return int A positve integer.
+ */
+function onepress_sanitize_required_posint( $value ) {
+	return absint( $value );
+}
+
+/**
+ * Validate optional positive integer.
+ *
+ * Checks whether the value is empty or a positive integer.
  *
  * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
  * @param mixed    $value    Value of the setting.
@@ -313,7 +332,7 @@ function onepress_validate_shortcode( $validity, $value ) {
 /**
  * Validate gallery shortcode.
  *
- * Validates that the page content contains a gallery shortcode.
+ * Checks whether the page content contains a gallery shortcode.
  *
  * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
  * @param mixed    $page_id  The ID of the selected page.
@@ -328,13 +347,33 @@ function onepress_validate_gallery_shortcode( $validity, $page_id ) {
 }
 
 /**
- * Validate non-negative integer.
+ * Validate an optional non-negative integer.
  *
  * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
  * @param mixed    $value    Value of the setting.
  * @return WP_error|true
  */
 function onepress_validate_absint( $validity, $value ) {
+	if ( '' === ( trim( $value ) ) ) {
+		return $validity;
+	} elseif ( is_numeric( $value ) ) {
+		if ( false === filter_var( $value, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 0 ) ) ) ) {
+			$validity->add( 'nanni', esc_html__( 'Must be larger than or equal to 0.', 'onepress' ) );
+		}
+	} else {
+		$validity->add( 'nan', esc_html__( 'Not a number.', 'onepress' ) );
+	}
+	return $validity;
+}
+
+/**
+ * Validate a required non-negative integer.
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $value    Value of the setting.
+ * @return WP_error|true
+ */
+function onepress_validate_required_absint( $validity, $value ) {
 	if ( '' === ( trim( $value ) ) ) {
 		$validity->add( 'required', esc_html__( 'Required', 'onepress' ) );
 	} elseif ( is_numeric( $value ) ) {
@@ -343,6 +382,95 @@ function onepress_validate_absint( $validity, $value ) {
 		}
 	} else {
 		$validity->add( 'nan', esc_html__( 'Not a number.', 'onepress' ) );
+	}
+	return $validity;
+}
+
+/**
+ * Validate an optional integer.
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $value    Value of the setting.
+ * @return WP_error|true
+ */
+function onepress_validate_int( $validity, $value ) {
+	if ( '' === ( trim( $value ) ) ) {
+		return $validity;
+	} elseif ( is_numeric( $value ) ) {
+		if ( false === filter_var( $value, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 0 ) ) ) ) {
+			$validity->add( 'nanni', esc_html__( 'Must be larger than or equal to 0.', 'onepress' ) );
+		}
+	} else {
+		$validity->add( 'nan', esc_html__( 'Not a number.', 'onepress' ) );
+	}
+	return $validity;
+}
+
+/**
+ * 
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $value    Value of the setting.
+ * @return WP_error|true
+ */
+function onepress_validate_required_nonneg_float( $validity, $value ) {
+	// Is required.
+	if ( '' === ( trim( $value ) ) ) {
+		$validity->add( 'required', esc_html__( 'Required', 'onepress' ) );
+		return $validity;
+	}
+
+	$value = str_replace( ',', '.', $value ); // Force period to be decimal separator.
+
+	if ( ! is_numeric( $value ) ) { // Must be numeric.
+		$validity->add( 'nan', esc_html__( 'Not a number.', 'onepress' ) );
+	} elseif ( $value < 0 ) { // Must be non-negativ.
+		$validity->add( 'not_nonnegative', esc_html__( 'Must be greater than or equal to 0.', 'onepress' ) );
+	}
+	return $validity;
+}
+
+/**
+ * Sanitize a required integer.
+ *
+ * @param mixed $value Value of the setting.
+ * @return int Sanizited value.
+ */
+function onepress_intval( $value ) {
+	return intval( $value );
+}
+
+/**
+ * Sanitize an optional integer.
+ *
+ * @param mixed $value Value of the setting.
+ * @return int|string Sanizited value.
+ */
+function onepress_optional_intval( $value ) {
+	$value = trim( $value );
+	return '' === $value ? $value : intval( $value );
+}
+
+/**
+ * Validate required integer.
+ *
+ * @param WP_Error $validity Filtered from `true` to `WP_Error` when invalid.
+ * @param mixed    $value    Value of the setting.
+ * @return WP_error|true
+ */
+function onepress_validate_required_int( $validity, $value ) {
+	// Is required.
+	if ( '' === ( trim( $value ) ) ) {
+		$validity->add( 'required', esc_html__( 'Required', 'onepress' ) );
+		return $validity;
+	}
+
+	$value = str_replace( ',', '.', $value ); // Force period to be decimal separator.
+
+	if ( ! is_numeric( $value ) ) { // Must be numeric.
+		$validity->add( 'nan', esc_html__( 'Not a number.', 'onepress' ) );
+	} elseif ( false === filter_var( $value, FILTER_VALIDATE_INT ) ) { // Must be an integer.
+		$validity->add( 'nai', esc_html__( 'Must be an integer.', 'onepress' ) );
 	}
 	return $validity;
 }
