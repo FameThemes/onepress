@@ -1,52 +1,75 @@
 <?php
+/**
+ * Custom Customizer Control for displaying a HTML dropdown list of pages.
+ *
+ * @package OnePress\Customizer
+ * @since 2.0.0
+ */
 
 /**
- * Class OnPress_Dropdown_Category_Control
+ * Class OnePress_Pages_Control
+ *
  * @since 2.0.0
+ *
+ * @see WP_Customize_Control
  */
 class OnePress_Pages_Control extends WP_Customize_Control {
 
-	public $type = 'dropdown-category';
-	public $show_option_none = 'dropdown-category';
+	/**
+	 * Control type.
+	 *
+	 * @since 2.0.0
+	 * @var string
+	 */
+	public $type = 'dropdown-pages';
 
-	protected $dropdown_args = false;
+	/**
+	 * Select none text.
+	 *
+	 * If not empty, this string will be used as text for to select the none of
+	 * the pages option.
+	 *
+	 * @since 2.0.0
+	 * @var string
+	 */
+	public $show_option_none = 'dropdown-pages';
 
+	/**
+	 * Arguments for the dropdown list of pages.
+	 *
+	 * @since 2.0.0
+	 * @var array
+	 */
+	protected $dropdown_args = array();
+
+	/**
+	 * Render the control's content
+	 *
+	 * @since 2.0.0
+	 */
 	protected function render_content() {
-		?><label><?php
+		echo '<label>';
 
-		if ( ! empty( $this->label ) ) :
-			?><span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span><?php
-		endif;
+		if ( ! empty( $this->label ) ) {
+			echo '<span class="customize-control-title">' . esc_html( $this->label ) . '</span>';
+		}
 
-		if ( ! empty( $this->description ) ) :
-			?><span class="description customize-control-description"><?php echo $this->description; ?></span><?php
-		endif;
+		if ( ! empty( $this->description ) ) {
+			'<span class="description customize-control-description">' . wp_kses_post( $this->description ) . '</span>';
+		}
 
 		$dropdown_args = wp_parse_args( $this->dropdown_args, array(
-			'selected'          => $this->value(),
-			'show_option_none'   => $this->show_option_none,
-			'orderby'           => 'id',
-			'order'             => 'ASC'
+			'selected'         => esc_html( $this->value() ),
+			'show_option_none' => esc_html( $this->show_option_none ),
+			'orderby'          => 'id',
+			'order'            => 'ASC',
+			'echo'             => false,
 		));
 
-		$dropdown_args['echo'] = false;
-
-		$dropdown = wp_dropdown_pages( $dropdown_args );
+		$dropdown = wp_dropdown_pages( $dropdown_args ); // WPCS: XSS ok.
 		$dropdown = str_replace( '<select', '<select ' . $this->get_link(), $dropdown );
 		echo $dropdown;
 
-		?></label><?php
-
-	}
-}
-
-function onepress_enqueue_editor(){
-	if( ! isset( $GLOBALS['__wp_mce_editor__'] ) || ! $GLOBALS['__wp_mce_editor__'] ) {
-		$GLOBALS['__wp_mce_editor__'] = true;
-		?>
-		<script id="_wp-mce-editor-tpl" type="text/html">
-			<?php wp_editor('', '__wp_mce_editor__'); ?>
-		</script>
-		<?php
+		echo '</label>';
 	}
 }
