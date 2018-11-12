@@ -150,7 +150,6 @@ class Onepress_Config {
 				'title'   => __( 'Gallery', 'onepress' ),
 				'default' => false,
 				'inverse' => false,
-				'disable' => true,
 			),
 			'news'          => array(
 				'label'   => __( 'Section: News', 'onepress' ),
