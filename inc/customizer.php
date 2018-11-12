@@ -142,7 +142,7 @@ function onepress_add_section_main_setting( $wp_customize, $section_id, $setting
 				'onepress_' . $section_id . '_disable',
 				array(
 					'sanitize_callback' => 'onepress_sanitize_checkbox',
-					'default'           => 1,
+					'default'           => onepress_get_default_disable( $section_id ),
 				)
 			);
 			// Add control.
@@ -241,7 +241,7 @@ function onepress_add_section_main_setting( $wp_customize, $section_id, $setting
 }
 
 /**
- * Gets the default section title
+ * Get the default section title
  *
  * @param string $section_id The section ID (about, contact, ...).
  * @return string The default section title.
@@ -251,6 +251,19 @@ function onepress_get_default_section_title( $section_id ) {
 	$default  = $sections[ $section_id ]['title'];
 
 	return ! empty( $default ) ? $default : '';
+}
+
+/**
+ * Get the default for the section's disable setting.
+ *
+ * @param string $section_id The section ID (about, contact, ...).
+ * @return bool The default disable value.
+ */
+function onepress_get_default_disable( $section_id ) {
+	$sections = Onepress_Config::get_sections();
+	$default  = $sections[ $section_id ]['disable'];
+
+	return $default ? true : false;
 }
 
 /**
