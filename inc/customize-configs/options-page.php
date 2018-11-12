@@ -1,14 +1,8 @@
 <?php
-/**
- * Theme Option: Page Title Area.
- *
- * @package OnePress\Customizer
- * @since Unknown
- */
 
-// Add settings section.
-$wp_customize->add_section(
-	'onepress_page',
+/* Page Settings
+----------------------------------------------------------------------*/
+$wp_customize->add_section( 'onepress_page',
 	array(
 		'priority'    => null,
 		'title'       => esc_html__( 'Page Title Area', 'onepress' ),
@@ -17,40 +11,30 @@ $wp_customize->add_section(
 	)
 );
 
-// Disable the page title bar setting.
-$wp_customize->add_setting(
-	'onepress_page_title_bar_disable',
+// Disable the page title bar
+$wp_customize->add_setting( 'onepress_page_title_bar_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => 0,
+		'default'           => '',
 	)
 );
-
-// Disable the page title bar control.
-$wp_customize->add_control(
-	'onepress_page_title_bar_disable',
+$wp_customize->add_control( 'onepress_page_title_bar_disable',
 	array(
 		'type'        => 'checkbox',
 		'label'       => esc_html__( 'Disable Page Title bar?', 'onepress' ),
 		'section'     => 'onepress_page',
-		'description' => esc_html__( 'Check this box to disable the page title bar on all pages.', 'onepress' ),
+		'description' => esc_html__( 'Check this box to disable the page title bar on all pages.', 'onepress' )
 	)
 );
 
-// Page cover padding top setting.
-$wp_customize->add_setting(
-	'onepress_page_cover_pd_top',
+$wp_customize->add_setting( 'onepress_page_cover_pd_top',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_posint',
-		'validate_callback' => 'onepress_validate_posint',
+		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => '',
-		'transport'         => 'postMessage',
+		'transport'         => 'postMessage'
 	)
 );
-
-// Page cover padding top control.
-$wp_customize->add_control(
-	'onepress_page_cover_pd_top',
+$wp_customize->add_control( 'onepress_page_cover_pd_top',
 	array(
 		'label'       => esc_html__( 'Padding Top', 'onepress' ),
 		'description' => esc_html__( 'The page cover padding top in percent (%).', 'onepress' ),
@@ -58,20 +42,14 @@ $wp_customize->add_control(
 	)
 );
 
-// Page cover padding bottom setting.
-$wp_customize->add_setting(
-	'onepress_page_cover_pd_bottom',
+$wp_customize->add_setting( 'onepress_page_cover_pd_bottom',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_posint',
-		'validate_callback' => 'onepress_validate_posint',
+		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => '',
-		'transport'         => 'postMessage',
+		'transport'         => 'postMessage'
 	)
 );
-
-// Page cover padding bottom control.
-$wp_customize->add_control(
-	'onepress_page_cover_pd_bottom',
+$wp_customize->add_control( 'onepress_page_cover_pd_bottom',
 	array(
 		'label'       => esc_html__( 'Padding Bottom', 'onepress' ),
 		'description' => esc_html__( 'The page cover padding bottom in percent (%).', 'onepress' ),
@@ -79,19 +57,14 @@ $wp_customize->add_control(
 	)
 );
 
-// Page cover color setting.
-$wp_customize->add_setting(
-	'onepress_page_cover_color',
+$wp_customize->add_setting( 'onepress_page_cover_color',
 	array(
 		'sanitize_callback' => 'sanitize_hex_color',
 		'default'           => null,
-		'transport'         => 'postMessage',
+		'transport'         => 'postMessage'
 	)
 );
-
-// Page cover color control.
-$wp_customize->add_control(
-	new WP_Customize_Color_Control(
+$wp_customize->add_control( new WP_Customize_Color_Control(
 		$wp_customize,
 		'onepress_page_cover_color',
 		array(
@@ -101,19 +74,15 @@ $wp_customize->add_control(
 	)
 );
 
-// Background overlay color setting.
-$wp_customize->add_setting(
-	'onepress_page_cover_overlay',
+// Overlay color
+$wp_customize->add_setting( 'onepress_page_cover_overlay',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_color_alpha',
-		// 'default'           => 'rgba(0,0,0,.3)',
-		'transport'         => 'postMessage',
+		//'default'           => 'rgba(0,0,0,.3)',
+		'transport'         => 'postMessage'
 	)
 );
-
-// Background overlay color control.
-$wp_customize->add_control(
-	new OnePress_Alpha_Color_Control(
+$wp_customize->add_control( new OnePress_Alpha_Color_Control(
 		$wp_customize,
 		'onepress_page_cover_overlay',
 		array(
@@ -123,19 +92,14 @@ $wp_customize->add_control(
 	)
 );
 
-// Content alignment setting.
-$wp_customize->add_setting(
-	'onepress_page_cover_align',
+$wp_customize->add_setting( 'onepress_page_cover_align',
 	array(
-		'sanitize_callback' => 'onepress_sanitize_select',
+		'sanitize_callback' => 'sanitize_text_field',
 		'default'           => 'center',
-		'transport'         => 'postMessage',
+		'transport'         => 'postMessage'
 	)
 );
-
-// Content alignment control.
-$wp_customize->add_control(
-	'onepress_page_cover_align',
+$wp_customize->add_control( 'onepress_page_cover_align',
 	array(
 		'label'   => esc_html__( 'Content Align', 'onepress' ),
 		'section' => 'onepress_page',
