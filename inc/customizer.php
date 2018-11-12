@@ -181,7 +181,7 @@ function onepress_add_section_main_setting( $wp_customize, $section_id, $setting
 				'onepress_' . $section_id . '_title',
 				array(
 					'sanitize_callback' => 'sanitize_text_field',
-					'default'           => onepress_set_default_section_title( $section_id ),
+					'default'           => esc_html( onepress_get_default_section_title( $section_id ) ),
 				)
 			);
 			// Add control.
@@ -200,7 +200,7 @@ function onepress_add_section_main_setting( $wp_customize, $section_id, $setting
 				'onepress_' . $section_id . '_subtitle',
 				array(
 					'sanitize_callback' => 'sanitize_text_field',
-					'default'           => esc_html__( 'Section subtitle', 'onepress' ),
+					'default'           => esc_html__( 'Section Subtitle', 'onepress' ),
 				)
 			);
 			// Add control.
@@ -241,41 +241,16 @@ function onepress_add_section_main_setting( $wp_customize, $section_id, $setting
 }
 
 /**
- * Sets the default section title
+ * Gets the default section title
  *
  * @param string $section_id The section ID (about, contact, ...).
  * @return string The default section title.
  */
-function onepress_set_default_section_title( $section_id ) {
-	switch ( $section_id ) {
-		case 'about':
-			$default = esc_html__( 'About us', 'onepress' );
-			break;
-		case 'contact':
-			$default = esc_html__( 'Get in touch', 'onepress' );
-			break;
-		case 'counter':
-			$default = esc_html__( 'Our Numbers', 'onepress' );
-			break;
-		case 'features':
-			$default = esc_html__( 'Features', 'onepress' );
-			break;
-		case 'gallery':
-			$default = esc_html__( 'Gallery', 'onepress' );
-			break;
-		case 'news':
-			$default = esc_html__( 'Latest News', 'onepress' );
-			break;
-		case 'services':
-			$default = esc_html__( 'Our Services', 'onepress' );
-			break;
-		case 'team':
-			$default = esc_html__( 'Our Team', 'onepress' );
-			break;
-		default:
-			$default = '';
-	}
-	return $default;
+function onepress_get_default_section_title( $section_id ) {
+	$sections = Onepress_Config::get_sections();
+	$default  = $sections[ $section_id ]['title'];
+
+	return ! empty( $default ) ? $default : '';
 }
 
 /**
