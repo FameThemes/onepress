@@ -115,7 +115,8 @@ function onepress_add_hr_setting( $wp_customize, $setting_id, $section_id ) {
 	);
 	$wp_customize->add_control(
 		new OnePress_Misc_Control(
-			$wp_customize, $setting_id,
+			$wp_customize,
+			$setting_id,
 			array(
 				'section' => $section_id,
 				'type'    => 'hr',
@@ -248,8 +249,10 @@ function onepress_add_section_main_setting( $wp_customize, $section_id, $setting
  */
 function onepress_get_default_section_title( $section_id ) {
 	$sections = Onepress_Config::get_sections();
-	$default  = $sections[ $section_id ]['title'];
-
+	$default = false;
+	if ( ! empty( $sections ) && isset( $sections[ $section_id ] ) ) {
+		$default  = $sections[ $section_id ]['title'];
+	}
 	return ! empty( $default ) ? $default : '';
 }
 
@@ -271,7 +274,8 @@ function onepress_add_upsell_for_section( $wp_customize, $section_id ) {
 		);
 		$wp_customize->add_control(
 			new OnePress_Misc_Control(
-				$wp_customize, $name,
+				$wp_customize,
+				$name,
 				array(
 					'type'        => 'notice-info',
 					'section'     => $section_id,
@@ -411,7 +415,9 @@ function opneress_customize_js_settings() {
 	$number_action = $actions['number_notice'];
 
 	wp_localize_script(
-		'customize-controls', 'onepress_customizer_settings', array(
+		'customize-controls',
+		'onepress_customizer_settings',
+		array(
 			'number_action'     => $number_action,
 			'is_plus_activated' => class_exists( 'OnePress_Plus' ) ? 'y' : 'n',
 			'action_url'        => admin_url( 'themes.php?page=ft_onepress&tab=recommended_actions' ),
@@ -425,7 +431,8 @@ add_action( 'customize_controls_enqueue_scripts', 'opneress_customize_js_setting
  */
 function onepress_customize_controls_enqueue_scripts() {
 	wp_localize_script(
-		'customize-controls', 'C_Icon_Picker',
+		'customize-controls',
+		'C_Icon_Picker',
 		apply_filters(
 			'c_icon_picker_js_setup',
 			array(

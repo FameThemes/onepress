@@ -29,19 +29,19 @@ $wp_customize->add_section(
 );
 
 // Section Settings: Show Content setting.
-onepress_add_section_main_setting( $wp_customize, 'about', 'disable' );
+onepress_add_section_main_setting( $wp_customize, 'features', 'disable' );
 
 // Section Settings: Section ID setting.
-onepress_add_section_main_setting( $wp_customize, 'about', 'id' );
+onepress_add_section_main_setting( $wp_customize, 'features', 'id' );
 
 // Section Settings: Title setting.
-onepress_add_section_main_setting( $wp_customize, 'about', 'title' );
+onepress_add_section_main_setting( $wp_customize, 'features', 'title' );
 
 // Section Settings: Subtitle setting.
-onepress_add_section_main_setting( $wp_customize, 'about', 'subtitle' );
+onepress_add_section_main_setting( $wp_customize, 'features', 'subtitle' );
 
 // Section Settings: Section description setting.
-onepress_add_section_main_setting( $wp_customize, 'about', 'desc' );
+onepress_add_section_main_setting( $wp_customize, 'features', 'desc' );
 
 // Section Settings: Features layout.
 $wp_customize->add_setting(
