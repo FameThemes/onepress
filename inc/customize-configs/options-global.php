@@ -1,7 +1,14 @@
 <?php
-/* Global Settings
-----------------------------------------------------------------------*/
-$wp_customize->add_section( 'onepress_global_settings',
+/**
+ * Global Theme Options
+ *
+ * @package OnePress\Customizer
+ * @since Unknown
+ */
+
+// Add settings section.
+$wp_customize->add_section(
+	'onepress_global_settings',
 	array(
 		'priority'    => 3,
 		'title'       => esc_html__( 'Global', 'onepress' ),
@@ -10,16 +17,18 @@ $wp_customize->add_section( 'onepress_global_settings',
 	)
 );
 
-// Sidebar settings
-$wp_customize->add_setting( 'onepress_layout',
+// Site layout (sidebar) setting.
+$wp_customize->add_setting(
+	'onepress_layout',
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'sanitize_callback' => 'onepress_sanitize_select',
 		'default'           => 'right-sidebar',
-		//'transport'			=> 'postMessage'
 	)
 );
 
-$wp_customize->add_control( 'onepress_layout',
+// Site layout (sidebar) control.
+$wp_customize->add_control(
+	'onepress_layout',
 	array(
 		'type'        => 'select',
 		'label'       => esc_html__( 'Site Layout', 'onepress' ),
@@ -29,57 +38,68 @@ $wp_customize->add_control( 'onepress_layout',
 			'right-sidebar' => esc_html__( 'Right sidebar', 'onepress' ),
 			'left-sidebar'  => esc_html__( 'Left sidebar', 'onepress' ),
 			'no-sidebar'    => esc_html__( 'No sidebar', 'onepress' ),
-		)
+		),
 	)
 );
 
-
-// Disable Animation
-$wp_customize->add_setting( 'onepress_animation_disable',
+// Disable animation setting.
+$wp_customize->add_setting(
+	'onepress_animation_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
 		'default'           => '',
 	)
 );
-$wp_customize->add_control( 'onepress_animation_disable',
+
+// Disable animation control.
+$wp_customize->add_control(
+	'onepress_animation_disable',
 	array(
 		'type'        => 'checkbox',
 		'label'       => esc_html__( 'Disable animation effect?', 'onepress' ),
 		'section'     => 'onepress_global_settings',
-		'description' => esc_html__( 'Check this box to disable all element animation when scroll.', 'onepress' )
+		'description' => esc_html__( 'Check this box to disable all element animation when scroll.', 'onepress' ),
 	)
 );
 
-// Disable Animation
-$wp_customize->add_setting( 'onepress_btt_disable',
+// Disable back to top button setting.
+$wp_customize->add_setting(
+	'onepress_btt_disable',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-		'transport'         => 'postMessage'
+		'default'           => 0,
+		'transport'         => 'postMessage',
 	)
 );
-$wp_customize->add_control( 'onepress_btt_disable',
+
+// Disable back to top button control.
+$wp_customize->add_control(
+	'onepress_btt_disable',
 	array(
 		'type'        => 'checkbox',
 		'label'       => esc_html__( 'Hide footer back to top?', 'onepress' ),
 		'section'     => 'onepress_global_settings',
-		'description' => esc_html__( 'Check this box to hide footer back to top button.', 'onepress' )
+		'description' => esc_html__( 'Check this box to hide footer back to top button.', 'onepress' ),
 	)
 );
 
-// Disable Google Font
-$wp_customize->add_setting( 'onepress_disable_g_font',
+// Disable Google Fonts setting.
+$wp_customize->add_setting(
+	'onepress_disable_g_font',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-		'transport'         => 'postMessage'
+		'default'           => 0,
+		'transport'         => 'postMessage',
 	)
 );
-$wp_customize->add_control( 'onepress_disable_g_font',
+
+// Disable Google Fonts control.
+$wp_customize->add_control(
+	'onepress_disable_g_font',
 	array(
 		'type'        => 'checkbox',
 		'label'       => esc_html__( 'Disable Google Fonts', 'onepress' ),
 		'section'     => 'onepress_global_settings',
-		'description' => esc_html__( 'Check this if you want to disable default google fonts in theme.', 'onepress' )
+		'description' => esc_html__( 'Check this if you want to disable default google fonts in theme.', 'onepress' ),
 	)
 );

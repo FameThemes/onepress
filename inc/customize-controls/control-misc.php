@@ -26,6 +26,10 @@ class OnePress_Misc_Control extends WP_Customize_Control {
 				echo '<p class="description">' . $this->description . '</p>';
 				break;
 
+			case 'notice-info' :
+				echo '<div class="notice notice-info"><p>' . $this->description . '</p></div>';
+				break;
+
 			case 'hr' :
 				echo '<hr />';
 				break;
