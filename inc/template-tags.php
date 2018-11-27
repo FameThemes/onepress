@@ -935,7 +935,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 		$content_width = absint( get_theme_mod( 'single_layout_content_width' ) );
 		if ( $content_width > 0 ) {
 			$value = $content_width . 'px';
-			echo '.site-main { max-width: ' . $value . '; margin-left: auto; margin-right: auto; }';
+			echo '.single-post .site-main { max-width: ' . $value . '; margin-left: auto; margin-right: auto; }';
 
 		}
 
