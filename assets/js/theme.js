@@ -1,4 +1,26 @@
 
+var isMobile = {
+	Android: function() {
+		return navigator.userAgent.match(/Android/i);
+	},
+	BlackBerry: function() {
+		return navigator.userAgent.match(/BlackBerry/i);
+	},
+	iOS: function() {
+		return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+	},
+	Opera: function() {
+		return navigator.userAgent.match(/Opera Mini/i);
+	},
+	Windows: function() {
+		return navigator.userAgent.match(/IEMobile/i);
+	},
+	any: function() {
+		return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+	}
+};
+
+
 function preload_images( images, complete_callback ) {
     if ( onepress_js_settings.hero_disable_preload ) {
         if ( complete_callback ) {
@@ -96,6 +118,29 @@ function _to_bool( v ) {
 })();
 
 
+( function(){
+	if ( isMobile.any() ) {
+		/**
+		 * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+		 */
+		// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+		let vh = window.innerHeight * 0.01;
+		let vw = window.innerWidth * 0.01;
+		// Then we set the value in the --vh, --vw custom property to the root of the document
+		document.documentElement.style.setProperty('--vh', `${vh}px`);
+		document.documentElement.style.setProperty('--vw', `${vw}px`);
+
+		window.addEventListener( 'resize', function(){
+			let vh = window.innerHeight * 0.01;
+			let vw = window.innerWidth * 0.01;
+			document.documentElement.style.setProperty('--vh', `${vh}px`);
+			document.documentElement.style.setProperty('--vw', `${vw}px`);
+		} );
+	}
+} )();
+
+
+
 /**
  * Sticky header when scroll.
  */
@@ -103,27 +148,6 @@ jQuery( document ).ready( function( $ ) {
 
     var $window     = $(window);
     var $document = $(document);
-
-    var isMobile = {
-        Android: function() {
-            return navigator.userAgent.match(/Android/i);
-        },
-        BlackBerry: function() {
-            return navigator.userAgent.match(/BlackBerry/i);
-        },
-        iOS: function() {
-            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-        },
-        Opera: function() {
-            return navigator.userAgent.match(/Opera Mini/i);
-        },
-        Windows: function() {
-            return navigator.userAgent.match(/IEMobile/i);
-        },
-        any: function() {
-            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-        }
-    };
 
     var getAdminBarHeight = function(){
         var h = 0;

@@ -13,6 +13,7 @@
 .no-sidebar {
 	.entry-content > .alignwide {
 		max-width: 100vw;
+		max-width: calc(var(--vw, 1vw) * 100);
 		width: 1110px;
 		transform: translateX(-50%);
 		left: 50%;
@@ -22,7 +23,10 @@
 	.entry-content > .alignfull {
 		margin: 1.5em 0;
 		max-width: 100vw;
+		max-width: calc(var(--vw, 1vw) * 100);
 		width: 100vw;
+		/* Use vh as a fallback for browsers that do not support Custom Properties */
+		width: calc(var(--vw, 1vw) * 100);
 		transform: translateX(-50%);
 		left: 50%;
 		position: relative;
@@ -89,6 +93,7 @@
 
 .wp-block-image.alignfull img {
 	width: 100vw;
+	width: calc(var(--vw, 1vw) * 100);
 }
 
 .wp-block-gallery:not(.components-placeholder) {
