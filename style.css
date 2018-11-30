@@ -4377,7 +4377,7 @@ div.wpforms-container .wpforms-form button[type=submit] {
 }
 @media screen and (max-width: 940px) {
   .c-bully {
-    right: 10px;
+    right: 0px;
   }
 }
 .c-bully.c-bully--inversed {
@@ -4385,10 +4385,15 @@ div.wpforms-container .wpforms-form button[type=submit] {
 }
 
 .c-bully__bullet {
-  padding: 0.5em;
+  padding: 8px;
   opacity: 0;
   cursor: pointer;
   position: relative;
+}
+@media screen and (max-width: 940px) {
+  .c-bully__bullet {
+    padding: 8px 3px;
+  }
 }
 .c-bully__bullet:hover .c-bully__title {
   opacity: 1;
@@ -4413,11 +4418,17 @@ div.wpforms-container .wpforms-form button[type=submit] {
 .c-bully__bullet:after {
   content: "";
   display: block;
-  width: 1em;
-  height: 1em;
+  width: 16px;
+  height: 16px;
   border: 2px solid currentColor;
   border-radius: 50%;
   will-change: transform;
+}
+@media screen and (max-width: 940px) {
+  .c-bully__bullet:after {
+    width: 9px;
+    height: 9px;
+  }
 }
 
 .c-bully__bullet--active {
@@ -4429,15 +4440,21 @@ div.wpforms-container .wpforms-form button[type=submit] {
 
 .c-bully__bullet--active:before {
   content: "";
-  width: 1em;
-  height: 1em;
+  width: 16px;
+  height: 16px;
   position: absolute;
   top: 50%;
   left: 50%;
-  font-size: 14px;
   transform: translate(-50%, -50%);
+  font-size: 14px;
   background: currentColor;
   border-radius: 50%;
+}
+@media screen and (max-width: 940px) {
+  .c-bully__bullet--active:before {
+    width: 9px;
+    height: 9px;
+  }
 }
 
 .c-bully__bullet--active:after {
