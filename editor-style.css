@@ -684,6 +684,8 @@ h6, p, ul, ol, dl, blockquote, pre {
   border-left: none;
   border-right: none;
   margin-bottom: 50px;
+  flex-basis: 100%;
+  text-align: center;
 }
 .nav-links .nav-previous {
   float: left;
@@ -691,7 +693,7 @@ h6, p, ul, ol, dl, blockquote, pre {
 .nav-links .nav-next {
   float: right;
 }
-.nav-links a {
+.nav-links a, .nav-links .page-numbers {
   background: #cccccc;
   color: #FFFFFF;
   padding: 12px 20px;
@@ -701,7 +703,12 @@ h6, p, ul, ol, dl, blockquote, pre {
   text-transform: uppercase;
   border-radius: 2px;
 }
-.nav-links a:hover {
+@media screen and (max-width: 940px) {
+  .nav-links a, .nav-links .page-numbers {
+    padding: 6px 10px;
+  }
+}
+.nav-links a:hover, .nav-links a.current, .nav-links .page-numbers:hover, .nav-links .page-numbers.current {
   background: #03c4eb;
   text-decoration: none;
 }

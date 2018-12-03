@@ -644,8 +644,10 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt,
 				.pirate-forms-submit-button, .pirate-forms-submit-button:hover, input[type="reset"], input[type="submit"], input[type="submit"], .pirate-forms-submit-button,
 				.contact-form div.wpforms-container-full .wpforms-form .wpforms-submit,
-				.contact-form div.wpforms-container-full .wpforms-form .wpforms-submit:hover
-
+				.contact-form div.wpforms-container-full .wpforms-form .wpforms-submit:hover,
+				.nav-links a:hover, .nav-links a.current, 
+				.nav-links .page-numbers:hover, 
+				.nav-links .page-numbers.current
 				{
 					background: #<?php echo $primary; ?>;
 				}

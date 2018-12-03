@@ -1534,6 +1534,8 @@ Footer widgets
   border-left: none;
   border-right: none;
   margin-bottom: 50px;
+  flex-basis: 100%;
+  text-align: center;
 }
 .nav-links .nav-previous {
   float: left;
@@ -1541,7 +1543,7 @@ Footer widgets
 .nav-links .nav-next {
   float: right;
 }
-.nav-links a {
+.nav-links a, .nav-links .page-numbers {
   background: #cccccc;
   color: #FFFFFF;
   padding: 12px 20px;
@@ -1551,7 +1553,12 @@ Footer widgets
   text-transform: uppercase;
   border-radius: 2px;
 }
-.nav-links a:hover {
+@media screen and (max-width: 940px) {
+  .nav-links a, .nav-links .page-numbers {
+    padding: 6px 10px;
+  }
+}
+.nav-links a:hover, .nav-links a.current, .nav-links .page-numbers:hover, .nav-links .page-numbers.current {
   background: #03c4eb;
   text-decoration: none;
 }
@@ -4418,8 +4425,8 @@ div.wpforms-container .wpforms-form button[type=submit] {
 .c-bully__bullet:after {
   content: "";
   display: block;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   border: 2px solid currentColor;
   border-radius: 50%;
   will-change: transform;
@@ -4440,8 +4447,8 @@ div.wpforms-container .wpforms-form button[type=submit] {
 
 .c-bully__bullet--active:before {
   content: "";
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   position: absolute;
   top: 50%;
   left: 50%;

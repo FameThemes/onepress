@@ -1,6 +1,10 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+# 2.2.1
+* IMPROVED: Improve posts navigation styling.
+
+
 # 2.2.0
 * NEW: Front page sections manager.
 * NEW: Support WPForm plugin.
