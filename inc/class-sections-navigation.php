@@ -84,7 +84,7 @@ class Onepress_Dots_Navigation {
 		$wp_customize->add_control(
 			$this->get_name( '__disable_mobile' ),
 			array(
-				'label'       => __( 'Disable in section navigation on mobile.', 'onepress' ),
+				'label'       => __( 'Disable the section navigation on mobile', 'onepress' ),
 				'section'     => $section_id,
 				'type'        => 'checkbox',
 			)
