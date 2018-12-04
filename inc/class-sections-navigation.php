@@ -282,20 +282,20 @@ class Onepress_Dots_Navigation {
 					$name   = $this->get_name( $id );
 					// $enable = get_theme_mod( $name, $args['default'] );
 					$translated_id = ( isset( $args['id'] ) && $args['id'] ) ? $args['id'] : $id;
-					$el_id = sanitize_text_field( get_theme_mod( 'onepress_' . $id . '_id', $translated_id, false ) );
+					$el_id = sanitize_title( get_theme_mod( 'onepress_' . $id . '_id', $translated_id, false ) );
 					if ( ! $el_id ) {
 						$el_id = $id;
 					}
 					$data[ $el_id ] = array(
 						'id'      => $el_id,
 						'_id'     => $id,
-						'inverse' => get_theme_mod( $this->get_name( $id . '_inverse' ), isset( $args['inverse'] ) ? $args['inverse']: false ),
-						'enable'  => get_theme_mod( $name, $args['default'] ) ? true                                                 : false,
+						'inverse' => get_theme_mod( $this->get_name( $id . '_inverse' ), isset( $args['inverse'] ) ? $args['inverse'] : false ),
+						'enable'  => get_theme_mod( $name, $args['default'] ) ? true : false,
 						'title'   => get_theme_mod( 'onepress_' . $id . '_title', $args['title'] ),
 					);
 					$custom_title   = get_theme_mod( $this->get_name( $id . '_label' ), false );
 					if ( $custom_title ) {
-						$data[ $id ]['title'] = $custom_title;
+						$data[ $el_id ]['title'] = $custom_title;
 					}
 				}
 			}
