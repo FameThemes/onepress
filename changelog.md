@@ -2,6 +2,7 @@
 CHANGELOG
 ====================================================================
 # 2.2.1
+* NEW: Add option to hide the post thumbnail if not exist.
 * IMPROVED: Improve posts navigation styling.
 * IMPROVED: Improve mobile navigation menu.
 
@@ -23,6 +24,7 @@ CHANGELOG
 * NEW: Item content source for Service section.
 * NEW: Hide post categories of News section. See in Customizer -> Section News.
 * NEW: Custom excerpt length. See in Customizer -> Section News.
+* IMPROVED: Improved More Posts button link in News section. 
 * IMPROVED: Improved More Posts button link in News section. 
 * IMPROVED: Re-Structure customize configs.
 * IMPROVED: Re-Structure customize controls.
