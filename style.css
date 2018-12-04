@@ -1044,7 +1044,6 @@ Footer widgets
 
   .onepress-menu.onepress-menu-mobile {
     position: absolute;
-    box-shadow: inset 0px 5px 5px 0px rgba(50, 50, 50, 0.35);
     top: 75px;
     right: 0;
     width: 100%;
@@ -4406,6 +4405,11 @@ div.wpforms-container .wpforms-form button[type=submit] {
 }
 .c-bully.c-bully--inversed {
   color: #fff;
+}
+@media screen and (max-width: 940px) {
+  .c-bully.c-bully-hide-on-mobile {
+    display: none;
+  }
 }
 
 .onepress-menu-mobile-opening .c-bully {

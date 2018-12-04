@@ -74,12 +74,30 @@ class Onepress_Dots_Navigation {
 		);
 
 		$wp_customize->add_setting(
+			$this->get_name( '__disable_mobile' ),
+			array(
+				'sanitize_callback' => 'onepress_sanitize_text',
+				'default'           => false,
+			)
+		);
+
+		$wp_customize->add_control(
+			$this->get_name( '__disable_mobile' ),
+			array(
+				'label'       => __( 'Disable in section navigation on mobile.', 'onepress' ),
+				'section'     => $section_id,
+				'type'        => 'checkbox',
+			)
+		);
+
+		$wp_customize->add_setting(
 			$this->get_name( '__enable_label' ),
 			array(
 				'sanitize_callback' => 'onepress_sanitize_text',
 				'default'           => 1,
 			)
 		);
+
 		$wp_customize->add_control(
 			$this->get_name( '__enable_label' ),
 			array(
@@ -317,6 +335,7 @@ class Onepress_Dots_Navigation {
 					'Onepress_Bully',
 					array(
 						'enable_label' => get_theme_mod( $this->get_name( '__enable_label' ), true ) ? true : false,
+						'disable_mobile' => get_theme_mod( $this->get_name( '__disable_mobile' ), false ) ? true : false,
 						'sections' => $this->get_settings(),
 					)
 				);
@@ -356,10 +375,6 @@ class Onepress_Dots_Navigation {
 
 			if ( $color ) {
 				$code .= " body .c-bully .c-bully__title { color: {$color}; } ";
-			}
-
-			if ( is_customize_preview() ) {
-				// die( 'loadmoe' );
 			}
 		}
 

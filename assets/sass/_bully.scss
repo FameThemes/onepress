@@ -26,6 +26,12 @@ $bully_size_s: 9px;
 	&.c-bully--inversed {
 		color: #fff;
 	}
+	&.c-bully-hide-on-mobile {
+		@include for(screens-medium) {
+			display: none;
+		} 
+	}
+	
 }
 .onepress-menu-mobile-opening {
 	.c-bully { 

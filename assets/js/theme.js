@@ -277,7 +277,7 @@ jQuery(document).ready(function($) {
 		var top = offset.y + offset.height - 1;
 		if (
 			$("#wpadminbar").length &&
-			$("#wpadminbar").css("position") === "absolute"
+			( $("#wpadminbar").css("position") === "absolute" || $("#wpadminbar").css("position") === "fixed" )
 		) {
 			top -= $("#wpadminbar").height();
 		}

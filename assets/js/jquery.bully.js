@@ -17,6 +17,10 @@
 		frameRendered = true;
 
 	$bully = $('<div class="c-bully">').appendTo("body");
+	if ( Onepress_Bully.disable_mobile ) {
+		$bully.addClass( 'c-bully-hide-on-mobile' );
+	}
+
 	$current = $(
 		'<div class="c-bully__bullet c-bully__bullet--active">'
 	).appendTo($bully);
