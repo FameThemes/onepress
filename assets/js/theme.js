@@ -340,17 +340,20 @@ jQuery(document).ready(function($) {
 				}
 			);
 		} else {
-			main_navigation.animate(
-				{
-					height: 0
-				},
-				300,
-				function() {
-					main_navigation.removeAttr("style");
-					main_navigation.removeClass("onepress-menu-mobile");
-					$("body").removeClass("onepress-menu-mobile-opening");
-				}
-			);
+			main_navigation.css( { height: main_navigation.height(), 'min-height': 0, overflow: 'hidden' } );
+			setTimeout( function(){
+				main_navigation.animate(
+					{
+						height: 0
+					},
+					300,
+					function() {
+						main_navigation.removeAttr("style");
+						main_navigation.removeClass("onepress-menu-mobile");
+						$("body").removeClass("onepress-menu-mobile-opening");
+					}
+				);
+			}, 40 );
 		}
 	});
 
