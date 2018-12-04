@@ -3,6 +3,7 @@ CHANGELOG
 ====================================================================
 # 2.2.1
 * IMPROVED: Improve posts navigation styling.
+* IMPROVED: Improve mobile navigation menu.
 
 
 # 2.2.0

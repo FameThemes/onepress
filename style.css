@@ -734,11 +734,11 @@ Footer widgets
   line-height: 75px;
   position: relative;
   width: 100%;
-  background: #FFFFFF;
+  background: #ffffff;
   z-index: 1000;
   -webkit-transition: all 1s ease-out;
   /* Safari */
-  transition: all .5s ease-out;
+  transition: all 0.5s ease-out;
   box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
 }
 .site-header.header-fixed {
@@ -801,7 +801,7 @@ Footer widgets
   background-color: transparent;
 }
 .is-transparent .site-header.header-fixed {
-  background: #FFFFFF;
+  background: #ffffff;
 }
 .is-transparent .site-header.header-fixed.no-scroll {
   background: transparent;
@@ -822,7 +822,8 @@ Footer widgets
   float: left;
 }
 
-.site-branding .site-title, .site-branding .site-text-logo {
+.site-branding .site-title,
+.site-branding .site-text-logo {
   margin: 0px;
   line-height: 1;
   font-family: "Raleway", Helvetica, Arial, sans-serif;
@@ -834,7 +835,8 @@ Footer widgets
   vertical-align: middle;
   font-weight: 600;
 }
-.site-branding .site-title:hover, .site-branding .site-text-logo:hover {
+.site-branding .site-title:hover,
+.site-branding .site-text-logo:hover {
   text-decoration: none;
 }
 .site-branding .site-title {
@@ -846,14 +848,17 @@ Footer widgets
 .site-branding .site-logo-div {
   line-height: 75px;
 }
-.site-branding .no-logo-img.has-desc, .site-branding .has-logo-img {
+.site-branding .no-logo-img.has-desc,
+.site-branding .has-logo-img {
   line-height: 60px;
 }
-.site-branding .no-logo-img.has-desc .site-title, .site-branding .has-logo-img .site-title {
+.site-branding .no-logo-img.has-desc .site-title,
+.site-branding .has-logo-img .site-title {
   margin-top: -5px;
   position: relative;
 }
-.site-branding .no-logo-img.has-desc .site-description, .site-branding .has-logo-img .site-description {
+.site-branding .no-logo-img.has-desc .site-description,
+.site-branding .has-logo-img .site-description {
   font-size: 12px;
   line-height: 14px;
   margin-bottom: 0;
@@ -862,7 +867,8 @@ Footer widgets
   color: #000000;
 }
 
-.home.header-transparent .no-scroll .site-brand-inner, .home.header-transparent .no-scroll .site-text-logo {
+.home.header-transparent .no-scroll .site-brand-inner,
+.home.header-transparent .no-scroll .site-text-logo {
   color: #fff;
 }
 
@@ -897,7 +903,8 @@ Footer widgets
   color: #000000;
   transition: all 0.2s linear 0s;
 }
-.header-social .fa-stack-1x, .header-social .fa-stack-2x {
+.header-social .fa-stack-1x,
+.header-social .fa-stack-2x {
   position: absolute;
   left: 0;
   width: 100%;
@@ -910,7 +917,7 @@ Footer widgets
   font-size: 2em;
 }
 .header-social .fa-inverse {
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .header-btn {
@@ -918,7 +925,8 @@ Footer widgets
 }
 
 /* Site Navigation */
-.onepress-menu, .onepress-menu * {
+.onepress-menu,
+.onepress-menu * {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -944,7 +952,8 @@ Footer widgets
 .onepress-menu > li {
   float: left;
 }
-.onepress-menu li:hover > ul, .onepress-menu li.sfHover > ul {
+.onepress-menu li:hover > ul,
+.onepress-menu li.sfHover > ul {
   display: block;
 }
 .onepress-menu a {
@@ -961,8 +970,8 @@ Footer widgets
 .onepress-menu li {
   white-space: nowrap;
   *white-space: normal;
-  -webkit-transition: background .2s;
-  transition: background .2s;
+  -webkit-transition: background 0.2s;
+  transition: background 0.2s;
 }
 .onepress-menu li:hover,
 .onepress-menu li.sfHover {
@@ -1027,17 +1036,21 @@ Footer widgets
 
   .main-navigation .onepress-menu {
     width: 100% !important;
-    display: none;
+    display: block;
+    height: 0px;
+    overflow: hidden;
+    background: #fff;
   }
 
   .onepress-menu.onepress-menu-mobile {
-    display: block !important;
     position: absolute;
+    box-shadow: inset 0px 5px 5px 0px rgba(50, 50, 50, 0.35);
     top: 75px;
     right: 0;
     width: 100%;
-    background: transparent;
-    z-index: 700;
+    z-index: 800;
+    overflow: auto !important;
+    border-top: 1px solid #e9e9e9;
     border-bottom: 1px solid #e9e9e9;
   }
   .onepress-menu.onepress-menu-mobile > li > a {
@@ -1074,9 +1087,12 @@ Footer widgets
   }
   .onepress-menu.onepress-menu-mobile li {
     line-height: 20px;
-    background: #FFFFFF;
+    background: #ffffff;
     border-top: 1px solid #e9e9e9;
     width: 100% !important;
+  }
+  .onepress-menu.onepress-menu-mobile > li:first-child {
+    border-top: 0px none;
   }
   .onepress-menu.onepress-menu-mobile li.onepress-current-item > a {
     color: #03c4eb;
@@ -1145,7 +1161,7 @@ Footer widgets
   height: 3px;
   width: 24px;
   background: #000000;
-  content: '';
+  content: "";
   right: 0;
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
@@ -1209,7 +1225,8 @@ Footer widgets
   background: #f8f9f9;
   border-bottom: 1px solid #e9e9e9;
 }
-.page-header .entry-title, .page-header .page-title {
+.page-header .entry-title,
+.page-header .page-title {
   margin-bottom: 0px;
   font-size: 24px;
   font-weight: 600;
@@ -1275,7 +1292,7 @@ Footer widgets
 ------------------------------*/
 .site-footer {
   background: #111111;
-  color: #BBBBBB;
+  color: #bbbbbb;
   font-size: 14px;
 }
 .site-footer a {
@@ -1293,7 +1310,7 @@ Footer widgets
   }
 }
 .site-footer .footer-connect .follow-heading {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 20px;
   letter-spacing: 0.8px;
 }
@@ -1358,7 +1375,7 @@ Footer widgets
 .site-footer .footer-social a {
   font-size: 30px;
   margin: 0px 13px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 .site-footer .footer-social a:hover {
   color: #03c4eb;
@@ -4389,6 +4406,10 @@ div.wpforms-container .wpforms-form button[type=submit] {
 }
 .c-bully.c-bully--inversed {
   color: #fff;
+}
+
+.onepress-menu-mobile-opening .c-bully {
+  z-index: 10;
 }
 
 .c-bully__bullet {
