@@ -282,6 +282,22 @@ $wp_customize->add_control( 'onepress_g_lightbox',
 	)
 );
 
+// Gallery image link to single
+$wp_customize->add_setting( 'onepress_g_image_link',
+	array(
+		'sanitize_callback' => 'onepress_sanitize_checkbox',
+		'default'           => 1,
+	)
+);
+$wp_customize->add_control( 'onepress_g_image_link',
+	array(
+		'label'    => esc_html__( 'Enable Image Link', 'onepress' ),
+		'section'  => 'onepress_gallery_content',
+		'priority' => 71,
+		'type'     => 'checkbox',
+	)
+);
+
 // Gallery readmore link
 $wp_customize->add_setting( 'onepress_g_readmore_link',
 	array(

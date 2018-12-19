@@ -1051,9 +1051,15 @@ jQuery(document).ready(function($) {
 		});
 
 		if ($.fn.lightGallery) {
+			var wrap_tag = $(".enable-lightbox", $context).find('.g-item').first();
+			var tag_selector = 'a';
+			if( wrap_tag.is( 'div' ) ){
+				tag_selector = 'div';
+			}
+			
 			$(".enable-lightbox", $context).lightGallery({
 				mode: "lg-fade",
-				selector: "a"
+				selector: tag_selector
 				//cssEasing : 'cubic-bezier(0.25, 0, 0.25, 1)'
 			});
 		}

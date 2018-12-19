@@ -543,6 +543,18 @@
 	border-top: 1px solid $border;
 	background: #f8f9f9;
 	border-bottom: 1px solid $border;
+
+	position: relative;
+	&:before {
+		position: absolute;
+		top: 0px;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		display: block;
+		content: " ";
+	}
+
 	.entry-title,
 	.page-title {
 		margin-bottom: 0px;
