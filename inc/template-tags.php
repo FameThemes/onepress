@@ -1206,7 +1206,7 @@ if ( ! function_exists( 'onepress_get_gallery_image_ids' ) ) {
 	 *
 	 * @since 2.2.1
 	 *
-	 * @return array or string
+	 * @return array
 	 */
 	function onepress_get_gallery_image_ids( $page_id ) {
 		$images = array();
@@ -1236,6 +1236,36 @@ if ( ! function_exists( 'onepress_get_gallery_image_ids' ) ) {
 	}
 }
 
+if ( ! function_exists( 'onepress_get_gallery_image_ids_by_urls' ) ) {
+	/**
+	 * Get Gallery image ids by urls from page content
+	 *
+	 * @since 2.2.1
+	 *
+	 * @return array
+	 */
+	function onepress_get_gallery_image_ids_by_urls( $page_id ) {
+		$images = array();
+		$post = get_post( $page_id );
+		$post_content = $post->post_content;
+		if ( '' != $post_content ) {
+			$urls = array();
+			preg_match_all( '#src=([\'"])(.+?)\1#is', $post_content, $image_urls, PREG_SET_ORDER );
+			if ( is_array( $image_urls ) && ! empty( $image_urls ) ) {
+				foreach ( $image_urls as $img_url ) {
+					if ( isset( $img_url[2] ) ) {
+						$urls[] = $img_url[2];
+					}
+				}
+			}
+			wp_reset_postdata();
+			if ( ! empty( $urls ) ) {
+				$images = $urls;
+			}
+		}
+		return $images;
+	}
+}
 
 if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 	/**
@@ -1262,7 +1292,7 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 				}
 
 				$display_type = get_theme_mod( 'onepress_gallery_display', 'grid' );
-				if ( $display_type == 'masonry' || $display_type == ' justified' ) {
+				if ( 'masonry' == $display_type || 'justified' == $display_type ) {
 					$size = 'large';
 				} else {
 					$size = 'onepress-small';
@@ -1299,6 +1329,20 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 									'alt'       => $alt,
 								);
 							}
+						}
+					}
+				} else {
+					if ( $page_id ) {
+						$gallery_image_urls = onepress_get_gallery_image_ids_by_urls( $page_id );
+						foreach ( $gallery_image_urls as $key => $value ) {
+							$data[ $key ] = array(
+								'id'        => '',
+								'thumbnail' => $value,
+								'full'      => $value,
+								'title'     => '',
+								'content'   => '',
+								'alt'       => '',
+							);
 						}
 					}
 				}
