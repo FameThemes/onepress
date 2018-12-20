@@ -308,13 +308,7 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
 					echo '<div id="parallax-' . esc_attr( $section_id ) . '" class="' . esc_attr( $class ) . '">';
 					echo ' <div class="parallax-bg"><img src="' . esc_url( $image ) . '" alt=""></div>';
 				} elseif ( $image || $alpha ) { // image bg
-					$extra_attr_style = '';
-					if( is_customize_preview( ) ) {
-						if( $image ){
-							$extra_attr_style = 'background-image: url('.esc_url( $image ).');';
-						}
-					}
-					echo '<div id="bgimage-' . esc_attr( $section_id ) . '" class="bgimage-alpha bgimage-section bgimage-' . esc_attr( $section_id ) . '" style="'.esc_attr( $extra_attr_style ).'">';
+					echo '<div id="bgimage-' . esc_attr( $section_id ) . '" class="bgimage-alpha bgimage-section bgimage-' . esc_attr( $section_id ) . '">';
 				}
 				break;
 		}// end switch
