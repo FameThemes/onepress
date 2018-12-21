@@ -364,7 +364,7 @@ select {
 	padding: $base/2;
 }
 
-textarea,
+textarea:not(.editor-post-title__input),
 input[type="date"],
 input[type="datetime"],
 input[type="datetime-local"],

@@ -118,6 +118,8 @@
 	border-left: none;
 	border-right: none;
 	margin-bottom: 50px;
+	flex-basis: 100%;
+    text-align: center;
 	@extend .clearfix !optional;;
 	.nav-previous {
 		float: left;
@@ -125,16 +127,19 @@
 	.nav-next {
 		float: right;
 	}
-	a {
+	a, .page-numbers {
 		background: #cccccc;
 		color: #FFFFFF;
 		padding: 12px 20px;
+		@include for( screens-medium ){
+			padding: 6px 10px;
+		}
 		font-weight: 600;
 		font-size: 12px;
 		letter-spacing: 1px;
 		text-transform: uppercase;
 		border-radius: 2px;
-		&:hover {
+		&:hover, &.current {
 			background: $primary;
 			text-decoration: none;
 		}

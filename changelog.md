@@ -1,6 +1,23 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+# 2.2.1
+* NEW: Add option to hide the post thumbnail if not exist.
+* NEW: Add option to enable/disable gallery image link.
+* NEW: Add option to change feature icon hover color.
+* NEW: Add the title for feature item's link.
+* IMPROVED: Improve mobile navigation menu.
+* IMPROVED: Set widh for single post only.
+* IMPROVED: Improve search form styling.
+* IMPROVED: Improve posts navigation styling.
+* IMPROVED: Improve mobile navigation menu.
+* IMPROVED: Improve PHP 7+ Compatibility.
+* IMPROVED: Improve single post content max width.
+* IMPROVED: Improve the page titlebar background option.
+* FIXED: Gutenberg - Gallery.
+* FIXED: Dots navigation working incorrect when language is not EN.
+
+
 # 2.2.0
 * NEW: Front page sections manager.
 * NEW: Support WPForm plugin.
@@ -18,6 +35,7 @@ CHANGELOG
 * NEW: Item content source for Service section.
 * NEW: Hide post categories of News section. See in Customizer -> Section News.
 * NEW: Custom excerpt length. See in Customizer -> Section News.
+* IMPROVED: Improved More Posts button link in News section. 
 * IMPROVED: Improved More Posts button link in News section. 
 * IMPROVED: Re-Structure customize configs.
 * IMPROVED: Re-Structure customize controls.
