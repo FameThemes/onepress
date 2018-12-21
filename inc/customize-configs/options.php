@@ -1,9 +1,12 @@
 <?php
 /**
  * Site Options
+ *
+ * @package onepress
  */
 
-$wp_customize->add_panel( 'onepress_options',
+$wp_customize->add_panel(
+	'onepress_options',
 	array(
 		'priority'       => 5,
 		'capability'     => 'edit_theme_options',
@@ -16,8 +19,7 @@ $wp_customize->add_panel( 'onepress_options',
 
 if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress < 4.7.
 
-	/* Custom CSS Settings
-	----------------------------------------------------------------------*/
+	// Custom CSS Settings.
 	$wp_customize->add_section(
 		'onepress_custom_code',
 		array(
@@ -41,7 +43,7 @@ if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress 
 		array(
 			'label'   => __( 'Custom CSS', 'onepress' ),
 			'section' => 'onepress_custom_code',
-			'type'    => 'textarea'
+			'type'    => 'textarea',
 		)
 	);
 } else {

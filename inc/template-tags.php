@@ -700,7 +700,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				echo ".page-header:not(.page--cover){ text-align: {$normal_title_align}; }";
 			}
 
-			$cover_color = sanitize_hex_color( get_theme_mod( 'onepress_page_cover_color' ) );
+			$cover_color = onepress_sanitize_color_alpha( get_theme_mod( 'onepress_page_cover_color' ) );
 			if ( $cover_color ) {
 				echo " .page-header.page--cover .entry-title { color: {$cover_color}; } .page-header .entry-title { color: {$cover_color}; }";
 			}

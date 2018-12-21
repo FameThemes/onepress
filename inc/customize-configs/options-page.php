@@ -1,8 +1,10 @@
 <?php
+/**
+ * Page Settings
+ *
+ * @package onepress
+ */
 
-/*
- Page Settings
-----------------------------------------------------------------------*/
 $wp_customize->add_section(
 	'onepress_page',
 	array(
@@ -13,7 +15,7 @@ $wp_customize->add_section(
 	)
 );
 
-// Disable the page title bar
+// Disable the page title bar.
 $wp_customize->add_setting(
 	'onepress_page_title_bar_disable',
 	array(
@@ -68,7 +70,7 @@ $wp_customize->add_control(
 $wp_customize->add_setting(
 	'onepress_page_cover_color',
 	array(
-		'sanitize_callback' => 'sanitize_hex_color',
+		'sanitize_callback' => 'onepress_sanitize_color_alpha',
 		'default'           => null,
 		'transport'         => 'postMessage',
 	)
@@ -84,12 +86,11 @@ $wp_customize->add_control(
 	)
 );
 
-// Overlay color
+// Overlay color.
 $wp_customize->add_setting(
 	'onepress_page_cover_overlay',
 	array(
 		'sanitize_callback' => 'onepress_sanitize_color_alpha',
-		// 'default'           => 'rgba(0,0,0,.3)',
 		'transport'         => 'postMessage',
 	)
 );
@@ -104,43 +105,8 @@ $wp_customize->add_control(
 	)
 );
 
-$wp_customize->add_setting(
-	'onepress_page_cover_align',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => 'center',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	'onepress_page_cover_align',
-	array(
-		'label'   => esc_html__( 'Cover Content Align', 'onepress' ),
-		'section' => 'onepress_page',
-		'type'    => 'select',
-		'choices' => array(
-			'center' => esc_html__( 'Center', 'onepress' ),
-			'left'   => esc_html__( 'Left', 'onepress' ),
-			'right'  => esc_html__( 'Right', 'onepress' ),
-		),
-	)
-);
-
-// hr
-$wp_customize->add_setting( 'onepress_page_title_align_hr', array( 'sanitize_callback' => 'onepress_sanitize_text' ) );
-$wp_customize->add_control(
-	new OnePress_Misc_Control(
-		$wp_customize,
-		'onepress_page_title_align_hr',
-		array(
-			'section'     => 'onepress_page',
-			'type'        => 'hr',
-		)
-	)
-);
-
 /**
- * Normal page title align
+ * Normal page title align.
  *
  * @since 2.2.1
 */
@@ -155,7 +121,31 @@ $wp_customize->add_setting(
 $wp_customize->add_control(
 	'onepress_page_normal_align',
 	array(
-		'label'   => esc_html__( 'Normal Content Align', 'onepress' ),
+		'label'   => esc_html__( 'Page Title Alignment', 'onepress' ),
+		'section' => 'onepress_page',
+		'type'    => 'select',
+		'choices' => array(
+			'left'   => esc_html__( 'Left', 'onepress' ),
+			'right'  => esc_html__( 'Right', 'onepress' ),
+			'center' => esc_html__( 'Center', 'onepress' ),
+		),
+	)
+);
+
+
+$wp_customize->add_setting(
+	'onepress_page_cover_align',
+	array(
+		'sanitize_callback' => 'sanitize_text_field',
+		'default'           => 'center',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	'onepress_page_cover_align',
+	array(
+		'label'   => esc_html__( 'Page Title Cover Alignment', 'onepress' ),
+		'description'   => esc_html__( 'Apply when the page display featured image as header cover.', 'onepress' ),
 		'section' => 'onepress_page',
 		'type'    => 'select',
 		'choices' => array(
@@ -165,3 +155,4 @@ $wp_customize->add_control(
 		),
 	)
 );
+
