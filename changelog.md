@@ -6,6 +6,7 @@ CHANGELOG
 * NEW: Add option to enable/disable gallery image link.
 * NEW: Add option to change feature icon hover color.
 * FIXED: Gutenberg - Gallery.
+* IMPROVED: Improve search form styling.
 * IMPROVED: Improve posts navigation styling.
 * IMPROVED: Improve mobile navigation menu.
 * IMPROVED: Improve PHP 7+ Compatibility.

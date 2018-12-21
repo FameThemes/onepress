@@ -620,10 +620,12 @@ h6, p, ul, ol, dl, blockquote, pre {
   padding-top: 40px;
 }
 
-.template-fullwidth-stretched #primary, .siteorigin-panels #primary {
+.template-fullwidth-stretched #primary,
+.siteorigin-panels #primary {
   padding: 0;
 }
-.template-fullwidth-stretched .entry-content, .siteorigin-panels .entry-content {
+.template-fullwidth-stretched .entry-content,
+.siteorigin-panels .entry-content {
   margin-bottom: 0px;
 }
 
@@ -658,8 +660,18 @@ h6, p, ul, ol, dl, blockquote, pre {
   }
 }
 
+.left-sidebar .site-main {
+  margin-left: auto;
+}
+
 .no-sidebar .content-area {
   width: 100%;
+}
+
+.single-post .no-sidebar .site-main,
+.single-post .no-sidebar .entry-content > * {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media screen and (min-width: 940px) {
@@ -702,16 +714,20 @@ Footer widgets
 .footer-widgets table {
   border-collapse: collapse;
 }
-.footer-widgets table > thead > tr > th, .footer-widgets table > thead > tr > td {
+.footer-widgets table > thead > tr > th,
+.footer-widgets table > thead > tr > td {
   border-width: 1px;
 }
-.footer-widgets table th, .footer-widgets table td {
+.footer-widgets table th,
+.footer-widgets table td {
   border-color: rgba(233, 233, 233, 0.4);
 }
 .footer-widgets .widget-title {
   color: #ffffff;
 }
-.footer-widgets .widget-area .widget_categories li, .footer-widgets .widget-area .widget_archive li, .footer-widgets .widget-area .widget_meta li {
+.footer-widgets .widget-area .widget_categories li,
+.footer-widgets .widget-area .widget_archive li,
+.footer-widgets .widget-area .widget_meta li {
   width: 100% !important;
   float: none;
 }
@@ -1991,14 +2007,24 @@ section > .customize-partial-edit-shortcut button {
 
 /* Search
 ------------------------------*/
-.sidebar .widget .search-form .search-field {
+.search-form {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.search-form .search-field {
   width: 100% !important;
   padding: 10px 15px;
   padding:  0.625rem 0.9375rem;
 }
-.sidebar .widget .search-form .search-submit {
-  padding: 12px 23px 12px;
-  width: 93%;
+.search-form .search-submit {
+  width: auto;
+  margin: 0px 0 0 0.5em;
+  height: 100%;
+}
+.search-form label {
+  flex-grow: 2;
+  margin: 0px;
 }
 
 /* Recent Comment
