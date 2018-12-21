@@ -109,8 +109,7 @@ module.exports = function(grunt) {
 
 		replace: {
 			theme_main: {
-				src: ["style.css", "assets/sass/style.scss"],
-				src: ["editor-style.css", "assets/sass/editor.scss"],
+				src: ["style.css", "assets/sass/style.scss", "editor-style.css", "assets/sass/editor.scss" ],
 				overwrite: true,
 				replacements: [
 					{
