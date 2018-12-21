@@ -5,13 +5,17 @@ CHANGELOG
 * NEW: Add option to hide the post thumbnail if not exist.
 * NEW: Add option to enable/disable gallery image link.
 * NEW: Add option to change feature icon hover color.
-* FIXED: Gutenberg - Gallery.
+* NEW: Add the title for feature item's link.
+* IMPROVED: Improve mobile navigation menu.
+* IMPROVED: Set widh for single post only.
 * IMPROVED: Improve search form styling.
 * IMPROVED: Improve posts navigation styling.
 * IMPROVED: Improve mobile navigation menu.
 * IMPROVED: Improve PHP 7+ Compatibility.
 * IMPROVED: Improve single post content max width.
 * IMPROVED: Improve the page titlebar background option.
+* FIXED: Gutenberg - Gallery.
+* FIXED: Dots navigation working incorrect when language is not EN.
 
 
 # 2.2.0
