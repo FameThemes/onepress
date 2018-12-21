@@ -1206,6 +1206,7 @@ if ( ! function_exists( 'onepress_get_gallery_image_ids' ) ) {
 	/**
 	 * Get Gallery image ids from page content
 	 *
+	 * @since unknown
 	 * @since 2.2.1
 	 *
 	 * @return array
@@ -1243,7 +1244,7 @@ if ( ! function_exists( 'onepress_get_gallery_image_ids_by_urls' ) ) {
 	 * Get Gallery image ids by urls from page content
 	 *
 	 * @since 2.2.1
-	 *
+	 * @param int $page_id
 	 * @return array
 	 */
 	function onepress_get_gallery_image_ids_by_urls( $page_id ) {
@@ -1274,11 +1275,12 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 	 * Get Gallery data
 	 *
 	 * @since 1.2.6
+	 * @since 2.2.1
 	 *
 	 * @return array
 	 */
 	function onepress_get_section_gallery_data() {
-		$source = 'page'; // get_theme_mod( 'onepress_gallery_source' );
+		$source = 'page';
 		if ( has_filter( 'onepress_get_section_gallery_data' ) ) {
 			$data = apply_filters( 'onepress_get_section_gallery_data', false );
 			return $data;
