@@ -691,11 +691,13 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			switch ( $cover_align ) {
 				case 'left':
 				case 'right':
-					echo ".page-header.page--cover{ text-align: {$cover_align}; } .page-header{ text-align: {$cover_align}; }";
+					echo ".page-header.page--cover{ text-align: {$cover_align}; }";
 					break;
-				case 'center':
-					echo ".page-header:not(.page--cover){ text-align: {$cover_align}; }";
-					break;
+			}
+
+			$normal_title_align = sanitize_text_field( get_theme_mod( 'onepress_page_normal_align' ) );
+			if ( '' != $normal_title_align && in_array( $normal_title_align, array( 'left', 'right', 'center' ) ) ) {
+				echo ".page-header:not(.page--cover){ text-align: {$normal_title_align}; }";
 			}
 
 			$cover_color = sanitize_hex_color( get_theme_mod( 'onepress_page_cover_color' ) );

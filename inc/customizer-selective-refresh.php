@@ -336,6 +336,7 @@ function onepress_customizer_partials( $wp_customize ) {
 		'onepress_menu_item_padding',
 
 		'onepress_page_cover_align',
+		'onepress_page_normal_align',
 		'onepress_page_cover_color',
 		'onepress_page_cover_overlay',
 		'onepress_page_cover_pd_top',
