@@ -270,7 +270,14 @@ jQuery(document).ready(function($) {
 	var main_navigation = jQuery(".main-navigation .onepress-menu");
 	var stite_header = $(".site-header");
 	var header = document.getElementById("masthead");
-	var noSticky = header.classList.contains("no-sticky");
+	var noSticky;
+
+	/**
+	 * Check header exist to prevent user hide it on Page Settings
+	 */
+	if(header) {
+		noSticky = header.classList.contains("no-sticky");
+	}
 
 	var setNavTop = function() {
 		var offset = header.getBoundingClientRect();
