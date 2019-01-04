@@ -269,8 +269,11 @@ jQuery(document).ready(function($) {
 	var mobile_max_width = 1140; // Media max width for mobile
 	var main_navigation = jQuery(".main-navigation .onepress-menu");
 	var stite_header = $(".site-header");
-	var header = document.getElementById("masthead");
-	var noSticky = header.classList.contains("no-sticky");
+    var header = document.getElementById("masthead");
+    if ( header ) {
+        var noSticky = header.classList.contains("no-sticky");
+    }
+	
 
 	var setNavTop = function() {
 		var offset = header.getBoundingClientRect();
