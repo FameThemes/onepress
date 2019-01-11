@@ -48,7 +48,7 @@ $wp_customize->add_control( 'onepress_hero_id',
 	array(
 		'label' 		=> esc_html__('Section ID:', 'onepress'),
 		'section' 		=> 'onepress_hero_settings',
-		'description'   => esc_html__( 'The section id, we will use this for link anchor.', 'onepress' )
+		'description'   => esc_html__( 'The section ID should be English character, lowercase and no space.', 'onepress' )
 	)
 );
 
