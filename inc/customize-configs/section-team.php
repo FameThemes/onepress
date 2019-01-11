@@ -46,7 +46,7 @@ $wp_customize->add_control( 'onepress_team_id',
 	array(
 		'label'     	=> esc_html__('Section ID:', 'onepress'),
 		'section' 		=> 'onepress_team_settings',
-		'description'   => 'The section id, we will use this for link anchor.'
+		'description'   => 'The section ID should be English character, lowercase and no space.'
 	)
 );
 

@@ -140,14 +140,14 @@ function _to_bool(v) {
 		let vh = window.innerHeight * 0.01;
 		let vw = window.innerWidth * 0.01;
 		// Then we set the value in the --vh, --vw custom property to the root of the document
-		document.documentElement.style.setProperty("--vh", `${vh}px`);
-		document.documentElement.style.setProperty("--vw", `${vw}px`);
+		document.documentElement.style.setProperty("--vh", vh + "px");
+		document.documentElement.style.setProperty("--vw", vw + "px");
 
 		window.addEventListener("resize", function() {
 			let vh = window.innerHeight * 0.01;
 			let vw = window.innerWidth * 0.01;
-			document.documentElement.style.setProperty("--vh", `${vh}px`);
-			document.documentElement.style.setProperty("--vw", `${vw}px`);
+			document.documentElement.style.setProperty("--vh", vh + "px");
+			document.documentElement.style.setProperty("--vw", vw + "px");
 		});
 	}
 })();
@@ -269,8 +269,11 @@ jQuery(document).ready(function($) {
 	var mobile_max_width = 1140; // Media max width for mobile
 	var main_navigation = jQuery(".main-navigation .onepress-menu");
 	var stite_header = $(".site-header");
-	var header = document.getElementById("masthead");
-	var noSticky = header.classList.contains("no-sticky");
+    var header = document.getElementById("masthead");
+    if ( header ) {
+        var noSticky = header.classList.contains("no-sticky");
+    }
+	
 
 	var setNavTop = function() {
 		var offset = header.getBoundingClientRect();
@@ -324,6 +327,9 @@ jQuery(document).ready(function($) {
 			$("body").addClass("onepress-menu-mobile-opening");
 			setNavTop();
 			var h = getNavHeight(!noSticky);
+			if( isNaN( h ) ) { // when IE 11 & Edge return h is NaN.
+				h = $(window).height(); 
+			}
 			main_navigation.animate(
 				{
 					height: h

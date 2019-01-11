@@ -1,6 +1,11 @@
 ====================================================================
 CHANGELOG
 ====================================================================
+# 2.2.2
+* FIXED: Javascript error when hide the header on the homepage.
+* FIXED: Slider not displaying good in IE 11.
+* FIXED: Menu burger on mobile view not working in IE11/Egde.
+
 # 2.2.1
 * NEW: Add option to hide the post thumbnail if not exist.
 * NEW: Add option to enable/disable gallery image link.
