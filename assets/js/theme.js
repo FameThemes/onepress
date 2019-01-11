@@ -327,6 +327,9 @@ jQuery(document).ready(function($) {
 			$("body").addClass("onepress-menu-mobile-opening");
 			setNavTop();
 			var h = getNavHeight(!noSticky);
+			if( isNaN( h ) ) { // when IE 11 & Edge return h is NaN.
+				h = $(window).height(); 
+			}
 			main_navigation.animate(
 				{
 					height: h
