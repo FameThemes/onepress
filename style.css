@@ -3303,7 +3303,7 @@ div.wpcf7-response-output {
   position: relative;
   display: block;
 }
-.gallery-masonry:affter {
+.gallery-masonry:after {
   clear: both;
 }
 .gallery-masonry .inner {
