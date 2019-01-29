@@ -276,13 +276,7 @@ jQuery(document).ready(function($) {
 
 	var setNavTop = function() {
 		var offset = header.getBoundingClientRect();
-		var top = offset.y + offset.height - 1;
-		if (
-			$("#wpadminbar").length &&
-			( $("#wpadminbar").css("position") === "absolute" || $("#wpadminbar").css("position") === "fixed" )
-		) {
-			top -= $("#wpadminbar").height();
-		}
+		var top = offset.x + offset.height - 1;
 		main_navigation.css({
 			top: top
 		});
