@@ -10,7 +10,7 @@
 		padding: 0;
 	}
 	.entry-content {
-		margin-bottom: 0px;
+		margin-bottom: 0;
 	}
 }
 
@@ -85,7 +85,7 @@ Footer widgets
 .footer-widgets {
 	background: #050505;
 	&.section-padding {
-		@include rem("padding", 70px 0px 35px);
+		@include rem("padding", 70px 0 35px);
 	}
 	table {
 		border-collapse: collapse;
@@ -109,9 +109,9 @@ Footer widgets
 	}
 	.widget_recent_entries ul li,
 	.widget_recent_comments ul li {
-		border-bottom: 0px none;
-		padding: 5px 0px;
-		margin-bottom: 0px;
+		border-bottom: 0 none;
+		padding: 5px 0;
+		margin-bottom: 0;
 	}
 	.sidebar {
 		.widget {
