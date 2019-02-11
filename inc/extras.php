@@ -292,6 +292,7 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
 				if ( $video_url || $video_webm_url || $video_ogv_url ) {
 					?>
 				<div class="video-section"
+					 data-fallback="<?php echo get_theme_mod( 'onepress_hero_mobile_img' ) ? 'true' : 'false'; ?>"
 					 data-mp4="<?php echo esc_url( $video_url ); ?>"
 					 data-webm="<?php echo esc_url( $video_webm_url ); ?>"
 					 data-ogv="<?php echo esc_url( $video_ogv_url ); ?>"
