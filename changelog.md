@@ -1,6 +1,8 @@
-====================================================================
-CHANGELOG
-====================================================================
+# CHANGELOG
+
+# 2.2.3
+* FIXED: Menu mobile not display.
+
 # 2.2.2
 * FIXED: Javascript error when hide the header on the homepage.
 * FIXED: Slider not displaying good in IE 11.
