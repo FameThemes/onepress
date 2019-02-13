@@ -67,6 +67,8 @@ do_action( 'onepress_site_end' );
 ?>
 </div><!-- #page -->
 
+<?php do_action( 'onepress_after_site_end' ); ?>
+
 <?php wp_footer(); ?>
 
 </body>
