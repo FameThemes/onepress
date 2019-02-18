@@ -527,3 +527,8 @@ input[type="radio"],input[type="checkbox"] {
     word-break: break-word;
     word-wrap: break-word;
 }
+
+body.mce-content-body{
+	margin: 20px 40px;
+	font-size: 13px;
+}

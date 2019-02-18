@@ -612,6 +612,11 @@ h6, p, ul, ol, dl, blockquote, pre {
   word-wrap: break-word;
 }
 
+body.mce-content-body {
+  margin: 20px 40px;
+  font-size: 13px;
+}
+
 /*--------------------------------------------------------------
 3.0 Layout
 --------------------------------------------------------------*/
