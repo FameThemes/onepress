@@ -4,7 +4,6 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 html {
@@ -25,7 +24,6 @@ html {
 
 body {
   background: #ffffff;
-  height: 100%;
 }
 
 .site {
