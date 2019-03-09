@@ -1541,7 +1541,15 @@ function onepress_breadcrumb( $post_id = null ) {
 			</div>
 		</div>
 		<?php
-	}
+	} else if ( function_exists('yoast_breadcrumb') ) {
+        ?>
+        <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+			<div class="container">
+            <?php yoast_breadcrumb(); ?>
+            </div>
+        </div>
+        <?php            
+    }
 }
 
 if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
