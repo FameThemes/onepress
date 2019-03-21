@@ -1,5 +1,13 @@
 # CHANGELOG
 
+# 2.2.4
+* NEW: Support Yoast SEO breadcrumb.
+* NEW: Support qTranslate-x in page header cover description.
+* NEW: Support emojis in Customizer content.
+* IMPROVED: Change link guide to create MailChimp URL.
+* FIXED: Yoast SEO metabox display.
+* FIXED: Visual Editor error.
+
 # 2.2.3
 * FIXED: Menu mobile not display.
 
