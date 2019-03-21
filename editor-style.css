@@ -564,6 +564,11 @@ h6, p, ul, ol, dl, blockquote, pre {
   word-wrap: break-word;
 }
 
+body.mce-content-body {
+  margin: 20px 40px;
+  font-size: 13px;
+}
+
 /* Page: 404
 ------------------------------*/
 .error-404 .search-form, .error-404 .widget {

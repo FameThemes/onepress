@@ -144,7 +144,7 @@ $wp_customize->add_control( 'onepress_newsletter_mailchimp',
 	array(
 		'label'       => esc_html__( 'MailChimp Action URL', 'onepress' ),
 		'section'     => 'onepres_footer_top',
-		'description' => __( 'The newsletter form use MailChimp, please follow <a target="_blank" href="http://goo.gl/uRVIst">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>', 'onepress' )
+		'description' => __( 'The newsletter form use MailChimp, please follow <a target="_blank" href="https://mailchimp.com/help/host-your-own-signup-forms/">this guide</a> to know how to get MailChimp Action URL. Example <i>//famethemes.us8.list-manage.com/subscribe/post?u=521c400d049a59a4b9c0550c2&amp;id=83187e0006</i>', 'onepress' )
 	)
 );
 

@@ -1541,7 +1541,15 @@ function onepress_breadcrumb( $post_id = null ) {
 			</div>
 		</div>
 		<?php
-	}
+	} else if ( function_exists('yoast_breadcrumb') ) {
+        ?>
+        <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+			<div class="container">
+            <?php yoast_breadcrumb(); ?>
+            </div>
+        </div>
+        <?php            
+    }
 }
 
 if ( ! function_exists( 'onepress_is_selective_refresh' ) ) {
@@ -1697,7 +1705,7 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 			if ( get_post_meta( $page_id, '_show_excerpt', true ) ) {
 				$post = get_post( $page_id );
 				if ( $post->post_excerpt ) {
-					$excerpt = get_the_excerpt( $page_id );
+                    $excerpt = apply_filters( 'the_excerpt', get_post_field('post_excerpt', $page_id) );
 				}
 			}
 		}
@@ -1713,7 +1721,7 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 					// WPCS: XSS OK.
 					echo '<' . $el . ' class="entry-title">' . $title . '</' . $el . '>';
 					if ( $excerpt ) {
-						echo '<div class="entry-tagline">' . $excerpt . '</div>';
+                        echo '<div class="entry-tagline">' . $excerpt . '</div>';
 					}
 					?>
 				</div>
