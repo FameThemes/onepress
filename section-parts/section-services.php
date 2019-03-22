@@ -61,7 +61,7 @@ if ( onepress_is_selective_refresh() ) {
                             if ( $settings['icon_type'] == 'image' && $settings['image'] ){
                                 $url = onepress_get_media_url( $settings['image'] );
                                 if ( $url ) {
-                                    $media = '<div class="service-image icon-image"><img src="'.esc_url( $url ).'" alt=""></div>';
+                                    $media = '<div class="service-image icon-image"><img src="'.esc_url( $url ).'" alt="'.get_post_meta( $settings['image']['id'], '_wp_attachment_image_alt', true ).'"></div>';
                                 }
                             } else if ( $settings['icon'] ) {
                                 $settings['icon'] = trim( $settings['icon'] );
