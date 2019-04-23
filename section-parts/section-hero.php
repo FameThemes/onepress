@@ -109,7 +109,7 @@ do_action( 'onepress_before_section_part', 'hero', $hook_args );
 						<?php if ( $hcl1_largetext != '' ) {
 							echo '<h2 class="hero-large-text">' . wp_kses_post( $hcl1_largetext ) . '</h2>';} ?>
 						<?php if ( $hcl1_smalltext != '' ) {
-							echo '<p class="hero-small-text">' . apply_filters( 'onepress_the_content', wp_kses_post( $hcl1_smalltext ) ) . '</p>';} ?>
+							echo '<div class="hero-small-text">' . apply_filters( 'onepress_the_content', wp_kses_post( $hcl1_smalltext ) ) . '</div>';} ?>
 						<?php if ( $hcl1_btn1_text != '' && $hcl1_btn1_link != '' ) {
 							echo '<a ' . $target_1 . ' href="' . esc_url( $hcl1_btn1_link ) . '" class="btn ' . esc_attr( $btn_1_style ) . ' btn-lg">' . wp_kses_post( $hcl1_btn1_text ) . '</a>';} ?>
 						<?php if ( $hcl1_btn2_text != '' && $hcl1_btn2_link != '' ) {
