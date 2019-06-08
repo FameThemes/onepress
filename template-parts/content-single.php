@@ -10,7 +10,7 @@
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
-		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+		<?php //the_title( '<h1 class="entry-title">', '</h1>' ); ?>
         <?php if ( get_theme_mod( 'single_meta', 1 ) ) { ?>
 		<div class="entry-meta">
 			<?php onepress_posted_on(); ?>
