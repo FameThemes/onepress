@@ -1,4 +1,4 @@
-var isMobile = {
+var onepressIsMobile = {
 	Android: function() {
 		return navigator.userAgent.match(/Android/i);
 	},
@@ -16,11 +16,11 @@ var isMobile = {
 	},
 	any: function() {
 		return (
-			isMobile.Android() ||
-			isMobile.BlackBerry() ||
-			isMobile.iOS() ||
-			isMobile.Opera() ||
-			isMobile.Windows()
+			onepressIsMobile.Android() ||
+			onepressIsMobile.BlackBerry() ||
+			onepressIsMobile.iOS() ||
+			onepressIsMobile.Opera() ||
+			onepressIsMobile.Windows()
 		);
 	}
 };
@@ -132,7 +132,7 @@ function _to_bool(v) {
 })();
 
 (function() {
-	if (isMobile.any()) {
+	if (onepressIsMobile.any()) {
 		/**
 		 * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
 		 */
@@ -361,7 +361,7 @@ jQuery(document).ready(function($) {
 	 *
 	 * @since 2.2.1
 	 */
-	if (!noSticky && isMobile.any()) {
+	if (!noSticky && onepressIsMobile.any()) {
 		$(document).on("scroll", function() {
 			if (main_navigation.hasClass("onepress-menu-mobile")) {
 				var newViewportHeight = Math.max(
@@ -587,7 +587,7 @@ jQuery(document).ready(function($) {
 		});
 	}
 
-	if (isMobile.any()) {
+	if (onepressIsMobile.any()) {
 		jQuery("body")
 			.addClass("body-mobile")
 			.removeClass("body-desktop");
