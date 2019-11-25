@@ -48,7 +48,16 @@
         .section-subtitle::after {
             background: rgba(255, 255, 255, 0.8);
         }
-    }
+	}
+	.pricing-table {
+		.pricing__item {
+			ul {
+				p {
+					color: #777777;
+				}
+			}
+		}
+	}
 }
 
 .section-inverse-extended {
