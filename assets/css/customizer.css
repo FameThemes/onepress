@@ -596,3 +596,12 @@ body .wp-full-overlay{
     padding: 0px !important;
     margin: 0px !important;
 }
+
+.onepress-customizer-notice {
+	background: rgb(254, 247, 241);
+    color: rgb(51, 51, 51);
+    padding: 10px;
+    border-left: 4px solid rgb(213, 78, 33);
+    display: block;
+    margin-bottom: 20px;
+}
