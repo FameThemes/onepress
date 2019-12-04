@@ -1,4 +1,11 @@
 # CHANGELOG
+# 2.2.5
+* FIXED: Add alert message when add multiple map but not setup main map.
+* FIXED: Fixed Hero section - Rotating text.
+* FIXED: Add prefix to the function name isMobile theme.js.
+* FIXED: Update WPML String translation related.
+* FIXED: Fixed Pricing section - Inverted Style.
+* FIXED: Get alt text for image - Section services.
 
 # 2.2.4
 * NEW: Support Yoast SEO breadcrumb.

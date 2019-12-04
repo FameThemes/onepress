@@ -1047,6 +1047,18 @@
              * Add new item
              */
             control.container.on('click', '.add-new-repeat-item', function () {
+				var controlbox_id = control.id;
+				if ( "onepress_map_items_address" === controlbox_id ) {
+					var map_long = wp.customize( 'onepress_map_long' ).get();
+					var map_lat = wp.customize( 'onepress_map_lat' ).get();
+					if ( '' === map_long || '' === map_lat ) {
+						$('#customize-control-onepress_map_items_address').find('label').append( '<span class="onepress-customizer-notice">'+ONEPRESS_CUSTOMIZER_DATA.multiple_map_notice+'</span>' );
+						return;
+					} else {
+						$('#customize-control-onepress_map_items_address').find('.onepress-customizer-notice').remove();
+					}
+				}
+
                 var $html = $(control.template(default_data));
                 $('.list-repeatable', control.container).append($html);
 
@@ -1059,7 +1071,7 @@
                 control.intItem($html);
                 control.actions($html);
                 control.updateValue();
-                control._check_max_item();
+				control._check_max_item();
             });
 
             /**
