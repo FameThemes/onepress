@@ -376,8 +376,8 @@ if ( ! function_exists( 'onepress_entry_footer' ) ) {
 		ob_end_flush();
 
 		if ( $content ) {
-			 echo '<footer class="entry-footer">';
-			echo $content; // // WPCS: XSS OK.
+			echo '<footer class="entry-footer">';
+			echo $content; // WPCS: XSS OK.
 			echo '</footer><!-- .entry-footer -->';
 		}
 
