@@ -135,7 +135,7 @@ if ( ! function_exists( 'onepress_get_media_url' ) ) {
  * 10 wpautop
  * 10 shortcode_unautop
  * 10 prepend_attachment
- * 10 wp_make_content_images_responsive
+ * 10 wp_filter_content_tags || wp_make_content_images_responsive
  * 11 capital_P_dangit
  * 11 do_shortcode
  * 20 convert_smilies
@@ -147,7 +147,11 @@ add_filter( 'onepress_the_content', 'wptexturize' );
 add_filter( 'onepress_the_content', 'wpautop' );
 add_filter( 'onepress_the_content', 'shortcode_unautop' );
 add_filter( 'onepress_the_content', 'prepend_attachment' );
-add_filter( 'onepress_the_content', 'wp_make_content_images_responsive' );
+if ( function_exists( 'wp_filter_content_tags' ) ) {
+	add_filter( 'onepress_the_content', 'wp_filter_content_tags' );
+} else {
+	add_filter( 'onepress_the_content', 'wp_make_content_images_responsive' );
+}
 add_filter( 'onepress_the_content', 'capital_P_dangit' );
 add_filter( 'onepress_the_content', 'do_shortcode' );
 add_filter( 'onepress_the_content', 'convert_smilies' );

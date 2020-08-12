@@ -57,7 +57,7 @@ if ( ! function_exists( 'onepress_setup' ) ) :
 		 */
 		register_nav_menus(
 			array(
-				'primary'      => esc_html__( 'Primary Menu', 'onepress' ),
+				'primary' => esc_html__( 'Primary Menu', 'onepress' ),
 			)
 		);
 
@@ -103,12 +103,12 @@ if ( ! function_exists( 'onepress_setup' ) ) :
 		add_theme_support(
 			'recommend-plugins',
 			array(
-				'wpforms-lite' => array(
-					'name' => esc_html__( 'Contact Form by WPForms', 'onepress' ),
+				'wpforms-lite'             => array(
+					'name'            => esc_html__( 'Contact Form by WPForms', 'onepress' ),
 					'active_filename' => 'wpforms-lite/wpforms.php',
 				),
 				'famethemes-demo-importer' => array(
-					'name' => esc_html__( 'Famethemes Demo Importer', 'onepress' ),
+					'name'            => esc_html__( 'Famethemes Demo Importer', 'onepress' ),
 					'active_filename' => 'famethemes-demo-importer/famethemes-demo-importer.php',
 				),
 			)
@@ -193,13 +193,13 @@ function onepress_widgets_init() {
 	for ( $i = 1; $i <= 4; $i++ ) {
 		register_sidebar(
 			array(
-				'name' => sprintf( __( 'Footer %s', 'onepress' ), $i ),
-				'id' => 'footer-' . $i,
-				'description' => '',
+				'name'          => sprintf( __( 'Footer %s', 'onepress' ), $i ),
+				'id'            => 'footer-' . $i,
+				'description'   => '',
 				'before_widget' => '<aside id="%1$s" class="footer-widget widget %2$s">',
-				'after_widget' => '</aside>',
-				'before_title' => '<h2 class="widget-title">',
-				'after_title' => '</h2>',
+				'after_widget'  => '</aside>',
+				'before_title'  => '<h2 class="widget-title">',
+				'after_title'   => '</h2>',
 			)
 		);
 	}
@@ -212,7 +212,7 @@ add_action( 'widgets_init', 'onepress_widgets_init' );
  */
 function onepress_scripts() {
 
-	$theme = wp_get_theme( 'onepress' );
+	$theme   = wp_get_theme( 'onepress' );
 	$version = $theme->get( 'Version' );
 
 	if ( ! get_theme_mod( 'onepress_disable_g_font' ) ) {
@@ -243,12 +243,12 @@ function onepress_scripts() {
 		'hero_disable_preload'           => get_theme_mod( 'onepress_hero_disable_preload', false ) ? true : false,
 		'is_home'                        => '',
 		'gallery_enable'                 => '',
-		'is_rtl' => is_rtl(),
+		'is_rtl'                         => is_rtl(),
 	);
 
 	// Load gallery scripts.
-	$galley_disable  = get_theme_mod( 'onepress_gallery_disable' ) == 1 ? true : false;
-	$is_shop = false;
+	$galley_disable = get_theme_mod( 'onepress_gallery_disable' ) == 1 ? true : false;
+	$is_shop        = false;
 	if ( function_exists( 'is_woocommerce' ) ) {
 		if ( is_woocommerce() ) {
 			$is_shop = true;
@@ -259,7 +259,7 @@ function onepress_scripts() {
 	if ( ! $is_shop ) {
 		if ( ! $galley_disable || is_customize_preview() ) {
 			$onepress_js_settings['gallery_enable'] = 1;
-			$display = get_theme_mod( 'onepress_gallery_display', 'grid' );
+			$display                                = get_theme_mod( 'onepress_gallery_display', 'grid' );
 			if ( ! is_customize_preview() ) {
 				switch ( $display ) {
 					case 'masonry':
@@ -295,7 +295,7 @@ function onepress_scripts() {
 			$onepress_js_settings['is_home'] = 1;
 		}
 	}
-	wp_localize_script( 'jquery', 'onepress_js_settings', $onepress_js_settings );
+	wp_localize_script( 'onepress-theme', 'onepress_js_settings', $onepress_js_settings );
 
 }
 add_action( 'wp_enqueue_scripts', 'onepress_scripts' );
@@ -451,7 +451,7 @@ function onepress_trim_excerpt( $text, $excerpt_length = null ) {
  */
 function onepress_the_excerpt( $type = false, $length = false ) {
 
-	$type = onepress_loop_get_prop( 'excerpt_type', 'excerpt' );
+	$type   = onepress_loop_get_prop( 'excerpt_type', 'excerpt' );
 	$length = onepress_loop_get_prop( 'excerpt_length', false );
 
 	switch ( $type ) {
