@@ -45,6 +45,9 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 /*--------------------------------------------------------------
 2.0 Document Setup
 --------------------------------------------------------------*/
+html, body {
+	height: 100%;
+}
 @import "document";
 
 /*--------------------------------------------------------------
