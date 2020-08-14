@@ -47,24 +47,6 @@ normalize.css http://necolas.github.io/normalize.css/, (C) 2012-2015 Nicolas Gal
 	Source: https://www.google.com/fonts/specimen/Open+Sans
 	License: SIL Open Font License, 1.1 - scripts.sil.org/OFL
 
-- Unsplash images
-License: https://unsplash.com/license (http://creativecommons.org/publicdomain/zero/1.0 - CC0)
-
-	assets/images/hero1.jpg
-	https://images.unsplash.com/photo-1418386767268-77cdab4edcaa?q=80&fm=jpg&s=a0b580b39c23e884da525559be88d2ff
-
-	assets/images/hero2.jpg
-	https://images.unsplash.com/photo-1436564989038-18b9958df72b?q=80&fm=jpg&s=63f82ffb3fa7effd45c79e0379dbdee6
-
-	assets/images/hero3.jpg
-	https://images.unsplash.com/photo-1427751840561-9852520f8ce8?q=80&fm=jpg&s=ee073e336649f68d3caa9ffa6e262cf8
-
-	assets/images/hero4.jpg
-	https://images.unsplash.com/46/unsplash_52c319226cefb_1.JPG?q=80&fm=jpg&s=b07cdc1f522e977fda8cc7ee63848f4d
-
-	image in screenshot
-	https://unsplash.com/photos/FIM--j1B_Rc
-
 - Pexels images
 License: https://www.pexels.com/photo-license/ (http://creativecommons.org/publicdomain/zero/1.0 - CC0)
 
@@ -94,33 +76,6 @@ License: https://www.pexels.com/photo-license/ (http://creativecommons.org/publi
 
 	assets/images/about3.jpg
 	https://www.pexels.com/photo/people-office-team-collaboration-7075/
-
-- Pixabay images
-License:  https://pixabay.com/en/service/terms/#usage (http://creativecommons.org/publicdomain/zero/1.0 - CC0)
-
-	assets/images/team1.jpg
-	https://pixabay.com/en/entrepreneur-startup-start-up-man-593358/
-
-	assets/images/team2.jpg
-	https://pixabay.com/en/person-woman-femal-business-woman-801829/
-
-	assets/images/team3.jpg
-	https://pixabay.com/en/women-s-one-of-the-happy-man-449407/
-
-	assets/images/team4.jpg
-	https://pixabay.com/en/person-human-male-face-man-view-829966/
-
-	assets/images/team5.jpg
-	https://pixabay.com/en/man-male-portrait-coach-838636/
-
-	assets/images/team6.jpg
-	https://pixabay.com/en/man-portrait-black-and-white-943554/
-
-	assets/images/team7.jpg
-	https://pixabay.com/en/man-male-model-handsome-attractive-910925/
-
-	assets/images/team8.jpg
-	https://pixabay.com/en/man-handsome-male-model-guy-885223/
 
 - FitVids
 Source: https://github.com/davatron5000/FitVids.js/blob/master/jquery.fitvids.js
