@@ -501,10 +501,10 @@ jQuery(document).ready(function($) {
 
 			if (onepress_js_settings.onepress_disable_sticky_header != "1") {
 				h =
-					jQuery("#wpadminbar").height() +
+					$("#wpadminbar").length > 0 ? jQuery("#wpadminbar").height() : 0 +
 					jQuery(".site-header").height();
 			} else {
-				h = jQuery("#wpadminbar").height();
+				h = $("#wpadminbar").length > 0 ? jQuery("#wpadminbar").height() : 0;
 			}
 
 			if (_scroll_top < current_top) {
