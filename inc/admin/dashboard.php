@@ -591,7 +591,7 @@ class Onepress_Dashboard {
                             </tr>
 
 
-                            <tr class="ti-about-page-text-center"><td></td><td colspan="2"><a href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_dashboard&utm_medium=compare_table&utm_campaign=onepress" target="_blank" class="button button-primary button-hero"><?php esc_attr_e('Get OnePress Plus now!', 'onepress') ?></a></td></tr>
+                            <tr class="ti-about-page-text-center"><td></td><td colspan="2"><a href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_dashboard&utm_medium=compare_table&utm_campaign=onepress" target="_blank" class="button button-primary button-hero"><?php esc_html_e('Get OnePress Plus now!', 'onepress') ?></a></td></tr>
                             </tbody>
                         </table>
                     </div>

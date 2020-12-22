@@ -231,13 +231,6 @@ if ( class_exists( 'WooCommerce' ) ) {
 }
 
 /**
- * Support Elementor plugin
- */
-if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
-	define( 'ELEMENTOR_PARTNER_ID', 2123 );
-}
-
-/**
  * Support WPForms plugin
  */
 if ( ! defined( 'WPFORMS_SHAREASALE_ID' ) ) {
