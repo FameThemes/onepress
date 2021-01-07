@@ -498,13 +498,11 @@ jQuery(document).ready(function($) {
 
 		if (!window.current_nav_item) {
 			var current_top = $window.scrollTop();
-
+			var adminBarHeight = jQuery("#wpadminbar").length > 0 ? jQuery("#wpadminbar").height() : 0;
 			if (onepress_js_settings.onepress_disable_sticky_header != "1") {
-				h =
-					jQuery("#wpadminbar").height() +
-					jQuery(".site-header").height();
+				h = adminBarHeight + jQuery(".site-header").height();
 			} else {
-				h = jQuery("#wpadminbar").height();
+				h = adminBarHeight;
 			}
 
 			if (_scroll_top < current_top) {

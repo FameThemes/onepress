@@ -19,12 +19,17 @@
 </head>
 
 <body <?php body_class(); ?>>
+<?php
+if ( function_exists( 'wp_body_open' ) ) {
+	wp_body_open();
+}
+?>
 <?php do_action( 'onepress_before_site_start' ); ?>
 <div id="page" class="hfeed site">
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'onepress' ); ?></a>
-    <?php
-    /**
-     * @since 2.0.0
-     */
-    onepress_header();
-    ?>
+	<?php
+	/**
+	 * @since 2.0.0
+	 */
+	onepress_header();
+	?>

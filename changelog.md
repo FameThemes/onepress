@@ -1,6 +1,9 @@
 # CHANGELOG
+# 2.2.6
+* FIXED: Fix not working scrolling of navigation links.
+
 # 2.2.5
-* FIXED: Remove deprecated functions
+* FIXED: Remove deprecated functions.
 * FIXED: Add alert message when add multiple map but not setup main map.
 * FIXED: Fixed Hero section - Rotating text.
 * FIXED: Add prefix to the function name isMobile theme.js.
