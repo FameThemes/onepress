@@ -4435,7 +4435,7 @@ div.wpforms-container .wpforms-form button[type=submit] {
 }
 @media screen and (max-width: 940px) {
   .c-bully {
-    right: 0px;
+    right: 10px;
   }
 }
 .c-bully.c-bully--inversed {
@@ -4498,8 +4498,8 @@ div.wpforms-container .wpforms-form button[type=submit] {
 }
 @media screen and (max-width: 940px) {
   .c-bully__bullet:after {
-    width: 9px;
-    height: 9px;
+    width: 10px;
+    height: 10px;
   }
 }
 
