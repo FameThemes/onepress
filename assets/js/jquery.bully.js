@@ -36,6 +36,13 @@
 			var _bh = $bully.height();
 			var _bb = _bh + _bt;
 
+			if ($("#masthead").hasClass("is-sticky")) {
+				_bb -= $("#masthead").height();
+			}
+			if ($("#wpadminbar").length) {
+				_bb -= $("#wpadminbar").height();
+			}
+
 			$.each(Onepress_Bully.sections, function(id, arg) {
 				var element = $("#" + id);
 
@@ -73,7 +80,7 @@
 					offset = activeBullet.offset().top - bullyOffset.top;
 				}
 
-				//var offset = $bully.children( '.c-bully__bullet' ).not( '.c-bully__bullet--active' ).first().outerHeight( true ) * ( count - 1 );
+				var offset = $bully.children( '.c-bully__bullet' ).not( '.c-bully__bullet--active' ).first().outerHeight( true ) * ( count - 1 );
 
 				$current.removeClass("c-bully__bullet--squash");
 				setTimeout(function() {
@@ -175,7 +182,10 @@
 		_calcTop: function(top) {
 			// check if has sticky
 			if ($("#masthead").hasClass("is-sticky")) {
-				top -= $("#masthead").outerHeight();
+				top -= $("#masthead").height();
+			}
+			if ($("#wpadminbar").length) {
+				top -= $("#wpadminbar").height();
 			}
 
 			return top;
@@ -222,10 +232,7 @@
 	};
 
 	$window.on("rellax load", reloadAll);
-})(jQuery, window, document);
 
-//Init Bully
-jQuery(document).ready(function($) {
 	$.each(Onepress_Bully.sections, function(id, args) {
 		if (args.enable) {
 			$("#" + id).bully({
@@ -233,4 +240,5 @@ jQuery(document).ready(function($) {
 			});
 		}
 	});
-});
+
+})(jQuery, window, document);
