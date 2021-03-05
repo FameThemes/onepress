@@ -1,4 +1,6 @@
 # CHANGELOG
+# 2.2.7
+* FIXED: Fix menu navigation and dots navigation.
 # 2.2.6
 * FIXED: Fix not working scrolling of navigation links.
 
