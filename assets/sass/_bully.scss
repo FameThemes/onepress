@@ -16,7 +16,7 @@ $bully_size_s: 9px;
 	top: 50%;
 	right: 28px;
 	@include for(screens-medium) {
-		right: 0px;
+		right: 0;
 	}
 	font-size: 12px;
 	transform: translate(0, -50%);

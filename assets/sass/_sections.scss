@@ -2,15 +2,15 @@
 /* Section Stuffs
 ------------------------------*/
 .section-padding {
-    @include rem('padding', 70px 0px);
+    @include rem('padding', 70px 0);
 }
 
 .section-padding-lg {
-    @include rem('padding', 90px 0px);
+    @include rem('padding', 90px 0);
 }
 
 .section-padding-larger {
-    @include rem('padding', 140px 0px);
+    @include rem('padding', 140px 0);
 }
 .section-meta {
     background-color: $meta;
@@ -21,10 +21,10 @@
     overflow: hidden;
     &:before {
         position: absolute;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         display: block;
         content: " ";
         z-index: 1;
@@ -93,7 +93,7 @@
         letter-spacing: 2px;
         font-weight: 800;
         position: relative;
-        margin-bottom: 0px;
+        margin-bottom: 0;
         text-transform: uppercase;
         @include for(medium-screens) {
             font-size: 40px;
@@ -129,8 +129,8 @@
     overflow: hidden;
     &:after {
         position: absolute;
-        top: 0px;
-        left: 0px;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.3);
@@ -209,7 +209,7 @@
         top: 50%;
         left: 50%;
         z-index: 9999999;
-        margin: 0px;
+        margin: 0;
         -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
     }
@@ -275,7 +275,7 @@
             top: 50%;
             left: 50%;
             z-index: 9999999;
-            margin: 0px;
+            margin: 0;
             -webkit-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
@@ -370,7 +370,7 @@
 
 .hero-slideshow-normal {
     .container {
-        padding: 10% 0px;
+        padding: 10% 0;
         position: relative;
         z-index: 80;
 
@@ -397,7 +397,7 @@
         text-transform: uppercase;
     }
     a.btn {
-        @include rem('margin', 10px 10px 20px 0px);
+        @include rem('margin', 10px 10px 20px 0);
     }
     p {
         @include rem('margin-bottom', 20px);
@@ -413,7 +413,7 @@
         letter-spacing: 3px;
     }
     .hcl2-content {
-        @include rem('padding', 50px 0px);
+        @include rem('padding', 50px 0);
     }
     .hcl2-image {
         text-align: right;
@@ -602,7 +602,7 @@
                 float: none;
                 margin-bottom: 30px;
                 margin-top: 10px;
-                margin-right: 0px;
+                margin-right: 0;
                 text-align: center;
             }
         }
@@ -612,7 +612,7 @@
         .service-content {
             overflow: hidden;
             p {
-                margin: 0px;
+                margin: 0;
                 font-size: 14px;
                 color: $text;
             }
@@ -632,8 +632,8 @@
                 height: 100%;
                 display: block;
                 position: absolute;
-                top: 0px;
-                left: 0px;
+                top: 0;
+                left: 0;
                 content: "";
             }
         }
@@ -688,10 +688,10 @@
         &:before {
             content: " ";
             position: absolute;
-            top: 0px;
-            left: 0px;
-            right: 0px;
-            bottom: 0px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(0, 0, 0, .3);
             display: block;
             width: 100%;
@@ -712,8 +712,8 @@
         }
 
         position: absolute;
-        top: 0px;
-        left: 0px;
+        top: 0;
+        left: 0;
         width: 100%;
         height: auto;
         min-height: 100%;
@@ -754,7 +754,7 @@
 .parallax-content {
     z-index: 10;
     position: relative;
-    padding: 100px 0px;
+    padding: 100px 0;
     text-align: center;
     h1, h2, h3, h4, h5, h6 {
         color: #FFFFFF;
@@ -781,7 +781,7 @@
 ------------------------------*/
 .section-team {
     .team-member {
-        padding: 0px 0.5px;
+        padding: 0 0.5px;
         text-align: center;
     }
     .row {
@@ -791,8 +791,8 @@
 }
 
 .team-members.row {
-    @include rem('margin-left', 0px);
-    @include rem('margin-right', 0px);
+    @include rem('margin-left', 0);
+    @include rem('margin-right', 0);
 
     @include for (medium-screens) {
         &.team-layout-4 {
@@ -885,7 +885,7 @@
     }
 
     .member-info {
-        margin-top: 0px;
+        margin-top: 0;
         position: relative;
         z-index: 30;
         text-align: center;
@@ -926,7 +926,7 @@
 
     .list-article {
         border-top: 1px solid $border;
-        padding: 25px 0px;
+        padding: 25px 0;
         &:last-of-type {
             border-bottom: 1px solid $border;
         }
@@ -943,7 +943,7 @@
         @include for(screens-small) {
             width: 100%;
             float: none;
-            margin-right: 0px;
+            margin-right: 0;
             margin-bottom: 30px;
             display: block;
             img {
@@ -971,22 +971,22 @@
         }
     }
     .entry-excerpt p {
-        margin-bottom: 0px;
+        margin-bottom: 0;
     }
 }
 
 .archive .site-main .list-article:first-child,
 .blog .site-main .list-article:first-of-type {
     border-top: none;
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 .page-template-template-blog .section-news {
     .list-article {
-        padding: 30px 0px;
+        padding: 30px 0;
         &:first-of-type {
             border-top: none;
-            padding-top: 0px;
+            padding-top: 0;
         }
         &:last-of-type {
             border-bottom: none;
@@ -1055,12 +1055,12 @@
 }
 
 div.wpcf7-validation-errors {
-    margin: 20px 0px;
+    margin: 20px 0;
     padding: 15px;
 }
 
 div.wpcf7-response-output {
-    margin: 20px 0px;
+    margin: 20px 0;
 }
 
 /* Section: Videolightbox
@@ -1073,7 +1073,7 @@ div.wpcf7-response-output {
     .videolightbox__heading {
         text-transform: uppercase;
         @include rem('font-size', 38px);
-        letter-spacing: 0px;
+        letter-spacing: 0;
         font-weight: 500;
         strong {
             font-weight: 800;
@@ -1148,7 +1148,7 @@ div.wpcf7-response-output {
 .g-layout-full-width.container {
     width: 100%;
     max-width: none;
-    padding: 0px;
+    padding: 0;
 }
 
 @include for(small-screens) {

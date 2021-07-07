@@ -11,7 +11,7 @@
 	}
 	ul {
 		list-style: none;
-		padding: 0px;
+		padding: 0;
 		&:after {
 			clear: both;
 		    content: ".";
@@ -42,12 +42,12 @@
 	}
 	.search-submit {
 		width: auto;
-		margin: 0px 0 0 0.5em;
+		margin: 0 0 0 0.5em;
 		height: 100%;
 	}
 	label {
 		flex-grow: 2;
-		margin: 0px;
+		margin: 0;
 	}
 }
 
@@ -99,8 +99,8 @@
 
 .widget_recent_entries {
 	ul li {
-		margin: 0px;
-		padding: 10px 0px 10px 0px;
+		margin: 0;
+		padding: 10px 0 10px 0;
 		border-bottom: 1px solid $border;
 	}
 }
