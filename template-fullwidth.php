@@ -1,6 +1,6 @@
 <?php
 /**
- *Template Name: Full Width - Contained Content
+ * Template Name: Full Width - Contained Content
  *
  * @package OnePress
  */
