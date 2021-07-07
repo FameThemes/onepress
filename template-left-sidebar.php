@@ -1,6 +1,6 @@
 <?php
 /**
- *Template Name: Left Sidebar
+ * Template Name: Left Sidebar
  *
  * @package OnePress
  */
