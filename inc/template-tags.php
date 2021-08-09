@@ -1407,11 +1407,11 @@ function onepress_gallery_html( $data, $inner = true, $size = 'thumbnail' ) {
 		if ( $inner ) {
 			$html .= '<span class="inner">';
 				$html .= '<span class="inner-content">';
-				$html .= '<img src="' . esc_url( $thumb ) . '" alt="' . esc_attr( $alt ) . '">';
+				$html .= '<img src="' . esc_url( $thumb ) . '" loading="lazy" alt="' . esc_attr( $alt ) . '">';
 				$html .= '</span>';
 			$html .= '</span>';
 		} else {
-			$html .= '<img src="' . esc_url( $thumb ) . '" alt="">';
+			$html .= '<img src="' . esc_url( $thumb ) . '" loading="lazy" alt="">';
 		}
 
 		$html .= $close_tag_html;
