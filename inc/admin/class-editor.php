@@ -5,11 +5,11 @@
  * @since 2.2.0
  */
 class OnePress_Editor {
-	private $action = 'onepress_load_editor_style';
+	private $action      = 'onepress_load_editor_style';
 	private $editor_file = 'assets/css/admin/editor.css';
 	public function __construct() {
 		// Add editor settings.
-		add_action( 'block_editor_settings', array( $this, 'editor_settings' ) );
+		add_filter( 'block_editor_settings_all', array( $this, 'editor_settings' ) );
 		// Add ajax action to load css file.
 		add_action( 'wp_ajax_' . $this->action, array( $this, 'css_file' ) );
 		// Add more editor assets.
@@ -47,7 +47,7 @@ class OnePress_Editor {
 		$content_width = absint( get_theme_mod( 'single_layout_content_width' ) );
 		if ( $content_width > 0 ) {
 			$value = $content_width . 'px';
-			$css .= '.editor-styles-wrapper .wp-block:not([data-align="full"]):not([data-align="wide"]) { max-width: ' . $value . '; }';
+			$css  .= '.editor-styles-wrapper .wp-block:not([data-align="full"]):not([data-align="wide"]) { max-width: ' . $value . '; }';
 		}
 
 		return $css;
@@ -62,7 +62,7 @@ class OnePress_Editor {
 		return add_query_arg(
 			array(
 				'action' => $this->action,
-				'nonce' => wp_create_nonce( $this->action ),
+				'nonce'  => wp_create_nonce( $this->action ),
 			),
 			admin_url( 'admin-ajax.php' )
 		);
@@ -77,11 +77,9 @@ class OnePress_Editor {
 	 * @return array
 	 */
 	public function editor_settings( $editor_settings ) {
-
 		$editor_settings['styles'][] = array(
 			'css' => $this->load_style(),
 		);
-
 		return $editor_settings;
 	}
 
@@ -103,7 +101,7 @@ class OnePress_Editor {
 	public function load_style() {
 		global $wp_filesystem;
 		WP_Filesystem();
-		$file = get_template_directory() . '/' . $this->editor_file;
+		$file          = get_template_directory() . '/' . $this->editor_file;
 		$file_contents = '';
 		if ( file_exists( $file ) ) {
 			$file_contents .= $wp_filesystem->get_contents( $file );
