@@ -1523,6 +1523,7 @@ add_action( 'onepress_footer_site_info', 'onepress_footer_site_info' );
  * Breadcrumb NavXT Compatibility.
  */
 function onepress_breadcrumb( $post_id = null ) {
+	// Test your schema at: https://search.google.com/test/rich-results.
 	if ( ! $post_id ) {
 		if ( is_page() ) {
 			$post_id = get_the_ID();
@@ -1535,7 +1536,7 @@ function onepress_breadcrumb( $post_id = null ) {
 	}
 	if ( function_exists( 'bcn_display' ) ) {
 		?>
-		<div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+		<div class="breadcrumbs">
 			<div class="container">
 				<?php bcn_display(); ?>
 			</div>
@@ -1543,7 +1544,7 @@ function onepress_breadcrumb( $post_id = null ) {
 		<?php
 	} else if ( function_exists('yoast_breadcrumb') ) {
         ?>
-        <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+        <div class="breadcrumbs">
 			<div class="container">
             <?php yoast_breadcrumb(); ?>
             </div>
