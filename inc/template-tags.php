@@ -1702,10 +1702,13 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 			}
 		} else {
 			$title = get_the_title( $page_id );
+			if ( is_tax() ) {
+				$title = single_term_title( '', false );
+			}
 			if ( get_post_meta( $page_id, '_show_excerpt', true ) ) {
 				$post = get_post( $page_id );
 				if ( $post->post_excerpt ) {
-                    $excerpt = apply_filters( 'the_excerpt', get_post_field('post_excerpt', $page_id) );
+                    $excerpt = apply_filters( 'the_excerpt', get_post_field( 'post_excerpt', $page_id ) );
 				}
 			}
 		}
