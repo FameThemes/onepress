@@ -9,7 +9,12 @@ class OnePress_Editor {
 	private $editor_file = 'assets/css/admin/editor.css';
 	public function __construct() {
 		// Add editor settings.
-		add_filter( 'block_editor_settings_all', array( $this, 'editor_settings' ) );
+		$current_wp_version = $GLOBALS['wp_version'];
+		if ( version_compare( $current_wp_version, '5.8', '>=' ) ) {
+			add_filter( 'block_editor_settings_all', array( $this, 'editor_settings' ) );
+		} else {
+			add_filter( 'block_editor_settings', array( $this, 'editor_settings' ) );
+		}
 		// Add ajax action to load css file.
 		add_action( 'wp_ajax_' . $this->action, array( $this, 'css_file' ) );
 		// Add more editor assets.
