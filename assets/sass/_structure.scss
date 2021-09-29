@@ -251,7 +251,7 @@
 .onepress-menu {
 	ul {
 		min-width: 12em; // allow long menu items to determine submenu width
-		*width: 12em; //no auto sub width for IE7, see white-space comment below
+		width: 12em; //no auto sub width for IE7, see white-space comment below
 		border: 1px solid $border;
 		border-top: none;
 	}

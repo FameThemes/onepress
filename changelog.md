@@ -1,4 +1,8 @@
 # CHANGELOG
+# 2.2.8
+* FIXED: Fix deprecated hook notice.
+* FIXED: Fix breadcrumb missing field itemListElement.
+* IMPROVED: Dropdown menu cut off in right side.
 # 2.2.7
 * FIXED: Fix menu navigation and dots navigation.
 # 2.2.6
