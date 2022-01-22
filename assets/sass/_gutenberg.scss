@@ -37,12 +37,12 @@
 
 // Right sidebar(s)
 .single-post .right-sidebar .content-inner {
-	margin-left: 0px;
+	margin-left: 0;
 }
 
 // Left sidebar(s)
 .single-post .left-sidebar .content-inner {
-	margin-right: 0px;
+	margin-right: 0;
 }
 
 .entry-content ul,
@@ -152,7 +152,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 		cite {
 			font-size: 13px;
 		}
-		padding: 0px;
+		padding: 0;
 	}
 	border-left-width: 4px;
 	border-left-color: currentColor;
@@ -163,11 +163,11 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	cite {
 		font-style: normal;
 		margin-top: 1em;
-		margin-left: 0px;
+		margin-left: 0;
 		position: relative;
 		font-size: 13px;
 		display: block;
-		margin-bottom: 0px;
+		margin-bottom: 0;
 	}
 }
 
@@ -191,7 +191,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 		text-transform: uppercase;
 	}
 	blockquote {
-		border-left: 0px;
+		border-left: 0;
 		background: none;
 	}
 }
@@ -207,7 +207,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 		border-bottom: none !important;
 		text-align: center;
 		&::before {
-			padding-left: 0px;
+			padding-left: 0;
 			font-size: 30px;
 		}
 	}
@@ -219,8 +219,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	}
 
 	.entry-content > * {
-		padding-left: 0px;
-		padding-right: 0px;
+		padding-left: 0;
+		padding-right: 0;
 	}
 }
 

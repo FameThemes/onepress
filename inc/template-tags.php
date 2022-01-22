@@ -606,8 +606,8 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			}
 			.hero-slideshow-wrapper:after {
 				position: absolute;
-				top: 0px;
-				left: 0px;
+				top: 0;
+				left: 0;
 				width: 100%;
 				height: 100%;
 				background-color: <?php echo $hero_bg_color; ?>;
@@ -726,7 +726,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				?>
 				.site-header, .is-transparent .site-header.header-fixed {
 					background: #<?php echo $header_bg_color; ?>;
-					border-bottom: 0px none;
+					border-bottom: 0 none;
 				}
 				<?php
 			} // END $header_bg_color
@@ -824,7 +824,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				?>
 				.hero-content-style1 .morphext {
 					background: <?php echo $r_bg_text; ?>;
-					padding: 0px 20px;
+					padding: 0 20px;
 					text-shadow: none;
 					border-radius: 3px;
 				}
@@ -935,7 +935,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 
 			?>
 			.gallery-carousel .g-item{
-				padding: 0px <?php echo intval( $gallery_spacing / 2 ); ?>px;
+				padding: 0 <?php echo intval( $gallery_spacing / 2 ); ?>px;
 			}
 			.gallery-carousel {
 				margin-left: -<?php echo intval( $gallery_spacing / 2 ); ?>px;

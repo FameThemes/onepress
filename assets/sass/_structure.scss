@@ -12,8 +12,8 @@
 	transition: all 0.5s ease-out;
 	box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.06);
 	&.header-fixed {
-		top: 0px;
-		left: 0px;
+		top: 0;
+		left: 0;
 		position: fixed;
 	}
 	.custom-logo-transparent {
@@ -39,13 +39,13 @@
 		width: 100%;
 		background: transparent;
 		position: absolute;
-		top: 0px;
+		top: 0;
 		display: block;
 	}
 	.site-header {
 		background: transparent;
 		position: fixed;
-		top: 0px;
+		top: 0;
 		&.no-sticky {
 			position: absolute;
 			top: auto;
@@ -105,7 +105,7 @@
 .site-branding {
 	.site-title,
 	.site-text-logo {
-		margin: 0px;
+		margin: 0;
 		line-height: 1;
 		font-family: $font_heading;
 		font-size: 23px;
@@ -155,7 +155,7 @@
 }
 
 .header-social {
-	margin-left: 0px;
+	margin-left: 0;
 	@include for(medium-screens) {
 		margin-left: 10px;
 	}
@@ -166,7 +166,7 @@
 		display: block;
 		height: 100%;
 		float: left;
-		margin-left: 0px;
+		margin-left: 0;
 		margin-top: -2px;
 		@include for(medium-screens) {
 			margin-left: 3px;
@@ -309,7 +309,7 @@
 
 	// Hover & Active
 	> li:last-child > a {
-		padding-right: 0px;
+		padding-right: 0;
 	}
 
 	> li:hover > a {
@@ -340,7 +340,7 @@
 	.main-navigation .onepress-menu {
 		width: 100% !important;
 		display: block;
-		height: 0px;
+		height: 0;
 		overflow: hidden;
 		background: #fff;
 	}
@@ -383,7 +383,7 @@
 				padding: 12px 105px;
 			}
 			ul {
-				left: 0px;
+				left: 0;
 			}
 		}
 		> li > a {
@@ -397,7 +397,7 @@
 		}
 		> li {
 			&:first-child {
-				border-top: 0px none;
+				border-top: 0 none;
 			}
 		}
 		// li.current-menu-item {
@@ -539,7 +539,7 @@
 }
 
 .page-header {
-	padding: 30px 0px;
+	padding: 30px 0;
 	border-top: 1px solid $border;
 	background: #f8f9f9;
 	border-bottom: 1px solid $border;
@@ -547,7 +547,7 @@
 	position: relative;
 	&:before {
 		position: absolute;
-		top: 0px;
+		top: 0;
 		bottom: 0;
 		left: 0;
 		width: 100%;
@@ -557,19 +557,19 @@
 
 	.entry-title,
 	.page-title {
-		margin-bottom: 0px;
+		margin-bottom: 0;
 		font-size: 24px;
 		font-weight: 600;
 		letter-spacing: 1px;
 		text-transform: uppercase;
 	}
 	p {
-		margin: 6px 0px 0px 0px;
+		margin: 6px 0 0 0;
 	}
 
 	&.page--cover {
 		position: relative;
-		padding: 8% 0px;
+		padding: 8% 0;
 		text-align: center;
 		border-top: 0 none;
 		border-bottom: 0 none;
@@ -581,7 +581,7 @@
 		background-repeat: no-repeat;
 		&:before {
 			position: absolute;
-			top: 0px;
+			top: 0;
 			bottom: 0;
 			left: 0;
 			width: 100%;
@@ -629,11 +629,11 @@
 		}
 	}
 	.footer-connect {
-		padding: 90px 0px;
-		@include rem("padding", 80px 0px);
+		padding: 90px 0;
+		@include rem("padding", 80px 0);
 		text-align: center;
 		@include for(screens-medium) {
-			//@include rem('padding', 40px 0px);
+			//@include rem('padding', 40px 0);
 		}
 		@include media-breakpoint-down(sm) {
 			.footer-subscribe {
@@ -672,9 +672,9 @@
 		}
 
 		.subs-button {
-			margin: 0px;
+			margin: 0;
 			position: relative;
-			top: 0px;
+			top: 0;
 			padding: 16px 23px 16px;
 			@include for(screens-large) {
 				width: 100%;
@@ -695,7 +695,7 @@
 		text-align: center;
 		a {
 			font-size: 30px;
-			margin: 0px 13px;
+			margin: 0 13px;
 			color: #ffffff;
 			&:hover {
 				color: $primary;
@@ -705,7 +705,7 @@
 	.site-info {
 		position: relative;
 		text-align: center;
-		padding: 35px 0px;
+		padding: 35px 0;
 		background: #222222;
 		font-weight: 500;
 		color: #bbbbbb;
@@ -720,7 +720,7 @@
 		}
 	}
 	.btt a {
-		border-radius: 0px 20px 0 0;
+		border-radius: 0 20px 0 0;
 		color: #999999;
 		background: #222222;
 		display: block;

@@ -759,8 +759,8 @@ button {
     .woocommerce-customer-details {
         .col-1, .col-2 {
             max-width: 100%;
-            padding-left: 0px;
-            padding-right: 0px;
+            padding-left: 0;
+            padding-right: 0;
         }
     }
     .woocommerce-additional-fields {
@@ -815,8 +815,8 @@ button {
 ;
 .woocommerce-MyAccount-navigation {
     ul {
-        margin: 0px;
-        padding-left: 0px;
+        margin: 0;
+        padding-left: 0;
     }
     li {
         list-style: none;
@@ -827,14 +827,14 @@ button {
 ------------------------------*/
 .breadcrumbs {
     font-size: 10px;
-    padding: 15px 0px;
+    padding: 15px 0;
     border-bottom: 1px solid $border;
     color: #858585;
     @include for(small-screens) {
         font-size: 12px;
     }
     i {
-        margin: 0px 6px;
+        margin: 0 6px;
     }
     a {
         text-decoration: none;
@@ -924,7 +924,7 @@ button {
     position: relative;
     overflow: hidden;
     /* fix for flashing background */
-    -webkit-transform: translate3d(0px, 0px, 0px);
+    -webkit-transform: translate3d(0px, 0, 0);
 }
 
 .owl-carousel .owl-wrapper,
@@ -1128,10 +1128,10 @@ button {
             cursor: pointer;
             display: block;
             font-size: 22px;
-            margin-top: 0px;
+            margin-top: 0;
             padding: 4px 10px 5px;
             transform: translateY(-50%);
-            border: 0px none;
+            border: 0 none;
             &:focus{
                 box-shadow: none;
                 outline: none;
@@ -1163,7 +1163,7 @@ button {
 }
 
 .owl-theme .owl-nav {
-    margin-top: 0px;
+    margin-top: 0;
     text-align: center;
     -webkit-tap-highlight-color: transparent;
 }
@@ -1205,8 +1205,8 @@ button {
     background: none !important;
     box-shadow: none !important;
     outline: none !important;
-    border: 0px none;
-    padding: 0px;
+    border: 0 none;
+    padding: 0;
 }
 
 .owl-theme .owl-dots .owl-dot span {
@@ -1264,7 +1264,7 @@ div.wpforms-container {
 
                 padding: 10px;
                 max-width: 100%;
-                border: 0px;
+                border: 0;
                 font-size: 15px;
                 font-weight: normal;
                 line-height: 22px;
@@ -1317,9 +1317,9 @@ div.wpforms-container {
         .form_field_wrap {
             width: 100%;
             max-width: 100%;
-            padding: 0px;
+            padding: 0;
             .form-control {
-                border-radius: 0px;
+                border-radius: 0;
             }
             .pirate-forms-submit-button {
                 display: block;
@@ -1329,7 +1329,7 @@ div.wpforms-container {
     }
     .contact_message_wrap {
         #pirate-forms-contact-message {
-            border-radius: 0px;
+            border-radius: 0;
             background-color: #f2f2f2;
             border: 0 none;
             min-height: 245px;
