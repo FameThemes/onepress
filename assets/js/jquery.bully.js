@@ -137,6 +137,10 @@
 		reloadAll();
 	});
 
+	$(document).on("hero_ready", function () {
+		reloadAll();
+	});
+
 	function Bully(element, options) {
 		this.element = element;
 		this.options = $.extend({}, $.fn.bully.defaults, options);
@@ -241,7 +245,6 @@
 					scrollPerSecond: 3000
 				});
 			}
-
 		}
 	});
 
