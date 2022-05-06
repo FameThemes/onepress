@@ -1,5 +1,5 @@
 <?php
-$id        = get_theme_mod( 'onepress_news_id', esc_html__( 'news', 'onepress' ) );
+$id        = get_theme_mod( 'onepress_news_id', 'news' );
 $disable   = get_theme_mod( 'onepress_news_disable' ) == 1 ? true : false;
 
 if ( onepress_is_selective_refresh() ) {

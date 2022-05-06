@@ -4,7 +4,7 @@
  * Copyright (c) 2016 PixelGrade http://www.pixelgrade.com
  * Licensed under MIT http://www.opensource.org/licenses/mit-license.php/
  */
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 	var $window = $(window),
 		windowHeight = $window.height(),
 		elements = [],
@@ -17,8 +17,8 @@
 		frameRendered = true;
 
 	$bully = $('<div class="c-bully">').appendTo("body");
-	if ( Onepress_Bully.disable_mobile ) {
-		$bully.addClass( 'c-bully-hide-on-mobile' );
+	if (Onepress_Bully.disable_mobile) {
+		$bully.addClass('c-bully-hide-on-mobile');
 	}
 
 	$current = $(
@@ -43,7 +43,7 @@
 				_bb -= $("#wpadminbar").height();
 			}
 
-			$.each(Onepress_Bully.sections, function(id, arg) {
+			$.each(Onepress_Bully.sections, function (id, arg) {
 				var element = $("#" + id);
 
 				if (element.length) {
@@ -80,10 +80,10 @@
 					offset = activeBullet.offset().top - bullyOffset.top;
 				}
 
-				var offset = $bully.children( '.c-bully__bullet' ).not( '.c-bully__bullet--active' ).first().outerHeight( true ) * ( count - 1 );
+				var offset = $bully.children('.c-bully__bullet').not('.c-bully__bullet--active').first().outerHeight(true) * (count - 1);
 
 				$current.removeClass("c-bully__bullet--squash");
-				setTimeout(function() {
+				setTimeout(function () {
 					$current.addClass("c-bully__bullet--squash");
 				});
 				$current.css("top", offset);
@@ -101,30 +101,30 @@
 	})();
 
 	function reloadAll() {
-		$.each(elements, function(i, element) {
+		$.each(elements, function (i, element) {
 			element._reloadElement();
 		});
 	}
 
 	function staggerClass($elements, classname, timeout) {
-		$.each($elements, function(i, obj) {
+		$.each($elements, function (i, obj) {
 			obj.$bullet.addClass(classname);
 			/*
-                var stagger = i * timeout;
+				var stagger = i * timeout;
 
-                setTimeout( function() {
-                    obj.$bullet.addClass( classname );
-                }, stagger );
-                */
+				setTimeout( function() {
+					obj.$bullet.addClass( classname );
+				}, stagger );
+				*/
 		});
 	}
 
-	$window.on("load", function(e) {
+	$window.on("load", function (e) {
 		staggerClass(elements, "c-bully__bullet--pop", 400);
 		frameRendered = false;
 	});
 
-	$window.on("scroll", function(e) {
+	$window.on("scroll", function (e) {
 		if (frameRendered === true) {
 			lastScrollY =
 				(window.pageYOffset || document.documentElement.scrollTop) -
@@ -133,7 +133,7 @@
 		frameRendered = false;
 	});
 
-	$window.on("load resize", function() {
+	$window.on("load resize", function () {
 		reloadAll();
 	});
 
@@ -159,7 +159,7 @@
 		}
 
 		$bullet.data("bully-data", self).appendTo($bully);
-		$bullet.on("click", function(event) {
+		$bullet.on("click", function (event) {
 			event.preventDefault();
 			event.stopPropagation();
 
@@ -175,11 +175,11 @@
 
 	Bully.prototype = {
 		constructor: Bully,
-		_reloadElement: function() {
+		_reloadElement: function () {
 			this.offset = $(this.element).offset();
 			this.height = $(this.element).outerHeight();
 		},
-		_calcTop: function(top) {
+		_calcTop: function (top) {
 			// check if has sticky
 			if ($("#masthead").hasClass("is-sticky")) {
 				top -= $("#masthead").height();
@@ -190,7 +190,7 @@
 
 			return top;
 		},
-		onClick: function() {
+		onClick: function () {
 			var self = this,
 				$target = $("html, body");
 
@@ -217,8 +217,8 @@
 		}
 	};
 
-	$.fn.bully = function(options) {
-		return this.each(function() {
+	$.fn.bully = function (options) {
+		return this.each(function () {
 			if (!$.data(this, "plugin_" + Bully)) {
 				$.data(this, "plugin_" + Bully, new Bully(this, options));
 			}
@@ -233,11 +233,15 @@
 
 	$window.on("rellax load", reloadAll);
 
-	$.each(Onepress_Bully.sections, function(id, args) {
+	$.each(Onepress_Bully.sections, function (id, args) {
 		if (args.enable) {
-			$("#" + id).bully({
-				scrollPerSecond: 3000
-			});
+			const section = $("#" + id);
+			if (section.length) {
+				section.bully({
+					scrollPerSecond: 3000
+				});
+			}
+
 		}
 	});
 

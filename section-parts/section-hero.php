@@ -1,5 +1,5 @@
 <?php
-$id         = get_theme_mod( 'onepress_hero_id', esc_html__( 'hero', 'onepress' ) );
+$id         = get_theme_mod( 'onepress_hero_id', 'hero' );
 $disable    = sanitize_text_field( get_theme_mod( 'onepress_hero_disable' ) ) == 1 ? true : false;
 $fullscreen = sanitize_text_field( get_theme_mod( 'onepress_hero_fullscreen' ) );
 $pdtop      = floatval( get_theme_mod( 'onepress_hero_pdtop', '10' ) );

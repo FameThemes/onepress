@@ -1,5 +1,5 @@
 <?php
-$id       = get_theme_mod( 'onepress_counter_id', esc_html__( 'counter', 'onepress' ) );
+$id       = get_theme_mod( 'onepress_counter_id', 'counter' );
 $disable  = get_theme_mod( 'onepress_counter_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_counter_title', esc_html__( 'Our Numbers', 'onepress' ) );
 $subtitle = get_theme_mod( 'onepress_counter_subtitle', esc_html__( 'Section subtitle', 'onepress' ) );

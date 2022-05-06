@@ -1,5 +1,5 @@
 <?php
-$onepress_contact_id            = get_theme_mod( 'onepress_contact_id', esc_html__( 'contact', 'onepress' ) );
+$onepress_contact_id            = get_theme_mod( 'onepress_contact_id', 'contact' );
 $onepress_contact_disable       = get_theme_mod( 'onepress_contact_disable' ) == 1 ? true : false;
 $onepress_contact_title         = get_theme_mod( 'onepress_contact_title', esc_html__( 'Get in touch', 'onepress' ) );
 $onepress_contact_subtitle      = get_theme_mod( 'onepress_contact_subtitle', esc_html__( 'Section subtitle', 'onepress' ) );

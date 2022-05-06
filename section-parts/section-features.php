@@ -1,5 +1,5 @@
 <?php
-$id       = get_theme_mod( 'onepress_features_id', esc_html__('features', 'onepress') );
+$id       = get_theme_mod( 'onepress_features_id', 'features' );
 $disable  = get_theme_mod( 'onepress_features_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_features_title', esc_html__('Features', 'onepress' ));
 $subtitle = get_theme_mod( 'onepress_features_subtitle', esc_html__('Why choose Us', 'onepress' ));
