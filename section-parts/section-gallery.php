@@ -9,7 +9,6 @@ if ( onepress_is_selective_refresh() ) {
     $disable = false;
 }
 $layout = get_theme_mod( 'onepress_gallery_layout', 'default' );
-
 ?>
 <?php if ( ! $disable ) { ?>
     <?php if ( ! onepress_is_selective_refresh() ){ ?>
