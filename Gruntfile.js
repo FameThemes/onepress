@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 	"use strict";
 	var pkgInfo = grunt.file.readJSON("package.json");
 	grunt.initConfig({
@@ -109,7 +109,7 @@ module.exports = function(grunt) {
 
 		replace: {
 			theme_main: {
-				src: ["style.css", "assets/sass/style.scss", "editor-style.css", "assets/sass/editor.scss" ],
+				src: ["style.css", "assets/sass/style.scss", "editor-style.css", "assets/sass/editor.scss"],
 				overwrite: true,
 				replacements: [
 					{
@@ -154,18 +154,14 @@ module.exports = function(grunt) {
 		"compress:main",
 		"clean:main"
 	]);
-	grunt.registerTask("release", function(ver) {
-		var newVersion = grunt.option("ver");
-		if (newVersion) {
-			// Replace new version
-			newVersion = newVersion ? newVersion : "patch";
-			grunt.task.run("bumpup:" + newVersion);
-			grunt.task.run("replace");
+	grunt.registerTask("release", function (ver) {
+		let newVersion = pkgInfo.version
+		grunt.task.run("bumpup:" + newVersion);
+		grunt.task.run("replace");
 
-			// i18n
-			// grunt.task.run(['addtextdomain', 'makepot']);
-			// re create css file and min
-			grunt.task.run(["css", "postcss"]);
-		}
+		// i18n
+		// grunt.task.run(['addtextdomain', 'makepot']);
+		// re create css file and min
+		grunt.task.run(["css", "postcss"]);
 	});
 };
