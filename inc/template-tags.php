@@ -937,15 +937,20 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			.gallery-carousel .g-item{
 				padding: 0px <?php echo intval( $gallery_spacing / 2 ); ?>px;
 			}
-			.gallery-carousel {
+			.gallery-carousel-wrap {
 				margin-left: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
 				margin-right: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
 			}
 			.gallery-grid .g-item, .gallery-masonry .g-item .inner {
 				padding: <?php echo intval( $gallery_spacing / 2 ); ?>px;
 			}
-			.gallery-grid, .gallery-masonry {
-				margin: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+			.gallery-grid-wrap, .gallery-masonry-wrap{
+				margin-left: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+				margin-right: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+			}
+			.gallery-justified-wrap {
+				margin-left: -<?php echo intval( $gallery_spacing ); ?>px;
+				margin-right: -<?php echo intval( $gallery_spacing ); ?>px;
 			}
 		<?php
 		$content_width = absint( get_theme_mod( 'single_layout_content_width' ) );
@@ -1454,16 +1459,20 @@ function onepress_gallery_generate( $echo = true ) {
 		case 'masonry':
 			$html = onepress_gallery_html( $data );
 			if ( $html ) {
+				$div .= '<div class="gallery-masonry-wrap  gallery-grid-wrap">';
 				$div .= '<div data-col="' . $col . '" class="g-zoom-in gallery-masonry ' . $class . ' gallery-grid g-col-' . $col . '">';
 				$div .= $html;
+				$div .= '</div>';
 				$div .= '</div>';
 			}
 			break;
 		case 'carousel':
 			$html = onepress_gallery_html( $data );
 			if ( $html ) {
+				$div .= '<div class="gallery-carousel-wrap">';
 				$div .= '<div data-col="' . $col . '" class="g-zoom-in gallery-carousel owl-theme owl-carousel owl-carousel' . $class . '">';
 				$div .= $html;
+				$div .= '</div>';
 				$div .= '</div>';
 			}
 			break;
@@ -1480,16 +1489,20 @@ function onepress_gallery_generate( $echo = true ) {
 			if ( $html ) {
 				$gallery_spacing = absint( get_theme_mod( 'onepress_g_spacing', 20 ) );
 				$row_height = absint( get_theme_mod( 'onepress_g_row_height', 120 ) );
+				$div .= '<div class="gallery-justified-wrap">';
 				$div .= '<div data-row-height="' . $row_height . '" data-spacing="' . $gallery_spacing . '" class="g-zoom-in gallery-justified' . $class . '">';
 				$div .= $html;
+				$div .= '</div>';
 				$div .= '</div>';
 			}
 			break;
 		default: // grid
 			$html = onepress_gallery_html( $data );
 			if ( $html ) {
+				$div .= '<div class="gallery-grid-wrap">';
 				$div .= '<div class="gallery-grid g-zoom-in ' . $class . ' g-col-' . $col . '">';
 				$div .= $html;
+				$div .= '</div>';
 				$div .= '</div>';
 			}
 			break;
