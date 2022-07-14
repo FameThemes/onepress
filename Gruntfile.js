@@ -6,12 +6,8 @@ module.exports = function (grunt) {
 		// Autoprefixer.
 		postcss: {
 			options: {
-				processors: [
-					require("autoprefixer")({
-						overrideBrowserslist: ["> 0.1%", "ie 8", "ie 9"]
-					})
-				]
-			},
+                style: 'expanded',
+            },
 			dist: {
 				src: ["assets/css/*.css", "*.css"]
 			}
