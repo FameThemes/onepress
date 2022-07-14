@@ -1,4 +1,7 @@
 # CHANGELOG
+# 2.3.0
+* Fixed Anchor links to other pages in menu doesn't work.
+
 # 2.2.9
 * FIXED: Fixed issue sometime the dot naviation working incorrect.
 
