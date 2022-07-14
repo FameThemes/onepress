@@ -2,6 +2,9 @@
 # 2.3.0
 * Fixed Anchor links to other pages in menu doesn't work.
 * Fixed issue Gallery - Item Spacing adding offset on the right.
+* Fixed issue ensure text remains visible during webfont load.
+* Fix issue dropdown menu item does not cover all text.
+
 
 # 2.2.9
 * FIXED: Fixed issue sometime the dot naviation working incorrect.
