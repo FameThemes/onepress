@@ -463,11 +463,10 @@ jQuery(document).ready(function ($) {
 			}
 			if ($el.length) {
 				event.preventDefault();
+				window.history.pushState({}, null, url.href);
 				smoothScroll($el);
-				return false;
 			}
 		}
-		return true;
 	});
 
 
