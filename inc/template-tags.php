@@ -1154,9 +1154,12 @@ if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
 	 * @return bool|array
 	 */
 	function onepress_get_social_profiles() {
-		$array = get_theme_mod( 'onepress_social_profiles' );
+		$array = get_theme_mod( 'onepress_social_profiles', [] );
 		if ( is_string( $array ) ) {
 			$array = json_decode( $array, true );
+		}
+		if ( ! is_array( $array ) ) {
+			$array = [];
 		}
 		$html = '';
 		if ( ! empty( $array ) && is_array( $array ) ) {
@@ -1192,7 +1195,7 @@ if ( ! function_exists( 'onepress_get_social_profiles' ) ) {
 		}
 
 		foreach ( (array) $array as $s ) {
-			if ( $s['icon'] != '' ) {
+			if ( $s && $s['icon'] != '' ) {
 				$html .= '<a target="_blank" href="' . $s['link'] . '" title="' . esc_attr( $s['network'] ) . '"><i class="fa ' . esc_attr( $s['icon'] ) . '"></i></a>';
 			}
 		}
