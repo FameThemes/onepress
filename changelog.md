@@ -6,6 +6,7 @@
 * Fix issue dropdown menu item does not cover all text.
 
 
+
 # 2.2.9
 * FIXED: Fixed issue sometime the dot naviation working incorrect.
 
