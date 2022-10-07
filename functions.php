@@ -157,6 +157,14 @@ if (!function_exists('onepress_setup')) :
 		 * This theme styles the visual editor to resemble the theme style.
 		 */
 		add_editor_style(array('editor-style.css', onepress_fonts_url()));
+
+		if (get_theme_mod('onepress_gallery_disable')) {
+			/**
+			 * Dequeue Google Fonts loaded by Elementor.
+			 * @since  2.3.1
+			 */
+			add_filter('elementor/frontend/print_google_fonts', '__return_false');
+		}
 	}
 endif;
 add_action('after_setup_theme', 'onepress_setup');
@@ -266,6 +274,7 @@ function onepress_scripts()
 		'hero_fade'                      => intval(get_theme_mod('onepress_hero_slider_fade', 750)),
 		'hero_duration'                  => intval(get_theme_mod('onepress_hero_slider_duration', 5000)),
 		'hero_disable_preload'           => get_theme_mod('onepress_hero_disable_preload', false) ? true : false,
+		'disabled_google_font'           => get_theme_mod('onepress_disable_g_font', false) ? true : false,
 		'is_home'                        => '',
 		'gallery_enable'                 => '',
 		'is_rtl'                         => is_rtl(),
@@ -323,6 +332,44 @@ function onepress_scripts()
 	wp_localize_script('onepress-theme', 'onepress_js_settings', $onepress_js_settings);
 }
 add_action('wp_enqueue_scripts', 'onepress_scripts');
+
+
+if (!function_exists('onepress_block_all_js_google_fonts')) {
+	/**
+	 * Disable all google added by js.
+	 * 
+	 * @since 2.3.1
+	 *
+	 * @return void
+	 */
+	function onepress_block_all_js_google_fonts()
+	{
+
+		if (!get_theme_mod('onepress_disable_g_font')) {
+			return;
+		}
+?>
+		<script>
+			var head = document.getElementsByTagName('head')[0];
+			// Save the original method
+			var insertBefore = head.insertBefore;
+			// Replace it!
+			head.insertBefore = function(newElement, referenceElement) {
+				if (newElement.href && newElement.href.indexOf('https://fonts.googleapis.com/css?family=') === 0) {
+					return;
+				}
+				if (newElement.href && newElement.href.indexOf('https://fonts.gstatic.com/') === 0) {
+					return;
+				}
+				insertBefore.call(head, newElement, referenceElement);
+			};
+		</script>
+<?php
+	}
+}
+add_action('wp_head', 'onepress_block_all_js_google_fonts', 0);
+
+
 
 
 if (!function_exists('onepress_fonts_url')) :

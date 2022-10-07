@@ -32,9 +32,9 @@ class OnePress_Editor {
 		if ( function_exists( 'onepress_typography_render_style' ) ) {
 			$typo = onepress_typography_render_style( false, true );
 			if ( $typo['url'] ) {
-				wp_enqueue_style( 'onepress-editor-fonts', $typo['url'] ); // Font style url.
+				wp_register_style( 'onepress-editor-fonts', $typo['url'] ); // Font style url.
+				wp_enqueue_style( 'onepress-editor-fonts' ); // Font style url.
 			}
-
 			wp_add_inline_style( 'wp-edit-post', $typo['code'] );
 		}
 

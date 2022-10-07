@@ -1,4 +1,7 @@
 # CHANGELOG
+# 2.3.1
+* Do not load google font when disabled. Theme can block google fonts that added by js but it can not block if the font load via an iframe.
+
 # 2.3.0
 * Fixed Anchor links to other pages in menu doesn't work.
 * Fixed issue Gallery - Item Spacing adding offset on the right.
