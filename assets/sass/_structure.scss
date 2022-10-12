@@ -256,10 +256,18 @@
 
 	ul {
 		position: absolute;
-		display: none;
+		display: block;
+		height: 1px;
+		overflow: hidden;
+		opacity: 0;
+		z-index: -1;
 		top: 100%;
 		left: 0;
-		z-index: 99;
+		
+		&.sub-ul-r {
+			left: auto;
+			right: 0px;
+		}
 	}
 
 	ul ul {
@@ -278,6 +286,10 @@
 	li:hover>ul,
 	li.sfHover>ul {
 		display: block;
+		height: initial;
+		overflow: initial;
+		opacity: 1;
+		z-index: 99;
 	}
 
 	a {
@@ -290,7 +302,8 @@
 .onepress-menu {
 	ul {
 		min-width: 12em; // allow long menu items to determine submenu width
-		width: 12em; //no auto sub width for IE7, see white-space comment below
+		width: fit-content;
+		max-width: 100vw;
 		border: 1px solid $border;
 		border-top: none;
 	}
@@ -298,6 +311,7 @@
 	li {
 		white-space: nowrap; // no need for Supersubs plugin
 		*white-space: normal; // ...unless you support IE7 (let it wrap)
+		
 		-webkit-transition: background 0.2s;
 		transition: background 0.2s;
 	}
@@ -320,7 +334,7 @@
 		text-decoration: none;
 		zoom: 1;
 		letter-spacing: 1px;
-		white-space: pre-line;
+		white-space: nowrap;
 
 		&:hover {
 			color: $primary;
@@ -329,7 +343,8 @@
 
 	ul li {
 		line-height: 26px;
-
+		width: fit-content;
+		min-width: 100%;
 		a {
 			border-top: 1px solid $border;
 			padding: 8px 18px;
@@ -403,7 +418,9 @@
 		overflow: auto !important;
 		border-top: 1px solid $border;
 		border-bottom: 1px solid $border;
-
+		.sub-menu {
+			width: auto;
+		}
 		>li>a {
 			padding: 12px 20px;
 		}
@@ -425,6 +442,7 @@
 			li a {
 				padding: 12px 35px;
 				border-top: none;
+				white-space: pre-line;
 
 				&:hover {
 					background: transparent;
@@ -502,7 +520,12 @@
 		}
 
 		.nav-toggle-dropdown>ul {
+			left: 0px;
 			display: block !important;
+			height: initial;
+			overflow: initial;
+			opacity: 1;
+			z-index: inherit;
 		}
 	}
 

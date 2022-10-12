@@ -290,7 +290,6 @@ jQuery(document).ready(function ($) {
 	 */
 	var mobile_max_width = 1140; // Media max width for mobile
 	var main_navigation = jQuery(".main-navigation .onepress-menu");
-	var stite_header = $(".site-header");
 	var header = document.getElementById("masthead");
 	if (header) {
 		var noSticky = header.classList.contains("no-sticky");
@@ -402,23 +401,61 @@ jQuery(document).ready(function ($) {
 		});
 	}
 
-	$(window).resize(function () {
-		if (
-			main_navigation.hasClass("onepress-menu-mobile") &&
-			$(window).width() <= mobile_max_width
-		) {
-			if (!noSticky) {
-				main_navigation.css({
-					height: getNavHeight(),
-					overflow: "auto"
-				});
+	function autoMenuAlign() {
+		const ww = $(window).width();
+		const isMobile = ww <= mobile_max_width;
+		const header = $('#masthead > .container');
+		const headerRect = header.length ? header[0].getBoundingClientRect() : {};
+		$('#site-navigation  .onepress-menu > li').each(function () {
+			const li = $(this);
+			const sub = $('> .sub-menu', li);
+			if (isMobile) {
+				sub.removeAttr('style');
+				return;
 			}
-		} else {
-			main_navigation.removeAttr("style");
-			main_navigation.removeClass("onepress-menu-mobile");
-			jQuery("#nav-toggle").removeClass("nav-is-visible");
+
+			if (sub.length) {
+				const liRect = li[0].getBoundingClientRect();
+				const subRect = sub[0].getBoundingClientRect();
+				if (headerRect.right < liRect.left + subRect.width) {
+					li.addClass('sub-li-r');
+					sub.addClass('sub-ul-r');
+					const diff = headerRect.right - (liRect.left + liRect.width);
+					sub.css('right', `-${diff}px`);
+				}
+			}
+		});
+
+	}
+
+	autoMenuAlign();
+	
+	let timeOutResize = false;
+	$(window).resize(function () {
+		if (timeOutResize) {
+			clearTimeout(timeOutResize);
 		}
+		timeOutResize = setTimeout(() => {
+			if (
+				main_navigation.hasClass("onepress-menu-mobile") &&
+				$(window).width() <= mobile_max_width
+			) {
+				if (!noSticky) {
+					main_navigation.css({
+						height: getNavHeight(),
+						overflow: "auto"
+					});
+				}
+			} else {
+				main_navigation.removeAttr("style");
+				main_navigation.removeClass("onepress-menu-mobile");
+				jQuery("#nav-toggle").removeClass("nav-is-visible");
+			}
+			autoMenuAlign();
+		}, 500);
 	});
+
+
 
 	jQuery(
 		".onepress-menu li.menu-item-has-children, .onepress-menu li.page_item_has_children"
@@ -432,9 +469,10 @@ jQuery(document).ready(function ($) {
 		"click",
 		".nav-toggle-subarrow, .nav-toggle-subarrow .nav-toggle-subarrow",
 		function () {
-			jQuery(this)
-				.parent()
-				.toggleClass("nav-toggle-dropdown");
+			const el = jQuery(this);
+			const p = el.parent();
+			p.removeAttr('style');
+			p.toggleClass("nav-toggle-dropdown");
 		}
 	);
 

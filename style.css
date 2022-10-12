@@ -963,10 +963,17 @@ Footer widgets
 }
 .onepress-menu ul {
   position: absolute;
-  display: none;
+  display: block;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  z-index: -1;
   top: 100%;
   left: 0;
-  z-index: 99;
+}
+.onepress-menu ul.sub-ul-r {
+  left: auto;
+  right: 0px;
 }
 .onepress-menu ul ul {
   top: 0;
@@ -981,6 +988,10 @@ Footer widgets
 .onepress-menu li:hover > ul,
 .onepress-menu li.sfHover > ul {
   display: block;
+  height: initial;
+  overflow: initial;
+  opacity: 1;
+  z-index: 99;
 }
 .onepress-menu a {
   display: block;
@@ -989,7 +1000,8 @@ Footer widgets
 
 .onepress-menu ul {
   min-width: 12em;
-  width: 12em;
+  width: fit-content;
+  max-width: 100vw;
   border: 1px solid #e9e9e9;
   border-top: none;
 }
@@ -1015,13 +1027,15 @@ Footer widgets
   text-decoration: none;
   zoom: 1;
   letter-spacing: 1px;
-  white-space: pre-line;
+  white-space: nowrap;
 }
 .onepress-menu a:hover {
   color: #03c4eb;
 }
 .onepress-menu ul li {
   line-height: 26px;
+  width: fit-content;
+  min-width: 100%;
 }
 .onepress-menu ul li a {
   border-top: 1px solid #e9e9e9;
@@ -1079,6 +1093,9 @@ Footer widgets
     border-top: 1px solid #e9e9e9;
     border-bottom: 1px solid #e9e9e9;
   }
+  .onepress-menu.onepress-menu-mobile .sub-menu {
+    width: auto;
+  }
   .onepress-menu.onepress-menu-mobile > li > a {
     padding: 12px 20px;
   }
@@ -1097,6 +1114,7 @@ Footer widgets
   .onepress-menu.onepress-menu-mobile ul li a {
     padding: 12px 35px;
     border-top: none;
+    white-space: pre-line;
   }
   .onepress-menu.onepress-menu-mobile ul li a:hover {
     background: transparent;
@@ -1147,7 +1165,12 @@ Footer widgets
     content: "" !important;
   }
   .onepress-menu.onepress-menu-mobile .nav-toggle-dropdown > ul {
+    left: 0px;
     display: block !important;
+    height: initial;
+    overflow: initial;
+    opacity: 1;
+    z-index: inherit;
   }
 
   #nav-toggle {
@@ -4820,3 +4843,5 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .has-very-dark-gray-background-color {
   background-color: #444;
 }
+
+/*# sourceMappingURL=style.css.map */

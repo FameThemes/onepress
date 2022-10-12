@@ -272,6 +272,7 @@ function onepress_scripts()
 		'hero_animation'                 => get_theme_mod('onepress_hero_option_animation', 'flipInX'),
 		'hero_speed'                     => intval(get_theme_mod('onepress_hero_option_speed', 5000)),
 		'hero_fade'                      => intval(get_theme_mod('onepress_hero_slider_fade', 750)),
+		'submenu_width'                  => intval(get_theme_mod('onepress_submenu_width', 0)),
 		'hero_duration'                  => intval(get_theme_mod('onepress_hero_slider_duration', 5000)),
 		'hero_disable_preload'           => get_theme_mod('onepress_hero_disable_preload', false) ? true : false,
 		'disabled_google_font'           => get_theme_mod('onepress_disable_g_font', false) ? true : false,

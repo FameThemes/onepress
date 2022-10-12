@@ -572,6 +572,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 
 			$logo_height = absint( get_theme_mod( 'onepress_logo_height' ) );
 			$logo_tran_height = absint( get_theme_mod( 'onepress_transparent_logo_height' ) );
+			$submenu_width = absint( get_theme_mod( 'onepress_submenu_width' ) );
 
 			/**
 			 *  Custom hero section css
@@ -598,6 +599,10 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			$t_tagline_color = sanitize_hex_color( get_theme_mod( 'onepress_transparent_tag_title_c' ) );
 		if ( $t_tagline_color ) {
 			echo "#page .is-transparent .site-header.no-scroll .site-description { color: {$t_tagline_color}; }";
+		}
+		
+		if ( $submenu_width ) {
+			echo ".onepress-menu ul {max-width: {$submenu_width}px;}";
 		}
 
 		?>

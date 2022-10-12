@@ -1,4 +1,9 @@
 # CHANGELOG
+# 2.3.2
+* REMOVE: Template html comments.
+* IMPROVED: Submenu auto width. Now the submenu width will set automatically base on the menu item text.
+* NEW: Submenu auto align.
+
 # 2.3.1
 * Do not load google font when disabled. Theme can block google fonts that added by js but it can not block if the font load via an iframe.
 
