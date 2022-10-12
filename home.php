@@ -58,14 +58,14 @@ $layout = onepress_get_layout();
 
 				<?php endif; ?>
 
-				</main><!-- #main -->
-			</div><!-- #primary -->
+				</main>
+			</div>
 
             <?php if ( $layout != 'no-sidebar' ) { ?>
                 <?php get_sidebar(); ?>
             <?php } ?>
 
-		</div><!--#content-inside -->
-	</div><!-- #content -->
+		</div>
+	</div>
 
 <?php get_footer(); ?>

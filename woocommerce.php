@@ -28,19 +28,17 @@ do_action( 'onepress_page_before_content' );
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">
 					<?php woocommerce_content(); ?>
-				</main><!-- #main -->
-			</div><!-- #primary -->
+				</main>
+			</div>
             <?php if ( $is_active_sidebar ) { ?>
                 <?php if ( $layout != 'no-sidebar' ) { ?>
                     <div id="secondary" class="widget-area sidebar" role="complementary">
                         <?php dynamic_sidebar( 'sidebar-shop' ); ?>
-                    </div><!-- #secondary -->
+                    </div>
                 <?php } ?>
 
             <?php } ?>
-		</div><!--#content-inside -->
-
-
-	</div><!-- #content -->
+		</div>
+	</div>
 
 <?php get_footer(); ?>

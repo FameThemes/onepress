@@ -38,7 +38,7 @@ get_header(); ?>
             do_action( 'onepress_frontpage_after_section_parts' );
 
 			?>
-		</main><!-- #main -->
-	</div><!-- #content -->
+		</main>
+	</div>
 
 <?php get_footer(); ?>

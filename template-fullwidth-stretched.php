@@ -34,9 +34,9 @@ do_action( 'onepress_page_before_content' );
 
 				<?php endwhile; // End of the loop. ?>
 
-			</main><!-- #main -->
-		</div><!-- #primary -->
-	</div><!--#content-inside -->
-</div><!-- #content -->
+			</main>
+		</div>
+	</div>
+</div>
 
 <?php get_footer(); ?>

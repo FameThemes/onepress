@@ -43,7 +43,7 @@ get_header(); ?>
 									) );
 								?>
 								</ul>
-							</div><!-- .widget -->
+							</div>
 							<?php endif; ?>
 
 							<?php
@@ -54,15 +54,15 @@ get_header(); ?>
 
 							<?php the_widget( 'WP_Widget_Tag_Cloud' ); ?>
 
-						</div><!-- .page-content -->
-					</section><!-- .error-404 -->
+						</div>
+					</section>
 
-				</main><!-- #main -->
-			</div><!-- #primary -->
+				</main>
+			</div>
 
 			<?php get_sidebar(); ?>
 
-		</div><!--#content-inside -->
-	</div><!-- #content -->
+		</div>
+	</div>
 	
 <?php get_footer(); ?>

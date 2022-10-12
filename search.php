@@ -46,12 +46,12 @@ get_header(); ?>
 
 				<?php endif; ?>
 
-				</main><!-- #main -->
-			</section><!-- #primary -->
+				</main>
+			</section>
 
 			<?php get_sidebar(); ?>
 
-		</div><!--#content-inside -->
-	</div><!-- #content -->
+		</div>
+	</div>
 
 <?php get_footer(); ?>

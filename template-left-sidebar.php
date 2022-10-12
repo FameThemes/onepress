@@ -34,12 +34,11 @@ do_action( 'onepress_page_before_content' );
 
 					<?php endwhile; // End of the loop. ?>
 
-				</main><!-- #main -->
-			</div><!-- #primary -->
+				</main>
+			</div>
 
 			<?php get_sidebar(); ?>
 
-		</div><!--#content-inside -->
-	</div><!-- #content -->
-
+		</div>
+	</div>
 <?php get_footer(); ?>
