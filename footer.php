@@ -54,9 +54,8 @@ if ( ! $hide_footer ) {
 				?>
 			</div>
 		</div>
-		<!-- .site-info -->
 
-	</footer><!-- #colophon -->
+	</footer>
 	<?php
 }
 /**
@@ -66,7 +65,7 @@ if ( ! $hide_footer ) {
  */
 do_action( 'onepress_site_end' );
 ?>
-</div><!-- #page -->
+</div>
 
 <?php do_action( 'onepress_after_site_end' ); ?>
 

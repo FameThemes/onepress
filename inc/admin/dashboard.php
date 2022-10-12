@@ -693,7 +693,7 @@ class Onepress_Dashboard
 
 			<?php do_action('onepress_more_tabs_details', $actions); ?>
 
-		</div> <!-- END .theme_info -->
+		</div>
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {
 				$('body').addClass('about-php');

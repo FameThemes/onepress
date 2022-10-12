@@ -237,10 +237,10 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
 							); ?>
 						</ul>
 					</nav>
-					<!-- #site-navigation -->
+					
 				</div>
 			</div>
-		</header><!-- #masthead -->
+		</header>
 		<?php
 	}
 }
@@ -378,7 +378,7 @@ if ( ! function_exists( 'onepress_entry_footer' ) ) {
 		if ( $content ) {
 			echo '<footer class="entry-footer">';
 			echo $content; // WPCS: XSS OK.
-			echo '</footer><!-- .entry-footer -->';
+			echo '</footer>';
 		}
 
 	}
@@ -491,7 +491,7 @@ if ( ! function_exists( 'onepress_comment' ) ) :
 						);
 						edit_comment_link( __( 'Edit', 'onepress' ), '<span class="edit-link">', '</span>' );
 					?>
-				</header><!-- .comment-meta -->
+				</header>
 
 					<?php if ( '0' == $comment->comment_approved ) : ?>
 					<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.', 'onepress' ); ?></p>
@@ -499,11 +499,11 @@ if ( ! function_exists( 'onepress_comment' ) ) :
 
 				<div class="comment-content entry-content">
 					<?php comment_text(); ?>
-									</div><!-- .comment-content -->
+				</div>
 
-			</div><!--/comment-wrapper-->
+			</div>
 
-		</article><!-- #comment-## -->
+		</article>
 				<?php
 				break;
 		endswitch; // end comment_type check

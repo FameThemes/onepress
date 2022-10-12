@@ -360,7 +360,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 								</div>
 
 							</div>
-						</div><!-- .form -->
+						</div>
 
 					</div>
 

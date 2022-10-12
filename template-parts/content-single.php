@@ -14,9 +14,9 @@
         <?php if ( get_theme_mod( 'single_meta', 1 ) ) { ?>
 		<div class="entry-meta">
 			<?php onepress_posted_on(); ?>
-		</div><!-- .entry-meta -->
+		</div>
         <?php } ?>
-	</header><!-- .entry-header -->
+	</header>
 
     <?php if ( get_theme_mod( 'single_thumbnail', 0 ) && has_post_thumbnail() ) { ?>
         <div class="entry-thumbnail">
@@ -25,7 +25,7 @@
             $size = 'large';
             the_post_thumbnail( $size );
             ?>
-        </div><!-- .entry-footer -->
+        </div>
     <?php } ?>
 
 	<div class="entry-content">
@@ -36,11 +36,11 @@
 				'after'  => '</div>',
 			) );
 		?>
-	</div><!-- .entry-content -->
+	</div>
     <?php if ( get_theme_mod( 'single_meta', 1 ) ) { ?>
 
     <?php onepress_entry_footer(); ?>
 
     <?php } ?>
-</article><!-- #post-## -->
+</article>
 
