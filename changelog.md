@@ -1,22 +1,21 @@
 # CHANGELOG
 # 2.3.2
-* REMOVE: Template html comments.
-* IMPROVED: Submenu auto width. Now the submenu width will set automatically base on the menu item text.
 * NEW: Submenu auto align.
+* IMPROVED: Submenu auto width. Now the submenu width will set automatically base on the menu item text.
+* REMOVED: Template html comments.
 
 # 2.3.1
-* Do not load google font when disabled. Theme can block google fonts that added by js but it can not block if the font load via an iframe.
+* FIXED: Do not load google font when disabled. Theme can block google fonts that added by js but it can not block if the font load via an iframe.
 
 # 2.3.0
-* Fixed Anchor links to other pages in menu doesn't work.
-* Fixed issue Gallery - Item Spacing adding offset on the right.
-* Fixed issue ensure text remains visible during webfont load.
-* Fix issue dropdown menu item does not cover all text.
-
+* FIXED: Anchor links to other pages in menu doesn't work.
+* FIXED: issue Gallery - Item Spacing adding offset on the right.
+* FIXED: issue ensure text remains visible during webfont load.
+* FIXED: issue dropdown menu item does not cover all text.
 
 
 # 2.2.9
-* FIXED: Fixed issue sometime the dot naviation working incorrect.
+* FIXED: Fixed issue sometime the dot navigation working incorrect.
 
 # 2.2.8
 * FIXED: Fix deprecated hook notice.
