@@ -9,9 +9,9 @@
 
 # 2.3.0
 * FIXED: Anchor links to other pages in menu doesn't work.
-* FIXED: issue Gallery - Item Spacing adding offset on the right.
-* FIXED: issue ensure text remains visible during webfont load.
-* FIXED: issue dropdown menu item does not cover all text.
+* FIXED: Fixed issue Gallery - Item Spacing adding offset on the right.
+* FIXED: Fixed issue ensure text remains visible during webfont load.
+* FIXED: Fixed issue dropdown menu item does not cover all text.
 
 
 # 2.2.9
