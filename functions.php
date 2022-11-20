@@ -249,7 +249,10 @@ function onepress_scripts()
 	$version = $theme->get('Version');
 
 	if (!get_theme_mod('onepress_disable_g_font')) {
-		wp_enqueue_style('onepress-fonts', onepress_fonts_url(), array(), $version);
+		$google_font_url = onepress_fonts_url();
+		if ( $google_font_url ) {
+			wp_enqueue_style('onepress-fonts', onepress_fonts_url(), array(), $version);
+		}
 	}
 
 	wp_enqueue_style('onepress-animate', get_template_directory_uri() . '/assets/css/animate.min.css', array(), $version);

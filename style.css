@@ -1498,10 +1498,12 @@ Footer widgets
 --------------------------------------------------------------*/
 /* Page: 404
 ------------------------------*/
-.error-404 .search-form, .error-404 .widget {
+.error-404 .search-form,
+.error-404 .widget {
   margin-bottom: 40px;
 }
-.error-404 .widgettitle, .error-404 .widget-title {
+.error-404 .widgettitle,
+.error-404 .widget-title {
   font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -1596,7 +1598,8 @@ Footer widgets
   padding-top: 30px;
   border-top: 1px solid #e9e9e9;
 }
-.entry-footer .cat-links, .entry-footer .tags-links {
+.entry-footer .cat-links,
+.entry-footer .tags-links {
   display: block;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -1619,7 +1622,8 @@ Footer widgets
 .nav-links .nav-next {
   float: right;
 }
-.nav-links a, .nav-links .page-numbers {
+.nav-links a,
+.nav-links .page-numbers {
   background: #cccccc;
   color: #FFFFFF;
   padding: 12px 20px;
@@ -1630,11 +1634,14 @@ Footer widgets
   border-radius: 2px;
 }
 @media screen and (max-width: 940px) {
-  .nav-links a, .nav-links .page-numbers {
+  .nav-links a,
+.nav-links .page-numbers {
     padding: 6px 10px;
   }
 }
-.nav-links a:hover, .nav-links a.current, .nav-links .page-numbers:hover, .nav-links .page-numbers.current {
+.nav-links a:hover, .nav-links a.current,
+.nav-links .page-numbers:hover,
+.nav-links .page-numbers.current {
   background: #03c4eb;
   text-decoration: none;
 }
@@ -1789,16 +1796,22 @@ Footer widgets
   top: 0;
   width: 0;
 }
-#comments .comment .comment-wrapper .comment-meta .comment-time, #comments .comment .comment-wrapper .comment-meta .comment-reply-link, #comments .comment .comment-wrapper .comment-meta .comment-edit-link {
+#comments .comment .comment-wrapper .comment-meta .comment-time,
+#comments .comment .comment-wrapper .comment-meta .comment-reply-link,
+#comments .comment .comment-wrapper .comment-meta .comment-edit-link {
   color: #aaaaaa;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   font-size: 11px;
 }
-#comments .comment .comment-wrapper .comment-meta .comment-time:hover, #comments .comment .comment-wrapper .comment-meta .comment-reply-link:hover, #comments .comment .comment-wrapper .comment-meta .comment-edit-link:hover {
+#comments .comment .comment-wrapper .comment-meta .comment-time:hover,
+#comments .comment .comment-wrapper .comment-meta .comment-reply-link:hover,
+#comments .comment .comment-wrapper .comment-meta .comment-edit-link:hover {
   color: #03c4eb;
 }
-#comments .comment .comment-wrapper .comment-meta .comment-time:after, #comments .comment .comment-wrapper .comment-meta .comment-reply-link:after, #comments .comment .comment-wrapper .comment-meta .comment-edit-link:after {
+#comments .comment .comment-wrapper .comment-meta .comment-time:after,
+#comments .comment .comment-wrapper .comment-meta .comment-reply-link:after,
+#comments .comment .comment-wrapper .comment-meta .comment-edit-link:after {
   content: "/";
   padding: 0px 5px;
 }
@@ -1898,6 +1911,12 @@ Footer widgets
 ------------------------------*/
 .woocommerce div.product form.cart .variations td.label {
   color: #777;
+}
+
+/* . Gutenberg  Editor  - Block Editor */
+.wp-block-gallery.is-layout-flex {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 /*--------------------------------------------------------------
@@ -4843,3 +4862,5 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .has-very-dark-gray-background-color {
   background-color: #444;
 }
+
+/*# sourceMappingURL=style.css.map */

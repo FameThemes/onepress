@@ -3,18 +3,24 @@
 /* Page: 404
 ------------------------------*/
 .error-404 {
-	.search-form, .widget {
+
+	.search-form,
+	.widget {
 		margin-bottom: 40px;
 	}
-	.widgettitle, .widget-title {
+
+	.widgettitle,
+	.widget-title {
 		font-size: 15px;
 		text-transform: uppercase;
 		letter-spacing: 2px;
 		margin-bottom: 13px;
 		font-weight: 700;
 	}
+
 	ul {
 		padding-left: 0px;
+
 		li {
 			list-style: none;
 		}
@@ -29,14 +35,17 @@
 		padding-bottom: 25px;
 		margin-bottom: 25px;
 	}
+
 	.entry-summary p {
 		margin-bottom: 0px;
 	}
+
 	.entry-header .entry-title {
 		font-size: 22px;
 		line-height: 1.5;
 		font-weight: 500;
-		a:hover{
+
+		a:hover {
 			text-decoration: none;
 		}
 	}
@@ -52,13 +61,15 @@
 	font-family: $font_text;
 	font-size: 25px;
 	line-height: 1.3;
+
 	@include for(medium-screens) {
 		font-size: 32px;
 		line-height: 1.5;
 	}
 }
+
 .entry-thumbnail {
-    margin-bottom: 30px;
+	margin-bottom: 30px;
 }
 
 .single .entry-header .entry-title {
@@ -80,6 +91,7 @@
 		background: $meta;
 		border-left: 3px solid $primary;
 		font-style: italic;
+
 		p {
 			margin: 0px;
 		}
@@ -103,7 +115,9 @@
 	margin-bottom: 30px;
 	padding-top: 30px;
 	border-top: 1px solid $border;
-	.cat-links, .tags-links {
+
+	.cat-links,
+	.tags-links {
 		display: block;
 		text-transform: uppercase;
 		letter-spacing: 1.5px;
@@ -119,27 +133,36 @@
 	border-right: none;
 	margin-bottom: 50px;
 	flex-basis: 100%;
-    text-align: center;
-	@extend .clearfix !optional;;
+	text-align: center;
+	@extend .clearfix !optional;
+	;
+
 	.nav-previous {
 		float: left;
 	}
+
 	.nav-next {
 		float: right;
 	}
-	a, .page-numbers {
+
+	a,
+	.page-numbers {
 		background: #cccccc;
 		color: #FFFFFF;
 		padding: 12px 20px;
-		@include for( screens-medium ){
+
+		@include for(screens-medium) {
 			padding: 6px 10px;
 		}
+
 		font-weight: 600;
 		font-size: 12px;
 		letter-spacing: 1px;
 		text-transform: uppercase;
 		border-radius: 2px;
-		&:hover, &.current {
+
+		&:hover,
+		&.current {
 			background: $primary;
 			text-decoration: none;
 		}
@@ -155,12 +178,13 @@
 .sticky .entry-title {
 	padding-left: 20px;
 	position: relative;
+
 	&:after {
 		content: "\f276";
 		display: inline-block;
-	    font-family: "FontAwesome";
-	    font-style: normal;
-	    font-weight: normal;
+		font-family: "FontAwesome";
+		font-style: normal;
+		font-weight: normal;
 		width: 12px;
 		height: 12px;
 		position: absolute;
@@ -179,10 +203,12 @@
 	line-height: 1.35;
 	margin-bottom: 15px;
 	margin-top: 5px;
+
 	img[class*="wp-image-"] {
 		display: block;
 		max-width: 100%;
 	}
+
 	.wp-caption-text {
 		margin: 10px 0px;
 	}
@@ -251,105 +277,132 @@
 #comments {
 	padding-top: 30px;
 	border-top: 1px solid $border;
+
 	.comments-title {
 		margin-bottom: $base;
 		font-size: 18px;
 		line-height: 26px;
-	    letter-spacing: 1.5px;
-	    text-transform: uppercase;
+		letter-spacing: 1.5px;
+		text-transform: uppercase;
 	}
+
 	.comment-list {
 		list-style: none;
 		padding-left: 0px;
+
 		.pingback {
 			border-bottom: 1px solid $border;
 			padding: $base 0;
 			margin: 0;
-			p { margin : 0px;}
+
+			p {
+				margin: 0px;
+			}
 		}
+
 		.pingback:last-child {
 			margin-bottom: $base*2;
 		}
 
 	}
+
 	.comment-content.entry-content {
 		margin-bottom: 0px;
 	}
+
 	.comment {
 		list-style: none;
 		margin: $gutter2 0;
+
 		.avatar {
 			width: 60px;
 			float: left;
-			@include border-radius( 3px );
+			@include border-radius(3px);
 		}
+
 		.comment-wrapper {
 			margin-left: $gutter2*3 ;
 			padding: ($gutter2 - 5) $gutter2 $gutter2/2 $gutter2;
 			background: #f8f9f9;
 			position: relative;
+
 			&:before {
 				border-color: rgba(0, 0, 0, 0) #f6f7f9 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
-			    border-style: solid;
-			    border-width: 0 10px 10px 0;
-			    content: "";
-			    height: 0;
-			    left: -9px;
-			    position: absolute;
-			    top: 0;
-			    width: 0;
+				border-style: solid;
+				border-width: 0 10px 10px 0;
+				content: "";
+				height: 0;
+				left: -9px;
+				position: absolute;
+				top: 0;
+				width: 0;
 			}
-			.comment-meta .comment-time, .comment-meta .comment-reply-link, .comment-meta .comment-edit-link {
+
+			.comment-meta .comment-time,
+			.comment-meta .comment-reply-link,
+			.comment-meta .comment-edit-link {
 				color: #aaaaaa;
 				text-transform: uppercase;
 				letter-spacing: 0.3px;
-				font-size: 11px ;
+				font-size: 11px;
+
 				&:hover {
 					color: $primary;
 				}
+
 				&:after {
 					content: "/";
 					padding: 0px 5px;
 				}
 
 			}
+
 			.comment-meta a:last-child {
 				&:after {
 					content: "";
 				}
 			}
+
 			.comment-meta cite .fn {
 				font-weight: bold;
 				font-style: normal;
-				margin-right: 5px ;
+				margin-right: 5px;
 				text-transform: uppercase;
 				letter-spacing: 1.5px;
 				font-size: 14px;
 			}
+
 			.comment-meta cite span {
 				padding: 3px 10px;
 				background: $border;
 				@include border-radius(4px);
 				margin-right: 10px;
 			}
+
 			a {
 				text-decoration: none;
 			}
 		}
+
 		.children {
 			padding-left: $gutter2*1;
+
 			.children {
 				padding-left: $gutter2*1;
+
 				.children {
 					padding-left: 0px;
 				}
 			}
 		}
+
 		@include for(medium-screens) {
 			.children {
 				padding-left: $gutter2*3;
+
 				.children {
 					padding-left: $gutter2*3;
+
 					.children {
 						padding-left: $gutter2*3;
 					}
@@ -358,11 +411,14 @@
 		}
 
 	}
+
 	.form-allowed-tags {
 		display: none;
 	}
+
 	a {
 		text-decoration: none;
+
 		&:hover {
 			text-decoration: underline;
 		}
@@ -373,29 +429,36 @@
 .comment-respond textarea {
 	width: 100%;
 }
+
 /* Comment Form
 ------------------------------*/
 #respond {
 	padding-top: $base;
+
 	.comment-form label {
 		display: block;
 		margin-bottom: 4px;
 	}
+
 	.form-allowed-tags {
 		font-size: 12px;
+
 		code {
 			background: none;
 		}
 	}
+
 	.comment-reply-title {
 		font-size: 18px;
 		letter-spacing: 1.5px;
-	    margin-bottom: 20px;
-	    text-transform: uppercase;
+		margin-bottom: 20px;
+		text-transform: uppercase;
 	}
+
 	.comment-notes {
 		display: none;
 	}
+
 	label {
 		font-size: 13px;
 		text-transform: uppercase;
@@ -412,4 +475,12 @@
 ------------------------------*/
 .woocommerce div.product form.cart .variations td.label {
 	color: #777;
+}
+
+/* . Gutenberg  Editor  - Block Editor */
+.wp-block-gallery {
+	&.is-layout-flex {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
