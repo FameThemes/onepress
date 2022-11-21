@@ -371,7 +371,7 @@ if (!function_exists('onepress_block_all_js_google_fonts')) {
 <?php
 	}
 }
-add_action('wp_head', 'onepress_block_all_js_google_fonts', 0);
+add_action('wp_head', 'onepress_block_all_js_google_fonts', 2);
 
 
 
