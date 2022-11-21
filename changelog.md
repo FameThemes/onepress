@@ -1,4 +1,10 @@
 # CHANGELOG
+
+# 2.3.2
+* IMPROVED: Change priority if block google font script.
+* IMPROVED: Check condition to load Google font url.
+* IMPROVED: Add style for block gallery.
+
 # 2.3.2
 * NEW: Submenu auto align.
 * IMPROVED: Submenu auto width. Now the submenu width will set automatically base on the menu item text.
@@ -12,7 +18,6 @@
 * FIXED: Fixed issue Gallery - Item Spacing adding offset on the right.
 * FIXED: Fixed issue ensure text remains visible during webfont load.
 * FIXED: Fixed issue dropdown menu item does not cover all text.
-
 
 # 2.2.9
 * FIXED: Fixed issue sometime the dot navigation working incorrect.
