@@ -1324,22 +1324,22 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 						$post = get_post( $post_id );
 						if ( $post ) {
 							$img_thumb = wp_get_attachment_image_src( $post_id, $image_thumb_size );
-							if ( $img_thumb ) {
-								$img_thumb = $img_thumb[0];
-							}
+							
 
 							$img_full = wp_get_attachment_image_src( $post_id, 'full' );
-							if ( $img_full ) {
-								$img_full = $img_full[0];
-							}
+							
 
 							$alt = get_post_meta( $post_id, '_wp_attachment_image_alt', true );
 
 							if ( $img_thumb && $img_full ) {
 								$data[ $post_id ] = array(
 									'id'        => $post_id,
-									'thumbnail' => $img_thumb,
-									'full'      => $img_full,
+									'thumbnail' => $img_thumb[0],
+									'thumb_w'   => $img_thumb[1],
+									'thumb_h'   => $img_thumb[2],
+									'full'      => $img_full[0],
+									'full_w'    => $img_full[1],
+									'full_h'    => $img_full[2],
 									'title'     => $post->post_title,
 									'content'   => $post->post_content,
 									'alt'       => $alt,
@@ -1460,6 +1460,7 @@ function onepress_gallery_generate( $echo = true ) {
 	if ( $col <= 0 ) {
 		$col = 4;
 	}
+	
 	switch ( $display_type ) {
 		case 'masonry':
 			$html = onepress_gallery_html( $data );
