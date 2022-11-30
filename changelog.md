@@ -1,4 +1,6 @@
 # CHANGELOG
+# 2.3.3
+* NEW: Support multiple contact phone, email, fax.
 
 # 2.3.2
 * IMPROVED: Change priority if block google font script.
