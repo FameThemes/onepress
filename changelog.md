@@ -1,8 +1,8 @@
 # CHANGELOG
-# 2.3.3
+# 2.3.4
 * NEW: Support multiple contact phone, email, fax.
 
-# 2.3.2
+# 2.3.3
 * IMPROVED: Change priority if block google font script.
 * IMPROVED: Check condition to load Google font url.
 * IMPROVED: Add style for block gallery.
