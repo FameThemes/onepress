@@ -1,3 +1,4 @@
+
 var onepressIsMobile = {
 	Android: function () {
 		return navigator.userAgent.match(/Android/i);
@@ -817,127 +818,7 @@ jQuery(document).ready(function ($) {
 		heroSliders();
 	});
 
-	$(".section-parallax, .parallax-hero").bind("inview", function (
-		event,
-		visible
-	) {
-		if (visible == true) {
-		} else {
-		}
-	});
-
-	var lastScrollTop = 0;
-	// Parallax effect
-	function parrallaxHeight() {
-		$(".section-parallax ").each(function () {
-			var $el = $(this);
-			$(".parallax-bg", $el).height("");
-			var w = $el.width();
-			var h = $el.height();
-			if (h <= 0) {
-				h = 500;
-			}
-			h = h * 1.5;
-			$(".parallax-bg", $el).height(h);
-		});
-	}
-
-	function parallaxPosition(direction) {
-		var scrollTop = $(window).scrollTop();
-		//var top = $( window ).scrollTop();
-		var wh = $(window).height();
-		var ww = $(window).width();
-		$(".section-parallax, .parallax-hero").each(function () {
-			var $el = $(this);
-			var pl = $(".parallax-bg", $el);
-
-			var w = $el.width();
-			var h = $el.height();
-			var img = $("img", pl);
-
-			if (img.length) {
-				var imageNaturalWidth = img.prop("naturalWidth");
-				var imageNaturalHeight = img.prop("naturalHeight");
-
-				var containerHeight = h > 0 ? h : 500;
-				var imgHeight = img.height();
-				var parallaxDist = imgHeight - containerHeight;
-				var top = $el.offset().top;
-				var windowHeight = window.innerHeight;
-				var windowBottom = scrollTop + windowHeight;
-				var percentScrolled =
-					(windowBottom - top) / (containerHeight + windowHeight);
-
-				var parallaxTop = parallaxDist * percentScrolled;
-				var l;
-				var max_width = imageNaturalWidth;
-
-				if (imageNaturalWidth > w) {
-				} else {
-					max_width = ww;
-				}
-
-				if (
-					max_width > ww * 2 &&
-					imageNaturalHeight > containerHeight * 2
-				) {
-					max_width = max_width - ww;
-				}
-
-				l = (max_width - ww) / 2;
-				if (l < 0) {
-					l = 0;
-				}
-
-				img.css({
-					top: "-" + parallaxTop + "px",
-					left: "-" + l + "px",
-					//maxWidth: ww+'px'
-					maxWidth: max_width + "px"
-				});
-			} else {
-				//var sh = $el.height();
-				var r = 0.3;
-				if (wh > w) {
-					r = 0.3;
-				} else {
-					r = 0.6;
-				}
-
-				$(".parallax-bg", $el).addClass("no-img");
-
-				var is_inview = $el.data("inview");
-				if (is_inview) {
-					var offsetTop = $el.offset().top;
-					var diff, bgTop;
-					diff = scrollTop - offsetTop;
-					bgTop = diff * r;
-					$(".parallax-bg", $el).css(
-						"background-position",
-						"50% " + bgTop + "px"
-					);
-				}
-			}
-		});
-	}
-
-	$(window).scroll(function (e) {
-		var top = $(window).scrollTop();
-		var direction = "";
-		if (top > lastScrollTop) {
-			direction = "down";
-		} else {
-			direction = "up";
-		}
-		lastScrollTop = top;
-		parallaxPosition();
-	});
-
-	parallaxPosition();
-	$(window).resize(function () {
-		parallaxPosition();
-	});
-
+	
 	// Parallax hero
 	$(".parallax-hero").each(function () {
 		var hero = $(this);
@@ -1135,7 +1016,14 @@ jQuery(document).ready(function ($) {
 	}
 
 	onepress_gallery_init($(".gallery-content"));
-
+	
+	
+	if ( typeof jarallax !== "undefined" ) {
+		jarallax(document.querySelectorAll('.jarallax'), {
+			speed: 0.5,
+	  });
+	} 
+	
 	if (
 		"undefined" !== typeof wp &&
 		wp.customize &&

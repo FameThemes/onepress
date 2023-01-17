@@ -263,9 +263,9 @@ function onepress_scripts()
 	$custom_css = onepress_custom_inline_style();
 	wp_add_inline_style('onepress-style', $custom_css);
 
-	wp_enqueue_script('jquery');
-	wp_enqueue_script('onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array('jquery'), $version, true);
-	wp_enqueue_script('onepress-js-bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.min.js', array(), $version, true);
+	wp_register_script('onepress-js-plugins', get_template_directory_uri() . '/assets/js/plugins.js', array('jquery'), $version, true);
+	wp_register_script('onepress-jarallax', get_template_directory_uri() . '/assets/jarallax/jarallax.js', array('jquery'), $version, true);
+	wp_enqueue_script('onepress-js-bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.min.js', array('jquery', 'onepress-js-plugins', 'onepress-jarallax'), $version, true);
 
 	// Animation from settings.
 	$onepress_js_settings = array(

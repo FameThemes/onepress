@@ -9,7 +9,7 @@ Version: 2.3.3
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
-Tested up to: 6.1.1
+Tested up to: 6.0.2
 Requires PHP: 5.6
 Tags: one-column, two-columns, left-sidebar, right-sidebar, custom-menu, featured-images, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, e-commerce, blog, portfolio
 
@@ -2814,12 +2814,14 @@ section > .customize-partial-edit-shortcut button {
 .section-parallax .parallax-bg img, #parallax-hero .parallax-bg img {
   position: absolute;
   left: 0;
+  display: none;
   bottom: 0;
   min-width: 100%;
   min-height: 100%;
-  width: auto;
+  display: block;
+  object-fit: cover;
+  width: 100%;
   height: auto;
-  max-width: 9999999px;
 }
 .section-parallax .parallax-bg.no-img, #parallax-hero .parallax-bg.no-img {
   height: 120%;
@@ -4862,3 +4864,5 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .has-very-dark-gray-background-color {
   background-color: #444;
 }
+
+/*# sourceMappingURL=style.css.map */

@@ -267,8 +267,8 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
 				$image_url = wp_get_attachment_image_url( $image, 'full' );
 				$image_alt = get_post_meta( $image, '_wp_attachment_image_alt', true );
 				if ( $image || onepress_is_selective_refresh() ) {
-					echo '<div class="section-parallax">';
-					echo ' <div class="parallax-bg"><img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $image_alt ) . '"></div>';
+					echo '<div class="section-parallax jarallax">';
+					echo ' <div class="parallax-bg jarallax-img"><img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $image_alt ) . '"></div>';
 				}
 				return;
 			}
@@ -310,12 +310,12 @@ if ( ! function_exists( 'onepress_before_section' ) ) {
 				);
 				extract( $args );
 				if ( $enable_parallax == 1 ) {
-					$class = 'section-parallax';
+					$class = 'section-parallax jarallax';
 					if ( $section_id == 'hero' ) {
-						$class = ' parallax-hero';
+						$class = ' parallax-hero jarallax';
 					}
 					echo '<div id="parallax-' . esc_attr( $section_id ) . '" class="' . esc_attr( $class ) . '">';
-					echo ' <div class="parallax-bg"><img src="' . esc_url( $image ) . '" alt=""></div>';
+					echo ' <div class="parallax-bg jarallax-img"><img src="' . esc_url( $image ) . '" alt=""></div>';
 				} elseif ( $image || $alpha ) { // image bg
 					echo '<div id="bgimage-' . esc_attr( $section_id ) . '" class="bgimage-alpha bgimage-section bgimage-' . esc_attr( $section_id ) . '">';
 				}
