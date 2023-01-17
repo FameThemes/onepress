@@ -1,3 +1,12 @@
+
+const concatJSFiles = [
+	'assets/js/plugins.js',
+	'assets/js/jarallax.js',
+	'assets/js/bootstrap.min.js',
+	'assets/js/theme.js',
+];
+
+
 module.exports = function (grunt) {
 	"use strict";
 	var pkgInfo = grunt.file.readJSON("package.json");
@@ -6,8 +15,8 @@ module.exports = function (grunt) {
 		// Autoprefixer.
 		postcss: {
 			options: {
-                style: 'expanded',
-            },
+				style: 'expanded',
+			},
 			dist: {
 				src: ["assets/css/*.css", "*.css"]
 			}
@@ -35,8 +44,8 @@ module.exports = function (grunt) {
 		// Watch changes for assets.
 		watch: {
 			css: {
-				files: ["assets/sass/*.scss"],
-				tasks: ["css"]
+				files: ["assets/sass/*.scss", "assets/js/*.js", "!assets/js/theme-all.js", "!assets/js/theme-all.min.js"],
+				tasks: ["css", 'concat']
 			}
 		},
 
@@ -114,6 +123,29 @@ module.exports = function (grunt) {
 					}
 				]
 			}
+		},
+
+		concat: {
+			options: {
+				separator: '\n',
+				sourceMap: true,
+			},
+			dist: {
+				src: concatJSFiles,
+				dest: 'assets/js/theme-all.js',
+			},
+		},
+
+		uglify: {
+			options: {
+				sourceMap: false,
+				mangle: false
+			},
+			my_target: {
+				files: {
+					'assets/js/theme-all.min.js': ['assets/js/theme-all.js']
+				}
+			}
 		}
 	});
 
@@ -158,6 +190,6 @@ module.exports = function (grunt) {
 		// i18n
 		// grunt.task.run(['addtextdomain', 'makepot']);
 		// re create css file and min
-		grunt.task.run(["css", "postcss"]);
+		grunt.task.run(["css", "postcss", "concat", 'uglify']);
 	});
 };

@@ -51,7 +51,7 @@ function preload_images(images, complete_callback) {
 				jQuery("#" + id).remove();
 			}, 5000);
 		});
-	}
+	}  
 }
 
 function _to_number(string) {
@@ -154,7 +154,7 @@ function _to_bool(v) {
 
 
 function isElementInViewport(el) {
-	// Special bonus for those using jQuery
+	// Special bonus for those using jQuery 
 	if (typeof jQuery === "function" && el instanceof jQuery) {
 		el = el[0];
 	}
@@ -192,7 +192,7 @@ jQuery(document).ready(function ($) {
 		return h;
 	};
 
-	var stickyHeaders = (function () {
+	var stickyHeaders = (function () { 
 		var $stickies;
 		var lastScrollTop = 0;
 
@@ -1011,7 +1011,7 @@ jQuery(document).ready(function ($) {
 				mode: "lg-fade",
 				selector: tag_selector
 				//cssEasing : 'cubic-bezier(0.25, 0, 0.25, 1)'
-			});
+			});  
 		}
 	}
 
