@@ -685,6 +685,8 @@
     }
 
     .parallax-bg {
+        // background: url(  );
+        // transition: all linear 0.25s;
         &:before {
             content: " ";
             position: absolute;
@@ -698,17 +700,19 @@
             height: 100%;
             z-index: 2;
         }
-        &:after {
-        }
         img {
+		
             position: absolute;
             left: 0;
+            display: none;
             bottom: 0;
             min-width: 100%;
             min-height: 100%;
-            width: auto;
+            display: block;
+            object-fit: cover;
+            width: 100%;
             height: auto;
-            max-width: 9999999px;
+    
         }
 
         position: absolute;
@@ -767,7 +771,7 @@
 
 .body-mobile {
     #parallax-hero, .section-parallax {
-        .parallax-bg {
+        .parallax-bg { 
             //background-attachment: local;
             //-webkit-background-size: none;
             //-moz-background-size: none;
