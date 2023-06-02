@@ -1320,20 +1320,17 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 					if ( ! is_array( $images ) ) {
 						$images = explode( ',', $images );
 					}
-					foreach ( $images as $post_id ) {
-						$post = get_post( $post_id );
+					
+					foreach ( $images as $img_id ) {
+						$post = get_post( $img_id );
 						if ( $post ) {
-							$img_thumb = wp_get_attachment_image_src( $post_id, $image_thumb_size );
-							
-
-							$img_full = wp_get_attachment_image_src( $post_id, 'full' );
-							
-
-							$alt = get_post_meta( $post_id, '_wp_attachment_image_alt', true );
+							$img_thumb = wp_get_attachment_image_src( $img_id, $image_thumb_size );
+							$img_full = wp_get_attachment_image_src( $img_id, 'full' );
+							$alt = get_post_meta( $img_id, '_wp_attachment_image_alt', true );
 
 							if ( $img_thumb && $img_full ) {
-								$data[ $post_id ] = array(
-									'id'        => $post_id,
+								$data[ $img_id ] = array(
+									'id'        => $img_id,
 									'thumbnail' => $img_thumb[0],
 									'thumb_w'   => $img_thumb[1],
 									'thumb_h'   => $img_thumb[2],
@@ -1347,18 +1344,44 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 							}
 						}
 					}
+					
 				} else {
 					if ( $page_id ) {
 						$gallery_image_urls = onepress_get_gallery_image_ids_by_urls( $page_id );
 						foreach ( $gallery_image_urls as $key => $value ) {
-							$data[ $key ] = array(
-								'id'        => '',
-								'thumbnail' => $value,
-								'full'      => $value,
-								'title'     => '',
-								'content'   => '',
-								'alt'       => '',
+						
+							$img_id = attachment_url_to_postid($value);
+							$content = '';
+							$title = '';
+							$alt = '';
+							$thumbnail = $value;
+							$full = $value;
+							if ($img_id) {
+								$post = get_post($img_id);
+								if ($post) {
+									$content = $post->post_title;
+									$title = $post->post_content;
+									$alt = get_post_meta($img_id, '_wp_attachment_image_alt', true);
+									$img_thumb = wp_get_attachment_image_src($img_id, $image_thumb_size);
+									if ($img_thumb) {
+										$thumbnail = $img_thumb[0];
+									}
+									$img_full = wp_get_attachment_image_src($img_id, 'full');
+									if ($img_full) {
+										$full = $img_full[0];
+									}
+								}
+							}
+
+							$data[$key] = array(
+								'id'        => $img_id,
+								'thumbnail' => $thumbnail,
+								'full'      => $full,
+								'title'     => $title,
+								'content'   => $content,
+								'alt'       => $alt,
 							);
+					
 						}
 					}
 				}

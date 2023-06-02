@@ -1,6 +1,8 @@
 # CHANGELOG
 # 2.3.4
 * NEW: Support multiple contact phone, email, fax.
+* IMPROVED: Improved parallax effect.
+* IMPROVED: Add bundle js file.
 
 # 2.3.3
 * IMPROVED: Change priority if block google font script.

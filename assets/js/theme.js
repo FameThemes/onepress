@@ -1020,7 +1020,7 @@ jQuery(document).ready(function ($) {
 	
 	if ( typeof jarallax !== "undefined" ) {
 		jarallax(document.querySelectorAll('.jarallax'), {
-			speed: 0.5,
+			speed: parseFloat( onepress_js_settings.parallax_speed || 0.5 ),
 	  });
 	} 
 	
