@@ -1,4 +1,8 @@
 # CHANGELOG
+# 2.3.5
+* NEW: Add new option to add shortcode in Gallery.
+* FIXED: Remove gallery source option Facebook, Instagram.
+
 # 2.3.4
 * NEW: Support multiple contact phone, email, fax.
 * IMPROVED: Improved parallax effect.

@@ -145,9 +145,10 @@ $wp_customize->add_control(
 		'priority' => 5,
 		'choices'  => array(
 			'page'      => esc_html__( 'Page', 'onepress' ),
-			'facebook'  => 'Facebook',
-			'instagram' => 'Instagram',
-			'flickr'    => 'Flickr',
+			// 'facebook'  => 'Facebook',
+			// 'instagram' => 'Instagram',
+			// 'flickr'    => 'Flickr',
+			'shortcode'    => 'Shortcode',
 		),
 	)
 );
@@ -169,6 +170,26 @@ $wp_customize->add_control(
 		'priority'    => 10,
 		'choices'     => $option_pages,
 		'description' => esc_html__( 'Select a page which have content contain [gallery] shortcode or gallery blocks.', 'onepress' ),
+	)
+);
+
+
+// Source page settings.
+$wp_customize->add_setting(
+	'onepress_gallery_source_shortcode',
+	array(
+		'sanitize_callback' => 'onepress_sanitize_number',
+		'default'           => '',
+	)
+);
+$wp_customize->add_control(
+	'onepress_gallery_source_shortcode',
+	array(
+		'label'       => esc_html__( 'Insert Gallery Shortcode', 'onepress' ),
+		'section'     => 'onepress_gallery_content',
+		'type'        => 'text',
+		'priority'    => 10,
+		'description' => esc_html__( 'Add shortcode get from another plugin to create Gallery to this field.', 'onepress' ),
 	)
 );
 
