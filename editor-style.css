@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*------------------------------
 	2.1 Typography
 ------------------------------*/
@@ -734,7 +735,7 @@ body.mce-content-body {
   position: relative;
 }
 .sticky .entry-title:after {
-  content: "\f276";
+  content: "";
   display: inline-block;
   font-family: "FontAwesome";
   font-style: normal;

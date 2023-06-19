@@ -1292,8 +1292,7 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 	 * @return array
 	 */
 	function onepress_get_section_gallery_data() {
-		$source = !empty(get_theme_mod( 'onepress_gallery_source')) ? get_theme_mod( 'onepress_gallery_source') : 'page';
-		
+		$source = 'page';
 		if ( has_filter( 'onepress_get_section_gallery_data' ) ) {
 			$data = apply_filters( 'onepress_get_section_gallery_data', false );
 			return $data;
@@ -1301,10 +1300,6 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 
 		$data = array();
 		switch ( $source ) {
-			case'shortcode' :
-				$data = !empty(get_theme_mod( 'onepress_gallery_source_shortcode')) ? get_theme_mod( 'onepress_gallery_source_shortcode') : '';;
-			break;
-
 			default:
 				$page_id = get_theme_mod( 'onepress_gallery_source_page' );
 				$images = '';
