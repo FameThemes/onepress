@@ -1,4 +1,7 @@
 # CHANGELOG
+# 2.3.5
+* IMPROVED: Support shortcode in gallery page for gallery section.
+
 # 2.3.4
 * NEW: Support multiple contact phone, email, fax.
 * IMPROVED: Improved parallax effect.

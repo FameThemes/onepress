@@ -1295,7 +1295,9 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 		$source = 'page';
 		if ( has_filter( 'onepress_get_section_gallery_data' ) ) {
 			$data = apply_filters( 'onepress_get_section_gallery_data', false );
-			return $data;
+			if ( $data ) {
+				return $data;
+			}
 		}
 
 		$data = array();
@@ -1303,6 +1305,7 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 			default:
 				$page_id = get_theme_mod( 'onepress_gallery_source_page' );
 				$images = '';
+				$found_gallery = false;
 				if ( $page_id ) {
 					$images = onepress_get_gallery_image_ids( $page_id );
 				}
@@ -1320,6 +1323,8 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 					if ( ! is_array( $images ) ) {
 						$images = explode( ',', $images );
 					}
+					
+					$found_gallery = true;
 					
 					foreach ( $images as $img_id ) {
 						$post = get_post( $img_id );
@@ -1348,6 +1353,9 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 				} else {
 					if ( $page_id ) {
 						$gallery_image_urls = onepress_get_gallery_image_ids_by_urls( $page_id );
+						if ( ! empty( $gallery_image_urls ) ) {
+							$found_gallery = true;
+						}
 						foreach ( $gallery_image_urls as $key => $value ) {
 						
 							$img_id = attachment_url_to_postid($value);
@@ -1384,7 +1392,13 @@ if ( ! function_exists( 'onepress_get_section_gallery_data' ) ) {
 					
 						}
 					}
+				} // End if check gallery.
+				
+				if ( ! $found_gallery && $page_id ) {
+					$post = get_post( $page_id );
+					return apply_filters( 'the_content',  $post->post_content );
 				}
+				
 				break;
 		}
 
@@ -1472,6 +1486,14 @@ function onepress_gallery_generate( $echo = true ) {
 	$div = '';
 
 	$data = onepress_get_section_gallery_data();
+	if ( $data && is_string( $data ) ) {
+		if ( $echo ) {
+			echo $data;
+			return;
+		} else {
+			return $data;
+		}
+	}
 
 	$display_type = get_theme_mod( 'onepress_gallery_display', 'grid' );
 	$lightbox = get_theme_mod( 'onepress_g_lightbox', 1 );
