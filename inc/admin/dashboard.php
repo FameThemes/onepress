@@ -72,12 +72,26 @@ class Onepress_Dashboard
 	function admin_scripts($hook)
 	{
 		if ($hook === 'widgets.php' || $hook === 'appearance_page_ft_onepress') {
-			wp_enqueue_style('onepress-admin-css', get_template_directory_uri() . '/assets/css/admin.css');
+			$theme_directory_url = get_template_directory_uri();
+
+			wp_enqueue_style('onepress-admin-css', $theme_directory_url . '/assets/css/admin.css');
 			// Add recommend plugin css
 			wp_enqueue_style('plugin-install');
 			wp_enqueue_script('plugin-install');
 			wp_enqueue_script('updates');
 			add_thickbox();
+
+
+			wp_enqueue_style('onepress_icon_picker', $theme_directory_url . '/dist/style-iconPicker.css', array(), false, 'all');
+
+			$asset_args = include ONEPRESS_THEME_PATH . '/dist/iconPicker.asset.php';
+			wp_enqueue_script(
+				'onepress_icon_picker',
+				$theme_directory_url . '/dist/iconPicker.js',
+				$asset_args['dependencies'],
+				$asset_args['version'],
+				true
+			);
 		}
 	}
 
@@ -251,13 +265,18 @@ class Onepress_Dashboard
 			<h2 class="nav-tab-wrapper">
 				<a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Overview', 'onepress') ?></a>
 				<a href="?page=ft_onepress&tab=recommended_actions" class="nav-tab<?php echo $tab == 'recommended_actions' ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Recommended Actions', 'onepress');
-																																							echo ($number_action > 0) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
+																																																																										echo ($number_action > 0) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
 				<?php if (!class_exists('OnePress_Plus')) { ?>
 					<a href="?page=ft_onepress&tab=free_pro" class="nav-tab<?php echo $tab == 'free_pro' ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Free vs PLUS', 'onepress'); ?></span></a>
 				<?php } ?>
 				<a href="?page=ft_onepress&tab=demo-data-importer" class="nav-tab<?php echo $tab == 'demo-data-importer' ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Demo Import', 'onepress'); ?></span></a>
 				<?php do_action('onepress_admin_more_tabs', $tab); ?>
 			</h2>
+
+			<div>
+				<h2>TEsstICON</h2>
+				<input id="test_icon" data-icon="icon-abac" />
+			</div>
 
 			<?php if (is_null($tab)) { ?>
 				<div class="theme_info info-tab-content">
@@ -690,7 +709,6 @@ class Onepress_Dashboard
 					<?php } ?>
 				</div>
 			<?php } ?>
-
 			<?php do_action('onepress_more_tabs_details', $actions); ?>
 
 		</div>

@@ -8,6 +8,10 @@
  * @package OnePress
  */
 
+
+
+define('ONEPRESS_THEME_PATH', dirname(__FILE__));
+
 if (!function_exists('onepress_setup')) :
 	/**
 	 * Sets up theme defaults and registers support for various WordPress features.
@@ -152,8 +156,8 @@ if (!function_exists('onepress_setup')) :
 		 */
 		add_theme_support('editor-styles');
 		add_theme_support('align-wide');
-		
-		add_theme_support( 'wp-block-styles' );
+
+		add_theme_support('wp-block-styles');
 
 		/*
 		 * This theme styles the visual editor to resemble the theme style.
@@ -341,9 +345,9 @@ function onepress_scripts()
 			$onepress_js_settings['is_home'] = 1;
 		}
 	}
-	
+
 	$onepress_js_settings['parallax_speed'] = 0.5;
-	$onepress_js_settings =  apply_filters( 'onepress_js_settings', $onepress_js_settings );
+	$onepress_js_settings =  apply_filters('onepress_js_settings', $onepress_js_settings);
 	wp_localize_script('onepress-theme', 'onepress_js_settings', $onepress_js_settings);
 }
 add_action('wp_enqueue_scripts', 'onepress_scripts');

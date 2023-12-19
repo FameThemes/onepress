@@ -1,0 +1,81 @@
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/style.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************/
+.onepress_icon_preview {
+  display: inline-flex;
+  font-size: 40px;
+  color: #ba3a20;
+  width: 60px;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+.onepress_icon_preview svg {
+  fill: currentColor;
+  width: 1em;
+  height: 1em;
+  max-height: 1em;
+  max-width: 1em;
+}
+
+.onepress_icon_styles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.onepress_icon_styles .filter-item {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  line-height: 16px;
+}
+.onepress_icon_styles .filter-item.active {
+  border-color: #2410db;
+}
+
+.onepress_icon_filter {
+  display: flex;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.onepress_icon_filter .search {
+  margin-right: auto;
+}
+
+.onepress_icon_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.onepress_icon_list .icon-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 5px;
+  border: 1px solid #ccc;
+  width: 60px;
+  cursor: pointer;
+}
+.onepress_icon_list .icon-label {
+  font-size: 8px;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 40px;
+  display: block;
+  white-space: nowrap;
+}
+.onepress_icon_list .icon-item {
+  display: inline-flex;
+  font-size: 40px;
+  color: #ba3a20;
+}
+.onepress_icon_list .icon-item svg {
+  fill: currentColor;
+  width: 1em;
+  height: 1em;
+  max-height: 1em;
+  max-width: 1em;
+}

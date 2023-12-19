@@ -1,0 +1,80 @@
+.onepress_icon_preview {
+  display: inline-flex;
+  font-size: 40px;
+  color: #ba3a20;
+  width: 60px;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #ccc;
+  svg {
+    fill: currentColor;
+    width: 1em;
+    height: 1em;
+    max-height: 1em;
+    max-width: 1em;
+  }
+}
+
+.onepress_icon_styles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .filter-item {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    line-height: 16px;
+    &.active {
+      border-color: #2410db;
+    }
+  }
+}
+
+.onepress_icon_filter {
+  display: flex;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  width: 100%;
+  .search {
+    margin-left: auto;
+  }
+}
+
+.onepress_icon_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  .icon-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 5px;
+    border: 1px solid #ccc;
+    width: 60px;
+    cursor: pointer;
+  }
+  .icon-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 40px;
+    display: block;
+    white-space: nowrap;
+  }
+  .icon-item {
+    display: inline-flex;
+    font-size: 40px;
+
+    color: #ba3a20;
+    svg {
+      fill: currentColor;
+      width: 1em;
+      height: 1em;
+      max-height: 1em;
+      max-width: 1em;
+    }
+  }
+}
