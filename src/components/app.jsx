@@ -69,6 +69,12 @@ const App = ({ data, el }) => {
     // Dispatch it.
     el.dispatchEvent(event);
   };
+  
+  useEffect(()=> {
+    // el.addEventListener('change', () => {
+    //   setValue(el.value);
+    // })
+  },[])
 
   console.log("cats", cats);
   // console.log("icons", icons);

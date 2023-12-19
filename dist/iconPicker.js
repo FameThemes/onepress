@@ -83,6 +83,11 @@ const App = ({
     // Dispatch it.
     el.dispatchEvent(event);
   };
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    // el.addEventListener('change', () => {
+    //   setValue(el.value);
+    // })
+  }, []);
   console.log("cats", cats);
   // console.log("icons", icons);
   const currentStyles = [...cats];
