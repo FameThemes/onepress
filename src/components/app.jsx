@@ -1,6 +1,9 @@
 import * as iconsObj from "../fontawesome/icons.json";
 import { render, useState, useEffect } from "@wordpress/element";
 
+import { ReactComponent as IconRemove } from "./remove.svg";
+import Modal from "react-modal";
+
 const IconGroups = ({ cats, icon, onClick }) => {
   if (!icon?.svg) {
     return null;
@@ -38,9 +41,11 @@ const IconGroups = ({ cats, icon, onClick }) => {
 
 const App = ({ data, el }) => {
   const { icon } = data;
-  const [search, setSearch] = useState();
+  const [isOpenModal, setIsOpenModal] = React.useState(false);
+  const [search, setSearch] = useState("");
   const [value, setValue] = useState(icon);
   const [cats, setCats] = useState([]);
+  const [listIcons, setListIcons] = useState([]);
   const icons = Object.values(iconsObj);
   const listCat = [];
 
@@ -69,72 +74,124 @@ const App = ({ data, el }) => {
     // Dispatch it.
     el.dispatchEvent(event);
   };
-  
-  useEffect(()=> {
+
+  useEffect(() => {
     // el.addEventListener('change', () => {
     //   setValue(el.value);
     // })
-  },[])
+  }, []);
 
-  console.log("cats", cats);
+  // console.log("cats", cats);
   // console.log("icons", icons);
-  const currentStyles = [...cats];
+  // const currentStyles = [...cats];
+
+  useEffect(() => {
+    const newListIcons = icons
+      .filter((icon) => icon?.svg)
+      .filter((icon) => {
+        if (!cats?.length) {
+          return true;
+        }
+
+        if (cats?.length) {
+          for (let i = 0; i < cats.length; i++) {
+            if (icon.styles?.length && icon.styles.includes(cats[i])) {
+              return true;
+            }
+          }
+        }
+        return false;
+      })
+      .filter((icon) => {
+        if (!search?.length) {
+          return true;
+        }
+        if (icon?.label?.toLowerCase?.().includes(search?.toLowerCase())) {
+          return true;
+        }
+
+        return false;
+      });
+
+    setListIcons(newListIcons);
+  }, [cats, search]);
+
   return (
     <>
-      <div className="onepress_icon_preview">
-        <div
-          className="icon-item"
-          dangerouslySetInnerHTML={{
-            __html: value,
-          }}
-        ></div>
+      <div className="onepress_icon_preview_wrap">
+        <div className="onepress_icon_preview">
+          <div
+            className="icon-item"
+            onClick={() => setIsOpenModal(true)}
+            dangerouslySetInnerHTML={{
+              __html: value,
+            }}
+          ></div>
+          <span className="remove" onClick={() => handleClick(null)}>
+            <IconRemove />
+          </span>
+        </div>
       </div>
-      <div className="onepress_icon_picker">
-        <div className="onepress_icon_filter">
-          <div className="onepress_icon_styles">
-            {listCat.map((cat, index) => {
-              const classes = ["filter-item"];
-              if (cats.includes(cat)) {
-                classes.push("active");
-              }
-              return (
-                <div
-                  onClick={() => handleFilter(cat)}
-                  className={classes.join(" ")}
-                  key={cat}
-                >
-                  {cat}
-                </div>
-              );
-            })}
+
+      <Modal
+        className="onepress_icon_modal"
+        isOpen={isOpenModal}
+        // onAfterOpen={afterOpenModal}
+        onRequestClose={(e) => setIsOpenModal(false)}
+        shouldCloseOnOverlayClick={true}
+      >
+        <div className="onepress_icon_picker">
+          <div className="onepress_icon_filter">
+            <div className="onepress_icon_styles">
+              {listCat.map((cat, index) => {
+                const classes = ["filter-item"];
+                if (cats.includes(cat)) {
+                  classes.push("active");
+                }
+                return (
+                  <div
+                    onClick={() => handleFilter(cat)}
+                    className={classes.join(" ")}
+                    key={cat}
+                  >
+                    {cat}
+                  </div>
+                );
+              })}
+            </div>
+            <input
+              className="search"
+              type="search"
+              placeholder="Search icon..."
+              value={search}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => setIsOpenModal(false)}
+              className="button button-primary"
+            >
+              Close
+            </button>
           </div>
-          <input
-            className="search"
-            type="search"
-            value={search}
-            onChange={(e) => handleSearch(e.target.value)}
-          />
+          <div className="onepress_icon_wrap">
+            <div className="onepress_icon_inner">
+              <div className="onepress_icon_list">
+                {listIcons.map((icon) => {
+                  return (
+                    <IconGroups
+                      key={["gic", icon?.unicode].join(".")}
+                      cats={cats}
+                      icon={icon}
+                      onClick={handleClick}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="onepress_icon_list">
-          {icons.map((icon) => {
-            if (search?.length > 0) {
-              if (
-                !icon?.label?.toLowerCase?.().includes(search?.toLowerCase())
-              ) {
-                return null;
-              }
-            }
-            return (
-              <IconGroups
-                key={["gic", icon?.unicode].join(".")}
-                cats={cats}
-                icon={icon}
-                onClick={handleClick}
-              />
-            );
-          })}
-        </div>
-      </div>
+      </Modal>
     </>
   );
 };

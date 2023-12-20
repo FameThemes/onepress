@@ -1,21 +1,44 @@
 /*!***************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/style.scss ***!
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/style.scss ***!
   \***************************************************************************************************************************************************************************************************************************************/
 .onepress_icon_preview {
   display: inline-flex;
   font-size: 40px;
-  color: #ba3a20;
+  color: #504e4d;
   width: 60px;
+  height: 60px;
+  overflow: hidden;
   align-items: center;
+  justify-content: center;
   padding: 5px;
   border: 1px solid #ccc;
+  cursor: pointer;
+  position: relative;
 }
-.onepress_icon_preview svg {
+.onepress_icon_preview .icon-item {
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.onepress_icon_preview .icon-item svg {
   fill: currentColor;
   width: 1em;
   height: 1em;
   max-height: 1em;
   max-width: 1em;
+}
+.onepress_icon_preview .remove {
+  font-size: 12px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  color: red;
+}
+
+.onepress_icon_preview_wrap .remove {
+  cursor: pointer;
 }
 
 .onepress_icon_styles {
@@ -24,7 +47,7 @@
   gap: 10px;
 }
 .onepress_icon_styles .filter-item {
-  padding: 10px 15px;
+  padding: 5px 15px;
   border: 1px solid #ccc;
   border-radius: 3px;
   cursor: pointer;
@@ -36,18 +59,41 @@
 
 .onepress_icon_filter {
   display: flex;
-  margin-bottom: 15px;
   flex-wrap: wrap;
-  width: 100%;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ccc;
+  padding: 5px 10px;
+  margin: 0px;
+  height: 30px;
 }
 .onepress_icon_filter .search {
   margin-left: auto;
+}
+
+.onepress_icon_picker {
+  height: 100%;
+  display: block;
+}
+
+.onepress_icon_wrap {
+  height: calc(100% - 40px);
+  display: flex;
+}
+
+.onepress_icon_inner {
+  padding: 0px;
+  width: 100%;
+  display: block;
+  height: 100%;
+  overflow: auto;
 }
 
 .onepress_icon_list {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  justify-content: space-between;
+  padding: 20px 30px;
 }
 .onepress_icon_list .icon-wrapper {
   display: flex;
@@ -78,6 +124,21 @@
   height: 1em;
   max-height: 1em;
   max-width: 1em;
+}
+
+.onepress_icon_modal {
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(9, 30, 66, 0.15) 0px 8px 12px 0px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 50vw;
+  height: 80vh;
+  display: block;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 3px;
 }
 
 /*# sourceMappingURL=style-iconPicker.css.map*/

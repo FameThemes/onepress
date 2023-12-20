@@ -16,6 +16,17 @@ module.exports = [
       path: path.resolve(__dirname, "./dist/"),
       publicPath: "auto",
     },
+    
+    module: {
+      rules: [ 
+      ...defaultConfig.module.rules,
+       {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        use: ['@svgr/webpack'],
+       },
+     ],
+   },
 
     plugins: [
       ...defaultConfig.plugins,
@@ -24,10 +35,21 @@ module.exports = [
       }),
     ],
   },
-
+  
   // Default Wordpress Config.
   {
     ...defaultConfig,
+    module: {
+       rules: [ 
+       ...defaultConfig.module.rules,
+        {
+          test: /\.svg$/i,
+          issuer: /\.[jt]sx?$/,
+          use: ['@svgr/webpack'],
+        },
+      ],
+    },
+      
     plugins: [
       ...defaultConfig.plugins,
       new RtlCssPlugin({
