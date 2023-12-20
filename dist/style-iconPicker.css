@@ -1,6 +1,7 @@
 /*!***************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/style.scss ***!
   \***************************************************************************************************************************************************************************************************************************************/
+/* Mixin */
 .onepress_icon_preview {
   display: inline-flex;
   font-size: 40px;
@@ -41,19 +42,32 @@
   cursor: pointer;
 }
 
-.onepress_icon_styles {
+.onepress_icon_modal .ml-auto {
+  margin-left: auto;
+}
+
+.onepress_icon_space {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
-.onepress_icon_styles .filter-item {
+.onepress_icon_space button.space-item {
+  padding: 5px;
+  line-height: 1px;
+}
+.onepress_icon_space select.space-item {
+  padding-right: 25px;
+}
+.onepress_icon_space .space-item {
   padding: 5px 15px;
   border: 1px solid #ccc;
   border-radius: 3px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
   line-height: 16px;
 }
-.onepress_icon_styles .filter-item.active {
+.onepress_icon_space .space-item.active {
   border-color: #2410db;
 }
 
@@ -62,12 +76,25 @@
   flex-wrap: wrap;
   background: #f5f5f5;
   border-bottom: 1px solid #ccc;
-  padding: 5px 10px;
+  padding: 10px 20px;
   margin: 0px;
-  height: 30px;
+  height: 40px;
 }
-.onepress_icon_filter .search {
-  margin-left: auto;
+@media (max-width: 479px) {
+  .onepress_icon_filter {
+    height: 90px;
+    gap: 10px;
+  }
+  .onepress_icon_filter .f2 {
+    order: 1;
+    width: 100%;
+  }
+  .onepress_icon_filter .f2 .close {
+    margin-left: auto;
+  }
+  .onepress_icon_filter .f1 {
+    order: 2;
+  }
 }
 
 .onepress_icon_picker {
@@ -76,8 +103,13 @@
 }
 
 .onepress_icon_wrap {
-  height: calc(100% - 40px);
+  height: calc(100% - 70px);
   display: flex;
+}
+@media (max-width: 479px) {
+  .onepress_icon_wrap {
+    height: calc(100% - 120px);
+  }
 }
 
 .onepress_icon_inner {
@@ -116,7 +148,7 @@
 .onepress_icon_list .icon-item {
   display: inline-flex;
   font-size: 40px;
-  color: #ba3a20;
+  color: #504e4d;
 }
 .onepress_icon_list .icon-item svg {
   fill: currentColor;
@@ -132,13 +164,22 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 50vw;
-  height: 80vh;
+  max-width: 100%;
+  max-height: calc(100% - 30px);
+  width: 800px;
+  height: 630px;
   display: block;
   background: #fff;
   border: 1px solid #ccc;
   box-sizing: border-box;
   border-radius: 3px;
+}
+@media (max-width: 479px) {
+  .onepress_icon_modal {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
 }
 
 /*# sourceMappingURL=style-iconPicker.css.map*/

@@ -136,43 +136,55 @@ const App = ({ data, el }) => {
       <Modal
         className="onepress_icon_modal"
         isOpen={isOpenModal}
-        // onAfterOpen={afterOpenModal}
         onRequestClose={(e) => setIsOpenModal(false)}
         shouldCloseOnOverlayClick={true}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.6)",
+          },
+        }}
       >
         <div className="onepress_icon_picker">
           <div className="onepress_icon_filter">
-            <div className="onepress_icon_styles">
-              {listCat.map((cat, index) => {
-                const classes = ["filter-item"];
-                if (cats.includes(cat)) {
-                  classes.push("active");
-                }
-                return (
-                  <div
-                    onClick={() => handleFilter(cat)}
-                    className={classes.join(" ")}
-                    key={cat}
-                  >
-                    {cat}
-                  </div>
-                );
-              })}
+            <div className="f1 onepress_icon_space">
+              <select className="space-item">
+                <option>Fontawesome v6</option>
+              </select>
+              <select className="space-item">
+                <option>All Styles</option>
+                {listCat.map((cat, index) => {
+                  // const classes = ["space-item"];
+                  // if (cats.includes(cat)) {
+                  //   classes.push("active");
+                  // }
+                  return (
+                    <option
+                      // onClick={() => handleFilter(cat)}
+                      // className={classes.join(" ")}
+                      key={cat}
+                    >
+                      {cat}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
-            <input
-              className="search"
-              type="search"
-              placeholder="Search icon..."
-              value={search}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-            <button
-              type="button"
-              onClick={() => setIsOpenModal(false)}
-              className="button button-primary"
-            >
-              Close
-            </button>
+            <div className="f2 ml-auto onepress_icon_space">
+              <input
+                className="search space-item"
+                type="search"
+                placeholder="Search icon..."
+                value={search}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setIsOpenModal(false)}
+                className="space-item close"
+              >
+                <IconRemove />
+              </button>
+            </div>
           </div>
           <div className="onepress_icon_wrap">
             <div className="onepress_icon_inner">

@@ -181,29 +181,38 @@ const App = ({
     onClick: () => handleClick(null)
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_remove_svg__WEBPACK_IMPORTED_MODULE_3__.ReactComponent, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)((react_modal__WEBPACK_IMPORTED_MODULE_4___default()), {
     className: "onepress_icon_modal",
-    isOpen: isOpenModal
-    // onAfterOpen={afterOpenModal}
-    ,
+    isOpen: isOpenModal,
     onRequestClose: e => setIsOpenModal(false),
-    shouldCloseOnOverlayClick: true
+    shouldCloseOnOverlayClick: true,
+    style: {
+      overlay: {
+        backgroundColor: "rgba(0,0,0,0.6)"
+      }
+    }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress_icon_picker"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress_icon_filter"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress_icon_styles"
-  }, listCat.map((cat, index) => {
-    const classes = ["filter-item"];
-    if (cats.includes(cat)) {
-      classes.push("active");
-    }
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      onClick: () => handleFilter(cat),
-      className: classes.join(" "),
+    className: "f1 onepress_icon_space"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+    className: "space-item"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", null, "Fontawesome v6")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+    className: "space-item"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", null, "All Styles"), listCat.map((cat, index) => {
+    // const classes = ["space-item"];
+    // if (cats.includes(cat)) {
+    //   classes.push("active");
+    // }
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      // onClick={() => handleFilter(cat)}
+      // className={classes.join(" ")}
       key: cat
     }, cat);
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "search",
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "f2 ml-auto onepress_icon_space"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "search space-item",
     type: "search",
     placeholder: "Search icon...",
     value: search,
@@ -211,8 +220,8 @@ const App = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     type: "button",
     onClick: () => setIsOpenModal(false),
-    className: "button button-primary"
-  }, "Close")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "space-item close"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_remove_svg__WEBPACK_IMPORTED_MODULE_3__.ReactComponent, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress_icon_wrap"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress_icon_inner"
