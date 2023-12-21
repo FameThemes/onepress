@@ -16,7 +16,7 @@ class OnePress_Editor_Custom_Control extends WP_Customize_Control
 	 *
 	 * Supported palette values are true, false, or an array of RGBa and Hex colors.
 	 */
-	public $mod;
+	public $mod = 'tmce';
 
 	public function render_content() {
 		$this->mod = strtolower( $this->mod );
