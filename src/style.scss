@@ -74,6 +74,8 @@ $desktop-width: 1024px;
   button.space-item {
     padding: 5px;
     line-height: 1px;
+    min-width: 40px;
+    display: inline-flex;
   }
   select.space-item {
     padding-right: 25px;
@@ -85,6 +87,7 @@ $desktop-width: 1024px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     line-height: 16px;
     &.active {
       border-color: #2410db;
@@ -140,7 +143,6 @@ $desktop-width: 1024px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: space-between;
   padding: 20px 30px;
   .icon-wrapper {
     display: flex;
@@ -148,8 +150,15 @@ $desktop-width: 1024px;
     flex-direction: column;
     padding: 5px;
     border: 1px solid #ccc;
+    border-radius: 3px;
     width: 60px;
     cursor: pointer;
+    color: #504e4d;
+    &:hover {
+      background: #2271b1;
+      border-color: #2271b1;
+      color: #fff;
+    }
   }
   .icon-label {
     font-size: 8px;
@@ -159,11 +168,13 @@ $desktop-width: 1024px;
     max-width: 40px;
     display: block;
     white-space: nowrap;
+    line-height: 10px;
+    margin-top: 5px;
   }
   .icon-item {
     display: inline-flex;
     font-size: 40px;
-    color: #504e4d;
+   
     svg {
       fill: currentColor;
       width: 1em;

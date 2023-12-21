@@ -39,6 +39,16 @@ const IconGroups = ({ cats, icon, onClick }) => {
   );
 };
 
+
+const listFonts = Object.keys(C_Icon_Picker.fonts).map(id => {
+
+  const label = C_Icon_Picker.fonts[id].name || id;
+  return {
+    label,
+    value: id,
+  }
+})
+
 const App = ({ data, el }) => {
   const { icon } = data;
   const [isOpenModal, setIsOpenModal] = React.useState(false);
@@ -148,19 +158,17 @@ const App = ({ data, el }) => {
           <div className="onepress_icon_filter">
             <div className="f1 onepress_icon_space">
               <select className="space-item">
-                <option>Fontawesome v6</option>
+                {listFonts.map(el => {
+                  return <option value={el.value} key={el.value}>{el.label}</option>
+                })}
+
               </select>
               <select className="space-item">
                 <option>All Styles</option>
                 {listCat.map((cat, index) => {
-                  // const classes = ["space-item"];
-                  // if (cats.includes(cat)) {
-                  //   classes.push("active");
-                  // }
                   return (
                     <option
-                      // onClick={() => handleFilter(cat)}
-                      // className={classes.join(" ")}
+                      value={cat}
                       key={cat}
                     >
                       {cat}

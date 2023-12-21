@@ -95,6 +95,13 @@ const IconGroups = ({
     }, icon?.label));
   }));
 };
+const listFonts = Object.keys(C_Icon_Picker.fonts).map(id => {
+  const label = C_Icon_Picker.fonts[id].name || id;
+  return {
+    label,
+    value: id
+  };
+});
 const App = ({
   data,
   el
@@ -197,16 +204,16 @@ const App = ({
     className: "f1 onepress_icon_space"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     className: "space-item"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", null, "Fontawesome v6")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+  }, listFonts.map(el => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: el.value,
+      key: el.value
+    }, el.label);
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     className: "space-item"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", null, "All Styles"), listCat.map((cat, index) => {
-    // const classes = ["space-item"];
-    // if (cats.includes(cat)) {
-    //   classes.push("active");
-    // }
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      // onClick={() => handleFilter(cat)}
-      // className={classes.join(" ")}
+      value: cat,
       key: cat
     }, cat);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -248,10 +255,12 @@ const App = ({
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
-/* harmony import */ var _components_app__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/app */ "./src/components/app.jsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
+/* harmony import */ var _components_app__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/app */ "./src/components/app.jsx");
 
 
 
@@ -259,7 +268,7 @@ __webpack_require__.r(__webpack_exports__);
 const el = document.getElementById("test_icon");
 const newEl = document.createElement("div");
 el.after(newEl);
-(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.render)((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_app__WEBPACK_IMPORTED_MODULE_2__["default"], {
+(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.render)((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_app__WEBPACK_IMPORTED_MODULE_3__["default"], {
   data: el.dataset,
   el: el
 }), newEl);
