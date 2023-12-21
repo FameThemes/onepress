@@ -1608,12 +1608,24 @@ jQuery(document).ready(function ($) {
             prefix: '',
             icons: ''
         }, font);
-
-        $('<link>')
+        
+        if ( Array.isArray(font.url) ) {
+            font.url.map(el => {
+                $('<link>')
+                .appendTo('head')
+                .attr({type: 'text/css', rel: 'stylesheet'})
+                .attr('id', 'customizer-icon-' + el?.key)
+                .attr('href', el?.url);
+            })
+        
+        } else {
+            $('<link>')
             .appendTo('head')
             .attr({type: 'text/css', rel: 'stylesheet'})
             .attr('id', 'customizer-icon-' + key)
             .attr('href', font.url);
+        }
+        
 
         options_font_type += '<option value="' + key + '">' + font.name + '</option>';
 

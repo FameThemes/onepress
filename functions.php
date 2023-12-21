@@ -263,7 +263,8 @@ function onepress_scripts()
 	}
 
 	wp_enqueue_style('onepress-animate', get_template_directory_uri() . '/assets/css/animate.min.css', array(), $version);
-	wp_enqueue_style('onepress-fa', get_template_directory_uri() . '/assets/css/font-awesome.min.css', array(), '4.7.0');
+	wp_enqueue_style('onepress-fa', get_template_directory_uri() . '/assets/fontawesome-v6/css/all.min.css', array(), '6.5.1');
+	wp_enqueue_style('onepress-fa-shims', get_template_directory_uri() . '/assets/fontawesome-v6/css/v4-shims.min.css', array(), '6.5.1');
 	wp_enqueue_style('onepress-bootstrap', get_template_directory_uri() . '/assets/css/bootstrap.min.css', false, $version);
 	wp_enqueue_style('onepress-style', get_template_directory_uri() . '/style.css');
 
