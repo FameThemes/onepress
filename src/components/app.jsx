@@ -1,4 +1,4 @@
-import * as iconsObj from "../fontawesome/icons.json";
+import * as fontAwesomeIcons from "../fontawesome/icon-list.json";
 import { render, useState, useEffect } from "@wordpress/element";
 
 import { ReactComponent as IconRemove } from "./remove.svg";
@@ -56,15 +56,13 @@ const App = ({ data, el }) => {
   const [value, setValue] = useState(icon);
   const [cats, setCats] = useState([]);
   const [listIcons, setListIcons] = useState([]);
-  const icons = Object.values(iconsObj);
+  const icons = Object.values(fontAwesomeIcons);
   const listCat = [];
 
   icons.map((icon) => {
-    icon?.styles?.map?.((s) => {
-      if (!listCat.includes(s)) {
-        listCat.push(s);
-      }
-    });
+    if (!listCat.includes(icon.style)) {
+      listCat.push(icon.style);
+    }
   });
 
   const handleSearch = (value) => {
@@ -97,18 +95,13 @@ const App = ({ data, el }) => {
 
   useEffect(() => {
     const newListIcons = icons
-      .filter((icon) => icon?.svg)
       .filter((icon) => {
         if (!cats?.length) {
           return true;
         }
 
         if (cats?.length) {
-          for (let i = 0; i < cats.length; i++) {
-            if (icon.styles?.length && icon.styles.includes(cats[i])) {
-              return true;
-            }
-          }
+          cats.includes(icon.style);
         }
         return false;
       })
@@ -116,7 +109,7 @@ const App = ({ data, el }) => {
         if (!search?.length) {
           return true;
         }
-        if (icon?.label?.toLowerCase?.().includes(search?.toLowerCase())) {
+        if (icon?.key?.toLowerCase?.().includes(search?.toLowerCase())) {
           return true;
         }
 
@@ -199,12 +192,21 @@ const App = ({ data, el }) => {
               <div className="onepress_icon_list">
                 {listIcons.map((icon) => {
                   return (
-                    <IconGroups
-                      key={["gic", icon?.unicode].join(".")}
-                      cats={cats}
-                      icon={icon}
-                      onClick={handleClick}
-                    />
+                    <div
+                      key={[icon.style, icon?.code].join(".")}
+                      title={icon?.key}
+                      className="icon-wrapper"
+                      onClick={() => onClick(code)}
+                    >
+                      <div
+                        className="icon-item"
+                        
+                      >
+
+                        <i className={`fa-${icon.style}  fa-${icon.key}`}></i>
+                      </div>
+                      <div className="icon-label">{icon?.key}</div>
+                    </div>
                   );
                 })}
               </div>

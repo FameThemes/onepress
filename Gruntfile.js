@@ -6,6 +6,8 @@ const concatJSFiles = [
 	'assets/js/theme.js',
 ];
 
+const fs = require('fs');
+const path = require('path')
 
 module.exports = function (grunt) {
 	"use strict";
@@ -191,5 +193,31 @@ module.exports = function (grunt) {
 		// grunt.task.run(['addtextdomain', 'makepot']);
 		// re create css file and min
 		grunt.task.run(["css", "postcss", "concat", 'uglify']);
+	});
+
+
+
+	grunt.registerTask('load-icon', function () {
+
+		const iconFile = path.resolve(__dirname, 'src', 'fontawesome', 'icons.json');
+		const saveFile = path.resolve(__dirname, 'src', 'fontawesome', 'icon-list.json');
+
+		const objecList = grunt.file.readJSON(iconFile);
+		const icons = [];
+		Object.keys(objecList).map(key => {
+			const icon = objecList[key];
+			icon.styles.map(style => {
+				icons.push({
+					key: key,
+					code: icon.unicode,
+					style: style,
+					// plain: `fa-${style} fa-${key}`
+				})
+			})
+
+		});
+
+		fs.writeFileSync(saveFile, JSON.stringify(icons), "UTF8")
+
 	});
 };

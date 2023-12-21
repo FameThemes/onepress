@@ -93,6 +93,8 @@ class Onepress_Dashboard
 				true
 			);
 
+		
+
 
 			wp_localize_script(
 				'onepress_icon_picker_v2',
@@ -104,6 +106,7 @@ class Onepress_Dashboard
 						'fonts' => array(
 							'font-awe-v6' => array(
 								'name' => esc_html__('Font Awesome v6', 'onepress'),
+								'icons' => []
 							),
 							'font-awesome' => array(
 								// Name of icon
