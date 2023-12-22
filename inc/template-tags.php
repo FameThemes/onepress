@@ -619,6 +619,9 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				display: block;
 				content: "";
 			}
+			#parallax-hero .jarallax-container .parallax-bg:before{
+				background-color: <?php echo $hero_bg_color; ?>;
+			}
 			.body-desktop .parallax-hero .hero-slideshow-wrapper:after {
 				display: none !important;
 			}
