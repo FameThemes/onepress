@@ -1,4 +1,9 @@
 # CHANGELOG
+# 2.3.6
+* NEW: Update font Awesome to version 6.5.1.
+* FIXED: PHP 8.3 isssues.
+* DEPRECATED: Instagram gallery source.
+
 # 2.3.5
 * IMPROVED: Support shortcode in gallery page for gallery section.
 
