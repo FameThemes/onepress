@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /*------------------------------
 	2.1 Typography
 ------------------------------*/
@@ -475,8 +474,7 @@ input[type=radio], input[type=checkbox] {
   text-decoration: none;
   top: 5px;
   width: auto;
-  z-index: 100000;
-  /* Above WP toolbar */
+  z-index: 100000; /* Above WP toolbar */
 }
 
 /*------------------------------
@@ -538,8 +536,7 @@ input[type=radio], input[type=checkbox] {
 ------------------------------*/
 /* Globally hidden elements when Infinite Scroll is supported and in use. */
 .infinite-scroll .posts-navigation,
-.infinite-scroll.neverending .site-footer {
-  /* Theme Footer (when set to scrolling) */
+.infinite-scroll.neverending .site-footer { /* Theme Footer (when set to scrolling) */
   display: none;
 }
 
@@ -713,7 +710,7 @@ body.mce-content-body {
 }
 @media screen and (max-width: 940px) {
   .nav-links a,
-.nav-links .page-numbers {
+  .nav-links .page-numbers {
     padding: 6px 10px;
   }
 }
@@ -735,7 +732,7 @@ body.mce-content-body {
   position: relative;
 }
 .sticky .entry-title:after {
-  content: "";
+  content: "\f276";
   display: inline-block;
   font-family: "FontAwesome";
   font-style: normal;
