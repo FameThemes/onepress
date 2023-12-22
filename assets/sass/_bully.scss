@@ -41,9 +41,9 @@ $bully_size_s: 9px;
 
 .c-bully__ {
 	&bullet {
-		padding: $bully_size / 2;
+		padding: $bully_size * 0.5;
 		@include for(screens-medium) {
-			padding: ( $bully_size / 2 ) 3px;
+			padding: ( $bully_size * 0.5 ) 3px;
 		}
 		opacity: 0;
 		cursor: pointer;

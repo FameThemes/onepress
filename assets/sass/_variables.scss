@@ -6,6 +6,8 @@
 //--------------------------------------------------------
 
 // Text colors
+@use "sass:math";
+
 $text: 			#777777;
 $heading:       #333333;
 
@@ -132,19 +134,19 @@ $base: 			20px;
 $baseline-px: 16px;
 @mixin rem($property, $px-values) {
 
-	$baseline-rem: $baseline-px / 1rem;
+	$baseline-rem: math.div($baseline-px, 1rem);
 
 	#{$property}: $px-values;
 
 	@if type-of($px-values) == "number" {
-		#{$property}: $px-values / $baseline-rem; }
+		#{$property}: math.div($px-values, $baseline-rem); }
 	@else {
 		$rem-values: unquote("");
 		@each $value in $px-values {
 			@if $value == 0 {
 				$rem-values: append($rem-values, $value); }
 			@else {
-				$rem-values: append($rem-values, $value / $baseline-rem); } }
+				$rem-values: append($rem-values, math.div($value, $baseline-rem)); } }
 		#{$property}: $rem-values; }
 }
 

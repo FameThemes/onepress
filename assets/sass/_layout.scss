@@ -1,5 +1,7 @@
 // main: style.scss
 
+@use "sass:math";
+
 #primary {
 	padding-bottom: $base * 2;
 	padding-top: $base * 2;
@@ -33,7 +35,7 @@
 	width: 100%;
 	float: none;
 	@include for(medium-screens) {
-		width: percentage(280px / $grid); // 300px
+		width: percentage(math.div(280px, $grid)); // 300px
 		float: left;
 	}
 }
@@ -57,7 +59,7 @@
 		padding-left: 39px;
 		border-left: 1px solid $border;
 		margin-right: 1px;
-		width: percentage(830px / $grid); //680px
+		width: percentage(math.div(830px, $grid)); //680px
 	}
 
 	.left-sidebar .sidebar {
@@ -69,7 +71,7 @@
 	.right-sidebar .content-area {
 		padding-right: 39px;
 		border-right: 1px solid $border;
-		width: percentage(830px / $grid); //680px
+		width: percentage(math.div(830px, $grid)); //680px
 	}
 
 	.right-sidebar .sidebar {

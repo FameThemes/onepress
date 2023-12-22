@@ -3,6 +3,8 @@
 /*------------------------------
 	2.1 Typography
 ------------------------------*/
+@use "sass:math";
+
 html, body {
 	margin: 0;
 	padding: 0;
@@ -263,7 +265,7 @@ ol {
 }
 
 ul li, ol li {
-	margin: $base/2.5 0;
+	margin: math.div($base, 2.5) 0;
 }
 
 dt {
@@ -359,7 +361,7 @@ select {
 	vertical-align: top;
 	outline: none;
 	border: 1px solid $border;
-	padding: $base/2;
+	padding: $base*0.5;
 }
 
 textarea:not(.editor-post-title__input),
@@ -415,7 +417,7 @@ button::-moz-focus-inner {
 }
 
 input[type="radio"],input[type="checkbox"] {
-	margin:  0 $base/2;
+	margin:  0 $base*0.5;
 }
 
 /*------------------------------

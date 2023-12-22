@@ -1,6 +1,8 @@
 
 /* Section Stuffs
 ------------------------------*/
+@use "sass:math";
+
 .section-padding {
     @include rem('padding', 70px 0px);
 }
@@ -801,7 +803,7 @@
     @include for (medium-screens) {
         &.team-layout-4 {
             .team-member {
-                width: (100%/4);
+                width: (100%*0.25);
             }
             .team-member:nth-child(4n+1) {
                 clear: left;
@@ -809,7 +811,7 @@
         }
         &.team-layout-3 {
             .team-member {
-                width: (100%/3);
+                width: math.div(100%, 3);
             }
             .team-member:nth-child(3n+1) {
                 clear: left;
@@ -817,7 +819,7 @@
         }
         &.team-layout-2 {
             .team-member {
-                width: (100%/2);
+                width: (100%*0.5);
             }
             .team-member:nth-child(2n+1) {
                 clear: left;
@@ -827,7 +829,7 @@
 
     @include for(screens-medium) {
         .team-member {
-            width: (100%/2);
+            width: (100%*0.5);
         }
         .team-member:nth-child(2n+1) {
             clear: left;
@@ -836,7 +838,7 @@
 
     @include for(screens-small) {
         .team-member {
-            width: (100%/2);
+            width: (100%*0.5);
         }
         .team-member:nth-child(2n+1) {
             clear: left;
@@ -1159,7 +1161,7 @@ div.wpcf7-response-output {
     @for $i from 1 through 6 {
         .g-col-#{$i} {
             .g-item {
-                width: (100% / $i);
+                width: math.div(100%, $i);
                 &:nth-child(#{$i}n+1) {
                     clear: left;
                 }
@@ -1172,7 +1174,7 @@ div.wpcf7-response-output {
     @for $i from 1 through 6 {
         .g-col-#{$i} {
             .g-item {
-                width: (100% / $i);
+                width: math.div(100%, $i);
                 &:nth-child(#{$i}n+1) {
                     clear: left;
                 }
@@ -1185,7 +1187,7 @@ div.wpcf7-response-output {
     @for $i from 1 through 6 {
         .g-col-#{$i} {
             .g-item {
-                width: (100% / $i);
+                width: math.div(100%, $i);
                 &:nth-child(#{$i}n+1) {
                     clear: left;
                 }
