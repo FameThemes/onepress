@@ -619,6 +619,9 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				display: block;
 				content: "";
 			}
+			#parallax-hero .jarallax-container .parallax-bg:before{
+				background-color: <?php echo $hero_bg_color; ?>;
+			}
 			.body-desktop .parallax-hero .hero-slideshow-wrapper:after {
 				display: none !important;
 			}
@@ -1832,7 +1835,7 @@ if ( ! function_exists( 'onepress_load_section' ) ) {
 	}
 }
 
-if ( ! function_exists( 'onepress_load_hero' ) ) {
+if ( ! function_exists( 'onepress_load_hero_section' ) ) {
 	function onepress_load_hero_section() {
 		if ( is_page_template( 'template-frontpage.php' ) ) {
 			onepress_load_section( 'hero' );

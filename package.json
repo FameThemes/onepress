@@ -5,8 +5,22 @@
   "engines": {
     "node": ">= 0.10.0"
   },
+  "scripts": {
+    "build": "wp-scripts build",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "packages-update": "wp-scripts packages-update",
+    "plugin-zip": "wp-scripts plugin-zip",
+    "start": "wp-scripts start",
+    "dev": "wp-scripts start"
+  },
   "devDependencies": {
+    "@wordpress/block-editor": "^9.3.0",
+    "array-move": "^4.0.0",
     "autoprefixer": "^10.4.7",
+    "babel-plugin-react-html-attrs": "^3.0.5",
+    "classnames": "^2.3.1",
     "grunt": "^1.0.4",
     "grunt-bumpup": "^0.6.3",
     "grunt-contrib-clean": "^1.1.0",
@@ -21,10 +35,20 @@
     "grunt-postcss": "^0.9.0",
     "grunt-rtlcss": "^2.0.1",
     "grunt-text-replace": "^0.4.0",
-    "grunt-wp-i18n": "^1.0.2"
+    "grunt-wp-i18n": "^1.0.2",
+    "lodash": "^4.17.21",
+    "matchdep": "^2.0.0",
+    "node-wp-i18n": "^1.2.6",
+    "object-hash": "^3.0.0",
+    "react-sortable-hoc": "^2.0.0",
+    "rtlcss-webpack-plugin": "^4.0.6",
+    "uniqid": "^5.4.0"
   },
   "dependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@wordpress/scripts": "^26.19.0",
     "copy": "^0.0.1",
+    "react-modal": "^3.16.1",
     "rtlcss": "^2.2.1"
   }
 }

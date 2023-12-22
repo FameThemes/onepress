@@ -8,6 +8,10 @@
  * @package OnePress
  */
 
+
+
+define('ONEPRESS_THEME_PATH', dirname(__FILE__));
+
 if (!function_exists('onepress_setup')) :
 	/**
 	 * Sets up theme defaults and registers support for various WordPress features.
@@ -152,8 +156,8 @@ if (!function_exists('onepress_setup')) :
 		 */
 		add_theme_support('editor-styles');
 		add_theme_support('align-wide');
-		
-		add_theme_support( 'wp-block-styles' );
+
+		add_theme_support('wp-block-styles');
 
 		/*
 		 * This theme styles the visual editor to resemble the theme style.
@@ -259,7 +263,8 @@ function onepress_scripts()
 	}
 
 	wp_enqueue_style('onepress-animate', get_template_directory_uri() . '/assets/css/animate.min.css', array(), $version);
-	wp_enqueue_style('onepress-fa', get_template_directory_uri() . '/assets/css/font-awesome.min.css', array(), '4.7.0');
+	wp_enqueue_style('onepress-fa', get_template_directory_uri() . '/assets/fontawesome-v6/css/all.min.css', array(), '6.5.1');
+	wp_enqueue_style('onepress-fa-shims', get_template_directory_uri() . '/assets/fontawesome-v6/css/v4-shims.min.css', array(), '6.5.1');
 	wp_enqueue_style('onepress-bootstrap', get_template_directory_uri() . '/assets/css/bootstrap.min.css', false, $version);
 	wp_enqueue_style('onepress-style', get_template_directory_uri() . '/style.css');
 
@@ -341,9 +346,9 @@ function onepress_scripts()
 			$onepress_js_settings['is_home'] = 1;
 		}
 	}
-	
+
 	$onepress_js_settings['parallax_speed'] = 0.5;
-	$onepress_js_settings =  apply_filters( 'onepress_js_settings', $onepress_js_settings );
+	$onepress_js_settings =  apply_filters('onepress_js_settings', $onepress_js_settings);
 	wp_localize_script('onepress-theme', 'onepress_js_settings', $onepress_js_settings);
 }
 add_action('wp_enqueue_scripts', 'onepress_scripts');
