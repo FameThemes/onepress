@@ -4,6 +4,8 @@ class Onepress_Dashboard
 {
 
 	private static $_instance = null;
+	protected $action_key = 'onepres_save_settings';
+	protected $save_status = '';
 
 	static function get_instance()
 	{
@@ -23,6 +25,20 @@ class Onepress_Dashboard
 			/* activation notice */
 			add_action('load-themes.php',  array($this, 'activation_admin_notice'));
 			add_action('admin_init', array($this, 'admin_dismiss_actions'));
+			add_action('admin_init', array($this, 'save_settings'));
+		}
+	}
+
+	function save_settings()
+	{
+
+		if (isset($_POST['submit'])) {
+			if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], $this->action_key)) {
+				wp_die(__('Security check!', 'onepress'));
+				die();
+			}
+			Onepress_Config::save_settings($_POST);
+			$this->save_status = 'saved';
 		}
 	}
 
@@ -173,8 +189,7 @@ class Onepress_Dashboard
 	{
 		$sections = Onepress_Config::get_sections();
 
-		if (isset($_POST['submit'])) {
-			Onepress_Config::save_settings($_POST);
+		if ($this->save_status) {
 		?>
 			<div id="sections-manager-notice" class="updated notice notice-success is-dismissible">
 				<p><?php _e('Settings saved', 'onepress'); ?></p>
@@ -183,8 +198,8 @@ class Onepress_Dashboard
 		}
 
 
-
 		echo '<form method="post" action="?page=ft_onepress" class="onepress-admin-sections-form">';
+		wp_nonce_field($this->action_key);
 		echo '<div class="onepress-admin-sections-wrapper">';
 		echo '<h3>' . __('Customizer Section Manager', 'onepress') . '</h3>';
 		echo '<p class="description">' . __('Disable (or enable) unused sections to improve Customizer loading speed. Your section settings is still saved.', 'onepress') . '</p>';
@@ -253,7 +268,7 @@ class Onepress_Dashboard
 			<h2 class="nav-tab-wrapper">
 				<a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Overview', 'onepress') ?></a>
 				<a href="?page=ft_onepress&tab=recommended_actions" class="nav-tab<?php echo $tab == 'recommended_actions' ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Recommended Actions', 'onepress');
-																																							echo ($number_action > 0) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
+																																																																										echo ($number_action > 0) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
 				<?php if (!class_exists('OnePress_Plus')) { ?>
 					<a href="?page=ft_onepress&tab=free_pro" class="nav-tab<?php echo $tab == 'free_pro' ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Free vs PLUS', 'onepress'); ?></span></a>
 				<?php } ?>
