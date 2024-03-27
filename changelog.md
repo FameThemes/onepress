@@ -1,4 +1,7 @@
 # CHANGELOG
+# 2.3.8
+* FIXED: Fix issue security check when save form.
+
 # 2.3.7
 * FIXED: Fix issue vulnerable to Cross Site Scripting (XSS).
 

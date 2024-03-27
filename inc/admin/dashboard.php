@@ -32,8 +32,8 @@ class Onepress_Dashboard
 	function save_settings()
 	{
 
-		if (isset($_POST['submit'])) {
-			if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], $this->action_key)) {
+		if (isset($_POST['onepress_settings_nonce'])) {
+			if (!isset($_POST['onepress_settings_nonce']) || !wp_verify_nonce($_POST['onepress_settings_nonce'], $this->action_key)) {
 				wp_die(__('Security check!', 'onepress'));
 				die();
 			}
@@ -199,11 +199,10 @@ class Onepress_Dashboard
 
 
 		echo '<form method="post" action="?page=ft_onepress" class="onepress-admin-sections-form">';
-		wp_nonce_field($this->action_key);
+		wp_nonce_field($this->action_key, 'onepress_settings_nonce');
 		echo '<div class="onepress-admin-sections-wrapper">';
 		echo '<h3>' . __('Customizer Section Manager', 'onepress') . '</h3>';
 		echo '<p class="description">' . __('Disable (or enable) unused sections to improve Customizer loading speed. Your section settings is still saved.', 'onepress') . '</p>';
-
 		echo '<div class="onepress-admin-sections">';
 
 		foreach ($sections as $key => $section) {
