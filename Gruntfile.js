@@ -138,7 +138,7 @@ module.exports = function (grunt) {
 
     concat: {
       options: {
-        separator: "\n",
+        separator: ";\n",
         sourceMap: true,
       },
       dist: {

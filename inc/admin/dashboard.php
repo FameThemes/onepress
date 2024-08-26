@@ -130,7 +130,14 @@ class Onepress_Dashboard
 			$theme_data = wp_get_theme();
 ?>
 			<div class="updated notice notice-success notice-alt is-dismissible">
-				<p><?php echo wp_kses(__('Welcome! Thank you for choosing %1$s! To fully take advantage of the best our theme can offer please make sure you visit our <a href="%2$s">Welcome page</a>', 'onepress'),  $theme_data->Name, admin_url('themes.php?page=ft_onepress'), onepress_allowed_tags() ); ?></p>
+				<p><?php echo wp_kses(
+						sprintf(
+							/* translators: 1: name, 2: link*/
+							__('Welcome! Thank you for choosing %1$s! To fully take advantage of the best our theme can offer please make sure you visit our <a href="%2$s">Welcome page</a>', 'onepress'), 
+							$theme_data->Name,
+							admin_url('themes.php?page=ft_onepress')
+						), onepress_allowed_tags()
+					); ?></p>
 			</div>
 		<?php
 		}
@@ -258,7 +265,7 @@ class Onepress_Dashboard
 		}
 		?>
 		<div class="wrap about-wrap theme_info_wrapper">
-			<h1><?php esc_html_e(sprintf(__('Welcome to OnePress - Version %1s', 'onepress'), $theme_data->Version)); ?></h1>
+			<h1><?php printf(esc_html__('Welcome to OnePress - Version %1s', 'onepress'), esc_html($theme_data->Version)); ?></h1>
 			<div class="about-text"><?php esc_html_e('OnePress is a creative and flexible WordPress ONE PAGE theme well suited for business, portfolio, digital agency, product showcase, freelancers websites.', 'onepress'); ?></div>
 			<a target="_blank" href="<?php echo esc_url('https://www.famethemes.com/?utm_source=theme_dashboard_page&utm_medium=badge_link&utm_campaign=onepress'); ?>" class="famethemes-badge wp-badge"><span>FameThemes</span></a>
 
@@ -287,14 +294,14 @@ class Onepress_Dashboard
 						<div class="theme_info_right">
 							<div class="theme_link">
 								<h3><?php esc_html_e('Theme Customizer', 'onepress'); ?></h3>
-								<p class="about"><?php esc_html_e(sprintf(__('%s supports the Theme Customizer for all theme settings. Click "Customize" to start customize your site.', 'onepress'), $theme_data->Name)); ?></p>
+								<p class="about"><?php printf(__('%s supports the Theme Customizer for all theme settings. Click "Customize" to start customize your site.', 'onepress'), esc_html($theme_data->Name) ); ?></p>
 								<p>
 									<a href="<?php echo esc_attr(admin_url('customize.php')); ?>" class="button button-primary"><?php esc_html_e('Start Customize', 'onepress'); ?></a>
 								</p>
 							</div>
 							<div class="theme_link">
 								<h3><?php esc_html_e('Theme Documentation', 'onepress'); ?></h3>
-								<p class="about"><?php  esc_html_e(sprintf(__('Need any help to setup and configure %s? Please have a look at our documentations instructions.', 'onepress'), $theme_data->Name)); ?></p>
+								<p class="about"><?php printf(__('Need any help to setup and configure %s? Please have a look at our documentations instructions.', 'onepress'), esc_html($theme_data->Name)); ?></p>
 								<p>
 									<a href="<?php echo esc_url('http://docs.famethemes.com/category/112-onepress'); ?>" target="_blank" class="button button-secondary"><?php esc_html_e('OnePress Documentation', 'onepress'); ?></a>
 								</p>
@@ -302,7 +309,7 @@ class Onepress_Dashboard
 							</div>
 							<div class="theme_link">
 								<h3><?php esc_html_e('Having Trouble, Need Support?', 'onepress'); ?></h3>
-								<p class="about"><?php  esc_html_e(sprintf(__('Support for %s WordPress theme is conducted through FameThemes support ticket system.', 'onepress'), $theme_data->Name)); ?></p>
+								<p class="about"><?php  printf(__('Support for %s WordPress theme is conducted through FameThemes support ticket system.', 'onepress'), esc_html($theme_data->Name)); ?></p>
 								<p>
 									<a href="<?php echo esc_url('https://www.famethemes.com/dashboard/tickets/'); ?>" target="_blank" class="button button-secondary"><?php esc_html_e('Create a support ticket', 'onepress'); ?></a>
 								</p>
@@ -322,12 +329,11 @@ class Onepress_Dashboard
 					?>
 						<form method="post" action="<?php echo esc_attr($current_action_link); ?>" class="demo-import-boxed copy-settings-form">
 							<p>
-								<strong> <?php esc_html_e(sprintf(__('You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress'),  $child_theme->Name)); ?></strong>
+								<strong> <?php printf(__('You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress'),  esc_html($child_theme->Name)); ?></strong>
 							</p>
-							<p><?php esc_html_e(sprintf(__("Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'onepress'))); ?></p>
+							<p><?php esc_html_e("Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'onepress'); ?></p>
 							<p>
 								<?php
-
 								$select = '<select name="copy_from">';
 								$select .= '<option value="">' . esc_html__('From Theme', 'onepress') . '</option>';
 								$select .= '<option value="onepress">OnePress</option>';
