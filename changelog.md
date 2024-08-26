@@ -1,4 +1,8 @@
 # CHANGELOG
+# 2.3.10
+* FIXED: fix css issues.
+
+
 # 2.3.9
 * FIXED: fix security issues.
 

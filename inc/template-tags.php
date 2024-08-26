@@ -1006,8 +1006,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				$css .= "\n/* --- Begin custom CSS --- */\n" . $custom . "\n/* --- End custom CSS --- */\n";
 			}
 		}
-
-		return wp_kses($css, array());
+		return wp_strip_all_tags($css);
 	}
 }
 
