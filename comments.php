@@ -29,12 +29,14 @@ if ( post_password_required() ) {
 			<?php
 				$n = get_comments_number();
 			if ( 1 === $n ) {
-				printf( esc_html__( 'One thought on &ldquo;%2$s&rdquo;', 'onepress' ), '<span>' . get_the_title() . '</span>' );
+				echo wp_kses(
+					/* translators: 1: number of comments, 2: post title */
+					sprintf(__( 'One thought on &ldquo;%2$s&rdquo;', 'onepress' ), '<span>' . get_the_title() . '</span>'), onepress_allowed_tags() );
 			} else {
 				// WPCS: XSS OK.
-				printf(
+				echo wp_kses(
 					/* translators: 1: number of comments, 2: post title */
-					_nx(
+					sprintf(_nx(
 						'%1$s thought on &ldquo;%2$s&rdquo;',
 						'%1$s thoughts on &ldquo;%2$s&rdquo;',
 						$n,
@@ -43,8 +45,7 @@ if ( post_password_required() ) {
 					),
 					number_format_i18n( $n ),
 					'<span>' . get_the_title() . '</span>'
-				);
-
+				), onepress_allowed_tags() );
 			}
 
 			?>

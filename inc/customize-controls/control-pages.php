@@ -19,7 +19,7 @@ class OnePress_Pages_Control extends WP_Customize_Control {
 		endif;
 
 		if ( ! empty( $this->description ) ) :
-			?><span class="description customize-control-description"><?php echo $this->description; ?></span><?php
+			?><span class="description customize-control-description"><?php echo wp_kses_post($this->description); ?></span><?php
 		endif;
 
 		$dropdown_args = wp_parse_args( $this->dropdown_args, array(
@@ -33,7 +33,7 @@ class OnePress_Pages_Control extends WP_Customize_Control {
 
 		$dropdown = wp_dropdown_pages( $dropdown_args );
 		$dropdown = str_replace( '<select', '<select ' . $this->get_link(), $dropdown );
-		echo $dropdown;
+		echo $dropdown; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		?></label><?php
 

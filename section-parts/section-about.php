@@ -30,7 +30,7 @@ $content_source = get_theme_mod( 'onepress_about_content_source' );
 						echo '<h2 class="section-title">' . esc_html( $title ) . '</h2>';
 } ?>
 					<?php if ( $desc != '' ) {
-						echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', $desc ) . '</div>';
+						echo '<div class="section-desc">' . wp_kses_post(apply_filters( 'onepress_the_content', $desc )) . '</div>';
 } ?>
 				</div>
 				<?php } ?>
@@ -99,7 +99,7 @@ $content_source = get_theme_mod( 'onepress_about_content_source' );
 									if ( $settings['enable_link'] ) {
 										echo '<a href="' . esc_url( get_permalink( $post ) ) . '">';
 									}
-										echo get_the_title( $post );
+										echo wp_kses_post( get_the_title( $post ) );
 									if ( $settings['enable_link'] ) {
 										echo '</a>';
 									}
@@ -109,11 +109,11 @@ $content_source = get_theme_mod( 'onepress_about_content_source' );
 								<?php
 								if ( $content_source == 'excerpt' ) {
 									$excerpt = get_the_excerpt( $post );
-									echo apply_filters( 'the_excerpt', $excerpt );
+									echo wp_kses_post(apply_filters( 'the_excerpt', $excerpt ));
 								} else {
 									$content = apply_filters( 'the_content', $post->post_content );
 									$content = str_replace( ']]>', ']]&gt;', $content );
-									echo $content;
+									echo wp_kses_post($content);
 								}
 
 								?>

@@ -18,14 +18,14 @@ class OnePress_Category_Control extends WP_Customize_Control {
 		endif;
 
 		if ( ! empty( $this->description ) ) :
-			?><span class="description customize-control-description"><?php echo $this->description; ?></span><?php
+			?><span class="description customize-control-description"><?php echo wp_kses_post($this->description); ?></span><?php
 		endif;
 
 		$dropdown_args = wp_parse_args( $this->dropdown_args, array(
 			'taxonomy'          => 'category',
 			'show_option_none'  => '',
 			'selected'          => $this->value(),
-			'show_option_all'   => __( 'All', 'onepress' ),
+			'show_option_all'   => esc_html__( 'All', 'onepress' ),
 			'orderby'           => 'id',
 			'order'             => 'ASC',
 			'show_count'        => 1,
@@ -42,7 +42,7 @@ class OnePress_Category_Control extends WP_Customize_Control {
 
 		$dropdown = wp_dropdown_categories( $dropdown_args );
 		$dropdown = str_replace( '<select', '<select ' . $this->get_link(), $dropdown );
-		echo $dropdown;
+		echo $dropdown; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		?></label><?php
 

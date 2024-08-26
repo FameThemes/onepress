@@ -24,7 +24,7 @@ if (!function_exists('onepress_sanitize_checkbox')) {
 function onepress_sanitize_css($string)
 {
 	$string = preg_replace('@<(script|style)[^>]*?>.*?</\\1>@si', '', $string);
-	$string = strip_tags($string);
+	$string = wp_strip_all_tags($string);
 	return trim($string);
 }
 
@@ -270,7 +270,9 @@ function onepress_gallery_source_validate($validity, $value)
 {
 	if (!class_exists('OnePress_Plus')) {
 		if ($value != 'page') {
-			$validity->add('notice', sprintf(esc_html__('Upgrade to %1s to unlock this feature.', 'onepress'), '<a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#gallery">OnePress Plus</a>'));
+			$validity->add('notice', sprintf(
+				/* translators: 1: feature name */
+				esc_html__('Upgrade to %1s to unlock this feature.', 'onepress'), '<a target="_blank" href="https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_customizer&utm_medium=text_link&utm_campaign=onepress_customizer#gallery">OnePress Plus</a>'));
 		}
 	}
 	return $validity;

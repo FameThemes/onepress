@@ -95,7 +95,7 @@ class OnePress_Editor {
 	 */
 	public function css_file() {
 		header( 'Content-type: text/css; charset: UTF-8' );
-		echo $this->load_style();
+		echo wp_kses_post($this->load_style());
 	}
 
 	/**

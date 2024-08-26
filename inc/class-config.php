@@ -61,7 +61,7 @@ class Onepress_Config {
 			),
 			'cta' => array(
 				'label' => __( 'Section: Call to Action', 'onepress' ),
-				'title' => __( '', 'onepress' ),
+				'title' => '',
 				'default' => false,
 				'inverse' => false,
 			),

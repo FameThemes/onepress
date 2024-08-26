@@ -34,7 +34,7 @@ class Onepress_Dashboard
 
 		if (isset($_POST['onepress_settings_nonce'])) {
 			if (!isset($_POST['onepress_settings_nonce']) || !wp_verify_nonce($_POST['onepress_settings_nonce'], $this->action_key)) {
-				wp_die(__('Security check!', 'onepress'));
+				wp_die(esc_html__('Security check!', 'onepress'));
 				die();
 			}
 			Onepress_Config::save_settings($_POST);
@@ -130,7 +130,7 @@ class Onepress_Dashboard
 			$theme_data = wp_get_theme();
 ?>
 			<div class="updated notice notice-success notice-alt is-dismissible">
-				<p><?php printf(__('Welcome! Thank you for choosing %1$s! To fully take advantage of the best our theme can offer please make sure you visit our <a href="%2$s">Welcome page</a>', 'onepress'),  $theme_data->Name, admin_url('themes.php?page=ft_onepress')); ?></p>
+				<p><?php echo wp_kses(__('Welcome! Thank you for choosing %1$s! To fully take advantage of the best our theme can offer please make sure you visit our <a href="%2$s">Welcome page</a>', 'onepress'),  $theme_data->Name, admin_url('themes.php?page=ft_onepress'), onepress_allowed_tags() ); ?></p>
 			</div>
 		<?php
 		}
@@ -168,11 +168,11 @@ class Onepress_Dashboard
 								<span class="switch-slider"></span>
 							</span>
 						<?php } ?>
-						<?php echo $section['label']; // WPCS: XSS OK. 
+						<?php echo wp_kses_post($section['label']); // WPCS: XSS OK. 
 						?>
 					</label>
 					<?php if ($see_only) { ?>
-						<span class="note-bubble"><?php _e('Plus Feature', 'onepress'); ?></span>
+						<span class="note-bubble"><?php esc_html('Plus Feature', 'onepress'); ?></span>
 					<?php } ?>
 				</div>
 			</div>
@@ -192,7 +192,7 @@ class Onepress_Dashboard
 		if ($this->save_status) {
 		?>
 			<div id="sections-manager-notice" class="updated notice notice-success is-dismissible">
-				<p><?php _e('Settings saved', 'onepress'); ?></p>
+				<p><?php esc_html('Settings saved', 'onepress'); ?></p>
 			</div>
 		<?php
 		}
@@ -201,8 +201,8 @@ class Onepress_Dashboard
 		echo '<form method="post" action="?page=ft_onepress" class="onepress-admin-sections-form">';
 		wp_nonce_field($this->action_key, 'onepress_settings_nonce');
 		echo '<div class="onepress-admin-sections-wrapper">';
-		echo '<h3>' . __('Customizer Section Manager', 'onepress') . '</h3>';
-		echo '<p class="description">' . __('Disable (or enable) unused sections to improve Customizer loading speed. Your section settings is still saved.', 'onepress') . '</p>';
+		echo '<h3>' . esc_html__('Customizer Section Manager', 'onepress') . '</h3>';
+		echo '<p class="description">' . esc_html__('Disable (or enable) unused sections to improve Customizer loading speed. Your section settings is still saved.', 'onepress') . '</p>';
 		echo '<div class="onepress-admin-sections">';
 
 		foreach ($sections as $key => $section) {
@@ -258,7 +258,7 @@ class Onepress_Dashboard
 		}
 		?>
 		<div class="wrap about-wrap theme_info_wrapper">
-			<h1><?php printf(esc_html__('Welcome to OnePress - Version %1s', 'onepress'), $theme_data->Version); ?></h1>
+			<h1><?php esc_html_e(sprintf(__('Welcome to OnePress - Version %1s', 'onepress'), $theme_data->Version)); ?></h1>
 			<div class="about-text"><?php esc_html_e('OnePress is a creative and flexible WordPress ONE PAGE theme well suited for business, portfolio, digital agency, product showcase, freelancers websites.', 'onepress'); ?></div>
 			<a target="_blank" href="<?php echo esc_url('https://www.famethemes.com/?utm_source=theme_dashboard_page&utm_medium=badge_link&utm_campaign=onepress'); ?>" class="famethemes-badge wp-badge"><span>FameThemes</span></a>
 
@@ -267,7 +267,7 @@ class Onepress_Dashboard
 			<h2 class="nav-tab-wrapper">
 				<a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Overview', 'onepress') ?></a>
 				<a href="?page=ft_onepress&tab=recommended_actions" class="nav-tab<?php echo $tab == 'recommended_actions' ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Recommended Actions', 'onepress');
-																																																																										echo ($number_action > 0) ? "<span class='theme-action-count'>{$number_action}</span>" : ''; ?></a>
+																																																																										echo ($number_action > 0) ? "<span class='theme-action-count'>".esc_html(number_format_i18n($number_action))."</span>" : ''; ?></a>
 				<?php if (!class_exists('OnePress_Plus')) { ?>
 					<a href="?page=ft_onepress&tab=free_pro" class="nav-tab<?php echo $tab == 'free_pro' ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Free vs PLUS', 'onepress'); ?></span></a>
 				<?php } ?>
@@ -287,14 +287,14 @@ class Onepress_Dashboard
 						<div class="theme_info_right">
 							<div class="theme_link">
 								<h3><?php esc_html_e('Theme Customizer', 'onepress'); ?></h3>
-								<p class="about"><?php printf(esc_html__('%s supports the Theme Customizer for all theme settings. Click "Customize" to start customize your site.', 'onepress'), $theme_data->Name); ?></p>
+								<p class="about"><?php esc_html_e(sprintf(__('%s supports the Theme Customizer for all theme settings. Click "Customize" to start customize your site.', 'onepress'), $theme_data->Name)); ?></p>
 								<p>
-									<a href="<?php echo admin_url('customize.php'); ?>" class="button button-primary"><?php esc_html_e('Start Customize', 'onepress'); ?></a>
+									<a href="<?php echo esc_attr(admin_url('customize.php')); ?>" class="button button-primary"><?php esc_html_e('Start Customize', 'onepress'); ?></a>
 								</p>
 							</div>
 							<div class="theme_link">
 								<h3><?php esc_html_e('Theme Documentation', 'onepress'); ?></h3>
-								<p class="about"><?php printf(esc_html__('Need any help to setup and configure %s? Please have a look at our documentations instructions.', 'onepress'), $theme_data->Name); ?></p>
+								<p class="about"><?php  esc_html_e(sprintf(__('Need any help to setup and configure %s? Please have a look at our documentations instructions.', 'onepress'), $theme_data->Name)); ?></p>
 								<p>
 									<a href="<?php echo esc_url('http://docs.famethemes.com/category/112-onepress'); ?>" target="_blank" class="button button-secondary"><?php esc_html_e('OnePress Documentation', 'onepress'); ?></a>
 								</p>
@@ -302,9 +302,9 @@ class Onepress_Dashboard
 							</div>
 							<div class="theme_link">
 								<h3><?php esc_html_e('Having Trouble, Need Support?', 'onepress'); ?></h3>
-								<p class="about"><?php printf(esc_html__('Support for %s WordPress theme is conducted through FameThemes support ticket system.', 'onepress'), $theme_data->Name); ?></p>
+								<p class="about"><?php  esc_html_e(sprintf(__('Support for %s WordPress theme is conducted through FameThemes support ticket system.', 'onepress'), $theme_data->Name)); ?></p>
 								<p>
-									<a href="<?php echo esc_url('https://www.famethemes.com/dashboard/tickets/'); ?>" target="_blank" class="button button-secondary"><?php echo sprintf(esc_html__('Create a support ticket', 'onepress'), $theme_data->Name); ?></a>
+									<a href="<?php echo esc_url('https://www.famethemes.com/dashboard/tickets/'); ?>" target="_blank" class="button button-secondary"><?php esc_html_e('Create a support ticket', 'onepress'); ?></a>
 								</p>
 							</div>
 						</div>
@@ -322,25 +322,25 @@ class Onepress_Dashboard
 					?>
 						<form method="post" action="<?php echo esc_attr($current_action_link); ?>" class="demo-import-boxed copy-settings-form">
 							<p>
-								<strong> <?php printf(esc_html__('You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress'),  $child_theme->Name); ?></strong>
+								<strong> <?php esc_html_e(sprintf(__('You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress'),  $child_theme->Name)); ?></strong>
 							</p>
-							<p><?php printf(esc_html__("Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'onepress')); ?></p>
+							<p><?php esc_html_e(sprintf(__("Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'onepress'))); ?></p>
 							<p>
 								<?php
 
 								$select = '<select name="copy_from">';
 								$select .= '<option value="">' . esc_html__('From Theme', 'onepress') . '</option>';
 								$select .= '<option value="onepress">OnePress</option>';
-								$select .= '<option value="' . esc_attr($child_theme->get_stylesheet()) . '">' . ($child_theme->Name) . '</option>';
+								$select .= '<option value="' . esc_attr($child_theme->get_stylesheet()) . '">' . esc_html($child_theme->Name) . '</option>';
 								$select .= '</select>';
 
 								$select_2 = '<select name="copy_to">';
 								$select_2 .= '<option value="">' . esc_html__('To Theme', 'onepress') . '</option>';
 								$select_2 .= '<option value="onepress">OnePress</option>';
-								$select_2 .= '<option value="' . esc_attr($child_theme->get_stylesheet()) . '">' . ($child_theme->Name) . '</option>';
+								$select_2 .= '<option value="' . esc_attr($child_theme->get_stylesheet()) . '">' . esc_html($child_theme->Name) . '</option>';
 								$select_2 .= '</select>';
 
-								echo $select . ' to ' . $select_2;
+								echo $select . ' to ' . $select_2; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 								?>
 								<input type="submit" class="button button-secondary" value="<?php esc_attr_e('Copy now', 'onepress'); ?>">
@@ -356,7 +356,7 @@ class Onepress_Dashboard
 
 						<?php if ($actions['recommend_plugins'] == 'active') {  ?>
 							<div id="plugin-filter" class="recommend-plugins action-required">
-								<a title="" class="dismiss" href="<?php echo add_query_arg(array('onepress_action_notice' => 'recommend_plugins'), $current_action_link); ?>">
+								<a title="" class="dismiss" href="<?php echo esc_url(add_query_arg(array('onepress_action_notice' => 'recommend_plugins'), $current_action_link)); ?>">
 									<?php if ($actions_r['hide_by_click']['recommend_plugins'] == 'hide') { ?>
 										<span class="dashicons dashicons-hidden"></span>
 									<?php } else { ?>
@@ -373,7 +373,7 @@ class Onepress_Dashboard
 
 						<?php if ($actions['page_on_front'] == 'active') {  ?>
 							<div class="theme_link  action-required">
-								<a title="<?php esc_attr_e('Dismiss', 'onepress'); ?>" class="dismiss" href="<?php echo add_query_arg(array('onepress_action_notice' => 'page_on_front'), $current_action_link); ?>">
+								<a title="<?php esc_attr_e('Dismiss', 'onepress'); ?>" class="dismiss" href="<?php echo esc_url(add_query_arg(array('onepress_action_notice' => 'page_on_front'), $current_action_link)); ?>">
 									<?php if ($actions_r['hide_by_click']['page_on_front'] == 'hide') { ?>
 										<span class="dashicons dashicons-hidden"></span>
 									<?php } else { ?>
@@ -382,17 +382,17 @@ class Onepress_Dashboard
 								</a>
 								<h3><?php esc_html_e('Switch "Front page displays" to "A static page"', 'onepress'); ?></h3>
 								<div class="about">
-									<p><?php _e('In order to have the one page look for your website, please go to Customize -&gt; Static Front Page and switch "Front page displays" to "A static page".', 'onepress'); ?></p>
+									<p><?php echo wp_kses(__('In order to have the one page look for your website, please go to Customize -&gt; Static Front Page and switch "Front page displays" to "A static page".', 'onepress'), onepress_allowed_tags() ); ?></p>
 								</div>
 								<p>
-									<a href="<?php echo admin_url('options-reading.php'); ?>" class="button"><?php esc_html_e('Setup front page displays', 'onepress'); ?></a>
+									<a href="<?php echo esc_url(admin_url('options-reading.php')); ?>" class="button"><?php esc_html_e('Setup front page displays', 'onepress'); ?></a>
 								</p>
 							</div>
 						<?php } ?>
 
 						<?php if ($actions['page_template'] == 'active') {  ?>
 							<div class="theme_link  action-required">
-								<a title="<?php esc_attr_e('Dismiss', 'onepress'); ?>" class="dismiss" href="<?php echo add_query_arg(array('onepress_action_notice' => 'page_template'), $current_action_link); ?>">
+								<a title="<?php esc_attr_e('Dismiss', 'onepress'); ?>" class="dismiss" href="<?php echo esc_url(add_query_arg(array('onepress_action_notice' => 'page_template'), $current_action_link)); ?>">
 									<?php if ($actions_r['hide_by_click']['page_template'] == 'hide') { ?>
 										<span class="dashicons dashicons-hidden"></span>
 									<?php } else { ?>
@@ -409,14 +409,14 @@ class Onepress_Dashboard
 									$front_page = get_option('page_on_front');
 									if ($front_page <= 0) {
 									?>
-										<a href="<?php echo admin_url('options-reading.php'); ?>" class="button"><?php esc_html_e('Setup front page displays', 'onepress'); ?></a>
+										<a href="<?php echo esc_url(admin_url('options-reading.php')); ?>" class="button"><?php esc_html_e('Setup front page displays', 'onepress'); ?></a>
 									<?php
 
 									}
 
 									if ($front_page > 0 && get_post_meta($front_page, '_wp_page_template', true) != 'template-frontpage.php') {
 									?>
-										<a href="<?php echo get_edit_post_link($front_page); ?>" class="button"><?php esc_html_e('Change homepage page template', 'onepress'); ?></a>
+										<a href="<?php echo esc_url(get_edit_post_link($front_page)); ?>" class="button"><?php esc_html_e('Change homepage page template', 'onepress'); ?></a>
 									<?php
 									}
 									?>
@@ -425,8 +425,8 @@ class Onepress_Dashboard
 						<?php } ?>
 						<?php do_action('onepress_more_required_details', $actions); ?>
 					<?php  } else { ?>
-						<h3><?php printf(__('Keep %s updated', 'onepress'), $theme_data->Name); ?></h3>
-						<p><?php _e('Hooray! There are no required actions for you right now.', 'onepress'); ?></p>
+						<h3><?php esc_html(sprintf(__('Keep %s updated', 'onepress'), $theme_data->Name)); ?></h3>
+						<p><?php esc_html_e('Hooray! There are no required actions for you right now.', 'onepress'); ?></p>
 					<?php } ?>
 				</div>
 			<?php } ?>
@@ -652,7 +652,7 @@ class Onepress_Dashboard
 							$plugin_name = 'famethemes-demo-importer';
 							$status = is_dir(WP_PLUGIN_DIR . '/' . $plugin_name);
 							$button_class = 'install-now button';
-							$button_txt = esc_html__('Install Now', 'onepress');
+							$button_txt = __('Install Now', 'onepress');
 							if (!$status) {
 								$install_url = wp_nonce_url(
 									add_query_arg(
@@ -673,7 +673,7 @@ class Onepress_Dashboard
 									'_wpnonce' => wp_create_nonce('activate-plugin_' . $plugin_name . '/' . $plugin_name . '.php'),
 								), network_admin_url('plugins.php'));
 								$button_class = 'activate-now button-primary';
-								$button_txt = esc_html__('Active Now', 'onepress');
+								$button_txt = __('Active Now', 'onepress');
 							}
 
 							$detail_link = add_query_arg(
@@ -699,7 +699,7 @@ class Onepress_Dashboard
 							);
 							echo '</p>';
 
-							echo '<p class="plugin-card-' . esc_attr($plugin_name) . '"><a href="' . esc_url($install_url) . '" data-slug="' . esc_attr($plugin_name) . '" class="' . esc_attr($button_class) . '">' . $button_txt . '</a></p>';
+							echo '<p class="plugin-card-' . esc_attr($plugin_name) . '"><a href="' . esc_url($install_url) . '" data-slug="' . esc_attr($plugin_name) . '" class="' . esc_attr($button_class) . '">' . esc_html($button_txt) . '</a></p>';
 
 							?>
 						</div>
@@ -741,7 +741,7 @@ class Onepress_Dashboard
 			}
 
 			if (!is_plugin_active($active_file_name)) {
-				$button_txt = esc_html__('Install Now', 'onepress');
+				$button_txt = __('Install Now', 'onepress');
 				if (!$status) {
 					$install_url = wp_nonce_url(
 						add_query_arg(
@@ -762,7 +762,7 @@ class Onepress_Dashboard
 						'_wpnonce' => wp_create_nonce('activate-plugin_' . $active_file_name),
 					), network_admin_url('plugins.php'));
 					$button_class = 'activate-now button-primary';
-					$button_txt = esc_html__('Active Now', 'onepress');
+					$button_txt = __('Active Now', 'onepress');
 				}
 
 				$detail_link = add_query_arg(
@@ -781,7 +781,7 @@ class Onepress_Dashboard
 				echo '<h4 class="rcp-name">';
 				echo esc_html($plugin_name);
 				echo '</h4>';
-				echo '<p class="action-btn plugin-card-' . esc_attr($plugin_slug) . '"><a href="' . esc_url($install_url) . '" data-slug="' . esc_attr($plugin_slug) . '" class="' . esc_attr($button_class) . '">' . $button_txt . '</a></p>';
+				echo '<p class="action-btn plugin-card-' . esc_attr($plugin_slug) . '"><a href="' . esc_url($install_url) . '" data-slug="' . esc_attr($plugin_slug) . '" class="' . esc_attr($button_class) . '">' . esc_html($button_txt) . '</a></p>';
 				echo '<a class="plugin-detail thickbox open-plugin-details-modal" href="' . esc_url($detail_link) . '">' . esc_html__('Details', 'onepress') . '</a>';
 				echo '</div>';
 			}
@@ -810,7 +810,7 @@ class Onepress_Dashboard
 		}
 
 		// Action for copy options
-		if (isset($_POST['copy_from']) && isset($_POST['copy_to'])) {
+		if (isset($_POST['copy_from']) && isset($_POST['copy_to'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$from = sanitize_text_field($_POST['copy_from']);
 			$to = sanitize_text_field($_POST['copy_to']);
 			if ($from && $to) {

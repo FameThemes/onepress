@@ -140,7 +140,7 @@ if ( ! function_exists( 'onepress_site_logo' ) ) {
 			$classes['desc'] = 'no-desc';
 		}
 
-		echo '<div class="site-brand-inner ' . esc_attr( join( ' ', $classes ) ) . '">' . $html . '</div>';
+		echo '<div class="site-brand-inner ' . esc_attr( join( ' ', $classes ) ) . '">' . wp_kses_post($html) . '</div>';
 	}
 }
 
@@ -225,7 +225,7 @@ if ( ! function_exists( 'onepress_site_header' ) ) {
 				?>
 				</div>
 				<div class="header-right-wrapper">
-					<a href="#0" id="nav-toggle"><?php _e( 'Menu', 'onepress' ); ?><span></span></a>
+					<a href="#0" id="nav-toggle"><?php esc_html_e( 'Menu', 'onepress' ); ?><span></span></a>
 					<nav id="site-navigation" class="main-navigation" role="navigation">
 						<ul class="onepress-menu">
 							<?php wp_nav_menu(
@@ -328,16 +328,18 @@ if ( ! function_exists( 'onepress_posted_on' ) ) {
 		);
 
 		$posted_on = sprintf(
+			/* translators: 1: time */
 			esc_html_x( 'Posted on %s', 'post date', 'onepress' ),
 			'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
 		);
 
 		$byline = sprintf(
+			/* translators: 1: author */
 			esc_html_x( 'by %s', 'post author', 'onepress' ),
 			'<span class="author vcard"><a  rel="author" class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
 		);
 
-		echo '<span class="posted-on">' . $posted_on . '</span><span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
+		echo '<span class="posted-on">' . $posted_on . '</span><span class="byline"> ' . $byline . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 }
@@ -355,13 +357,18 @@ if ( ! function_exists( 'onepress_entry_footer' ) ) {
 			/* translators: used between list items, there is a space after the comma */
 			$categories_list = get_the_category_list( esc_html__( ', ', 'onepress' ) );
 			if ( $categories_list && onepress_categorized_blog() ) {
-				printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', 'onepress' ) . '</span>', $categories_list ); // WPCS: XSS OK.
+				printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', 'onepress' ) . '</span>', $categories_list ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 			/* translators: used between list items, there is a space after the comma */
 			$tags_list = get_the_tag_list( '', esc_html__( ', ', 'onepress' ) );
 			if ( $tags_list ) {
-				printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', 'onepress' ) . '</span>', $tags_list ); // WPCS: XSS OK.
+				echo '<span class="tags-links">';
+				printf( 
+					/* translators: 1 : tag list */
+					esc_html__( 'Tagged %1$s', 'onepress' ), $tags_list  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				);
+				echo '</span>';
 			}
 		}
 
@@ -377,7 +384,7 @@ if ( ! function_exists( 'onepress_entry_footer' ) ) {
 
 		if ( $content ) {
 			echo '<footer class="entry-footer">';
-			echo $content; // WPCS: XSS OK.
+			echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo '</footer>';
 		}
 
@@ -449,7 +456,7 @@ if ( ! function_exists( 'onepress_comment' ) ) :
 				// Display trackbacks differently than normal comments.
 				?>
 	<li <?php comment_class(); ?> id="comment-<?php comment_ID(); ?>">
-		<p><?php _e( 'Pingback:', 'onepress' ); ?> <?php comment_author_link(); ?> <?php edit_comment_link( __( '(Edit)', 'onepress' ), '<span class="edit-link">', '</span>' ); ?></p>
+		<p><?php esc_html_e( 'Pingback:', 'onepress' ); ?> <?php comment_author_link(); ?> <?php edit_comment_link( esc_html__( '(Edit)', 'onepress' ), '<span class="edit-link">', '</span>' ); ?></p>
 				<?php
 				break;
 			default:
@@ -469,32 +476,32 @@ if ( ! function_exists( 'onepress_comment' ) ) :
 							'<cite><b class="fn">%1$s</b> %2$s</cite>',
 							get_comment_author_link(),
 							// If current post author is also comment author, make it known visually.
-							( $comment->user_id === $post->post_author ) ? '<span>' . __( 'Post author', 'onepress' ) . '</span>' : ''
+							( $comment->user_id === $post->post_author ) ? '<span>' . esc_html__( 'Post author', 'onepress' ) . '</span>' : ''
 						);
 						printf(
+							/* translators: 1: date, 2: time */
 							'<a class="comment-time" href="%1$s"><time datetime="%2$s">%3$s</time></a>',
 							esc_url( get_comment_link( $comment->comment_ID ) ),
-							get_comment_time( 'c' ),
-							/* translators: 1: date, 2: time */
-							get_comment_date()
+							esc_html(get_comment_time( 'c' )),
+							esc_html(get_comment_date())
 						);
 						comment_reply_link(
 							array_merge(
 								$args,
 								array(
-									'reply_text' => __( 'Reply', 'onepress' ),
+									'reply_text' => esc_html__( 'Reply', 'onepress' ),
 									'after' => '',
 									'depth' => $depth,
 									'max_depth' => $args['max_depth'],
 								)
 							)
 						);
-						edit_comment_link( __( 'Edit', 'onepress' ), '<span class="edit-link">', '</span>' );
+						edit_comment_link( esc_html__( 'Edit', 'onepress' ), '<span class="edit-link">', '</span>' );
 					?>
 				</header>
 
 					<?php if ( '0' == $comment->comment_approved ) : ?>
-					<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.', 'onepress' ); ?></p>
+					<p class="comment-awaiting-moderation"><?php esc_html_e( 'Your comment is awaiting moderation.', 'onepress' ); ?></p>
 				<?php endif; ?>
 
 				<div class="comment-content entry-content">
@@ -585,24 +592,24 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			ob_start();
 
 		if ( $logo_height > 0 ) {
-			echo ".site-logo-div img{ height: {$logo_height}px; width: auto; }";
+			echo ".site-logo-div img{ height: {$logo_height}px; width: auto; }"; // phpcs:ignore 	WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		if ( $logo_tran_height ) {
-			echo ".site-logo-div img.custom-logo-transparent{ height: {$logo_tran_height}px; width: auto; }";
+			echo ".site-logo-div img.custom-logo-transparent{ height: {$logo_tran_height}px; width: auto; }"; // phpcs:ignore 	WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 			$t_site_name_color = sanitize_hex_color( get_theme_mod( 'onepress_transparent_site_title_c' ) );
 		if ( $t_site_name_color ) {
-			echo "#page .is-transparent .site-header.no-scroll .site-title, #page .is-transparent .site-header.no-scroll .site-title .site-text-logo { color: {$t_site_name_color}; }";
+			echo "#page .is-transparent .site-header.no-scroll .site-title, #page .is-transparent .site-header.no-scroll .site-title .site-text-logo { color: {$t_site_name_color}; }"; // phpcs:ignore 	WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 			$t_tagline_color = sanitize_hex_color( get_theme_mod( 'onepress_transparent_tag_title_c' ) );
 		if ( $t_tagline_color ) {
-			echo "#page .is-transparent .site-header.no-scroll .site-description { color: {$t_tagline_color}; }";
+			echo "#page .is-transparent .site-header.no-scroll .site-description { color: {$t_tagline_color}; }"; // phpcs:ignore 	WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		
 		if ( $submenu_width ) {
-			echo ".onepress-menu ul {max-width: {$submenu_width}px;}";
+			echo ".onepress-menu ul {max-width: {$submenu_width}px;}"; // phpcs:ignore 	WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		?>
@@ -615,18 +622,18 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				left: 0px;
 				width: 100%;
 				height: 100%;
-				background-color: <?php echo $hero_bg_color; ?>;
+				background-color: <?php echo $hero_bg_color; // phpcs:ignore 	WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				display: block;
 				content: "";
 			}
 			#parallax-hero .jarallax-container .parallax-bg:before{
-				background-color: <?php echo $hero_bg_color; ?>;
+				background-color: <?php echo $hero_bg_color; // phpcs:ignore 	WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 			}
 			.body-desktop .parallax-hero .hero-slideshow-wrapper:after {
 				display: none !important;
 			}
 			#parallax-hero > .parallax-bg::before {
-				background-color: <?php echo $hero_bg_color; ?>;
+				background-color: <?php echo $hero_bg_color; // phpcs:ignore 	WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				opacity: 1;
 			}
 			.body-desktop .parallax-hero .hero-slideshow-wrapper:after {
@@ -646,7 +653,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				.btn-theme-primary-outline, .sidebar .widget a:hover, .section-services .service-item .service-image i, .counter_item .counter__number,
 				.team-member .member-thumb .member-profile a:hover, .icon-background-default
 				{
-					color: #<?php echo $primary; ?>;
+					color: #<?php echo $primary;  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				input[type="reset"], input[type="submit"], input[type="submit"], input[type="reset"]:hover, input[type="submit"]:hover, input[type="submit"]:hover .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .section-testimonials .card-theme-primary,
 				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt,
@@ -657,11 +664,11 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				.nav-links .page-numbers:hover, 
 				.nav-links .page-numbers.current
 				{
-					background: #<?php echo $primary; ?>;
+					background: #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				.btn-theme-primary-outline, .btn-theme-primary-outline:hover, .pricing__item:hover, .section-testimonials .card-theme-primary, .entry-content blockquote
 				{
-					border-color : #<?php echo $primary; ?>;
+					border-color : #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				<?php
 				if ( class_exists( 'WooCommerce' ) ) { ?>
@@ -669,13 +676,13 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 					.woocommerce a.button.alt,
 					.woocommerce button.button.alt,
 					.woocommerce input.button.alt {
-						background-color: #<?php echo $primary; ?>;
+						background-color: #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 					}
 					.woocommerce #respond input#submit.alt:hover,
 					.woocommerce a.button.alt:hover,
 					.woocommerce button.button.alt:hover,
 					.woocommerce input.button.alt:hover {
-						background-color: #<?php echo $primary; ?>;
+						background-color: #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 					}
 				<?php }
 			} // End $primary
@@ -687,43 +694,43 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			 */
 			$secondary_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_secondary_color' ) );
 			if ( '' != $secondary_color ) {
-				echo ".feature-item:hover .icon-background-default{ color: #{$secondary_color}; }";
+				echo ".feature-item:hover .icon-background-default{ color: #{$secondary_color}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 			$menu_padding = get_theme_mod( 'onepress_menu_item_padding' );
 			if ( $menu_padding ) {
 				$menu_padding = absint( $menu_padding );
-				echo ".onepress-menu a{ padding-left: {$menu_padding}px; padding-right: {$menu_padding}px;  }";
+				echo ".onepress-menu a{ padding-left: {$menu_padding}px; padding-right: {$menu_padding}px;  }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 			$cover_align = sanitize_text_field( get_theme_mod( 'onepress_page_cover_align' ) );
 			switch ( $cover_align ) {
 				case 'left':
 				case 'right':
-					echo ".page-header.page--cover{ text-align: {$cover_align}; }";
+					echo ".page-header.page--cover{ text-align: {$cover_align}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					break;
 			}
 
 			$normal_title_align = sanitize_text_field( get_theme_mod( 'onepress_page_normal_align' ) );
 			if ( '' != $normal_title_align && in_array( $normal_title_align, array( 'left', 'right', 'center' ) ) ) {
-				echo ".page-header:not(.page--cover){ text-align: {$normal_title_align}; }";
+				echo ".page-header:not(.page--cover){ text-align: {$normal_title_align}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 			$cover_color = onepress_sanitize_color_alpha( get_theme_mod( 'onepress_page_cover_color' ) );
 			if ( $cover_color ) {
-				echo " .page-header.page--cover .entry-title { color: {$cover_color}; } .page-header .entry-title { color: {$cover_color}; }";
+				echo " .page-header.page--cover .entry-title { color: {$cover_color}; } .page-header .entry-title { color: {$cover_color}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 			$cover_overlay = onepress_sanitize_color_alpha( get_theme_mod( 'onepress_page_cover_overlay' ) );
 			if ( $cover_overlay ) {
-				echo ".page-header.page--cover:before { background: {$cover_overlay}; } .page-header:before { background: {$cover_overlay}; }";
+				echo ".page-header.page--cover:before { background: {$cover_overlay}; } .page-header:before { background: {$cover_overlay}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 			$cover_pd_top = absint( get_theme_mod( 'onepress_page_cover_pd_top' ) );
 			if ( $cover_pd_top > 0 ) {
-				echo ".page-header.page--cover { padding-top: {$cover_pd_top}%; } .page-header { padding-top: {$cover_pd_top}%; }";
+				echo ".page-header.page--cover { padding-top: {$cover_pd_top}%; } .page-header { padding-top: {$cover_pd_top}%; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 			$cover_pd_bottom = absint( get_theme_mod( 'onepress_page_cover_pd_bottom' ) );
 			if ( $cover_pd_bottom > 0 ) {
-				echo ".page-header.page--cover { padding-bottom: {$cover_pd_bottom}%; } .page-header { padding-bottom: {$cover_pd_bottom}%; }";
+				echo ".page-header.page--cover { padding-bottom: {$cover_pd_bottom}%; } .page-header { padding-bottom: {$cover_pd_bottom}%; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 			/**
@@ -733,7 +740,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			if ( $header_bg_color ) {
 				?>
 				.site-header, .is-transparent .site-header.header-fixed {
-					background: #<?php echo $header_bg_color; ?>;
+					background: #<?php echo $header_bg_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 					border-bottom: 0px none;
 				}
 				<?php
@@ -746,7 +753,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			if ( $menu_color ) {
 				?>
 				.onepress-menu > li > a {
-					color: #<?php echo $menu_color; ?>;
+					color: #<?php echo $menu_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				<?php
 			} // END $menu_color
@@ -759,7 +766,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				?>
 				.onepress-menu > li > a:hover,
 				.onepress-menu > li.onepress-current-item > a{
-					color: #<?php echo $menu_hover_color; ?>;
+					color: #<?php echo $menu_hover_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 					-webkit-transition: all 0.5s ease-in-out;
 					-moz-transition: all 0.5s ease-in-out;
 					-o-transition: all 0.5s ease-in-out;
@@ -781,7 +788,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 					.onepress-menu > li > a:hover,
 					.onepress-menu > li.onepress-current-item > a
 					{
-						background: #<?php echo $menu_hover_bg; ?>;
+						background: #<?php echo $menu_hover_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 						-webkit-transition: all 0.5s ease-in-out;
 						-moz-transition: all 0.5s ease-in-out;
 						-o-transition: all 0.5s ease-in-out;
@@ -799,7 +806,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 				?>
 				#nav-toggle span, #nav-toggle span::before, #nav-toggle span::after,
 				#nav-toggle.nav-is-visible span::before, #nav-toggle.nav-is-visible span::after {
-					background: #<?php echo $menu_button_color; ?>;
+					background: #<?php echo $menu_button_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				<?php
 			}
@@ -811,27 +818,28 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			if ( $onepress_logo_text_color ) {
 				?>
 				#page .site-branding .site-title, #page .site-branding .site-text-logo {
-					color: #<?php echo $onepress_logo_text_color; ?>;
+					color: #<?php echo $onepress_logo_text_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				<?php
 			}
 			$onepress_site_tagline_color = sanitize_hex_color_no_hash( get_theme_mod( 'onepress_tagline_text_color' ) );
 			if ( $onepress_site_tagline_color ) {
-				echo "#page .site-branding .site-description { color: #{$onepress_site_tagline_color};  } ";
+				echo "#page .site-branding .site-description { color: #{$onepress_site_tagline_color};  } "; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 			$r_text = sanitize_hex_color( get_theme_mod( 'onepress_hcl1_r_color' ) );
-			$r_bg_text = sanitize_hex_color( get_theme_mod( 'onepress_hcl1_r_bg_color' ) );         if ( $r_text ) {
+			$r_bg_text = sanitize_hex_color( get_theme_mod( 'onepress_hcl1_r_bg_color' ) );        
+			if ( $r_text ) {
 				?>
 				.hero-content-style1 .morphext {
-					color: <?php echo $r_text; ?>;
+					color: <?php echo $r_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				<?php
 			}
 			if ( $r_bg_text ) {
 				?>
 				.hero-content-style1 .morphext {
-					background: <?php echo $r_bg_text; ?>;
+					background: <?php echo $r_bg_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 					padding: 0px 20px;
 					text-shadow: none;
 					border-radius: 3px;
@@ -844,16 +852,16 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			if ( $onepress_footer_bg ) {
 				?>
 				.site-footer {
-					background-color: #<?php echo $onepress_footer_bg; ?>;
+					background-color: #<?php echo $onepress_footer_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				.site-footer .footer-connect .follow-heading, .site-footer .footer-social a {
-					color: <?php echo ( $footer_top_text ) ? $footer_top_text : 'rgba(255, 255, 255, 0.9)'; ?>;
+					color: <?php echo ( $footer_top_text ) ? $footer_top_text : 'rgba(255, 255, 255, 0.9)'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				<?php
 			} elseif ( $footer_top_text ) {
 				?>
 				.site-footer .footer-connect .follow-heading, .site-footer .footer-social a {
-					color: <?php echo $footer_top_text; ?>;
+					color: <?php echo $footer_top_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 				}
 				<?php
 			}
@@ -865,15 +873,15 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			if ( $onepress_footer_info_bg ) {
 				?>
 				.site-footer .site-info, .site-footer .btt a{
-					background-color: #<?php echo $onepress_footer_info_bg; ?>;
+					background-color: #<?php echo $onepress_footer_info_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>;
 
 				}
 				<?php if ( $c_color ) { ?>
 					.site-footer .site-info {
-						color: <?php echo $c_color; ?>;
+						color: <?php echo $c_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>;
 					}
 					.site-footer .btt a, .site-footer .site-info a {
-						color: <?php echo $c_color; ?>;
+						color: <?php echo $c_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>;
 					}
 					<?php
 } else {
@@ -889,7 +897,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			} elseif ( $c_color ) {
 				?>
 				.site-footer .site-info {
-					color: <?php echo $c_color; ?>;
+					color: <?php echo $c_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>;
 				}
 
 				<?php
@@ -897,14 +905,14 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			if ( $c_link_color ) {
 				?>
 				.site-footer .btt a, .site-footer .site-info a {
-					color: <?php echo $c_link_color; ?>;
+					color: <?php echo $c_link_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>;
 				}
 				<?php
 			}
 			if ( $c_link_hover_color ) {
 				?>
 				.site-footer .btt a:hover, .site-footer .site-info a:hover {
-					color: <?php echo $c_link_hover_color; ?>;
+					color: <?php echo $c_link_hover_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>;
 				}
 				<?php
 			}
@@ -919,52 +927,52 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			#footer-widgets {
 				<?php
 				if ( $footer_widgets_color ) {
-					echo "color: {$footer_widgets_color};";
+					echo "color: {$footer_widgets_color};"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 				}
 				if ( $footer_widgets_bg_color ) {
-					echo "background-color: {$footer_widgets_bg_color};";
+					echo "background-color: {$footer_widgets_bg_color};"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 				}
 				?>
 			}
 			<?php
 			if ( $footer_widgets_title_color ) {
-				echo "#footer-widgets .widget-title{ color: {$footer_widgets_title_color}; }";
+				echo "#footer-widgets .widget-title{ color: {$footer_widgets_title_color}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 			}
 
 			if ( $footer_widgets_link_color ) {
-				echo "#footer-widgets .sidebar .widget a{ color: {$footer_widgets_link_color}; }";
+				echo "#footer-widgets .sidebar .widget a{ color: {$footer_widgets_link_color}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 			}
 
 			if ( $footer_widgets_link_hover_color ) {
-				echo "#footer-widgets .sidebar .widget a:hover{ color: {$footer_widgets_link_hover_color}; }";
+				echo "#footer-widgets .sidebar .widget a:hover{ color: {$footer_widgets_link_hover_color}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 			}
 
 			$gallery_spacing = absint( get_theme_mod( 'onepress_g_spacing', 20 ) );
 
 			?>
 			.gallery-carousel .g-item{
-				padding: 0px <?php echo intval( $gallery_spacing / 2 ); ?>px;
+				padding: 0px <?php echo intval( $gallery_spacing / 2 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>px;
 			}
 			.gallery-carousel-wrap {
-				margin-left: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
-				margin-right: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+				margin-left: -<?php echo intval( $gallery_spacing / 2 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>px;
+				margin-right: -<?php echo intval( $gallery_spacing / 2 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>px;
 			}
 			.gallery-grid .g-item, .gallery-masonry .g-item .inner {
-				padding: <?php echo intval( $gallery_spacing / 2 ); ?>px;
+				padding: <?php echo intval( $gallery_spacing / 2 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>px;
 			}
 			.gallery-grid-wrap, .gallery-masonry-wrap{
-				margin-left: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
-				margin-right: -<?php echo intval( $gallery_spacing / 2 ); ?>px;
+				margin-left: -<?php echo intval( $gallery_spacing / 2 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>px;
+				margin-right: -<?php echo intval( $gallery_spacing / 2 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>px;
 			}
 			.gallery-justified-wrap {
-				margin-left: -<?php echo intval( $gallery_spacing ); ?>px;
-				margin-right: -<?php echo intval( $gallery_spacing ); ?>px;
+				margin-left: -<?php echo intval( $gallery_spacing ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>px;
+				margin-right: -<?php echo intval( $gallery_spacing );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>px;
 			}
 		<?php
 		$content_width = absint( get_theme_mod( 'single_layout_content_width' ) );
 		if ( $content_width > 0 ) {
 			$value = $content_width . 'px';
-			echo '.single-post .site-main, .single-post .entry-content > * { max-width: ' . $value . '; }';
+			echo '.single-post .site-main, .single-post .entry-content > * { max-width: ' . $value . '; }'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 		}
 
 		$css = ob_get_clean();
@@ -999,7 +1007,7 @@ if ( ! function_exists( 'onepress_custom_inline_style' ) ) {
 			}
 		}
 
-		return $css;
+		return wp_kses($css, array());
 	}
 }
 
@@ -1491,7 +1499,7 @@ function onepress_gallery_generate( $echo = true ) {
 	$data = onepress_get_section_gallery_data();
 	if ( $data && is_string( $data ) ) {
 		if ( $echo ) {
-			echo $data;
+			echo wp_kses_post($data);
 			return;
 		} else {
 			return $data;
@@ -1563,7 +1571,7 @@ function onepress_gallery_generate( $echo = true ) {
 	}
 
 	if ( $echo ) {
-		echo $div;
+		echo wp_kses_post($div);
 	} else {
 		return $div;
 	}
@@ -1580,9 +1588,13 @@ if ( ! function_exists( 'onepress_footer_site_info' ) ) {
 	 */
 	function onepress_footer_site_info() {
 		?>
-		<?php printf( esc_html__( 'Copyright %1$s %2$s %3$s', 'onepress' ), '&copy;', esc_attr( date( 'Y' ) ), esc_attr( get_bloginfo() ) ); ?>
+		<?php printf(
+		
+			esc_html__( 'Copyright %1$s %2$s %3$s', 'onepress' ), '&copy;', esc_attr( gmdate( 'Y' ) ), esc_attr( get_bloginfo() ) ); ?>
 		<span class="sep"> &ndash; </span>
-		<?php printf( esc_html__( '%1$s theme by %2$s', 'onepress' ), '<a href="' . esc_url( 'https://www.famethemes.com/themes/onepress', 'onepress' ) . '">OnePress</a>', 'FameThemes' ); ?>
+		<?php printf( 
+				/* translators: 1: themename, 2: author */
+			esc_html__( '%1$s theme by %2$s', 'onepress' ), '<a href="' . esc_url( 'https://www.famethemes.com/themes/onepress', 'onepress' ) . '">OnePress</a>', 'FameThemes' ); ?>
 		<?php
 	}
 }
@@ -1793,9 +1805,9 @@ if ( ! function_exists( 'onepress_display_page_title' ) ) {
 				<div class="container">
 					<?php
 					// WPCS: XSS OK.
-					echo '<' . $el . ' class="entry-title">' . $title . '</' . $el . '>';
+					echo '<' . $el . ' class="entry-title">' . wp_kses($title, onepress_allowed_tags() ). '</' . $el . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped	
 					if ( $excerpt ) {
-                        echo '<div class="entry-tagline">' . $excerpt . '</div>';
+            echo '<div class="entry-tagline">'. wp_kses_post($excerpt). '</div>';
 					}
 					?>
 				</div>
@@ -1852,15 +1864,15 @@ if ( ! function_exists( 'onepress_subscribe_form' ) ) {
 	 * @since 2.0.0
 	 */
 	function onepress_subscribe_form() {
-		$onepress_newsletter_title = wp_kses_post( get_theme_mod( 'onepress_newsletter_title', __( 'Join our Newsletter', 'onepress' ) ) );
-		$onepress_newsletter_mailchimp = wp_kses_post( get_theme_mod( 'onepress_newsletter_mailchimp' ) );
+		$onepress_newsletter_title =  get_theme_mod( 'onepress_newsletter_title', __( 'Join our Newsletter', 'onepress' ) );
+		$onepress_newsletter_mailchimp = get_theme_mod( 'onepress_newsletter_mailchimp' );
 		?>
 		<div class="footer-subscribe">
 			<?php if ( $onepress_newsletter_title != '' ) {
-				echo '<h5 class="follow-heading">' . $onepress_newsletter_title . '</h5>';} ?>
+				echo '<h5 class="follow-heading">' . wp_kses($onepress_newsletter_title, onepress_allowed_tags()) . '</h5>';} ?>
 			<form novalidate="" target="_blank" class="" name="mc-embedded-subscribe-form" id="mc-embedded-subscribe-form" method="post"
 				  action="<?php if ( $onepress_newsletter_mailchimp != '' ) {
-						echo $onepress_newsletter_mailchimp;
+						echo wp_kses_post( $onepress_newsletter_mailchimp );
 }; ?>">
 				<input type="text" placeholder="<?php esc_attr_e( 'Enter your e-mail address', 'onepress' ); ?>" id="mce-EMAIL" class="subs_input" name="EMAIL" value="">
 				<input type="submit" class="subs-button" value="<?php esc_attr_e( 'Subscribe', 'onepress' ); ?>" name="subscribe">
@@ -1871,12 +1883,12 @@ if ( ! function_exists( 'onepress_subscribe_form' ) ) {
 }
 if ( ! function_exists( 'onepress_footer_social_icons' ) ) {
 	function onepress_footer_social_icons() {
-		$onepress_social_footer_title = wp_kses_post( get_theme_mod( 'onepress_social_footer_title', __( 'Keep Updated', 'onepress' ) ) );
+		$onepress_social_footer_title = get_theme_mod( 'onepress_social_footer_title', __( 'Keep Updated', 'onepress' ) );
 		?>
 		<div class="footer-social">
 			<?php
 			if ( $onepress_social_footer_title != '' ) {
-				echo '<h5 class="follow-heading">' . $onepress_social_footer_title . '</h5>';
+				echo '<h5 class="follow-heading">' . wp_kses($onepress_social_footer_title, onepress_allowed_tags() ) . '</h5>';
 			}
 
 			$socials = onepress_get_social_profiles();
@@ -1888,7 +1900,7 @@ if ( ! function_exists( 'onepress_footer_social_icons' ) ) {
 			 */
 			echo '<div class="footer-social-icons">';
 			if ( $socials ) {
-				echo $socials;
+				echo $socials; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			} else {
 				/**
 				 * Deprecated

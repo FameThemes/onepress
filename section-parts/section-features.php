@@ -21,7 +21,7 @@ if ( !$disable && !empty( $data ) ) {
             <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
             <?php if ($title != '') echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
             <?php if ( $desc ) {
-                echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
+                echo '<div class="section-desc">' . wp_kses_post(apply_filters( 'onepress_the_content', $desc  ) ). '</div>';
             } ?>
         </div>
         <?php } ?>
@@ -54,11 +54,11 @@ if ( !$disable && !empty( $data ) ) {
                 <div class="feature-item col-lg-<?php echo esc_attr( $layout ); ?> col-sm-6 wow slideInUp">
                     <div class="feature-media">
                         <?php if ( $f['link'] ) { ?><a title="<?php echo esc_attr( $f['title'] ) ?>" href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?>
-                        <?php echo $media; ?>
+                        <?php echo wp_kses_post($media); ?>
                         <?php if ( $f['link'] )  { ?></a><?php } ?>
                     </div>
                     <h4><?php if ( $f['link'] ) { ?><a title="<?php echo esc_attr( $f['title'] ) ?>" href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?><?php echo esc_html( $f['title'] ); ?><?php if ( $f['link'] )  { ?></a><?php } ?></h4>
-                    <div class="feature-item-content"><?php echo apply_filters( 'the_content', $f['desc'] ); ?></div>
+                    <div class="feature-item-content"><?php echo wp_kses_post(apply_filters( 'the_content', $f['desc'] )); ?></div>
                 </div>
             <?php
             }// end loop featues

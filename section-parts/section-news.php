@@ -33,7 +33,7 @@ if (!$disable) :
 						echo '<h2 class="section-title">' . esc_html($title) . '</h2>';
 					} ?>
 					<?php if ($desc) {
-						echo '<div class="section-desc">' . apply_filters('onepress_the_content', wp_kses_post($desc)) . '</div>';
+						echo '<div class="section-desc">' . wp_kses_post(apply_filters('onepress_the_content', $desc)) . '</div>';
 					} ?>
 				</div>
 			<?php } ?>

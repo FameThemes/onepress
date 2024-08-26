@@ -23,7 +23,7 @@ if ( get_theme_mod( 'onepress_hide_thumnail_if_not_exists', false ) ) {
 			if ( has_post_thumbnail() ) {
 				the_post_thumbnail( 'onepress-blog-small' );
 			} else {
-				echo '<img alt="" src="' . get_template_directory_uri() . '/assets/images/placholder2.png" width="300" height="150">';
+				echo '<img alt="" src="' . esc_url(get_template_directory_uri() . '/assets/images/placholder2.png') .'" width="300" height="150">';
 			}
 			?>
 		</a>

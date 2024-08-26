@@ -12,6 +12,25 @@
 
 define('ONEPRESS_THEME_PATH', dirname(__FILE__));
 
+function onepress_allowed_tags()
+{
+	$allowed_tags = array(
+		'div' => array(),
+		'span' => array(),
+		'p' => array(),
+		'b' => array(),
+		'i' => array(),
+		'em' => array(),
+		'a' => array(
+			'href'  => true,
+			'title' => true,
+			'class' => true,
+		),
+	);
+	return $allowed_tags;
+}
+
+
 if (!function_exists('onepress_setup')) :
 	/**
 	 * Sets up theme defaults and registers support for various WordPress features.
@@ -232,7 +251,10 @@ function onepress_widgets_init()
 	for ($i = 1; $i <= 4; $i++) {
 		register_sidebar(
 			array(
-				'name'          => sprintf(__('Footer %s', 'onepress'), $i),
+				'name'          => esc_html(sprintf(
+					 /* translators: 1: widget number */
+					__('Footer %s', 'onepress'), $i
+				)),
 				'id'            => 'footer-' . $i,
 				'description'   => '',
 				'before_widget' => '<aside id="%1$s" class="footer-widget widget %2$s">',
@@ -573,7 +595,7 @@ function onepress_the_excerpt($type = false, $length = false)
 			$excerpt = onepress_trim_excerpt($text, $length);
 			if ($excerpt) {
 				// WPCS: XSS OK.
-				echo apply_filters('the_excerpt', $excerpt);
+				echo wp_kses_post(apply_filters('the_excerpt', $excerpt));
 			} else {
 				the_excerpt();
 			}

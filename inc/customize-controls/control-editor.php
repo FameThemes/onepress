@@ -29,7 +29,7 @@ class OnePress_Editor_Custom_Control extends WP_Customize_Control
 				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
 			</label>
 			<textarea class="wp-js-editor-textarea large-text" data-editor-mod="<?php echo esc_attr( $this->mod ); ?>" <?php $this->link(); ?>><?php echo esc_textarea( $this->value() ); ?></textarea>
-			<p class="description"><?php echo $this->description ?></p>
+			<p class="description"><?php echo wp_kses_post($this->description) ?></p>
 		</div>
 		<?php
 	}

@@ -8,7 +8,7 @@ class One_Press_Textarea_Custom_Control extends WP_Customize_Control
 			<textarea class="large-text" cols="20" rows="5" <?php $this->link(); ?>>
 				<?php echo esc_textarea( $this->value() ); ?>
 			</textarea>
-			<p class="description"><?php echo $this->description ?></p>
+			<p class="description"><?php echo wp_kses_post($this->description) ?></p>
 		</label>
 		<?php
 	}

@@ -36,7 +36,7 @@ if ($onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_address
 							echo '<h2 class="section-title">' . esc_html($onepress_contact_title) . '</h2>';
 						} ?>
 						<?php if ($desc) {
-							echo '<div class="section-desc">' . apply_filters('onepress_the_content', $desc) . '</div>';
+							echo '<div class="section-desc">' . wp_kses_post(apply_filters('onepress_the_content', $desc)) . '</div>';
 						} ?>
 					</div>
 				<?php } ?>
@@ -59,7 +59,7 @@ if ($onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_address
 					<div class="col-sm-6 wow slideInUp">
 						<?php
 						if ($onepress_contact_text != '') {
-							echo apply_filters('onepress_the_content', wp_kses_post(trim($onepress_contact_text)));
+							echo wp_kses_post(apply_filters('onepress_the_content', trim($onepress_contact_text)));
 						}
 						?>
 						<br><br>
@@ -107,7 +107,7 @@ if ($onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_address
 							?>
 									<div class="address-contact">
 										<span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
-										<div class="address-content"><a href="mailto:<?php echo antispambot($email); ?>"><?php echo antispambot($email); ?></a></div>
+										<div class="address-content"><a href="mailto:<?php echo esc_attr(antispambot($email)); ?>"><?php echo esc_html(antispambot($email)); ?></a></div>
 									</div>
 							<?php }
 							endif; ?>

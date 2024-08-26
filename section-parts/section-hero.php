@@ -54,7 +54,7 @@ do_action( 'onepress_before_section_part', 'hero', $hook_args );
 <?php if ( ! $disable && ! empty( $images ) ) : ?>
 	<section  id="<?php if ( $id != '' ) {
 		echo esc_attr( $id ); } ?>" <?php if ( ! empty( $images ) && ! $is_parallax ) {
-	?> data-images="<?php echo esc_attr( json_encode( $images ) ); ?>"<?php } ?>
+	?> data-images="<?php echo esc_attr( wp_json_encode( $images, JSON_NUMERIC_CHECK ) ); ?>"<?php } ?>
 			 class="hero-slideshow-wrapper <?php echo ( $fullscreen == 1 ) ? 'hero-slideshow-fullscreen' : 'hero-slideshow-normal'; ?>">
 
 		<?php if ( ! get_theme_mod( 'onepress_hero_disable_preload', false ) ) { ?>
@@ -71,11 +71,11 @@ do_action( 'onepress_before_section_part', 'hero', $hook_args );
 				$hcl2_content = get_theme_mod( 'onepress_hcl2_content', wp_kses_post( '<h1>Business Website' . "\n" . 'Made Simple.</h1>' . "\n" . 'We provide creative solutions to clients around the world,' . "\n" . 'creating things that get attention and meaningful.' . "\n\n" . '<a class="btn btn-secondary-outline btn-lg" href="#">Get Started</a>' ) );
 				$hcl2_image   = get_theme_mod( 'onepress_hcl2_image', get_template_directory_uri() . '/assets/images/onepress_responsive.png' );
 				?>
-				<div class="container"<?php echo $hero_content_style; ?>>
+				<div class="container"<?php echo esc_attr($hero_content_style); ?>>
 					<div class="row hero__content hero-content-style<?php echo esc_attr( $layout ); ?>">
 						<div class="col-md-12 col-lg-6">
 							<?php if ( $hcl2_content ) {
-								echo '<div class="hcl2-content">' . apply_filters( 'the_content', do_shortcode( wp_kses_post( $hcl2_content ) ) ) . '</div>';
+								echo '<div class="hcl2-content">' . wp_kses_post(apply_filters( 'the_content', do_shortcode( $hcl2_content ) ) ) . '</div>';
 }; ?>
 						</div>
 						<div class="col-md-12 col-lg-6">
@@ -104,16 +104,18 @@ do_action( 'onepress_before_section_part', 'hero', $hook_args );
 				$target_2 = ( $btn_2_target == 1 ) ? 'target="_blank"' : '';
 
 				?>
-				<div class="container"<?php echo $hero_content_style; ?>>
+				<div class="container"<?php echo esc_attr($hero_content_style); ?>>
 					<div class="hero__content hero-content-style<?php echo esc_attr( $layout ); ?>">
 						<?php if ( $hcl1_largetext != '' ) {
 							echo '<h2 class="hero-large-text">' . wp_kses_post( $hcl1_largetext ) . '</h2>';} ?>
 						<?php if ( $hcl1_smalltext != '' ) {
 							echo '<div class="hero-small-text">' . apply_filters( 'onepress_the_content', wp_kses_post( $hcl1_smalltext ) ) . '</div>';} ?>
 						<?php if ( $hcl1_btn1_text != '' && $hcl1_btn1_link != '' ) {
-							echo '<a ' . $target_1 . ' href="' . esc_url( $hcl1_btn1_link ) . '" class="btn ' . esc_attr( $btn_1_style ) . ' btn-lg">' . wp_kses_post( $hcl1_btn1_text ) . '</a>';} ?>
+							echo '<a ' . $target_1 . // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							' href="' . esc_url( $hcl1_btn1_link ) . '" class="btn ' . esc_attr( $btn_1_style ) . ' btn-lg">' . wp_kses( $hcl1_btn1_text, onepress_allowed_tags() ) . '</a>';} ?>
 						<?php if ( $hcl1_btn2_text != '' && $hcl1_btn2_link != '' ) {
-							echo '<a ' . $target_2 . ' href="' . esc_url( $hcl1_btn2_link ) . '" class="btn ' . esc_attr( $btn_2_style ) . ' btn-lg">' . wp_kses_post( $hcl1_btn2_text ) . '</a>';} ?>
+							echo '<a ' . $target_2 .  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							' href="' . esc_url( $hcl1_btn2_link ) . '" class="btn ' . esc_attr( $btn_2_style ) . ' btn-lg">' . wp_kses( $hcl1_btn2_text, onepress_allowed_tags()  ) . '</a>';} ?>
 					</div>
 				</div>
 				<?php

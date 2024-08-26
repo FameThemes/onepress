@@ -26,7 +26,7 @@ if ( onepress_is_selective_refresh() ) {
 					<?php if ( $title != '' ) {
 						echo '<h2 class="section-title">' . esc_html( $title ) . '</h2>';} ?>
 					<?php if ( $desc ) {
-						echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>';
+						echo '<div class="section-desc">' .wp_kses_post( apply_filters( 'onepress_the_content',  $desc ) ) . '</div>';
 } ?>
 				</div>
 				<?php } ?>
@@ -94,7 +94,7 @@ if ( onepress_is_selective_refresh() ) {
 									<?php
 									if ( ! empty( $settings['enable_link'] ) ) {
 										?>
-										<a class="service-link" href="<?php the_permalink(); ?>"><span class="screen-reader-text"><?php echo get_the_title( $post ); ?></span></a>
+										<a class="service-link" href="<?php the_permalink(); ?>"><span class="screen-reader-text"><?php echo wp_kses( get_the_title( $post ), onepress_allowed_tags() ); ?></span></a>
 										<?php
 									}
 									?>
@@ -106,10 +106,10 @@ if ( onepress_is_selective_refresh() ) {
 										</div>
 									<?php } ?>
 									<?php if ( $media != '' ) {
-										echo $media;
+										echo $media; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } ?>
 									<div class="service-content">
-										<h4 class="service-title"><?php echo get_the_title( $post ); ?></h4>
+										<h4 class="service-title"><?php echo wp_kses(get_the_title( $post ), onepress_allowed_tags() ); ?></h4>
 										<?php if ( $content_source == 'content' ) {
 											the_content();
 } else {

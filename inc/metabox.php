@@ -135,35 +135,35 @@ class OnePress_MetaBox {
 		?>
 		<p>
 			<label>
-				<input type="checkbox" name="onepress_page_settings[hide_header]" <?php checked( $values['hide_header'], 1 ); ?> value="1"> <?php _e( 'Hide header.', 'onepress' ); ?>
+				<input type="checkbox" name="onepress_page_settings[hide_header]" <?php checked( $values['hide_header'], 1 ); ?> value="1"> <?php esc_html_e( 'Hide header.', 'onepress' ); ?>
 			</label>
 		</p>
 		<p>
 			<label>
-				<input type="checkbox" name="onepress_page_settings[hide_page_title]" <?php checked( $values['hide_page_title'], 1 ); ?> value="1"> <?php _e( 'Hide page title area.', 'onepress' ); ?>
-			</label>
-		</p>
-
-		<p>
-			<label>
-				<input type="checkbox" name="onepress_page_settings[cover]" <?php checked( $values['cover'], 1 ); ?> value="1"> <?php _e( 'Display featured image as header cover.', 'onepress' ); ?>
+				<input type="checkbox" name="onepress_page_settings[hide_page_title]" <?php checked( $values['hide_page_title'], 1 ); ?> value="1"> <?php esc_html_e( 'Hide page title area.', 'onepress' ); ?>
 			</label>
 		</p>
 
 		<p>
 			<label>
-				<input type="checkbox" name="onepress_page_settings[show_excerpt]" <?php checked( $values['show_excerpt'], 1 ); ?> value="1"> <?php _e( 'Display page excerpt as header cover description.', 'onepress' ); ?>
+				<input type="checkbox" name="onepress_page_settings[cover]" <?php checked( $values['cover'], 1 ); ?> value="1"> <?php esc_html_e( 'Display featured image as header cover.', 'onepress' ); ?>
 			</label>
 		</p>
 
 		<p>
 			<label>
-				<input type="checkbox" name="onepress_page_settings[hide_breadcrumb]" <?php checked( $values['hide_breadcrumb'], 1 ); ?> value="1"> <?php _e( 'Hide breadcrumb.', 'onepress' ); ?>
+				<input type="checkbox" name="onepress_page_settings[show_excerpt]" <?php checked( $values['show_excerpt'], 1 ); ?> value="1"> <?php esc_html_e( 'Display page excerpt as header cover description.', 'onepress' ); ?>
+			</label>
+		</p>
+
+		<p>
+			<label>
+				<input type="checkbox" name="onepress_page_settings[hide_breadcrumb]" <?php checked( $values['hide_breadcrumb'], 1 ); ?> value="1"> <?php esc_html_e( 'Hide breadcrumb.', 'onepress' ); ?>
 			</label>
 		</p>
 		<p>
 			<label>
-				<input type="checkbox" name="onepress_page_settings[hide_footer]" <?php checked( $values['hide_footer'], 1 ); ?> value="1"> <?php _e( 'Hide footer.', 'onepress' ); ?>
+				<input type="checkbox" name="onepress_page_settings[hide_footer]" <?php checked( $values['hide_footer'], 1 ); ?> value="1"> <?php esc_html_e( 'Hide footer.', 'onepress' ); ?>
 			</label>
 		</p>
 		<?php
@@ -172,7 +172,7 @@ class OnePress_MetaBox {
 				?>
 				<p>
 					<label>
-						<input type="checkbox" name="onepress_page_settings[wc_apply_product]" <?php checked( $values['wc_apply_product'], 1 ); ?> value="1"> <?php _e( 'Apply header cover settings for single product.', 'onepress' ); ?>
+						<input type="checkbox" name="onepress_page_settings[wc_apply_product]" <?php checked( $values['wc_apply_product'], 1 ); ?> value="1"> <?php esc_html_e( 'Apply header cover settings for single product.', 'onepress' ); ?>
 					</label>
 				</p>
 				<?php

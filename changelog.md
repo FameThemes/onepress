@@ -1,4 +1,7 @@
 # CHANGELOG
+# 2.3.9
+* FIXED: fix security issues.
+
 # 2.3.8
 * FIXED: Fix issue security check when save form.
 
