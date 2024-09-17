@@ -17,7 +17,7 @@ if (onepress_is_selective_refresh()) {
 }
 
 if ($onepress_contact_cf7 || $onepress_contact_text || $onepress_contact_address_title || $onepress_contact_phone || $onepress_contact_email || $onepress_contact_fax) {
-	$desc = wp_kses_post(get_theme_mod('onepress_contact_desc'));
+	$desc = get_theme_mod('onepress_contact_desc');
 ?>
 	<?php if (!$onepress_contact_disable) : ?>
 		<?php if (!onepress_is_selective_refresh()) { ?>

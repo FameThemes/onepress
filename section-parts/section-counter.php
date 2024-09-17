@@ -10,7 +10,7 @@ if ( onepress_is_selective_refresh() ) {
 // Get counter data
 $boxes = onepress_get_section_counter_data();
 if ( ! empty( $boxes ) ) {
-	$desc = wp_kses_post( get_theme_mod( 'onepress_counter_desc' ) );
+	$desc = get_theme_mod( 'onepress_counter_desc' );
 	?>
 	<?php if ( $disable != '1' ) : ?>
 		<?php if ( ! onepress_is_selective_refresh() ) { ?>

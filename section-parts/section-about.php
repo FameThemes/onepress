@@ -3,7 +3,7 @@ $id       = get_theme_mod( 'onepress_about_id', 'about' );
 $disable  = get_theme_mod( 'onepress_about_disable' ) == 1 ? true : false;
 $title    = get_theme_mod( 'onepress_about_title', esc_html__( 'About Us', 'onepress' ) );
 $subtitle = get_theme_mod( 'onepress_about_subtitle', esc_html__( 'Section subtitle', 'onepress' ) );
-$desc     = wp_kses_post( get_theme_mod( 'onepress_about_desc' ) );
+$desc     = get_theme_mod( 'onepress_about_desc' );
 if ( onepress_is_selective_refresh() ) {
 	$disable = false;
 }
