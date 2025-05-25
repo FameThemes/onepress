@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 2.3.12
+
+- FIXED: fix security issues.
+
 # 2.3.11
 
 - UPDATED: Tested up to WP 6.7.1

@@ -131,13 +131,14 @@ class Onepress_Dashboard
 ?>
 			<div class="updated notice notice-success notice-alt is-dismissible">
 				<p><?php echo wp_kses(
-						sprintf(
-							/* translators: 1: name, 2: link*/
-							__('Welcome! Thank you for choosing %1$s! To fully take advantage of the best our theme can offer please make sure you visit our <a href="%2$s">Welcome page</a>', 'onepress'), 
-							$theme_data->Name,
-							admin_url('themes.php?page=ft_onepress')
-						), onepress_allowed_tags()
-					); ?></p>
+							sprintf(
+								/* translators: 1: name, 2: link*/
+								__('Welcome! Thank you for choosing %1$s! To fully take advantage of the best our theme can offer please make sure you visit our <a href="%2$s">Welcome page</a>', 'onepress'),
+								$theme_data->Name,
+								admin_url('themes.php?page=ft_onepress')
+							),
+							onepress_allowed_tags()
+						); ?></p>
 			</div>
 		<?php
 		}
@@ -274,7 +275,7 @@ class Onepress_Dashboard
 			<h2 class="nav-tab-wrapper">
 				<a href="?page=ft_onepress" class="nav-tab<?php echo is_null($tab) ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Overview', 'onepress') ?></a>
 				<a href="?page=ft_onepress&tab=recommended_actions" class="nav-tab<?php echo $tab == 'recommended_actions' ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Recommended Actions', 'onepress');
-																																																																										echo ($number_action > 0) ? "<span class='theme-action-count'>".esc_html(number_format_i18n($number_action))."</span>" : ''; ?></a>
+																																																																										echo ($number_action > 0) ? "<span class='theme-action-count'>" . esc_html(number_format_i18n($number_action)) . "</span>" : ''; ?></a>
 				<?php if (!class_exists('OnePress_Plus')) { ?>
 					<a href="?page=ft_onepress&tab=free_pro" class="nav-tab<?php echo $tab == 'free_pro' ? ' nav-tab-active' : null; ?>"><?php esc_html_e('Free vs PLUS', 'onepress'); ?></span></a>
 				<?php } ?>
@@ -294,7 +295,7 @@ class Onepress_Dashboard
 						<div class="theme_info_right">
 							<div class="theme_link">
 								<h3><?php esc_html_e('Theme Customizer', 'onepress'); ?></h3>
-								<p class="about"><?php printf(__('%s supports the Theme Customizer for all theme settings. Click "Customize" to start customize your site.', 'onepress'), esc_html($theme_data->Name) ); ?></p>
+								<p class="about"><?php printf(__('%s supports the Theme Customizer for all theme settings. Click "Customize" to start customize your site.', 'onepress'), esc_html($theme_data->Name)); ?></p>
 								<p>
 									<a href="<?php echo esc_attr(admin_url('customize.php')); ?>" class="button button-primary"><?php esc_html_e('Start Customize', 'onepress'); ?></a>
 								</p>
@@ -309,7 +310,7 @@ class Onepress_Dashboard
 							</div>
 							<div class="theme_link">
 								<h3><?php esc_html_e('Having Trouble, Need Support?', 'onepress'); ?></h3>
-								<p class="about"><?php  printf(__('Support for %s WordPress theme is conducted through FameThemes support ticket system.', 'onepress'), esc_html($theme_data->Name)); ?></p>
+								<p class="about"><?php printf(__('Support for %s WordPress theme is conducted through FameThemes support ticket system.', 'onepress'), esc_html($theme_data->Name)); ?></p>
 								<p>
 									<a href="<?php echo esc_url('https://www.famethemes.com/dashboard/tickets/'); ?>" target="_blank" class="button button-secondary"><?php esc_html_e('Create a support ticket', 'onepress'); ?></a>
 								</p>
@@ -354,6 +355,7 @@ class Onepress_Dashboard
 							<?php if (isset($_GET['copied']) && $_GET['copied'] == 1) { ?>
 								<p><?php esc_html_e('Your settings were copied.', 'onepress'); ?></p>
 							<?php } ?>
+							<?php wp_nonce_field('copy_action_nonce', 'copy_action_nonce'); ?>
 						</form>
 
 					<?php } ?>
@@ -388,7 +390,7 @@ class Onepress_Dashboard
 								</a>
 								<h3><?php esc_html_e('Switch "Front page displays" to "A static page"', 'onepress'); ?></h3>
 								<div class="about">
-									<p><?php echo wp_kses(__('In order to have the one page look for your website, please go to Customize -&gt; Static Front Page and switch "Front page displays" to "A static page".', 'onepress'), onepress_allowed_tags() ); ?></p>
+									<p><?php echo wp_kses(__('In order to have the one page look for your website, please go to Customize -&gt; Static Front Page and switch "Front page displays" to "A static page".', 'onepress'), onepress_allowed_tags()); ?></p>
 								</div>
 								<p>
 									<a href="<?php echo esc_url(admin_url('options-reading.php')); ?>" class="button"><?php esc_html_e('Setup front page displays', 'onepress'); ?></a>
@@ -817,6 +819,13 @@ class Onepress_Dashboard
 
 		// Action for copy options
 		if (isset($_POST['copy_from']) && isset($_POST['copy_to'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+			$nonce = isset($_POST['copy_action_nonce']) ? sanitize_text_field($_POST['copy_action_nonce']) : '';
+			if (!wp_verify_nonce($nonce, 'copy_action_nonce')) {
+				wp_die(esc_html__('Security check!', 'onepress'));
+				die();
+			}
+
 			$from = sanitize_text_field($_POST['copy_from']);
 			$to = sanitize_text_field($_POST['copy_to']);
 			if ($from && $to) {
