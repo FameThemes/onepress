@@ -390,13 +390,8 @@ function onepress_scripts()
 		$deps[] = onepress_load_build_script('gallery-carousel');
 	}
 
-	if (isset($_GET['prevjs'])) {
-		wp_enqueue_script('onepress-theme', get_template_directory_uri() . '/assets/js/theme-all' . $min_ext . '.js', $deps, $version, true);
-	} else {
-		$handle = onepress_load_build_script('theme', $deps);
-		wp_enqueue_script($handle);
-	}
-
+	$handle = onepress_load_build_script('theme', $deps);
+	wp_enqueue_script($handle);
 
 	$custom_css = onepress_custom_inline_style();
 	// var_dump($custom_css);
