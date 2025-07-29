@@ -1,0 +1,255 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+// main: style.scss
+
+// SASS Variables and Mixins
+
+// Variables
+//--------------------------------------------------------
+
+// Text colors
+@use "sass:math";
+
+$text: 			#777777;
+$heading:       #333333;
+
+// Active color
+$primary: 		#03c4eb;
+$secondary: 	#00aeef;
+
+// Mics color
+$border:		#e9e9e9;
+$meta:			#f8f9f9;
+
+// Fonts
+$font_text:      	 "Open Sans", Helvetica, Arial, sans-serif;
+$font_heading:       "Raleway",Helvetica,Arial,sans-serif;
+$monaco: 			 Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+
+// Screen resolutions
+$small_phone:	576px;
+$phone: 		720px;
+$table: 		940px;
+$small_desktop:	1140px;
+
+//Grid
+$width:			1230px;
+$grid:			1110px;
+$column: 		40px;
+$gutter: 		50px;
+$gutter2: 		30px;
+
+//Baseline
+$base: 			20px;
+
+// Mixins
+//--------------------------------------------------------
+
+@mixin border-radius($radius: 2px) {
+	-webkit-border-radius:  $radius;
+		-moz-border-radius: $radius;
+			border-radius:  $radius;
+}
+
+// Mobile first responsive
+@mixin for($media) {
+	@if $media == tiny-screens {
+		@media screen and (min-width: $small_phone) { @content; }
+	}
+	@else if $media ==screens-tiny {
+		@media screen and (max-width: $small_phone) { @content; }
+	}
+	@if $media == small-screens {
+		@media screen and (min-width: $phone) { @content; }
+	}
+	@else if $media ==screens-small {
+		@media screen and (max-width: $phone) { @content; }
+	}
+
+	@else if $media == medium-screens {
+		@media screen and (min-width: $table) { @content; }
+	}
+	@else if $media == screens-medium {
+		@media screen and (max-width: $table) { @content; }
+	}
+
+	@else if $media == large-screens {
+		@media screen and (min-width: $small_desktop) { @content; }
+	}
+	@else if $media == screens-large {
+		@media screen and (max-width: $small_desktop) { @content; }
+	}
+}
+
+// Center block
+@mixin center-block {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+// Clearfix
+@mixin clearfix() {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+// Clear after (not all clearfix need this also)
+@mixin clearfix-after() {
+	clear: both;
+}
+
+
+// Media breakpoint
+// @mixin media-breakpoint-up($device) {
+// 	@if $device == sm {
+// 		@media (min-width: 34em) { @content; }
+// 	}
+// 	@if $device == md {
+// 		@media (min-width: 48em) { @content; }
+// 	}
+// 	@if $device == lg {
+// 		@media (min-width: 62em) { @content; }
+// 	}
+// 	@if $device == xl {
+// 		@media (min-width: 75em) { @content; }
+// 	}
+// }
+//
+// @mixin media-breakpoint-down($device) {
+// 	@if $device == sm {
+// 		@media (max-width: 33.9em) { @content; }
+// 	}
+// 	@if $device == md {
+// 		@media (max-width: 47.9em) { @content; }
+// 	}
+// 	@if $device == lg {
+// 		@media (max-width: 61.9em) { @content; }
+// 	}
+// 	@if $device == xl {
+// 		@media (max-width: 74.9em) { @content; }
+// 	}
+// }
+
+// Use rem for better responsive
+$baseline-px: 16px;
+@mixin rem($property, $px-values) {
+
+	$baseline-rem: math.div($baseline-px, 1rem);
+
+	#{$property}: $px-values;
+
+	@if meta.type-of($px-values) == "number" {
+		#{$property}: math.div($px-values, $baseline-rem); }
+	@else {
+		$rem-values: string.unquote("");
+		@each $value in $px-values {
+			@if $value == 0 {
+				$rem-values: list.append($rem-values, $value); }
+			@else {
+				$rem-values: list.append($rem-values, math.div($value, $baseline-rem)); } }
+		#{$property}: $rem-values; }
+}
+
+$grid-breakpoints: (
+  // Extra small screen / phone
+  xs: 0,
+  // Small screen / phone
+  sm: 544px,
+  // Medium screen / tablet
+  md: 768px,
+  // Large screen / desktop
+  lg: 992px,
+  // Extra large screen / wide desktop
+  xl: 1200px
+) !default;
+
+// Breakpoint viewport sizes and media queries.
+//
+// Breakpoints are defined as a map of (name: minimum width), order from small to large:
+//
+//    (xs: 0, sm: 544px, md: 768px)
+//
+// The map defined in the `$grid-breakpoints` global variable is used as the `$breakpoints` argument by default.
+
+// Name of the next breakpoint, or null for the last breakpoint.
+//
+//    >> breakpoint-next(sm)
+//    md
+//    >> breakpoint-next(sm, (xs: 0, sm: 544px, md: 768px))
+//    md
+//    >> breakpoint-next(sm, $breakpoint-names: (xs sm md))
+//    md
+@function breakpoint-next($name, $breakpoints: $grid-breakpoints, $breakpoint-names: map.keys($breakpoints)) {
+  $n: list.index($breakpoint-names, $name);
+  @return if($n < list.length($breakpoint-names), list.nth($breakpoint-names, $n + 1), null);
+}
+
+// Minimum breakpoint width. Null for the smallest (first) breakpoint.
+//
+//    >> breakpoint-min(sm, (xs: 0, sm: 544px, md: 768px))
+//    544px
+@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
+  $min: map.get($breakpoints, $name);
+  @return if($min != 0, $min, null);
+}
+
+// Maximum breakpoint width. Null for the largest (last) breakpoint.
+// The maximum value is calculated as the minimum of the next one less 0.1.
+//
+//    >> breakpoint-max(sm, (xs: 0, sm: 544px, md: 768px))
+//    767px
+@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
+  $next: breakpoint-next($name, $breakpoints);
+  @return if($next, breakpoint-min($next, $breakpoints) - 1px, null);
+}
+
+// Media of at least the minimum breakpoint width. No query for the smallest breakpoint.
+// Makes the @content apply to the given breakpoint and wider.
+@mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
+  $min: breakpoint-min($name, $breakpoints);
+  @if $min {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Media of at most the maximum breakpoint width. No query for the largest breakpoint.
+// Makes the @content apply to the given breakpoint and narrower.
+@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
+  $max: breakpoint-max($name, $breakpoints);
+  @if $max {
+    @media (max-width: $max) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Media between the breakpoint's minimum and maximum widths.
+// No minimum for the smallest breakpoint, and no maximum for the largest one.
+// Makes the @content apply only to the given breakpoint, not viewports any wider or narrower.
+@mixin media-breakpoint-only($name, $breakpoints: $grid-breakpoints) {
+  @include media-breakpoint-up($name, $breakpoints) {
+    @include media-breakpoint-down($name, $breakpoints) {
+      @content;
+    }
+  }
+}
+
+// Media that spans multiple breakpoint widths.
+// Makes the @content apply between the min and max breakpoints
+@mixin media-breakpoint-between($lower, $upper, $breakpoints: $grid-breakpoints) {
+  @include media-breakpoint-up($lower, $breakpoints) {
+    @include media-breakpoint-down($upper, $breakpoints) {
+      @content;
+    }
+  }
+}

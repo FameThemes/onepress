@@ -1,0 +1,125 @@
+@use "variables";
+
+// main: style.scss
+
+@use "sass:math";
+
+#primary {
+	padding-bottom: variables.$base * 2;
+	padding-top: variables.$base * 2;
+}
+.template-fullwidth-stretched,
+.siteorigin-panels {
+	#primary {
+		padding: 0;
+	}
+	.entry-content {
+		margin-bottom: 0px;
+	}
+}
+
+#secondary {
+	padding-bottom: variables.$base * 2;
+	padding-top: 0;
+	@include variables.for(medium-screens) {
+		padding-top: variables.$base * 2;
+	}
+}
+
+.content-area {
+	width: 100%;
+	float: none;
+	@include variables.for(medium-screens) {
+		float: left;
+	}
+}
+.sidebar {
+	width: 100%;
+	float: none;
+	@include variables.for(medium-screens) {
+		width: math.percentage(math.div(280px, variables.$grid)); // 300px
+		float: left;
+	}
+}
+
+.left-sidebar .site-main {
+	margin-left: auto;
+}
+.no-sidebar .content-area {
+	width: 100%;
+}
+
+.single-post .no-sidebar .site-main,
+.single-post .no-sidebar .entry-content > * {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+@include variables.for(medium-screens) {
+	.left-sidebar .content-area {
+		float: right;
+		padding-left: 39px;
+		border-left: 1px solid variables.$border;
+		margin-right: 1px;
+		width: math.percentage(math.div(830px, variables.$grid)); //680px
+	}
+
+	.left-sidebar .sidebar {
+		padding-right: 39px;
+		border-right: 1px solid variables.$border;
+		margin-right: -1px;
+	}
+
+	.right-sidebar .content-area {
+		padding-right: 39px;
+		border-right: 1px solid variables.$border;
+		width: math.percentage(math.div(830px, variables.$grid)); //680px
+	}
+
+	.right-sidebar .sidebar {
+		padding-left: 39px;
+		border-left: 1px solid variables.$border;
+		margin-left: -1px;
+	}
+}
+
+/**
+Footer widgets
+ */
+.footer-widgets {
+	background: #050505;
+	&.section-padding {
+		@include variables.rem("padding", 70px 0px 35px);
+	}
+	table {
+		border-collapse: collapse;
+		> thead > tr > th,
+		> thead > tr > td {
+			border-width: 1px;
+		}
+		th,
+		td {
+			border-color: rgba(233, 233, 233, 0.4);
+		}
+	}
+	.widget-title {
+		color: #ffffff;
+	}
+	.widget-area .widget_categories li,
+	.widget-area .widget_archive li,
+	.widget-area .widget_meta li {
+		width: 100% !important;
+		float: none;
+	}
+	.widget_recent_entries ul li,
+	.widget_recent_comments ul li {
+		border-bottom: 0px none;
+		padding: 5px 0px;
+		margin-bottom: 0px;
+	}
+	.sidebar {
+		.widget {
+			margin-bottom: 30px;
+		}
+	}
+}
