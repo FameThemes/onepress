@@ -181,7 +181,7 @@ if (!function_exists('onepress_setup')) :
 		/*
 		 * This theme styles the visual editor to resemble the theme style.
 		 */
-		add_editor_style(array('editor-style.css', onepress_fonts_url()));
+		add_editor_style(array('assets/build/admin/editor.css', onepress_fonts_url()));
 
 		if (get_theme_mod('onepress_gallery_disable')) {
 			/**
@@ -318,6 +318,7 @@ function onepress_scripts()
 
 	if (!get_theme_mod('onepress_disable_g_font')) {
 		$google_font_url = onepress_fonts_url();
+		// var_dump($google_font_url); die();
 		if ($google_font_url) {
 			wp_enqueue_style('onepress-fonts', onepress_fonts_url(), array(), $version);
 		}
@@ -326,14 +327,8 @@ function onepress_scripts()
 	wp_enqueue_style('onepress-animate', get_template_directory_uri() . '/assets/css/animate.min.css', array(), $version);
 	wp_enqueue_style('onepress-fa', get_template_directory_uri() . '/assets/fontawesome-v6/css/all.min.css', array(), '6.5.1');
 	wp_enqueue_style('onepress-fa-shims', get_template_directory_uri() . '/assets/fontawesome-v6/css/v4-shims.min.css', array(), '6.5.1');
-	wp_enqueue_style('onepress-bootstrap', get_template_directory_uri() . '/assets/css/bootstrap.min.css', false, $version);
-	// wp_enqueue_style('onepress-style', get_template_directory_uri() . '/style.css');
-
-	$custom_css = onepress_custom_inline_style();
-	wp_add_inline_style('onepress-style', $custom_css);
 
 	$deps = array('jquery');
-
 	// Animation from settings.
 	$onepress_js_settings = array(
 		'onepress_disable_animation'     => get_theme_mod('onepress_animation_disable'),
@@ -401,6 +396,11 @@ function onepress_scripts()
 		$handle = onepress_load_build_script('theme', $deps);
 		wp_enqueue_script($handle);
 	}
+
+
+	$custom_css = onepress_custom_inline_style();
+	// var_dump($custom_css);
+	wp_add_inline_style('onepress-style', $custom_css);
 
 	if (is_singular() && comments_open() && get_option('thread_comments')) {
 		wp_enqueue_script('comment-reply');

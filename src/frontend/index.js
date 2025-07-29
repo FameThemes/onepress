@@ -7,9 +7,9 @@ import "./libs/jquery.counterup";
 import "./libs/imagesloaded.js";
 import "./libs/jarallax.js";
 import "./libs/jquery.bully.js";
-
-import "./sass/style.scss";
 import "./libs/bootstrap/bootstrap.css";
+import "./sass/style.scss";
+
 
 var onepressIsMobile = {
   Android: function () {

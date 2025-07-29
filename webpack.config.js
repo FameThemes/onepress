@@ -22,9 +22,13 @@ module.exports = (env, args) => {
 
   let entry = {
     [`frontend/theme${suffix}`]: "./src/frontend/index.js",
-    [`frontend/gallery-isotope${suffix}`]: "./src/frontend/libs/gallery/isotope.js",
-    [`frontend/gallery-justified${suffix}`]: "./src/frontend/libs/gallery/jquery.justified.js",
-    [`frontend/gallery-carousel${suffix}`]: "./src/frontend/libs/gallery/owl.carousel.js",
+    [`frontend/gallery-isotope${suffix}`]:
+      "./src/frontend/libs/gallery/isotope.js",
+    [`frontend/gallery-justified${suffix}`]:
+      "./src/frontend/libs/gallery/jquery.justified.js",
+    [`frontend/gallery-carousel${suffix}`]:
+      "./src/frontend/libs/gallery/owl.carousel.js",
+    [`admin/editor${suffix}`]: "./src/frontend/sass/editor.scss",
   };
 
   return [
@@ -53,36 +57,6 @@ module.exports = (env, args) => {
       },
       optimization: undefined,
       devServer: undefined,
-      // plugins: [
-      //   new MergeIntoSingle({
-      //     files: {
-      //       "./frontend/frontend.js": [
-      //         "./src/frontend/libs/FitVids.js",
-      //         "./src/frontend/libs/wow.js/wow.js",
-              
-      //         "./src/frontend/libs/Morphext/morphext.js",
-      //         "./src/frontend/libs/jquery.backstretch/backstretch.js",
-      //         "./src/frontend/libs/waypoints/index.js",
-      //         "./src/frontend/libs/jquery.counterup.js",
-      //         "./src/frontend/libs/imagesloaded.js",
-      //         "./src/frontend/libs/lightgallery.js",
-      //         "./src/frontend/libs/lightgallery-video.js",
-      //         "./src/frontend/libs/jarallax.js",
-      //         // "./src/frontend/libs/tether/index.js",
-      //         // "./src/frontend/libs/bootstrap/bootstrap.js",
-      //         "./src/frontend/inc/theme.js",
-      //       ],
-      //     },
-      //   }),
-      // ],
-      // plugins: [
-      //   ...plugins.filter(
-      //     (plugin) => !(plugin instanceof MiniCssExtractPlugin)
-      //   ),
-      //   new MiniCssExtractPlugin({
-      //     filename: "css/[name].css", // custom CSS folder
-      //   }),
-      // ],
     },
   ];
 };
