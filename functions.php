@@ -394,7 +394,6 @@ function onepress_scripts()
 	wp_enqueue_script($handle);
 
 	$custom_css = onepress_custom_inline_style();
-	// var_dump($custom_css);
 	wp_add_inline_style('onepress-style', $custom_css);
 
 	if (is_singular() && comments_open() && get_option('thread_comments')) {
