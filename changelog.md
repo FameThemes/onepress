@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 2.3.15
+
+- FIXED: Fix security issues.
+- UPDATED: Update style files.
+
 # 2.3.12
 
 - FIXED: fix security issues.

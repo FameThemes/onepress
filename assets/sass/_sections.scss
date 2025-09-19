@@ -1,21 +1,23 @@
+@use "variables";
+
 
 /* Section Stuffs
 ------------------------------*/
 @use "sass:math";
 
 .section-padding {
-    @include rem('padding', 70px 0px);
+    @include variables.rem('padding', 70px 0px);
 }
 
 .section-padding-lg {
-    @include rem('padding', 90px 0px);
+    @include variables.rem('padding', 90px 0px);
 }
 
 .section-padding-larger {
-    @include rem('padding', 140px 0px);
+    @include variables.rem('padding', 140px 0px);
 }
 .section-meta {
-    background-color: $meta;
+    background-color: variables.$meta;
 }
 
 .onepage-section {
@@ -97,7 +99,7 @@
         position: relative;
         margin-bottom: 0px;
         text-transform: uppercase;
-        @include for(medium-screens) {
+        @include variables.for(medium-screens) {
             font-size: 40px;
             letter-spacing: 3.5px;
         }
@@ -107,18 +109,18 @@
         font-size: 12px;
         display: inline-block;
         position: relative;
-        @include rem('margin-bottom', 13px);
+        @include variables.rem('margin-bottom', 13px);
         text-transform: uppercase;
         letter-spacing: 2px;
-        @include for(medium-screens) {
+        @include variables.for(medium-screens) {
             font-size: 14px;
         }
     }
 }
 
 .section-desc {
-    @include rem('font-size', 20px);
-    @include rem('margin-top', 40px);
+    @include variables.rem('font-size', 20px);
+    @include variables.rem('margin-top', 40px);
 }
 
 /* Section: Hero
@@ -391,7 +393,7 @@
 .hero__content {
     color: #FFF;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    @include rem('font-size', 18px);
+    @include variables.rem('font-size', 18px);
     font-weight: 300;
     h1, h2, h3, h4, h5, h6 {
         color: #FFF;
@@ -399,10 +401,10 @@
         text-transform: uppercase;
     }
     a.btn {
-        @include rem('margin', 10px 10px 20px 0px);
+        @include variables.rem('margin', 10px 10px 20px 0px);
     }
     p {
-        @include rem('margin-bottom', 20px);
+        @include variables.rem('margin-bottom', 20px);
     }
 
 }
@@ -411,17 +413,17 @@
 .hero-content-style2 {
     h1 {
         font-weight: 800;
-        @include rem('font-size', 50px);
+        @include variables.rem('font-size', 50px);
         letter-spacing: 3px;
     }
     .hcl2-content {
-        @include rem('padding', 50px 0px);
+        @include variables.rem('padding', 50px 0px);
     }
     .hcl2-image {
         text-align: right;
     }
     .hcl2-content, .hcl2-image {
-        @include media-breakpoint-down(lg) {
+        @include variables.media-breakpoint-down(lg) {
             text-align: center;
         }
     }
@@ -438,11 +440,11 @@
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         font-weight: 800;
         text-transform: uppercase;
-        @include for(small-screens) {
+        @include variables.for(small-screens) {
             font-size: 60px;
             letter-spacing: 3px;
         }
-        @include for(medium-screens) {
+        @include variables.for(medium-screens) {
             font-size: 75px;
             letter-spacing: 4px;
         }
@@ -458,11 +460,11 @@
         color: #FFFFFF;
         text-align: center;
         font-weight: 100;
-        @include rem('margin-bottom', 30px);
-        @include for(medium-screens) {
+        @include variables.rem('margin-bottom', 30px);
+        @include variables.for(medium-screens) {
             font-size: 18px;
         }
-        @include for(large-screens) {
+        @include variables.for(large-screens) {
             font-size: 22px;
         }
         strong {
@@ -470,7 +472,7 @@
         }
     }
     .btn {
-        @include media-breakpoint-down(sm) {
+        @include variables.media-breakpoint-down(sm) {
             display: inline-block;
         }
     }
@@ -535,7 +537,7 @@
             transform: scale(1.1);
         }
     }
-    @include for(medium-screens) {
+    @include variables.for(medium-screens) {
         &.col-lg-3:nth-child(4n+1),
         &.col-lg-4:nth-child(3n+1),
         &.col-lg-6:nth-child(2n+1) {
@@ -580,12 +582,12 @@
         -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
         -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
         transition: all 100ms ease-out 0s;
-        @include for(screens-small) {
+        @include variables.for(screens-small) {
             padding: 20px;
         }
         &:after {
-            @include clearfix;
-            @include clearfix-after;
+            @include variables.clearfix;
+            @include variables.clearfix-after;
         }
         &:hover {
             box-shadow: 0 6px 9px rgba(0, 0, 0, 0.09);
@@ -598,9 +600,9 @@
                 height: auto;
             }
             i {
-                color: $primary;
+                color: variables.$primary;
             }
-            @include for(screens-small) {
+            @include variables.for(screens-small) {
                 float: none;
                 margin-bottom: 30px;
                 margin-top: 10px;
@@ -609,23 +611,23 @@
             }
         }
         .service-thumbnail {
-            @include rem('margin-bottom', 25px);
+            @include variables.rem('margin-bottom', 25px);
         }
         .service-content {
             overflow: hidden;
             p {
                 margin: 0px;
                 font-size: 14px;
-                color: $text;
+                color: variables.$text;
             }
-            @include for(screens-small) {
+            @include variables.for(screens-small) {
                 text-align: center;
                 overflow: auto;
             }
 
         }
         .service-title {
-            @include rem('margin-bottom', 10px);
+            @include variables.rem('margin-bottom', 10px);
             color: #333333;
         }
         .service-link {
@@ -650,17 +652,17 @@
 
 .counter_item {
     text-align: center;
-    @include rem('margin-bottom', 35px);
+    @include variables.rem('margin-bottom', 35px);
     .counter__number {
-        @include rem('font-size', 50px);
+        @include variables.rem('font-size', 50px);
         font-weight: 800;
-        color: $primary;
+        color: variables.$primary;
         line-height: 1;
         font-family: serif, sans-serif;
         text-transform: uppercase;
     }
     .counter_title {
-        @include rem('font-size', 18px);
+        @include variables.rem('font-size', 18px);
     }
 }
 
@@ -797,10 +799,10 @@
 }
 
 .team-members.row {
-    @include rem('margin-left', 0px);
-    @include rem('margin-right', 0px);
+    @include variables.rem('margin-left', 0px);
+    @include variables.rem('margin-right', 0px);
 
-    @include for (medium-screens) {
+    @include variables.for (medium-screens) {
         &.team-layout-4 {
             .team-member {
                 width: (100%*0.25);
@@ -827,7 +829,7 @@
         }
     }
 
-    @include for(screens-medium) {
+    @include variables.for(screens-medium) {
         .team-member {
             width: (100%*0.5);
         }
@@ -836,7 +838,7 @@
         }
     }
 
-    @include for(screens-small) {
+    @include variables.for(screens-small) {
         .team-member {
             width: (100%*0.5);
         }
@@ -845,7 +847,7 @@
         }
     }
 
-    @include for(screens-tiny) {
+    @include variables.for(screens-tiny) {
         .team-member {
             width: 100%;
         }
@@ -884,7 +886,7 @@
                     color: #ffffff;
                 }
                 &:hover {
-                    color: $primary;
+                    color: variables.$primary;
                 }
             }
         }
@@ -931,10 +933,10 @@
 .section-news, .archive, .blog {
 
     .list-article {
-        border-top: 1px solid $border;
+        border-top: 1px solid variables.$border;
         padding: 25px 0px;
         &:last-of-type {
-            border-bottom: 1px solid $border;
+            border-bottom: 1px solid variables.$border;
         }
     }
     .list-article-thumb {
@@ -943,10 +945,10 @@
         a img:hover {
             opacity: 0.8;
         }
-        @include for(screens-medium) {
+        @include variables.for(screens-medium) {
             display: none;
         }
-        @include for(screens-small) {
+        @include variables.for(screens-small) {
             width: 100%;
             float: none;
             margin-right: 0px;
@@ -1074,11 +1076,11 @@ div.wpcf7-response-output {
 .section-videolightbox {
     text-align: center;
     .videolightbox__icon {
-        @include rem('margin-bottom', 40px);
+        @include variables.rem('margin-bottom', 40px);
     }
     .videolightbox__heading {
         text-transform: uppercase;
-        @include rem('font-size', 38px);
+        @include variables.rem('font-size', 38px);
         letter-spacing: 0px;
         font-weight: 500;
         strong {
@@ -1157,7 +1159,7 @@ div.wpcf7-response-output {
     padding: 0px;
 }
 
-@include for(small-screens) {
+@include variables.for(small-screens) {
     @for $i from 1 through 6 {
         .g-col-#{$i} {
             .g-item {
@@ -1170,7 +1172,7 @@ div.wpcf7-response-output {
     }
 }
 
-@media screen and (min-width: $small_phone) and (max-width: $phone) {
+@media screen and (min-width: variables.$small_phone) and (max-width: variables.$phone) {
     @for $i from 1 through 6 {
         .g-col-#{$i} {
             .g-item {
@@ -1183,7 +1185,7 @@ div.wpcf7-response-output {
     }
 }
 
-@include for(screens-tiny) {
+@include variables.for(screens-tiny) {
     @for $i from 1 through 6 {
         .g-col-#{$i} {
             .g-item {
@@ -1227,7 +1229,7 @@ div.wpcf7-response-output {
     position: relative;
     display: block;
     &:after {
-        @include clearfix-after();
+        @include variables.clearfix-after();
     }
     .inner {
         display: block;

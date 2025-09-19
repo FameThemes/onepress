@@ -31,7 +31,6 @@ class Onepress_Dashboard
 
 	function save_settings()
 	{
-
 		if (isset($_POST['onepress_settings_nonce'])) {
 			if (!isset($_POST['onepress_settings_nonce']) || !wp_verify_nonce($_POST['onepress_settings_nonce'], $this->action_key)) {
 				wp_die(esc_html__('Security check!', 'onepress'));
@@ -200,7 +199,7 @@ class Onepress_Dashboard
 		if ($this->save_status) {
 		?>
 			<div id="sections-manager-notice" class="updated notice notice-success is-dismissible">
-				<p><?php esc_html('Settings saved', 'onepress'); ?></p>
+				<p><?php esc_html_e('Settings saved', 'onepress'); ?></p>
 			</div>
 		<?php
 		}
@@ -800,6 +799,11 @@ class Onepress_Dashboard
 	{
 		// Action for dismiss
 		if (isset($_GET['onepress_action_notice'])) {
+			if (!current_user_can('edit_theme_options')) {
+				wp_die(esc_html__('You are not authorized to access this page.', 'onepress'));
+				die();
+			}
+
 			$actions_dismiss =  get_option('onepress_actions_dismiss');
 			if (!is_array($actions_dismiss)) {
 				$actions_dismiss = array();
@@ -819,6 +823,11 @@ class Onepress_Dashboard
 
 		// Action for copy options
 		if (isset($_POST['copy_from']) && isset($_POST['copy_to'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+			if (!current_user_can('edit_theme_options')) {
+				wp_die(esc_html__('You are not authorized to access this page.', 'onepress'));
+				die();
+			}
 
 			$nonce = isset($_POST['copy_action_nonce']) ? sanitize_text_field($_POST['copy_action_nonce']) : '';
 			if (!wp_verify_nonce($nonce, 'copy_action_nonce')) {

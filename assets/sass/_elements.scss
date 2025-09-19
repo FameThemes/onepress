@@ -1,12 +1,14 @@
+@use "variables";
+
 // main: style.scss
 
 /* Button
 ------------------------------*/
 .btn {
     text-transform: uppercase;
-    @include border-radius(2px);
+    @include variables.border-radius(2px);
     box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
-    @include rem('font-size', 13px);
+    @include variables.rem('font-size', 13px);
     font-weight: 600;
     &:active, &:focus {
         outline: none;
@@ -24,11 +26,11 @@
 }
 
 .btn-lg {
-    @include rem('font-size', 17px);
+    @include variables.rem('font-size', 17px);
 }
 
 .btn-theme-primary {
-    background: $primary;
+    background: variables.$primary;
     color: #FFFFFF;
     &:hover {
         color: #FFFFFF;
@@ -37,12 +39,12 @@
 .btn-theme-primary-outline {
     background-color: transparent;
     background-image: none;
-    border-color: $primary;
-    color: $primary;
+    border-color: variables.$primary;
+    color: variables.$primary;
     &:hover {
         color: #FFF;
-        background-color: $primary;
-        border-color: $primary;
+        background-color: variables.$primary;
+        border-color: variables.$primary;
     }
 }
 

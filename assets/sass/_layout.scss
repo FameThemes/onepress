@@ -1,10 +1,12 @@
+@use "variables";
+
 // main: style.scss
 
 @use "sass:math";
 
 #primary {
-	padding-bottom: $base * 2;
-	padding-top: $base * 2;
+	padding-bottom: variables.$base * 2;
+	padding-top: variables.$base * 2;
 }
 .template-fullwidth-stretched,
 .siteorigin-panels {
@@ -17,25 +19,25 @@
 }
 
 #secondary {
-	padding-bottom: $base * 2;
+	padding-bottom: variables.$base * 2;
 	padding-top: 0;
-	@include for(medium-screens) {
-		padding-top: $base * 2;
+	@include variables.for(medium-screens) {
+		padding-top: variables.$base * 2;
 	}
 }
 
 .content-area {
 	width: 100%;
 	float: none;
-	@include for(medium-screens) {
+	@include variables.for(medium-screens) {
 		float: left;
 	}
 }
 .sidebar {
 	width: 100%;
 	float: none;
-	@include for(medium-screens) {
-		width: percentage(math.div(280px, $grid)); // 300px
+	@include variables.for(medium-screens) {
+		width: math.percentage(math.div(280px, variables.$grid)); // 300px
 		float: left;
 	}
 }
@@ -53,30 +55,30 @@
 	margin-right: auto;
 }
 
-@include for(medium-screens) {
+@include variables.for(medium-screens) {
 	.left-sidebar .content-area {
 		float: right;
 		padding-left: 39px;
-		border-left: 1px solid $border;
+		border-left: 1px solid variables.$border;
 		margin-right: 1px;
-		width: percentage(math.div(830px, $grid)); //680px
+		width: math.percentage(math.div(830px, variables.$grid)); //680px
 	}
 
 	.left-sidebar .sidebar {
 		padding-right: 39px;
-		border-right: 1px solid $border;
+		border-right: 1px solid variables.$border;
 		margin-right: -1px;
 	}
 
 	.right-sidebar .content-area {
 		padding-right: 39px;
-		border-right: 1px solid $border;
-		width: percentage(math.div(830px, $grid)); //680px
+		border-right: 1px solid variables.$border;
+		width: math.percentage(math.div(830px, variables.$grid)); //680px
 	}
 
 	.right-sidebar .sidebar {
 		padding-left: 39px;
-		border-left: 1px solid $border;
+		border-left: 1px solid variables.$border;
 		margin-left: -1px;
 	}
 }
@@ -87,7 +89,7 @@ Footer widgets
 .footer-widgets {
 	background: #050505;
 	&.section-padding {
-		@include rem("padding", 70px 0px 35px);
+		@include variables.rem("padding", 70px 0px 35px);
 	}
 	table {
 		border-collapse: collapse;
