@@ -1,3 +1,5 @@
+@use "variables";
+
 // main: style.scss
 
 /* Header
@@ -32,7 +34,7 @@
 	max-width: auto;
 	width: auto;
 
-	@include for(medium-screens) {
+	@include variables.for(medium-screens) {
 		padding-left: 30px;
 		padding-right: 30px;
 	}
@@ -100,7 +102,7 @@
 	}
 }
 
-@include for(large-screens) {
+@include variables.for(large-screens) {
 	.is-transparent .no-scroll.site-header {
 		.onepress-menu>li>a {
 			color: rgba(255, 255, 255, 0.9);
@@ -109,7 +111,7 @@
 }
 
 .is-transparent .hero-slideshow-fullscreen .hero__content {
-	@include rem("padding-top", 50px);
+	@include variables.rem("padding-top", 50px);
 }
 
 .site-branding {
@@ -122,7 +124,7 @@
 	.site-text-logo {
 		margin: 0px;
 		line-height: 1;
-		font-family: $font_heading;
+		font-family: variables.$font_heading;
 		font-size: 23px;
 		letter-spacing: 1px;
 		text-transform: uppercase;
@@ -178,12 +180,12 @@
 
 .header-social {
 	margin-left: 0px;
-
-	@include for(medium-screens) {
+	float: right;
+	@include variables.for(medium-screens) {
 		margin-left: 10px;
 	}
 
-	@include for(screens-tiny) {
+	@include variables.for(screens-tiny) {
 		display: none;
 	}
 
@@ -193,20 +195,18 @@
 		float: left;
 		margin-left: 0px;
 		margin-top: -2px;
+		color: variables.$primary;
 
-		@include for(medium-screens) {
+		@include variables.for(medium-screens) {
 			margin-left: 3px;
 		}
-
-		color: $primary;
-
 		&:hover {
 			color: #000000;
 			transition: all 0.2s linear 0s;
 		}
 	}
 
-	float: right;
+	
 
 	// .fa-stack {
 	//     position: relative;
@@ -304,7 +304,7 @@
 		min-width: 12em; // allow long menu items to determine submenu width
 		width: fit-content;
 		max-width: 100vw;
-		border: 1px solid $border;
+		border: 1px solid variables.$border;
 		border-top: none;
 	}
 
@@ -325,7 +325,7 @@
 
 	a {
 		color: #333333;
-		font-family: $font_heading;
+		font-family: variables.$font_heading;
 		padding-left: 17px;
 		padding-right: 17px;
 		font-size: 13px;
@@ -337,7 +337,7 @@
 		white-space: nowrap;
 
 		&:hover {
-			color: $primary;
+			color: variables.$primary;
 		}
 	}
 
@@ -346,7 +346,7 @@
 		width: fit-content;
 		min-width: 100%;
 		a {
-			border-top: 1px solid $border;
+			border-top: 1px solid variables.$border;
 			padding: 8px 18px;
 			color: #999999;
 			font-size: 13px;
@@ -355,17 +355,17 @@
 			letter-spacing: 0;
 
 			&:hover {
-				color: $primary;
+				color: variables.$primary;
 			}
 		}
 	}
 
 	li.onepress-current-item>a {
-		color: $primary;
+		color: variables.$primary;
 	}
 
 	ul li.current-menu-item>a {
-		color: $primary;
+		color: variables.$primary;
 	}
 
 	// Hover & Active
@@ -381,7 +381,7 @@
 	//     }
 	// }
 	>li a.menu-actived {
-		color: $primary;
+		color: variables.$primary;
 	}
 
 	.nav-toggle-subarrow {
@@ -395,7 +395,7 @@
 	margin-left: 15px;
 }
 
-@include for(screens-large) {
+@include variables.for(screens-large) {
 	.main-navigation {
 		position: static;
 	}
@@ -416,8 +416,8 @@
 		//background: transparent;
 		z-index: 800;
 		overflow: auto !important;
-		border-top: 1px solid $border;
-		border-bottom: 1px solid $border;
+		border-top: 1px solid variables.$border;
+		border-bottom: 1px solid variables.$border;
 		.sub-menu {
 			width: auto;
 		}
@@ -470,7 +470,7 @@
 		li {
 			line-height: 20px;
 			background: #ffffff;
-			border-top: 1px solid $border;
+			border-top: 1px solid variables.$border;
 			width: 100% !important;
 		}
 
@@ -488,12 +488,12 @@
 		// }
 		li.onepress-current-item {
 			>a {
-				color: $primary;
+				color: variables.$primary;
 			}
 		}
 
 		a {
-			color: $text;
+			color: variables.$text;
 
 			&:hover {
 				color: #000000;
@@ -503,7 +503,7 @@
 		.nav-toggle-subarrow {
 			display: block;
 			color: #999999;
-			border-left: 1px solid $border;
+			border-left: 1px solid variables.$border;
 			font-weight: normal;
 			position: absolute;
 			top: 0;
@@ -620,7 +620,7 @@
 /* Content
 ------------------------------*/
 .site-content {
-	border-top: 1px solid $border;
+	border-top: 1px solid variables.$border;
 	margin-top: -1px;
 	//padding-top: 74px;
 }
@@ -638,9 +638,9 @@
 
 .page-header {
 	padding: 30px 0px;
-	border-top: 1px solid $border;
+	border-top: 1px solid variables.$border;
 	background: #f8f9f9;
-	border-bottom: 1px solid $border;
+	border-bottom: 1px solid variables.$border;
 
 	position: relative;
 
@@ -702,15 +702,15 @@
 			font-style: italic;
 			font-weight: 300;
 
-			@include for(large-screens) {
+			@include variables.for(large-screens) {
 				font-size: 20px;
 			}
 
-			@include for(screens-medium) {
+			@include variables.for(screens-medium) {
 				font-size: 18px;
 			}
 
-			@include for(screens-small) {
+			@include variables.for(screens-small) {
 				font-size: 16px;
 			}
 		}
@@ -731,21 +731,21 @@
 	font-size: 14px;
 
 	a {
-		color: $primary;
+		color: variables.$primary;
 
 		&:hover {}
 	}
 
 	.footer-connect {
 		padding: 90px 0px;
-		@include rem("padding", 80px 0px);
+		@include variables.rem("padding", 80px 0px);
 		text-align: center;
 
-		@include for(screens-medium) {
+		@include variables.for(screens-medium) {
 			//@include rem('padding', 40px 0px);
 		}
 
-		@include media-breakpoint-down(sm) {
+		@include variables.media-breakpoint-down(sm) {
 			.footer-subscribe {
 				margin-bottom: 40px;
 			}
@@ -771,17 +771,17 @@
 				border: none;
 			}
 
-			@include for(screens-large) {
+			@include variables.for(screens-large) {
 				width: 100%;
 				margin-bottom: 4px;
 			}
 
-			@include for(screens-medium) {
+			@include variables.for(screens-medium) {
 				width: 70%;
 				margin-bottom: 4px;
 			}
 
-			@include for(screens-small) {
+			@include variables.for(screens-small) {
 				width: 100%;
 				margin-bottom: 4px;
 			}
@@ -793,15 +793,15 @@
 			top: 0px;
 			padding: 16px 23px 16px;
 
-			@include for(screens-large) {
+			@include variables.for(screens-large) {
 				width: 100%;
 			}
 
-			@include for(screens-medium) {
+			@include variables.for(screens-medium) {
 				width: 70%;
 			}
 
-			@include for(screens-small) {
+			@include variables.for(screens-small) {
 				width: 100%;
 			}
 		}
@@ -820,7 +820,7 @@
 			color: #ffffff;
 
 			&:hover {
-				color: $primary;
+				color: variables.$primary;
 			}
 		}
 	}
@@ -867,7 +867,7 @@
 		-o-transform: rotate(-45deg);
 
 		&:hover {
-			color: $primary;
+			color: variables.$primary;
 		}
 
 		i {
@@ -878,7 +878,7 @@
 			margin-left: 3px;
 		}
 
-		@include for(screens-medium) {
+		@include variables.for(screens-medium) {
 			right: 0;
 			left: 0;
 		}

@@ -1,3 +1,5 @@
+@use "variables";
+
 // main: style.scss
 
 /* Page: 404
@@ -31,7 +33,7 @@
 ------------------------------*/
 .search-results {
 	.hentry {
-		border-bottom: 1px solid $border;
+		border-bottom: 1px solid variables.$border;
 		padding-bottom: 25px;
 		margin-bottom: 25px;
 	}
@@ -58,11 +60,11 @@
 	font-weight: 500;
 	text-transform: none;
 	letter-spacing: -0.6px;
-	font-family: $font_text;
+	font-family: variables.$font_text;
 	font-size: 25px;
 	line-height: 1.3;
 
-	@include for(medium-screens) {
+	@include variables.for(medium-screens) {
 		font-size: 32px;
 		line-height: 1.5;
 	}
@@ -77,7 +79,7 @@
 }
 
 .highlight {
-	color: $primary;
+	color: variables.$primary;
 }
 
 /* Entry Content
@@ -88,8 +90,8 @@
 	blockquote {
 		padding: 30px;
 		position: relative;
-		background: $meta;
-		border-left: 3px solid $primary;
+		background: variables.$meta;
+		border-left: 3px solid variables.$primary;
 		font-style: italic;
 
 		p {
@@ -108,13 +110,13 @@
 	font-size: 12px;
 	font-weight: 600;
 	padding-bottom: 30px;
-	border-bottom: 1px solid $border;
+	border-bottom: 1px solid variables.$border;
 }
 
 .entry-footer {
 	margin-bottom: 30px;
 	padding-top: 30px;
-	border-top: 1px solid $border;
+	border-top: 1px solid variables.$border;
 
 	.cat-links,
 	.tags-links {
@@ -150,20 +152,19 @@
 		background: #cccccc;
 		color: #FFFFFF;
 		padding: 12px 20px;
-
-		@include for(screens-medium) {
-			padding: 6px 10px;
-		}
-
 		font-weight: 600;
 		font-size: 12px;
 		letter-spacing: 1px;
 		text-transform: uppercase;
 		border-radius: 2px;
 
+		@include variables.for(screens-medium) {
+			padding: 6px 10px;
+		}
+
 		&:hover,
 		&.current {
-			background: $primary;
+			background: variables.$primary;
 			text-decoration: none;
 		}
 	}
@@ -276,10 +277,10 @@
 ------------------------------*/
 #comments {
 	padding-top: 30px;
-	border-top: 1px solid $border;
+	border-top: 1px solid variables.$border;
 
 	.comments-title {
-		margin-bottom: $base;
+		margin-bottom: variables.$base;
 		font-size: 18px;
 		line-height: 26px;
 		letter-spacing: 1.5px;
@@ -291,8 +292,8 @@
 		padding-left: 0px;
 
 		.pingback {
-			border-bottom: 1px solid $border;
-			padding: $base 0;
+			border-bottom: 1px solid variables.$border;
+			padding: variables.$base 0;
 			margin: 0;
 
 			p {
@@ -301,7 +302,7 @@
 		}
 
 		.pingback:last-child {
-			margin-bottom: $base*2;
+			margin-bottom: variables.$base*2;
 		}
 
 	}
@@ -312,17 +313,17 @@
 
 	.comment {
 		list-style: none;
-		margin: $gutter2 0;
+		margin: variables.$gutter2 0;
 
 		.avatar {
 			width: 60px;
 			float: left;
-			@include border-radius(3px);
+			@include variables.border-radius(3px);
 		}
 
 		.comment-wrapper {
-			margin-left: $gutter2*3 ;
-			padding: ($gutter2 - 5) $gutter2 $gutter2*0.5 $gutter2;
+			margin-left: variables.$gutter2*3 ;
+			padding: (variables.$gutter2 - 5) variables.$gutter2 variables.$gutter2*0.5 variables.$gutter2;
 			background: #f8f9f9;
 			position: relative;
 
@@ -347,7 +348,7 @@
 				font-size: 11px;
 
 				&:hover {
-					color: $primary;
+					color: variables.$primary;
 				}
 
 				&:after {
@@ -374,8 +375,8 @@
 
 			.comment-meta cite span {
 				padding: 3px 10px;
-				background: $border;
-				@include border-radius(4px);
+				background: variables.$border;
+				@include variables.border-radius(4px);
 				margin-right: 10px;
 			}
 
@@ -385,10 +386,10 @@
 		}
 
 		.children {
-			padding-left: $gutter2*1;
+			padding-left: variables.$gutter2*1;
 
 			.children {
-				padding-left: $gutter2*1;
+				padding-left: variables.$gutter2*1;
 
 				.children {
 					padding-left: 0px;
@@ -396,15 +397,15 @@
 			}
 		}
 
-		@include for(medium-screens) {
+		@include variables.for(medium-screens) {
 			.children {
-				padding-left: $gutter2*3;
+				padding-left: variables.$gutter2*3;
 
 				.children {
-					padding-left: $gutter2*3;
+					padding-left: variables.$gutter2*3;
 
 					.children {
-						padding-left: $gutter2*3;
+						padding-left: variables.$gutter2*3;
 					}
 				}
 			}
@@ -433,7 +434,7 @@
 /* Comment Form
 ------------------------------*/
 #respond {
-	padding-top: $base;
+	padding-top: variables.$base;
 
 	.comment-form label {
 		display: block;
@@ -467,7 +468,7 @@
 }
 
 .full-screen .comments-area {
-	max-width: $grid;
+	max-width: variables.$grid;
 	margin: 0 auto;
 }
 

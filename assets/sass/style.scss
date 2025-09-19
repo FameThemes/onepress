@@ -4,7 +4,7 @@ Theme URI: https://www.famethemes.com/themes/onepress/
 Author: FameThemes
 Author URI: http://www.famethemes.com
 Description: OnePress is an outstanding creative and flexible WordPress one page theme well suited for business website, portfolio, digital agency, product showcase, freelancers and everyone else who appreciate good design. The theme overall is an elegant and classic one, a fine example of Bootstrap 4 WordPress theme which compatibility with latest version of WooCommerce. (Live preview : https://demos.famethemes.com/onepress)
-Version: 2.3.13
+Version: 2.3.15
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: onepress
@@ -36,7 +36,8 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 9.0  External Plugins
 
 --------------------------------------------------------------*/
-@import "variables";
+@use "sass:meta";
+@use "variables";
 
 /*--------------------------------------------------------------
 1.0 Reset
@@ -50,41 +51,41 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 html, body {
 	height: 100%;
 }
-@import "document";
+@include meta.load-css("document");
 
 /*--------------------------------------------------------------
 3.0 Layout
 --------------------------------------------------------------*/
-@import "layout";
+@include meta.load-css("layout");
 
 /*--------------------------------------------------------------
 4.0 Structure
 --------------------------------------------------------------*/
-@import "structure";
+@include meta.load-css("structure");
 
 /*--------------------------------------------------------------
 5.0 Contents
 --------------------------------------------------------------*/
-@import "contents";
+@include meta.load-css("contents");
 
 /*--------------------------------------------------------------
 6.0 Elements
 --------------------------------------------------------------*/
-@import "elements";
+@include meta.load-css("elements");
 
 /*--------------------------------------------------------------
 7.0 Widgets
 --------------------------------------------------------------*/
-@import "widgets";
+@include meta.load-css("widgets");
 
 /*--------------------------------------------------------------
 8.0 Sections
 --------------------------------------------------------------*/
-@import "sections";
+@include meta.load-css("sections");
 
 /*--------------------------------------------------------------
 9.0 External Plugins
 --------------------------------------------------------------*/
-@import "external_plugins";
-@import "bully";
-@import "gutenberg";
+@include meta.load-css("external_plugins");
+@include meta.load-css("bully");
+@include meta.load-css("gutenberg");

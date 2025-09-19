@@ -1,24 +1,27 @@
 <?php
+
 /**
  * Support Gutenberg Editor.
  *
  * @since 2.2.0
  */
-class OnePress_Editor {
+class OnePress_Editor
+{
 	private $action      = 'onepress_load_editor_style';
 	private $editor_file = 'assets/css/admin/editor.css';
-	public function __construct() {
+	public function __construct()
+	{
 		// Add editor settings.
 		$current_wp_version = $GLOBALS['wp_version'];
-		if ( version_compare( $current_wp_version, '5.8', '>=' ) ) {
-			add_filter( 'block_editor_settings_all', array( $this, 'editor_settings' ) );
+		if (version_compare($current_wp_version, '5.8', '>=')) {
+			add_filter('block_editor_settings_all', array($this, 'editor_settings'));
 		} else {
-			add_filter( 'block_editor_settings', array( $this, 'editor_settings' ) );
+			add_filter('block_editor_settings', array($this, 'editor_settings'));
 		}
 		// Add ajax action to load css file.
-		add_action( 'wp_ajax_' . $this->action, array( $this, 'css_file' ) );
+		add_action('wp_ajax_' . $this->action, array($this, 'css_file'));
 		// Add more editor assets.
-		add_action( 'enqueue_block_editor_assets', array( $this, 'assets' ) );
+		add_action('enqueue_block_editor_assets', array($this, 'assets'));
 	}
 
 	/**
@@ -28,17 +31,18 @@ class OnePress_Editor {
 	 *
 	 * @return void
 	 */
-	function assets() {
-		if ( function_exists( 'onepress_typography_render_style' ) ) {
-			$typo = onepress_typography_render_style( false, true );
-			if ( $typo['url'] ) {
-				wp_register_style( 'onepress-editor-fonts', $typo['url'] ); // Font style url.
-				wp_enqueue_style( 'onepress-editor-fonts' ); // Font style url.
+	function assets()
+	{
+		if (function_exists('onepress_typography_render_style')) {
+			$typo = onepress_typography_render_style(false, true);
+			if ($typo['url']) {
+				wp_register_style('onepress-editor-fonts', $typo['url']); // Font style url.
+				wp_enqueue_style('onepress-editor-fonts'); // Font style url.
 			}
-			wp_add_inline_style( 'wp-edit-post', $typo['code'] );
+			wp_add_inline_style('wp-edit-post', $typo['code']);
 		}
 
-		wp_add_inline_style( 'wp-edit-post', $this->css() );
+		wp_add_inline_style('wp-edit-post', $this->css());
 	}
 
 	/**
@@ -46,11 +50,12 @@ class OnePress_Editor {
 	 *
 	 * @return string CSS code.
 	 */
-	public function css() {
+	public function css()
+	{
 		$css = '';
 
-		$content_width = absint( get_theme_mod( 'single_layout_content_width' ) );
-		if ( $content_width > 0 ) {
+		$content_width = absint(get_theme_mod('single_layout_content_width'));
+		if ($content_width > 0) {
 			$value = $content_width . 'px';
 			$css  .= '.editor-styles-wrapper .wp-block:not([data-align="full"]):not([data-align="wide"]) { max-width: ' . $value . '; }';
 		}
@@ -63,13 +68,14 @@ class OnePress_Editor {
 	 *
 	 * @return string CSS URL
 	 */
-	public function editor_style_url() {
+	public function editor_style_url()
+	{
 		return add_query_arg(
 			array(
 				'action' => $this->action,
-				'nonce'  => wp_create_nonce( $this->action ),
+				'nonce'  => wp_create_nonce($this->action),
 			),
-			admin_url( 'admin-ajax.php' )
+			admin_url('admin-ajax.php')
 		);
 	}
 
@@ -81,7 +87,8 @@ class OnePress_Editor {
 	 * @param array $editor_settings
 	 * @return array
 	 */
-	public function editor_settings( $editor_settings ) {
+	public function editor_settings($editor_settings)
+	{
 		$editor_settings['styles'][] = array(
 			'css' => $this->load_style(),
 		);
@@ -93,8 +100,20 @@ class OnePress_Editor {
 	 *
 	 * @return void
 	 */
-	public function css_file() {
-		header( 'Content-type: text/css; charset: UTF-8' );
+	public function css_file()
+	{
+
+		if (!current_user_can('edit_posts')) {
+			wp_die(esc_html__('You are not authorized to access this page.', 'onepress'));
+			die();
+		}
+
+		$none = isset($_REQUEST['none']) ? sanitize_text_field($_REQUEST['none']) : false;
+		if (! wp_verify_nonce($none, $this->action)) {
+			wp_die(esc_html__('Security check!', 'onepress'));
+		}
+
+		header('Content-type: text/css; charset: UTF-8');
 		echo wp_kses_post($this->load_style());
 	}
 
@@ -103,21 +122,20 @@ class OnePress_Editor {
 	 *
 	 * @return string CSS code.
 	 */
-	public function load_style() {
+	public function load_style()
+	{
 		global $wp_filesystem;
 		WP_Filesystem();
 		$file          = get_template_directory() . '/' . $this->editor_file;
 		$file_contents = '';
-		if ( file_exists( $file ) ) {
-			$file_contents .= $wp_filesystem->get_contents( $file );
+		if (file_exists($file)) {
+			$file_contents .= $wp_filesystem->get_contents($file);
 		}
 		$file_contents .= '';
 		return $file_contents;
 	}
-
 }
 
-if ( is_admin() ) {
+if (is_admin()) {
 	new OnePress_Editor();
 }
-

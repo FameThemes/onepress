@@ -1,3 +1,6 @@
+@use "sass:string";
+@use "variables";
+
 // main: style.scss
 
 /* Magnific Popup CSS */
@@ -131,7 +134,7 @@ $mfp-use-visuallyhidden: false !default; // Hide content from browsers, but make
     background: $mfp-overlay-color;
     opacity: $mfp-overlay-opacity;
     @if $mfp-IE7support {
-        filter: unquote("alpha(opacity=#{$mfp-overlay-opacity*100})");
+        filter: string.unquote("alpha(opacity=#{$mfp-overlay-opacity*100})");
     }
 }
 
@@ -331,7 +334,7 @@ button {
     text-align: center;
     opacity: $mfp-controls-opacity;
     @if $mfp-IE7support {
-        filter: unquote("alpha(opacity=#{$mfp-controls-opacity*100})");
+        filter: string.unquote("alpha(opacity=#{$mfp-controls-opacity*100})");
     }
     padding: 0 0 18px 10px;
     color: $mfp-controls-color;
@@ -344,7 +347,7 @@ button {
     &:focus {
         opacity: 1;
         @if $mfp-IE7support {
-            filter: unquote("alpha(opacity=#{1*100})");
+            filter: string.unquote("alpha(opacity=#{1*100})");
         }
     }
 
@@ -387,7 +390,7 @@ button {
         position: absolute;
         opacity: $mfp-controls-opacity;
         @if $mfp-IE7support {
-            filter: unquote("alpha(opacity=#{$mfp-controls-opacity*100})");
+            filter: string.unquote("alpha(opacity=#{$mfp-controls-opacity*100})");
         }
         margin: 0;
         top: 50%;
@@ -403,7 +406,7 @@ button {
         &:focus {
             opacity: 1;
             @if $mfp-IE7support {
-                filter: unquote("alpha(opacity=#{1*100})");
+                filter: string.unquote("alpha(opacity=#{1*100})");
             }
         }
         &:before,
@@ -708,18 +711,18 @@ button {
 }
 
 .woocommerce ul.products li.product h3 {
-    @include rem('font-size', 18px);
+    @include variables.rem('font-size', 18px);
     margin-bottom: 7px;
 }
 
 .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt {
-    background-color: $primary;
-    @include rem('padding', 10px 20px);
+    background-color: variables.$primary;
+    @include variables.rem('padding', 10px 20px);
     color: #FFF;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    @include rem('font-size', 13px);
+    @include variables.rem('font-size', 13px);
     border-radius: 2px;
     &:hover {
         background: #222222;
@@ -744,7 +747,7 @@ button {
 }
 
 .related.products h2, #tab-description h2 {
-    @include rem('font-size', 17px);
+    @include variables.rem('font-size', 17px);
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -775,7 +778,7 @@ button {
             text-align: left;
         }
         h2 {
-            @include rem(font-size, 20px);
+            @include variables.rem(font-size, 20px);
         }
     }
     .wc-proceed-to-checkout {
@@ -783,7 +786,7 @@ button {
     }
     .woocommerce-order-details__title,
     .woocommerce-customer-details h2 {
-        @include rem(font-size, 20px);
+        @include variables.rem(font-size, 20px);
     }
 }
 
@@ -807,9 +810,9 @@ button {
 .woocommerce a.button.alt,
 .woocommerce button.button.alt,
 .woocommerce input.button.alt {
-    background-color: $primary;
+    background-color: variables.$primary;
     &:hover {
-        background-color: $primary;
+        background-color: variables.$primary;
         opacity: .8;
     }
 }
@@ -830,9 +833,9 @@ button {
 .breadcrumbs {
     font-size: 10px;
     padding: 15px 0px;
-    border-bottom: 1px solid $border;
+    border-bottom: 1px solid variables.$border;
     color: #858585;
-    @include for(small-screens) {
+    @include variables.for(small-screens) {
         font-size: 12px;
     }
     i {
@@ -840,7 +843,7 @@ button {
     }
     a {
         text-decoration: none;
-        color: $text;
+        color: variables.$text;
         font-weight: 600;
         &:hover {
             text-decoration: underline;
@@ -849,7 +852,7 @@ button {
     span {
         margin-right: 20px;
         position: relative;
-        @include for(small-screens) {
+        @include variables.for(small-screens) {
             margin-right: 40px;
         }
         span {
@@ -865,7 +868,7 @@ button {
         position: absolute;
         right: -11px;
         top: 2px;
-        @include for(small-screens) {
+        @include variables.for(small-screens) {
             right: -23px;
             top: 3px;
         }
@@ -879,7 +882,7 @@ button {
         position: absolute;
         right: -10px;
         top: 3px;
-        @include for(small-screens) {
+        @include variables.for(small-screens) {
             right: -22px;
             top: 4px;
         }
