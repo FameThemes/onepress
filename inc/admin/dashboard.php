@@ -179,7 +179,7 @@ class Onepress_Dashboard
 						?>
 					</label>
 					<?php if ($see_only) { ?>
-						<span class="note-bubble"><?php esc_html('Plus Feature', 'onepress'); ?></span>
+						<span class="note-bubble"><?php esc_html_e('Plus Feature', 'onepress'); ?></span>
 					<?php } ?>
 				</div>
 			</div>
@@ -432,7 +432,7 @@ class Onepress_Dashboard
 						<?php } ?>
 						<?php do_action('onepress_more_required_details', $actions); ?>
 					<?php  } else { ?>
-						<h3><?php esc_html(sprintf(__('Keep %s updated', 'onepress'), $theme_data->Name)); ?></h3>
+						<h3><?php echo esc_html(sprintf(__('Keep %s updated', 'onepress'), $theme_data->Name)); ?></h3>
 						<p><?php esc_html_e('Hooray! There are no required actions for you right now.', 'onepress'); ?></p>
 					<?php } ?>
 				</div>
