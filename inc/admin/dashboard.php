@@ -179,7 +179,7 @@ class Onepress_Dashboard
 						?>
 					</label>
 					<?php if ($see_only) { ?>
-						<span class="note-bubble"><?php esc_html('Plus Feature', 'onepress'); ?></span>
+						<span class="note-bubble"><?php esc_html_e('Plus Feature', 'onepress'); ?></span>
 					<?php } ?>
 				</div>
 			</div>
@@ -235,11 +235,12 @@ class Onepress_Dashboard
 		$theme_data = wp_get_theme('onepress');
 
 		if (isset($_GET['onepress_action_dismiss'])) {
+			$key = sanitize_text_field($_GET['onepress_action_dismiss']);
 			$actions_dismiss =  get_option('onepress_actions_dismiss');
 			if (!is_array($actions_dismiss)) {
 				$actions_dismiss = array();
 			}
-			$actions_dismiss[sanitize_text_field($_GET['onepress_action_dismiss'])] = 'dismiss';
+			$actions_dismiss[$key] = 'dismiss';
 			update_option('onepress_actions_dismiss', $actions_dismiss);
 		}
 
@@ -351,7 +352,7 @@ class Onepress_Dashboard
 								?>
 								<input type="submit" class="button button-secondary" value="<?php esc_attr_e('Copy now', 'onepress'); ?>">
 							</p>
-							<?php if (isset($_GET['copied']) && $_GET['copied'] == 1) { ?>
+							<?php if (isset($_GET['copied']) && absint($_GET['copied']) == 1) { ?>
 								<p><?php esc_html_e('Your settings were copied.', 'onepress'); ?></p>
 							<?php } ?>
 							<?php wp_nonce_field('copy_action_nonce', 'copy_action_nonce'); ?>
@@ -432,7 +433,7 @@ class Onepress_Dashboard
 						<?php } ?>
 						<?php do_action('onepress_more_required_details', $actions); ?>
 					<?php  } else { ?>
-						<h3><?php esc_html(sprintf(__('Keep %s updated', 'onepress'), $theme_data->Name)); ?></h3>
+						<h3><?php echo esc_html(sprintf(__('Keep %s updated', 'onepress'), $theme_data->Name)); ?></h3>
 						<p><?php esc_html_e('Hooray! There are no required actions for you right now.', 'onepress'); ?></p>
 					<?php } ?>
 				</div>
@@ -720,12 +721,12 @@ class Onepress_Dashboard
 			jQuery(document).ready(function($) {
 				$('body').addClass('about-php');
 
-				$('.copy-settings-form').on('submit', function() {
-					var c = confirm('<?php echo esc_attr_e('Are you sure want to copy ?', 'onepress'); ?>');
-					if (!c) {
-						return false;
-					}
-				});
+			$('.copy-settings-form').on('submit', function() {
+				var c = confirm(<?php echo wp_json_encode(__('Are you sure want to copy ?', 'onepress')); ?>);
+				if (!c) {
+					return false;
+				}
+			});
 			});
 		</script>
 <?php
