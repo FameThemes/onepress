@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 2.3.16
+- FIXED: Fix security issues.
+
 # 2.3.15
 
 - FIXED: Fix security issues.
