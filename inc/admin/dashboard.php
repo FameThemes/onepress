@@ -722,7 +722,7 @@ class Onepress_Dashboard
 				$('body').addClass('about-php');
 
 			$('.copy-settings-form').on('submit', function() {
-				var c = confirm(<?php echo wp_json_encode(__('Are you sure want to copy ?', 'onepress')); ?>);
+				var c = confirm(<?php echo wp_json_encode(__('Are you sure you want to copy?', 'onepress')); ?>);
 				if (!c) {
 					return false;
 				}
