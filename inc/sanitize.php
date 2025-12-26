@@ -133,25 +133,37 @@ function onepress_sanitize_repeatable_data_field($input, $setting)
 					case 'radio':
 						$data[$i][$id] = sanitize_text_field($value);
 						break;
-					case 'media':
-						$value = wp_parse_args(
-							$value,
-							array(
-								'url' => '',
-								'id' => false,
-							)
-						);
-						$value['id'] = absint($value['id']);
-						$data[$i][$id]['url'] = sanitize_text_field($value['url']);
+				case 'media':
+					$value = wp_parse_args(
+						$value,
+						array(
+							'url' => '',
+							'id' => false,
+						)
+					);
+					$value['id'] = absint($value['id']);
+					
+					// Validate and sanitize URL
+					$url = sanitize_text_field($value['url']);
+					// Only allow http/https URLs for security
+					if (!empty($url) && !preg_match('/^https?:\/\//', $url)) {
+						$url = '';
+					}
+					$url = esc_url_raw($url);
+					$data[$i][$id]['url'] = $url;
 
-						if ($url = wp_get_attachment_url($value['id'])) {
-							$data[$i][$id]['id']   = $value['id'];
-							$data[$i][$id]['url']  = $url;
-						} else {
+					if ($url && $value['id'] && ($attachment_url = wp_get_attachment_url($value['id']))) {
+						$data[$i][$id]['id']   = $value['id'];
+						$data[$i][$id]['url']  = esc_url_raw($attachment_url);
+					} else {
+						if (empty($url)) {
 							$data[$i][$id]['id'] = '';
+						} else {
+							$data[$i][$id]['id'] = $value['id'];
 						}
+					}
 
-						break;
+					break;
 					default:
 						$data[$i][$id] = wp_kses_post($value);
 				}

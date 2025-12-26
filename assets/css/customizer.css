@@ -1,7 +1,7 @@
 li#accordion-panel-onepress_options > .accordion-section-title,
 li#accordion-panel-onepress_typo > .accordion-section-title
 {
-    padding-left: 14px;
+    /* padding-left: 14px; */
 }
 
 .theme-action-count {

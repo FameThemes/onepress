@@ -149,7 +149,22 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 		$this->json['default_empty_title']    = $this->default_empty_title;
 		$this->json['value']         = $value;
 		$this->json['id_key']        = $this->id_key;
-		$this->json['fields']        = $this->fields;
+		
+		// Sanitize fields data before passing to JavaScript
+		$sanitized_fields = array();
+		foreach ($this->fields as $key => $field) {
+			$sanitized_fields[$key] = $field;
+			if (isset($field['title'])) {
+				// Allow safe HTML tags in title (like <strong>, <em>, etc.)
+				$sanitized_fields[$key]['title'] = wp_kses_post($field['title']);
+			}
+			if (isset($field['desc'])) {
+				// Allow safe HTML tags in description (like <strong>, <em>, <a>, <p>, etc.)
+				// wp_kses_post() removes dangerous tags like <script>, <iframe> while keeping safe ones
+				$sanitized_fields[$key]['desc'] = wp_kses_post($field['desc']);
+			}
+		}
+		$this->json['fields'] = $sanitized_fields;
 
 	}
 
@@ -229,7 +244,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 									#>
 									<# if ( field.type !== 'checkbox' ) { #>
 									<# if ( field.title ) { #>
-									<label class="field-label">{{ field.title }}</label>
+									<label class="field-label">{{{ field.title }}}</label>
 									<# } #>
 
 									<# if ( field.desc ) { #>
@@ -248,11 +263,11 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 									<# if ( field.title ) { #>
 									<label class="checkbox-label">
 										<input data-live-id="{{ field.id }}" type="checkbox" <# if ( field.value ) { #> checked="checked" <# } #> value="1" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
-										{{ field.title }}</label>
+										{{{ field.title }}}</label>
 									<# } #>
 
 									<# if ( field.desc ) { #>
-									<p class="field-desc description">{{ field.desc }}</p>
+									<p class="field-desc description">{{{ field.desc }}}</p>
 									<# } #>
 
 
