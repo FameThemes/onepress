@@ -331,9 +331,8 @@ class Onepress_Dots_Navigation
 	{
 		if (get_theme_mod($this->get_name('__enable'), false)) {
 			if (is_front_page()) {
-				wp_enqueue_script('jquery.bully', get_template_directory_uri() . '/assets/js/jquery.bully.js', array('jquery'), false, true);
 				wp_localize_script(
-					'jquery.bully',
+					'onepress-theme',
 					'Onepress_Bully',
 					array(
 						'enable_label' => get_theme_mod($this->get_name('__enable_label'), true) ? true : false,
