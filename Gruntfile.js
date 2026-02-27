@@ -79,12 +79,15 @@ module.exports = function (grunt) {
           "!phpunit.xml",
           "!README.md",
           "!sass/**",
+          "!src/**",
           "!codesniffer.ruleset.xml",
           "!vendor/**",
           "!composer.json",
           "!composer.lock",
           "!package-lock.json",
           "!phpcs.xml.dist",
+          "!webpack.config.js",
+          "!.babelrc",
         ],
         dest: "onepress/",
       },
@@ -122,8 +125,6 @@ module.exports = function (grunt) {
       theme_main: {
         src: [
           "style.css",
-          "assets/**/*.css",
-          "src/**/*.scss",
         ],
         overwrite: true,
         replacements: [

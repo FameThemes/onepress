@@ -7,6 +7,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const glob = require("glob");
 const path = require("path");
 const MergeIntoSingle = require("webpack-merge-and-include-globally");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 /**
  * @see https://github.com/WordPress/wp-movies-demo/tree/main
@@ -28,7 +29,11 @@ module.exports = (env, args) => {
       "./src/frontend/libs/gallery/jquery.justified.js",
     [`frontend/gallery-carousel${suffix}`]:
       "./src/frontend/libs/gallery/owl.carousel.js",
-    [`admin/editor${suffix}`]: "./src/frontend/sass/editor.scss",
+    [`admin/editor${suffix}`]: "./src/frontend/styles/editor.scss",
+    [`admin/customizer${suffix}`]: "./src/admin/customizer.js",
+    [`admin/customizer-liveview${suffix}`]: "./src/admin/customizer-liveview.js",
+    [`admin/admin${suffix}`]: "./src/admin/admin.js",
+    [`frontend/lightgallery${suffix}`]: "./src/frontend/lightgallery.js",
   };
 
   return [
@@ -37,7 +42,7 @@ module.exports = (env, args) => {
       entry,
       output: {
         ...defaultConfig[0].output,
-        path: path.resolve(__dirname, "assets/build"),
+        path: path.resolve(__dirname, "assets"),
         // filename: "build/[name].bundle.js",
         // assetModuleFilename: (pathData) => {
         //   const ext = path.extname(pathData.filename).toLowerCase();
@@ -55,6 +60,18 @@ module.exports = (env, args) => {
         //   return "media/[name][ext]"; // Mặc định: PDF, mp4, webm, v.v.
         // },
       },
+      plugins: [
+        ...(defaultConfig[0].plugins || []),
+        new CopyWebpackPlugin({
+          patterns: [
+            {
+              from: path.resolve(__dirname, "src/images"),
+              to: "images",
+              noErrorOnMissing: true,
+            },
+          ],
+        }),
+      ],
       optimization: undefined,
       devServer: undefined,
     },
