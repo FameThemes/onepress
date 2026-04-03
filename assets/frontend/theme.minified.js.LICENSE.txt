@@ -61,3 +61,7 @@ Copyright © 2011-2016 Caleb Troughton
 Licensed under the MIT license.
 https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 */
+
+/*! Backstretch - v2.0.4 - 2013-06-19
+ * http://srobbin.com/jquery-plugins/backstretch/
+ * Copyright (c) 2013 Scott Robbin; Licensed MIT */

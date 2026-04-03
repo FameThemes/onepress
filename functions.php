@@ -282,6 +282,9 @@ function onepress_load_build_script($key, $deps = [], $is_admin = false)
 	}
 
 	$f = $dir . $key . '.asset.php';
+	if (!file_exists($f) && $min_ext !== '') {
+		$f = $dir . $key . $min_ext . '.asset.php';
+	}
 	if (!file_exists($f)) {
 		return;
 	}
@@ -300,8 +303,12 @@ function onepress_load_build_script($key, $deps = [], $is_admin = false)
 		$handle_css = 'onepress-style';
 	}
 
-	if (file_exists($dir . $key . '.css')) {
-		$url_css =  $dir_url . $key . '.css';
+	$css_file = $key . '.css';
+	if (!file_exists($dir . $css_file) && $min_ext !== '') {
+		$css_file = $key . $min_ext . '.css';
+	}
+	if (file_exists($dir . $css_file)) {
+		$url_css = $dir_url . $css_file;
 	}
 
 	if ($url_js) {
@@ -684,6 +691,11 @@ require get_template_directory() . '/inc/class-sections-navigation.php';
  * Customizer additions.
  */
 require get_template_directory() . '/inc/customizer.php';
+
+/**
+ * Customizer: React layout builder (theme_mod JSON tree).
+ */
+require get_template_directory() . '/inc/mini-builder/mini-builder.php';
 
 /**
  * Add theme info page

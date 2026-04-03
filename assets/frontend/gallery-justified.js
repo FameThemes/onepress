@@ -28,9 +28,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    *
    * @param $gallery the gallery to build
    * @param settings the settings (the defaults are in JustifiedGallery.defaults)
-   * @constructor
+   * @class
    */
-  var JustifiedGallery = function ($gallery, settings) {
+  const JustifiedGallery = function ($gallery, settings) {
     this.settings = settings;
     this.checkSettings();
     this.imgAnalyzerTimeout = null;
@@ -65,9 +65,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     this.$gallery = $gallery;
   };
 
-  /** @returns {String} the best suffix given the width and the height */
+  /**
+   * @param  width
+   * @param  height
+   * @return {string} the best suffix given the width and the height
+   */
   JustifiedGallery.prototype.getSuffix = function (width, height) {
-    var longestSide, i;
+    let longestSide, i;
     longestSide = width > height ? width : height;
     for (i = 0; i < this.suffixRanges.length; i++) {
       if (longestSide <= this.suffixRanges[i]) {
@@ -80,14 +84,18 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   /**
    * Remove the suffix from the string
    *
-   * @returns {string} a new string without the suffix
+   * @param  str
+   * @param  suffix
+   * @return {string} a new string without the suffix
    */
   JustifiedGallery.prototype.removeSuffix = function (str, suffix) {
     return str.substring(0, str.length - suffix.length);
   };
 
   /**
-   * @returns {boolean} a boolean to say if the suffix is contained in the str or not
+   * @param  str
+   * @param  suffix
+   * @return {boolean} a boolean to say if the suffix is contained in the str or not
    */
   JustifiedGallery.prototype.endsWith = function (str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -96,14 +104,18 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   /**
    * Get the used suffix of a particular url
    *
-   * @param str
-   * @returns {String} return the used suffix
+   * @param  str
+   * @return {string} return the used suffix
    */
   JustifiedGallery.prototype.getUsedSuffix = function (str) {
-    for (var si in this.settings.sizeRangeSuffixes) {
+    for (const si in this.settings.sizeRangeSuffixes) {
       if (this.settings.sizeRangeSuffixes.hasOwnProperty(si)) {
-        if (this.settings.sizeRangeSuffixes[si].length === 0) continue;
-        if (this.endsWith(str, this.settings.sizeRangeSuffixes[si])) return this.settings.sizeRangeSuffixes[si];
+        if (this.settings.sizeRangeSuffixes[si].length === 0) {
+          continue;
+        }
+        if (this.endsWith(str, this.settings.sizeRangeSuffixes[si])) {
+          return this.settings.sizeRangeSuffixes[si];
+        }
       }
     }
     return '';
@@ -113,15 +125,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * Given an image src, with the width and the height, returns the new image src with the
    * best suffix to show the best quality thumbnail.
    *
-   * @returns {String} the suffix to use
+   * @param  imageSrc
+   * @param  imgWidth
+   * @param  imgHeight
+   * @param  image
+   * @return {string} the suffix to use
    */
   JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight, image) {
-    var newImageSrc;
+    let newImageSrc;
     if (this.settings.thumbnailPath) {
       newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight, image);
     } else {
-      var matchRes = imageSrc.match(this.settings.extension);
-      var ext = matchRes !== null ? matchRes[0] : '';
+      const matchRes = imageSrc.match(this.settings.extension);
+      const ext = matchRes !== null ? matchRes[0] : '';
       newImageSrc = imageSrc.replace(this.settings.extension, '');
       newImageSrc = this.removeSuffix(newImageSrc, this.getUsedSuffix(newImageSrc));
       newImageSrc += this.getSuffix(imgWidth, imgHeight) + ext;
@@ -132,13 +148,15 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   /**
    * Shows the images that is in the given entry
    *
-   * @param $entry the entry
+   * @param $entry   the entry
    * @param callback the callback that is called when the show animation is finished
    */
   JustifiedGallery.prototype.showImg = function ($entry, callback) {
     if (this.settings.cssAnimation) {
       $entry.addClass('jg-entry-visible');
-      if (callback) callback();
+      if (callback) {
+        callback();
+      }
     } else {
       $entry.stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
       $entry.find(this.settings.imgSelector).stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
@@ -149,12 +167,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * Extract the image src form the image, looking from the 'safe-src', and if it can't be found, from the
    * 'src' attribute. It saves in the image data the 'jg.originalSrc' field, with the extracted src.
    *
-   * @param $image the image to analyze
-   * @returns {String} the extracted src
+   * @param  $image the image to analyze
+   * @return {string} the extracted src
    */
   JustifiedGallery.prototype.extractImgSrcFromImage = function ($image) {
-    var imageSrc = $image.data('safe-src');
-    var imageSrcLoc = 'data-safe-src';
+    let imageSrc = $image.data('safe-src');
+    let imageSrcLoc = 'data-safe-src';
     if (typeof imageSrc === 'undefined') {
       imageSrc = $image.attr('src');
       imageSrcLoc = 'src';
@@ -165,34 +183,40 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     return imageSrc;
   };
 
-  /** @returns {jQuery} the image in the given entry */
+  /**
+   * @param  $entry
+   * @return {jQuery} the image in the given entry
+   */
   JustifiedGallery.prototype.imgFromEntry = function ($entry) {
-    var $img = $entry.find(this.settings.imgSelector);
+    const $img = $entry.find(this.settings.imgSelector);
     return $img.length === 0 ? null : $img;
   };
 
-  /** @returns {jQuery} the caption in the given entry */
+  /**
+   * @param  $entry
+   * @return {jQuery} the caption in the given entry
+   */
   JustifiedGallery.prototype.captionFromEntry = function ($entry) {
-    var $caption = $entry.find('> .jg-caption');
+    const $caption = $entry.find('> .jg-caption');
     return $caption.length === 0 ? null : $caption;
   };
 
   /**
    * Display the entry
    *
-   * @param {jQuery} $entry the entry to display
-   * @param {int} x the x position where the entry must be positioned
-   * @param y the y position where the entry must be positioned
-   * @param imgWidth the image width
-   * @param imgHeight the image height
-   * @param rowHeight the row height of the row that owns the entry
+   * @param {jQuery} $entry    the entry to display
+   * @param {int}    x         the x position where the entry must be positioned
+   * @param          y         the y position where the entry must be positioned
+   * @param          imgWidth  the image width
+   * @param          imgHeight the image height
+   * @param          rowHeight the row height of the row that owns the entry
    */
   JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgHeight, rowHeight) {
     $entry.width(imgWidth);
     $entry.height(rowHeight);
     $entry.css('top', y);
     $entry.css('left', x);
-    var $image = this.imgFromEntry($entry);
+    const $image = this.imgFromEntry($entry);
     if ($image !== null) {
       $image.css('width', imgWidth);
       $image.css('height', imgHeight);
@@ -200,14 +224,14 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       $image.css('margin-top', -imgHeight / 2);
 
       // Image reloading for an high quality of thumbnails
-      var imageSrc = $image.data('jg.src');
+      let imageSrc = $image.data('jg.src');
       if (imageSrc) {
         imageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
         $image.one('error', function () {
           this.resetImgSrc($image); //revert to the original thumbnail
         });
-        var loadNewImage = function () {
-          // if (imageSrc !== newImageSrc) { 
+        const loadNewImage = function () {
+          // if (imageSrc !== newImageSrc) {
           $image.attr('src', imageSrc);
           // }
         };
@@ -233,14 +257,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param {jQuery} $entry the entry to process
    */
   JustifiedGallery.prototype.displayEntryCaption = function ($entry) {
-    var $image = this.imgFromEntry($entry);
+    const $image = this.imgFromEntry($entry);
     if ($image !== null && this.settings.captions) {
-      var $imgCaption = this.captionFromEntry($entry);
+      let $imgCaption = this.captionFromEntry($entry);
 
       // Create it if it doesn't exists
       if ($imgCaption === null) {
-        var caption = $image.attr('alt');
-        if (!this.isValidCaption(caption)) caption = $entry.attr('title');
+        let caption = $image.attr('alt');
+        if (!this.isValidCaption(caption)) {
+          caption = $entry.attr('title');
+        }
         if (this.isValidCaption(caption)) {
           // Create only we found something
           $imgCaption = $('<div class="jg-caption">' + caption + '</div>');
@@ -251,7 +277,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
       // Create events (we check again the $imgCaption because it can be still inexistent)
       if ($imgCaption !== null) {
-        if (!this.settings.cssAnimation) $imgCaption.stop().fadeTo(0, this.settings.captionSettings.nonVisibleOpacity);
+        if (!this.settings.cssAnimation) {
+          $imgCaption.stop().fadeTo(0, this.settings.captionSettings.nonVisibleOpacity);
+        }
         this.addCaptionEventsHandlers($entry);
       }
     } else {
@@ -262,7 +290,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   /**
    * Validates the caption
    *
-   * @param caption The caption that should be validated
+   * @param  caption The caption that should be validated
    * @return {boolean} Validation result
    */
   JustifiedGallery.prototype.isValidCaption = function (caption) {
@@ -276,7 +304,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param {Event} eventObject the event object
    */
   JustifiedGallery.prototype.onEntryMouseEnterForCaption = function (eventObject) {
-    var $caption = this.captionFromEntry($(eventObject.currentTarget));
+    const $caption = this.captionFromEntry($(eventObject.currentTarget));
     if (this.settings.cssAnimation) {
       $caption.addClass('jg-caption-visible').removeClass('jg-caption-hidden');
     } else {
@@ -291,7 +319,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param {Event} eventObject the event object
    */
   JustifiedGallery.prototype.onEntryMouseLeaveForCaption = function (eventObject) {
-    var $caption = this.captionFromEntry($(eventObject.currentTarget));
+    const $caption = this.captionFromEntry($(eventObject.currentTarget));
     if (this.settings.cssAnimation) {
       $caption.removeClass('jg-caption-visible').removeClass('jg-caption-hidden');
     } else {
@@ -305,7 +333,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param $entry the entry to modify
    */
   JustifiedGallery.prototype.addCaptionEventsHandlers = function ($entry) {
-    var captionMouseEvents = $entry.data('jg.captionMouseEvents');
+    let captionMouseEvents = $entry.data('jg.captionMouseEvents');
     if (typeof captionMouseEvents === 'undefined') {
       captionMouseEvents = {
         mouseenter: $.proxy(this.onEntryMouseEnterForCaption, this),
@@ -323,7 +351,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param $entry the entry to modify
    */
   JustifiedGallery.prototype.removeCaptionEventsHandlers = function ($entry) {
-    var captionMouseEvents = $entry.data('jg.captionMouseEvents');
+    const captionMouseEvents = $entry.data('jg.captionMouseEvents');
     if (typeof captionMouseEvents !== 'undefined') {
       $entry.off('mouseenter', undefined, captionMouseEvents.mouseenter);
       $entry.off('mouseleave', undefined, captionMouseEvents.mouseleave);
@@ -345,26 +373,28 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    *
    * @param isLastRow
    * @param hiddenRow undefined or false for normal behavior. hiddenRow = true to hide the row.
-   * @returns a boolean to know if the row has been justified or not
+   * @return a boolean to know if the row has been justified or not
    */
   JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow, hiddenRow) {
-    var i,
+    let i,
       $entry,
       imgAspectRatio,
       newImgW,
       newImgH,
       justify = true;
-    var minHeight = 0;
-    var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * this.settings.margins;
-    var rowHeight = availableWidth / this.buildingRow.aspectRatio;
-    var defaultRowHeight = this.settings.rowHeight;
-    var justifiable = this.buildingRow.width / availableWidth > this.settings.justifyThreshold;
+    let minHeight = 0;
+    let availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * this.settings.margins;
+    const rowHeight = availableWidth / this.buildingRow.aspectRatio;
+    let defaultRowHeight = this.settings.rowHeight;
+    const justifiable = this.buildingRow.width / availableWidth > this.settings.justifyThreshold;
 
     //Skip the last row if we can't justify it and the lastRow == 'hide'
     if (hiddenRow || isLastRow && this.settings.lastRow === 'hide' && !justifiable) {
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
         $entry = this.buildingRow.entriesBuff[i];
-        if (this.settings.cssAnimation) $entry.removeClass('jg-entry-visible');else {
+        if (this.settings.cssAnimation) {
+          $entry.removeClass('jg-entry-visible');
+        } else {
           $entry.stop().fadeTo(0, 0.1);
           $entry.find('> img, > a > img').fadeTo(0, 0);
         }
@@ -393,7 +423,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       availableWidth -= Math.round(newImgW);
       $entry.data('jg.jwidth', Math.round(newImgW));
       $entry.data('jg.jheight', Math.ceil(newImgH));
-      if (i === 0 || minHeight > newImgH) minHeight = newImgH;
+      if (i === 0 || minHeight > newImgH) {
+        minHeight = newImgH;
+      }
     }
     this.buildingRow.height = minHeight;
     return justify;
@@ -406,8 +438,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param hiddenRow undefined or false for normal behavior. hiddenRow = true to hide the row.
    */
   JustifiedGallery.prototype.flushRow = function (isLastRow, hiddenRow) {
-    var settings = this.settings;
-    var $entry,
+    const settings = this.settings;
+    let $entry,
       buildingRowRes,
       offX = this.border,
       i;
@@ -417,19 +449,25 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       return;
     }
     if (this.maxRowHeight) {
-      if (this.maxRowHeight < this.buildingRow.height) this.buildingRow.height = this.maxRowHeight;
+      if (this.maxRowHeight < this.buildingRow.height) {
+        this.buildingRow.height = this.maxRowHeight;
+      }
     }
 
     //Align last (unjustified) row
     if (isLastRow && (settings.lastRow === 'center' || settings.lastRow === 'right')) {
-      var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
+      let availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
         $entry = this.buildingRow.entriesBuff[i];
         availableWidth -= $entry.data('jg.jwidth');
       }
-      if (settings.lastRow === 'center') offX += Math.round(availableWidth / 2);else if (settings.lastRow === 'right') offX += availableWidth;
+      if (settings.lastRow === 'center') {
+        offX += Math.round(availableWidth / 2);
+      } else if (settings.lastRow === 'right') {
+        offX += availableWidth;
+      }
     }
-    var lastEntryIdx = this.buildingRow.entriesBuff.length - 1;
+    const lastEntryIdx = this.buildingRow.entriesBuff.length - 1;
     for (i = 0; i <= lastEntryIdx; i++) {
       $entry = this.buildingRow.entriesBuff[this.settings.rtl ? lastEntryIdx - i : i];
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), this.buildingRow.height);
@@ -449,7 +487,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   };
 
   // Scroll position not restoring: https://github.com/miromannino/Justified-Gallery/issues/221
-  var galleryPrevStaticHeight = 0;
+  let galleryPrevStaticHeight = 0;
   JustifiedGallery.prototype.rememberGalleryHeight = function () {
     galleryPrevStaticHeight = this.$gallery.height();
     this.$gallery.height(galleryPrevStaticHeight);
@@ -471,8 +509,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
       // if the gallery is not currently visible, abort.
-      if (!this.$gallery.is(":visible")) return;
-      var galleryWidth = parseFloat(this.$gallery.width());
+      if (!this.$gallery.is(':visible')) {
+        return;
+      }
+      const galleryWidth = parseFloat(this.$gallery.width());
       if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
         this.galleryWidth = galleryWidth;
         this.rewind();
@@ -485,14 +525,14 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   };
 
   /**
-   * @returns {boolean} a boolean saying if the spinner is active or not
+   * @return {boolean} a boolean saying if the spinner is active or not
    */
   JustifiedGallery.prototype.isSpinnerActive = function () {
     return this.spinner.intervalId !== null;
   };
 
   /**
-   * @returns {int} the spinner height
+   * @return {int} the spinner height
    */
   JustifiedGallery.prototype.getSpinnerHeight = function () {
     return this.spinner.$el.innerHeight();
@@ -512,8 +552,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * Starts the spinner animation
    */
   JustifiedGallery.prototype.startLoadingSpinnerAnimation = function () {
-    var spinnerContext = this.spinner;
-    var $spinnerPoints = spinnerContext.$el.find('span');
+    const spinnerContext = this.spinner;
+    const $spinnerPoints = spinnerContext.$el.find('span');
     clearInterval(spinnerContext.intervalId);
     this.$gallery.append(spinnerContext.$el);
     this.setGalleryTempHeight(this.offY + this.buildingRow.height + this.getSpinnerHeight());
@@ -539,30 +579,30 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   };
 
   /**
-   * @returns {String} `settings.selector` rejecting spinner element
+   * @return {string} `settings.selector` rejecting spinner element
    */
   JustifiedGallery.prototype.getSelectorWithoutSpinner = function () {
     return this.settings.selector + ', div:not(.jg-spinner)';
   };
 
   /**
-   * @returns {Array} all entries matched by `settings.selector`
+   * @return {Array} all entries matched by `settings.selector`
    */
   JustifiedGallery.prototype.getAllEntries = function () {
-    var selector = this.getSelectorWithoutSpinner();
+    const selector = this.getSelectorWithoutSpinner();
     return this.$gallery.children(selector).toArray();
   };
 
   /**
    * Update the entries searching it from the justified gallery HTML element
    *
-   * @param norewind if norewind only the new entries will be changed (i.e. randomized, sorted or filtered)
-   * @returns {boolean} true if some entries has been founded
+   * @param  norewind if norewind only the new entries will be changed (i.e. randomized, sorted or filtered)
+   * @return {boolean} true if some entries has been founded
    */
   JustifiedGallery.prototype.updateEntries = function (norewind) {
-    var newEntries;
+    let newEntries;
     if (norewind && this.lastFetchedEntry != null) {
-      var selector = this.getSelectorWithoutSpinner();
+      const selector = this.getSelectorWithoutSpinner();
       newEntries = $(this.lastFetchedEntry).nextAll(selector).toArray();
     } else {
       this.entries = [];
@@ -594,7 +634,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param entries the entries that has been modified and that must be re-ordered in the DOM
    */
   JustifiedGallery.prototype.insertToGallery = function (entries) {
-    var that = this;
+    const that = this;
     $.each(entries, function () {
       $(this).appendTo(that.$gallery);
     });
@@ -607,7 +647,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @return the shuffled array
    */
   JustifiedGallery.prototype.shuffleArray = function (a) {
-    var i, j, temp;
+    let i, j, temp;
     for (i = a.length - 1; i > 0; i--) {
       j = Math.floor(Math.random() * (i + 1));
       temp = a[i];
@@ -636,7 +676,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param a the array to reset
    */
   JustifiedGallery.prototype.resetFilters = function (a) {
-    for (var i = 0; i < a.length; i++) $(a[i]).removeClass('jg-filtered');
+    for (let i = 0; i < a.length; i++) {
+      $(a[i]).removeClass('jg-filtered');
+    }
   };
 
   /**
@@ -646,23 +688,22 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @return the filtered array
    */
   JustifiedGallery.prototype.filterArray = function (a) {
-    var settings = this.settings;
+    const settings = this.settings;
     if ($.type(settings.filter) === 'string') {
       // Filter only keeping the entries passed in the string
       return a.filter(function (el) {
-        var $el = $(el);
+        const $el = $(el);
         if ($el.is(settings.filter)) {
           $el.removeClass('jg-filtered');
           return true;
-        } else {
-          $el.addClass('jg-filtered').removeClass('jg-visible');
-          return false;
         }
+        $el.addClass('jg-filtered').removeClass('jg-visible');
+        return false;
       });
     } else if ($.isFunction(settings.filter)) {
       // Filter using the passed function
-      var filteredArr = a.filter(settings.filter);
-      for (var i = 0; i < a.length; i++) {
+      const filteredArr = a.filter(settings.filter);
+      for (let i = 0; i < a.length; i++) {
         if (filteredArr.indexOf(a[i]) === -1) {
           $(a[i]).addClass('jg-filtered').removeClass('jg-visible');
         } else {
@@ -675,6 +716,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
   /**
    * Revert the image src to the default value.
+   * @param $img
    */
   JustifiedGallery.prototype.resetImgSrc = function ($img) {
     if ($img.data('jg.originalSrcLoc') === 'src') {
@@ -699,7 +741,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     // Get fresh entries list since filtered entries are absent in `this.entries`
     $.each(this.getAllEntries(), $.proxy(function (_, entry) {
-      var $entry = $(entry);
+      const $entry = $(entry);
 
       // Reset entry style
       $entry.css('width', '');
@@ -710,7 +752,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       $entry.removeClass('jg-entry jg-filtered jg-entry-visible');
 
       // Reset image style
-      var $img = this.imgFromEntry($entry);
+      const $img = this.imgFromEntry($entry);
       if ($img) {
         $img.css('width', '');
         $img.css('height', '');
@@ -724,13 +766,15 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
       // Remove caption
       this.removeCaptionEventsHandlers($entry);
-      var $caption = this.captionFromEntry($entry);
+      const $caption = this.captionFromEntry($entry);
       if ($entry.data('jg.createdCaption')) {
         // remove also the caption element (if created by jg)
         $entry.data('jg.createdCaption', undefined);
-        if ($caption !== null) $caption.remove();
-      } else {
-        if ($caption !== null) $caption.fadeTo(0, 1);
+        if ($caption !== null) {
+          $caption.remove();
+        }
+      } else if ($caption !== null) {
+        $caption.fadeTo(0, 1);
       }
     }, this));
     this.$gallery.css('height', '');
@@ -745,11 +789,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param isForResize if the image analyzer is called for resizing or not, to call a different callback at the end
    */
   JustifiedGallery.prototype.analyzeImages = function (isForResize) {
-    for (var i = this.lastAnalyzedIndex + 1; i < this.entries.length; i++) {
-      var $entry = $(this.entries[i]);
+    for (let i = this.lastAnalyzedIndex + 1; i < this.entries.length; i++) {
+      const $entry = $(this.entries[i]);
       if ($entry.data('jg.loaded') === true || $entry.data('jg.loaded') === 'skipped') {
-        var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * this.settings.margins;
-        var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
+        const availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * this.settings.margins;
+        const imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
         this.buildingRow.entriesBuff.push($entry);
         this.buildingRow.aspectRatio += imgAspectRatio;
         this.buildingRow.width += imgAspectRatio * this.settings.rowHeight;
@@ -775,9 +819,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     }
 
     /* Stop, if there is, the timeout to start the analyzeImages.
-     This is because an image can be set loaded, and the timeout can be set,
-     but this image can be analyzed yet.
-     */
+       This is because an image can be set loaded, and the timeout can be set,
+       but this image can be analyzed yet.
+       */
     this.stopImgAnalyzerStarter();
     this.setGalleryFinalHeight(this.galleryHeightToSet);
 
@@ -802,7 +846,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @param isForResize specifies if the image analyzer must be called for resizing or not
    */
   JustifiedGallery.prototype.startImgAnalyzer = function (isForResize) {
-    var that = this;
+    const that = this;
     this.stopImgAnalyzerStarter();
     this.imgAnalyzerTimeout = setTimeout(function () {
       that.analyzeImages(isForResize);
@@ -814,13 +858,15 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * because some browsers, with a 404 set complete = true.
    *
    * @param imageSrc the image src to load
-   * @param onLoad callback that is called when the image has been loaded
-   * @param onError callback that is called in case of an error
+   * @param onLoad   callback that is called when the image has been loaded
+   * @param onError  callback that is called in case of an error
    */
   JustifiedGallery.prototype.onImageEvent = function (imageSrc, onLoad, onError) {
-    if (!onLoad && !onError) return;
-    var memImage = new Image();
-    var $memImage = $(memImage);
+    if (!onLoad && !onError) {
+      return;
+    }
+    const memImage = new Image();
+    const $memImage = $(memImage);
     if (onLoad) {
       $memImage.one('load', function () {
         $memImage.off('load error');
@@ -841,28 +887,32 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * It analyzes all the entries starting theirs loading and calling the image analyzer (that works with loaded images)
    */
   JustifiedGallery.prototype.init = function () {
-    var imagesToLoad = false,
+    let imagesToLoad = false,
       skippedImages = false,
       that = this;
     $.each(this.entries, function (index, entry) {
-      var $entry = $(entry);
-      var $image = that.imgFromEntry($entry);
+      const $entry = $(entry);
+      const $image = that.imgFromEntry($entry);
       $entry.addClass('jg-entry');
       if ($entry.data('jg.loaded') !== true && $entry.data('jg.loaded') !== 'skipped') {
         // Link Rel global overwrite
-        if (that.settings.rel !== null) $entry.attr('rel', that.settings.rel);
+        if (that.settings.rel !== null) {
+          $entry.attr('rel', that.settings.rel);
+        }
 
         // Link Target global overwrite
-        if (that.settings.target !== null) $entry.attr('target', that.settings.target);
+        if (that.settings.target !== null) {
+          $entry.attr('target', that.settings.target);
+        }
         if ($image !== null) {
           // Image src
-          var imageSrc = that.extractImgSrcFromImage($image);
+          const imageSrc = that.extractImgSrcFromImage($image);
 
           /* If we have the height and the width, we don't wait that the image is loaded, 
-             but we start directly with the justification */
+                  but we start directly with the justification */
           if (that.settings.waitThumbnailsLoad === false || !imageSrc) {
-            var width = parseFloat($image.attr('width'));
-            var height = parseFloat($image.attr('height'));
+            let width = parseFloat($image.attr('width'));
+            let height = parseFloat($image.attr('height'));
             if ($image.prop('tagName') === 'svg') {
               width = parseFloat($image[0].getBBox().width);
               height = parseFloat($image[0].getBBox().height);
@@ -880,7 +930,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           imagesToLoad = true;
 
           // Spinner start
-          if (!that.isSpinnerActive()) that.startLoadingSpinnerAnimation();
+          if (!that.isSpinnerActive()) {
+            that.startLoadingSpinnerAnimation();
+          }
           that.onImageEvent(imageSrc, function (loadImg) {
             // image loaded
             $entry.data('jg.width', loadImg.width);
@@ -899,7 +951,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         }
       }
     });
-    if (!imagesToLoad && !skippedImages) this.startImgAnalyzer(false);
+    if (!imagesToLoad && !skippedImages) {
+      this.startImgAnalyzer(false);
+    }
     this.checkWidth();
   };
 
@@ -907,14 +961,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * Checks that it is a valid number. If a string is passed it is converted to a number
    *
    * @param settingContainer the object that contains the setting (to allow the conversion)
-   * @param settingName the setting name
+   * @param settingName      the setting name
    */
   JustifiedGallery.prototype.checkOrConvertNumber = function (settingContainer, settingName) {
     if ($.type(settingContainer[settingName]) === 'string') {
       settingContainer[settingName] = parseFloat(settingContainer[settingName]);
     }
     if ($.type(settingContainer[settingName]) === 'number') {
-      if (isNaN(settingContainer[settingName])) throw 'invalid number for ' + settingName;
+      if (isNaN(settingContainer[settingName])) {
+        throw 'invalid number for ' + settingName;
+      }
     } else {
       throw settingName + ' must be a number';
     }
@@ -928,17 +984,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     if ($.type(this.settings.sizeRangeSuffixes) !== 'object') {
       throw 'sizeRangeSuffixes must be defined and must be an object';
     }
-    var suffixRanges = [];
-    for (var rangeIdx in this.settings.sizeRangeSuffixes) {
-      if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) suffixRanges.push(rangeIdx);
+    const suffixRanges = [];
+    for (const rangeIdx in this.settings.sizeRangeSuffixes) {
+      if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) {
+        suffixRanges.push(rangeIdx);
+      }
     }
-    var newSizeRngSuffixes = {
+    const newSizeRngSuffixes = {
       0: ''
     };
-    for (var i = 0; i < suffixRanges.length; i++) {
+    for (let i = 0; i < suffixRanges.length; i++) {
       if ($.type(suffixRanges[i]) === 'string') {
         try {
-          var numIdx = parseInt(suffixRanges[i].replace(/^[a-z]+/, ''), 10);
+          const numIdx = parseInt(suffixRanges[i].replace(/^[a-z]+/, ''), 10);
           newSizeRngSuffixes[numIdx] = this.settings.sizeRangeSuffixes[suffixRanges[i]];
         } catch (e) {
           throw 'sizeRangeSuffixes keys must contains correct numbers (' + e + ')';
@@ -957,8 +1015,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * @return number or null
    */
   JustifiedGallery.prototype.retrieveMaxRowHeight = function () {
-    var newMaxRowHeight = null;
-    var rowHeight = this.settings.rowHeight;
+    let newMaxRowHeight = null;
+    const rowHeight = this.settings.rowHeight;
     if ($.type(this.settings.maxRowHeight) === 'string') {
       if (this.settings.maxRowHeight.match(/^[0-9]+%$/)) {
         newMaxRowHeight = rowHeight * parseFloat(this.settings.maxRowHeight.match(/^([0-9]+)%$/)[1]) / 100;
@@ -974,10 +1032,14 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     }
 
     // check if the converted value is not a number
-    if (isNaN(newMaxRowHeight)) throw 'invalid number for maxRowHeight';
+    if (isNaN(newMaxRowHeight)) {
+      throw 'invalid number for maxRowHeight';
+    }
 
     // check values, maxRowHeight must be >= rowHeight
-    if (newMaxRowHeight < rowHeight) newMaxRowHeight = rowHeight;
+    if (newMaxRowHeight < rowHeight) {
+      newMaxRowHeight = rowHeight;
+    }
     return newMaxRowHeight;
   };
 
@@ -990,7 +1052,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     this.checkOrConvertNumber(this.settings, 'margins');
     this.checkOrConvertNumber(this.settings, 'border');
     this.checkOrConvertNumber(this.settings, 'maxRowsCount');
-    var lastRowModes = ['justify', 'nojustify', 'left', 'center', 'right', 'hide'];
+    const lastRowModes = ['justify', 'nojustify', 'left', 'center', 'right', 'hide'];
     if (lastRowModes.indexOf(this.settings.lastRow) === -1) {
       throw 'lastRow must be one of: ' + lastRowModes.join(', ');
     }
@@ -1001,7 +1063,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     if ($.type(this.settings.cssAnimation) !== 'boolean') {
       throw 'cssAnimation must be a boolean';
     }
-    if ($.type(this.settings.captions) !== 'boolean') throw 'captions must be a boolean';
+    if ($.type(this.settings.captions) !== 'boolean') {
+      throw 'captions must be a boolean';
+    }
     this.checkOrConvertNumber(this.settings.captionSettings, 'animationDuration');
     this.checkOrConvertNumber(this.settings.captionSettings, 'visibleOpacity');
     if (this.settings.captionSettings.visibleOpacity < 0 || this.settings.captionSettings.visibleOpacity > 1) {
@@ -1014,8 +1078,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     this.checkOrConvertNumber(this.settings, 'imagesAnimationDuration');
     this.checkOrConvertNumber(this.settings, 'refreshTime');
     this.checkOrConvertNumber(this.settings, 'refreshSensitivity');
-    if ($.type(this.settings.randomize) !== 'boolean') throw 'randomize must be a boolean';
-    if ($.type(this.settings.selector) !== 'string') throw 'selector must be a string';
+    if ($.type(this.settings.randomize) !== 'boolean') {
+      throw 'randomize must be a boolean';
+    }
+    if ($.type(this.settings.selector) !== 'string') {
+      throw 'selector must be a string';
+    }
     if (this.settings.sort !== false && !$.isFunction(this.settings.sort)) {
       throw 'sort must be false or a comparison function';
     }
@@ -1026,12 +1094,14 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
   /**
    * It brings all the indexes from the sizeRangeSuffixes and it orders them. They are then sorted and returned.
-   * @returns {Array} sorted suffix ranges
+   * @return {Array} sorted suffix ranges
    */
   JustifiedGallery.prototype.retrieveSuffixRanges = function () {
-    var suffixRanges = [];
-    for (var rangeIdx in this.settings.sizeRangeSuffixes) {
-      if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) suffixRanges.push(parseInt(rangeIdx, 10));
+    const suffixRanges = [];
+    for (const rangeIdx in this.settings.sizeRangeSuffixes) {
+      if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) {
+        suffixRanges.push(parseInt(rangeIdx, 10));
+      }
     }
     suffixRanges.sort(function (a, b) {
       return a > b ? 1 : a < b ? -1 : 0;
@@ -1055,21 +1125,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     this.suffixRanges = this.retrieveSuffixRanges();
   };
   JustifiedGallery.prototype.defaults = {
-    sizeRangeSuffixes: {},
-    /* e.g. Flickr configuration
-    {
-    100: '_t',  // used when longest is less than 100px
-    240: '_m',  // used when longest is between 101px and 240px
-    320: '_n',  // ...
-    500: '',
-    640: '_z',
-    1024: '_b'  // used as else case because it is the last
-    }
-    */
-    thumbnailPath: undefined,
-    /* If defined, sizeRangeSuffixes is not used, and this function is used to determine the
-    path relative to a specific thumbnail size. The function should accept respectively three arguments:
-    current path, width and height */
+    sizeRangeSuffixes: {} /* e.g. Flickr configuration
+                          {
+                          100: '_t',  // used when longest is less than 100px
+                          240: '_m',  // used when longest is between 101px and 240px
+                          320: '_n',  // ...
+                          500: '',
+                          640: '_z',
+                          1024: '_b'  // used as else case because it is the last
+                          }
+                          */,
+    thumbnailPath: undefined /* If defined, sizeRangeSuffixes is not used, and this function is used to determine the
+                             path relative to a specific thumbnail size. The function should accept respectively three arguments:
+                             current path, width and height */,
     rowHeight: 120,
     // required? required to be > 0?
     maxRowHeight: false,
@@ -1085,9 +1153,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     lastRow: 'nojustify',
     // … which is the same as 'left', or can be 'justify', 'center', 'right' or 'hide'
 
-    justifyThreshold: 0.90,
-    /* if row width / available space > 0.90 it will be always justified
-     * (i.e. lastRow setting is not considered) */
+    justifyThreshold: 0.9 /* if row width / available space > 0.90 it will be always justified
+                          * (i.e. lastRow setting is not considered) */,
     waitThumbnailsLoad: true,
     captions: true,
     cssAnimation: true,
@@ -1112,24 +1179,22 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     randomize: false,
     rtl: false,
     // right-to-left mode
-    sort: false,
-    /*
-    - false: to do not sort
-    - function: to sort them using the function as comparator (see Array.prototype.sort())
-    */
-    filter: false,
-    /*
-    - false, null or undefined: for a disabled filter
-    - a string: an entry is kept if entry.is(filter string) returns true
-    see jQuery's .is() function for further information
-    - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
-     It follows the specifications of the Array.prototype.filter() function of JavaScript.
-    */
+    sort: false /*
+                - false: to do not sort
+                - function: to sort them using the function as comparator (see Array.prototype.sort())
+                */,
+    filter: false /*
+                  - false, null or undefined: for a disabled filter
+                  - a string: an entry is kept if entry.is(filter string) returns true
+                    see jQuery's .is() function for further information
+                  - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
+                      It follows the specifications of the Array.prototype.filter() function of JavaScript.
+                  */,
     selector: 'a',
     // The selector that is used to know what are the entries of the gallery
     imgSelector: '> img, > a > img, > svg, > a > svg',
     // The selector that is used to know what are the images of each entry
-    triggerEvent: function (event) {
+    triggerEvent(event) {
       // This is called to trigger events, the default behavior is to call $.trigger
       this.$gallery.trigger(event); // Consider that 'this' is this set to the JustifiedGallery object, so it can
     } // access to fields such as $gallery, useful to trigger events with jQuery.
@@ -1143,18 +1208,20 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    *  - jg.resize : called when the gallery has been resized
    *  - jg.rowflush : when a new row appears
    *
-   * @param arg the action (or the settings) passed when the plugin is called
-   * @returns {*} the object itself
+   * @param  arg the action (or the settings) passed when the plugin is called
+   * @return {*} the object itself
    */
   $.fn.justifiedGallery = function (arg) {
     return this.each(function (index, gallery) {
-      var $gallery = $(gallery);
+      const $gallery = $(gallery);
       $gallery.addClass('justified-gallery');
-      var controller = $gallery.data('jg.controller');
+      let controller = $gallery.data('jg.controller');
       if (typeof controller === 'undefined') {
         // Create controller and assign it to the object data
         if (typeof arg !== 'undefined' && arg !== null && $.type(arg) !== 'object') {
-          if (arg === 'destroy') return; // Just a call to an unexisting object
+          if (arg === 'destroy') {
+            return;
+          } // Just a call to an unexisting object
           throw 'The argument must be an object';
         }
         controller = new JustifiedGallery($gallery, $.extend({}, JustifiedGallery.prototype.defaults, arg));
@@ -1172,7 +1239,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }
 
       // Update the entries list
-      if (!controller.updateEntries(arg === 'norewind')) return;
+      if (!controller.updateEntries(arg === 'norewind')) {
+        return;
+      }
 
       // Init justified gallery
       controller.init();

@@ -46,7 +46,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   // helper function for logging errors
   // $.error breaks jQuery chaining
   var console = window.console;
-  var logError = typeof console == 'undefined' ? function () {} : function (message) {
+  var logError = typeof console === 'undefined' ? function () {} : function (message) {
     console.error(message);
   };
 
@@ -72,7 +72,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
     // make jQuery plugin
     $.fn[namespace] = function (arg0 /*, arg1 */) {
-      if (typeof arg0 == 'string') {
+      if (typeof arg0 === 'string') {
         // method call $().plugin( 'methodName', { options } )
         // shift arguments by 1
         var args = arraySlice.call(arguments, 1);
@@ -261,7 +261,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     return isValid && num;
   }
   function noop() {}
-  var logError = typeof console == 'undefined' ? noop : function (message) {
+  let logError = typeof console === 'undefined' ? noop : function (message) {
     console.error(message);
   };
 
@@ -341,7 +341,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     setup();
 
     // use querySeletor if elem is string
-    if (typeof elem == 'string') {
+    if (typeof elem === 'string') {
       elem = document.querySelector(elem);
     }
 
@@ -469,7 +469,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
   // extends objects
   utils.extend = function (a, b) {
-    for (var prop in b) {
+    for (let prop in b) {
       a[prop] = b[prop];
     }
     return a;
@@ -489,7 +489,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     if (Array.isArray(obj)) {
       // use object if already an array
       ary = obj;
-    } else if (obj && typeof obj.length == 'number') {
+    } else if (obj && typeof obj.length === 'number') {
       // convert nodeList to array
       for (var i = 0; i < obj.length; i++) {
         ary.push(obj[i]);
@@ -525,7 +525,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
   // use element as selector string
   utils.getQueryElement = function (elem) {
-    if (typeof elem == 'string') {
+    if (typeof elem === 'string') {
       return document.querySelector(elem);
     }
     return elem;
@@ -655,6 +655,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
 /**
  * Outlayer Item
+ * @param window
+ * @param factory
  */
 
 (function (window, factory) {
@@ -684,8 +686,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   // -------------------------- CSS3 support -------------------------- //
 
   var docElemStyle = document.documentElement.style;
-  var transitionProperty = typeof docElemStyle.transition == 'string' ? 'transition' : 'WebkitTransition';
-  var transformProperty = typeof docElemStyle.transform == 'string' ? 'transform' : 'WebkitTransform';
+  let transitionProperty = typeof docElemStyle.transition === 'string' ? 'transition' : 'WebkitTransition';
+  let transformProperty = typeof docElemStyle.transform === 'string' ? 'transform' : 'WebkitTransform';
   var transitionEndEvent = {
     WebkitTransition: 'webkitTransitionEnd',
     transition: 'transitionend'
@@ -717,7 +719,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   }
 
   // inherit EvEmitter
-  var proto = Item.prototype = Object.create(EvEmitter.prototype);
+  let proto = Item.prototype = Object.create(EvEmitter.prototype);
   proto.constructor = Item;
   proto._create = function () {
     // transition objects
@@ -748,7 +750,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
    */
   proto.css = function (style) {
     var elemStyle = this.element.style;
-    for (var prop in style) {
+    for (let prop in style) {
       // use vendor property if available
       var supportedProp = vendorProperties[prop] || prop;
       elemStyle[supportedProp] = style[prop];
@@ -876,7 +878,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     if (args.isCleaning) {
       this._removeStyles(args.to);
     }
-    for (var prop in args.onTransitionEnd) {
+    for (let prop in args.onTransitionEnd) {
       args.onTransitionEnd[prop].call(this);
     }
   };
@@ -951,7 +953,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     // }
     // munge number to millisecond, to match stagger
     var duration = this.layout.options.transitionDuration;
-    duration = typeof duration == 'number' ? duration + 'ms' : duration;
+    duration = typeof duration === 'number' ? duration + 'ms' : duration;
     // enable transition styles
     this.css({
       transitionProperty: transitionProps,
@@ -1014,11 +1016,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   /**
    * removes style property from element
    * @param {Object} style
-  **/
+   **/
   proto._removeStyles = function (style) {
     // clean up transition styles
     var cleanStyle = {};
-    for (var prop in style) {
+    for (let prop in style) {
       cleanStyle[prop] = '';
     }
     this.css(cleanStyle);
@@ -1101,7 +1103,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
       return 'opacity';
     }
     // get first property
-    for (var prop in optionStyle) {
+    for (let prop in optionStyle) {
       return prop;
     }
   };
@@ -1172,7 +1174,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   // ----- vars ----- //
   var console = window.console;
   var jQuery = window.jQuery;
-  var noop = function () {};
+  let noop = function () {};
 
   // -------------------------- Outlayer -------------------------- //
 
@@ -1380,7 +1382,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
       this[measurement] = 0;
     } else {
       // use option as an element
-      if (typeof option == 'string') {
+      if (typeof option === 'string') {
         elem = this.element.querySelector(option);
       } else if (option instanceof HTMLElement) {
         elem = option;
@@ -1652,7 +1654,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
       return;
     }
     // if string, use argument as selector string
-    if (typeof elems == 'string') {
+    if (typeof elems === 'string') {
       elems = this.element.querySelectorAll(elems);
     }
     elems = utils.makeArray(elems);
@@ -1681,7 +1683,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
   /**
    * @param {Element} stamp
-  **/
+   **/
   proto._manageStamp = noop;
 
   /**
@@ -1754,7 +1756,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
    * add items to Outlayer instance
    * @param {Array or NodeList or Element} elems
    * @returns {Array} items - Outlayer.Items
-  **/
+   **/
   proto.addItems = function (elems) {
     var items = this._itemize(elems);
     // add items to collection
@@ -1990,7 +1992,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   // munge time-like parameter into millisecond number
   // '0.4s' -> 40
   function getMilliseconds(time) {
-    if (typeof time == 'number') {
+    if (typeof time === 'number') {
       return time;
     }
     var matches = time.match(/(^\d*\.?\d*)(\w*)/);
@@ -2013,7 +2015,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
 /**
  * Isotope Item
-**/
+ **/
 
 (function (window, factory) {
   // universal module definition
@@ -2036,7 +2038,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   function Item() {
     Outlayer.Item.apply(this, arguments);
   }
-  var proto = Item.prototype = Object.create(Outlayer.Item.prototype);
+  let proto = Item.prototype = Object.create(Outlayer.Item.prototype);
   var _create = proto._create;
   proto._create = function () {
     // assign id, used for original-order sorting
@@ -2056,7 +2058,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     // go thru getSortData obj and apply the sorters
     var getSortData = this.layout.options.getSortData;
     var sorters = this.layout._sorters;
-    for (var key in getSortData) {
+    for (let key in getSortData) {
       var sorter = sorters[key];
       this.sortData[key] = sorter(this.element, this);
     }
@@ -2075,6 +2077,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
 /**
  * Isotope LayoutMode
+ * @param window
+ * @param factory
  */
 
 (function (window, factory) {
@@ -2108,7 +2112,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   /**
    * some methods should just defer to default Outlayer method
    * and reference the Isotope instance as `this`
-  **/
+   **/
   var facadeMethods = ['_resetLayout', '_getItemLayoutPosition', '_manageStamp', '_getContainerSize', '_getElementOffset', 'needsResizeLayout', '_getOption'];
   facadeMethods.forEach(function (methodName) {
     proto[methodName] = function () {
@@ -2144,7 +2148,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
    * get columnWidth or rowHeight
    * segment: 'column' or 'row'
    * size 'Width' or 'Height'
-  **/
+   **/
   proto.getSegmentSize = function (segment, size) {
     var segmentName = segment + size;
     var outerSize = 'outer' + size;
@@ -2291,7 +2295,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     // apply setHeight to necessary columns
     var setHeight = minimumY + item.size.outerHeight;
     var setSpan = this.cols + 1 - colGroup.length;
-    for (var i = 0; i < setSpan; i++) {
+    for (let i = 0; i < setSpan; i++) {
       this.colYs[shortColIndex + i] = setHeight;
     }
     return position;
@@ -2310,7 +2314,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     // how many different places could this brick fit horizontally
     var groupCount = this.cols + 1 - colSpan;
     // for each group potential horizontal position
-    for (var i = 0; i < groupCount; i++) {
+    for (let i = 0; i < groupCount; i++) {
       // make an array of colY values for that one group
       var groupColYs = this.colYs.slice(i, i + colSpan);
       // and get the max value of the array
@@ -2335,7 +2339,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
     var isOriginTop = this._getOption('originTop');
     var stampMaxY = (isOriginTop ? offset.top : offset.bottom) + stampSize.outerHeight;
-    for (var i = firstCol; i <= lastCol; i++) {
+    for (let i = firstCol; i <= lastCol; i++) {
       this.colYs[i] = Math.max(stampMaxY, this.colYs[i]);
     }
   };
@@ -2403,7 +2407,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   };
 
   // inherit Masonry prototype
-  for (var method in Masonry.prototype) {
+  for (let method in Masonry.prototype) {
     // do not inherit mode methods
     if (!keepModeMethods[method]) {
       proto[method] = Masonry.prototype[method];
@@ -2429,6 +2433,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
 /**
  * fitRows layout mode
+ * @param window
+ * @param factory
  */
 
 (function (window, factory) {
@@ -2446,7 +2452,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 })(window, function factory(LayoutMode) {
   'use strict';
 
-  var FitRows = LayoutMode.create('fitRows');
+  let FitRows = LayoutMode.create('fitRows');
   var proto = FitRows.prototype;
   proto._resetLayout = function () {
     this.x = 0;
@@ -2481,6 +2487,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
 /**
  * vertical layout mode
+ * @param window
+ * @param factory
  */
 
 (function (window, factory) {
@@ -2511,8 +2519,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     var y = this.y;
     this.y += item.size.outerHeight;
     return {
-      x: x,
-      y: y
+      x,
+      y
     };
   };
   proto._getContainerSize = function () {
@@ -2553,7 +2561,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
   // -------------------------- helpers -------------------------- //
 
-  var trim = String.prototype.trim ? function (str) {
+  let trim = String.prototype.trim ? function (str) {
     return str.trim();
   } : function (str) {
     return str.replace(/^\s+|\s+$/g, '');
@@ -2585,7 +2593,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     // keep of track of sortBys
     this.sortHistory = ['original-order'];
     // create from registered layout modes
-    for (var name in LayoutMode.modes) {
+    for (let name in LayoutMode.modes) {
       this._initLayoutMode(name);
     }
   };
@@ -2747,7 +2755,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
         return jQuery(item.element).is(filter);
       };
     }
-    if (typeof filter == 'function') {
+    if (typeof filter === 'function') {
       // use filter as function
       return function (item) {
         return filter(item.element);
@@ -2780,7 +2788,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   };
   proto._getSorters = function () {
     var getSortData = this.options.getSortData;
-    for (var key in getSortData) {
+    for (let key in getSortData) {
       var sorter = getSortData[key];
       this._sorters[key] = mungeSorter(sorter);
     }
@@ -2811,7 +2819,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
     // `.foo-bar parseInt` will parse that as a number
     function mungeSorter(sorter) {
       // if not a string, return function or whatever it is
-      if (typeof sorter != 'string') {
+      if (typeof sorter !== 'string') {
         return sorter;
       }
       // parse the sorter string
@@ -2854,10 +2862,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
 
   // parsers used in getSortData shortcut strings
   Isotope.sortDataParsers = {
-    'parseInt': function (val) {
+    parseInt: function (val) {
       return parseInt(val, 10);
     },
-    'parseFloat': function (val) {
+    parseFloat: function (val) {
       return parseFloat(val);
     }
   };
@@ -2886,7 +2894,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_LO
   function getItemSorter(sortBys, sortAsc) {
     return function sorter(itemA, itemB) {
       // cycle through all sortKeys
-      for (var i = 0; i < sortBys.length; i++) {
+      for (let i = 0; i < sortBys.length; i++) {
         var sortBy = sortBys[i];
         var a = itemA.sortData[sortBy];
         var b = itemB.sortData[sortBy];

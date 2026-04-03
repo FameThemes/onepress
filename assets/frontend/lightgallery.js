@@ -24,7 +24,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
   (function () {
     'use strict';
 
-    var defaults = {
+    const defaults = {
       mode: 'lg-slide',
       // Ex : 'ease'
       cssEasing: 'ease',
@@ -51,13 +51,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       appendSubHtmlTo: '.lg-sub-html',
       subHtmlSelectorRelative: false,
       /**
-       * @desc number of preload slides
+       * @description number of preload slides
        * will exicute only after the current slide is fully loaded.
        *
        * @ex you clicked on 4th image and if preload = 1 then 3rd slide and 5th
        * slide will be loaded in the background after the 4th slide is fully loaded..
        * if preload is 2 then 2nd 3rd 5th 6th slides will be preloaded.. ... ...
-       *
        */
       preload: 1,
       showAfterLoad: true,
@@ -114,18 +113,16 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       // Gallery items
       if (this.s.dynamic) {
         this.$items = this.s.dynamicEl;
-      } else {
-        if (this.s.selector === 'this') {
-          this.$items = this.$el;
-        } else if (this.s.selector !== '') {
-          if (this.s.selectWithin) {
-            this.$items = $(this.s.selectWithin).find(this.s.selector);
-          } else {
-            this.$items = this.$el.find($(this.s.selector));
-          }
+      } else if (this.s.selector === 'this') {
+        this.$items = this.$el;
+      } else if (this.s.selector !== '') {
+        if (this.s.selectWithin) {
+          this.$items = $(this.s.selectWithin).find(this.s.selector);
         } else {
-          this.$items = this.$el.children();
+          this.$items = this.$el.find($(this.s.selector));
         }
+      } else {
+        this.$items = this.$el.children();
       }
 
       // .lg-item
@@ -137,7 +134,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       return this;
     }
     Plugin.prototype.init = function () {
-      var _this = this;
+      const _this = this;
 
       // s.preload should not be more than $item.length
       if (_this.s.preload > _this.$items.length) {
@@ -145,7 +142,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }
 
       // if dynamic option is enabled execute immediately
-      var _hash = window.location.hash;
+      const _hash = window.location.hash;
       if (_hash.indexOf('lg=' + this.s.galleryId) > 0) {
         _this.index = parseInt(_hash.split('&slide=')[1], 10);
         $('body').addClass('lg-from-hash');
@@ -189,7 +186,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }
     };
     Plugin.prototype.build = function (index) {
-      var _this = this;
+      const _this = this;
       _this.structure();
 
       // module constructor
@@ -229,12 +226,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       _this.$outer.trigger('mousemove.lg');
     };
     Plugin.prototype.structure = function () {
-      var list = '';
-      var controls = '';
-      var i = 0;
-      var subHtmlCont = '';
-      var template;
-      var _this = this;
+      let list = '';
+      let controls = '';
+      let i = 0;
+      let subHtmlCont = '';
+      let template;
+      const _this = this;
       $('body').append('<div class="lg-backdrop"></div>');
       $('.lg-backdrop').css('transition-duration', this.s.backdropDuration + 'ms');
 
@@ -291,7 +288,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
         this.$outer.addClass('lg-show-after-load');
       }
       if (this.doCss()) {
-        var $inner = this.$outer.find('.lg-inner');
+        const $inner = this.$outer.find('.lg-inner');
         $inner.css('transition-timing-function', this.s.cssEasing);
         $inner.css('transition-duration', this.s.speed + 'ms');
       }
@@ -312,9 +309,9 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     // For fixed height gallery
     Plugin.prototype.setTop = function () {
       if (this.s.height !== '100%') {
-        var wH = $(window).height();
-        var top = (wH - parseInt(this.s.height, 10)) / 2;
-        var $lGallery = this.$outer.find('.lg');
+        const wH = $(window).height();
+        const top = (wH - parseInt(this.s.height, 10)) / 2;
+        const $lGallery = this.$outer.find('.lg');
         if (wH >= parseInt(this.s.height, 10)) {
           $lGallery.css('top', top + 'px');
         } else {
@@ -326,10 +323,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     // Find css3 support
     Plugin.prototype.doCss = function () {
       // check for css animation support
-      var support = function () {
-        var transition = ['transition', 'MozTransition', 'WebkitTransition', 'OTransition', 'msTransition', 'KhtmlTransition'];
-        var root = document.documentElement;
-        var i = 0;
+      const support = function () {
+        const transition = ['transition', 'MozTransition', 'WebkitTransition', 'OTransition', 'msTransition', 'KhtmlTransition'];
+        const root = document.documentElement;
+        let i = 0;
         for (i = 0; i < transition.length; i++) {
           if (transition[i] in root.style) {
             return true;
@@ -343,13 +340,14 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     };
 
     /**
-     *  @desc Check the given src is video
-     *  @param {String} src
+     *  @description Check the given src is video
+     * @param          index
+     * @param {string} src
      *  @return {Object} video type
      *  Ex:{ youtube  :  ["//www.youtube.com/watch?v=c0asJgSyxcY", "c0asJgSyxcY"] }
      */
     Plugin.prototype.isVideo = function (src, index) {
-      var html;
+      let html;
       if (this.s.dynamic) {
         html = this.s.dynamicEl[index].html;
       } else {
@@ -360,31 +358,31 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
           html5: true
         };
       }
-      var youtube = src.match(/\/\/(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=|embed\/)?([a-z0-9\-\_\%]+)/i);
-      var vimeo = src.match(/\/\/(?:www\.)?vimeo.com\/([0-9a-z\-_]+)/i);
-      var dailymotion = src.match(/\/\/(?:www\.)?dai.ly\/([0-9a-z\-_]+)/i);
-      var vk = src.match(/\/\/(?:www\.)?(?:vk\.com|vkontakte\.ru)\/(?:video_ext\.php\?)(.*)/i);
+      const youtube = src.match(/\/\/(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=|embed\/)?([a-z0-9\-\_\%]+)/i);
+      const vimeo = src.match(/\/\/(?:www\.)?vimeo.com\/([0-9a-z\-_]+)/i);
+      const dailymotion = src.match(/\/\/(?:www\.)?dai.ly\/([0-9a-z\-_]+)/i);
+      const vk = src.match(/\/\/(?:www\.)?(?:vk\.com|vkontakte\.ru)\/(?:video_ext\.php\?)(.*)/i);
       if (youtube) {
         return {
-          youtube: youtube
+          youtube
         };
       } else if (vimeo) {
         return {
-          vimeo: vimeo
+          vimeo
         };
       } else if (dailymotion) {
         return {
-          dailymotion: dailymotion
+          dailymotion
         };
       } else if (vk) {
         return {
-          vk: vk
+          vk
         };
       }
     };
 
     /**
-     *  @desc Create image counter
+     *  @description Create image counter
      *  Ex: 1/10
      */
     Plugin.prototype.counter = function () {
@@ -394,13 +392,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     };
 
     /**
-     *  @desc add sub-html into the slide
-     *  @param {Number} index - index of the slide
+     *  @description add sub-html into the slide
+     * @param {number} index - index of the slide
      */
     Plugin.prototype.addHtml = function (index) {
-      var subHtml = null;
-      var subHtmlUrl;
-      var $currentEle;
+      let subHtml = null;
+      let subHtmlUrl;
+      let $currentEle;
       if (this.s.dynamic) {
         if (this.s.dynamicEl[index].subHtmlUrl) {
           subHtmlUrl = this.s.dynamicEl[index].subHtmlUrl;
@@ -422,7 +420,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
         if (typeof subHtml !== 'undefined' && subHtml !== null) {
           // get first letter of subhtml
           // if first letter starts with . or # get the html form the jQuery object
-          var fL = subHtml.substring(0, 1);
+          const fL = subHtml.substring(0, 1);
           if (fL === '.' || fL === '#') {
             if (this.s.subHtmlSelectorRelative && !this.s.dynamic) {
               subHtml = $currentEle.find(subHtml).html();
@@ -440,12 +438,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
         } else {
           this.$outer.find(this.s.appendSubHtmlTo).html(subHtml);
         }
+      } else if (subHtmlUrl) {
+        this.$slide.eq(index).load(subHtmlUrl);
       } else {
-        if (subHtmlUrl) {
-          this.$slide.eq(index).load(subHtmlUrl);
-        } else {
-          this.$slide.eq(index).append(subHtml);
-        }
+        this.$slide.eq(index).append(subHtml);
       }
 
       // Add lg-empty-html class if title doesn't exist
@@ -460,12 +456,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     };
 
     /**
-     *  @desc Preload slides
-     *  @param {Number} index - index of the slide
+     *  @description Preload slides
+     * @param {number} index - index of the slide
      */
     Plugin.prototype.preload = function (index) {
-      var i = 1;
-      var j = 1;
+      let i = 1;
+      let j = 1;
       for (i = 1; i <= this.s.preload; i++) {
         if (i >= this.$items.length - index) {
           break;
@@ -481,25 +477,25 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     };
 
     /**
-     *  @desc Load slide content into slide.
-     *  @param {Number} index - index of the slide.
-     *  @param {Boolean} rec - if true call loadcontent() function again.
-     *  @param {Boolean} delay - delay for adding complete class. it is 0 except first time.
+     *  @description Load slide content into slide.
+     * @param {number}  index - index of the slide.
+     * @param {boolean} rec   - if true call loadcontent() function again.
+     * @param {boolean} delay - delay for adding complete class. it is 0 except first time.
      */
     Plugin.prototype.loadContent = function (index, rec, delay) {
-      var _this = this;
-      var _hasPoster = false;
-      var _$img;
-      var _src;
-      var _poster;
-      var _srcset;
-      var _sizes;
-      var _html;
-      var getResponsiveSrc = function (srcItms) {
-        var rsWidth = [];
-        var rsSrc = [];
-        for (var i = 0; i < srcItms.length; i++) {
-          var __src = srcItms[i].split(' ');
+      const _this = this;
+      let _hasPoster = false;
+      let _$img;
+      let _src;
+      let _poster;
+      let _srcset;
+      let _sizes;
+      let _html;
+      const getResponsiveSrc = function (srcItms) {
+        const rsWidth = [];
+        const rsSrc = [];
+        for (let i = 0; i < srcItms.length; i++) {
+          const __src = srcItms[i].split(' ');
 
           // Manage empty space
           if (__src[0] === '') {
@@ -508,8 +504,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
           rsSrc.push(__src[0]);
           rsWidth.push(__src[1]);
         }
-        var wWidth = $(window).width();
-        for (var j = 0; j < rsWidth.length; j++) {
+        const wWidth = $(window).width();
+        for (let j = 0; j < rsWidth.length; j++) {
           if (parseInt(rsWidth[j], 10) > wWidth) {
             _src = rsSrc[j];
             break;
@@ -524,7 +520,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
         _html = _this.s.dynamicEl[index].html;
         _src = _this.s.dynamicEl[index].src;
         if (_this.s.dynamicEl[index].responsive) {
-          var srcDyItms = _this.s.dynamicEl[index].responsive.split(',');
+          const srcDyItms = _this.s.dynamicEl[index].responsive.split(',');
           getResponsiveSrc(srcDyItms);
         }
         _srcset = _this.s.dynamicEl[index].srcset;
@@ -537,7 +533,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
         _html = _this.$items.eq(index).attr('data-html');
         _src = _this.$items.eq(index).attr('href') || _this.$items.eq(index).attr('data-src');
         if (_this.$items.eq(index).attr('data-responsive')) {
-          var srcItms = _this.$items.eq(index).attr('data-responsive').split(',');
+          const srcItms = _this.$items.eq(index).attr('data-responsive').split(',');
           getResponsiveSrc(srcItms);
         }
         _srcset = _this.$items.eq(index).attr('data-srcset');
@@ -546,22 +542,20 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
 
       //if (_src || _srcset || _sizes || _poster) {
 
-      var iframe = false;
+      let iframe = false;
       if (_this.s.dynamic) {
         if (_this.s.dynamicEl[index].iframe) {
           iframe = true;
         }
-      } else {
-        if (_this.$items.eq(index).attr('data-iframe') === 'true') {
-          iframe = true;
-        }
+      } else if (_this.$items.eq(index).attr('data-iframe') === 'true') {
+        iframe = true;
       }
-      var _isVideo = _this.isVideo(_src, index);
+      const _isVideo = _this.isVideo(_src, index);
       if (!_this.$slide.eq(index).hasClass('lg-loaded')) {
         if (iframe) {
           _this.$slide.eq(index).prepend('<div class="lg-video-cont" style="max-width:' + _this.s.iframeMaxWidth + '"><div class="lg-video"><iframe class="lg-object" frameborder="0" src="' + _src + '"  allowfullscreen="true"></iframe></div></div>');
         } else if (_hasPoster) {
-          var videoClass = '';
+          let videoClass = '';
           if (_isVideo && _isVideo.youtube) {
             videoClass = 'lg-has-youtube';
           } else if (_isVideo && _isVideo.vimeo) {
@@ -598,7 +592,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }
       _this.$slide.eq(index).find('.lg-object').on('load.lg error.lg', function () {
         // For first time add some delay for displaying the start animation.
-        var _speed = 0;
+        let _speed = 0;
 
         // Do not change the delay value because it is required for zoom plugin.
         // If gallery opened from direct url (hash) speed value should be 0
@@ -629,7 +623,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     };
 
     /**
-     *   @desc slide function for lightgallery
+     *   @description slide function for lightgallery
      ** Slide() gets call on start
      ** ** Set lg.on true once slide() function gets called.
      ** Call loadContent() on slide() function inside setTimeout
@@ -637,31 +631,32 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
      ** ** So on first slide( if lg.on if false that is first slide) loadContent() should start loading immediately
      ** ** Else loadContent() should wait for the transition to complete.
      ** ** So set timeout s.speed + 50
-     <=> ** loadContent() will load slide content in to the particular slide
+      <=> ** loadContent() will load slide content in to the particular slide
      ** ** It has recursion (rec) parameter. if rec === true loadContent() will call preload() function.
      ** ** preload will execute only when the previous slide is fully loaded (images iframe)
      ** ** avoid simultaneous image load
-     <=> ** Preload() will check for s.preload value and call loadContent() again accoring to preload value
+      <=> ** Preload() will check for s.preload value and call loadContent() again accoring to preload value
      ** loadContent()  <====> Preload();
-      *   @param {Number} index - index of the slide
-     *   @param {Boolean} fromTouch - true if slide function called via touch event or mouse drag
-     *   @param {Boolean} fromThumb - true if slide function called via thumbnail click
-     *   @param {String} direction - Direction of the slide(next/prev)
+     
+     * @param {Number}  index     - index of the slide
+     * @param {Boolean} fromTouch - true if slide function called via touch event or mouse drag
+     * @param {Boolean} fromThumb - true if slide function called via thumbnail click
+     * @param {String}  direction - Direction of the slide(next/prev)
      */
     Plugin.prototype.slide = function (index, fromTouch, fromThumb, direction) {
-      var _prevIndex = this.$outer.find('.lg-current').index();
-      var _this = this;
+      const _prevIndex = this.$outer.find('.lg-current').index();
+      const _this = this;
 
       // Prevent if multiple call
       // Required for hsh plugin
       if (_this.lGalleryOn && _prevIndex === index) {
         return;
       }
-      var _length = this.$slide.length;
-      var _time = _this.lGalleryOn ? this.s.speed : 0;
+      const _length = this.$slide.length;
+      const _time = _this.lGalleryOn ? this.s.speed : 0;
       if (!_this.lgBusy) {
         if (this.s.download) {
-          var _src;
+          let _src;
           if (_this.s.dynamic) {
             _src = _this.s.dynamicEl[index].downloadUrl !== false && (_this.s.dynamicEl[index].downloadUrl || _this.s.dynamicEl[index].src);
           } else {
@@ -719,8 +714,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
           }, 50);
         } else {
           this.$slide.removeClass('lg-prev-slide lg-current lg-next-slide');
-          var touchPrev;
-          var touchNext;
+          let touchPrev;
+          let touchNext;
           if (_length > 2) {
             touchPrev = index - 1;
             touchNext = index + 1;
@@ -765,12 +760,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     };
 
     /**
-     *  @desc Go to next slide
-     *  @param {Boolean} fromTouch - true if slide function called via touch event
+     *  @description Go to next slide
+     * @param {boolean} fromTouch - true if slide function called via touch event
      */
     Plugin.prototype.goToNextSlide = function (fromTouch) {
-      var _this = this;
-      var _loop = _this.s.loop;
+      const _this = this;
+      let _loop = _this.s.loop;
       if (fromTouch && _this.$slide.length < 3) {
         _loop = false;
       }
@@ -779,28 +774,26 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
           _this.index++;
           _this.$el.trigger('onBeforeNextSlide.lg', [_this.index]);
           _this.slide(_this.index, fromTouch, false, 'next');
-        } else {
-          if (_loop) {
-            _this.index = 0;
-            _this.$el.trigger('onBeforeNextSlide.lg', [_this.index]);
-            _this.slide(_this.index, fromTouch, false, 'next');
-          } else if (_this.s.slideEndAnimatoin && !fromTouch) {
-            _this.$outer.addClass('lg-right-end');
-            setTimeout(function () {
-              _this.$outer.removeClass('lg-right-end');
-            }, 400);
-          }
+        } else if (_loop) {
+          _this.index = 0;
+          _this.$el.trigger('onBeforeNextSlide.lg', [_this.index]);
+          _this.slide(_this.index, fromTouch, false, 'next');
+        } else if (_this.s.slideEndAnimatoin && !fromTouch) {
+          _this.$outer.addClass('lg-right-end');
+          setTimeout(function () {
+            _this.$outer.removeClass('lg-right-end');
+          }, 400);
         }
       }
     };
 
     /**
-     *  @desc Go to previous slide
-     *  @param {Boolean} fromTouch - true if slide function called via touch event
+     *  @description Go to previous slide
+     * @param {boolean} fromTouch - true if slide function called via touch event
      */
     Plugin.prototype.goToPrevSlide = function (fromTouch) {
-      var _this = this;
-      var _loop = _this.s.loop;
+      const _this = this;
+      let _loop = _this.s.loop;
       if (fromTouch && _this.$slide.length < 3) {
         _loop = false;
       }
@@ -809,22 +802,20 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
           _this.index--;
           _this.$el.trigger('onBeforePrevSlide.lg', [_this.index, fromTouch]);
           _this.slide(_this.index, fromTouch, false, 'prev');
-        } else {
-          if (_loop) {
-            _this.index = _this.$items.length - 1;
-            _this.$el.trigger('onBeforePrevSlide.lg', [_this.index, fromTouch]);
-            _this.slide(_this.index, fromTouch, false, 'prev');
-          } else if (_this.s.slideEndAnimatoin && !fromTouch) {
-            _this.$outer.addClass('lg-left-end');
-            setTimeout(function () {
-              _this.$outer.removeClass('lg-left-end');
-            }, 400);
-          }
+        } else if (_loop) {
+          _this.index = _this.$items.length - 1;
+          _this.$el.trigger('onBeforePrevSlide.lg', [_this.index, fromTouch]);
+          _this.slide(_this.index, fromTouch, false, 'prev');
+        } else if (_this.s.slideEndAnimatoin && !fromTouch) {
+          _this.$outer.addClass('lg-left-end');
+          setTimeout(function () {
+            _this.$outer.removeClass('lg-left-end');
+          }, 400);
         }
       }
     };
     Plugin.prototype.keyPress = function () {
-      var _this = this;
+      const _this = this;
       if (this.$items.length > 1) {
         $(window).on('keyup.lg', function (e) {
           if (_this.$items.length > 1) {
@@ -851,7 +842,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       });
     };
     Plugin.prototype.arrow = function () {
-      var _this = this;
+      const _this = this;
       this.$outer.find('.lg-prev').on('click.lg', function () {
         _this.goToPrevSlide();
       });
@@ -885,7 +876,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }
     };
     Plugin.prototype.touchMove = function (startCoords, endCoords) {
-      var distance = endCoords - startCoords;
+      const distance = endCoords - startCoords;
       if (Math.abs(distance) > 15) {
         // reset opacity and transition duration
         this.$outer.addClass('lg-dragging');
@@ -899,7 +890,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }
     };
     Plugin.prototype.touchEnd = function (distance) {
-      var _this = this;
+      const _this = this;
 
       // keep slide animation for any mode while dragg/swipe
       if (_this.s.mode !== 'lg-slide') {
@@ -929,10 +920,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }, _this.s.speed + 100);
     };
     Plugin.prototype.enableSwipe = function () {
-      var _this = this;
-      var startCoords = 0;
-      var endCoords = 0;
-      var isMoved = false;
+      const _this = this;
+      let startCoords = 0;
+      let endCoords = 0;
+      let isMoved = false;
       if (_this.s.enableSwipe && _this.isTouch && _this.doCss()) {
         _this.$slide.on('touchstart.lg', function (e) {
           if (!_this.$outer.hasClass('lg-zoomed') && !_this.lgBusy) {
@@ -962,11 +953,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }
     };
     Plugin.prototype.enableDrag = function () {
-      var _this = this;
-      var startCoords = 0;
-      var endCoords = 0;
-      var isDraging = false;
-      var isMoved = false;
+      const _this = this;
+      let startCoords = 0;
+      let endCoords = 0;
+      let isDraging = false;
+      let isMoved = false;
       if (_this.s.enableDrag && !_this.isTouch && _this.doCss()) {
         _this.$slide.on('mousedown.lg', function (e) {
           // execute only on .lg-object
@@ -1016,8 +1007,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }
     };
     Plugin.prototype.manageSwipeClass = function () {
-      var _touchNext = this.index + 1;
-      var _touchPrev = this.index - 1;
+      let _touchNext = this.index + 1;
+      let _touchPrev = this.index - 1;
       if (this.s.loop && this.$slide.length > 2) {
         if (this.index === 0) {
           _touchPrev = this.$slide.length - 1;
@@ -1032,7 +1023,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       this.$slide.eq(_touchNext).addClass('lg-next-slide');
     };
     Plugin.prototype.mousewheel = function () {
-      var _this = this;
+      const _this = this;
       _this.$outer.on('mousewheel.lg', function (e) {
         if (!e.deltaY) {
           return;
@@ -1046,8 +1037,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       });
     };
     Plugin.prototype.closeGallery = function () {
-      var _this = this;
-      var mousedown = false;
+      const _this = this;
+      let mousedown = false;
       this.$outer.find('.lg-close').on('click.lg', function () {
         _this.destroy();
       });
@@ -1071,7 +1062,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }
     };
     Plugin.prototype.destroy = function (d) {
-      var _this = this;
+      const _this = this;
       if (!d) {
         _this.$el.trigger('onBeforeClose.lg');
         $(window).scrollTop(_this.prevScrollTop);
@@ -1139,7 +1130,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
 (function ($, window, document, undefined) {
   'use strict';
 
-  var defaults = {
+  const defaults = {
     videoMaxWidth: '855px',
     youtubePlayerParams: false,
     vimeoPlayerParams: false,
@@ -1148,7 +1139,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     videojs: false,
     videojsOptions: {}
   };
-  var Video = function (element) {
+  const Video = function (element) {
     this.core = $(element).data('lightGallery');
     this.$el = $(element);
     this.core.s = $.extend({}, defaults, this.core.s);
@@ -1157,7 +1148,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     return this;
   };
   Video.prototype.init = function () {
-    var _this = this;
+    const _this = this;
 
     // Event triggered when video url found without poster
     _this.core.$el.on('hasVideo.lg.tm', function (event, index, src, html) {
@@ -1184,15 +1175,15 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       _this.core.$slide.eq(index).find('.lg-video-cont').css('max-width', _this.core.s.videoMaxWidth);
       _this.videoLoaded = true;
     });
-    var loadOnClick = function ($el) {
+    const loadOnClick = function ($el) {
       // check slide has poster
       if ($el.find('.lg-object').hasClass('lg-has-poster') && $el.find('.lg-object').is(':visible')) {
         // check already video element present
         if (!$el.hasClass('lg-has-video')) {
           $el.addClass('lg-video-playing lg-has-video');
-          var _src;
-          var _html;
-          var _loadVideo = function (_src, _html) {
+          let _src;
+          let _html;
+          const _loadVideo = function (_src, _html) {
             $el.find('.lg-video').append(_this.loadVideo(_src, '', false, _this.core.index, _html));
             if (_html) {
               if (_this.core.s.videojs) {
@@ -1217,7 +1208,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
             _html = _this.core.$items.eq(_this.core.index).attr('data-html');
             _loadVideo(_src, _html);
           }
-          var $tempImg = $el.find('.lg-object');
+          const $tempImg = $el.find('.lg-object');
           $el.find('.lg-video').append($tempImg);
 
           // @todo loading icon for html5 videos also
@@ -1229,10 +1220,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
             });
           }
         } else {
-          var youtubePlayer = $el.find('.lg-youtube').get(0);
-          var vimeoPlayer = $el.find('.lg-vimeo').get(0);
-          var dailymotionPlayer = $el.find('.lg-dailymotion').get(0);
-          var html5Player = $el.find('.lg-html5').get(0);
+          const youtubePlayer = $el.find('.lg-youtube').get(0);
+          const vimeoPlayer = $el.find('.lg-vimeo').get(0);
+          const dailymotionPlayer = $el.find('.lg-dailymotion').get(0);
+          const html5Player = $el.find('.lg-html5').get(0);
           if (youtubePlayer) {
             youtubePlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
           } else if (vimeoPlayer) {
@@ -1260,7 +1251,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     };
     if (_this.core.doCss() && _this.core.$items.length > 1 && (_this.core.s.enableSwipe && _this.core.isTouch || _this.core.s.enableDrag && !_this.core.isTouch)) {
       _this.core.$el.on('onSlideClick.lg.tm', function () {
-        var $el = _this.core.$slide.eq(_this.core.index);
+        const $el = _this.core.$slide.eq(_this.core.index);
         loadOnClick($el);
       });
     } else {
@@ -1270,12 +1261,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       });
     }
     _this.core.$el.on('onBeforeSlide.lg.tm', function (event, prevIndex, index) {
-      var $videoSlide = _this.core.$slide.eq(prevIndex);
-      var youtubePlayer = $videoSlide.find('.lg-youtube').get(0);
-      var vimeoPlayer = $videoSlide.find('.lg-vimeo').get(0);
-      var dailymotionPlayer = $videoSlide.find('.lg-dailymotion').get(0);
-      var vkPlayer = $videoSlide.find('.lg-vk').get(0);
-      var html5Player = $videoSlide.find('.lg-html5').get(0);
+      const $videoSlide = _this.core.$slide.eq(prevIndex);
+      const youtubePlayer = $videoSlide.find('.lg-youtube').get(0);
+      const vimeoPlayer = $videoSlide.find('.lg-vimeo').get(0);
+      const dailymotionPlayer = $videoSlide.find('.lg-dailymotion').get(0);
+      const vkPlayer = $videoSlide.find('.lg-vk').get(0);
+      const html5Player = $videoSlide.find('.lg-html5').get(0);
       if (youtubePlayer) {
         youtubePlayer.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
       } else if (vimeoPlayer) {
@@ -1300,13 +1291,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       if (vkPlayer) {
         $(vkPlayer).attr('src', $(vkPlayer).attr('src').replace('&autoplay', '&noplay'));
       }
-      var _src;
+      let _src;
       if (_this.core.s.dynamic) {
         _src = _this.core.s.dynamicEl[index].src;
       } else {
         _src = _this.core.$items.eq(index).attr('href') || _this.core.$items.eq(index).attr('data-src');
       }
-      var _isVideo = _this.core.isVideo(_src, index) || {};
+      const _isVideo = _this.core.isVideo(_src, index) || {};
       if (_isVideo.youtube || _isVideo.vimeo || _isVideo.dailymotion || _isVideo.vk) {
         _this.core.$outer.addClass('lg-hide-download');
       }
@@ -1318,10 +1309,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
     });
   };
   Video.prototype.loadVideo = function (src, addClass, noposter, index, html) {
-    var video = '';
-    var autoplay = 1;
-    var a = '';
-    var isVideo = this.core.isVideo(src, index) || {};
+    let video = '';
+    let autoplay = 1;
+    let a = '';
+    const isVideo = this.core.isVideo(src, index) || {};
 
     // Enable autoplay for first video if poster doesn't exist
     if (noposter) {
@@ -1350,7 +1341,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
       }
       video = '<iframe class="lg-video-object lg-dailymotion ' + addClass + '" width="560" height="315" src="//www.dailymotion.com/embed/video/' + isVideo.dailymotion[1] + a + '" frameborder="0" allowfullscreen></iframe>';
     } else if (isVideo.html5) {
-      var fL = html.substring(0, 1);
+      const fL = html.substring(0, 1);
       if (fL === '.' || fL === '#') {
         html = $(html).html();
       }

@@ -144,22 +144,22 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (() => {
 
 var onepressIsMobile = {
-  Android: function () {
+  Android() {
     return navigator.userAgent.match(/Android/i);
   },
-  BlackBerry: function () {
+  BlackBerry() {
     return navigator.userAgent.match(/BlackBerry/i);
   },
-  iOS: function () {
+  iOS() {
     return navigator.userAgent.match(/iPhone|iPad|iPod/i);
   },
-  Opera: function () {
+  Opera() {
     return navigator.userAgent.match(/Opera Mini/i);
   },
-  Windows: function () {
+  Windows() {
     return navigator.userAgent.match(/IEMobile/i);
   },
-  any: function () {
+  any() {
     return onepressIsMobile.Android() || onepressIsMobile.BlackBerry() || onepressIsMobile.iOS() || onepressIsMobile.Opera() || onepressIsMobile.Windows();
   }
 };
@@ -169,50 +169,48 @@ function preload_images(images, complete_callback) {
       complete_callback();
     }
   } else {
-    var id = "_img_loading_" + new Date().getTime();
-    jQuery("body").append('<div id="' + id + '"></div>');
+    const id = '_img_loading_' + new Date().getTime();
+    jQuery('body').append('<div id="' + id + '"></div>');
     jQuery.each(images, function (index, src) {
-      var img = jQuery("<img>");
-      img.attr("alt", "");
-      img.attr("class", "image__preload");
-      img.css("display", "none");
-      img.attr("src", src);
-      jQuery("#" + id).append(img);
+      const img = jQuery('<img>');
+      img.attr('alt', '');
+      img.attr('class', 'image__preload');
+      img.css('display', 'none');
+      img.attr('src', src);
+      jQuery('#' + id).append(img);
     });
-    jQuery("#" + id).imagesLoaded(function () {
+    jQuery('#' + id).imagesLoaded(function () {
       if (complete_callback) {
         complete_callback();
       }
       setTimeout(function () {
-        jQuery("#" + id).remove();
+        jQuery('#' + id).remove();
       }, 5000);
     });
   }
 }
 function _to_number(string) {
-  if (typeof string === "number") {
+  if (typeof string === 'number') {
     return string;
   }
-  var n = string.match(/\d+$/);
+  const n = string.match(/\d+$/);
   if (n) {
     return parseFloat(n[0]);
-  } else {
-    return 0;
   }
+  return 0;
 }
 function _to_bool(v) {
-  if (typeof v === "boolean") {
+  if (typeof v === 'boolean') {
     return v;
   }
-  if (typeof v === "number") {
+  if (typeof v === 'number') {
     return v === 0 ? false : true;
   }
-  if (typeof v === "string") {
-    if (v === "true" || v === "1") {
+  if (typeof v === 'string') {
+    if (v === 'true' || v === '1') {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
   return false;
 }
@@ -225,12 +223,12 @@ function _to_bool(v) {
  * Learn more: https://github.com/Automattic/OnePress/pull/136
  */
 (function () {
-  var is_webkit = navigator.userAgent.toLowerCase().indexOf("webkit") > -1,
-    is_opera = navigator.userAgent.toLowerCase().indexOf("opera") > -1,
-    is_ie = navigator.userAgent.toLowerCase().indexOf("msie") > -1;
+  const is_webkit = navigator.userAgent.toLowerCase().indexOf('webkit') > -1,
+    is_opera = navigator.userAgent.toLowerCase().indexOf('opera') > -1,
+    is_ie = navigator.userAgent.toLowerCase().indexOf('msie') > -1;
   if ((is_webkit || is_opera || is_ie) && document.getElementById && window.addEventListener) {
-    window.addEventListener("hashchange", function () {
-      var id = location.hash.substring(1),
+    window.addEventListener('hashchange', function () {
+      let id = location.hash.substring(1),
         element;
       if (!/^[A-z0-9_-]+$/.test(id)) {
         return;
@@ -251,25 +249,25 @@ function _to_bool(v) {
      * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
      */
     // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-    let vh = window.innerHeight * 0.01;
-    let vw = window.innerWidth * 0.01;
+    const vh = window.innerHeight * 0.01;
+    const vw = window.innerWidth * 0.01;
     // Then we set the value in the --vh, --vw custom property to the root of the document
-    document.documentElement.style.setProperty("--vh", vh + "px");
-    document.documentElement.style.setProperty("--vw", vw + "px");
-    window.addEventListener("resize", function () {
-      let vh = window.innerHeight * 0.01;
-      let vw = window.innerWidth * 0.01;
-      document.documentElement.style.setProperty("--vh", vh + "px");
-      document.documentElement.style.setProperty("--vw", vw + "px");
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+    document.documentElement.style.setProperty('--vw', vw + 'px');
+    window.addEventListener('resize', function () {
+      const vh = window.innerHeight * 0.01;
+      const vw = window.innerWidth * 0.01;
+      document.documentElement.style.setProperty('--vh', vh + 'px');
+      document.documentElement.style.setProperty('--vw', vw + 'px');
     });
   }
 })();
 function isElementInViewport(el) {
   // Special bonus for those using jQuery
-  if (typeof jQuery === "function" && el instanceof jQuery) {
+  if (typeof jQuery === 'function' && el instanceof jQuery) {
     el = el[0];
   }
-  var rect = el.getBoundingClientRect();
+  const rect = el.getBoundingClientRect();
   return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) /* or $(window).height() */ && rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */;
 }
 
@@ -277,63 +275,63 @@ function isElementInViewport(el) {
  * Sticky header when scroll.
  */
 jQuery(function ($) {
-  var $window = $(window);
-  var $document = $(document);
-  $(document).on("mouseenter resize", ".sub-menu .menu-item-has-children", function () {
-    var submenuEl = $(this).find(".sub-menu");
+  const $window = $(window);
+  const $document = $(document);
+  $(document).on('mouseenter resize', '.sub-menu .menu-item-has-children', function () {
+    const submenuEl = $(this).find('.sub-menu');
     if (submenuEl.length > 0 && !isElementInViewport(submenuEl)) {
       submenuEl.css({
-        right: "100%",
-        left: "auto"
+        right: '100%',
+        left: 'auto'
       });
     }
   });
-  var getAdminBarHeight = function () {
-    var h = 0;
-    if ($("#wpadminbar").length) {
-      if ($("#wpadminbar").css("position") === "fixed") {
-        h = $("#wpadminbar").height();
+  const getAdminBarHeight = function () {
+    let h = 0;
+    if ($('#wpadminbar').length) {
+      if ($('#wpadminbar').css('position') === 'fixed') {
+        h = $('#wpadminbar').height();
       }
     }
     return h;
   };
-  var stickyHeaders = function () {
-    var $stickies;
-    var lastScrollTop = 0;
-    var setData = function (stickies, addWrap) {
-      var top = 0;
-      if (typeof addWrap === "undefined") {
+  const stickyHeaders = function () {
+    let $stickies;
+    const lastScrollTop = 0;
+    const setData = function (stickies, addWrap) {
+      const top = 0;
+      if (typeof addWrap === 'undefined') {
         addWrap = true;
       }
       $stickies = stickies.each(function () {
-        var $thisSticky = $(this);
-        var p = $thisSticky.parent();
-        if (!p.hasClass("followWrap")) {
+        const $thisSticky = $(this);
+        const p = $thisSticky.parent();
+        if (!p.hasClass('followWrap')) {
           if (addWrap) {
             $thisSticky.wrap('<div class="followWrap" />');
           }
         }
-        $thisSticky.parent().removeAttr("style");
+        $thisSticky.parent().removeAttr('style');
         $thisSticky.parent().height($thisSticky.height());
       });
     };
-    var load = function (stickies) {
-      if (typeof stickies === "object" && stickies instanceof jQuery && stickies.length > 0) {
+    const load = function (stickies) {
+      if (typeof stickies === 'object' && stickies instanceof jQuery && stickies.length > 0) {
         setData(stickies);
-        $window.on("scroll", function () {
+        $window.on('scroll', function () {
           _whenScrolling();
         });
-        $window.on("resize", function () {
+        $window.on('resize', function () {
           setData(stickies, false);
           stickies.each(function () {
-            $(this).removeClass("fixed").removeAttr("style");
+            $(this).removeClass('fixed').removeAttr('style');
           });
           _whenScrolling();
         });
-        $document.on("hero_ready", function () {
-          $(".followWrap").removeAttr("style");
+        $document.on('hero_ready', function () {
+          $('.followWrap').removeAttr('style');
           setTimeout(function () {
-            $(".followWrap").removeAttr("style");
+            $('.followWrap').removeAttr('style');
             setData(stickies, false);
             _whenScrolling();
           }, 500);
@@ -341,34 +339,34 @@ jQuery(function ($) {
       }
     };
     var _whenScrolling = function () {
-      var top = 0;
+      let top = 0;
       top = getAdminBarHeight();
-      var scrollTop = $window.scrollTop();
+      const scrollTop = $window.scrollTop();
       $stickies.each(function (i) {
-        var $thisSticky = $(this),
+        const $thisSticky = $(this),
           $stickyPosition = $thisSticky.parent().offset().top;
         if (scrollTop === 0) {
-          $thisSticky.addClass("no-scroll");
+          $thisSticky.addClass('no-scroll');
         }
         if ($stickyPosition - top <= scrollTop) {
           if (scrollTop > 0) {
-            $thisSticky.removeClass("no-scroll");
+            $thisSticky.removeClass('no-scroll');
           }
-          $thisSticky.addClass("header-fixed");
-          $thisSticky.css("top", top);
+          $thisSticky.addClass('header-fixed');
+          $thisSticky.css('top', top);
         } else {
-          $thisSticky.removeClass("header-fixed").removeAttr("style").addClass("no-scroll");
+          $thisSticky.removeClass('header-fixed').removeAttr('style').addClass('no-scroll');
         }
       });
     };
     return {
-      load: load
+      load
     };
   }();
-  stickyHeaders.load($("#masthead.is-sticky"));
+  stickyHeaders.load($('#masthead.is-sticky'));
   // When Header Panel rendered by customizer
-  $document.on("header_view_changed", function () {
-    stickyHeaders.load($("#masthead.is-sticky"));
+  $document.on('header_view_changed', function () {
+    stickyHeaders.load($('#masthead.is-sticky'));
   });
 
   /*
@@ -376,39 +374,39 @@ jQuery(function ($) {
    *
    * Smooth scroll for navigation and other elements
    */
-  var mobile_max_width = 1140; // Media max width for mobile
-  var main_navigation = jQuery(".main-navigation .onepress-menu");
-  var header = document.getElementById("masthead");
+  const mobile_max_width = 1140; // Media max width for mobile
+  const main_navigation = jQuery('.main-navigation .onepress-menu');
+  const header = document.getElementById('masthead');
   if (header) {
-    var noSticky = header.classList.contains("no-sticky");
+    var noSticky = header.classList.contains('no-sticky');
   }
-  var setNavTop = function () {
-    var offset = header.getBoundingClientRect();
-    var top = offset.x + offset.height - 1;
+  const setNavTop = function () {
+    const offset = header.getBoundingClientRect();
+    const top = offset.x + offset.height - 1;
     main_navigation.css({
-      top: top
+      top
     });
   };
 
   /**
    * Get mobile navigation height.
    *
+   * @param fitWindow
    * @return number
    */
-  var getNavHeight = function (fitWindow) {
-    if (typeof fitWindow === "undefined") {
+  const getNavHeight = function (fitWindow) {
+    if (typeof fitWindow === 'undefined') {
       fitWindow = true;
     }
     if (fitWindow) {
-      var offset = header.getBoundingClientRect();
-      var h = $(window).height() - (offset.x + offset.height) + 1;
+      const offset = header.getBoundingClientRect();
+      const h = $(window).height() - (offset.x + offset.height) + 1;
       return h;
-    } else {
-      main_navigation.css("height", "auto");
-      var navOffset = main_navigation[0].getBoundingClientRect();
-      main_navigation.css("height", 0);
-      return navOffset.height;
     }
+    main_navigation.css('height', 'auto');
+    const navOffset = main_navigation[0].getBoundingClientRect();
+    main_navigation.css('height', 0);
+    return navOffset.height;
   };
 
   /**
@@ -417,17 +415,17 @@ jQuery(function ($) {
    * @since 0.0.1
    * @since 2.2.1
    */
-  $document.on("click", "#nav-toggle", function (event) {
+  $document.on('click', '#nav-toggle', function (event) {
     event.preventDefault();
-    jQuery("#nav-toggle").toggleClass("nav-is-visible");
-    jQuery(".header-widget").toggleClass("header-widget-mobile");
+    jQuery('#nav-toggle').toggleClass('nav-is-visible');
+    jQuery('.header-widget').toggleClass('header-widget-mobile');
     main_navigation.stop();
     // Open menu mobile.
-    if (!main_navigation.hasClass("onepress-menu-mobile")) {
-      main_navigation.addClass("onepress-menu-mobile");
-      $("body").addClass("onepress-menu-mobile-opening");
+    if (!main_navigation.hasClass('onepress-menu-mobile')) {
+      main_navigation.addClass('onepress-menu-mobile');
+      $('body').addClass('onepress-menu-mobile-opening');
       setNavTop();
-      var h = getNavHeight(!noSticky);
+      let h = getNavHeight(!noSticky);
       if (isNaN(h)) {
         // when IE 11 & Edge return h is NaN.
         h = $(window).height();
@@ -438,24 +436,24 @@ jQuery(function ($) {
         // Animation complete.
         if (noSticky) {
           main_navigation.css({
-            "min-height": h,
-            height: "auto"
+            'min-height': h,
+            height: 'auto'
           });
         }
       });
     } else {
       main_navigation.css({
         height: main_navigation.height(),
-        "min-height": 0,
-        overflow: "hidden"
+        'min-height': 0,
+        overflow: 'hidden'
       });
       setTimeout(function () {
         main_navigation.animate({
           height: 0
         }, 300, function () {
-          main_navigation.removeAttr("style");
-          main_navigation.removeClass("onepress-menu-mobile");
-          $("body").removeClass("onepress-menu-mobile-opening");
+          main_navigation.removeAttr('style');
+          main_navigation.removeClass('onepress-menu-mobile');
+          $('body').removeClass('onepress-menu-mobile-opening');
         });
       }, 40);
     }
@@ -467,15 +465,15 @@ jQuery(function ($) {
    * @since 2.2.1
    */
   if (!noSticky && onepressIsMobile.any()) {
-    $(document).on("scroll", function () {
-      if (main_navigation.hasClass("onepress-menu-mobile")) {
-        var newViewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        var offset = header.getBoundingClientRect();
-        var top = offset.x + offset.height - 1;
-        var h = newViewportHeight - top + 1;
+    $(document).on('scroll', function () {
+      if (main_navigation.hasClass('onepress-menu-mobile')) {
+        const newViewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        const offset = header.getBoundingClientRect();
+        const top = offset.x + offset.height - 1;
+        const h = newViewportHeight - top + 1;
         main_navigation.css({
           height: h,
-          top: top
+          top
         });
       }
     });
@@ -483,23 +481,23 @@ jQuery(function ($) {
   function autoMenuAlign() {
     const ww = $(window).width();
     const isMobile = ww <= mobile_max_width;
-    const header = $("#masthead > .container");
+    const header = $('#masthead > .container');
     const headerRect = header.length ? header[0].getBoundingClientRect() : {};
-    $("#site-navigation  .onepress-menu > li").each(function () {
+    $('#site-navigation  .onepress-menu > li').each(function () {
       const li = $(this);
-      const sub = $("> .sub-menu", li);
+      const sub = $('> .sub-menu', li);
       if (isMobile) {
-        sub.removeAttr("style");
+        sub.removeAttr('style');
         return;
       }
       if (sub.length) {
         const liRect = li[0].getBoundingClientRect();
         const subRect = sub[0].getBoundingClientRect();
         if (headerRect.right < liRect.left + subRect.width) {
-          li.addClass("sub-li-r");
-          sub.addClass("sub-ul-r");
+          li.addClass('sub-li-r');
+          sub.addClass('sub-ul-r');
           const diff = headerRect.right - (liRect.left + liRect.width);
-          sub.css("right", `-${diff}px`);
+          sub.css('right', `-${diff}px`);
         }
       }
     });
@@ -511,51 +509,51 @@ jQuery(function ($) {
       clearTimeout(timeOutResize);
     }
     timeOutResize = setTimeout(() => {
-      if (main_navigation.hasClass("onepress-menu-mobile") && $(window).width() <= mobile_max_width) {
+      if (main_navigation.hasClass('onepress-menu-mobile') && $(window).width() <= mobile_max_width) {
         if (!noSticky) {
           main_navigation.css({
             height: getNavHeight(),
-            overflow: "auto"
+            overflow: 'auto'
           });
         }
       } else {
-        main_navigation.removeAttr("style");
-        main_navigation.removeClass("onepress-menu-mobile");
-        jQuery("#nav-toggle").removeClass("nav-is-visible");
+        main_navigation.removeAttr('style');
+        main_navigation.removeClass('onepress-menu-mobile');
+        jQuery('#nav-toggle').removeClass('nav-is-visible');
       }
       autoMenuAlign();
     }, 500);
   });
-  jQuery(".onepress-menu li.menu-item-has-children, .onepress-menu li.page_item_has_children").each(function () {
+  jQuery('.onepress-menu li.menu-item-has-children, .onepress-menu li.page_item_has_children').each(function () {
     jQuery(this).prepend('<div class="nav-toggle-subarrow"><i class="fa fa-angle-down"></i></div>');
   });
-  $document.on("click", ".nav-toggle-subarrow, .nav-toggle-subarrow .nav-toggle-subarrow", function () {
+  $document.on('click', '.nav-toggle-subarrow, .nav-toggle-subarrow .nav-toggle-subarrow', function () {
     const el = jQuery(this);
     const p = el.parent();
-    p.removeAttr("style");
-    p.toggleClass("nav-toggle-dropdown");
+    p.removeAttr('style');
+    p.toggleClass('nav-toggle-dropdown');
   });
 
   // Get the header height and wpadminbar height if enable.
-  var h;
+  let h;
   window.current_nav_item = false;
-  if (onepress_js_settings.onepress_disable_sticky_header !== "1") {
-    h = jQuery("#wpadminbar").height() + jQuery(".site-header").height();
+  if (onepress_js_settings.onepress_disable_sticky_header !== '1') {
+    h = jQuery('#wpadminbar').height() + jQuery('.site-header').height();
   } else {
-    h = jQuery("#wpadminbar").height();
+    h = jQuery('#wpadminbar').height();
   }
 
   /**
    *  Navigation click to section.
    *  @updated 2.3.0
    */
-  jQuery('#site-navigation li a[href*="#"]').on("click", function (event) {
-    let url = new URL(this.href);
+  jQuery('#site-navigation li a[href*="#"]').on('click', function (event) {
+    const url = new URL(this.href);
     if (url.origin + url.pathname === window.location.origin + window.location.pathname) {
-      let $el = jQuery(this.hash);
+      const $el = jQuery(this.hash);
       // if in mobile mod.
-      if (jQuery(".onepress-menu").hasClass("onepress-menu-mobile")) {
-        jQuery("#nav-toggle").trigger("click");
+      if (jQuery('.onepress-menu').hasClass('onepress-menu-mobile')) {
+        jQuery('#nav-toggle').trigger('click');
       }
       if ($el.length) {
         event.preventDefault();
@@ -566,10 +564,12 @@ jQuery(function ($) {
   });
   function setNavActive(currentNode) {
     if (currentNode) {
-      currentNode = currentNode.replace("#", "");
-      if (currentNode) jQuery("#site-navigation li").removeClass("onepress-current-item");
+      currentNode = currentNode.replace('#', '');
       if (currentNode) {
-        jQuery("#site-navigation li").find('a[href$="#' + currentNode + '"]').parent().addClass("onepress-current-item");
+        jQuery('#site-navigation li').removeClass('onepress-current-item');
+      }
+      if (currentNode) {
+        jQuery('#site-navigation li').find('a[href$="#' + currentNode + '"]').parent().addClass('onepress-current-item');
       }
     }
   }
@@ -577,62 +577,60 @@ jQuery(function ($) {
     if (!offset_top) {
       offset_top = 0;
     }
-    var view_port_top = jQuery(window).scrollTop();
-    if ($("#wpadminbar").length > 0) {
-      view_port_top -= $("#wpadminbar").outerHeight() - 1;
-      offset_top += $("#wpadminbar").outerHeight() - 1;
+    let view_port_top = jQuery(window).scrollTop();
+    if ($('#wpadminbar').length > 0) {
+      view_port_top -= $('#wpadminbar').outerHeight() - 1;
+      offset_top += $('#wpadminbar').outerHeight() - 1;
     }
-    var view_port_h = $("body").outerHeight();
-    var el_top = $element.offset().top;
-    var eh_h = $element.height();
-    var el_bot = el_top + eh_h;
-    var view_port_bot = view_port_top + view_port_h;
-    var all_height = $("body")[0].scrollHeight;
-    var max_top = all_height - view_port_h;
-    var in_view_port = false;
+    const view_port_h = $('body').outerHeight();
+    const el_top = $element.offset().top;
+    const eh_h = $element.height();
+    const el_bot = el_top + eh_h;
+    const view_port_bot = view_port_top + view_port_h;
+    const all_height = $('body')[0].scrollHeight;
+    const max_top = all_height - view_port_h;
+    let in_view_port = false;
     // If scroll maximum
     if (view_port_top >= max_top) {
       if (el_top < view_port_top && el_top > view_port_bot || el_top > view_port_top && el_bot < view_port_top) {
         in_view_port = true;
       }
-    } else {
-      if (el_top <= view_port_top + offset_top) {
-        //if ( eh_bot > view_port_top &&  eh_bot < view_port_bot ) {
-        if (el_bot > view_port_top) {
-          in_view_port = true;
-        }
+    } else if (el_top <= view_port_top + offset_top) {
+      //if ( eh_bot > view_port_top &&  eh_bot < view_port_bot ) {
+      if (el_bot > view_port_top) {
+        in_view_port = true;
       }
     }
     return in_view_port;
   }
 
   // Add active class to menu when scroll to active section.
-  var _scroll_top = $window.scrollTop();
+  let _scroll_top = $window.scrollTop();
   jQuery(window).on('scroll', function () {
-    var currentNode = null;
+    let currentNode = null;
     if (!window.current_nav_item) {
-      var current_top = $window.scrollTop();
-      var adminBarHeight = jQuery("#wpadminbar").length > 0 ? jQuery("#wpadminbar").height() : 0;
-      if (onepress_js_settings.onepress_disable_sticky_header !== "1") {
-        h = adminBarHeight + jQuery(".site-header").height();
+      const current_top = $window.scrollTop();
+      const adminBarHeight = jQuery('#wpadminbar').length > 0 ? jQuery('#wpadminbar').height() : 0;
+      if (onepress_js_settings.onepress_disable_sticky_header !== '1') {
+        h = adminBarHeight + jQuery('.site-header').height();
       } else {
         h = adminBarHeight;
       }
       if (_scroll_top < current_top) {
-        jQuery("section").each(function (index) {
-          var section = jQuery(this);
-          var currentId = section.attr("id") || "";
-          var in_vp = inViewPort(section, h + 10);
+        jQuery('section').each(function (index) {
+          const section = jQuery(this);
+          const currentId = section.attr('id') || '';
+          const in_vp = inViewPort(section, h + 10);
           if (in_vp) {
             currentNode = currentId;
           }
         });
       } else {
-        var ns = jQuery("section").length;
-        for (var i = ns - 1; i >= 0; i--) {
-          var section = jQuery("section").eq(i);
-          var currentId = section.attr("id") || "";
-          var in_vp = inViewPort(section, h + 10);
+        const ns = jQuery('section').length;
+        for (let i = ns - 1; i >= 0; i--) {
+          const section = jQuery('section').eq(i);
+          const currentId = section.attr('id') || '';
+          const in_vp = inViewPort(section, h + 10);
           if (in_vp) {
             currentNode = currentId;
           }
@@ -640,21 +638,21 @@ jQuery(function ($) {
       }
       _scroll_top = current_top;
     } else {
-      currentNode = window.current_nav_item.replace("#", "");
+      currentNode = window.current_nav_item.replace('#', '');
     }
     setNavActive(currentNode);
   });
 
   // Move to the right section on page load.
-  jQuery(window).on("load", function () {
-    var urlCurrent = location.hash;
+  jQuery(window).on('load', function () {
+    const urlCurrent = location.hash;
     if (jQuery(urlCurrent).length > 0) {
       smoothScroll(urlCurrent);
     }
   });
 
   // Other scroll to elements
-  jQuery('.hero-slideshow-wrapper a[href*="#"]:not([href="#"]), .parallax-content a[href*="#"]:not([href="#"]), .back-to-top').on("click", function (event) {
+  jQuery('.hero-slideshow-wrapper a[href*="#"]:not([href="#"]), .parallax-content a[href*="#"]:not([href="#"]), .back-to-top').on('click', function (event) {
     event.preventDefault();
     smoothScroll(jQuery(this.hash));
   });
@@ -664,71 +662,71 @@ jQuery(function ($) {
     if (element.length <= 0) {
       return false;
     }
-    jQuery("html, body").animate({
-      scrollTop: jQuery(element).offset().top - h + "px"
+    jQuery('html, body').animate({
+      scrollTop: jQuery(element).offset().top - h + 'px'
     }, {
       duration: 800,
-      easing: "swing",
-      complete: function () {
+      easing: 'swing',
+      complete() {
         window.current_nav_item = false;
       }
     });
   }
   if (onepress_js_settings.is_home) {
     // custom-logo-link
-    jQuery(".site-branding .site-brand-inner").on("click", function (e) {
+    jQuery('.site-branding .site-brand-inner').on('click', function (e) {
       e.preventDefault();
-      jQuery("html, body").animate({
-        scrollTop: "0px"
+      jQuery('html, body').animate({
+        scrollTop: '0px'
       }, {
         duration: 300,
-        easing: "swing"
+        easing: 'swing'
       });
     });
   }
   if (onepressIsMobile.any()) {
-    jQuery("body").addClass("body-mobile").removeClass("body-desktop");
+    jQuery('body').addClass('body-mobile').removeClass('body-desktop');
   } else {
-    jQuery("body").addClass("body-desktop").removeClass("body-mobile");
+    jQuery('body').addClass('body-desktop').removeClass('body-mobile');
   }
 
   /**
    * Reveal Animations When Scrolling
    */
-  if (onepress_js_settings.onepress_disable_animation !== "1") {
-    var wow = new WOW({
+  if (onepress_js_settings.onepress_disable_animation !== '1') {
+    const wow = new WOW({
       offset: 50,
       mobile: false,
       live: false
     });
     wow.init();
   }
-  var text_rotator = function () {
+  const text_rotator = function () {
     /**
      * Text rotator
      */
-    jQuery(".js-rotating").Morphext({
+    jQuery('.js-rotating').Morphext({
       // The [in] animation type. Refer to Animate.css for a list of available animations.
       animation: onepress_js_settings.hero_animation,
       // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
-      separator: "|",
+      separator: '|',
       // The delay between the changing of each phrase in milliseconds.
       speed: parseInt(onepress_js_settings.hero_speed, 10),
-      complete: function () {
+      complete() {
         // Called after the entrance animation is executed.
       }
     });
   };
   text_rotator();
-  $document.on("header_view_changed", function () {
+  $document.on('header_view_changed', function () {
     text_rotator();
   });
 
   /**
    * Responsive Videos
    */
-  jQuery(".site-content").fitVids({
-    ignore: ".wp-block-embed iframe, .wp-block-embed object"
+  jQuery('.site-content').fitVids({
+    ignore: '.wp-block-embed iframe, .wp-block-embed object'
   });
 
   /**
@@ -736,11 +734,11 @@ jQuery(function ($) {
    */
 
   if ($.fn.lightGallery) {
-    $(".videolightbox-popup").lightGallery({});
+    $('.videolightbox-popup').lightGallery({});
   }
 
   // Counter Up
-  $(".counter").counterUp({
+  $('.counter').counterUp({
     delay: 10,
     time: 1000
   });
@@ -748,56 +746,57 @@ jQuery(function ($) {
   /**
    * Center vertical align for navigation.
    */
-  if (onepress_js_settings.onepress_vertical_align_menu === "1") {
-    var header_height = jQuery(".site-header").height();
-    jQuery(".site-header .onepress-menu").css("line-height", header_height + "px");
+  if (onepress_js_settings.onepress_vertical_align_menu === '1') {
+    const header_height = jQuery('.site-header').height();
+    jQuery('.site-header .onepress-menu').css('line-height', header_height + 'px');
   }
 
   /**
    * Section: Hero Full Screen Slideshow
+   * @param no_trigger
    */
   function hero_full_screen(no_trigger) {
-    if ($(".hero-slideshow-fullscreen").length > 0) {
-      var wh = $window.height();
-      var top = getAdminBarHeight();
-      var $header = jQuery("#masthead");
-      var is_transparent = $header.hasClass("is-t");
-      var headerH;
+    if ($('.hero-slideshow-fullscreen').length > 0) {
+      const wh = $window.height();
+      const top = getAdminBarHeight();
+      const $header = jQuery('#masthead');
+      const is_transparent = $header.hasClass('is-t');
+      let headerH;
       if (is_transparent) {
         headerH = 0;
       } else {
         headerH = $header.height();
       }
       headerH += top;
-      jQuery(".hero-slideshow-fullscreen").css("height", wh - headerH + 1 + "px");
-      if (typeof no_trigger === "undefined" || !no_trigger) {
-        $document.trigger("hero_ready");
+      jQuery('.hero-slideshow-fullscreen').css('height', wh - headerH + 1 + 'px');
+      if (typeof no_trigger === 'undefined' || !no_trigger) {
+        $document.trigger('hero_ready');
       }
     }
   }
-  $window.on("resize", function () {
+  $window.on('resize', function () {
     hero_full_screen();
   });
   hero_full_screen();
-  $document.on("header_view_changed", function () {
+  $document.on('header_view_changed', function () {
     hero_full_screen();
   });
-  $document.on("hero_ready", function () {
+  $document.on('hero_ready', function () {
     hero_full_screen(true);
   });
 
   /**
    * Hero sliders
    */
-  var heroSliders = function () {
-    if ($("#parallax-hero").length <= 0) {
-      jQuery(".hero-slideshow-wrapper").each(function () {
-        var hero = $(this);
-        if (hero.hasClass("video-hero")) {
+  const heroSliders = function () {
+    if ($('#parallax-hero').length <= 0) {
+      jQuery('.hero-slideshow-wrapper').each(function () {
+        const hero = $(this);
+        if (hero.hasClass('video-hero')) {
           return;
         }
-        var images = hero.data("images") || false;
-        if (typeof images === "string") {
+        let images = hero.data('images') || false;
+        if (typeof images === 'string') {
           images = JSON.parse(images);
         }
         if (images) {
@@ -807,88 +806,89 @@ jQuery(function ($) {
               duration: _to_number(onepress_js_settings.hero_duration)
             });
             //
-            hero.addClass("loaded");
-            hero.removeClass("loading");
+            hero.addClass('loaded');
+            hero.removeClass('loading');
             setTimeout(function () {
-              hero.find(".slider-spinner").remove();
+              hero.find('.slider-spinner').remove();
             }, 600);
           });
         } else {
-          hero.addClass("loaded");
-          hero.removeClass("loading");
-          hero.find(".slider-spinner").remove();
+          hero.addClass('loaded');
+          hero.removeClass('loading');
+          hero.find('.slider-spinner').remove();
         }
       });
     }
   };
   heroSliders();
-  $document.on("header_view_changed", function () {
+  $document.on('header_view_changed', function () {
     heroSliders();
   });
 
   // Parallax hero
-  $(".parallax-hero").each(function () {
-    var hero = $(this);
-    hero.addClass("loading");
-    var bg = true;
-    if (hero.find("img").length > 0) {
+  $('.parallax-hero').each(function () {
+    const hero = $(this);
+    hero.addClass('loading');
+    let bg = true;
+    if (hero.find('img').length > 0) {
       bg = false;
     }
-    $(".parallax-bg", hero).imagesLoaded({
+    $('.parallax-bg', hero).imagesLoaded({
       background: bg
     }, function () {
-      hero.find(".hero-slideshow-wrapper").addClass("loaded");
-      hero.removeClass("loading");
+      hero.find('.hero-slideshow-wrapper').addClass('loaded');
+      hero.removeClass('loading');
       setTimeout(function () {
-        hero.find(".hero-slideshow-wrapper").find(".slider-spinner").remove();
+        hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
       }, 600);
     }).fail(function (instance) {
-      hero.removeClass("loading");
-      hero.find(".hero-slideshow-wrapper").addClass("loaded");
-      hero.find(".hero-slideshow-wrapper").find(".slider-spinner").remove();
+      hero.removeClass('loading');
+      hero.find('.hero-slideshow-wrapper').addClass('loaded');
+      hero.find('.hero-slideshow-wrapper').find('.slider-spinner').remove();
     });
   });
-  $(".section-parallax").each(function () {
-    var hero = $(this);
-    var bg = true;
-    if (hero.find("img").length > 0) {
+  $('.section-parallax').each(function () {
+    const hero = $(this);
+    let bg = true;
+    if (hero.find('img').length > 0) {
       bg = false;
     }
-    $(".parallax-bg", hero).imagesLoaded({
+    $('.parallax-bg', hero).imagesLoaded({
       background: bg
     }, function () {}).fail(function (instance) {});
   });
 
   // Trigger when site load
   setTimeout(function () {
-    $(window).trigger("scroll");
+    $(window).trigger('scroll');
   }, 500);
 
   /**
    * Gallery
+   * @param $context
    */
   function onepress_gallery_init($context) {
     // justified
     if ($.fn.justifiedGallery) {
-      $(".gallery-justified", $context).imagesLoaded(function () {
-        $(".gallery-justified", $context).each(function () {
-          var margin = $(this).attr("data-spacing") || 20;
-          var row_height = $(this).attr("data-row-height") || 120;
+      $('.gallery-justified', $context).imagesLoaded(function () {
+        $('.gallery-justified', $context).each(function () {
+          let margin = $(this).attr('data-spacing') || 20;
+          let row_height = $(this).attr('data-row-height') || 120;
           margin = _to_number(margin);
           row_height = _to_number(row_height);
           $(this).justifiedGallery({
             rowHeight: row_height,
             margins: margin,
-            selector: "a, div:not(.spinner), .inner"
+            selector: 'a, div:not(.spinner), .inner'
           });
         });
       });
     }
-    var is_rtl = onepress_js_settings.is_rtl;
+    const is_rtl = onepress_js_settings.is_rtl;
 
     // Slider
     if ($.fn.owlCarousel) {
-      $(".gallery-slider", $context).owlCarousel({
+      $('.gallery-slider', $context).owlCarousel({
         items: 1,
         smartSpeed: 200,
         autoplay: true,
@@ -900,8 +900,8 @@ jQuery(function ($) {
         rtl: Number(is_rtl) !== 0,
         dots: false
       });
-      $(".gallery-carousel", $context).each(function () {
-        var n = $(this).attr("data-col") || 5;
+      $('.gallery-carousel', $context).each(function () {
+        let n = $(this).attr('data-col') || 5;
         n = _to_number(n);
         if (n <= 0) {
           n = 5;
@@ -934,13 +934,13 @@ jQuery(function ($) {
     }
     function isotope_init() {
       if ($.fn.isotope) {
-        $(".gallery-masonry", $context).each(function () {
-          var m = $(this);
-          var gutter = m.attr("data-gutter") || 10;
-          var columns = m.attr("data-col") || 5;
+        $('.gallery-masonry', $context).each(function () {
+          const m = $(this);
+          let gutter = m.attr('data-gutter') || 10;
+          let columns = m.attr('data-col') || 5;
           gutter = _to_number(gutter);
           columns = _to_number(columns);
-          var w = $(window).width();
+          const w = $(window).width();
           if (w <= 940) {
             columns = columns > 2 ? columns - 1 : columns;
           }
@@ -953,62 +953,62 @@ jQuery(function ($) {
 
           //gutter = gutter / 2;
           // m.parent().css({'margin-left': -gutter, 'margin-right': -gutter});
-          m.find(".g-item").css({
-            width: 100 / columns + "%",
-            float: "left",
+          m.find('.g-item').css({
+            width: 100 / columns + '%',
+            float: 'left',
             padding: 0
           });
           // m.find('.g-item .inner').css({'padding': gutter / 2});
           m.isotope({
             // options
-            itemSelector: ".g-item",
+            itemSelector: '.g-item',
             percentPosition: true,
             masonry: {
-              columnWidth: ".inner"
+              columnWidth: '.inner'
             }
           });
         });
       }
     }
-    $(".gallery-masonry", $context).imagesLoaded(function () {
+    $('.gallery-masonry', $context).imagesLoaded(function () {
       isotope_init();
     });
-    $(window).on("resize", function () {
+    $(window).on('resize', function () {
       isotope_init();
     });
     if ($.fn.lightGallery) {
-      var wrap_tag = $(".enable-lightbox", $context).find(".g-item").first();
-      var tag_selector = "a";
-      if (wrap_tag.is("div")) {
-        tag_selector = "div";
+      const wrap_tag = $('.enable-lightbox', $context).find('.g-item').first();
+      let tag_selector = 'a';
+      if (wrap_tag.is('div')) {
+        tag_selector = 'div';
       }
-      $(".enable-lightbox", $context).lightGallery({
-        mode: "lg-fade",
+      $('.enable-lightbox', $context).lightGallery({
+        mode: 'lg-fade',
         selector: tag_selector
         //cssEasing : 'cubic-bezier(0.25, 0, 0.25, 1)'
       });
     }
   }
-  onepress_gallery_init($(".gallery-content"));
+  onepress_gallery_init($('.gallery-content'));
   if ($.fn.jarallax) {
-    jQuery(".jarallax").each(function () {
-      var $this = jQuery(this);
-      var speed = $this.attr("data-speed") || 0.5;
+    jQuery('.jarallax').each(function () {
+      const $this = jQuery(this);
+      var speed = $this.attr('data-speed') || 0.5;
       var speed = parseFloat(speed);
       if (speed > 0) {
         $this.jarallax({
-          speed: speed
+          speed
         });
       }
     });
   }
-  if ("undefined" !== typeof wp && wp.customize && wp.customize.selectiveRefresh) {
-    wp.customize.selectiveRefresh.bind("partial-content-rendered", function (placement) {
-      if (placement.partial.id === "section-gallery") {
-        onepress_gallery_init(placement.container.find(".gallery-content"));
+  if ('undefined' !== typeof wp && wp.customize && wp.customize.selectiveRefresh) {
+    wp.customize.selectiveRefresh.bind('partial-content-rendered', function (placement) {
+      if (placement.partial.id === 'section-gallery') {
+        onepress_gallery_init(placement.container.find('.gallery-content'));
 
         // Trigger resize to make other sections work.
-        $(window).trigger("resize");
+        $(window).trigger('resize');
       }
     });
   }
@@ -1033,59 +1033,59 @@ jQuery(function ($) {
  */
 
 (function ($) {
-  "use strict";
+  'use strict';
 
   $.fn.fitVids = function (options) {
-    var settings = {
+    const settings = {
       customSelector: null,
       ignore: null
     };
-    if (!document.getElementById("fit-vids-style")) {
+    if (!document.getElementById('fit-vids-style')) {
       // appendStyles: https://github.com/toddmotto/fluidvids/blob/master/dist/fluidvids.js
-      var head = document.head || document.getElementsByTagName("head")[0];
-      var css = ".fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}";
-      var div = document.createElement("div");
-      div.innerHTML = '<p>x</p><style id="fit-vids-style">' + css + "</style>";
+      const head = document.head || document.getElementsByTagName('head')[0];
+      const css = '.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}';
+      const div = document.createElement('div');
+      div.innerHTML = '<p>x</p><style id="fit-vids-style">' + css + '</style>';
       head.appendChild(div.childNodes[1]);
     }
     if (options) {
       $.extend(settings, options);
     }
     return this.each(function () {
-      var selectors = ['iframe[src*="player.vimeo.com"]', 'iframe[src*="youtube.com"]', 'iframe[src*="youtube-nocookie.com"]', 'iframe[src*="kickstarter.com"][src*="video.html"]', "object", "embed"];
+      const selectors = ['iframe[src*="player.vimeo.com"]', 'iframe[src*="youtube.com"]', 'iframe[src*="youtube-nocookie.com"]', 'iframe[src*="kickstarter.com"][src*="video.html"]', 'object', 'embed'];
       if (settings.customSelector) {
         selectors.push(settings.customSelector);
       }
-      var ignoreList = ".fitvidsignore";
+      let ignoreList = '.fitvidsignore';
       if (settings.ignore) {
-        ignoreList = ignoreList + ", " + settings.ignore;
+        ignoreList = ignoreList + ', ' + settings.ignore;
       }
-      var $allVideos = $(this).find(selectors.join(","));
-      $allVideos = $allVideos.not("object object"); // SwfObj conflict patch
+      let $allVideos = $(this).find(selectors.join(','));
+      $allVideos = $allVideos.not('object object'); // SwfObj conflict patch
       $allVideos = $allVideos.not(ignoreList); // Disable FitVids on this video.
 
       $allVideos.each(function () {
-        var $this = $(this);
+        const $this = $(this);
         if ($this.parents(ignoreList).length > 0) {
           return; // Disable FitVids on this video.
         }
-        if (this.tagName.toLowerCase() === "embed" && $this.parent("object").length || $this.parent(".fluid-width-video-wrapper").length) {
+        if (this.tagName.toLowerCase() === 'embed' && $this.parent('object').length || $this.parent('.fluid-width-video-wrapper').length) {
           return;
         }
-        if (!$this.css("height") && !$this.css("width") && (isNaN($this.attr("height")) || isNaN($this.attr("width")))) {
-          $this.attr("height", 9);
-          $this.attr("width", 16);
+        if (!$this.css('height') && !$this.css('width') && (isNaN($this.attr('height')) || isNaN($this.attr('width')))) {
+          $this.attr('height', 9);
+          $this.attr('width', 16);
         }
-        var height = this.tagName.toLowerCase() === "object" || $this.attr("height") && !isNaN(parseInt($this.attr("height"), 10)) ? parseInt($this.attr("height"), 10) : $this.height(),
-          width = !isNaN(parseInt($this.attr("width"), 10)) ? parseInt($this.attr("width"), 10) : $this.width(),
+        const height = this.tagName.toLowerCase() === 'object' || $this.attr('height') && !isNaN(parseInt($this.attr('height'), 10)) ? parseInt($this.attr('height'), 10) : $this.height(),
+          width = !isNaN(parseInt($this.attr('width'), 10)) ? parseInt($this.attr('width'), 10) : $this.width(),
           aspectRatio = height / width;
-        if (!$this.attr("name")) {
-          var videoName = "fitvid" + $.fn.fitVids._count;
-          $this.attr("name", videoName);
+        if (!$this.attr('name')) {
+          const videoName = 'fitvid' + $.fn.fitVids._count;
+          $this.attr('name', videoName);
           $.fn.fitVids._count++;
         }
-        $this.wrap('<div class="fluid-width-video-wrapper"></div>').parent(".fluid-width-video-wrapper").css("padding-top", aspectRatio * 100 + "%");
-        $this.removeAttr("height").removeAttr("width");
+        $this.wrap('<div class="fluid-width-video-wrapper"></div>').parent('.fluid-width-video-wrapper').css('padding-top', aspectRatio * 100 + '%');
+        $this.removeAttr('height').removeAttr('width');
       });
     });
   };
@@ -1121,12 +1121,12 @@ jQuery(function ($) {
 /*eslint-disable no-underscore-dangle */
 
 (function ($) {
-  "use strict";
+  'use strict';
 
-  var pluginName = "Morphext",
+  const pluginName = 'Morphext',
     defaults = {
-      animation: "bounceIn",
-      separator: ",",
+      animation: 'bounceIn',
+      separator: ',',
       speed: 2000,
       complete: $.noop
     };
@@ -1137,10 +1137,10 @@ jQuery(function ($) {
     this._init();
   }
   Plugin.prototype = {
-    _init: function () {
-      var $that = this;
+    _init() {
+      const $that = this;
       this.phrases = [];
-      this.element.addClass("morphext");
+      this.element.addClass('morphext');
       $.each(this.element.text().split(this.settings.separator), function (key, value) {
         $that.phrases.push($.trim(value));
       });
@@ -1148,27 +1148,27 @@ jQuery(function ($) {
       this.animate();
       this.start();
     },
-    animate: function () {
+    animate() {
       this.index = ++this.index % this.phrases.length;
-      this.element[0].innerHTML = "<span class=\"animated " + this.settings.animation + "\">" + this.phrases[this.index] + "</span>";
+      this.element[0].innerHTML = '<span class="animated ' + this.settings.animation + '">' + this.phrases[this.index] + '</span>';
       if ($.isFunction(this.settings.complete)) {
         this.settings.complete.call(this);
       }
     },
-    start: function () {
-      var $that = this;
+    start() {
+      const $that = this;
       this._interval = setInterval(function () {
         $that.animate();
       }, this.settings.speed);
     },
-    stop: function () {
+    stop() {
       this._interval = clearInterval(this._interval);
     }
   };
   $.fn[pluginName] = function (options) {
     return this.each(function () {
-      if (!$.data(this, "plugin_" + pluginName)) {
-        $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+      if (!$.data(this, 'plugin_' + pluginName)) {
+        $.data(this, 'plugin_' + pluginName, new Plugin(this, options));
       }
     });
   };
@@ -1205,6 +1205,8 @@ __webpack_require__.r(__webpack_exports__);
  * EvEmitter v2.1.1
  * Lil' event emitter
  * MIT License
+ * @param global
+ * @param factory
  */
 
 (function (global, factory) {
@@ -1216,16 +1218,18 @@ __webpack_require__.r(__webpack_exports__);
     // Browser globals
     global.EvEmitter = factory();
   }
-})(typeof window != 'undefined' ? window : this, function () {
+})(typeof window !== 'undefined' ? window : this, function () {
   function EvEmitter() {}
-  let proto = EvEmitter.prototype;
+  const proto = EvEmitter.prototype;
   proto.on = function (eventName, listener) {
-    if (!eventName || !listener) return this;
+    if (!eventName || !listener) {
+      return this;
+    }
 
     // set events hash
-    let events = this._events = this._events || {};
+    const events = this._events = this._events || {};
     // set listeners array
-    let listeners = events[eventName] = events[eventName] || [];
+    const listeners = events[eventName] = events[eventName] || [];
     // only add once
     if (!listeners.includes(listener)) {
       listeners.push(listener);
@@ -1233,23 +1237,27 @@ __webpack_require__.r(__webpack_exports__);
     return this;
   };
   proto.once = function (eventName, listener) {
-    if (!eventName || !listener) return this;
+    if (!eventName || !listener) {
+      return this;
+    }
 
     // add event
     this.on(eventName, listener);
     // set once flag
     // set onceEvents hash
-    let onceEvents = this._onceEvents = this._onceEvents || {};
+    const onceEvents = this._onceEvents = this._onceEvents || {};
     // set onceListeners object
-    let onceListeners = onceEvents[eventName] = onceEvents[eventName] || {};
+    const onceListeners = onceEvents[eventName] = onceEvents[eventName] || {};
     // set flag
     onceListeners[listener] = true;
     return this;
   };
   proto.off = function (eventName, listener) {
-    let listeners = this._events && this._events[eventName];
-    if (!listeners || !listeners.length) return this;
-    let index = listeners.indexOf(listener);
+    const listeners = this._events && this._events[eventName];
+    if (!listeners || !listeners.length) {
+      return this;
+    }
+    const index = listeners.indexOf(listener);
     if (index != -1) {
       listeners.splice(index, 1);
     }
@@ -1257,15 +1265,17 @@ __webpack_require__.r(__webpack_exports__);
   };
   proto.emitEvent = function (eventName, args) {
     let listeners = this._events && this._events[eventName];
-    if (!listeners || !listeners.length) return this;
+    if (!listeners || !listeners.length) {
+      return this;
+    }
 
     // copy over to avoid interference if .off() in listener
     listeners = listeners.slice(0);
     args = args || [];
     // once stuff
-    let onceListeners = this._onceEvents && this._onceEvents[eventName];
-    for (let listener of listeners) {
-      let isOnce = onceListeners && onceListeners[listener];
+    const onceListeners = this._onceEvents && this._onceEvents[eventName];
+    for (const listener of listeners) {
+      const isOnce = onceListeners && onceListeners[listener];
       if (isOnce) {
         // remove listener
         // remove before trigger to prevent recursion
@@ -1302,17 +1312,21 @@ __webpack_require__.r(__webpack_exports__);
   }
 })(typeof window !== 'undefined' ? window : this, function factory(window, EvEmitter) {
   let $ = window.jQuery;
-  let console = window.console;
+  const console = window.console;
 
   // -------------------------- helpers -------------------------- //
 
   // turn element or nodeList into an array
   function makeArray(obj) {
     // use object if already an array
-    if (Array.isArray(obj)) return obj;
-    let isArrayLike = typeof obj == 'object' && typeof obj.length == 'number';
+    if (Array.isArray(obj)) {
+      return obj;
+    }
+    const isArrayLike = typeof obj === 'object' && typeof obj.length === 'number';
     // convert nodeList to array
-    if (isArrayLike) return [...obj];
+    if (isArrayLike) {
+      return [...obj];
+    }
 
     // array of single index
     return [obj];
@@ -1321,10 +1335,10 @@ __webpack_require__.r(__webpack_exports__);
   // -------------------------- imagesLoaded -------------------------- //
 
   /**
-   * @param {[Array, Element, NodeList, String]} elem
-   * @param {[Object, Function]} options - if function, use as callback
-   * @param {Function} onAlways - callback function
-   * @returns {ImagesLoaded}
+   * @param {[Array, Element, NodeList, string]} elem
+   * @param {[Object, Function]}                 options  - if function, use as callback
+   * @param {Function}                           onAlways - callback function
+   * @return {ImagesLoaded}
    */
   function ImagesLoaded(elem, options, onAlways) {
     // coerce ImagesLoaded() without new, to be new ImagesLoaded()
@@ -1333,7 +1347,7 @@ __webpack_require__.r(__webpack_exports__);
     }
     // use elem as selector string
     let queryElem = elem;
-    if (typeof elem == 'string') {
+    if (typeof elem === 'string') {
       queryElem = document.querySelectorAll(elem);
     }
     // bail if bad element
@@ -1344,15 +1358,19 @@ __webpack_require__.r(__webpack_exports__);
     this.elements = makeArray(queryElem);
     this.options = {};
     // shift arguments if no options set
-    if (typeof options == 'function') {
+    if (typeof options === 'function') {
       onAlways = options;
     } else {
       Object.assign(this.options, options);
     }
-    if (onAlways) this.on('always', onAlways);
+    if (onAlways) {
+      this.on('always', onAlways);
+    }
     this.getImages();
     // add jQuery Deferred object
-    if ($) this.jqDeferred = new $.Deferred();
+    if ($) {
+      this.jqDeferred = new $.Deferred();
+    }
 
     // HACK check async to allow time to bind listeners
     setTimeout(this.check.bind(this));
@@ -1381,34 +1399,38 @@ __webpack_require__.r(__webpack_exports__);
 
     // find children
     // no non-element nodes, #143
-    let {
+    const {
       nodeType
     } = elem;
-    if (!nodeType || !elementNodeTypes.includes(nodeType)) return;
-    let childImgs = elem.querySelectorAll('img');
+    if (!nodeType || !elementNodeTypes.includes(nodeType)) {
+      return;
+    }
+    const childImgs = elem.querySelectorAll('img');
     // concat childElems to filterFound array
-    for (let img of childImgs) {
+    for (const img of childImgs) {
       this.addImage(img);
     }
 
     // get child background images
-    if (typeof this.options.background == 'string') {
-      let children = elem.querySelectorAll(this.options.background);
-      for (let child of children) {
+    if (typeof this.options.background === 'string') {
+      const children = elem.querySelectorAll(this.options.background);
+      for (const child of children) {
         this.addElementBackgroundImages(child);
       }
     }
   };
   const reURL = /url\((['"])?(.*?)\1\)/gi;
   ImagesLoaded.prototype.addElementBackgroundImages = function (elem) {
-    let style = getComputedStyle(elem);
+    const style = getComputedStyle(elem);
     // Firefox returns null if in a hidden iframe https://bugzil.la/548397
-    if (!style) return;
+    if (!style) {
+      return;
+    }
 
     // get url inside url("...")
     let matches = reURL.exec(style.backgroundImage);
     while (matches !== null) {
-      let url = matches && matches[2];
+      const url = matches && matches[2];
       if (url) {
         this.addBackground(url, elem);
       }
@@ -1420,11 +1442,11 @@ __webpack_require__.r(__webpack_exports__);
    * @param {Image} img
    */
   ImagesLoaded.prototype.addImage = function (img) {
-    let loadingImage = new LoadingImage(img);
+    const loadingImage = new LoadingImage(img);
     this.images.push(loadingImage);
   };
   ImagesLoaded.prototype.addBackground = function (url, elem) {
-    let background = new Background(url, elem);
+    const background = new Background(url, elem);
     this.images.push(background);
   };
   ImagesLoaded.prototype.check = function () {
@@ -1437,7 +1459,7 @@ __webpack_require__.r(__webpack_exports__);
     }
 
     /* eslint-disable-next-line func-style */
-    let onProgress = (image, elem, message) => {
+    const onProgress = (image, elem, message) => {
       // HACK - Chrome triggers event before object properties have changed. #83
       setTimeout(() => {
         this.progress(image, elem, message);
@@ -1465,12 +1487,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   };
   ImagesLoaded.prototype.complete = function () {
-    let eventName = this.hasAnyBroken ? 'fail' : 'done';
+    const eventName = this.hasAnyBroken ? 'fail' : 'done';
     this.isComplete = true;
     this.emitEvent(eventName, [this]);
     this.emitEvent('always', [this]);
     if (this.jqDeferred) {
-      let jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
+      const jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
       this.jqDeferred[jqMethod](this);
     }
   };
@@ -1484,7 +1506,7 @@ __webpack_require__.r(__webpack_exports__);
   LoadingImage.prototype.check = function () {
     // If complete is true and browser supports natural sizes,
     // try to check for image status manually.
-    let isComplete = this.getIsImageComplete();
+    const isComplete = this.getIsImageComplete();
     if (isComplete) {
       // report based on naturalWidth
       this.confirm(this.img.naturalWidth !== 0, 'naturalWidth');
@@ -1511,11 +1533,11 @@ __webpack_require__.r(__webpack_exports__);
   };
   LoadingImage.prototype.confirm = function (isLoaded, message) {
     this.isLoaded = isLoaded;
-    let {
+    const {
       parentNode
     } = this.img;
     // emit progress with parent <picture> or self <img>
-    let elem = parentNode.nodeName === 'PICTURE' ? parentNode : this.img;
+    const elem = parentNode.nodeName === 'PICTURE' ? parentNode : this.img;
     this.emitEvent('progress', [this, elem, message]);
   };
 
@@ -1523,7 +1545,7 @@ __webpack_require__.r(__webpack_exports__);
 
   // trigger specified handler for event type
   LoadingImage.prototype.handleEvent = function (event) {
-    let method = 'on' + event.type;
+    const method = 'on' + event.type;
     if (this[method]) {
       this[method](event);
     }
@@ -1558,7 +1580,7 @@ __webpack_require__.r(__webpack_exports__);
     this.img.addEventListener('error', this);
     this.img.src = this.url;
     // check if image is already complete
-    let isComplete = this.getIsImageComplete();
+    const isComplete = this.getIsImageComplete();
     if (isComplete) {
       this.confirm(this.img.naturalWidth !== 0, 'naturalWidth');
       this.unbindEvents();
@@ -1577,13 +1599,15 @@ __webpack_require__.r(__webpack_exports__);
 
   ImagesLoaded.makeJQueryPlugin = function (jQuery) {
     jQuery = jQuery || window.jQuery;
-    if (!jQuery) return;
+    if (!jQuery) {
+      return;
+    }
 
     // set local variable
     $ = jQuery;
     // $().imagesLoaded()
     $.fn.imagesLoaded = function (options, onAlways) {
-      let instance = new ImagesLoaded(this, options, onAlways);
+      const instance = new ImagesLoaded(this, options, onAlways);
       return instance.jqDeferred.promise($(this));
     };
   };
@@ -1611,18 +1635,18 @@ __webpack_require__.r(__webpack_exports__);
 (function (global, factory) {
    true ? module.exports = factory() : 0;
 })(this, function () {
-  "use strict";
+  'use strict';
 
   /**
    * Document ready callback.
    * @param {Function} callback - callback will be fired once Document ready.
    */
   function ready(callback) {
-    if (document.readyState === "complete" || document.readyState === "interactive") {
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
       // Already ready or interactive, execute callback
       callback();
     } else {
-      document.addEventListener("DOMContentLoaded", callback, {
+      document.addEventListener('DOMContentLoaded', callback, {
         capture: true,
         once: true,
         passive: true
@@ -1633,26 +1657,26 @@ __webpack_require__.r(__webpack_exports__);
   /* eslint-disable import/no-mutable-exports */
   /* eslint-disable no-restricted-globals */
   let win;
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     win = window;
-  } else if (typeof __webpack_require__.g !== "undefined") {
+  } else if (typeof __webpack_require__.g !== 'undefined') {
     win = __webpack_require__.g;
-  } else if (typeof self !== "undefined") {
+  } else if (typeof self !== 'undefined') {
     win = self;
   } else {
     win = {};
   }
-  var global$1 = win;
-  var defaults = {
+  const global$1 = win;
+  const defaults = {
     // Base parallax options.
-    type: "scroll",
+    type: 'scroll',
     speed: 0.5,
-    containerClass: "jarallax-container",
+    containerClass: 'jarallax-container',
     imgSrc: null,
-    imgElement: ".jarallax-img",
-    imgSize: "cover",
-    imgPosition: "50% 50%",
-    imgRepeat: "no-repeat",
+    imgElement: '.jarallax-img',
+    imgSize: 'cover',
+    imgPosition: '50% 50%',
+    imgRepeat: 'no-repeat',
     keepImg: false,
     elementInViewport: null,
     zIndex: -100,
@@ -1663,7 +1687,7 @@ __webpack_require__.r(__webpack_exports__);
     onDestroy: null,
     onCoverImage: null,
     // Video options.
-    videoClass: "jarallax-video",
+    videoClass: 'jarallax-video',
     videoSrc: null,
     videoStartTime: 0,
     videoEndTime: 0,
@@ -1680,13 +1704,13 @@ __webpack_require__.r(__webpack_exports__);
   /**
    * Add styles to element.
    *
-   * @param {Element} el - element.
-   * @param {String|Object} styles - styles list.
+   * @param {Element}         el     - element.
+   * @param {string | Object} styles - styles list.
    *
-   * @returns {Element}
+   * @return {Element}
    */
   function css(el, styles) {
-    if (typeof styles === "string") {
+    if (typeof styles === 'string') {
       return global$1.getComputedStyle(el).getPropertyValue(styles);
     }
     Object.keys(styles).forEach(key => {
@@ -1698,10 +1722,10 @@ __webpack_require__.r(__webpack_exports__);
   /**
    * Extend like jQuery.extend
    *
-   * @param {Object} out - output object.
+   * @param {Object} out  - output object.
    * @param {...any} args - additional objects to extend.
    *
-   * @returns {Object}
+   * @return {Object}
    */
   function extend(out, ...args) {
     out = out || {};
@@ -1721,7 +1745,7 @@ __webpack_require__.r(__webpack_exports__);
    *
    * @param {Element} elem - DOM element.
    *
-   * @returns {Array}
+   * @return {Array}
    */
   function getParents(elem) {
     const parents = [];
@@ -1750,8 +1774,8 @@ __webpack_require__.r(__webpack_exports__);
    */
   function getDeviceHeight() {
     if (!$deviceHelper && document.body) {
-      $deviceHelper = document.createElement("div");
-      $deviceHelper.style.cssText = "position: fixed; top: -9999px; left: 0; height: 100vh; width: 0;";
+      $deviceHelper = document.createElement('div');
+      $deviceHelper.style.cssText = 'position: fixed; top: -9999px; left: 0; height: 100vh; width: 0;';
       document.body.appendChild($deviceHelper);
     }
     return ($deviceHelper ? $deviceHelper.clientHeight : 0) || global$1.innerHeight || document.documentElement.clientHeight;
@@ -1765,9 +1789,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
   updateWindowHeight();
-  global$1.addEventListener("resize", updateWindowHeight);
-  global$1.addEventListener("orientationchange", updateWindowHeight);
-  global$1.addEventListener("load", updateWindowHeight);
+  global$1.addEventListener('resize', updateWindowHeight);
+  global$1.addEventListener('orientationchange', updateWindowHeight);
+  global$1.addEventListener('load', updateWindowHeight);
   ready(() => {
     updateWindowHeight();
   });
@@ -1825,7 +1849,7 @@ __webpack_require__.r(__webpack_exports__);
   }, {
     // We have to start parallax calculation before the block is in view
     // to prevent possible parallax jumping.
-    rootMargin: "50px"
+    rootMargin: '50px'
   });
   function addObserver(instance) {
     jarallaxList.push({
@@ -1867,7 +1891,7 @@ __webpack_require__.r(__webpack_exports__);
       const pureDataOptions = {};
       Object.keys(dataOptions).forEach(key => {
         const lowerCaseOption = key.substr(0, 1).toLowerCase() + key.substr(1);
-        if (lowerCaseOption && typeof self.defaults[lowerCaseOption] !== "undefined") {
+        if (lowerCaseOption && typeof self.defaults[lowerCaseOption] !== 'undefined') {
           pureDataOptions[lowerCaseOption] = dataOptions[key];
         }
       });
@@ -1876,9 +1900,9 @@ __webpack_require__.r(__webpack_exports__);
 
       // prepare 'true' and 'false' strings to boolean
       Object.keys(self.options).forEach(key => {
-        if (self.options[key] === "true") {
+        if (self.options[key] === 'true') {
           self.options[key] = true;
-        } else if (self.options[key] === "false") {
+        } else if (self.options[key] === 'false') {
           self.options[key] = false;
         }
       });
@@ -1887,33 +1911,33 @@ __webpack_require__.r(__webpack_exports__);
       self.options.speed = Math.min(2, Math.max(-1, parseFloat(self.options.speed)));
 
       // prepare disableParallax callback
-      if (typeof self.options.disableParallax === "string") {
+      if (typeof self.options.disableParallax === 'string') {
         self.options.disableParallax = new RegExp(self.options.disableParallax);
       }
       if (self.options.disableParallax instanceof RegExp) {
         const disableParallaxRegexp = self.options.disableParallax;
         self.options.disableParallax = () => disableParallaxRegexp.test(navigator.userAgent);
       }
-      if (typeof self.options.disableParallax !== "function") {
+      if (typeof self.options.disableParallax !== 'function') {
         self.options.disableParallax = () => false;
       }
 
       // prepare disableVideo callback
-      if (typeof self.options.disableVideo === "string") {
+      if (typeof self.options.disableVideo === 'string') {
         self.options.disableVideo = new RegExp(self.options.disableVideo);
       }
       if (self.options.disableVideo instanceof RegExp) {
         const disableVideoRegexp = self.options.disableVideo;
         self.options.disableVideo = () => disableVideoRegexp.test(navigator.userAgent);
       }
-      if (typeof self.options.disableVideo !== "function") {
+      if (typeof self.options.disableVideo !== 'function') {
         self.options.disableVideo = () => false;
       }
 
       // custom element to check if parallax in viewport
       let elementInVP = self.options.elementInViewport;
       // get first item from array
-      if (elementInVP && typeof elementInVP === "object" && typeof elementInVP.length !== "undefined") {
+      if (elementInVP && typeof elementInVP === 'object' && typeof elementInVP.length !== 'undefined') {
         [elementInVP] = elementInVP;
       }
       // check if dom element
@@ -1928,7 +1952,7 @@ __webpack_require__.r(__webpack_exports__);
         // 1. Position fixed is needed for the most of browsers because absolute position have glitches
         // 2. On MacOS with smooth scroll there is a huge lags with absolute position - https://github.com/nk-o/jarallax/issues/75
         // 3. Previously used 'absolute' for mobile devices. But we re-tested on iPhone 12 and 'fixed' position is working better, then 'absolute', so for now position is always 'fixed'
-        position: "fixed"
+        position: 'fixed'
       };
       if (self.initImg() && self.canInitParallax()) {
         self.init();
@@ -1960,7 +1984,7 @@ __webpack_require__.r(__webpack_exports__);
 
       // find image element
       let $imgElement = self.options.imgElement;
-      if ($imgElement && typeof $imgElement === "string") {
+      if ($imgElement && typeof $imgElement === 'string') {
         $imgElement = self.$item.querySelector($imgElement);
       }
 
@@ -1990,10 +2014,10 @@ __webpack_require__.r(__webpack_exports__);
 
       // get image src
       if (self.image.src === null) {
-        self.image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-        self.image.bgImage = self.css(self.$item, "background-image");
+        self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+        self.image.bgImage = self.css(self.$item, 'background-image');
       }
-      return !(!self.image.bgImage || self.image.bgImage === "none");
+      return !(!self.image.bgImage || self.image.bgImage === 'none');
     }
     canInitParallax() {
       return !this.options.disableParallax();
@@ -2001,105 +2025,105 @@ __webpack_require__.r(__webpack_exports__);
     init() {
       const self = this;
       const containerStyles = {
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
-        width: "100%",
-        height: "100%",
-        overflow: "hidden"
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden'
       };
       let imageStyles = {
-        pointerEvents: "none",
-        transformStyle: "preserve-3d",
-        backfaceVisibility: "hidden"
+        pointerEvents: 'none',
+        transformStyle: 'preserve-3d',
+        backfaceVisibility: 'hidden'
       };
       if (!self.options.keepImg) {
         // save default user styles
-        const curStyle = self.$item.getAttribute("style");
+        const curStyle = self.$item.getAttribute('style');
         if (curStyle) {
-          self.$item.setAttribute("data-jarallax-original-styles", curStyle);
+          self.$item.setAttribute('data-jarallax-original-styles', curStyle);
         }
         if (self.image.useImgTag) {
-          const curImgStyle = self.image.$item.getAttribute("style");
+          const curImgStyle = self.image.$item.getAttribute('style');
           if (curImgStyle) {
-            self.image.$item.setAttribute("data-jarallax-original-styles", curImgStyle);
+            self.image.$item.setAttribute('data-jarallax-original-styles', curImgStyle);
           }
         }
       }
 
       // set relative position and z-index to the parent
-      if (self.css(self.$item, "position") === "static") {
+      if (self.css(self.$item, 'position') === 'static') {
         self.css(self.$item, {
-          position: "relative"
+          position: 'relative'
         });
       }
-      if (self.css(self.$item, "z-index") === "auto") {
+      if (self.css(self.$item, 'z-index') === 'auto') {
         self.css(self.$item, {
           zIndex: 0
         });
       }
 
       // container for parallax image
-      self.image.$container = document.createElement("div");
+      self.image.$container = document.createElement('div');
       self.css(self.image.$container, containerStyles);
       self.css(self.image.$container, {
-        "z-index": self.options.zIndex
+        'z-index': self.options.zIndex
       });
 
       // it will remove some image overlapping
       // overlapping occur due to an image position fixed inside absolute position element
       // needed only when background in fixed position
-      if (this.image.position === "fixed") {
+      if (this.image.position === 'fixed') {
         self.css(self.image.$container, {
-          "-webkit-clip-path": "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-          "clip-path": "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
+          '-webkit-clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+          'clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
         });
       }
 
       // Add container unique ID.
-      self.image.$container.setAttribute("id", `jarallax-container-${self.instanceID}`);
+      self.image.$container.setAttribute('id', `jarallax-container-${self.instanceID}`);
 
       // Add container class.
       if (self.options.containerClass) {
-        self.image.$container.setAttribute("class", self.options.containerClass);
+        self.image.$container.setAttribute('class', self.options.containerClass);
       }
       self.$item.appendChild(self.image.$container);
 
       // use img tag
       if (self.image.useImgTag) {
         imageStyles = self.extend({
-          "object-fit": self.options.imgSize,
-          "object-position": self.options.imgPosition,
-          "max-width": "none"
+          'object-fit': self.options.imgSize,
+          'object-position': self.options.imgPosition,
+          'max-width': 'none'
         }, containerStyles, imageStyles);
 
         // use div with background image
       } else {
-        self.image.$item = document.createElement("div");
+        self.image.$item = document.createElement('div');
         if (self.image.src) {
           imageStyles = self.extend({
-            "background-position": self.options.imgPosition,
-            "background-size": self.options.imgSize,
-            "background-repeat": self.options.imgRepeat,
-            "background-image": self.image.bgImage || `url("${self.image.src}")`
+            'background-position': self.options.imgPosition,
+            'background-size': self.options.imgSize,
+            'background-repeat': self.options.imgRepeat,
+            'background-image': self.image.bgImage || `url("${self.image.src}")`
           }, containerStyles, imageStyles);
         }
       }
-      if (self.options.type === "opacity" || self.options.type === "scale" || self.options.type === "scale-opacity" || self.options.speed === 1) {
-        self.image.position = "absolute";
+      if (self.options.type === 'opacity' || self.options.type === 'scale' || self.options.type === 'scale-opacity' || self.options.speed === 1) {
+        self.image.position = 'absolute';
       }
 
       // 1. Check if one of parents have transform style (without this check, scroll transform will be inverted if used parallax with position fixed)
       //    discussion - https://github.com/nk-o/jarallax/issues/9
       // 2. Check if parents have overflow scroll
-      if (self.image.position === "fixed") {
+      if (self.image.position === 'fixed') {
         const $parents = getParents(self.$item).filter(el => {
           const styles = global$1.getComputedStyle(el);
-          const parentTransform = styles["-webkit-transform"] || styles["-moz-transform"] || styles.transform;
+          const parentTransform = styles['-webkit-transform'] || styles['-moz-transform'] || styles.transform;
           const overflowRegex = /(auto|scroll)/;
-          return parentTransform && parentTransform !== "none" || overflowRegex.test(styles.overflow + styles["overflow-y"] + styles["overflow-x"]);
+          return parentTransform && parentTransform !== 'none' || overflowRegex.test(styles.overflow + styles['overflow-y'] + styles['overflow-x']);
         });
-        self.image.position = $parents.length ? "absolute" : "fixed";
+        self.image.position = $parents.length ? 'absolute' : 'fixed';
       }
 
       // add position to parallax block
@@ -2119,9 +2143,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       // remove default user background
-      if (self.css(self.$item, "background-image") !== "none") {
+      if (self.css(self.$item, 'background-image') !== 'none') {
         self.css(self.$item, {
-          "background-image": "none"
+          'background-image': 'none'
         });
       }
       addObserver(self);
@@ -2131,23 +2155,23 @@ __webpack_require__.r(__webpack_exports__);
       removeObserver(self);
 
       // return styles on container as before jarallax init
-      const originalStylesTag = self.$item.getAttribute("data-jarallax-original-styles");
-      self.$item.removeAttribute("data-jarallax-original-styles");
+      const originalStylesTag = self.$item.getAttribute('data-jarallax-original-styles');
+      self.$item.removeAttribute('data-jarallax-original-styles');
       // null occurs if there is no style tag before jarallax init
       if (!originalStylesTag) {
-        self.$item.removeAttribute("style");
+        self.$item.removeAttribute('style');
       } else {
-        self.$item.setAttribute("style", originalStylesTag);
+        self.$item.setAttribute('style', originalStylesTag);
       }
       if (self.image.useImgTag) {
         // return styles on img tag as before jarallax init
-        const originalStylesImgTag = self.image.$item.getAttribute("data-jarallax-original-styles");
-        self.image.$item.removeAttribute("data-jarallax-original-styles");
+        const originalStylesImgTag = self.image.$item.getAttribute('data-jarallax-original-styles');
+        self.image.$item.removeAttribute('data-jarallax-original-styles');
         // null occurs if there is no style tag before jarallax init
         if (!originalStylesImgTag) {
-          self.image.$item.removeAttribute("style");
+          self.image.$item.removeAttribute('style');
         } else {
-          self.image.$item.setAttribute("style", originalStylesTag);
+          self.image.$item.setAttribute('style', originalStylesTag);
         }
 
         // move img tag to its default position
@@ -2179,7 +2203,7 @@ __webpack_require__.r(__webpack_exports__);
       const {
         speed
       } = self.options;
-      const isScroll = self.options.type === "scroll" || self.options.type === "scroll-opacity";
+      const isScroll = self.options.type === 'scroll' || self.options.type === 'scroll-opacity';
       let scrollDist = 0;
       let resultH = contH;
       let resultMT = 0;
@@ -2221,7 +2245,7 @@ __webpack_require__.r(__webpack_exports__);
       self.css(self.image.$item, {
         height: `${resultH}px`,
         marginTop: `${resultMT}px`,
-        left: self.image.position === "fixed" ? `${rect.left}px` : "0",
+        left: self.image.position === 'fixed' ? `${rect.left}px` : '0',
         width: `${rect.width}px`
       });
 
@@ -2277,13 +2301,13 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       // opacity
-      if (self.options.type === "opacity" || self.options.type === "scale-opacity" || self.options.type === "scroll-opacity") {
-        styles.transform = "translate3d(0,0,0)";
+      if (self.options.type === 'opacity' || self.options.type === 'scale-opacity' || self.options.type === 'scroll-opacity') {
+        styles.transform = 'translate3d(0,0,0)';
         styles.opacity = visiblePercent;
       }
 
       // scale
-      if (self.options.type === "scale" || self.options.type === "scale-opacity") {
+      if (self.options.type === 'scale' || self.options.type === 'scale-opacity') {
         let scale = 1;
         if (self.options.speed < 0) {
           scale -= self.options.speed * visiblePercent;
@@ -2294,11 +2318,11 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       // scroll
-      if (self.options.type === "scroll" || self.options.type === "scroll-opacity") {
+      if (self.options.type === 'scroll' || self.options.type === 'scroll-opacity') {
         let positionY = self.parallaxScrollDistance * fromViewportCenter;
 
         // fix if parallax block in absolute position
-        if (self.image.position === "absolute") {
+        if (self.image.position === 'absolute') {
           positionY -= contT;
         }
         styles.transform = `translate3d(0,${positionY}px,0)`;
@@ -2329,14 +2353,14 @@ __webpack_require__.r(__webpack_exports__);
   const jarallax = function (items, options, ...args) {
     // check for dom element
     // thanks: http://stackoverflow.com/questions/384286/javascript-isdom-how-do-you-check-if-a-javascript-object-is-a-dom-object
-    if (typeof HTMLElement === "object" ? items instanceof HTMLElement : items && typeof items === "object" && items !== null && items.nodeType === 1 && typeof items.nodeName === "string") {
+    if (typeof HTMLElement === 'object' ? items instanceof HTMLElement : items && typeof items === 'object' && items !== null && items.nodeType === 1 && typeof items.nodeName === 'string') {
       items = [items];
     }
     const len = items.length;
     let k = 0;
     let ret;
     for (k; k < len; k += 1) {
-      if (typeof options === "object" || typeof options === "undefined") {
+      if (typeof options === 'object' || typeof options === 'undefined') {
         if (!items[k].jarallax) {
           items[k].jarallax = new Jarallax(items[k], options);
         }
@@ -2344,7 +2368,7 @@ __webpack_require__.r(__webpack_exports__);
         // eslint-disable-next-line prefer-spread
         ret = items[k].jarallax[options].apply(items[k].jarallax, args);
       }
-      if (typeof ret !== "undefined") {
+      if (typeof ret !== 'undefined') {
         return ret;
       }
     }
@@ -2354,11 +2378,11 @@ __webpack_require__.r(__webpack_exports__);
   const $ = global$1.jQuery;
 
   // jQuery support
-  if (typeof $ !== "undefined") {
+  if (typeof $ !== 'undefined') {
     const $Plugin = function (...args) {
       Array.prototype.unshift.call(args, this);
       const res = jarallax.apply(global$1, args);
-      return typeof res !== "object" ? res : this;
+      return typeof res !== 'object' ? res : this;
     };
     $Plugin.constructor = jarallax.constructor;
 
@@ -2373,7 +2397,7 @@ __webpack_require__.r(__webpack_exports__);
 
   // data-jarallax initialization
   ready(() => {
-    jarallax(document.querySelectorAll("[data-jarallax]"));
+    jarallax(document.querySelectorAll('[data-jarallax]'));
   });
   return jarallax;
 });
@@ -2387,10 +2411,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (() => {
 
 /*! Backstretch - v2.0.4 - 2013-06-19
-* http://srobbin.com/jquery-plugins/backstretch/
-* Copyright (c) 2013 Scott Robbin; Licensed MIT */
+ * http://srobbin.com/jquery-plugins/backstretch/
+ * Copyright (c) 2013 Scott Robbin; Licensed MIT */
 
-;
 (function ($, window, undefined) {
   'use strict';
 
@@ -2399,24 +2422,24 @@ __webpack_require__.r(__webpack_exports__);
   $.fn.backstretch = function (images, options) {
     // We need at least one image or method name
     if (images === undefined || images.length === 0) {
-      $.error("No images were supplied for Backstretch");
+      $.error('No images were supplied for Backstretch');
     }
 
     /*
      * Scroll the page one pixel to get the right window height on iOS
      * Pretty harmless for everyone else
-    */
+     */
     if ($(window).scrollTop() === 0) {
       window.scrollTo(0, 0);
     }
     return this.each(function () {
-      var $this = $(this),
+      let $this = $(this),
         obj = $this.data('backstretch');
 
       // Do we already have an instance attached to this element?
       if (obj) {
         // Is this a method they're trying to execute?
-        if (typeof images == 'string' && typeof obj[images] == 'function') {
+        if (typeof images === 'string' && typeof obj[images] === 'function') {
           // Call the method
           obj[images](options);
 
@@ -2450,22 +2473,22 @@ __webpack_require__.r(__webpack_exports__);
    * ========================= */
 
   $.fn.backstretch.defaults = {
-    centeredX: true // Should we center the image on the X axis?
-    ,
-    centeredY: true // Should we center the image on the Y axis?
-    ,
-    duration: 5000 // Amount of time in between slides (if slideshow)
-    ,
+    centeredX: true,
+    // Should we center the image on the X axis?
+    centeredY: true,
+    // Should we center the image on the Y axis?
+    duration: 5000,
+    // Amount of time in between slides (if slideshow)
     fade: 0 // Speed of fade transition between slides
   };
 
   /* STYLES
-   * 
+   *
    * Baked-in styles that we'll apply to our elements.
    * In an effort to keep the plugin simple, these are not exposed as options.
    * That said, anyone can override these in their own stylesheet.
    * ========================= */
-  var styles = {
+  const styles = {
     wrap: {
       left: 0,
       top: 0,
@@ -2519,14 +2542,14 @@ __webpack_require__.r(__webpack_exports__);
     this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
 
     // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
-    var $existing = this.$container.children(".backstretch").first();
+    const $existing = this.$container.children('.backstretch').first();
     this.$wrap = $existing.length ? $existing : $('<div class="backstretch"></div>').css(styles.wrap).appendTo(this.$container);
 
     // Non-body elements need some style adjustments
     if (!this.isBody) {
       // If the container is statically positioned, we need to make it relative,
       // and if no zIndex is defined, we should set it to zero.
-      var position = this.$container.css('position'),
+      const position = this.$container.css('position'),
         zIndex = this.$container.css('zIndex');
       this.$container.css({
         position: position === 'static' ? 'relative' : position,
@@ -2562,9 +2585,9 @@ __webpack_require__.r(__webpack_exports__);
   /* PUBLIC METHODS
    * ========================= */
   Backstretch.prototype = {
-    resize: function () {
+    resize() {
       try {
-        var bgCSS = {
+        let bgCSS = {
             left: 0,
             top: 0
           },
@@ -2600,18 +2623,16 @@ __webpack_require__.r(__webpack_exports__);
         // This try/catch block is a hack to let it fail gracefully.
       }
       return this;
-    }
-
+    },
     // Show the slide at a certain position
-    ,
-    show: function (newIndex) {
+    show(newIndex) {
       // Validate index
       if (Math.abs(newIndex) > this.images.length - 1) {
         return;
       }
 
       // Vars
-      var self = this,
+      const self = this,
         oldImage = self.$wrap.find('img').addClass('deleteable'),
         evtOptions = {
           relatedTarget: self.$container[0]
@@ -2628,7 +2649,7 @@ __webpack_require__.r(__webpack_exports__);
 
       // New image
       self.$img = $('<img />').css(styles.img).bind('load', function (e) {
-        var imgWidth = this.width || $(e.target).width(),
+        const imgWidth = this.width || $(e.target).width(),
           imgHeight = this.height || $(e.target).height();
 
         // Save the ratio
@@ -2659,26 +2680,26 @@ __webpack_require__.r(__webpack_exports__);
       self.$img.attr('src', self.images[newIndex]);
       return self;
     },
-    next: function () {
+    next() {
       // Next slide
       return this.show(this.index < this.images.length - 1 ? this.index + 1 : 0);
     },
-    prev: function () {
+    prev() {
       // Previous slide
       return this.show(this.index === 0 ? this.images.length - 1 : this.index - 1);
     },
-    pause: function () {
+    pause() {
       // Pause the slideshow
       this.paused = true;
       return this;
     },
-    resume: function () {
+    resume() {
       // Resume the slideshow
       this.paused = false;
       this.next();
       return this;
     },
-    cycle: function () {
+    cycle() {
       // Start/resume the slideshow
       if (this.images.length > 1) {
         // Clear the interval, just in case
@@ -2692,7 +2713,7 @@ __webpack_require__.r(__webpack_exports__);
       }
       return this;
     },
-    destroy: function (preserveBackground) {
+    destroy(preserveBackground) {
       // Stop the resize events
       $(window).off('resize.backstretch orientationchange.backstretch');
 
@@ -2721,10 +2742,9 @@ __webpack_require__.r(__webpack_exports__);
    * ========================= */
 
   var supportsFixedPosition = function () {
-    var ua = navigator.userAgent,
-      platform = navigator.platform
+    const ua = navigator.userAgent,
+      platform = navigator.platform,
       // Rendering engine is Webkit, and capture major version
-      ,
       wkmatch = ua.match(/AppleWebKit\/([0-9]+)/),
       wkversion = !!wkmatch && wkmatch[1],
       ffmatch = ua.match(/Fennec\/([0-9]+)/),
@@ -2735,17 +2755,18 @@ __webpack_require__.r(__webpack_exports__);
       ieversion = !!iematch && iematch[1];
     return !(
     // iOS 4.3 and older : Platform is iPhone/Pad/Touch and Webkit version is less than 534 (ios5)
-    (platform.indexOf("iPhone") > -1 || platform.indexOf("iPad") > -1 || platform.indexOf("iPod") > -1) && wkversion && wkversion < 534 ||
+
+    (platform.indexOf('iPhone') > -1 || platform.indexOf('iPad') > -1 || platform.indexOf('iPod') > -1) && wkversion && wkversion < 534 ||
     // Opera Mini
-    window.operamini && {}.toString.call(window.operamini) === "[object OperaMini]" || operammobilematch && omversion < 7458 ||
+    window.operamini && {}.toString.call(window.operamini) === '[object OperaMini]' || operammobilematch && omversion < 7458 ||
     //Android lte 2.1: Platform is Android and Webkit version is less than 533 (Android 2.2)
-    ua.indexOf("Android") > -1 && wkversion && wkversion < 533 ||
+    ua.indexOf('Android') > -1 && wkversion && wkversion < 533 ||
     // Firefox Mobile before 6.0 -
     ffversion && ffversion < 6 ||
     // WebOS less than 3
-    "palmGetResource" in window && wkversion && wkversion < 534 ||
+    'palmGetResource' in window && wkversion && wkversion < 534 ||
     // MeeGo
-    ua.indexOf("MeeGo") > -1 && ua.indexOf("NokiaBrowser/8.5.0") > -1 ||
+    ua.indexOf('MeeGo') > -1 && ua.indexOf('NokiaBrowser/8.5.0') > -1 ||
     // IE6
     ieversion && ieversion <= 6);
   }();
@@ -2769,7 +2790,7 @@ __webpack_require__.r(__webpack_exports__);
   if (typeof Onepress_Bully === 'undefined') {
     return;
   }
-  var $window = $(window),
+  let $window = $(window),
     windowHeight = $window.height(),
     elements = [],
     $bully,
@@ -2777,32 +2798,32 @@ __webpack_require__.r(__webpack_exports__);
     current = 0,
     inversed = false,
     frameRendered = true;
-  $bully = $('<div class="c-bully">').appendTo("body");
-  if (Onepress_Bully?.disable_mobile) {
+  $bully = $('<div class="c-bully">').appendTo('body');
+  if (Onepress_Bully.disable_mobile) {
     $bully.addClass('c-bully-hide-on-mobile');
   }
   $current = $('<div class="c-bully__bullet c-bully__bullet--active">').appendTo($bully);
   (function update() {
     if (frameRendered !== true) {
-      var count = 0;
-      var lastItemId = false;
+      let count = 0;
+      let lastItemId = false;
 
       // Ty to to find item that bully over
-      var _bt = $bully.offset().top;
-      var _bh = $bully.height();
-      var _bb = _bh + _bt;
-      if ($("#masthead").hasClass("is-sticky")) {
-        _bb -= $("#masthead").height();
+      const _bt = $bully.offset().top;
+      const _bh = $bully.height();
+      let _bb = _bh + _bt;
+      if ($('#masthead').hasClass('is-sticky')) {
+        _bb -= $('#masthead').height();
       }
-      if ($("#wpadminbar").length) {
-        _bb -= $("#wpadminbar").height();
+      if ($('#wpadminbar').length) {
+        _bb -= $('#wpadminbar').height();
       }
       $.each(Onepress_Bully.sections, function (id, arg) {
-        var element = $("#" + id);
+        const element = $('#' + id);
         if (element.length) {
-          var _et = element.offset().top;
-          var _eh = element.height();
-          var _eb = _eh + _et;
+          const _et = element.offset().top;
+          const _eh = element.height();
+          const _eb = _eh + _et;
           if (_et <= _bt || _bb >= _eb || _bb >= _et && _eb > _bb) {
             lastItemId = id;
             if (arg.enable) {
@@ -2813,29 +2834,29 @@ __webpack_require__.r(__webpack_exports__);
       });
 
       // New insverse
-      if (lastItemId && typeof Onepress_Bully.sections[lastItemId] !== "undefined") {
+      if (lastItemId && typeof Onepress_Bully.sections[lastItemId] !== 'undefined') {
         if (Onepress_Bully.sections[lastItemId].inverse) {
-          $bully.addClass("c-bully--inversed");
+          $bully.addClass('c-bully--inversed');
         } else {
-          $bully.removeClass("c-bully--inversed");
+          $bully.removeClass('c-bully--inversed');
         }
       }
       if (count !== current) {
-        var activeBullet = $bully.find("#bully__" + lastItemId);
-        var bullyOffset = $bully.offset();
+        const activeBullet = $bully.find('#bully__' + lastItemId);
+        const bullyOffset = $bully.offset();
         var offset = 0;
         if (activeBullet.length > 0) {
           offset = activeBullet.offset().top - bullyOffset.top;
         }
         var offset = $bully.children('.c-bully__bullet').not('.c-bully__bullet--active').first().outerHeight(true) * (count - 1);
-        $current.removeClass("c-bully__bullet--squash");
+        $current.removeClass('c-bully__bullet--squash');
         setTimeout(function () {
-          $current.addClass("c-bully__bullet--squash");
+          $current.addClass('c-bully__bullet--squash');
         });
-        $current.css("top", offset);
+        $current.css('top', offset);
         current = count;
-        $bully.find(".c-bully__bullet--pop").removeClass("c-bully__current");
-        activeBullet.addClass("c-bully__current");
+        $bully.find('.c-bully__bullet--pop').removeClass('c-bully__current');
+        activeBullet.addClass('c-bully__current');
       }
     }
     window.requestAnimationFrame(update);
@@ -2857,39 +2878,39 @@ __webpack_require__.r(__webpack_exports__);
       	*/
     });
   }
-  $window.on("load", function (e) {
-    staggerClass(elements, "c-bully__bullet--pop", 400);
+  $window.on('load', function (e) {
+    staggerClass(elements, 'c-bully__bullet--pop', 400);
     frameRendered = false;
   });
-  $window.on("scroll", function (e) {
+  $window.on('scroll', function (e) {
     if (frameRendered === true) {
       lastScrollY = (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0);
     }
     frameRendered = false;
   });
-  $window.on("load resize", function () {
+  $window.on('load resize', function () {
     reloadAll();
   });
-  $(document).on("hero_ready", function () {
+  $(document).on('hero_ready', function () {
     reloadAll();
   });
   function Bully(element, options) {
     this.element = element;
     this.options = $.extend({}, $.fn.bully.defaults, options);
-    var label = "";
-    var id = element.id;
-    var self = this,
+    let label = '';
+    const id = element.id;
+    const self = this,
       $bullet = $('<div id="bully__' + id + '" class="c-bully__bullet">');
     if (Onepress_Bully.enable_label) {
-      if (id && typeof Onepress_Bully.sections[id] !== "undefined") {
+      if (id && typeof Onepress_Bully.sections[id] !== 'undefined') {
         label = Onepress_Bully.sections[id].title;
       }
       if (label) {
-        $bullet.append('<div class="c-bully__title">' + label + "</div>");
+        $bullet.append('<div class="c-bully__title">' + label + '</div>');
       }
     }
-    $bullet.data("bully-data", self).appendTo($bully);
-    $bullet.on("click", function (event) {
+    $bullet.data('bully-data', self).appendTo($bully);
+    $bullet.on('click', function (event) {
       event.preventDefault();
       event.stopPropagation();
       self.onClick();
@@ -2901,29 +2922,29 @@ __webpack_require__.r(__webpack_exports__);
   }
   Bully.prototype = {
     constructor: Bully,
-    _reloadElement: function () {
+    _reloadElement() {
       this.offset = $(this.element).offset();
       this.height = $(this.element).outerHeight();
     },
-    _calcTop: function (top) {
+    _calcTop(top) {
       // check if has sticky
-      if ($("#masthead").hasClass("is-sticky")) {
-        top -= $("#masthead").height();
+      if ($('#masthead').hasClass('is-sticky')) {
+        top -= $('#masthead').height();
       }
-      if ($("#wpadminbar").length) {
-        top -= $("#wpadminbar").height();
+      if ($('#wpadminbar').length) {
+        top -= $('#wpadminbar').height();
       }
       return top;
     },
-    onClick: function () {
-      var self = this,
-        $target = $("html, body");
+    onClick() {
+      const self = this,
+        $target = $('html, body');
       if (self.options.scrollDuration == 0) {
         $target.scrollTop(this._calcTop(self.offset.top));
         return;
       }
-      if (self.options.scrollDuration === "auto") {
-        var duration = Math.abs(lastScrollY - self.offset.top) / (self.options.scrollPerSecond / 1000);
+      if (self.options.scrollDuration === 'auto') {
+        const duration = Math.abs(lastScrollY - self.offset.top) / (self.options.scrollPerSecond / 1000);
         $target.animate({
           scrollTop: this._calcTop(self.offset.top)
         }, duration);
@@ -2936,20 +2957,20 @@ __webpack_require__.r(__webpack_exports__);
   };
   $.fn.bully = function (options) {
     return this.each(function () {
-      if (!$.data(this, "plugin_" + Bully)) {
-        $.data(this, "plugin_" + Bully, new Bully(this, options));
+      if (!$.data(this, 'plugin_' + Bully)) {
+        $.data(this, 'plugin_' + Bully, new Bully(this, options));
       }
     });
   };
   $.fn.bully.defaults = {
-    scrollDuration: "auto",
+    scrollDuration: 'auto',
     scrollPerSecond: 4000,
     sections: {}
   };
-  $window.on("rellax load", reloadAll);
+  $window.on('rellax load', reloadAll);
   $.each(Onepress_Bully.sections, function (id, args) {
     if (args.enable) {
-      const section = $("#" + id);
+      const section = $('#' + id);
       if (section.length) {
         section.bully({
           scrollPerSecond: 3000
@@ -2978,43 +2999,45 @@ __webpack_require__.r(__webpack_exports__);
  * Date: Feb 24, 2017
  */
 (function ($) {
-  "use strict";
+  'use strict';
 
   $.fn.counterUp = function (options) {
     // Defaults
-    var settings = $.extend({
+    let settings = $.extend({
         time: 400,
         delay: 10,
         offset: 100,
         beginAt: 0,
         formatter: false,
-        context: "window",
-        callback: function () {}
+        context: 'window',
+        callback() {}
       }, options),
       s;
     return this.each(function () {
       // Store the object
-      var $this = $(this),
+      const $this = $(this),
         counter = {
-          time: $(this).data("counterup-time") || settings.time,
-          delay: $(this).data("counterup-delay") || settings.delay,
-          offset: $(this).data("counterup-offset") || settings.offset,
-          beginAt: $(this).data("counterup-beginat") || settings.beginAt,
-          context: $(this).data("counterup-context") || settings.context
+          time: $(this).data('counterup-time') || settings.time,
+          delay: $(this).data('counterup-delay') || settings.delay,
+          offset: $(this).data('counterup-offset') || settings.offset,
+          beginAt: $(this).data('counterup-beginat') || settings.beginAt,
+          context: $(this).data('counterup-context') || settings.context
         };
-      var counterUpper = function () {
-        var nums = [];
-        var divisions = counter.time / counter.delay;
-        var num = $this.attr("data-num") ? $this.attr("data-num") : $this.text();
-        var isComma = /[0-9]+,[0-9]+/.test(num);
-        num = num.replace(/,/g, "");
-        var decimalPlaces = (num.split(".")[1] || []).length;
-        if (counter.beginAt > num) counter.beginAt = num;
-        var isTime = /[0-9]+:[0-9]+:[0-9]+/.test(num);
+      const counterUpper = function () {
+        const nums = [];
+        const divisions = counter.time / counter.delay;
+        let num = $this.attr('data-num') ? $this.attr('data-num') : $this.text();
+        const isComma = /[0-9]+,[0-9]+/.test(num);
+        num = num.replace(/,/g, '');
+        const decimalPlaces = (num.split('.')[1] || []).length;
+        if (counter.beginAt > num) {
+          counter.beginAt = num;
+        }
+        const isTime = /[0-9]+:[0-9]+:[0-9]+/.test(num);
 
         // Convert time to total seconds
         if (isTime) {
-          var times = num.split(":"),
+          let times = num.split(':'),
             m = 1;
           s = 0;
           while (times.length > 0) {
@@ -3024,22 +3047,22 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         // Generate list of incremental numbers to display
-        for (var i = divisions; i >= counter.beginAt / num * divisions; i--) {
-          var newNum = parseFloat(num / divisions * i).toFixed(decimalPlaces);
+        for (let i = divisions; i >= counter.beginAt / num * divisions; i--) {
+          let newNum = parseFloat(num / divisions * i).toFixed(decimalPlaces);
 
           // Add incremental seconds and convert back to time
           if (isTime) {
             newNum = parseInt(s / divisions * i);
-            var hours = parseInt(newNum / 3600) % 24;
-            var minutes = parseInt(newNum / 60) % 60;
-            var seconds = parseInt(newNum % 60, 10);
-            newNum = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+            const hours = parseInt(newNum / 3600) % 24;
+            const minutes = parseInt(newNum / 60) % 60;
+            const seconds = parseInt(newNum % 60, 10);
+            newNum = (hours < 10 ? '0' + hours : hours) + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
           }
 
           // Preserve commas if input had commas
           if (isComma) {
             while (/(\d+)(\d{3})/.test(newNum.toString())) {
-              newNum = newNum.toString().replace(/(\d+)(\d{3})/, "$1" + "," + "$2");
+              newNum = newNum.toString().replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
             }
           }
           if (settings.formatter) {
@@ -3047,28 +3070,28 @@ __webpack_require__.r(__webpack_exports__);
           }
           nums.unshift(newNum);
         }
-        $this.data("counterup-nums", nums);
+        $this.data('counterup-nums', nums);
         $this.text(counter.beginAt);
 
         // Updates the number until we're done
-        var f = function () {
-          if (!$this.data("counterup-nums")) {
+        const f = function () {
+          if (!$this.data('counterup-nums')) {
             settings.callback.call(this);
             return;
           }
-          $this.html($this.data("counterup-nums").shift());
-          if ($this.data("counterup-nums").length) {
-            setTimeout($this.data("counterup-func"), counter.delay);
+          $this.html($this.data('counterup-nums').shift());
+          if ($this.data('counterup-nums').length) {
+            setTimeout($this.data('counterup-func'), counter.delay);
           } else {
-            $this.data("counterup-nums", null);
-            $this.data("counterup-func", null);
+            $this.data('counterup-nums', null);
+            $this.data('counterup-func', null);
             settings.callback.call(this);
           }
         };
-        $this.data("counterup-func", f);
+        $this.data('counterup-func', f);
 
         // Start the count up
-        setTimeout($this.data("counterup-func"), counter.delay);
+        setTimeout($this.data('counterup-func'), counter.delay);
       };
 
       // Perform counts when the element gets into view
@@ -3076,7 +3099,7 @@ __webpack_require__.r(__webpack_exports__);
         counterUpper();
         this.destroy(); //-- Waypoint 3.0 version of triggerOnce
       }, {
-        offset: counter.offset + "%",
+        offset: counter.offset + '%',
         context: counter.context
       });
     });
@@ -3098,28 +3121,28 @@ Licensed under the MIT license.
 https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 */
 (function () {
-  "use strict";
+  'use strict';
 
-  var keyCounter = 0;
-  var allWaypoints = {};
+  let keyCounter = 0;
+  const allWaypoints = {};
 
   /* http://imakewebthings.com/waypoints/api/waypoint */
   function Waypoint(options) {
     if (!options) {
-      throw new Error("No options passed to Waypoint constructor");
+      throw new Error('No options passed to Waypoint constructor');
     }
     if (!options.element) {
-      throw new Error("No element option passed to Waypoint constructor");
+      throw new Error('No element option passed to Waypoint constructor');
     }
     if (!options.handler) {
-      throw new Error("No handler option passed to Waypoint constructor");
+      throw new Error('No handler option passed to Waypoint constructor');
     }
-    this.key = "waypoint-" + keyCounter;
+    this.key = 'waypoint-' + keyCounter;
     this.options = Waypoint.Adapter.extend({}, Waypoint.defaults, options);
     this.element = this.options.element;
     this.adapter = new Waypoint.Adapter(this.element);
     this.callback = options.handler;
-    this.axis = this.options.horizontal ? "horizontal" : "vertical";
+    this.axis = this.options.horizontal ? 'horizontal' : 'vertical';
     this.enabled = this.options.enabled;
     this.triggerPoint = null;
     this.group = Waypoint.Group.findOrCreate({
@@ -3188,11 +3211,11 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 
   /* Private */
   Waypoint.invokeAll = function (method) {
-    var allWaypointsArray = [];
-    for (var waypointKey in allWaypoints) {
+    const allWaypointsArray = [];
+    for (const waypointKey in allWaypoints) {
       allWaypointsArray.push(allWaypoints[waypointKey]);
     }
-    for (var i = 0, end = allWaypointsArray.length; i < end; i++) {
+    for (let i = 0, end = allWaypointsArray.length; i < end; i++) {
       allWaypointsArray[i][method]();
     }
   };
@@ -3200,20 +3223,20 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   /* Public */
   /* http://imakewebthings.com/waypoints/api/destroy-all */
   Waypoint.destroyAll = function () {
-    Waypoint.invokeAll("destroy");
+    Waypoint.invokeAll('destroy');
   };
 
   /* Public */
   /* http://imakewebthings.com/waypoints/api/disable-all */
   Waypoint.disableAll = function () {
-    Waypoint.invokeAll("disable");
+    Waypoint.invokeAll('disable');
   };
 
   /* Public */
   /* http://imakewebthings.com/waypoints/api/enable-all */
   Waypoint.enableAll = function () {
     Waypoint.Context.refreshAll();
-    for (var waypointKey in allWaypoints) {
+    for (const waypointKey in allWaypoints) {
       allWaypoints[waypointKey].enabled = true;
     }
     return this;
@@ -3241,37 +3264,37 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     context: window,
     continuous: true,
     enabled: true,
-    group: "default",
+    group: 'default',
     horizontal: false,
     offset: 0
   };
   Waypoint.offsetAliases = {
-    "bottom-in-view": function () {
+    'bottom-in-view'() {
       return this.context.innerHeight() - this.adapter.outerHeight();
     },
-    "right-in-view": function () {
+    'right-in-view'() {
       return this.context.innerWidth() - this.adapter.outerWidth();
     }
   };
   window.Waypoint = Waypoint;
 })();
 (function () {
-  "use strict";
+  'use strict';
 
   function requestAnimationFrameShim(callback) {
     window.setTimeout(callback, 1000 / 60);
   }
-  var keyCounter = 0;
-  var contexts = {};
-  var Waypoint = window.Waypoint;
-  var oldWindowLoad = window.onload;
+  let keyCounter = 0;
+  const contexts = {};
+  const Waypoint = window.Waypoint;
+  const oldWindowLoad = window.onload;
 
   /* http://imakewebthings.com/waypoints/api/context */
   function Context(element) {
     this.element = element;
     this.Adapter = Waypoint.Adapter;
     this.adapter = new this.Adapter(element);
-    this.key = "waypoint-context-" + keyCounter;
+    this.key = 'waypoint-context-' + keyCounter;
     this.didScroll = false;
     this.didResize = false;
     this.oldScroll = {
@@ -3295,30 +3318,30 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 
   /* Private */
   Context.prototype.add = function (waypoint) {
-    var axis = waypoint.options.horizontal ? "horizontal" : "vertical";
+    const axis = waypoint.options.horizontal ? 'horizontal' : 'vertical';
     this.waypoints[axis][waypoint.key] = waypoint;
     this.refresh();
   };
 
   /* Private */
   Context.prototype.checkEmpty = function () {
-    var horizontalEmpty = this.Adapter.isEmptyObject(this.waypoints.horizontal);
-    var verticalEmpty = this.Adapter.isEmptyObject(this.waypoints.vertical);
-    var isWindow = this.element == this.element.window;
+    const horizontalEmpty = this.Adapter.isEmptyObject(this.waypoints.horizontal);
+    const verticalEmpty = this.Adapter.isEmptyObject(this.waypoints.vertical);
+    const isWindow = this.element == this.element.window;
     if (horizontalEmpty && verticalEmpty && !isWindow) {
-      this.adapter.off(".waypoints");
+      this.adapter.off('.waypoints');
       delete contexts[this.key];
     }
   };
 
   /* Private */
   Context.prototype.createThrottledResizeHandler = function () {
-    var self = this;
+    const self = this;
     function resizeHandler() {
       self.handleResize();
       self.didResize = false;
     }
-    this.adapter.on("resize.waypoints", function () {
+    this.adapter.on('resize.waypoints', function () {
       if (!self.didResize) {
         self.didResize = true;
         Waypoint.requestAnimationFrame(resizeHandler);
@@ -3328,12 +3351,12 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 
   /* Private */
   Context.prototype.createThrottledScrollHandler = function () {
-    var self = this;
+    const self = this;
     function scrollHandler() {
       self.handleScroll();
       self.didScroll = false;
     }
-    this.adapter.on("scroll.waypoints", function () {
+    this.adapter.on('scroll.waypoints', function () {
       if (!self.didScroll || Waypoint.isTouch) {
         self.didScroll = true;
         Waypoint.requestAnimationFrame(scrollHandler);
@@ -3348,41 +3371,41 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 
   /* Private */
   Context.prototype.handleScroll = function () {
-    var triggeredGroups = {};
-    var axes = {
+    const triggeredGroups = {};
+    const axes = {
       horizontal: {
         newScroll: this.adapter.scrollLeft(),
         oldScroll: this.oldScroll.x,
-        forward: "right",
-        backward: "left"
+        forward: 'right',
+        backward: 'left'
       },
       vertical: {
         newScroll: this.adapter.scrollTop(),
         oldScroll: this.oldScroll.y,
-        forward: "down",
-        backward: "up"
+        forward: 'down',
+        backward: 'up'
       }
     };
-    for (var axisKey in axes) {
-      var axis = axes[axisKey];
-      var isForward = axis.newScroll > axis.oldScroll;
-      var direction = isForward ? axis.forward : axis.backward;
-      for (var waypointKey in this.waypoints[axisKey]) {
-        var waypoint = this.waypoints[axisKey][waypointKey];
+    for (const axisKey in axes) {
+      const axis = axes[axisKey];
+      const isForward = axis.newScroll > axis.oldScroll;
+      const direction = isForward ? axis.forward : axis.backward;
+      for (const waypointKey in this.waypoints[axisKey]) {
+        const waypoint = this.waypoints[axisKey][waypointKey];
         if (waypoint.triggerPoint === null) {
           continue;
         }
-        var wasBeforeTriggerPoint = axis.oldScroll < waypoint.triggerPoint;
-        var nowAfterTriggerPoint = axis.newScroll >= waypoint.triggerPoint;
-        var crossedForward = wasBeforeTriggerPoint && nowAfterTriggerPoint;
-        var crossedBackward = !wasBeforeTriggerPoint && !nowAfterTriggerPoint;
+        const wasBeforeTriggerPoint = axis.oldScroll < waypoint.triggerPoint;
+        const nowAfterTriggerPoint = axis.newScroll >= waypoint.triggerPoint;
+        const crossedForward = wasBeforeTriggerPoint && nowAfterTriggerPoint;
+        const crossedBackward = !wasBeforeTriggerPoint && !nowAfterTriggerPoint;
         if (crossedForward || crossedBackward) {
           waypoint.queueTrigger(direction);
           triggeredGroups[waypoint.group.id] = waypoint.group;
         }
       }
     }
-    for (var groupKey in triggeredGroups) {
+    for (const groupKey in triggeredGroups) {
       triggeredGroups[groupKey].flushTriggers();
     }
     this.oldScroll = {
@@ -3420,13 +3443,13 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   /* Public */
   /* http://imakewebthings.com/waypoints/api/context-destroy */
   Context.prototype.destroy = function () {
-    var allWaypoints = [];
-    for (var axis in this.waypoints) {
-      for (var waypointKey in this.waypoints[axis]) {
+    const allWaypoints = [];
+    for (const axis in this.waypoints) {
+      for (const waypointKey in this.waypoints[axis]) {
         allWaypoints.push(this.waypoints[axis][waypointKey]);
       }
     }
-    for (var i = 0, end = allWaypoints.length; i < end; i++) {
+    for (let i = 0, end = allWaypoints.length; i < end; i++) {
       allWaypoints[i].destroy();
     }
   };
@@ -3435,11 +3458,11 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   /* http://imakewebthings.com/waypoints/api/context-refresh */
   Context.prototype.refresh = function () {
     /*eslint-disable eqeqeq */
-    var isWindow = this.element == this.element.window;
+    const isWindow = this.element == this.element.window;
     /*eslint-enable eqeqeq */
-    var contextOffset = isWindow ? undefined : this.adapter.offset();
-    var triggeredGroups = {};
-    var axes;
+    const contextOffset = isWindow ? undefined : this.adapter.offset();
+    const triggeredGroups = {};
+    let axes;
     this.handleScroll();
     axes = {
       horizontal: {
@@ -3447,38 +3470,38 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
         contextScroll: isWindow ? 0 : this.oldScroll.x,
         contextDimension: this.innerWidth(),
         oldScroll: this.oldScroll.x,
-        forward: "right",
-        backward: "left",
-        offsetProp: "left"
+        forward: 'right',
+        backward: 'left',
+        offsetProp: 'left'
       },
       vertical: {
         contextOffset: isWindow ? 0 : contextOffset.top,
         contextScroll: isWindow ? 0 : this.oldScroll.y,
         contextDimension: this.innerHeight(),
         oldScroll: this.oldScroll.y,
-        forward: "down",
-        backward: "up",
-        offsetProp: "top"
+        forward: 'down',
+        backward: 'up',
+        offsetProp: 'top'
       }
     };
-    for (var axisKey in axes) {
-      var axis = axes[axisKey];
-      for (var waypointKey in this.waypoints[axisKey]) {
-        var waypoint = this.waypoints[axisKey][waypointKey];
-        var adjustment = waypoint.options.offset;
-        var oldTriggerPoint = waypoint.triggerPoint;
-        var elementOffset = 0;
-        var freshWaypoint = oldTriggerPoint == null;
+    for (const axisKey in axes) {
+      const axis = axes[axisKey];
+      for (const waypointKey in this.waypoints[axisKey]) {
+        const waypoint = this.waypoints[axisKey][waypointKey];
+        let adjustment = waypoint.options.offset;
+        const oldTriggerPoint = waypoint.triggerPoint;
+        let elementOffset = 0;
+        const freshWaypoint = oldTriggerPoint == null;
         var contextModifier, wasBeforeScroll, nowAfterScroll;
         var triggeredBackward, triggeredForward;
         if (waypoint.element !== waypoint.element.window) {
           elementOffset = waypoint.adapter.offset()[axis.offsetProp];
         }
-        if (typeof adjustment === "function") {
+        if (typeof adjustment === 'function') {
           adjustment = adjustment.apply(waypoint);
-        } else if (typeof adjustment === "string") {
+        } else if (typeof adjustment === 'string') {
           adjustment = parseFloat(adjustment);
-          if (waypoint.options.offset.indexOf("%") > -1) {
+          if (waypoint.options.offset.indexOf('%') > -1) {
             adjustment = Math.ceil(axis.contextDimension * adjustment / 100);
           }
         }
@@ -3501,7 +3524,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       }
     }
     Waypoint.requestAnimationFrame(function () {
-      for (var groupKey in triggeredGroups) {
+      for (const groupKey in triggeredGroups) {
         triggeredGroups[groupKey].flushTriggers();
       }
     });
@@ -3515,7 +3538,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 
   /* Private */
   Context.refreshAll = function () {
-    for (var contextId in contexts) {
+    for (const contextId in contexts) {
       contexts[contextId].refresh();
     }
   };
@@ -3532,13 +3555,13 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     Context.refreshAll();
   };
   Waypoint.requestAnimationFrame = function (callback) {
-    var requestFn = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || requestAnimationFrameShim;
+    const requestFn = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || requestAnimationFrameShim;
     requestFn.call(window, callback);
   };
   Waypoint.Context = Context;
 })();
 (function () {
-  "use strict";
+  'use strict';
 
   function byTriggerPoint(a, b) {
     return a.triggerPoint - b.triggerPoint;
@@ -3546,17 +3569,17 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   function byReverseTriggerPoint(a, b) {
     return b.triggerPoint - a.triggerPoint;
   }
-  var groups = {
+  const groups = {
     vertical: {},
     horizontal: {}
   };
-  var Waypoint = window.Waypoint;
+  const Waypoint = window.Waypoint;
 
   /* http://imakewebthings.com/waypoints/api/group */
   function Group(options) {
     this.name = options.name;
     this.axis = options.axis;
-    this.id = this.name + "-" + this.axis;
+    this.id = this.name + '-' + this.axis;
     this.waypoints = [];
     this.clearTriggerQueues();
     groups[this.axis][this.name] = this;
@@ -3579,12 +3602,12 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 
   /* Private */
   Group.prototype.flushTriggers = function () {
-    for (var direction in this.triggerQueues) {
-      var waypoints = this.triggerQueues[direction];
-      var reverse = direction === "up" || direction === "left";
+    for (const direction in this.triggerQueues) {
+      const waypoints = this.triggerQueues[direction];
+      const reverse = direction === 'up' || direction === 'left';
       waypoints.sort(reverse ? byReverseTriggerPoint : byTriggerPoint);
-      for (var i = 0, end = waypoints.length; i < end; i += 1) {
-        var waypoint = waypoints[i];
+      for (let i = 0, end = waypoints.length; i < end; i += 1) {
+        const waypoint = waypoints[i];
         if (waypoint.options.continuous || i === waypoints.length - 1) {
           waypoint.trigger([direction]);
         }
@@ -3596,15 +3619,15 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   /* Private */
   Group.prototype.next = function (waypoint) {
     this.waypoints.sort(byTriggerPoint);
-    var index = Waypoint.Adapter.inArray(waypoint, this.waypoints);
-    var isLast = index === this.waypoints.length - 1;
+    const index = Waypoint.Adapter.inArray(waypoint, this.waypoints);
+    const isLast = index === this.waypoints.length - 1;
     return isLast ? null : this.waypoints[index + 1];
   };
 
   /* Private */
   Group.prototype.previous = function (waypoint) {
     this.waypoints.sort(byTriggerPoint);
-    var index = Waypoint.Adapter.inArray(waypoint, this.waypoints);
+    const index = Waypoint.Adapter.inArray(waypoint, this.waypoints);
     return index ? this.waypoints[index - 1] : null;
   };
 
@@ -3615,7 +3638,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 
   /* Private */
   Group.prototype.remove = function (waypoint) {
-    var index = Waypoint.Adapter.inArray(waypoint, this.waypoints);
+    const index = Waypoint.Adapter.inArray(waypoint, this.waypoints);
     if (index > -1) {
       this.waypoints.splice(index, 1);
     }
@@ -3640,45 +3663,45 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   Waypoint.Group = Group;
 })();
 (function () {
-  "use strict";
+  'use strict';
 
-  var $ = window.jQuery;
-  var Waypoint = window.Waypoint;
+  const $ = window.jQuery;
+  const Waypoint = window.Waypoint;
   function JQueryAdapter(element) {
     this.$element = $(element);
   }
-  $.each(["innerHeight", "innerWidth", "off", "offset", "on", "outerHeight", "outerWidth", "scrollLeft", "scrollTop"], function (i, method) {
+  $.each(['innerHeight', 'innerWidth', 'off', 'offset', 'on', 'outerHeight', 'outerWidth', 'scrollLeft', 'scrollTop'], function (i, method) {
     JQueryAdapter.prototype[method] = function () {
-      var args = Array.prototype.slice.call(arguments);
+      const args = Array.prototype.slice.call(arguments);
       return this.$element[method].apply(this.$element, args);
     };
   });
-  $.each(["extend", "inArray", "isEmptyObject"], function (i, method) {
+  $.each(['extend', 'inArray', 'isEmptyObject'], function (i, method) {
     JQueryAdapter[method] = $[method];
   });
   Waypoint.adapters.push({
-    name: "jquery",
+    name: 'jquery',
     Adapter: JQueryAdapter
   });
   Waypoint.Adapter = JQueryAdapter;
 })();
 (function () {
-  "use strict";
+  'use strict';
 
-  var Waypoint = window.Waypoint;
+  const Waypoint = window.Waypoint;
   function createExtension(framework) {
     return function () {
-      var waypoints = [];
-      var overrides = arguments[0];
+      const waypoints = [];
+      let overrides = arguments[0];
       if (framework.isFunction(arguments[0])) {
         overrides = framework.extend({}, arguments[1]);
         overrides.handler = arguments[0];
       }
       this.each(function () {
-        var options = framework.extend({}, overrides, {
+        const options = framework.extend({}, overrides, {
           element: this
         });
-        if (typeof options.context === "string") {
+        if (typeof options.context === 'string') {
           options.context = framework(this).closest(options.context)[0];
         }
         waypoints.push(new Waypoint(options));
@@ -3703,7 +3726,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 /***/ (function(module) {
 
 (function () {
-  var MutationObserver,
+  let MutationObserver,
     Util,
     WeakMap,
     getComputedStyle,
@@ -3714,15 +3737,17 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       };
     },
     indexOf = [].indexOf || function (item) {
-      for (var i = 0, l = this.length; i < l; i++) {
-        if (i in this && this[i] === item) return i;
+      for (let i = 0, l = this.length; i < l; i++) {
+        if (i in this && this[i] === item) {
+          return i;
+        }
       }
       return -1;
     };
   Util = function () {
     function Util() {}
     Util.prototype.extend = function (custom, defaults) {
-      var key, value;
+      let key, value;
       for (key in defaults) {
         value = defaults[key];
         if (custom[key] == null) {
@@ -3735,7 +3760,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(agent);
     };
     Util.prototype.createEvent = function (event, bubble, cancel, detail) {
-      var customEvent;
+      let customEvent;
       if (bubble == null) {
         bubble = false;
       }
@@ -3761,34 +3786,31 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
         return elem.dispatchEvent(event);
       } else if (event in (elem != null)) {
         return elem[event]();
-      } else if ("on" + event in (elem != null)) {
-        return elem["on" + event]();
+      } else if ('on' + event in (elem != null)) {
+        return elem['on' + event]();
       }
     };
     Util.prototype.addEvent = function (elem, event, fn) {
       if (elem.addEventListener != null) {
         return elem.addEventListener(event, fn, false);
       } else if (elem.attachEvent != null) {
-        return elem.attachEvent("on" + event, fn);
-      } else {
-        return elem[event] = fn;
+        return elem.attachEvent('on' + event, fn);
       }
+      return elem[event] = fn;
     };
     Util.prototype.removeEvent = function (elem, event, fn) {
       if (elem.removeEventListener != null) {
         return elem.removeEventListener(event, fn, false);
       } else if (elem.detachEvent != null) {
-        return elem.detachEvent("on" + event, fn);
-      } else {
-        return delete elem[event];
+        return elem.detachEvent('on' + event, fn);
       }
+      return delete elem[event];
     };
     Util.prototype.innerHeight = function () {
       if ('innerHeight' in window) {
         return window.innerHeight;
-      } else {
-        return document.documentElement.clientHeight;
       }
+      return document.documentElement.clientHeight;
     };
     return Util;
   }();
@@ -3798,7 +3820,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       this.values = [];
     }
     WeakMap.prototype.get = function (key) {
-      var i, item, j, len, ref;
+      let i, item, j, len, ref;
       ref = this.keys;
       for (i = j = 0, len = ref.length; j < len; i = ++j) {
         item = ref[i];
@@ -3808,7 +3830,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       }
     };
     WeakMap.prototype.set = function (key, value) {
-      var i, item, j, len, ref;
+      let i, item, j, len, ref;
       ref = this.keys;
       for (i = j = 0, len = ref.length; j < len; i = ++j) {
         item = ref[i];
@@ -3824,10 +3846,10 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   }());
   MutationObserver = this.MutationObserver || this.WebkitMutationObserver || this.MozMutationObserver || (MutationObserver = function () {
     function MutationObserver() {
-      if (typeof console !== "undefined" && console !== null) {
+      if (typeof console !== 'undefined' && console !== null) {
         console.warn('MutationObserver is not supported by your browser.');
       }
-      if (typeof console !== "undefined" && console !== null) {
+      if (typeof console !== 'undefined' && console !== null) {
         console.warn('WOW.js cannot detect dom mutations, please call .sync() after loading new content.');
       }
     }
@@ -3837,7 +3859,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   }());
   getComputedStyle = this.getComputedStyle || function (el, pseudo) {
     this.getPropertyValue = function (prop) {
-      var ref;
+      let ref;
       if (prop === 'float') {
         prop = 'styleFloat';
       }
@@ -3878,9 +3900,9 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       this.wowEvent = this.util().createEvent(this.config.boxClass);
     }
     WOW.prototype.init = function () {
-      var ref;
+      let ref;
       this.element = window.document.documentElement;
-      if ((ref = document.readyState) === "interactive" || ref === "complete") {
+      if ((ref = document.readyState) === 'interactive' || ref === 'complete') {
         this.start();
       } else {
         this.util().addEvent(document, 'DOMContentLoaded', this.start);
@@ -3888,11 +3910,11 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       return this.finished = [];
     };
     WOW.prototype.start = function () {
-      var box, j, len, ref;
+      let box, j, len, ref;
       this.stopped = false;
       this.boxes = function () {
-        var j, len, ref, results;
-        ref = this.element.querySelectorAll("." + this.config.boxClass);
+        let j, len, ref, results;
+        ref = this.element.querySelectorAll('.' + this.config.boxClass);
         results = [];
         for (j = 0, len = ref.length; j < len; j++) {
           box = ref[j];
@@ -3901,7 +3923,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
         return results;
       }.call(this);
       this.all = function () {
-        var j, len, ref, results;
+        let j, len, ref, results;
         ref = this.boxes;
         results = [];
         for (j = 0, len = ref.length; j < len; j++) {
@@ -3929,12 +3951,12 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       if (this.config.live) {
         return new MutationObserver(function (_this) {
           return function (records) {
-            var k, len1, node, record, results;
+            let k, len1, node, record, results;
             results = [];
             for (k = 0, len1 = records.length; k < len1; k++) {
               record = records[k];
               results.push(function () {
-                var l, len2, ref1, results1;
+                let l, len2, ref1, results1;
                 ref1 = record.addedNodes || [];
                 results1 = [];
                 for (l = 0, len2 = ref1.length; l < len2; l++) {
@@ -3966,7 +3988,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       }
     };
     WOW.prototype.doSync = function (element) {
-      var box, j, len, ref, results;
+      let box, j, len, ref, results;
       if (element == null) {
         element = this.element;
       }
@@ -3974,7 +3996,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
         return;
       }
       element = element.parentNode || element;
-      ref = element.querySelectorAll("." + this.config.boxClass);
+      ref = element.querySelectorAll('.' + this.config.boxClass);
       results = [];
       for (j = 0, len = ref.length; j < len; j++) {
         box = ref[j];
@@ -3995,7 +4017,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
     };
     WOW.prototype.show = function (box) {
       this.applyStyle(box);
-      box.className = box.className + " " + this.config.animateClass;
+      box.className = box.className + ' ' + this.config.animateClass;
       if (this.config.callback != null) {
         this.config.callback(box);
       }
@@ -4007,7 +4029,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       return box;
     };
     WOW.prototype.applyStyle = function (box, hidden) {
-      var delay, duration, iteration;
+      let delay, duration, iteration;
       duration = box.getAttribute('data-wow-duration');
       delay = box.getAttribute('data-wow-delay');
       iteration = box.getAttribute('data-wow-iteration');
@@ -4022,14 +4044,13 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
         return function (callback) {
           return window.requestAnimationFrame(callback);
         };
-      } else {
-        return function (callback) {
-          return callback();
-        };
       }
+      return function (callback) {
+        return callback();
+      };
     }();
     WOW.prototype.resetStyle = function () {
-      var box, j, len, ref, results;
+      let box, j, len, ref, results;
       ref = this.boxes;
       results = [];
       for (j = 0, len = ref.length; j < len; j++) {
@@ -4039,7 +4060,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       return results;
     };
     WOW.prototype.resetAnimation = function (event) {
-      var target;
+      let target;
       if (event.type.toLowerCase().indexOf('animationend') >= 0) {
         target = event.target || event.srcElement;
         return target.className = target.className.replace(this.config.animateClass, '').trim();
@@ -4070,20 +4091,20 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       });
       return box;
     };
-    WOW.prototype.vendors = ["moz", "webkit"];
+    WOW.prototype.vendors = ['moz', 'webkit'];
     WOW.prototype.vendorSet = function (elem, properties) {
-      var name, results, value, vendor;
+      let name, results, value, vendor;
       results = [];
       for (name in properties) {
         value = properties[name];
-        elem["" + name] = value;
+        elem['' + name] = value;
         results.push(function () {
-          var j, len, ref, results1;
+          let j, len, ref, results1;
           ref = this.vendors;
           results1 = [];
           for (j = 0, len = ref.length; j < len; j++) {
             vendor = ref[j];
-            results1.push(elem["" + vendor + name.charAt(0).toUpperCase() + name.substr(1)] = value);
+            results1.push(elem['' + vendor + name.charAt(0).toUpperCase() + name.substr(1)] = value);
           }
           return results1;
         }.call(this));
@@ -4091,18 +4112,18 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       return results;
     };
     WOW.prototype.vendorCSS = function (elem, property) {
-      var j, len, ref, result, style, vendor;
+      let j, len, ref, result, style, vendor;
       style = getComputedStyle(elem);
       result = style.getPropertyCSSValue(property);
       ref = this.vendors;
       for (j = 0, len = ref.length; j < len; j++) {
         vendor = ref[j];
-        result = result || style.getPropertyCSSValue("-" + vendor + "-" + property);
+        result = result || style.getPropertyCSSValue('-' + vendor + '-' + property);
       }
       return result;
     };
     WOW.prototype.animationName = function (box) {
-      var animationName, error;
+      let animationName, error;
       try {
         animationName = this.vendorCSS(box, 'animation-name').cssText;
       } catch (error) {
@@ -4110,9 +4131,8 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       }
       if (animationName === 'none') {
         return '';
-      } else {
-        return animationName;
       }
+      return animationName;
     };
     WOW.prototype.cacheAnimationName = function (box) {
       return this.animationNameCache.set(box, this.animationName(box));
@@ -4124,11 +4144,11 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       return this.scrolled = true;
     };
     WOW.prototype.scrollCallback = function () {
-      var box;
+      let box;
       if (this.scrolled) {
         this.scrolled = false;
         this.boxes = function () {
-          var j, len, ref, results;
+          let j, len, ref, results;
           ref = this.boxes;
           results = [];
           for (j = 0, len = ref.length; j < len; j++) {
@@ -4150,7 +4170,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       }
     };
     WOW.prototype.offsetTop = function (element) {
-      var top;
+      let top;
       while (element.offsetTop === void 0) {
         element = element.parentNode;
       }
@@ -4161,7 +4181,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
       return top;
     };
     WOW.prototype.isVisible = function (box) {
-      var bottom, offset, top, viewBottom, viewTop;
+      let bottom, offset, top, viewBottom, viewTop;
       offset = box.getAttribute('data-wow-offset') || this.config.offset;
       viewTop = this.config.scrollContainer && this.config.scrollContainer.scrollTop || window.pageYOffset;
       viewBottom = viewTop + Math.min(this.element.clientHeight, this.util().innerHeight()) - offset;
@@ -4180,7 +4200,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   if ( true && module.exports) {
     module.exports = this.WOW;
   }
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     window.WOW = this.WOW;
   }
 }).call(this);

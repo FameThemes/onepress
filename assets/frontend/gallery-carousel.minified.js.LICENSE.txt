@@ -1,0 +1,128 @@
+/**
+ * Animate Plugin
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Bartosz Wojciechowski
+ * @author David Deutsch
+ * @license The MIT License (MIT)
+ */
+
+/**
+ * AutoHeight Plugin
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Bartosz Wojciechowski
+ * @author David Deutsch
+ * @license The MIT License (MIT)
+ */
+
+/**
+ * AutoRefresh Plugin
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Artus Kolanowski
+ * @author David Deutsch
+ * @license The MIT License (MIT)
+ */
+
+/**
+ * Autoplay Plugin
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Bartosz Wojciechowski
+ * @author Artus Kolanowski
+ * @author David Deutsch
+ * @author Tom De Caluwé
+ * @license The MIT License (MIT)
+ */
+
+/**
+ * Hash Plugin
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Artus Kolanowski
+ * @author David Deutsch
+ * @license The MIT License (MIT)
+ */
+
+/**
+ * Lazy Plugin
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Bartosz Wojciechowski
+ * @author David Deutsch
+ * @license The MIT License (MIT)
+ */
+
+/**
+ * Navigation Plugin
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Artus Kolanowski
+ * @author David Deutsch
+ * @license The MIT License (MIT)
+ */
+
+/**
+ * Owl carousel
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Bartosz Wojciechowski
+ * @author David Deutsch
+ * @license The MIT License (MIT)
+ * @todo Lazy Load Icon
+ * @todo prevent animationend bubling
+ * @todo itemsScaleUp
+ * @todo Test Zepto
+ * @todo stagePadding calculate wrong active classes
+ */
+
+/**
+ * Support Plugin
+ *
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Vivid Planet Software GmbH
+ * @author Artus Kolanowski
+ * @author David Deutsch
+ * @license The MIT License (MIT)
+ */
+
+/**
+ * Video Plugin
+ * @param $
+ * @param window
+ * @param document
+ * @param undefined
+ * @version 2.3.4
+ * @author Bartosz Wojciechowski
+ * @author David Deutsch
+ * @license The MIT License (MIT)
+ */

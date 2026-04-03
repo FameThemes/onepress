@@ -8,25 +8,27 @@
  * Theme Customizer enhancements for a better user experience.
  *
  * Contains handlers to make Theme Customizer preview reload changes asynchronously.
+ * @param $
+ * @param api
  */
 
 (function ($, api) {
   // Site footer bg
   /*
-  wp.customize( 'onepress_footer_bg', function( value ) {
-      value.bind( function( to ) {
-          $( '.site-footer' ).css( {
-              'background': to
-          } );
-      } );
-  } );
-  */
+     wp.customize( 'onepress_footer_bg', function( value ) {
+         value.bind( function( to ) {
+             $( '.site-footer' ).css( {
+                 'background': to
+             } );
+         } );
+     } );
+     */
 
   // Site footer info bg
   wp.customize('onepress_footer_info_bg', function (value) {
     value.bind(function (to) {
       $('.site-footer .site-info, .site-footer .btt a').css({
-        'background': to
+        background: to
       });
       $('.site-footer .site-info').css({
         color: 'rgba(255, 255, 255, 0.7)'
@@ -51,14 +53,14 @@
     value.bind(function (to) {
       if ('blank' === to) {
         $('.site-title a, .site-description').css({
-          'clip': 'rect(1px, 1px, 1px, 1px)',
-          'position': 'absolute'
+          clip: 'rect(1px, 1px, 1px, 1px)',
+          position: 'absolute'
         });
       } else {
         $('.site-title a, .site-description').css({
-          'clip': 'auto',
-          'color': to,
-          'position': 'relative'
+          clip: 'auto',
+          color: to,
+          position: 'relative'
         });
       }
     });
@@ -75,7 +77,7 @@
     });
   });
   function update_css() {
-    var css_code = $('#onepress-style-inline-css').html();
+    const css_code = $('#onepress-style-inline-css').html();
     // Fix Chrome Lost CSS When resize ??
     $('#onepress-style-inline-css').replaceWith('<style class="replaced-style" id="onepress-style-inline-css">' + css_code + '</style>');
   }

@@ -12,168 +12,25 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
-/***/ })
+/***/ }),
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
-(() => {
-/*!*********************************!*\
-  !*** ./src/admin/customizer.js ***!
-  \*********************************/
+/***/ "./src/admin/customizer/alpha-color-picker.js":
+/*!****************************************************!*\
+  !*** ./src/admin/customizer/alpha-color-picker.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _customizer_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./customizer.scss */ "./src/admin/customizer.scss");
-
-(function (api) {
-  // Extends our custom "example-1" section.
-  api.sectionConstructor['onepress-plus'] = api.Section.extend({
-    // No events for this type of section.
-    attachEvents: function () {},
-    // Always make the section active.
-    isContextuallyActive: function () {
-      return true;
-    }
-  });
-})(wp.customize);
-
-/*
-  jQuery deparam is an extraction of the deparam method from Ben Alman's jQuery BBQ
-  http://benalman.com/projects/jquery-bbq-plugin/
-*/
-(function ($) {
-  $.deparam = function (params, coerce) {
-    var obj = {},
-      coerce_types = {
-        'true': !0,
-        'false': !1,
-        'null': null
-      };
-
-    // Iterate over all name=value pairs.
-    $.each(params.replace(/\+/g, ' ').split('&'), function (j, v) {
-      var param = v.split('='),
-        key = decodeURIComponent(param[0]),
-        val,
-        cur = obj,
-        i = 0,
-        // If key is more complex than 'foo', like 'a[]' or 'a[b][c]', split it
-        // into its component parts.
-        keys = key.split(']['),
-        keys_last = keys.length - 1;
-
-      // If the first keys part contains [ and the last ends with ], then []
-      // are correctly balanced.
-      if (/\[/.test(keys[0]) && /\]$/.test(keys[keys_last])) {
-        // Remove the trailing ] from the last keys part.
-        keys[keys_last] = keys[keys_last].replace(/\]$/, '');
-
-        // Split first keys part into two parts on the [ and add them back onto
-        // the beginning of the keys array.
-        keys = keys.shift().split('[').concat(keys);
-        keys_last = keys.length - 1;
-      } else {
-        // Basic 'foo' style key.
-        keys_last = 0;
-      }
-
-      // Are we dealing with a name=value pair, or just a name?
-      if (param.length === 2) {
-        val = decodeURIComponent(param[1]);
-
-        // Coerce values.
-        if (coerce) {
-          val = val && !isNaN(val) ? +val // number
-          : val === 'undefined' ? undefined // undefined
-          : coerce_types[val] !== undefined ? coerce_types[val] // true, false, null
-          : val; // string
-        }
-        if (keys_last) {
-          // Complex key, build deep object structure based on a few rules:
-          // * The 'cur' pointer starts at the object top-level.
-          // * [] = array push (n is set to array length), [n] = array if n is
-          //   numeric, otherwise object.
-          // * If at the last keys part, set the value.
-          // * For each keys part, if the current level is undefined create an
-          //   object or array based on the type of the next keys part.
-          // * Move the 'cur' pointer to the next level.
-          // * Rinse & repeat.
-          for (; i <= keys_last; i++) {
-            key = keys[i] === '' ? cur.length : keys[i];
-            cur = cur[key] = i < keys_last ? cur[key] || (keys[i + 1] && isNaN(keys[i + 1]) ? {} : []) : val;
-          }
-        } else {
-          // Simple key, even simpler rules, since only scalars and shallow
-          // arrays are allowed.
-
-          if ($.isArray(obj[key])) {
-            // val is already an array, so push on the next value.
-            obj[key].push(val);
-          } else if (obj[key] !== undefined) {
-            // val isn't an array, but since a second value has been specified,
-            // convert val into an array.
-            obj[key] = [obj[key], val];
-          } else {
-            // val is a scalar.
-            obj[key] = val;
-          }
-        }
-      } else if (key) {
-        // No value was defined, so set something meaningful.
-        obj[key] = coerce ? undefined : '';
-      }
-    });
-    return obj;
-  };
-})(jQuery);
-
-// COLOR ALPHA -----------------------------
-
-/**
- * Alpha Color Picker JS
- */
-
-(function ($) {
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   registerAlphaColorPicker: () => (/* binding */ registerAlphaColorPicker)
+/* harmony export */ });
+/** Alpha color picker (extends wp Color / Iris). */
+/* global Color */
+function registerAlphaColorPicker($) {
   /**
    * Override the stock color.js toString() method to add support for
    * outputting RGBa or Hex.
+   * @param flag
    */
   Color.prototype.toString = function (flag) {
     // If our no-alpha flag has been passed in, output RGBa value with 100% opacity.
@@ -188,12 +45,12 @@ __webpack_require__.r(__webpack_exports__);
     }
 
     // Proceed with stock color.js hex output.
-    var hex = parseInt(this._color, 10).toString(16);
+    let hex = parseInt(this._color, 10).toString(16);
     if (this.error) {
       return '';
     }
     if (hex.length < 6) {
-      for (var i = 6 - hex.length - 1; i >= 0; i--) {
+      for (let i = 6 - hex.length - 1; i >= 0; i--) {
         hex = '0' + hex;
       }
     }
@@ -202,9 +59,10 @@ __webpack_require__.r(__webpack_exports__);
 
   /**
    * Given an RGBa, RGB, or hex color value, return the alpha channel value.
+   * @param value
    */
   function acp_get_alpha_value_from_color(value) {
-    var alphaVal;
+    let alphaVal;
 
     // Remove all spaces from the passed in value to help our RGBa regex.
     value = value.replace(/ /g, '');
@@ -219,9 +77,13 @@ __webpack_require__.r(__webpack_exports__);
 
   /**
    * Force update the alpha value of the color picker object and maybe the alpha slider.
+   * @param alpha
+   * @param $input
+   * @param $alphaSlider
+   * @param update_slider
    */
   function acp_update_alpha_value_on_color_input(alpha, $input, $alphaSlider, update_slider) {
-    var iris, colorPicker, color;
+    let iris, colorPicker, color;
     iris = $input.data('a8cIris');
     colorPicker = $input.data('wpWpColorPicker');
 
@@ -251,6 +113,8 @@ __webpack_require__.r(__webpack_exports__);
 
   /**
    * Update the slider handle position and label.
+   * @param alpha
+   * @param $alphaSlider
    */
   function acp_update_alpha_value_on_alpha_slider(alpha, $alphaSlider) {
     $alphaSlider.slider('value', alpha);
@@ -259,7 +123,7 @@ __webpack_require__.r(__webpack_exports__);
   $.fn.alphaColorPicker = function () {
     return this.each(function () {
       // Scope the vars.
-      var $input, startingColor, paletteInput, showOpacity, defaultColor, palette, colorPickerOptions, $container, $alphaSlider, alphaVal, sliderOptions;
+      let $input, startingColor, paletteInput, showOpacity, defaultColor, palette, colorPickerOptions, $container, $alphaSlider, alphaVal, sliderOptions;
 
       // Store the input.
       $input = $(this);
@@ -294,8 +158,8 @@ __webpack_require__.r(__webpack_exports__);
 
       // Set up the options that we'll pass to wpColorPicker().
       colorPickerOptions = {
-        change: function (event, ui) {
-          var key, value, alpha, $transparency;
+        change(event, ui) {
+          let key, value, alpha, $transparency;
           key = $input.attr('data-customize-setting-link');
           value = $input.wpColorPicker('color');
 
@@ -307,7 +171,7 @@ __webpack_require__.r(__webpack_exports__);
 
           // If we're in the Customizer, send an ajax request to wp.customize
           // to trigger the Save action.
-          if (typeof wp.customize != 'undefined') {
+          if (typeof wp.customize !== 'undefined') {
             wp.customize(key, function (obj) {
               obj.set(value);
             });
@@ -318,10 +182,10 @@ __webpack_require__.r(__webpack_exports__);
           $transparency.css('background-color', ui.color.toString('no-alpha'));
           $input.trigger('color_change');
         },
-        clear: function () {
-          var key = $input.attr('data-customize-setting-link') || '';
+        clear() {
+          const key = $input.attr('data-customize-setting-link') || '';
           if (key && key !== '') {
-            if (typeof wp.customize != 'undefined') {
+            if (typeof wp.customize !== 'undefined') {
               wp.customize(key, function (obj) {
                 obj.set('');
               });
@@ -346,8 +210,8 @@ __webpack_require__.r(__webpack_exports__);
 
       // Set up jQuery UI slider() options.
       sliderOptions = {
-        create: function (event, ui) {
-          var value = $(this).slider('value');
+        create(event, ui) {
+          const value = $(this).slider('value');
 
           // Set up initial values.
           $(this).find('.ui-slider-handle').text(value);
@@ -379,7 +243,7 @@ __webpack_require__.r(__webpack_exports__);
 
       // Bind event handler for clicking on a palette color.
       $container.find('.iris-palette').on('click', function () {
-        var color, alpha;
+        let color, alpha;
         color = $(this).css('background-color');
         alpha = acp_get_alpha_value_from_color(color);
         acp_update_alpha_value_on_alpha_slider(alpha, $alphaSlider);
@@ -396,20 +260,20 @@ __webpack_require__.r(__webpack_exports__);
 
       // Bind event handler for clicking on the 'Default' button.
       $container.find('.button.wp-picker-default').on('click', function () {
-        var alpha = acp_get_alpha_value_from_color(defaultColor);
+        const alpha = acp_get_alpha_value_from_color(defaultColor);
         acp_update_alpha_value_on_alpha_slider(alpha, $alphaSlider);
       });
 
       // Bind event handler for typing or pasting into the input.
       $input.on('input', function () {
-        var value = $(this).val();
-        var alpha = acp_get_alpha_value_from_color(value);
+        const value = $(this).val();
+        const alpha = acp_get_alpha_value_from_color(value);
         acp_update_alpha_value_on_alpha_slider(alpha, $alphaSlider);
       });
 
       // Update all the things when the slider is interacted with.
       $alphaSlider.slider().on('slide', function (event, ui) {
-        var alpha = parseFloat(ui.value) / 100.0;
+        const alpha = parseFloat(ui.value) / 100.0;
         acp_update_alpha_value_on_color_input(alpha, $input, $alphaSlider, false);
 
         // Change value shown on slider handle.
@@ -417,48 +281,71 @@ __webpack_require__.r(__webpack_exports__);
       });
     });
   };
-})(jQuery);
+}
 
-// WP COLOR ALPHA customizer -----------------------------
-(function (api, $) {
+/***/ }),
+
+/***/ "./src/admin/customizer/control-alpha-color.js":
+/*!*****************************************************!*\
+  !*** ./src/admin/customizer/control-alpha-color.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   registerAlphaColorControl: () => (/* binding */ registerAlphaColorControl)
+/* harmony export */ });
+/**
+ * @param {Object} api @param {Function} $ jQuery
+ * @param          $
+ */
+function registerAlphaColorControl(api, $) {
   api.controlConstructor['alpha-color'] = api.Control.extend({
-    ready: function () {
-      var control = this;
+    ready() {
+      const control = this;
       $('.alpha-color-control', control.container).alphaColorPicker({
-        clear: function (event, ui) {}
+        clear() {}
       });
     }
   });
-})(wp.customize, jQuery);
+}
 
-// WP REPEATERABLE Customizer -----------------------------
+/***/ }),
 
-(function (api, $) {
-  api.controlConstructor['repeatable'] = api.Control.extend({
-    ready: function () {
-      var control = this;
+/***/ "./src/admin/customizer/control-repeatable.js":
+/*!****************************************************!*\
+  !*** ./src/admin/customizer/control-repeatable.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   registerRepeatableControl: () => (/* binding */ registerRepeatableControl)
+/* harmony export */ });
+function registerRepeatableControl(api, $) {
+  api.controlConstructor.repeatable = api.Control.extend({
+    ready() {
+      const control = this;
       setTimeout(function () {
         control._init();
       }, 2500);
     },
-    eval: function (valueIs, valueShould, operator) {
+    eval(valueIs, valueShould, operator) {
       switch (operator) {
         case 'not_in':
           valueShould = valueShould.split(',');
           if ($.inArray(valueIs, valueShould) < 0) {
             return true;
-          } else {
-            return false;
           }
+          return false;
           // removed by dead control flow
 {}
         case 'in':
           valueShould = valueShould.split(',');
           if ($.inArray(valueIs, valueShould) > -1) {
             return true;
-          } else {
-            return false;
           }
+          return false;
           // removed by dead control flow
 {}
         case '!=':
@@ -478,9 +365,9 @@ __webpack_require__.r(__webpack_exports__);
 {}
       }
     },
-    compare: function (value1, cond, value2) {
-      var equal = false;
-      var _v;
+    compare(value1, cond, value2) {
+      let equal = false;
+      let _v;
       switch (cond) {
         case '===':
           equal = value1 === value2 ? true : false;
@@ -527,17 +414,17 @@ __webpack_require__.r(__webpack_exports__);
       }
       return equal;
     },
-    multiple_compare: function (list, values) {
-      var control = this;
-      var check = true;
+    multiple_compare(list, values) {
+      const control = this;
+      let check = true;
       try {
-        var test = list[0];
+        const test = list[0];
         check = true;
         if (_.isString(test)) {
           check = false;
-          var cond = list[1];
-          var cond_val = list[2];
-          var value;
+          const cond = list[1];
+          const cond_val = list[2];
+          let value;
           if (!_.isUndefined(values[test])) {
             value = values[test];
             check = control.compare(value, cond, cond_val);
@@ -545,10 +432,10 @@ __webpack_require__.r(__webpack_exports__);
         } else if (_.isArray(test)) {
           check = true;
           _.each(list, function (req) {
-            var cond_key = req[0];
-            var cond_cond = req[1];
-            var cond_val = req[2];
-            var t_val = values[cond_key];
+            const cond_key = req[0];
+            const cond_cond = req[1];
+            const cond_val = req[2];
+            let t_val = values[cond_key];
             if (_.isUndefined(t_val)) {
               t_val = '';
             }
@@ -562,27 +449,27 @@ __webpack_require__.r(__webpack_exports__);
       }
       return check;
     },
-    conditionize: function ($context) {
-      var control = this;
+    conditionize($context) {
+      const control = this;
       if ($context.hasClass('conditionized')) {
         return;
       }
       $context.addClass('conditionized');
-      var $fields = $('.field--item', $context);
+      const $fields = $('.field--item', $context);
       $context.on('change condition_check', 'input, select, textarea', function (e) {
-        var f = $('.form', $context);
-        var data = $('input, textarea, select', f).serialize();
+        const f = $('.form', $context);
+        let data = $('input, textarea, select', f).serialize();
         data = jQuery.deparam(data);
-        var fieldData = {};
+        let fieldData = {};
         if (_.isObject(data)) {
           _.each(data._items, function (value) {
             fieldData = value;
           });
         }
         $fields.each(function () {
-          var $field = $(this);
-          var check = true;
-          var req = $field.attr('data-cond') || false;
+          const $field = $(this);
+          let check = true;
+          let req = $field.attr('data-cond') || false;
           if (!_.isUndefined(req) && req) {
             req = JSON.parse(req);
             check = control.multiple_compare(req, fieldData);
@@ -600,14 +487,14 @@ __webpack_require__.r(__webpack_exports__);
        */
       $('input, select, textarea', $context).eq(0).trigger('condition_check');
     },
-    remove_editor: function ($context) {},
-    editor: function ($textarea) {},
-    _init: function () {
-      var control = this;
-      var default_data = control.params.fields;
-      var values;
+    remove_editor($context) {},
+    editor($textarea) {},
+    _init() {
+      const control = this;
+      const default_data = control.params.fields;
+      let values;
       try {
-        if (typeof control.params.value == 'string') {
+        if (typeof control.params.value === 'string') {
           values = JSON.parse(control.params.value);
         } else {
           values = control.params.value;
@@ -615,8 +502,8 @@ __webpack_require__.r(__webpack_exports__);
       } catch (e) {
         values = {};
       }
-      var max_item = 0; // unlimited
-      var limited_mg = control.params.limited_msg || '';
+      let max_item = 0; // unlimited
+      const limited_mg = control.params.limited_msg || '';
       if (!isNaN(parseInt(control.params.max_item))) {
         max_item = parseInt(control.params.max_item);
       }
@@ -629,7 +516,7 @@ __webpack_require__.r(__webpack_exports__);
        */
       control.container.on('click', '.widget .widget-action, .widget .repeat-control-close, .widget-title', function (e) {
         e.preventDefault();
-        var p = $(this).closest('.widget');
+        const p = $(this).closest('.widget');
         if (p.hasClass('explained')) {
           //console.log( 'has: explained' );
           $('.widget-inside', p).slideUp(200, 'linear', function () {
@@ -650,8 +537,8 @@ __webpack_require__.r(__webpack_exports__);
        */
       control.container.on('click', '.repeat-control-remove', function (e) {
         e.preventDefault();
-        var $context = $(this).closest('.repeatable-customize-control');
-        $("body").trigger("repeat-control-remove-item", [$context]);
+        const $context = $(this).closest('.repeatable-customize-control');
+        $('body').trigger('repeat-control-remove-item', [$context]);
         control.remove_editor($context);
         $context.remove();
         control.rename();
@@ -662,11 +549,11 @@ __webpack_require__.r(__webpack_exports__);
       /**
        * Get customizer control data
        *
-       * @returns {*}
+       * @return {*}
        */
       control.getData = function () {
-        var f = $('.form-data', control.container);
-        var data = $('input, textarea, select', f).serialize();
+        const f = $('.form-data', control.container);
+        const data = $('input, textarea, select', f).serialize();
         return JSON.stringify(data);
       };
 
@@ -674,7 +561,7 @@ __webpack_require__.r(__webpack_exports__);
        * Update repeater value
        */
       control.updateValue = function () {
-        var data = control.getData();
+        const data = control.getData();
         //$("[data-hidden-value]", control.container).val(data);
         //$("[data-hidden-value]", control.container).trigger('change');
 
@@ -686,11 +573,11 @@ __webpack_require__.r(__webpack_exports__);
        */
       control.rename = function () {
         $('.list-repeatable li', control.container).each(function (index) {
-          var li = $(this);
+          const li = $(this);
           $('input, textarea, select', li).each(function () {
-            var input = $(this);
-            var name = input.attr('data-repeat-name') || undefined;
-            if (typeof name !== "undefined") {
+            const input = $(this);
+            let name = input.attr('data-repeat-name') || undefined;
+            if (typeof name !== 'undefined') {
               name = name.replace(/__i__/g, index);
               input.attr('name', name);
             }
@@ -707,16 +594,16 @@ __webpack_require__.r(__webpack_exports__);
       }
       window._upload_fame.on('close', function () {
         // get selections and save to hidden input plus other AJAX stuff etc.
-        var selection = window._upload_fame.state().get('selection');
+        const selection = window._upload_fame.state().get('selection');
         // console.log(selection);
       });
       window.media_current = {};
       window.media_btn = {};
       window._upload_fame.on('select', function () {
         // Grab our attachment selection and construct a JSON representation of the model.
-        var media_attachment = window._upload_fame.state().get('selection').first().toJSON();
+        const media_attachment = window._upload_fame.state().get('selection').first().toJSON();
         $('.image_id', window.media_current).val(media_attachment.id);
-        var preview, img_url;
+        let preview, img_url;
         img_url = media_attachment.url;
         $('.current', window.media_current).removeClass('hide').addClass('show');
         $('.image_url', window.media_current).val(img_url);
@@ -732,7 +619,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       control.handleMedia = function ($context) {
         $('.item-media', $context).each(function () {
-          var _item = $(this);
+          const _item = $(this);
           // when remove item
           $('.remove-button', _item).on('click', function (e) {
             e.preventDefault();
@@ -762,24 +649,24 @@ __webpack_require__.r(__webpack_exports__);
       control.colorPicker = function ($context) {
         // Add Color Picker to all inputs that have 'color-field' class
         $('.c-color', $context).wpColorPicker({
-          change: function (event, ui) {
+          change(event, ui) {
             control.updateValue();
           },
-          clear: function (event, ui) {
+          clear(event, ui) {
             control.updateValue();
           }
         });
         $('.c-coloralpha', $context).each(function () {
-          var input = $(this);
-          var c = input.val();
+          const input = $(this);
+          let c = input.val();
           c = c.replace('#', '');
           input.removeAttr('value');
           input.prop('value', c);
           input.alphaColorPicker({
-            change: function (event, ui) {
+            change(event, ui) {
               control.updateValue();
             },
-            clear: function (event, ui) {
+            clear(event, ui) {
               control.updateValue();
             }
           });
@@ -796,7 +683,7 @@ __webpack_require__.r(__webpack_exports__);
           if (!$context.attr('data-title-format')) {
             $context.attr('data-title-format', control.params.title_format);
           }
-          var format = $context.attr('data-title-format') || '';
+          let format = $context.attr('data-title-format') || '';
           // Custom for special ID
           if (control.id === 'onepress_section_order_styling') {
             if ($context.find('input.add_by').val() !== 'click') {
@@ -806,7 +693,7 @@ __webpack_require__.r(__webpack_exports__);
 
           // Live title
           if (control.params.live_title_id && $("[data-live-id='" + control.params.live_title_id + "']", $context).length > 0) {
-            var v = '';
+            let v = '';
             if ($("[data-live-id='" + control.params.live_title_id + "']", $context).is('.select-one')) {
               v = $("[data-live-id='" + control.params.live_title_id + "']", $context).find('option:selected').eq(0).text();
             } else {
@@ -820,8 +707,8 @@ __webpack_require__.r(__webpack_exports__);
             }
             $('.widget-title .live-title', $context).text(v);
             $context.on('keyup change', "[data-live-id='" + control.params.live_title_id + "']", function () {
-              var v = '';
-              var format = $context.attr('data-title-format') || '';
+              let v = '';
+              let format = $context.attr('data-title-format') || '';
               // custom for special ID
               if (control.id === 'onepress_section_order_styling') {
                 if ($context.find('input.add_by').val() !== 'click') {
@@ -853,13 +740,13 @@ __webpack_require__.r(__webpack_exports__);
        * @private
        */
       control._check_max_item = function () {
-        var n = $('.list-repeatable > li.repeatable-customize-control', control.container).length;
+        const n = $('.list-repeatable > li.repeatable-customize-control', control.container).length;
         //console.log( n );
         if (n >= max_item) {
           $('.repeatable-actions', control.container).hide();
           if ($('.limited-msg', control.container).length <= 0) {
             if (limited_mg !== '') {
-              var msg = $('<p class="limited-msg"/>');
+              const msg = $('<p class="limited-msg"/>');
               msg.html(limited_mg);
               msg.insertAfter($('.repeatable-actions', control.container));
               msg.show();
@@ -877,7 +764,7 @@ __webpack_require__.r(__webpack_exports__);
        * Function that loads the Mustache template
        */
       control.repeaterTemplate = _.memoize(function () {
-        var compiled,
+        let compiled,
           /*
            * Underscore's default ERB-style templates are incompatible with PHP
            * when asp_tags is enabled, so WordPress uses Mustache-inspired templating syntax.
@@ -891,7 +778,7 @@ __webpack_require__.r(__webpack_exports__);
             variable: 'data'
           };
         return function (data) {
-          if (typeof window.repeater_item_tpl === "undefined") {
+          if (typeof window.repeater_item_tpl === 'undefined') {
             window.repeater_item_tpl = $('#repeatable-js-item-tpl').html();
           }
           compiled = _.template(window.repeater_item_tpl, null, options);
@@ -944,12 +831,12 @@ __webpack_require__.r(__webpack_exports__);
       /**
        * Drag to sort items
        */
-      $(".list-repeatable", control.container).sortable({
-        handle: ".widget-title",
+      $('.list-repeatable', control.container).sortable({
+        handle: '.widget-title',
         //containment: ".customize-control-repeatable",
         containment: control.container,
         /// placeholder: "sortable-placeholder",
-        update: function (event, ui) {
+        update(event, ui) {
           control.rename();
           control.updateValue();
         }
@@ -961,24 +848,24 @@ __webpack_require__.r(__webpack_exports__);
        */
 
       $.each(values, function (i, _values) {
-        var _templateData = $.extend(true, {}, control.params.fields);
+        const _templateData = $.extend(true, {}, control.params.fields);
         _values = values[i];
         if (_values) {
-          for (var j in _values) {
-            if (typeof _templateData[j] === "undefined") {
+          for (const j in _values) {
+            if (typeof _templateData[j] === 'undefined') {
               _templateData[j] = {};
             }
             _templateData[j].value = _values[j];
             /*
-            if (_templateData.hasOwnProperty(j) && _values.hasOwnProperty(j)) {
-                _templateData[j].value = _values[j];
-            }
-            */
+                              if (_templateData.hasOwnProperty(j) && _values.hasOwnProperty(j)) {
+                                  _templateData[j].value = _values[j];
+                              }
+                              */
           }
         }
-        var $html = $(control.template(_templateData));
+        const $html = $(control.template(_templateData));
         if (control.id === 'onepress_section_order_styling') {
-          if (typeof _templateData.__visibility !== "undefined") {
+          if (typeof _templateData.__visibility !== 'undefined') {
             if (_templateData.__visibility.value === 'hidden') {
               $html.addClass('visibility-hidden');
             }
@@ -993,18 +880,17 @@ __webpack_require__.r(__webpack_exports__);
        * Add new item
        */
       control.container.on('click', '.add-new-repeat-item', function () {
-        var controlbox_id = control.id;
-        if ("onepress_map_items_address" === controlbox_id) {
-          var map_long = wp.customize('onepress_map_long').get();
-          var map_lat = wp.customize('onepress_map_lat').get();
+        const controlbox_id = control.id;
+        if ('onepress_map_items_address' === controlbox_id) {
+          const map_long = wp.customize('onepress_map_long').get();
+          const map_lat = wp.customize('onepress_map_lat').get();
           if ('' === map_long || '' === map_lat) {
             $('#customize-control-onepress_map_items_address').find('label').append('<span class="onepress-customizer-notice">' + ONEPRESS_CUSTOMIZER_DATA.multiple_map_notice + '</span>');
             return;
-          } else {
-            $('#customize-control-onepress_map_items_address').find('.onepress-customizer-notice').remove();
           }
+          $('#customize-control-onepress_map_items_address').find('.onepress-customizer-notice').remove();
         }
-        var $html = $(control.template(default_data));
+        const $html = $(control.template(default_data));
         $('.list-repeatable', control.container).append($html);
 
         // add unique ID for section if id_key is set
@@ -1027,33 +913,565 @@ __webpack_require__.r(__webpack_exports__);
       control._check_max_item();
     }
   });
-})(wp.customize, jQuery);
+}
 
+/***/ }),
+
+/***/ "./src/admin/customizer/customize-editor-bindings.js":
+/*!***********************************************************!*\
+  !*** ./src/admin/customizer/customize-editor-bindings.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   registerCustomizeEditorBindings: () => (/* binding */ registerCustomizeEditorBindings)
+/* harmony export */ });
+function registerCustomizeEditorBindings(api, $) {
+  function _the_editor(container) {
+    const _editor = {
+      editor_added: false,
+      ready(container) {
+        const control = this;
+        control.container = container;
+        control.container.addClass('onepress-editor-added');
+        control.editing_area = $('textarea', control.container);
+        if (control.editing_area.hasClass('wp-editor-added')) {
+          return false;
+        }
+        control.editing_area.uniqueId();
+        control.editing_area.addClass('wp-editor-added');
+        control.editing_id = control.editing_area.attr('id') || false;
+        if (!control.editing_id) {
+          return false;
+        }
+        control.editor_id = 'wpe-for-' + control.editing_id;
+        control.preview = $('<div id="preview-' + control.editing_id + '" class="wp-js-editor-preview"></div>');
+        control.editing_editor = $('<div id="wrap-' + control.editing_id + '" class="modal-wp-js-editor"><textarea id="' + control.editor_id + '"></textarea></div>');
+        const content = control.editing_area.val();
+        // Load default value
+        $('textarea', control.editing_editor).val(content);
+        try {
+          control.preview.html(window.switchEditors._wp_Autop(content));
+        } catch (e) {}
+        $('body').on('click', '#customize-controls, .customize-section-back', function (e) {
+          if (!$(e.target).is(control.preview)) {
+            /// e.preventDefault(); // Keep this AFTER the key filter above
+            control.editing_editor.removeClass('wpe-active');
+            $('.wp-js-editor-preview').removeClass('wpe-focus');
+          }
+        });
+        control.container.find('.wp-js-editor').addClass('wp-js-editor-active');
+        control.preview.insertBefore(control.editing_area);
+        control._init();
+        $(window).on('resize', function () {
+          control._resize();
+        });
+      },
+      _add_editor() {
+        const control = this;
+        if (!this.editor_added) {
+          this.editor_added = true;
+          $('body .wp-full-overlay').append(control.editing_editor);
+          $('textarea', control.editing_editor).attr('data-editor-mod', control.editing_area.attr('data-editor-mod') || '').wp_js_editor({
+            sync_id: control.editing_area,
+            init_instance_callback(editor) {
+              const w = $('#wp-' + control.editor_id + '-wrap');
+              $('.wp-editor-tabs', w).append('<button class="wp-switch-editor fullscreen-wp-editor"  type="button"><span class="dashicons"></span></button>');
+              $('.wp-editor-tabs', w).append('<button class="wp-switch-editor preview-wp-editor"  type="button"><span class="dashicons dashicons-visibility"></span></button>');
+              $('.wp-editor-tabs', w).append('<button class="wp-switch-editor close-wp-editor"  type="button"><span class="dashicons dashicons-no-alt"></span></button>');
+              w.on('click', '.close-wp-editor', function (e) {
+                e.preventDefault();
+                control.editing_editor.removeClass('wpe-active');
+                $('.wp-js-editor-preview').removeClass('wpe-focus');
+              });
+              $('.preview-wp-editor', w).hover(function () {
+                w.closest('.modal-wp-js-editor').css({
+                  opacity: 0
+                });
+              }, function () {
+                w.closest('.modal-wp-js-editor').css({
+                  opacity: 1
+                });
+              });
+              w.on('click', '.fullscreen-wp-editor', function (e) {
+                e.preventDefault();
+                w.closest('.modal-wp-js-editor').toggleClass('fullscreen');
+                setTimeout(function () {
+                  $(window).resize();
+                }, 600);
+              });
+            }
+          });
+        }
+      },
+      _init() {
+        const control = this;
+        control.editing_area.on('change', function () {
+          control.preview.html(window.switchEditors._wp_Autop($(this).val()));
+        });
+        control.preview.on('click', function (e) {
+          control._add_editor();
+          $('.modal-wp-js-editor').removeClass('wpe-active');
+          control.editing_editor.toggleClass('wpe-active');
+          tinyMCE.get(control.editor_id).focus();
+          control.preview.addClass('wpe-focus');
+          control._resize();
+          return false;
+        });
+        control.container.on('click', '.wp-js-editor-preview', function (e) {
+          e.preventDefault();
+        });
+      },
+      _resize() {
+        const control = this;
+        const w = $('#wp-' + control.editor_id + '-wrap');
+        const height = w.innerHeight();
+        let tb_h = w.find('.mce-toolbar-grp').eq(0).height();
+        tb_h += w.find('.wp-editor-tools').eq(0).height();
+        tb_h += 50;
+        //var width = $( window ).width();
+        const editor = tinymce.get(control.editor_id);
+        if (editor) {
+          control.editing_editor.width('');
+          editor.theme.resizeTo('100%', height - tb_h);
+          w.find('textarea.wp-editor-area').height(height - tb_h);
+        }
+      }
+    };
+    _editor.ready(container);
+  }
+  function _remove_editor($context) {
+    $('textarea', $context).each(function () {
+      const id = $(this).attr('id') || '';
+      const editor_id = 'wpe-for-' + id;
+      try {
+        const editor = tinymce.get(editor_id);
+        if (editor) {
+          editor.remove();
+        }
+        $('#wrap-' + editor_id).remove();
+        $('#wrap-' + id).remove();
+        if (typeof tinyMCEPreInit.mceInit[editor_id] !== 'undefined') {
+          delete tinyMCEPreInit.mceInit[editor_id];
+        }
+        if (typeof tinyMCEPreInit.qtInit[editor_id] !== 'undefined') {
+          delete tinyMCEPreInit.qtInit[editor_id];
+        }
+      } catch (e) {}
+    });
+  }
+  const _is_init_editors = {};
+
+  // jQuery( document ).ready( function( $ ){
+
+  api.bind('ready', function (e, b) {
+    $('#customize-theme-controls .accordion-section').each(function () {
+      const section = $(this);
+      const id = section.attr('id') || '';
+      if (id) {
+        if (typeof _is_init_editors[id] === 'undefined') {
+          _is_init_editors[id] = true;
+          setTimeout(function () {
+            if ($('.wp-js-editor', section).length > 0) {
+              $('.wp-js-editor', section).each(function () {
+                _the_editor($(this));
+              });
+            }
+            if ($('.repeatable-customize-control:not(.no-changeable) .item-editor', section).length > 0) {
+              $('.repeatable-customize-control:not(.no-changeable) .item-editor', section).each(function () {
+                _the_editor($(this));
+              });
+            }
+          }, 10);
+        }
+      }
+    });
+
+    // Check section when focus
+    if (_wpCustomizeSettings.autofocus) {
+      if (_wpCustomizeSettings.autofocus.section) {
+        const id = 'sub-accordion-section-' + _wpCustomizeSettings.autofocus.section;
+        _is_init_editors[id] = true;
+        const section = $('#' + id);
+        setTimeout(function () {
+          if ($('.wp-js-editor', section).length > 0) {
+            $('.wp-js-editor', section).each(function () {
+              _the_editor($(this));
+            });
+          }
+          if ($('.repeatable-customize-control:not(.no-changeable) .item-editor', section).length > 0) {
+            $('.repeatable-customize-control:not(.no-changeable) .item-editor', section).each(function () {
+              _the_editor($(this));
+            });
+          }
+        }, 1000);
+      } else if (_wpCustomizeSettings.autofocus.panel) {}
+    }
+    $('body').on('repeater-control-init-item', function (e, container) {
+      $('.item-editor', container).each(function () {
+        _the_editor($(this));
+      });
+    });
+    $('body').on('repeat-control-remove-item', function (e, container) {
+      _remove_editor(container);
+    });
+  });
+}
+
+/***/ }),
+
+/***/ "./src/admin/customizer/icon-picker.js":
+/*!*********************************************!*\
+  !*** ./src/admin/customizer/icon-picker.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   initIconPicker: () => (/* binding */ initIconPicker)
+/* harmony export */ });
 /**
- * WP EDITOR plugin
+ * Icon picker overlay + footer layout controls.
+ *
+ * @param {Function} $ jQuery
  */
-(function ($) {
+function initIconPicker($) {
+  $(document).ready(function () {
+    window.editing_icon = false;
+    const icon_picker = $('<div class="c-icon-picker"><div class="c-icon-type-wrap"><select class="c-icon-type"></select></div><div class="c-icon-search"><input class="" type="text"></div><div class="c-icon-list"></div></div>');
+    let options_font_type = '',
+      icon_group = '';
+    $.each(C_Icon_Picker.fonts, function (key, font) {
+      font = $.extend({}, {
+        url: '',
+        name: '',
+        prefix: '',
+        icons: ''
+      }, font);
+      if (Array.isArray(font.url)) {
+        font.url.map(el => {
+          $('<link>').appendTo('head').attr({
+            type: 'text/css',
+            rel: 'stylesheet'
+          }).attr('id', 'customizer-icon-' + el?.key).attr('href', el?.url);
+        });
+      } else {
+        $('<link>').appendTo('head').attr({
+          type: 'text/css',
+          rel: 'stylesheet'
+        }).attr('id', 'customizer-icon-' + key).attr('href', font.url);
+      }
+      options_font_type += '<option value="' + key + '">' + font.name + '</option>';
+      const icons_array = font.icons.split('|');
+      icon_group += '<div class="ic-icons-group" style="display: none;" data-group-name="' + key + '">';
+      $.each(icons_array, function (index, icon) {
+        if (font.prefix) {
+          icon = font.prefix + ' ' + icon;
+        }
+        icon_group += '<span title="' + icon + '" data-name="' + icon + '"><i class="' + icon + '"></i></span>';
+      });
+      icon_group += '</div>';
+    });
+    icon_picker.find('.c-icon-search input').attr('placeholder', C_Icon_Picker.search);
+    icon_picker.find('.c-icon-type').html(options_font_type);
+    icon_picker.find('.c-icon-list').append(icon_group);
+    $('.wp-full-overlay').append(icon_picker);
+    $('body').on('change', 'select.c-icon-type', function () {
+      const t = $(this).val();
+      icon_picker.find('.ic-icons-group').hide();
+      icon_picker.find('.ic-icons-group[data-group-name="' + t + '"]').show();
+    });
+    icon_picker.find('select.c-icon-type').trigger('change');
+    $('body').on('keyup', '.c-icon-search input', function () {
+      const v = $(this).val();
+      if (v == '') {
+        $('.c-icon-list span').show();
+      } else {
+        $('.c-icon-list span').hide();
+        try {
+          $('.c-icon-list span[data-name*="' + v + '"]').show();
+        } catch (e) {
+          // ignore
+        }
+      }
+    });
+    $('body').on('click', '.icon-wrapper', function (e) {
+      e.preventDefault();
+      const icon = $(this);
+      window.editing_icon = icon;
+      icon_picker.addClass('ic-active');
+      $('body').find('.icon-wrapper').removeClass('icon-editing');
+      icon.addClass('icon-editing');
+    });
+    $('body').on('click', '.item-icon .remove-icon', function (e) {
+      e.preventDefault();
+      const item = $(this).closest('.item-icon');
+      item.find('.icon-wrapper input').val('');
+      item.find('.icon-wrapper input').trigger('change');
+      item.find('.icon-wrapper i').attr('class', '');
+      $('body').find('.icon-wrapper').removeClass('icon-editing');
+    });
+    $('body').on('click', '.c-icon-list span', function (e) {
+      e.preventDefault();
+      const icon_name = $(this).attr('data-name') || '';
+      if (window.editing_icon) {
+        window.editing_icon.find('i').attr('class', '').addClass($(this).find('i').attr('class'));
+        window.editing_icon.find('input').val(icon_name).trigger('change');
+      }
+      icon_picker.removeClass('ic-active');
+      window.editing_icon = false;
+      $('body').find('.icon-wrapper').removeClass('icon-editing');
+    });
+    $(document).mouseup(function (e) {
+      if (window.editing_icon) {
+        if (!window.editing_icon.is(e.target) && window.editing_icon.has(e.target).length === 0 && !icon_picker.is(e.target) && icon_picker.has(e.target).length === 0) {
+          icon_picker.removeClass('ic-active');
+        }
+      }
+    });
+    const display_footer_layout = function (l) {
+      $('li[id^="customize-control-footer_custom_"]').hide();
+      $('li[id^="customize-control-footer_custom_' + l + '_columns"]').show();
+    };
+    display_footer_layout($('#customize-control-footer_layout select').val());
+    $('#customize-control-footer_layout select').on('change', function () {
+      display_footer_layout($(this).val());
+    });
+  });
+}
+
+/***/ }),
+
+/***/ "./src/admin/customizer/index.js":
+/*!***************************************!*\
+  !*** ./src/admin/customizer/index.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _jquery_deparam__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./jquery-deparam */ "./src/admin/customizer/jquery-deparam.js");
+/* harmony import */ var _section_onepress_plus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./section-onepress-plus */ "./src/admin/customizer/section-onepress-plus.js");
+/* harmony import */ var _alpha_color_picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./alpha-color-picker */ "./src/admin/customizer/alpha-color-picker.js");
+/* harmony import */ var _control_alpha_color__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./control-alpha-color */ "./src/admin/customizer/control-alpha-color.js");
+/* harmony import */ var _control_repeatable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./control-repeatable */ "./src/admin/customizer/control-repeatable.js");
+/* harmony import */ var _wp_js_editor_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./wp-js-editor-plugin */ "./src/admin/customizer/wp-js-editor-plugin.js");
+/* harmony import */ var _customize_editor_bindings__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./customize-editor-bindings */ "./src/admin/customizer/customize-editor-bindings.js");
+/* harmony import */ var _ui_conditional_controls__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ui-conditional-controls */ "./src/admin/customizer/ui-conditional-controls.js");
+/* harmony import */ var _icon_picker__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./icon-picker */ "./src/admin/customizer/icon-picker.js");
+
+
+
+
+
+
+
+
+
+const api = wp.customize;
+const $ = jQuery;
+(0,_jquery_deparam__WEBPACK_IMPORTED_MODULE_0__.registerJqueryDeparam)($);
+(0,_section_onepress_plus__WEBPACK_IMPORTED_MODULE_1__.registerOnepressPlusSection)(api);
+(0,_alpha_color_picker__WEBPACK_IMPORTED_MODULE_2__.registerAlphaColorPicker)($);
+(0,_control_alpha_color__WEBPACK_IMPORTED_MODULE_3__.registerAlphaColorControl)(api, $);
+(0,_control_repeatable__WEBPACK_IMPORTED_MODULE_4__.registerRepeatableControl)(api, $);
+(0,_wp_js_editor_plugin__WEBPACK_IMPORTED_MODULE_5__.registerWpJsEditorPlugin)($);
+(0,_customize_editor_bindings__WEBPACK_IMPORTED_MODULE_6__.registerCustomizeEditorBindings)(api, $);
+(0,_ui_conditional_controls__WEBPACK_IMPORTED_MODULE_7__.initUiConditionalControls)($);
+(0,_icon_picker__WEBPACK_IMPORTED_MODULE_8__.initIconPicker)($);
+
+/***/ }),
+
+/***/ "./src/admin/customizer/jquery-deparam.js":
+/*!************************************************!*\
+  !*** ./src/admin/customizer/jquery-deparam.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   registerJqueryDeparam: () => (/* binding */ registerJqueryDeparam)
+/* harmony export */ });
+/**
+ * jQuery deparam — extraction from jQuery BBQ (Ben Alman).
+ * @see http://benalman.com/projects/jquery-bbq-plugin/
+ *
+ * @param {Function} $ jQuery
+ */
+function registerJqueryDeparam($) {
+  if ($.deparam) {
+    return;
+  }
+  $.deparam = function (params, coerce) {
+    const obj = {},
+      coerce_types = {
+        true: !0,
+        false: !1,
+        null: null
+      };
+    $.each(params.replace(/\+/g, ' ').split('&'), function (j, v) {
+      let param = v.split('='),
+        key = decodeURIComponent(param[0]),
+        val,
+        cur = obj,
+        i = 0,
+        keys = key.split(']['),
+        keys_last = keys.length - 1;
+      if (/\[/.test(keys[0]) && /\]$/.test(keys[keys_last])) {
+        keys[keys_last] = keys[keys_last].replace(/\]$/, '');
+        keys = keys.shift().split('[').concat(keys);
+        keys_last = keys.length - 1;
+      } else {
+        keys_last = 0;
+      }
+      if (param.length === 2) {
+        val = decodeURIComponent(param[1]);
+        if (coerce) {
+          val = val && !isNaN(val) ? +val : val === 'undefined' ? undefined : coerce_types[val] !== undefined ? coerce_types[val] : val;
+        }
+        if (keys_last) {
+          for (; i <= keys_last; i++) {
+            key = keys[i] === '' ? cur.length : keys[i];
+            cur = cur[key] = i < keys_last ? cur[key] || (keys[i + 1] && isNaN(keys[i + 1]) ? {} : []) : val;
+          }
+        } else if ($.isArray(obj[key])) {
+          obj[key].push(val);
+        } else if (obj[key] !== undefined) {
+          obj[key] = [obj[key], val];
+        } else {
+          obj[key] = val;
+        }
+      } else if (key) {
+        obj[key] = coerce ? undefined : '';
+      }
+    });
+    return obj;
+  };
+}
+
+/***/ }),
+
+/***/ "./src/admin/customizer/section-onepress-plus.js":
+/*!*******************************************************!*\
+  !*** ./src/admin/customizer/section-onepress-plus.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   registerOnepressPlusSection: () => (/* binding */ registerOnepressPlusSection)
+/* harmony export */ });
+/** @param {Object} api wp.customize */
+function registerOnepressPlusSection(api) {
+  api.sectionConstructor['onepress-plus'] = api.Section.extend({
+    attachEvents() {},
+    isContextuallyActive() {
+      return true;
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./src/admin/customizer/ui-conditional-controls.js":
+/*!*********************************************************!*\
+  !*** ./src/admin/customizer/ui-conditional-controls.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   initUiConditionalControls: () => (/* binding */ initUiConditionalControls)
+/* harmony export */ });
+/**
+ * Hero / gallery / theme action UI toggles in the Customizer.
+ *
+ * @param {Function} $ jQuery
+ */
+function initUiConditionalControls($) {
+  $(window).ready(function () {
+    if (typeof onepress_customizer_settings !== 'undefined') {
+      if (onepress_customizer_settings.number_action > 0) {
+        $('.control-section-themes h3.accordion-section-title').append('<a class="theme-action-count" href="' + onepress_customizer_settings.action_url + '">' + onepress_customizer_settings.number_action + '</a>');
+      }
+    }
+    $('select[data-customize-setting-link="onepress_hero_layout"]').on('change on_custom_load', function () {
+      const v = $(this).val() || '';
+      $("li[id^='customize-control-onepress_hcl']").hide();
+      $("li[id^='customize-control-onepress_hcl" + v + "']").show();
+    });
+    $('select[data-customize-setting-link="onepress_hero_layout"]').trigger('on_custom_load');
+    $('select[data-customize-setting-link="onepress_gallery_source"]').on('change on_custom_load', function () {
+      const v = $(this).val() || '';
+      $("li[id^='customize-control-onepress_gallery_source_']").hide();
+      $("li[id^='customize-control-onepress_gallery_api_']").hide();
+      $("li[id^='customize-control-onepress_gallery_settings_']").hide();
+      $("li[id^='customize-control-onepress_gallery_source_" + v + "']").show();
+      $("li[id^='customize-control-onepress_gallery_api_" + v + "']").show();
+      $("li[id^='customize-control-onepress_gallery_settings_" + v + "']").show();
+    });
+    $('select[data-customize-setting-link="onepress_gallery_source"]').trigger('on_custom_load');
+    $('select[data-customize-setting-link="onepress_gallery_display"]').on('change on_custom_load', function () {
+      const v = $(this).val() || '';
+      switch (v) {
+        case 'slider':
+          $('#customize-control-onepress_g_row_height, #customize-control-onepress_g_col, #customize-control-onepress_g_spacing').hide();
+          break;
+        case 'justified':
+          $('#customize-control-onepress_g_col, #customize-control-onepress_g_spacing').hide();
+          $('#customize-control-onepress_g_row_height').show();
+          break;
+        case 'carousel':
+          $('#customize-control-onepress_g_row_height, #customize-control-onepress_g_col').hide();
+          $('#customize-control-onepress_g_col, #customize-control-onepress_g_spacing').show();
+          break;
+        case 'masonry':
+          $('#customize-control-onepress_g_row_height').hide();
+          $('#customize-control-onepress_g_col, #customize-control-onepress_g_spacing').show();
+          break;
+        default:
+          $('#customize-control-onepress_g_row_height').hide();
+          $('#customize-control-onepress_g_col, #customize-control-onepress_g_spacing').show();
+      }
+    });
+    $('select[data-customize-setting-link="onepress_gallery_display"]').trigger('on_custom_load');
+  });
+}
+
+/***/ }),
+
+/***/ "./src/admin/customizer/wp-js-editor-plugin.js":
+/*!*****************************************************!*\
+  !*** ./src/admin/customizer/wp-js-editor-plugin.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   registerWpJsEditorPlugin: () => (/* binding */ registerWpJsEditorPlugin)
+/* harmony export */ });
+function registerWpJsEditorPlugin($) {
   window._wpEditor = {
-    init: function (id, content, settings) {
-      var _id = '__wp_mce_editor__';
-      var _tpl = $('#_wp-mce-editor-tpl').html();
-      if (typeof content === "undefined") {
+    init(id, content, settings) {
+      const _id = '__wp_mce_editor__';
+      const _tpl = $('#_wp-mce-editor-tpl').html();
+      if (typeof content === 'undefined') {
         content = '';
       }
-      if (typeof window.tinyMCEPreInit.mceInit[_id] !== "undefined") {
-        var tmceInit = _.clone(window.tinyMCEPreInit.mceInit[_id]);
-        var qtInit = _.clone(window.tinyMCEPreInit.qtInit[_id]);
+      if (typeof window.tinyMCEPreInit.mceInit[_id] !== 'undefined') {
+        let tmceInit = _.clone(window.tinyMCEPreInit.mceInit[_id]);
+        let qtInit = _.clone(window.tinyMCEPreInit.qtInit[_id]);
         tmceInit = $.extend(tmceInit, settings.tinymce);
         qtInit = $.extend(qtInit, settings.qtag);
-        var tpl = _tpl.replace(new RegExp(_id, "g"), id);
-        var template = $(tpl);
+        const tpl = _tpl.replace(new RegExp(_id, 'g'), id);
+        const template = $(tpl);
         template.find('textarea').removeAttr('rows').removeAttr('cols');
-        $("#" + id).replaceWith(template);
+        $('#' + id).replaceWith(template);
         // set content
         $('#' + id).val(content);
-        $wrap = tinymce.$('#wp-' + id + '-wrap');
-        tmceInit.body_class = tmceInit.body_class.replace(new RegExp(_id, "g"), id);
-        tmceInit.selector = tmceInit.selector.replace(new RegExp(_id, "g"), id);
+        const $wrap = tinymce.$('#wp-' + id + '-wrap');
+        tmceInit.body_class = tmceInit.body_class.replace(new RegExp(_id, 'g'), id);
+        tmceInit.selector = tmceInit.selector.replace(new RegExp(_id, 'g'), id);
         tmceInit.cache_suffix = '';
         $wrap.removeClass('html-active').addClass('tmce-active');
         tmceInit.init_instance_callback = function (editor) {
@@ -1065,29 +1483,29 @@ __webpack_require__.r(__webpack_exports__);
               } catch (e) {}
             }
             // editor.theme.resizeTo('100%', 500);
-            if (typeof settings.init_instance_callback === "function") {
+            if (typeof settings.init_instance_callback === 'function') {
               settings.init_instance_callback(editor);
             }
             if (settings.sync_id !== '') {
               if (typeof settings.sync_id === 'string') {
                 editor.on('keyup change', function (e) {
-                  var html = editor.getContent({
+                  let html = editor.getContent({
                     format: 'raw'
                   });
-                  html = _wpEditor.removep(html);
+                  html = window._wpEditor.removep(html);
                   $('#' + settings.sync_id).val(html).trigger('change');
                 });
               } else {
                 editor.on('keyup change', function (e) {
-                  var html = editor.getContent({
+                  let html = editor.getContent({
                     format: 'raw'
                   });
-                  html = _wpEditor.removep(html);
+                  html = window._wpEditor.removep(html);
                   settings.sync_id.val(html).trigger('change');
                 });
               }
               $('textarea#' + id).on('keyup change', function () {
-                var v = $(this).val();
+                const v = $(this).val();
                 if (typeof settings.sync_id === 'string') {
                   $('#' + settings.sync_id).val(v).trigger('change');
                 } else {
@@ -1126,29 +1544,30 @@ __webpack_require__.r(__webpack_exports__);
     },
     /**
      * Replace paragraphs with double line breaks
+     * @param html
      * @see wp-admin/js/editor.js
      */
-    removep: function (html) {
+    removep(html) {
       return window.switchEditors._wp_Nop(html);
     },
-    sync: function () {
+    sync() {
       //
     },
-    remove: function (id) {
-      var content = '';
-      var editor = false;
+    remove(id) {
+      let content = '';
+      let editor = false;
       if (editor = tinymce.get(id)) {
         content = editor.getContent({
           format: 'raw'
         });
-        content = _wpEditor.removep(content);
+        content = window._wpEditor.removep(content);
         editor.remove();
       } else {
         content = $('#' + id).val();
       }
       if ($('#wp-' + id + '-wrap').length > 0) {
         window._wpEditorBackUp = window._wpEditorBackUp || {};
-        if (typeof window._wpEditorBackUp[id] !== "undefined") {
+        if (typeof window._wpEditorBackUp[id] !== 'undefined') {
           $('#wp-' + id + '-wrap').replaceWith(window._wpEditorBackUp[id]);
         }
       }
@@ -1159,7 +1578,7 @@ __webpack_require__.r(__webpack_exports__);
     // This is the easiest way to have default options.
     if (options !== 'remove') {
       options = $.extend({
-        sync_id: "",
+        sync_id: '',
         // sync to another text area
         tinymce: {},
         // tinymce setting
@@ -1167,16 +1586,16 @@ __webpack_require__.r(__webpack_exports__);
         // quick tag settings
         mod: '',
         // quick tag settings
-        init_instance_callback: function () {} // quick tag settings
+        init_instance_callback() {} // quick tag settings
       }, options);
     } else {
       options = 'remove';
     }
     return this.each(function () {
-      var edit_area = $(this);
+      const edit_area = $(this);
       edit_area.uniqueId();
       // Make sure edit area have a id attribute
-      var id = edit_area.attr('id') || '';
+      const id = edit_area.attr('id') || '';
       if (id === '') {
         return;
       }
@@ -1192,373 +1611,106 @@ __webpack_require__.r(__webpack_exports__);
       }
     });
   };
-})(jQuery);
-(function (api, $) {
-  function _the_editor(container) {
-    var _editor = {
-      editor_added: false,
-      ready: function (container) {
-        var control = this;
-        control.container = container;
-        control.container.addClass('onepress-editor-added');
-        control.editing_area = $('textarea', control.container);
-        if (control.editing_area.hasClass('wp-editor-added')) {
-          return false;
-        }
-        control.editing_area.uniqueId();
-        control.editing_area.addClass('wp-editor-added');
-        control.editing_id = control.editing_area.attr('id') || false;
-        if (!control.editing_id) {
-          return false;
-        }
-        control.editor_id = 'wpe-for-' + control.editing_id;
-        control.preview = $('<div id="preview-' + control.editing_id + '" class="wp-js-editor-preview"></div>');
-        control.editing_editor = $('<div id="wrap-' + control.editing_id + '" class="modal-wp-js-editor"><textarea id="' + control.editor_id + '"></textarea></div>');
-        var content = control.editing_area.val();
-        // Load default value
-        $('textarea', control.editing_editor).val(content);
-        try {
-          control.preview.html(window.switchEditors._wp_Autop(content));
-        } catch (e) {}
-        $('body').on('click', '#customize-controls, .customize-section-back', function (e) {
-          if (!$(e.target).is(control.preview)) {
-            /// e.preventDefault(); // Keep this AFTER the key filter above
-            control.editing_editor.removeClass('wpe-active');
-            $('.wp-js-editor-preview').removeClass('wpe-focus');
-          }
-        });
-        control.container.find('.wp-js-editor').addClass('wp-js-editor-active');
-        control.preview.insertBefore(control.editing_area);
-        control._init();
-        $(window).on('resize', function () {
-          control._resize();
-        });
-      },
-      _add_editor: function () {
-        var control = this;
-        if (!this.editor_added) {
-          this.editor_added = true;
-          $('body .wp-full-overlay').append(control.editing_editor);
-          $('textarea', control.editing_editor).attr('data-editor-mod', control.editing_area.attr('data-editor-mod') || '').wp_js_editor({
-            sync_id: control.editing_area,
-            init_instance_callback: function (editor) {
-              var w = $('#wp-' + control.editor_id + '-wrap');
-              $('.wp-editor-tabs', w).append('<button class="wp-switch-editor fullscreen-wp-editor"  type="button"><span class="dashicons"></span></button>');
-              $('.wp-editor-tabs', w).append('<button class="wp-switch-editor preview-wp-editor"  type="button"><span class="dashicons dashicons-visibility"></span></button>');
-              $('.wp-editor-tabs', w).append('<button class="wp-switch-editor close-wp-editor"  type="button"><span class="dashicons dashicons-no-alt"></span></button>');
-              w.on('click', '.close-wp-editor', function (e) {
-                e.preventDefault();
-                control.editing_editor.removeClass('wpe-active');
-                $('.wp-js-editor-preview').removeClass('wpe-focus');
-              });
-              $('.preview-wp-editor', w).hover(function () {
-                w.closest('.modal-wp-js-editor').css({
-                  opacity: 0
-                });
-              }, function () {
-                w.closest('.modal-wp-js-editor').css({
-                  opacity: 1
-                });
-              });
-              w.on('click', '.fullscreen-wp-editor', function (e) {
-                e.preventDefault();
-                w.closest('.modal-wp-js-editor').toggleClass('fullscreen');
-                setTimeout(function () {
-                  $(window).resize();
-                }, 600);
-              });
-            }
-          });
-        }
-      },
-      _init: function () {
-        var control = this;
-        control.editing_area.on('change', function () {
-          control.preview.html(window.switchEditors._wp_Autop($(this).val()));
-        });
-        control.preview.on('click', function (e) {
-          control._add_editor();
-          $('.modal-wp-js-editor').removeClass('wpe-active');
-          control.editing_editor.toggleClass('wpe-active');
-          tinyMCE.get(control.editor_id).focus();
-          control.preview.addClass('wpe-focus');
-          control._resize();
-          return false;
-        });
-        control.container.on('click', '.wp-js-editor-preview', function (e) {
-          e.preventDefault();
-        });
-      },
-      _resize: function () {
-        var control = this;
-        var w = $('#wp-' + control.editor_id + '-wrap');
-        var height = w.innerHeight();
-        var tb_h = w.find('.mce-toolbar-grp').eq(0).height();
-        tb_h += w.find('.wp-editor-tools').eq(0).height();
-        tb_h += 50;
-        //var width = $( window ).width();
-        var editor = tinymce.get(control.editor_id);
-        if (editor) {
-          control.editing_editor.width('');
-          editor.theme.resizeTo('100%', height - tb_h);
-          w.find('textarea.wp-editor-area').height(height - tb_h);
-        }
-      }
-    };
-    _editor.ready(container);
-  }
-  function _remove_editor($context) {
-    $('textarea', $context).each(function () {
-      var id = $(this).attr('id') || '';
-      var editor_id = 'wpe-for-' + id;
-      try {
-        var editor = tinymce.get(editor_id);
-        if (editor) {
-          editor.remove();
-        }
-        $('#wrap-' + editor_id).remove();
-        $('#wrap-' + id).remove();
-        if (typeof tinyMCEPreInit.mceInit[editor_id] !== "undefined") {
-          delete tinyMCEPreInit.mceInit[editor_id];
-        }
-        if (typeof tinyMCEPreInit.qtInit[editor_id] !== "undefined") {
-          delete tinyMCEPreInit.qtInit[editor_id];
-        }
-      } catch (e) {}
-    });
-  }
-  var _is_init_editors = {};
+}
 
-  // jQuery( document ).ready( function( $ ){
+/***/ }),
 
-  api.bind('ready', function (e, b) {
-    $('#customize-theme-controls .accordion-section').each(function () {
-      var section = $(this);
-      var id = section.attr('id') || '';
-      if (id) {
-        if (typeof _is_init_editors[id] === "undefined") {
-          _is_init_editors[id] = true;
-          setTimeout(function () {
-            if ($('.wp-js-editor', section).length > 0) {
-              $('.wp-js-editor', section).each(function () {
-                _the_editor($(this));
-              });
-            }
-            if ($('.repeatable-customize-control:not(.no-changeable) .item-editor', section).length > 0) {
-              $('.repeatable-customize-control:not(.no-changeable) .item-editor', section).each(function () {
-                _the_editor($(this));
-              });
-            }
-          }, 10);
-        }
-      }
-    });
+/***/ "./src/frontend/fontawesome-v6/css/all.css":
+/*!*************************************************!*\
+  !*** ./src/frontend/fontawesome-v6/css/all.css ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-    // Check section when focus
-    if (_wpCustomizeSettings.autofocus) {
-      if (_wpCustomizeSettings.autofocus.section) {
-        var id = "sub-accordion-section-" + _wpCustomizeSettings.autofocus.section;
-        _is_init_editors[id] = true;
-        var section = $('#' + id);
-        setTimeout(function () {
-          if ($('.wp-js-editor', section).length > 0) {
-            $('.wp-js-editor', section).each(function () {
-              _the_editor($(this));
-            });
-          }
-          if ($('.repeatable-customize-control:not(.no-changeable) .item-editor', section).length > 0) {
-            $('.repeatable-customize-control:not(.no-changeable) .item-editor', section).each(function () {
-              _the_editor($(this));
-            });
-          }
-        }, 1000);
-      } else if (_wpCustomizeSettings.autofocus.panel) {}
-    }
-    $('body').on('repeater-control-init-item', function (e, container) {
-      $('.item-editor', container).each(function () {
-        _the_editor($(this));
-      });
-    });
-    $('body').on('repeat-control-remove-item', function (e, container) {
-      _remove_editor(container);
-    });
-  });
-})(wp.customize, jQuery);
-jQuery(window).ready(function ($) {
-  if (typeof onepress_customizer_settings !== "undefined") {
-    if (onepress_customizer_settings.number_action > 0) {
-      $('.control-section-themes h3.accordion-section-title').append('<a class="theme-action-count" href="' + onepress_customizer_settings.action_url + '">' + onepress_customizer_settings.number_action + '</a>');
-    }
-  }
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
 
-  /**
-   * For Hero layout content settings
-   */
-  $('select[data-customize-setting-link="onepress_hero_layout"]').on('change on_custom_load', function () {
-    var v = $(this).val() || '';
-    $("li[id^='customize-control-onepress_hcl']").hide();
-    $("li[id^='customize-control-onepress_hcl" + v + "']").show();
-  });
-  $('select[data-customize-setting-link="onepress_hero_layout"]').trigger('on_custom_load');
 
-  /**
-   * For Gallery content settings
-   */
-  $('select[data-customize-setting-link="onepress_gallery_source"]').on('change on_custom_load', function () {
-    var v = $(this).val() || '';
-    $("li[id^='customize-control-onepress_gallery_source_']").hide();
-    $("li[id^='customize-control-onepress_gallery_api_']").hide();
-    $("li[id^='customize-control-onepress_gallery_settings_']").hide();
-    $("li[id^='customize-control-onepress_gallery_source_" + v + "']").show();
-    $("li[id^='customize-control-onepress_gallery_api_" + v + "']").show();
-    $("li[id^='customize-control-onepress_gallery_settings_" + v + "']").show();
-  });
-  $('select[data-customize-setting-link="onepress_gallery_source"]').trigger('on_custom_load');
+/***/ }),
 
-  /**
-   * For Gallery display settings
-   */
-  $('select[data-customize-setting-link="onepress_gallery_display"]').on('change on_custom_load', function () {
-    var v = $(this).val() || '';
-    switch (v) {
-      case 'slider':
-        $("#customize-control-onepress_g_row_height, #customize-control-onepress_g_col, #customize-control-onepress_g_spacing").hide();
-        break;
-      case 'justified':
-        $("#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").hide();
-        $("#customize-control-onepress_g_row_height").show();
-        break;
-      case 'carousel':
-        $("#customize-control-onepress_g_row_height, #customize-control-onepress_g_col").hide();
-        $("#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").show();
-        break;
-      case 'masonry':
-        $("#customize-control-onepress_g_row_height").hide();
-        $("#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").show();
-        break;
-      default:
-        $("#customize-control-onepress_g_row_height").hide();
-        $("#customize-control-onepress_g_col, #customize-control-onepress_g_spacing").show();
-    }
-  });
-  $('select[data-customize-setting-link="onepress_gallery_display"]').trigger('on_custom_load');
-});
+/***/ "./src/frontend/fontawesome-v6/css/v4-shims.css":
+/*!******************************************************!*\
+  !*** ./src/frontend/fontawesome-v6/css/v4-shims.css ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/**
- * Icon picker
- */
-jQuery(document).ready(function ($) {
-  window.editing_icon = false;
-  var icon_picker = $('<div class="c-icon-picker"><div class="c-icon-type-wrap"><select class="c-icon-type"></select></div><div class="c-icon-search"><input class="" type="text"></div><div class="c-icon-list"></div></div>');
-  var options_font_type = '',
-    icon_group = '';
-  $.each(C_Icon_Picker.fonts, function (key, font) {
-    font = $.extend({}, {
-      url: '',
-      name: '',
-      prefix: '',
-      icons: ''
-    }, font);
-    if (Array.isArray(font.url)) {
-      font.url.map(el => {
-        $('<link>').appendTo('head').attr({
-          type: 'text/css',
-          rel: 'stylesheet'
-        }).attr('id', 'customizer-icon-' + el?.key).attr('href', el?.url);
-      });
-    } else {
-      $('<link>').appendTo('head').attr({
-        type: 'text/css',
-        rel: 'stylesheet'
-      }).attr('id', 'customizer-icon-' + key).attr('href', font.url);
-    }
-    options_font_type += '<option value="' + key + '">' + font.name + '</option>';
-    var icons_array = font.icons.split('|');
-    icon_group += '<div class="ic-icons-group" style="display: none;" data-group-name="' + key + '">';
-    $.each(icons_array, function (index, icon) {
-      if (font.prefix) {
-        icon = font.prefix + ' ' + icon;
-      }
-      icon_group += '<span title="' + icon + '" data-name="' + icon + '"><i class="' + icon + '"></i></span>';
-    });
-    icon_group += '</div>';
-  });
-  icon_picker.find('.c-icon-search input').attr('placeholder', C_Icon_Picker.search);
-  icon_picker.find('.c-icon-type').html(options_font_type);
-  icon_picker.find('.c-icon-list').append(icon_group);
-  $('.wp-full-overlay').append(icon_picker);
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
 
-  // Change icon type
-  $('body').on('change', 'select.c-icon-type', function () {
-    var t = $(this).val();
-    icon_picker.find('.ic-icons-group').hide();
-    icon_picker.find('.ic-icons-group[data-group-name="' + t + '"]').show();
-  });
-  icon_picker.find('select.c-icon-type').trigger('change');
 
-  // When type to search
-  $('body').on('keyup', '.c-icon-search input', function () {
-    var v = $(this).val();
-    if (v == '') {
-      $('.c-icon-list span').show();
-    } else {
-      $('.c-icon-list span').hide();
-      try {
-        $('.c-icon-list span[data-name*="' + v + '"]').show();
-      } catch (e) {}
-    }
-  });
+/***/ })
 
-  // Edit icon
-  $('body').on('click', '.icon-wrapper', function (e) {
-    e.preventDefault();
-    var icon = $(this);
-    window.editing_icon = icon;
-    icon_picker.addClass('ic-active');
-    $('body').find('.icon-wrapper').removeClass('icon-editing');
-    icon.addClass('icon-editing');
-  });
-  // Remove icon
-  $('body').on('click', '.item-icon .remove-icon', function (e) {
-    e.preventDefault();
-    var item = $(this).closest('.item-icon');
-    item.find('.icon-wrapper input').val('');
-    item.find('.icon-wrapper input').trigger('change');
-    item.find('.icon-wrapper i').attr('class', '');
-    $('body').find('.icon-wrapper').removeClass('icon-editing');
-  });
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
+/*!*********************************!*\
+  !*** ./src/admin/customizer.js ***!
+  \*********************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _customizer_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./customizer.scss */ "./src/admin/customizer.scss");
+/* harmony import */ var _frontend_fontawesome_v6_css_all_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../frontend/fontawesome-v6/css/all.css */ "./src/frontend/fontawesome-v6/css/all.css");
+/* harmony import */ var _frontend_fontawesome_v6_css_v4_shims_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../frontend/fontawesome-v6/css/v4-shims.css */ "./src/frontend/fontawesome-v6/css/v4-shims.css");
+/* harmony import */ var _customizer_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./customizer/index.js */ "./src/admin/customizer/index.js");
 
-  // Selected icon
-  $('body').on('click', '.c-icon-list span', function (e) {
-    e.preventDefault();
-    var icon_name = $(this).attr('data-name') || '';
-    if (window.editing_icon) {
-      window.editing_icon.find('i').attr('class', '').addClass($(this).find('i').attr('class'));
-      window.editing_icon.find('input').val(icon_name).trigger('change');
-    }
-    icon_picker.removeClass('ic-active');
-    window.editing_icon = false;
-    $('body').find('.icon-wrapper').removeClass('icon-editing');
-  });
-  $(document).mouseup(function (e) {
-    if (window.editing_icon) {
-      if (!window.editing_icon.is(e.target) // if the target of the click isn't the container...
-      && window.editing_icon.has(e.target).length === 0 // ... nor a descendant of the container
-      && !icon_picker.is(e.target) && icon_picker.has(e.target).length === 0) {
-        icon_picker.removeClass('ic-active');
-        // window.editing_icon = false;
-      }
-    }
-  });
-  var display_footer_layout = function (l) {
-    $('li[id^="customize-control-footer_custom_"]').hide();
-    $('li[id^="customize-control-footer_custom_' + l + '_columns"]').show();
-  };
-  display_footer_layout($('#customize-control-footer_layout select').val());
-  $('#customize-control-footer_layout select').on('change', function () {
-    display_footer_layout($(this).val());
-  });
-});
+
+
+// Folder must be explicit: `./customizer` would resolve to this file (`customizer.js`).
+
 })();
 
 /******/ })()
