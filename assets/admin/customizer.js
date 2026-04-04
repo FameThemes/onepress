@@ -12,6 +12,18 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
+/***/ }),
+
+/***/ "./src/frontend/fontawesome-v6/css/all.min.css":
+/*!*****************************************************!*\
+  !*** ./src/frontend/fontawesome-v6/css/all.min.css ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
 /***/ })
 
 /******/ 	});
@@ -61,6 +73,8 @@ var __webpack_exports__ = {};
   \*********************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _customizer_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./customizer.scss */ "./src/admin/customizer.scss");
+/* harmony import */ var _frontend_fontawesome_v6_css_all_min_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../frontend/fontawesome-v6/css/all.min.css */ "./src/frontend/fontawesome-v6/css/all.min.css");
+
 
 (function (api) {
   // Extends our custom "example-1" section.

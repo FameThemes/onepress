@@ -1,4 +1,5 @@
 import './customizer.scss'
+import '../frontend/fontawesome-v6/css/all.min.css'
 
 (function (api) {
 
