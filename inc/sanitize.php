@@ -29,39 +29,170 @@ function onepress_sanitize_css($string)
 }
 
 
-function onepress_sanitize_color_alpha($color)
+/**
+ * Whether a string contains patterns disallowed inside a single CSS <color> value (XSS / injection).
+ *
+ * @param string $color Color candidate.
+ * @return bool
+ */
+function onepress_css_color_has_injection($color)
 {
-	$color = str_replace('#', '', $color);
-	if ('' === $color) {
+	if ($color === '') {
+		return false;
+	}
+	if (preg_match('/[\x00-\x1F\x7F]/', $color)) {
+		return true;
+	}
+	if (preg_match('/[<>"\'\\\\]|\/\*|\*\/|!important|@import|expression\s*\(|url\s*\(|javascript\s*:/i', $color)) {
+		return true;
+	}
+	if (strpos($color, ';') !== false || strpos($color, '!') !== false) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Root functions allowed for CSS <color> (Level 4+), plus safe var().
+ *
+ * @return array<string, true>
+ */
+function onepress_css_color_allowed_functions_map()
+{
+	static $map = null;
+
+	if ($map === null) {
+		$funcs = array(
+			'rgb',
+			'rgba',
+			'hsl',
+			'hsla',
+			'hwb',
+			'lab',
+			'lch',
+			'oklab',
+			'oklch',
+			'color',
+			'device-cmyk',
+			'color-mix',
+			'light-dark',
+			'gray',
+		);
+		$map = array_fill_keys($funcs, true);
+	}
+
+	return $map;
+}
+
+/**
+ * Sanitize a CSS <color> value: supports hex, transparent/currentColor, rgb/hsl/hwb/lab/lch/oklab/oklch/color/device-cmyk,
+ * color-mix, light-dark, gray(), and var(--custom-property). Named colors (e.g. red, aliceblue) are not accepted.
+ *
+ * @param mixed  $color Raw input.
+ * @param int    $depth Internal recursion guard (e.g. var() fallbacks).
+ * @return string Safe color or empty string if invalid.
+ */
+function onepress_sanitize_css_color($color, $depth = 0)
+{
+	$color = is_string($color) ? trim($color) : '';
+	if ($color === '') {
 		return '';
 	}
 
-	// 3 or 6 hex digits, or the empty string.
-	if (preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', '#' . $color)) {
-		// convert to rgb
-		$colour = $color;
-		if (strlen($colour) == 6) {
-			list($r, $g, $b) = array($colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5]);
-		} elseif (strlen($colour) == 3) {
-			list($r, $g, $b) = array($colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2]);
-		} else {
-			return false;
-		}
-		$r = hexdec($r);
-		$g = hexdec($g);
-		$b = hexdec($b);
-		return 'rgba(' . join(
-			',',
-			array(
-				'r' => $r,
-				'g' => $g,
-				'b' => $b,
-				'a' => 1,
-			)
-		) . ')';
+	if ($depth > 5) {
+		return '';
 	}
 
-	return strpos(trim($color), 'rgb') !== false ? $color : false;
+	if (strlen($color) > 512) {
+		return '';
+	}
+
+	if (onepress_css_color_has_injection($color)) {
+		return '';
+	}
+
+	$lower = strtolower($color);
+	if ('transparent' === $lower) {
+		return 'transparent';
+	}
+	if ('currentcolor' === $lower) {
+		return 'currentColor';
+	}
+
+	if (preg_match('/^var\(\s*--[a-zA-Z0-9_-]+\s*\)$/', $color)) {
+		return $color;
+	}
+
+	if (preg_match('/^var\(\s*(--[a-zA-Z0-9_-]+)\s*,\s*(.+)\)$/s', $color, $vm)) {
+		$fallback = onepress_sanitize_css_color(trim($vm[2]), $depth + 1);
+		if ('' === $fallback) {
+			return '';
+		}
+		return 'var(' . $vm[1] . ', ' . $fallback . ')';
+	}
+
+	if (preg_match('/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/', $color)) {
+		return $color;
+	}
+
+	if (preg_match('/^([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/', $color)) {
+		return '#' . $color;
+	}
+
+	if (! preg_match('/^([a-zA-Z][-a-zA-Z0-9]*)\s*\((.*)\)\s*$/s', $color, $m)) {
+		return '';
+	}
+
+	$fname = strtolower($m[1]);
+	$inner = $m[2];
+
+	if (! isset(onepress_css_color_allowed_functions_map()[$fname])) {
+		return '';
+	}
+
+	if (! onepress_css_color_parens_balanced($inner)) {
+		return '';
+	}
+
+	// Allow numbers, keywords (in, none, from, srgb, display-p3, etc.), whitespace, calc operators, underscores (e.g. var fallbacks / custom idents).
+	if (preg_match('/[^a-zA-Z0-9\s.,%#\/+()_*_-]/', $inner)) {
+		return '';
+	}
+
+	return $color;
+}
+
+/**
+ * @param string $s Inner of parentheses.
+ * @return bool
+ */
+function onepress_css_color_parens_balanced($s)
+{
+	$depth = 0;
+	$len = strlen($s);
+	for ($i = 0; $i < $len; $i++) {
+		$c = $s[ $i ];
+		if ('(' === $c) {
+			$depth++;
+		} elseif (')' === $c) {
+			$depth--;
+			if ($depth < 0) {
+				return false;
+			}
+		}
+	}
+	return 0 === $depth;
+}
+
+/**
+ * Sanitize color values used in theme options / repeatable fields (alpha-capable CSS colors).
+ *
+ * @param mixed $color Raw input.
+ * @return string
+ */
+function onepress_sanitize_color_alpha($color)
+{
+	return onepress_sanitize_css_color($color);
 }
 
 
@@ -252,15 +383,6 @@ function onepress_sanitize_hex_color($color)
 		return $color;
 	}
 	return null;
-}
-
-function onepress_sanitize_checkbox($input)
-{
-	if ($input == 1) {
-		return 1;
-	} else {
-		return 0;
-	}
 }
 
 function onepress_sanitize_text($string)

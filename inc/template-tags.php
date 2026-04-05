@@ -542,41 +542,34 @@ if (! function_exists('onepress_hex_to_rgba')) {
 	 */
 	function onepress_hex_to_rgba($color, $alpha = 1)
 	{
-		$color = str_replace('#', '', $color);
-		if ('' === $color) {
+		if (! function_exists('onepress_sanitize_css_color')) {
 			return '';
 		}
 
-		if (strpos(trim($color), 'rgb') !== false) {
-			return $color;
+		$safe = onepress_sanitize_css_color($color);
+		if ('' === $safe) {
+			return '';
 		}
 
-		// 3 or 6 hex digits, or the empty string.
-		if (preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', '#' . $color)) {
-			// convert to rgb
-			$colour = $color;
-			if (strlen($colour) == 6) {
-				list($r, $g, $b) = array($colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5]);
-			} elseif (strlen($colour) == 3) {
-				list($r, $g, $b) = array($colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2]);
+		// 3- or 6-digit hex: combine with $alpha (legacy hero overlay behaviour).
+		if (preg_match('/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $safe)) {
+			$hex = substr($safe, 1);
+			if (3 === strlen($hex)) {
+				$r = hexdec($hex[0] . $hex[0]);
+				$g = hexdec($hex[1] . $hex[1]);
+				$b = hexdec($hex[2] . $hex[2]);
 			} else {
-				return false;
+				$r = hexdec(substr($hex, 0, 2));
+				$g = hexdec(substr($hex, 2, 2));
+				$b = hexdec(substr($hex, 4, 2));
 			}
-			$r = hexdec($r);
-			$g = hexdec($g);
-			$b = hexdec($b);
-			return 'rgba(' . join(
-				',',
-				array(
-					'r' => $r,
-					'g' => $g,
-					'b' => $b,
-					'a' => $alpha,
-				)
-			) . ')';
+			$alpha = is_numeric($alpha) ? (float) $alpha : 1;
+			$alpha = max(0, min(1, $alpha));
+			return 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $alpha . ')';
 		}
 
-		return false;
+		// 4/8-digit hex, rgb/hsl/color()/var(), etc.: already a full CSS color.
+		return $safe;
 	}
 }
 
