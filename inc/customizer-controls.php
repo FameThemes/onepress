@@ -12,6 +12,7 @@ require_once get_template_directory() . '/inc/customize-controls/control-color-a
 require_once get_template_directory() . '/inc/customize-controls/control-repeater.php';
 require_once get_template_directory() . '/inc/customize-controls/control-category.php';
 require_once get_template_directory() . '/inc/customize-controls/control-pages.php';
+require_once get_template_directory() . '/inc/customize-controls/control-media.php';
 
 
 class OnePress_Editor_Scripts

@@ -177,6 +177,7 @@ function onepress_customizer_partials( $wp_customize ) {
 			'settings' => array(
 				'onepress_videolightbox_title',
 				'onepress_videolightbox_url',
+				'onepress_videolightbox_media_url',
 			),
 		),
 

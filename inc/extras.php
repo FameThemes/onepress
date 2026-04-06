@@ -248,6 +248,87 @@ if ( ! function_exists( 'onepress_get_video_lightbox_image' ) ) {
 	}
 }
 
+if ( ! function_exists( 'onepress_is_self_hosted_video_file_url' ) ) {
+	/**
+	 * True when URL points to a direct video file (not YouTube/Vimeo/etc. embed).
+	 *
+	 * @param string $url URL.
+	 * @return bool
+	 */
+	function onepress_is_self_hosted_video_file_url( $url ) {
+		if ( ! is_string( $url ) || $url === '' ) {
+			return false;
+		}
+		if ( preg_match( '#youtu(\.be|be\.com)|vimeo\.com|dai\.ly|dailymotion\.com/embed|vk\.com/video_ext#i', $url ) ) {
+			return false;
+		}
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+		$ext  = strtolower( pathinfo( (string) $path, PATHINFO_EXTENSION ) );
+
+		return in_array( $ext, array( 'mp4', 'webm', 'ogv', 'ogg', 'mov', 'm4v', 'avi', 'mkv' ), true );
+	}
+}
+
+if ( ! function_exists( 'onepress_videolightbox_mime_for_video_url' ) ) {
+	/**
+	 * @param string $url Video file URL.
+	 * @return string MIME type for HTML5 <source type="…">.
+	 */
+	function onepress_videolightbox_mime_for_video_url( $url ) {
+		$path = wp_parse_url( (string) $url, PHP_URL_PATH );
+		$ext  = strtolower( pathinfo( (string) $path, PATHINFO_EXTENSION ) );
+		$map  = array(
+			'mp4'  => 'video/mp4',
+			'webm' => 'video/webm',
+			'ogv'  => 'video/ogg',
+			'ogg'  => 'video/ogg',
+			'mov'  => 'video/quicktime',
+			'm4v'  => 'video/x-m4v',
+			'avi'  => 'video/x-msvideo',
+			'mkv'  => 'video/x-matroska',
+		);
+
+		return isset( $map[ $ext ] ) ? $map[ $ext ] : 'video/mp4';
+	}
+}
+
+if ( ! function_exists( 'onepress_videolightbox_lightgallery_data_html' ) ) {
+	/**
+	 * Markup for lightGallery 1.x HTML5 video (stored in data-html; requires lg-html5 class).
+	 *
+	 * @param string $src_url Absolute URL to video file.
+	 * @param string $mime    Optional MIME (from attachment); falls back from extension.
+	 * @return string Raw HTML (escape with esc_attr() when placing in data-html).
+	 */
+	function onepress_videolightbox_lightgallery_data_html( $src_url, $mime = '' ) {
+		$safe_url = esc_url( $src_url );
+		if ( $safe_url === '' ) {
+			return '';
+		}
+		$mime = is_string( $mime ) && $mime !== '' ? $mime : onepress_videolightbox_mime_for_video_url( $safe_url );
+
+		return '<video class="lg-video-object lg-html5 lg-object" controls preload="metadata"><source src="' . esc_url( $safe_url ) . '" type="' . esc_attr( $mime ) . '"></video>';
+	}
+}
+
+if ( ! function_exists( 'onepress_videolightbox_poster_url' ) ) {
+	/**
+	 * Optional poster for self-hosted lightbox (section background image mod).
+	 *
+	 * @return string URL or empty.
+	 */
+	function onepress_videolightbox_poster_url() {
+		$image_id = get_theme_mod( 'onepress_videolightbox_image' );
+		$image_id = absint( $image_id );
+		if ( ! $image_id ) {
+			return '';
+		}
+		$url = wp_get_attachment_image_url( $image_id, 'full' );
+
+		return $url ? esc_url( $url ) : '';
+	}
+}
+
 
 if ( ! function_exists( 'onepress_before_section' ) ) {
 	/**

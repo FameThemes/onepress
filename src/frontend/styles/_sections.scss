@@ -1130,6 +1130,10 @@ div.wpcf7-response-output {
             font-weight: 800;
         }
     }
+    a.videolightbox-link-self-hosted[href=""] {
+        cursor: pointer;
+        text-decoration: none;
+    }
     .video_icon {
         background: rgba(0, 0, 0, 0.2) none repeat scroll 0 0;
         border: 4px solid #fff;

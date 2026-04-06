@@ -708,11 +708,13 @@ jQuery(function ($) {
   });
 
   /**
-   * Video lightbox
+   * Video lightbox (YouTube/Vimeo via href; self-hosted files via data-html + lg-html5 — see section-videolightbox.php)
    */
 
   if ($.fn.lightGallery) {
-    $(".videolightbox-popup").lightGallery({});
+    $(".videolightbox-popup").lightGallery({
+      selector: "a",
+    });
   }
 
   // Counter Up

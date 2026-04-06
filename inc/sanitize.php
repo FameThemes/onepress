@@ -959,6 +959,139 @@ function onepress_sanitize_html_input($string)
 	return wp_kses_allowed_html($string);
 }
 
+if (! function_exists('onepress_sanitize_media_control_value')) {
+	/**
+	 * Sanitize OnePress_Media_Control values for theme_mod / customize.
+	 *
+	 * @param mixed  $input   Raw value from Customizer (string, array, or JSON string).
+	 * @param string $storage One of 'url', 'id', 'mixed'.
+	 * @return string|int For 'id' returns int; otherwise string (URL or JSON for mixed).
+	 */
+	function onepress_sanitize_media_control_value($input, $storage = 'url')
+	{
+		$storage = in_array($storage, array('url', 'id', 'mixed'), true) ? $storage : 'url';
+
+		if ($input === null || $input === false || $input === '') {
+			return 'id' === $storage ? 0 : '';
+		}
+
+		switch ($storage) {
+			case 'id':
+				return absint($input);
+			case 'mixed':
+				$id = 0;
+				$url = '';
+				if (is_array($input)) {
+					$id = isset($input['id']) ? absint($input['id']) : 0;
+					$url = isset($input['url']) ? esc_url_raw($input['url']) : '';
+				} elseif (is_string($input)) {
+					$decoded = json_decode(wp_unslash($input), true);
+					if (is_array($decoded)) {
+						$id = isset($decoded['id']) ? absint($decoded['id']) : 0;
+						$url = isset($decoded['url']) ? esc_url_raw($decoded['url']) : '';
+					}
+				}
+				if ($id <= 0 && $url === '') {
+					return '';
+				}
+
+				return wp_json_encode(
+					array(
+						'id' => $id,
+						'url' => $url,
+					)
+				);
+			case 'url':
+			default:
+				return esc_url_raw($input);
+		}
+	}
+}
+
+if (! function_exists('onepress_sanitize_media_control_url')) {
+	function onepress_sanitize_media_control_url($input)
+	{
+		return onepress_sanitize_media_control_value($input, 'url');
+	}
+}
+
+if (! function_exists('onepress_sanitize_media_control_id')) {
+	function onepress_sanitize_media_control_id($input)
+	{
+		return onepress_sanitize_media_control_value($input, 'id');
+	}
+}
+
+if (! function_exists('onepress_sanitize_media_control_mixed')) {
+	function onepress_sanitize_media_control_mixed($input)
+	{
+		return onepress_sanitize_media_control_value($input, 'mixed');
+	}
+}
+
+if (! function_exists('onepress_parse_media_control_value')) {
+	/**
+	 * Normalize stored media control value to id + url (for templates).
+	 *
+	 * @param mixed $raw theme_mod or similar.
+	 * @return array{ id: int, url: string }
+	 */
+	function onepress_parse_media_control_value($raw)
+	{
+		$out = array(
+			'id' => 0,
+			'url' => '',
+		);
+		if ($raw === null || $raw === false || $raw === '') {
+			return $out;
+		}
+		if (is_array($raw)) {
+			$out['id'] = isset($raw['id']) ? absint($raw['id']) : 0;
+			$out['url'] = isset($raw['url']) ? esc_url_raw($raw['url']) : '';
+
+			return $out;
+		}
+		if (is_numeric($raw)) {
+			$out['id'] = absint($raw);
+			if ($out['id']) {
+				$u = wp_get_attachment_url($out['id']);
+				$out['url'] = $u ? esc_url_raw($u) : '';
+			}
+
+			return $out;
+		}
+		if (is_string($raw)) {
+			$trim = trim($raw);
+			if ($trim === '') {
+				return $out;
+			}
+			$decoded = json_decode($raw, true);
+			if (is_array($decoded) && (isset($decoded['id']) || isset($decoded['url']))) {
+				$out['id'] = isset($decoded['id']) ? absint($decoded['id']) : 0;
+				$out['url'] = isset($decoded['url']) ? esc_url_raw($decoded['url']) : '';
+				if ($out['url'] === '' && $out['id']) {
+					$u = wp_get_attachment_url($out['id']);
+					$out['url'] = $u ? esc_url_raw($u) : '';
+				}
+
+				return $out;
+			}
+			if (preg_match('/^\d+$/', $trim)) {
+				$out['id'] = absint($trim);
+				if ($out['id']) {
+					$u = wp_get_attachment_url($out['id']);
+					$out['url'] = $u ? esc_url_raw($u) : '';
+				}
+
+				return $out;
+			}
+			$out['url'] = esc_url_raw($raw);
+		}
+
+		return $out;
+	}
+}
+
 function onepress_showon_frontpage()
 {
 	return is_page_template('template-frontpage.php');
