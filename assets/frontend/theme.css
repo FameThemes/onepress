@@ -20674,16 +20674,37 @@ Footer widgets
 
 .site-footer .footer-social {
   text-align: center;
+  --icon-size: 30px;
 }
 
 .site-footer .footer-social a {
-  font-size: 30px;
-  margin: 0px 13px;
+  font-size: var(--icon-size);
   color: #ffffff;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+  text-decoration: none;
 }
 
 .site-footer .footer-social a:hover {
   color: #03c4eb;
+}
+
+.site-footer .footer-social a.footer-social-icon-svg svg {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+.site-footer .footer-social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 26px;
 }
 
 .site-footer .site-info {
@@ -21916,27 +21937,62 @@ section > .customize-partial-edit-shortcut button {
 
 /* Section: Features
 ------------------------------*/
-.icon-background-default {
-  color: #03c4eb;
-}
-
 .feature-item {
   text-align: center;
+  --icon-bg-color: #03c4eb;
+  --icon-color: #fff;
+  --icon-hover-bg-color: #333333;
 }
 
 .feature-item .feature-icon {
-  color: #fff;
+  color: var(--icon-color);
+}
+
+.feature-item .transiton {
+  transition: all 0.5s ease-in-out;
+  transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+.feature-item .icon-background-default {
+  color: var(--icon-bg-color);
+}
+
+.feature-item .feature-icon-svg-wrap {
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: var(--icon-bg-color);
+  color: var(--icon-color);
+  border-radius: 300px;
+  width: 2em;
+  height: 2em;
+}
+
+.feature-item .feature-icon-svg-wrap svg {
+  display: block;
+  width: 4em;
+  height: 4em;
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .feature-item .fa-5x {
   font-size: 4em;
 }
 
+.feature-item:hover .feature-icon-svg-wrap {
+  background-color: var(--icon-hover-bg-color);
+}
+
 .feature-item:hover .icon-background-default {
-  color: #333333;
-  transition: all 0.5s ease-in-out;
-  transform: scale(1.1);
-  transform: scale(1.1);
+  color: var(--icon-hover-bg-color);
 }
 
 @media screen and (min-width: 940px) {
@@ -21969,6 +22025,10 @@ section > .customize-partial-edit-shortcut button {
 
 /* Section: Services
 ------------------------------*/
+.section-services {
+  --service-bg-color: #FFFFFF;
+}
+
 .section-services .service-item {
   background: #FFFFFF;
   padding: 30px;
@@ -22008,6 +22068,21 @@ section > .customize-partial-edit-shortcut button {
 
 .section-services .service-item .service-image i {
   color: #03c4eb;
+}
+
+.section-services .service-item .service-image .service-icon-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  color: #03c4eb;
+}
+
+.section-services .service-item .service-image svg {
+  display: block;
+  width: auto;
+  height: auto;
 }
 
 @media screen and (max-width: 720px) {

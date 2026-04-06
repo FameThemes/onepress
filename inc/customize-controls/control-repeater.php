@@ -121,6 +121,9 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 		if (is_string( $value ) ) {
 			$value = json_decode( $value, true );
 		}
+		if ( is_array( $value ) && isset( $value['_items'] ) && is_array( $value['_items'] ) ) {
+			$value = $value['_items'];
+		}
 		if ( empty ( $value ) ){
 			$value = $this->defined_values;
 		} elseif ( is_array( $this->defined_values ) && ! empty ( $this->defined_values ) ) {
@@ -342,17 +345,25 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 										<textarea data-live-id="{{{ field.id }}}" data-repeat-name="_items[__i__][{{ field.id }}]">{{ field.value }}</textarea>
 										<# }  else if ( field.type == 'icon'  ) { #>
 										<#
-										var icon_class = field.value;
-										if ( icon_class.indexOf( 'fa-' ) != 0 ) {
-										icon_class = 'fa-' + field.value;
-										} else {
-										icon_class = icon_class.replace( 'fa ', '' );
+										var rawIcon = field.value ? String( field.value ) : '';
+										var svgProbe = rawIcon.replace( /^\uFEFF/, '' ).replace( /^\s+/, '' ).replace( /^\s*<\?xml[^>]*>\s*/i, '' ).replace( /^\s*<!DOCTYPE[^>]*>\s*/i, '' );
+										var isSvgIcon = /^<\s*svg[\s>]/i.test( svgProbe );
+										var icon_class = rawIcon;
+										if ( ! isSvgIcon ) {
+											if ( icon_class.indexOf( 'fa-' ) != 0 ) {
+												icon_class = 'fa-' + field.value;
+											} else {
+												icon_class = icon_class.replace( 'fa ', '' );
+											}
+											icon_class = icon_class.replace( 'fa-fa', '' );
 										}
-										icon_class = icon_class.replace( 'fa-fa', '' );
-
 										#>
 										<div class="icon-wrapper">
+											<# if ( isSvgIcon ) { #>
+											<span class="onepress-svg-preview">{{{ svgProbe }}}</span>
+											<# } else { #>
 											<i class="fa {{ icon_class }}"></i>
+											<# } #>
 											<input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
 										</div>
 										<a href="#" class="remove-icon"><?php esc_html_e( 'Remove', 'onepress' ); ?></a>

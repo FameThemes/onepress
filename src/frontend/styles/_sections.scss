@@ -511,30 +511,60 @@
 
 /* Section: Features
 ------------------------------*/
-.icon-background-default {
-    color: #03c4eb;
-}
-
 .feature-item {
     text-align: center;
+    --icon-bg-color: #03c4eb;
+    --icon-color: #fff;
+    --icon-hover-bg-color: #333333;
     .feature-icon {
-        color: #fff;
+        color: var(--icon-color);
+    }
+    .transiton {
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+        transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+    .icon-background-default {
+        color: var(--icon-bg-color);
+    }
+    .feature-icon-svg-wrap {
+        vertical-align: middle;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background-color: var(--icon-bg-color);
+        color: var(--icon-color);
+        border-radius: 300px;
+        width: 2em;
+        height: 2em;
+        svg {
+            display: block;
+            width: 4em;
+            height: 4em;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
     .fa-5x {
         font-size: 4em;
     }
     &:hover {
+        .feature-icon-svg-wrap { 
+            background-color: var(--icon-hover-bg-color);
+        }
         .icon-background-default {
-            color: #333333;
-            -webkit-transition: all 0.5s ease-in-out;
-            -moz-transition: all 0.5s ease-in-out;
-            -o-transition: all 0.5s ease-in-out;
-            transition: all 0.5s ease-in-out;
-            transform: scale(1.1);
-            -webkit-transform: scale(1.1);
-            -moz-transform: scale(1.1);
-            -ms-transform: scale(1.1);
-            transform: scale(1.1);
+            color: var(--icon-hover-bg-color);
         }
     }
     @include variables.for(medium-screens) {
@@ -573,6 +603,7 @@
 /* Section: Services
 ------------------------------*/
 .section-services {
+    --service-bg-color: #FFFFFF;
     .service-item {
         background: #FFFFFF;
         padding: 30px;
@@ -602,6 +633,19 @@
             i {
                 color: variables.$primary;
             }
+            .service-icon-svg {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 70px;
+                height: 70px;
+                color: variables.$primary;
+            }
+            svg {
+                display: block;
+                width: auto;
+                height: auto;
+            }
             @include variables.for(screens-small) {
                 float: none;
                 margin-bottom: 30px;
@@ -624,7 +668,6 @@
                 text-align: center;
                 overflow: auto;
             }
-
         }
         .service-title {
             @include variables.rem('margin-bottom', 10px);

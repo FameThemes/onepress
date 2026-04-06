@@ -475,6 +475,47 @@ body .wp-full-overlay{
     border-color: #5b9dd9;
 }
 
+.icon-wrapper .onepress-svg-preview {
+    display: inline-block;
+    vertical-align: middle;
+}
+.icon-wrapper .onepress-svg-preview svg {
+    display: block;
+    max-width: 40px;
+    max-height: 40px;
+}
+.icon-wrapper .onepress-svg-preview--invalid {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 8px auto;
+    border: 1px dashed #c3c4c7;
+    border-radius: 2px;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+.c-icon-svg-editor {
+    position: absolute;
+    top: 44px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.c-icon-svg-textarea {
+    flex: 1;
+    min-height: 120px;
+    width: 100%;
+    resize: vertical;
+    font-family: monospace;
+    font-size: 12px;
+}
+.c-icon-svg-actions {
+    margin: 8px 0 0;
+}
+
 @media (max-width: 700px) {
     .c-icon-picker {
         z-index: 99999;

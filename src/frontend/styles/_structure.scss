@@ -813,16 +813,37 @@
 
 	.footer-social {
 		text-align: center;
+		--icon-size: 30px;
 
 		a {
-			font-size: 30px;
-			margin: 0px 13px;
+			font-size: var(--icon-size);
 			color: #ffffff;
-
+			width: var(--icon-size);
+			height: var(--icon-size);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			vertical-align: middle;
+			line-height: 1;
+			text-decoration: none;
 			&:hover {
 				color: variables.$primary;
 			}
 		}
+
+		a.footer-social-icon-svg {
+			svg {
+				display: inline-block;
+				width: 1em;
+				height: 1em;
+			}
+		}
+	}
+	.footer-social-icons {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 26px;
 	}
 
 	.site-info {

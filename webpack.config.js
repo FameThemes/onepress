@@ -11,6 +11,9 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 /**
  * @see https://github.com/WordPress/wp-movies-demo/tree/main
+ *
+ * Production build does not run ESLint (no eslint-webpack-plugin in @wordpress/scripts).
+ * Use `npm run lint:js` separately; admin bundle rules are relaxed in `.eslintrc.js`.
  */
 
 const plugins = defaultConfig.plugins || [];

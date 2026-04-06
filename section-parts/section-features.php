@@ -47,14 +47,21 @@ if ( !$disable && !empty( $data ) ) {
                     }
                 } else if ( $f['icon'] ) {
                     $f['icon'] = trim( $f['icon'] );
-                    $media = '<span class="fa-stack fa-5x"><i class="fa fa-circle fa-stack-2x icon-background-default"></i> <i class="feature-icon fa '.esc_attr( $f['icon'] ).' fa-stack-1x"></i></span>';
+                    if ( onepress_is_svg_icon_markup( $f['icon'] ) ) {
+                        $media = '<span class="feature-icon-svg-wrap transiton fa-5x ">' . onepress_sanitize_inline_svg_markup( $f['icon'] ) . '</span>';
+                    } else {
+                        $media = '<span class="fa-stack fa-5x"><i class="fa fa-circle fa-stack-2x icon-background-default transiton"></i> <i class="feature-icon fa '.esc_attr( $f['icon'] ).' fa-stack-1x"></i></span>';
+                    }
                 }
 
                 ?>
                 <div class="feature-item col-lg-<?php echo esc_attr( $layout ); ?> col-sm-6 wow slideInUp">
                     <div class="feature-media">
                         <?php if ( $f['link'] ) { ?><a title="<?php echo esc_attr( $f['title'] ) ?>" href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?>
-                        <?php echo wp_kses_post($media); ?>
+                        <?php
+                        // $media may contain inline SVG (sanitized via onepress_sanitize_inline_svg_markup); wp_kses_post() strips <svg>.
+                        echo $media; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        ?>
                         <?php if ( $f['link'] )  { ?></a><?php } ?>
                     </div>
                     <h4><?php if ( $f['link'] ) { ?><a title="<?php echo esc_attr( $f['title'] ) ?>" href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?><?php echo esc_html( $f['title'] ); ?><?php if ( $f['link'] )  { ?></a><?php } ?></h4>

@@ -204,6 +204,9 @@ function onepress_customize_controls_enqueue_scripts()
 			'c_icon_picker_js_setup',
 			array(
 				'search'    => esc_html__('Search', 'onepress'),
+				'svg_code'    => esc_html__('Svg Code', 'onepress'),
+				'apply_svg'   => esc_html__( 'Apply', 'onepress' ),
+				'svg_placeholder' => esc_html__( 'Paste SVG markup here…', 'onepress' ),
 				'fonts' => array(
 					'font-awesome' => array(
 						// Name of icon
