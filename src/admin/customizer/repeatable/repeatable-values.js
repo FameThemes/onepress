@@ -2,6 +2,8 @@
  * Row value helpers: defaults, merge from server, payload for Customizer setting.
  */
 
+import isEqual from 'lodash/isEqual';
+
 export function defaultForField(field) {
 	const t = (field.type || '').toLowerCase();
 	switch (t) {
@@ -125,6 +127,66 @@ export function serializeSetting(items, fieldDefs) {
 	return JSON.stringify({
 		_items: items.map((row) => rowToSaveItem(row, fieldDefs)),
 	});
+}
+
+/**
+ * Parse customize setting value or JSON string to { _items: rows }.
+ *
+ * @param {string|object|Array} raw
+ * @returns {{ _items: Array }}
+ */
+export function parseRepeatableStructure(raw) {
+	if (raw === null || raw === undefined || raw === '') {
+		return { _items: [] };
+	}
+	let data = raw;
+	if (typeof data === 'string') {
+		try {
+			data = JSON.parse(data);
+		} catch {
+			return { _items: [] };
+		}
+	}
+	if (Array.isArray(data)) {
+		return { _items: data };
+	}
+	if (typeof data === 'object' && data !== null && Array.isArray(data._items)) {
+		return { _items: data._items };
+	}
+	return { _items: [] };
+}
+
+/**
+ * Drop Customizer-only row keys (injected in PHP to_json, not stored in theme_mod).
+ *
+ * @param {{ _items: Array }} struct
+ * @returns {{ _items: Array }}
+ */
+export function stripUiMetaFromRepeatable(struct) {
+	const items = (struct._items || []).map((row) => {
+		if (!row || typeof row !== 'object') {
+			return row;
+		}
+		const { __visibility, ...rest } = row;
+		return rest;
+	});
+	return { _items: items };
+}
+
+/**
+ * True when saved setting and React payload represent the same repeatable data.
+ * Uses deep equality so key order / string vs object wrappers do not false-positive.
+ * Ignores __visibility (section list UI) which exists in control.params.value but not in DB.
+ *
+ * @param {string|object|Array} a
+ * @param {string|object|Array} b
+ * @returns {boolean}
+ */
+export function repeatableSettingValuesEqual(a, b) {
+	return isEqual(
+		stripUiMetaFromRepeatable(parseRepeatableStructure(a)),
+		stripUiMetaFromRepeatable(parseRepeatableStructure(b))
+	);
 }
 
 export function newEmptyRow(fieldDefs, idKey) {

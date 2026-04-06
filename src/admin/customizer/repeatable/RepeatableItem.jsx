@@ -3,6 +3,7 @@
  */
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { RepeatableField } from './RepeatableField';
+import { fieldVisible } from './repeatable-logic';
 
 export function RepeatableItem({
 	$,
@@ -58,6 +59,7 @@ export function RepeatableItem({
 		return v;
 	}, [row, liveTitleId, titleFormat, defaultEmptyTitle, fields, control.id]);
 
+	// Step 1→2→3: field value → repeater row state → commit() → Customizer setting (RepeatableControlApp).
 	const onFieldChange = useCallback(
 		(fieldId, val) => {
 			setRow(index, (prev) => ({ ...prev, [fieldId]: val }));
@@ -132,9 +134,10 @@ export function RepeatableItem({
 									fid === 'title' && row.add_by === 'click'
 										? { ...def, type: 'text' }
 										: def;
+								const condVisible = fieldVisible(fieldDef.required, rowValues);
 								return (
 									<RepeatableField
-										key={fid}
+										key={`${fid}-${condVisible ? '1' : '0'}`}
 										field={fieldDef}
 										value={row[fid]}
 										onChange={(v) => onFieldChange(fid, v)}

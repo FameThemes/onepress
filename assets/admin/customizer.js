@@ -227,6 +227,43 @@ module.exports = Set;
 
 /***/ }),
 
+/***/ "./node_modules/lodash/_SetCache.js":
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_SetCache.js ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var MapCache = __webpack_require__(/*! ./_MapCache */ "./node_modules/lodash/_MapCache.js"),
+    setCacheAdd = __webpack_require__(/*! ./_setCacheAdd */ "./node_modules/lodash/_setCacheAdd.js"),
+    setCacheHas = __webpack_require__(/*! ./_setCacheHas */ "./node_modules/lodash/_setCacheHas.js");
+
+/**
+ *
+ * Creates an array cache object to store unique values.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [values] The values to cache.
+ */
+function SetCache(values) {
+  var index = -1,
+      length = values == null ? 0 : values.length;
+
+  this.__data__ = new MapCache;
+  while (++index < length) {
+    this.add(values[index]);
+  }
+}
+
+// Add methods to `SetCache`.
+SetCache.prototype.add = SetCache.prototype.push = setCacheAdd;
+SetCache.prototype.has = setCacheHas;
+
+module.exports = SetCache;
+
+
+/***/ }),
+
 /***/ "./node_modules/lodash/_Stack.js":
 /*!***************************************!*\
   !*** ./node_modules/lodash/_Stack.js ***!
@@ -465,6 +502,39 @@ function arrayPush(array, values) {
 }
 
 module.exports = arrayPush;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_arraySome.js":
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_arraySome.js ***!
+  \*******************************************/
+/***/ ((module) => {
+
+/**
+ * A specialized version of `_.some` for arrays without support for iteratee
+ * shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} predicate The function invoked per iteration.
+ * @returns {boolean} Returns `true` if any element passes the predicate check,
+ *  else `false`.
+ */
+function arraySome(array, predicate) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
+
+  while (++index < length) {
+    if (predicate(array[index], index, array)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+module.exports = arraySome;
 
 
 /***/ }),
@@ -1015,6 +1085,137 @@ module.exports = baseIsArguments;
 
 /***/ }),
 
+/***/ "./node_modules/lodash/_baseIsEqual.js":
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_baseIsEqual.js ***!
+  \*********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var baseIsEqualDeep = __webpack_require__(/*! ./_baseIsEqualDeep */ "./node_modules/lodash/_baseIsEqualDeep.js"),
+    isObjectLike = __webpack_require__(/*! ./isObjectLike */ "./node_modules/lodash/isObjectLike.js");
+
+/**
+ * The base implementation of `_.isEqual` which supports partial comparisons
+ * and tracks traversed objects.
+ *
+ * @private
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @param {boolean} bitmask The bitmask flags.
+ *  1 - Unordered comparison
+ *  2 - Partial comparison
+ * @param {Function} [customizer] The function to customize comparisons.
+ * @param {Object} [stack] Tracks traversed `value` and `other` objects.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ */
+function baseIsEqual(value, other, bitmask, customizer, stack) {
+  if (value === other) {
+    return true;
+  }
+  if (value == null || other == null || (!isObjectLike(value) && !isObjectLike(other))) {
+    return value !== value && other !== other;
+  }
+  return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual, stack);
+}
+
+module.exports = baseIsEqual;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_baseIsEqualDeep.js":
+/*!*************************************************!*\
+  !*** ./node_modules/lodash/_baseIsEqualDeep.js ***!
+  \*************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var Stack = __webpack_require__(/*! ./_Stack */ "./node_modules/lodash/_Stack.js"),
+    equalArrays = __webpack_require__(/*! ./_equalArrays */ "./node_modules/lodash/_equalArrays.js"),
+    equalByTag = __webpack_require__(/*! ./_equalByTag */ "./node_modules/lodash/_equalByTag.js"),
+    equalObjects = __webpack_require__(/*! ./_equalObjects */ "./node_modules/lodash/_equalObjects.js"),
+    getTag = __webpack_require__(/*! ./_getTag */ "./node_modules/lodash/_getTag.js"),
+    isArray = __webpack_require__(/*! ./isArray */ "./node_modules/lodash/isArray.js"),
+    isBuffer = __webpack_require__(/*! ./isBuffer */ "./node_modules/lodash/isBuffer.js"),
+    isTypedArray = __webpack_require__(/*! ./isTypedArray */ "./node_modules/lodash/isTypedArray.js");
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG = 1;
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    arrayTag = '[object Array]',
+    objectTag = '[object Object]';
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * A specialized version of `baseIsEqual` for arrays and objects which performs
+ * deep comparisons and tracks traversed objects enabling objects with circular
+ * references to be compared.
+ *
+ * @private
+ * @param {Object} object The object to compare.
+ * @param {Object} other The other object to compare.
+ * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+ * @param {Function} customizer The function to customize comparisons.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Object} [stack] Tracks traversed `object` and `other` objects.
+ * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+ */
+function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
+  var objIsArr = isArray(object),
+      othIsArr = isArray(other),
+      objTag = objIsArr ? arrayTag : getTag(object),
+      othTag = othIsArr ? arrayTag : getTag(other);
+
+  objTag = objTag == argsTag ? objectTag : objTag;
+  othTag = othTag == argsTag ? objectTag : othTag;
+
+  var objIsObj = objTag == objectTag,
+      othIsObj = othTag == objectTag,
+      isSameTag = objTag == othTag;
+
+  if (isSameTag && isBuffer(object)) {
+    if (!isBuffer(other)) {
+      return false;
+    }
+    objIsArr = true;
+    objIsObj = false;
+  }
+  if (isSameTag && !objIsObj) {
+    stack || (stack = new Stack);
+    return (objIsArr || isTypedArray(object))
+      ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
+      : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
+  }
+  if (!(bitmask & COMPARE_PARTIAL_FLAG)) {
+    var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
+        othIsWrapped = othIsObj && hasOwnProperty.call(other, '__wrapped__');
+
+    if (objIsWrapped || othIsWrapped) {
+      var objUnwrapped = objIsWrapped ? object.value() : object,
+          othUnwrapped = othIsWrapped ? other.value() : other;
+
+      stack || (stack = new Stack);
+      return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack);
+    }
+  }
+  if (!isSameTag) {
+    return false;
+  }
+  stack || (stack = new Stack);
+  return equalObjects(object, other, bitmask, customizer, equalFunc, stack);
+}
+
+module.exports = baseIsEqualDeep;
+
+
+/***/ }),
+
 /***/ "./node_modules/lodash/_baseIsMap.js":
 /*!*******************************************!*\
   !*** ./node_modules/lodash/_baseIsMap.js ***!
@@ -1331,6 +1532,29 @@ function baseUnary(func) {
 }
 
 module.exports = baseUnary;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_cacheHas.js":
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_cacheHas.js ***!
+  \******************************************/
+/***/ ((module) => {
+
+/**
+ * Checks if a `cache` value for `key` exists.
+ *
+ * @private
+ * @param {Object} cache The cache to query.
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function cacheHas(cache, key) {
+  return cache.has(key);
+}
+
+module.exports = cacheHas;
 
 
 /***/ }),
@@ -1780,6 +2004,322 @@ var defineProperty = (function() {
 }());
 
 module.exports = defineProperty;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_equalArrays.js":
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_equalArrays.js ***!
+  \*********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var SetCache = __webpack_require__(/*! ./_SetCache */ "./node_modules/lodash/_SetCache.js"),
+    arraySome = __webpack_require__(/*! ./_arraySome */ "./node_modules/lodash/_arraySome.js"),
+    cacheHas = __webpack_require__(/*! ./_cacheHas */ "./node_modules/lodash/_cacheHas.js");
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG = 1,
+    COMPARE_UNORDERED_FLAG = 2;
+
+/**
+ * A specialized version of `baseIsEqualDeep` for arrays with support for
+ * partial deep comparisons.
+ *
+ * @private
+ * @param {Array} array The array to compare.
+ * @param {Array} other The other array to compare.
+ * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+ * @param {Function} customizer The function to customize comparisons.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Object} stack Tracks traversed `array` and `other` objects.
+ * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
+ */
+function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
+  var isPartial = bitmask & COMPARE_PARTIAL_FLAG,
+      arrLength = array.length,
+      othLength = other.length;
+
+  if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
+    return false;
+  }
+  // Check that cyclic values are equal.
+  var arrStacked = stack.get(array);
+  var othStacked = stack.get(other);
+  if (arrStacked && othStacked) {
+    return arrStacked == other && othStacked == array;
+  }
+  var index = -1,
+      result = true,
+      seen = (bitmask & COMPARE_UNORDERED_FLAG) ? new SetCache : undefined;
+
+  stack.set(array, other);
+  stack.set(other, array);
+
+  // Ignore non-index properties.
+  while (++index < arrLength) {
+    var arrValue = array[index],
+        othValue = other[index];
+
+    if (customizer) {
+      var compared = isPartial
+        ? customizer(othValue, arrValue, index, other, array, stack)
+        : customizer(arrValue, othValue, index, array, other, stack);
+    }
+    if (compared !== undefined) {
+      if (compared) {
+        continue;
+      }
+      result = false;
+      break;
+    }
+    // Recursively compare arrays (susceptible to call stack limits).
+    if (seen) {
+      if (!arraySome(other, function(othValue, othIndex) {
+            if (!cacheHas(seen, othIndex) &&
+                (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
+              return seen.push(othIndex);
+            }
+          })) {
+        result = false;
+        break;
+      }
+    } else if (!(
+          arrValue === othValue ||
+            equalFunc(arrValue, othValue, bitmask, customizer, stack)
+        )) {
+      result = false;
+      break;
+    }
+  }
+  stack['delete'](array);
+  stack['delete'](other);
+  return result;
+}
+
+module.exports = equalArrays;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_equalByTag.js":
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_equalByTag.js ***!
+  \********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var Symbol = __webpack_require__(/*! ./_Symbol */ "./node_modules/lodash/_Symbol.js"),
+    Uint8Array = __webpack_require__(/*! ./_Uint8Array */ "./node_modules/lodash/_Uint8Array.js"),
+    eq = __webpack_require__(/*! ./eq */ "./node_modules/lodash/eq.js"),
+    equalArrays = __webpack_require__(/*! ./_equalArrays */ "./node_modules/lodash/_equalArrays.js"),
+    mapToArray = __webpack_require__(/*! ./_mapToArray */ "./node_modules/lodash/_mapToArray.js"),
+    setToArray = __webpack_require__(/*! ./_setToArray */ "./node_modules/lodash/_setToArray.js");
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG = 1,
+    COMPARE_UNORDERED_FLAG = 2;
+
+/** `Object#toString` result references. */
+var boolTag = '[object Boolean]',
+    dateTag = '[object Date]',
+    errorTag = '[object Error]',
+    mapTag = '[object Map]',
+    numberTag = '[object Number]',
+    regexpTag = '[object RegExp]',
+    setTag = '[object Set]',
+    stringTag = '[object String]',
+    symbolTag = '[object Symbol]';
+
+var arrayBufferTag = '[object ArrayBuffer]',
+    dataViewTag = '[object DataView]';
+
+/** Used to convert symbols to primitives and strings. */
+var symbolProto = Symbol ? Symbol.prototype : undefined,
+    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
+
+/**
+ * A specialized version of `baseIsEqualDeep` for comparing objects of
+ * the same `toStringTag`.
+ *
+ * **Note:** This function only supports comparing values with tags of
+ * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+ *
+ * @private
+ * @param {Object} object The object to compare.
+ * @param {Object} other The other object to compare.
+ * @param {string} tag The `toStringTag` of the objects to compare.
+ * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+ * @param {Function} customizer The function to customize comparisons.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Object} stack Tracks traversed `object` and `other` objects.
+ * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+ */
+function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
+  switch (tag) {
+    case dataViewTag:
+      if ((object.byteLength != other.byteLength) ||
+          (object.byteOffset != other.byteOffset)) {
+        return false;
+      }
+      object = object.buffer;
+      other = other.buffer;
+
+    case arrayBufferTag:
+      if ((object.byteLength != other.byteLength) ||
+          !equalFunc(new Uint8Array(object), new Uint8Array(other))) {
+        return false;
+      }
+      return true;
+
+    case boolTag:
+    case dateTag:
+    case numberTag:
+      // Coerce booleans to `1` or `0` and dates to milliseconds.
+      // Invalid dates are coerced to `NaN`.
+      return eq(+object, +other);
+
+    case errorTag:
+      return object.name == other.name && object.message == other.message;
+
+    case regexpTag:
+    case stringTag:
+      // Coerce regexes to strings and treat strings, primitives and objects,
+      // as equal. See http://www.ecma-international.org/ecma-262/7.0/#sec-regexp.prototype.tostring
+      // for more details.
+      return object == (other + '');
+
+    case mapTag:
+      var convert = mapToArray;
+
+    case setTag:
+      var isPartial = bitmask & COMPARE_PARTIAL_FLAG;
+      convert || (convert = setToArray);
+
+      if (object.size != other.size && !isPartial) {
+        return false;
+      }
+      // Assume cyclic values are equal.
+      var stacked = stack.get(object);
+      if (stacked) {
+        return stacked == other;
+      }
+      bitmask |= COMPARE_UNORDERED_FLAG;
+
+      // Recursively compare objects (susceptible to call stack limits).
+      stack.set(object, other);
+      var result = equalArrays(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
+      stack['delete'](object);
+      return result;
+
+    case symbolTag:
+      if (symbolValueOf) {
+        return symbolValueOf.call(object) == symbolValueOf.call(other);
+      }
+  }
+  return false;
+}
+
+module.exports = equalByTag;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_equalObjects.js":
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_equalObjects.js ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var getAllKeys = __webpack_require__(/*! ./_getAllKeys */ "./node_modules/lodash/_getAllKeys.js");
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG = 1;
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * A specialized version of `baseIsEqualDeep` for objects with support for
+ * partial deep comparisons.
+ *
+ * @private
+ * @param {Object} object The object to compare.
+ * @param {Object} other The other object to compare.
+ * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+ * @param {Function} customizer The function to customize comparisons.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Object} stack Tracks traversed `object` and `other` objects.
+ * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+ */
+function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
+  var isPartial = bitmask & COMPARE_PARTIAL_FLAG,
+      objProps = getAllKeys(object),
+      objLength = objProps.length,
+      othProps = getAllKeys(other),
+      othLength = othProps.length;
+
+  if (objLength != othLength && !isPartial) {
+    return false;
+  }
+  var index = objLength;
+  while (index--) {
+    var key = objProps[index];
+    if (!(isPartial ? key in other : hasOwnProperty.call(other, key))) {
+      return false;
+    }
+  }
+  // Check that cyclic values are equal.
+  var objStacked = stack.get(object);
+  var othStacked = stack.get(other);
+  if (objStacked && othStacked) {
+    return objStacked == other && othStacked == object;
+  }
+  var result = true;
+  stack.set(object, other);
+  stack.set(other, object);
+
+  var skipCtor = isPartial;
+  while (++index < objLength) {
+    key = objProps[index];
+    var objValue = object[key],
+        othValue = other[key];
+
+    if (customizer) {
+      var compared = isPartial
+        ? customizer(othValue, objValue, key, other, object, stack)
+        : customizer(objValue, othValue, key, object, other, stack);
+    }
+    // Recursively compare objects (susceptible to call stack limits).
+    if (!(compared === undefined
+          ? (objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack))
+          : compared
+        )) {
+      result = false;
+      break;
+    }
+    skipCtor || (skipCtor = key == 'constructor');
+  }
+  if (result && !skipCtor) {
+    var objCtor = object.constructor,
+        othCtor = other.constructor;
+
+    // Non `Object` object instances with different constructors are not equal.
+    if (objCtor != othCtor &&
+        ('constructor' in object && 'constructor' in other) &&
+        !(typeof objCtor == 'function' && objCtor instanceof objCtor &&
+          typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+      result = false;
+    }
+  }
+  stack['delete'](object);
+  stack['delete'](other);
+  return result;
+}
+
+module.exports = equalObjects;
 
 
 /***/ }),
@@ -2873,6 +3413,34 @@ module.exports = mapCacheSet;
 
 /***/ }),
 
+/***/ "./node_modules/lodash/_mapToArray.js":
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_mapToArray.js ***!
+  \********************************************/
+/***/ ((module) => {
+
+/**
+ * Converts `map` to its key-value pairs.
+ *
+ * @private
+ * @param {Object} map The map to convert.
+ * @returns {Array} Returns the key-value pairs.
+ */
+function mapToArray(map) {
+  var index = -1,
+      result = Array(map.size);
+
+  map.forEach(function(value, key) {
+    result[++index] = [key, value];
+  });
+  return result;
+}
+
+module.exports = mapToArray;
+
+
+/***/ }),
+
 /***/ "./node_modules/lodash/_nativeCreate.js":
 /*!**********************************************!*\
   !*** ./node_modules/lodash/_nativeCreate.js ***!
@@ -3048,6 +3616,87 @@ var freeSelf = typeof self == 'object' && self && self.Object === Object && self
 var root = freeGlobal || freeSelf || Function('return this')();
 
 module.exports = root;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_setCacheAdd.js":
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_setCacheAdd.js ***!
+  \*********************************************/
+/***/ ((module) => {
+
+/** Used to stand-in for `undefined` hash values. */
+var HASH_UNDEFINED = '__lodash_hash_undefined__';
+
+/**
+ * Adds `value` to the array cache.
+ *
+ * @private
+ * @name add
+ * @memberOf SetCache
+ * @alias push
+ * @param {*} value The value to cache.
+ * @returns {Object} Returns the cache instance.
+ */
+function setCacheAdd(value) {
+  this.__data__.set(value, HASH_UNDEFINED);
+  return this;
+}
+
+module.exports = setCacheAdd;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_setCacheHas.js":
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_setCacheHas.js ***!
+  \*********************************************/
+/***/ ((module) => {
+
+/**
+ * Checks if `value` is in the array cache.
+ *
+ * @private
+ * @name has
+ * @memberOf SetCache
+ * @param {*} value The value to search for.
+ * @returns {number} Returns `true` if `value` is found, else `false`.
+ */
+function setCacheHas(value) {
+  return this.__data__.has(value);
+}
+
+module.exports = setCacheHas;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_setToArray.js":
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_setToArray.js ***!
+  \********************************************/
+/***/ ((module) => {
+
+/**
+ * Converts `set` to an array of its values.
+ *
+ * @private
+ * @param {Object} set The set to convert.
+ * @returns {Array} Returns the values.
+ */
+function setToArray(set) {
+  var index = -1,
+      result = Array(set.size);
+
+  set.forEach(function(value) {
+    result[++index] = value;
+  });
+  return result;
+}
+
+module.exports = setToArray;
 
 
 /***/ }),
@@ -3676,6 +4325,51 @@ function isEmpty(value) {
 }
 
 module.exports = isEmpty;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/isEqual.js":
+/*!****************************************!*\
+  !*** ./node_modules/lodash/isEqual.js ***!
+  \****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var baseIsEqual = __webpack_require__(/*! ./_baseIsEqual */ "./node_modules/lodash/_baseIsEqual.js");
+
+/**
+ * Performs a deep comparison between two values to determine if they are
+ * equivalent.
+ *
+ * **Note:** This method supports comparing arrays, array buffers, booleans,
+ * date objects, error objects, maps, numbers, `Object` objects, regexes,
+ * sets, strings, symbols, and typed arrays. `Object` objects are compared
+ * by their own, not inherited, enumerable properties. Functions and DOM
+ * nodes are compared by strict equality, i.e. `===`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ * var other = { 'a': 1 };
+ *
+ * _.isEqual(object, other);
+ * // => true
+ *
+ * object === other;
+ * // => false
+ */
+function isEqual(value, other) {
+  return baseIsEqual(value, other);
+}
+
+module.exports = isEqual;
 
 
 /***/ }),
@@ -5252,11 +5946,56 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * React root for Customizer `repeatable` control: mounts as children of `ul.list-repeatable`.
+ *
+ * Data flow (every user edit must follow this path):
+ * 1. Field UI changes → field `onChange(fieldId, value)` (RepeatableItem → RepeatableField → field component).
+ * 2. `setRow` merges the value into that row in React state and builds the next `items` array.
+ * 3. `commit(nextItems)` serializes rows to JSON (`serializeSetting`) and calls
+ *    `pushRepeatablePayloadToCustomizer` → `setting.set(payload)` + hidden input + callbacks
+ *    so wp.customize marks the setting dirty and preview/changeset update.
+ *
+ * Fields that update the DOM via jQuery only (e.g. modal TinyMCE → `.val().trigger("change")`)
+ * must still invoke the same `onChange` path (see TextareaField editor + jQuery listeners).
  */
 
 
 
 
+
+/**
+ * Step 3: apply serialized repeater data to the Customizer setting (and linked hidden input).
+ * Core Value#set no-ops when _.isEqual(from, to) — e.g. object vs same JSON string
+ * — leaving _dirty false so refresh preview / changeset never see the edit.
+ *
+ * @param {jQuery} $ jQuery
+ * @param {object} control wp.customize.Control instance
+ * @param {string} payload JSON string for the setting
+ */
+function pushRepeatablePayloadToCustomizer($, control, payload) {
+  const setting = control.setting;
+  if (!setting || typeof setting.set !== 'function' || typeof setting.get !== 'function') {
+    return;
+  }
+  const before = setting.get();
+  setting.set(payload);
+  const $hidden = control.container.find('input[data-customize-setting-link]');
+  if ($hidden.length) {
+    $hidden.val(payload);
+    $hidden.trigger('input').trigger('change');
+  }
+  const after = setting.get();
+  const _ = typeof window !== 'undefined' ? window._ : null;
+  if (_ && typeof _.isEqual === 'function') {
+    const skipped = _.isEqual(before, after) && !_.isEqual(before, payload);
+    if (skipped) {
+      setting._value = payload;
+      setting._dirty = true;
+      if (setting.callbacks && typeof setting.callbacks.fireWith === 'function') {
+        setting.callbacks.fireWith(setting, [payload, before]);
+      }
+    }
+  }
+}
 function RepeatableControlApp({
   control,
   $,
@@ -5270,19 +6009,27 @@ function RepeatableControlApp({
   const idKey = control.params.id_key || '';
   const dragFrom = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)(null);
 
-  // Align wp.customize.Setting + hidden input (data-customize-setting-link) with React state on load.
+  // Sync hidden input + setting only if payload differs from WP (avoids false “dirty” on load).
+  // Note: wp.customize.Value#set ignores a second-arg “silent”; every set marks the setting dirty.
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useLayoutEffect)(() => {
     const payload = (0,_repeatable_values__WEBPACK_IMPORTED_MODULE_4__.serializeSetting)(items, fields);
-    if (typeof control.setting.set === 'function') {
-      control.setting.set(payload, {
-        silent: true
-      });
+    if (typeof control.setting.set !== 'function' || typeof control.setting.get !== 'function') {
+      return;
+    }
+    const current = control.setting.get();
+    if (!(0,_repeatable_values__WEBPACK_IMPORTED_MODULE_4__.repeatableSettingValuesEqual)(current, payload)) {
+      pushRepeatablePayloadToCustomizer($, control, payload);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- bootstrap only
   }, []);
+
+  // Step 3: rows in memory → JSON payload → wp.customize.Setting.
   const commit = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(next => {
-    control.setting.set((0,_repeatable_values__WEBPACK_IMPORTED_MODULE_4__.serializeSetting)(next, fields));
-  }, [control, fields]);
+    const payload = (0,_repeatable_values__WEBPACK_IMPORTED_MODULE_4__.serializeSetting)(next, fields);
+    pushRepeatablePayloadToCustomizer($, control, payload);
+  }, [control, fields, $]);
+
+  // Step 2: patch one row, then commit the full list.
   const setRow = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)((index, updater) => {
     setItems(prev => {
       const prevRow = prev[index];
@@ -5404,12 +6151,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _fields_fieldRegistry__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fields/fieldRegistry */ "./src/admin/customizer/repeatable/fields/fieldRegistry.js");
-/* harmony import */ var _repeatable_logic__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./repeatable-logic */ "./src/admin/customizer/repeatable/repeatable-logic.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _fields_fieldRegistry__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fields/fieldRegistry */ "./src/admin/customizer/repeatable/fields/fieldRegistry.js");
+/* harmony import */ var _repeatable_logic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./repeatable-logic */ "./src/admin/customizer/repeatable/repeatable-logic.js");
 
 /**
  * Single field inside a repeatable row (mirrors PHP `js_item` structure / classes).
  */
+
 
 
 function RepeatableField({
@@ -5420,25 +6170,46 @@ function RepeatableField({
   $,
   skipEditor
 }) {
-  if (!field.type) {
+  const wrapRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  const fieldType = field?.type;
+  const fieldId = field?.id;
+  const required = field?.required;
+  const visible = fieldType ? (0,_repeatable_logic__WEBPACK_IMPORTED_MODULE_3__.fieldVisible)(required, rowValues) : false;
+
+  // Modal WP editor (modal-editor.js) only runs on row mount via repeater-control-init-item.
+  // When an editor field appears later (required / visibility), init it against the row <li>.
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useLayoutEffect)(() => {
+    if (!visible || fieldType !== 'editor' || skipEditor) {
+      return;
+    }
+    const el = wrapRef.current;
+    if (!el) {
+      return;
+    }
+    const $row = $(el).closest('.repeatable-customize-control');
+    if (!$row.length) {
+      return;
+    }
+    $('body').trigger('repeater-control-init-item', [$row]);
+  }, [visible, fieldType, fieldId, skipEditor, $]);
+  if (!fieldType) {
     return null;
   }
-  const required = field.required;
-  const visible = (0,_repeatable_logic__WEBPACK_IMPORTED_MODULE_2__.fieldVisible)(required, rowValues);
 
   // Do not mount hidden fields (avoids editor/media init; state stays in row).
   if (!visible) {
     return null;
   }
-  const FieldType = (0,_fields_fieldRegistry__WEBPACK_IMPORTED_MODULE_1__.getRepeatableFieldComponent)(field.type);
+  const FieldType = (0,_fields_fieldRegistry__WEBPACK_IMPORTED_MODULE_2__.getRepeatableFieldComponent)(fieldType);
   if (!FieldType) {
     return null;
   }
-  const wrapClass = `field--item item item-${field.type} item-${field.id}`;
-  const t = field.type;
+  const wrapClass = `field--item item item-${fieldType} item-${fieldId}`;
+  const t = fieldType;
   const showLabel = t !== 'checkbox';
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    "data-field-id": field.id,
+    ref: wrapRef,
+    "data-field-id": fieldId,
     className: wrapClass,
     "data-cond": required ? JSON.stringify(required) : undefined
   }, showLabel && field.title ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -5478,10 +6249,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _RepeatableField__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RepeatableField */ "./src/admin/customizer/repeatable/RepeatableField.jsx");
+/* harmony import */ var _repeatable_logic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./repeatable-logic */ "./src/admin/customizer/repeatable/repeatable-logic.js");
 
 /**
  * One repeater row: widget chrome, fields, remove/close, drag handle.
  */
+
 
 
 function RepeatableItem({
@@ -5536,6 +6309,8 @@ function RepeatableItem({
     }
     return v;
   }, [row, liveTitleId, titleFormat, defaultEmptyTitle, fields, control.id]);
+
+  // Step 1→2→3: field value → repeater row state → commit() → Customizer setting (RepeatableControlApp).
   const onFieldChange = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((fieldId, val) => {
     setRow(index, prev => ({
       ...prev,
@@ -5612,8 +6387,9 @@ function RepeatableItem({
       ...def,
       type: 'text'
     } : def;
+    const condVisible = (0,_repeatable_logic__WEBPACK_IMPORTED_MODULE_3__.fieldVisible)(fieldDef.required, rowValues);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RepeatableField__WEBPACK_IMPORTED_MODULE_2__.RepeatableField, {
-      key: fid,
+      key: `${fid}-${condVisible ? '1' : '0'}`,
       field: fieldDef,
       value: row[fid],
       onChange: v => onFieldChange(fid, v),
@@ -5712,22 +6488,61 @@ function AlphaColorInput({
     c = String(c).replace(/^#/, '');
     $el.removeAttr('value');
     $el.prop('value', c);
-    $el.alphaColorPicker({
-      change() {
-        onChangeRef.current($el.val() || '');
-      },
-      clear() {
-        onChangeRef.current('');
+    // $.fn.alphaColorPicker() ignores passed options; it always uses internal wpColorPicker callbacks
+    // and triggers jQuery "color_change" (see alpha-color-picker.js).
+    const onColorPlugin = () => {
+      onChangeRef.current($el.val() || '');
+    };
+    $el.on('color_change.onepressRepeatable', onColorPlugin);
+    // alpha-color-picker.js binds "input" for the opacity slider only; typing does not always fire color_change.
+    $el.on('input.onepressRepeatable', onColorPlugin);
+    $el.alphaColorPicker();
+    let raf = 0;
+    const pushRaf = () => {
+      if (raf) {
+        return;
       }
-    });
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        onColorPlugin();
+      });
+    };
+    const $picker = $el.closest('.wp-picker-container');
+    if ($picker.length) {
+      $picker.on('mousemove.onepressRepeatable touchmove.onepressRepeatable', '.iris-picker', pushRaf);
+    }
     return () => {
+      $picker.off('.onepressRepeatable');
+      if (raf) {
+        window.cancelAnimationFrame(raf);
+      }
+      $el.off('color_change.onepressRepeatable', onColorPlugin);
+      $el.off('input.onepressRepeatable', onColorPlugin);
       try {
-        $el.off();
+        $el.wpColorPicker('destroy');
+      } catch (e) {
+        // ignore
+      }
+      try {
+        const $wrap = $el.parent('.alpha-color-picker-wrap');
+        if ($wrap.length) {
+          $el.unwrap();
+        }
       } catch (e) {
         // ignore
       }
     };
   }, [$, fieldId]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    try {
+      const $el = $(ref.current);
+      if ($el.length && $el.data('wpWpColorPicker')) {
+        $el.wpColorPicker('color', value || '');
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [value, $]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     ref: ref,
     "data-live-id": fieldId,
@@ -5843,15 +6658,40 @@ function ColorInput({
     if (!$el.length) {
       return;
     }
+    const readColor = () => {
+      try {
+        return $el.wpColorPicker('color') || $el.val() || '';
+      } catch (e) {
+        return $el.val() || '';
+      }
+    };
+    const push = () => {
+      onChangeRef.current(readColor());
+    };
+    let raf = 0;
+    const pushRaf = () => {
+      if (raf) {
+        return;
+      }
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        push();
+      });
+    };
     $el.wpColorPicker({
-      change() {
-        onChangeRef.current($el.wpColorPicker('color') || '');
-      },
+      change: push,
       clear() {
         onChangeRef.current('');
       }
     });
+    // wpColorPicker does not forward Iris drag events; while dragging, sync via the picker surface.
+    const $wrap = $el.closest('.wp-picker-container');
+    $wrap.on('mousemove.onepressRepeatable touchmove.onepressRepeatable', '.iris-picker', pushRaf);
     return () => {
+      $wrap.off('.onepressRepeatable');
+      if (raf) {
+        window.cancelAnimationFrame(raf);
+      }
       try {
         $el.wpColorPicker('destroy');
       } catch (e) {
@@ -6232,17 +7072,56 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+
 
 function TextareaField({
   field,
   value,
   onChange,
-  skipEditor
+  skipEditor,
+  $
 }) {
+  const ref = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  const onChangeRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(onChange);
+  onChangeRef.current = onChange;
+
+  // Modal TinyMCE (modal-editor.js + wp-editor.js) syncs with
+  // settings.sync_id.val(html).trigger("change") (jQuery). That does not invoke
+  // native addEventListener handlers, so a controlled React textarea never updates
+  // state or the Customizer setting — bind the same callback via jQuery as well.
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    if (field.type !== 'editor' || skipEditor) {
+      return;
+    }
+    const el = ref.current;
+    if (!el) {
+      return;
+    }
+    const push = () => {
+      onChangeRef.current(el.value);
+    };
+    el.addEventListener('change', push);
+    el.addEventListener('input', push);
+    let $el;
+    if ($ && typeof $.fn?.on === 'function') {
+      $el = $(el);
+      $el.on('change.onepressRepeaterEditor input.onepressRepeaterEditor', push);
+    }
+    return () => {
+      el.removeEventListener('change', push);
+      el.removeEventListener('input', push);
+      if ($el) {
+        $el.off('.onepressRepeaterEditor');
+      }
+    };
+  }, [field.type, skipEditor, $]);
   if (field.type === 'editor' && skipEditor) {
     return null;
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("textarea", {
+    ref: ref,
     "data-live-id": field.id,
     value: value === undefined || value === null ? '' : value,
     onChange: e => onChange(e.target.value)
@@ -6530,13 +7409,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   newEmptyRow: () => (/* binding */ newEmptyRow),
 /* harmony export */   normalizeMediaValue: () => (/* binding */ normalizeMediaValue),
 /* harmony export */   normalizeSvgIconForStorage: () => (/* binding */ normalizeSvgIconForStorage),
+/* harmony export */   parseRepeatableStructure: () => (/* binding */ parseRepeatableStructure),
+/* harmony export */   repeatableSettingValuesEqual: () => (/* binding */ repeatableSettingValuesEqual),
 /* harmony export */   rowToSaveItem: () => (/* binding */ rowToSaveItem),
 /* harmony export */   sanitizeSvgForCustomizerPreview: () => (/* binding */ sanitizeSvgForCustomizerPreview),
-/* harmony export */   serializeSetting: () => (/* binding */ serializeSetting)
+/* harmony export */   serializeSetting: () => (/* binding */ serializeSetting),
+/* harmony export */   stripUiMetaFromRepeatable: () => (/* binding */ stripUiMetaFromRepeatable)
 /* harmony export */ });
+/* harmony import */ var lodash_isEqual__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/isEqual */ "./node_modules/lodash/isEqual.js");
+/* harmony import */ var lodash_isEqual__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_isEqual__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * Row value helpers: defaults, merge from server, payload for Customizer setting.
  */
+
 
 function defaultForField(field) {
   const t = (field.type || '').toLowerCase();
@@ -6655,6 +7540,78 @@ function serializeSetting(items, fieldDefs) {
   return JSON.stringify({
     _items: items.map(row => rowToSaveItem(row, fieldDefs))
   });
+}
+
+/**
+ * Parse customize setting value or JSON string to { _items: rows }.
+ *
+ * @param {string|object|Array} raw
+ * @returns {{ _items: Array }}
+ */
+function parseRepeatableStructure(raw) {
+  if (raw === null || raw === undefined || raw === '') {
+    return {
+      _items: []
+    };
+  }
+  let data = raw;
+  if (typeof data === 'string') {
+    try {
+      data = JSON.parse(data);
+    } catch {
+      return {
+        _items: []
+      };
+    }
+  }
+  if (Array.isArray(data)) {
+    return {
+      _items: data
+    };
+  }
+  if (typeof data === 'object' && data !== null && Array.isArray(data._items)) {
+    return {
+      _items: data._items
+    };
+  }
+  return {
+    _items: []
+  };
+}
+
+/**
+ * Drop Customizer-only row keys (injected in PHP to_json, not stored in theme_mod).
+ *
+ * @param {{ _items: Array }} struct
+ * @returns {{ _items: Array }}
+ */
+function stripUiMetaFromRepeatable(struct) {
+  const items = (struct._items || []).map(row => {
+    if (!row || typeof row !== 'object') {
+      return row;
+    }
+    const {
+      __visibility,
+      ...rest
+    } = row;
+    return rest;
+  });
+  return {
+    _items: items
+  };
+}
+
+/**
+ * True when saved setting and React payload represent the same repeatable data.
+ * Uses deep equality so key order / string vs object wrappers do not false-positive.
+ * Ignores __visibility (section list UI) which exists in control.params.value but not in DB.
+ *
+ * @param {string|object|Array} a
+ * @param {string|object|Array} b
+ * @returns {boolean}
+ */
+function repeatableSettingValuesEqual(a, b) {
+  return lodash_isEqual__WEBPACK_IMPORTED_MODULE_0___default()(stripUiMetaFromRepeatable(parseRepeatableStructure(a)), stripUiMetaFromRepeatable(parseRepeatableStructure(b)));
 }
 function newEmptyRow(fieldDefs, idKey) {
   const row = {};
