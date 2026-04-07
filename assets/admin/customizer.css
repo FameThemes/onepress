@@ -20,11 +20,13 @@ li#accordion-panel-onepress_typo > .accordion-section-title {
   z-index: 26;
 }
 
-.item-hidden, .tem-add_by {
+.item-hidden,
+.tem-add_by {
   display: none;
 }
 
-.no-changeable .remove-btn-wrapper, .no-changeable .repeatable-actions {
+.no-changeable .remove-btn-wrapper,
+.no-changeable .repeatable-actions {
   display: none !important;
 }
 
@@ -108,12 +110,17 @@ li#accordion-panel-onepress_typo > .accordion-section-title {
   width: 100%;
 }
 
-.list-repeatable .item-media .actions, .repeatable-actions {
+.list-repeatable .item-media .actions,
+.repeatable-actions {
   text-align: right;
   margin-top: 10px;
   display: flex;
   gap: 10px;
   flex-direction: column;
+}
+
+.media-actions {
+  flex-direction: row;
 }
 
 .list-repeatable .thumbnail-image {
@@ -161,7 +168,7 @@ li#accordion-panel-onepress_typo > .accordion-section-title {
   margin-top: 3px;
   display: inline-block;
   font-weight: normal;
-  background: #D54E21;
+  background: #d54e21;
   color: #ffffff;
   padding: 0px 5px;
 }
@@ -171,7 +178,8 @@ body .wp-full-overlay {
   z-index: 9999;
 }
 
-.wp-js-editor-active textarea, .onepress-editor-added textarea {
+.wp-js-editor-active textarea,
+.onepress-editor-added textarea {
   display: none;
 }
 
@@ -214,7 +222,7 @@ body .wp-full-overlay {
   bottom: 0px;
   height: 350px;
   max-height: 100%;
-  background: #EEEEEE;
+  background: #eeeeee;
   padding: 15px;
   border-top: 1px solid #ddd;
   box-sizing: border-box; /* Safari */
@@ -300,7 +308,7 @@ body .wp-full-overlay {
   border: 1px solid #dfdfdf;
   border-top: none;
   display: none;
-  background: #FFF;
+  background: #fff;
   padding: 0 11px 10px;
   position: relative;
 }
@@ -329,8 +337,8 @@ body .wp-full-overlay {
 .alpha-color-picker-container .ui-slider-handle,
 .alpha-color-picker-container .ui-widget-content .ui-state-default {
   color: #777;
-  background-color: #FFF;
-  text-shadow: 0 1px 0 #FFF;
+  background-color: #fff;
+  text-shadow: 0 1px 0 #fff;
   text-decoration: none;
   position: absolute;
   z-index: 2;
@@ -368,7 +376,7 @@ body .wp-full-overlay {
 .alpha-color-picker-container .transparency {
   height: 24px;
   width: 100%;
-  background-color: #FFF;
+  background-color: #fff;
   background-image: url(../images/transparency-grid.530044ad.png);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.4) inset;
   border-radius: 3px;
@@ -417,7 +425,7 @@ body .wp-full-overlay {
   bottom: 0px;
   display: block;
   width: 300px;
-  background: #EEEEEE;
+  background: #eeeeee;
   border-right: 1px solid #ddd; /* Safari */
   transition: all 0.5s; /* IE 9 */ /* Safari */
   transform: translateX(-100%);
@@ -628,13 +636,13 @@ body .wp-full-overlay {
 
 .onepress-c-heading {
   padding: 5px 12px;
-  background: #BBBBBB;
+  background: #bbbbbb;
   margin: 10px -12px 2px;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 500;
   font-size: 12px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 /* MISC control */
@@ -646,7 +654,7 @@ body .wp-full-overlay {
   letter-spacing: 2px;
   font-weight: 500;
   font-size: 12px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .repeatable-customize-control.visibility-hidden {
