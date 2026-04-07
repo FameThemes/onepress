@@ -2,6 +2,7 @@
 # 2.3.17
   IMPROVED: Support self-hosted video lightbox & media control.
   IMPROVED: Improve customizer controls, support svg icon.
+  IMPROVED: Reorder sanitization and adjust escaping.
 
 # 2.3.16
 - FIXED: Fix security issues.
