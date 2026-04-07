@@ -329,6 +329,138 @@ if ( ! function_exists( 'onepress_videolightbox_poster_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'onepress_sanitize_news_layout' ) ) {
+	/**
+	 * @param string $value Raw value.
+	 * @return string 'list'|'grid'
+	 */
+	function onepress_sanitize_news_layout( $value ) {
+		$value = is_string( $value ) ? $value : 'list';
+
+		return in_array( $value, array( 'list', 'grid' ), true ) ? $value : 'list';
+	}
+}
+
+if ( ! function_exists( 'onepress_news_snap_columns_per_row' ) ) {
+	/**
+	 * Snap to a row count that divides the 12-column Bootstrap grid evenly.
+	 *
+	 * @param int $n Desired columns per row.
+	 * @return int One of 1, 2, 3, 4, 6, 12.
+	 */
+	function onepress_news_snap_columns_per_row( $n ) {
+		$allowed = array( 1, 2, 3, 4, 6, 12 );
+		$n       = absint( $n );
+		if ( $n < 1 ) {
+			$n = 1;
+		}
+		if ( in_array( $n, $allowed, true ) ) {
+			return $n;
+		}
+		$best = 1;
+		foreach ( $allowed as $a ) {
+			if ( abs( $a - $n ) < abs( $best - $n ) ) {
+				$best = $a;
+			}
+		}
+
+		return $best;
+	}
+}
+
+if ( ! function_exists( 'onepress_news_columns_per_row_to_span' ) ) {
+	/**
+	 * Bootstrap 3 column span (out of 12) for equal columns per row.
+	 *
+	 * @param int $cols_per_row Columns per row (1–12, snapped).
+	 * @return int Span 1–12.
+	 */
+	function onepress_news_columns_per_row_to_span( $cols_per_row ) {
+		$c   = onepress_news_snap_columns_per_row( $cols_per_row );
+		$map = array(
+			1  => 12,
+			2  => 6,
+			3  => 4,
+			4  => 3,
+			6  => 2,
+			12 => 1,
+		);
+
+		return isset( $map[ $c ] ) ? $map[ $c ] : 4;
+	}
+}
+
+if ( ! function_exists( 'onepress_sanitize_news_grid_columns' ) ) {
+	/**
+	 * Three integers "desktop tablet mobile" (space-separated), e.g. "3 2 1".
+	 *
+	 * @param string $input Raw.
+	 * @return string Normalized string.
+	 */
+	function onepress_sanitize_news_grid_columns( $input ) {
+		$input = trim( preg_replace( '/\s+/', ' ', (string) $input ) );
+		if ( $input === '' ) {
+			return '3 2 1';
+		}
+		$parts = explode( ' ', $input );
+		$parts = array_pad( $parts, 3, '1' );
+		$out   = array();
+		foreach ( array_slice( $parts, 0, 3 ) as $p ) {
+			$out[] = (string) onepress_news_snap_columns_per_row( absint( $p ) );
+		}
+
+		return implode( ' ', $out );
+	}
+}
+
+if ( ! function_exists( 'onepress_parse_news_grid_columns' ) ) {
+	/**
+	 * @param string $string Theme mod value.
+	 * @return array{ lg: int, md: int, xs: int } Bootstrap span integers for col-lg-*, col-md-*, col-xs-*.
+	 */
+	function onepress_parse_news_grid_columns( $string ) {
+		$string = trim( (string) $string );
+		if ( $string === '' ) {
+			$string = '3 2 1';
+		}
+		$parts = preg_split( '/\s+/', $string );
+		$parts = array_pad( $parts, 3, '1' );
+
+		return array(
+			'lg' => onepress_news_columns_per_row_to_span( $parts[0] ),
+			'md' => onepress_news_columns_per_row_to_span( $parts[1] ),
+			'xs' => onepress_news_columns_per_row_to_span( $parts[2] ),
+		);
+	}
+}
+
+if ( ! function_exists( 'onepress_get_blog_posts_loop_layout_config' ) ) {
+	/**
+	 * Blog / archive listing layout (Customizer: Blog Posts).
+	 *
+	 * @return array{ layout: string, is_grid: bool, grid_col_class: string }
+	 */
+	function onepress_get_blog_posts_loop_layout_config() {
+		$layout = onepress_sanitize_news_layout( get_theme_mod( 'onepress_blog_posts_layout', 'list' ) );
+		$grid_col_class = '';
+		if ( $layout === 'grid' ) {
+			$spans = onepress_parse_news_grid_columns( get_theme_mod( 'onepress_blog_posts_grid_columns', '2 2 1' ) );
+			$grid_col_class = sprintf(
+				'col-lg-%d col-md-%d col-xs-%d blog-posts-loop__col',
+				(int) $spans['lg'],
+				(int) $spans['md'],
+				(int) $spans['xs']
+			);
+		}
+
+		return array(
+			'layout'         => $layout,
+			'is_grid'        => ( $layout === 'grid' ),
+			'grid_col_class' => $grid_col_class,
+		);
+	}
+}
+
 
 if ( ! function_exists( 'onepress_before_section' ) ) {
 	/**

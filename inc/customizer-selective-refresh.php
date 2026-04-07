@@ -137,6 +137,8 @@ function onepress_customizer_partials( $wp_customize ) {
 				'onepress_news_cat',
 				'onepress_news_orderby',
 				'onepress_news_order',
+				'onepress_news_layout',
+				'onepress_news_grid_columns',
 			),
 		),
 

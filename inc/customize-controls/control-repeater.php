@@ -205,7 +205,10 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 			<ul class="list-repeatable"></ul>
 		</div>
 		<div class="repeatable-actions">
-			<span class="button-secondary add-new-repeat-item"><?php echo ( $this->add_text ) ? esc_html( $this->add_text ) : esc_html__( 'Add an item', 'onepress' ); ?></span>
+			<div>
+				<span class="button-secondary add-new-repeat-item"><?php echo ( $this->add_text ) ? esc_html( $this->add_text ) : esc_html__( 'Add an item', 'onepress' ); ?></span>
+			</div>
+			<span class="limited-msg"></span>
 		</div>
 		<?php
 	}

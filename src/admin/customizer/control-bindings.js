@@ -69,4 +69,30 @@ export function initControlBindings($) {
     });
     $('select[data-customize-setting-link="onepress_gallery_display"]').trigger('on_custom_load');
 
+    /**
+     * News section: show column string only when Blog layout is Grid
+     */
+    $('select[data-customize-setting-link="onepress_news_layout"]').on('change on_custom_load', function () {
+        var v = $(this).val() || '';
+        if (v === 'grid') {
+            $('#customize-control-onepress_news_grid_columns').show();
+        } else {
+            $('#customize-control-onepress_news_grid_columns').hide();
+        }
+    });
+    $('select[data-customize-setting-link="onepress_news_layout"]').trigger('on_custom_load');
+
+    /**
+     * Blog Posts (global): grid column string only when layout is Grid
+     */
+    $('select[data-customize-setting-link="onepress_blog_posts_layout"]').on('change on_custom_load', function () {
+        var v = $(this).val() || '';
+        if (v === 'grid') {
+            $('#customize-control-onepress_blog_posts_grid_columns').show();
+        } else {
+            $('#customize-control-onepress_blog_posts_grid_columns').hide();
+        }
+    });
+    $('select[data-customize-setting-link="onepress_blog_posts_layout"]').trigger('on_custom_load');
+
 }

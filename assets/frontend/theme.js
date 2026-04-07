@@ -1178,10 +1178,10 @@ jQuery(function ($) {
 
 /***/ }),
 
-/***/ "./src/frontend/libs/bootstrap/bootstrap.min.css":
-/*!*******************************************************!*\
-  !*** ./src/frontend/libs/bootstrap/bootstrap.min.css ***!
-  \*******************************************************/
+/***/ "./src/frontend/libs/bootstrap/scss/bootstrap.scss":
+/*!*********************************************************!*\
+  !*** ./src/frontend/libs/bootstrap/scss/bootstrap.scss ***!
+  \*********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4321,7 +4321,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs_jquery_bully_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_libs_jquery_bully_js__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _libs_wow_js_wow_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./libs/wow.js/wow.js */ "./src/frontend/libs/wow.js/wow.js");
 /* harmony import */ var _libs_wow_js_wow_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_libs_wow_js_wow_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _libs_bootstrap_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./libs/bootstrap/bootstrap.min.css */ "./src/frontend/libs/bootstrap/bootstrap.min.css");
+/* harmony import */ var _libs_bootstrap_scss_bootstrap_scss__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./libs/bootstrap/scss/bootstrap.scss */ "./src/frontend/libs/bootstrap/scss/bootstrap.scss");
 /* harmony import */ var _fontawesome_v6_css_all_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./fontawesome-v6/css/all.css */ "./src/frontend/fontawesome-v6/css/all.css");
 /* harmony import */ var _fontawesome_v6_css_v4_shims_css__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./fontawesome-v6/css/v4-shims.css */ "./src/frontend/fontawesome-v6/css/v4-shims.css");
 /* harmony import */ var _styles_animate_scss__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./styles/animate.scss */ "./src/frontend/styles/animate.scss");

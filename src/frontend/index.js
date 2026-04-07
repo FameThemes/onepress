@@ -8,7 +8,7 @@ import "./libs/imagesloaded.js";
 import "./libs/jarallax.js";
 import "./libs/jquery.bully.js";
 import "./libs/wow.js/wow.js";
-import "./libs/bootstrap/bootstrap.min.css";
+import "./libs/bootstrap/scss/bootstrap.scss";
 import "./fontawesome-v6/css/all.css";
 import "./fontawesome-v6/css/v4-shims.css";
 import './styles/animate.scss'

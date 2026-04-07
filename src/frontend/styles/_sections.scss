@@ -967,6 +967,16 @@
 
 /* Section: News
 ------------------------------*/
+
+.blog-entry--grid, .blog-posts-layout--grid {
+    .list-article {
+        display: flex;
+        grid-row: inherit;
+        gap: 10px;
+        flex-direction: column;
+        border-bottom: 0px none !important;
+    }
+}
 .all-news {
     text-align: center;
     margin-top: 40px;
@@ -1042,6 +1052,78 @@
         &:last-of-type {
             border-bottom: none;
         }
+    }
+}
+
+.section-news--layout-grid {
+    .section-news-row {
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+    .section-news-grid__col {
+        margin-bottom: 30px;
+    }
+    .list-article--news-grid {
+        border-top: none;
+        border-bottom: none;
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 100%;
+    }
+    .list-article--news-grid .list-article-thumb {
+        float: none;
+        margin-right: 0;
+        margin-bottom: 15px;
+        width: 100%;
+        display: block;
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+    .list-article--news-grid .list-article-content {
+        overflow: visible;
+    }
+}
+
+.section-news.section-inverse.section-news--layout-grid {
+    .list-article--news-grid {
+        border-top: none;
+        border-bottom: none;
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+}
+
+.blog-posts-layout--grid {
+    .blog-posts-loop__row {
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+    .blog-posts-loop__col {
+        margin-bottom: 30px;
+    }
+    .list-article--posts-grid {
+        border-top: none;
+        border-bottom: none;
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 100%;
+    }
+    .list-article--posts-grid .list-article-thumb {
+        float: none;
+        margin-right: 0;
+        margin-bottom: 15px;
+        width: 100%;
+        display: block;
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+    .list-article--posts-grid .list-article-content {
+        overflow: visible;
     }
 }
 

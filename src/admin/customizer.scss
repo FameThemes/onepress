@@ -92,6 +92,9 @@ li#accordion-panel-onepress_typo > .accordion-section-title
 .list-repeatable .item-media .actions , .repeatable-actions{
     text-align: right;
     margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
 }
 
 .list-repeatable .thumbnail-image {
@@ -116,6 +119,14 @@ li#accordion-panel-onepress_typo > .accordion-section-title
     display: none;
 }
 */
+
+.wp-customizer  .preview-tablet .wp-full-overlay-main {
+    width: 768px;
+}
+
+.wp-customizer  .preview-mobile .wp-full-overlay-main {
+    height: 95dvh;
+}
 
 .repeatable-customize-control.show-display-field-only .widget-content .item.item-show_section{
     display: block;
