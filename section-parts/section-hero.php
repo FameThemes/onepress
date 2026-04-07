@@ -80,7 +80,7 @@ do_action( 'onepress_before_section_part', 'hero', $hook_args );
 						</div>
 						<div class="col-md-12 col-lg-6">
 							<?php if ( $hcl2_image ) {
-								echo '<img class="hcl2-image" src="' . esc_url( $hcl2_image ) . '" alt="">';
+								echo '<img class="hcl2-image" src="' . esc_url( $hcl2_image ) . '" alt="'.esc_attr( get_bloginfo( 'name' ) ).'">';
 }; ?>
 						</div>
 					</div>
