@@ -1,4 +1,7 @@
 # CHANGELOG
+# 2.3.17
+  IMPROVED: Support self-hosted video lightbox & media control.
+  IMPROVED: Improve customizer controls, support svg icon.
 
 # 2.3.16
 - FIXED: Fix security issues.
