@@ -1,5 +1,6 @@
 # CHANGELOG
 # 2.3.17
+  IMPROVED: Add altt text to hero image slider.
   IMPROVED: Support self-hosted video lightbox & media control.
   IMPROVED: Improve customizer controls, support svg icon.
   IMPROVED: Reorder sanitization and adjust escaping.
