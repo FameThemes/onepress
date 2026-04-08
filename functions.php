@@ -674,6 +674,13 @@ require get_template_directory() . '/inc/template-tags.php';
 require get_template_directory() . '/inc/extras.php';
 
 /**
+ * Typography (Customizer control + front-end CSS).
+ */
+require get_template_directory() . '/inc/typography/typography.php';
+require get_template_directory() . '/inc/typography/helper.php';
+require get_template_directory() . '/inc/typography/typography-demo-auto-apply.php';
+
+/**
  * Dots Navigation class
  *
  * @since 2.1.0

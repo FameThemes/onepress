@@ -1,0 +1,586 @@
+.customize-control-onepress_typo .customize-control-title {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.customize-control-onepress_typo .onepress-typo-summary-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fb 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+
+.customize-control-onepress_typo .onepress-typo-summary-card:hover {
+  border-color: #2271b1;
+}
+
+.customize-control-onepress_typo .onepress-typo-summary-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.customize-control-onepress_typo .onepress-typo-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #1d2327;
+  background: #eef1f5;
+  border: 1px solid #d0d7de;
+  border-radius: 999px;
+}
+
+.customize-control-onepress_typo .onepress-typo-summary-preview {
+  font-size: 16px;
+  line-height: 1.35;
+  color: #3c434a;
+  word-break: break-word;
+}
+
+.onepress-typo-portal {
+  position: fixed;
+  inset: 0;
+  z-index: 500000;
+}
+
+.onepress-typo-portal .customize-control-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.onepress-typo-portal .input {
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 3px 7px;
+  border: 1px solid #c4c8ce;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.onepress-typo-portal .input:focus,
+.onepress-typo-portal .fontpicker-search:focus {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  outline: 2px solid transparent;
+}
+
+.onepress-typo-portal .color-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-direction: row;
+}
+
+.onepress-typo-portal .color-swatch-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 36px;
+  height: 28px;
+  border-radius: 2px;
+  border: 1px solid #c3c4c7;
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #ddd 25%, transparent 25%),
+    linear-gradient(-45deg, #ddd 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ddd 75%),
+    linear-gradient(-45deg, transparent 75%, #ddd 75%);
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    0 4px,
+    4px -4px,
+    -4px 0;
+  overflow: hidden;
+}
+
+.onepress-typo-portal .color-swatch {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 1px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.onepress-typo-portal .color-alpha-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.onepress-typo-portal .color-alpha-label {
+  flex: 0 0 auto;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #50575e;
+}
+
+.onepress-typo-portal .color-alpha-range {
+  flex: 1;
+  min-width: 0;
+  height: 20px;
+  margin: 0;
+}
+
+.onepress-typo-portal .color-alpha-value {
+  flex: 0 0 38px;
+  font-size: 11px;
+  text-align: right;
+  color: #50575e;
+  font-variant-numeric: tabular-nums;
+}
+
+.onepress-typo-portal .font-selector-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.onepress-typo-portal .font-selector-btn:hover {
+  border-color: #2271b1;
+  color: #1d2327;
+}
+
+.onepress-typo-portal .font-selector-btn__name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1d2327;
+}
+
+.onepress-typo-portal .font-selector-btn__sample {
+  font-size: 15px;
+  line-height: 1.4;
+  color: #50575e;
+  word-break: break-word;
+}
+
+.onepress-typo-portal.settings-backdrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(17, 24, 39, 0);
+}
+
+.onepress-typo-portal .settings-modal {
+  position: fixed;
+  left: 310px;
+  width: 300px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  max-height: 85dvh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #bcbcbe;
+  overflow: hidden;
+}
+
+.onepress-typo-portal .settings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e6e7ea;
+}
+
+.onepress-typo-portal .settings-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.onepress-typo-portal .setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.onepress-typo-portal .setting-group .customize-control-title {
+  margin: 0;
+  color: #374151;
+}
+
+.onepress-typo-portal .font-family-row {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.onepress-typo-portal .font-family-row .font-family-value.input {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  width: auto;
+  font-weight: 400;
+  color: #2c3338;
+  text-align: left;
+  word-break: break-word;
+}
+
+.onepress-typo-portal .font-family-value.clickable {
+  cursor: pointer;
+}
+
+.onepress-typo-portal .font-family-value.clickable:hover {
+  border-color: #8c8f94;
+}
+
+.onepress-typo-portal .font-family-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  min-height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #c4c8ce;
+  border-radius: 6px;
+  background: #fff;
+  color: #50575e;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.onepress-typo-portal .font-family-clear .dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.onepress-typo-portal .font-family-clear:hover {
+  border-color: #d63638;
+  color: #d63638;
+  background: #fcf0f1;
+}
+
+.onepress-typo-portal .font-family-clear:focus {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+.onepress-typo-portal .setting-group--unit .setting-group__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.onepress-typo-portal .setting-group__devices {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.onepress-typo-portal .setting-group__device-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: #fff;
+  color: #50575e;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.onepress-typo-portal .setting-group__device-btn .dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.onepress-typo-portal .setting-group__device-btn:hover {
+  border-color: #2271b1;
+  color: #0a4b78;
+}
+
+.onepress-typo-portal .setting-group__device-btn:focus {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+.onepress-typo-portal .setting-group__device-btn.is-active {
+  border-color: #2271b1;
+  background: #eaf4ff;
+  color: #0a4b78;
+  border-color: #0a4b78;
+}
+
+.onepress-typo-portal .unit-row {
+  display: grid;
+  grid-template-columns: 1fr 96px;
+  gap: 4px;
+}
+
+.onepress-typo-portal .choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.onepress-typo-portal .choice-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 26px;
+  padding: 0 6px;
+  border: 1px solid #c4c8ce;
+  border-radius: 6px;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+.onepress-typo-portal .choice-btn:hover {
+  border-color: #2271b1;
+}
+
+.onepress-typo-portal .choice-btn:focus {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+.onepress-typo-portal .choice-btn.is-active {
+  border-color: #2271b1;
+  background: #eaf4ff;
+  color: #0a4b78;
+}
+
+.onepress-typo-portal .choice-icon {
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.onepress-typo-portal .choice-icon.overline {
+  text-decoration: overline;
+}
+
+.onepress-typo-portal .choice-icon.underline {
+  text-decoration: underline;
+}
+
+.onepress-typo-portal .choice-icon.line-through {
+  text-decoration: line-through;
+}
+
+.onepress-typo-portal .choice-icon.uppercase {
+  text-transform: uppercase;
+}
+
+.onepress-typo-portal .choice-icon.lowercase {
+  text-transform: lowercase;
+}
+
+.onepress-typo-portal .choice-icon.capitalize {
+  text-transform: capitalize;
+}
+
+.onepress-typo-portal.fontpicker-backdrop {
+  z-index: 500100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+}
+
+.onepress-typo-portal .fontpicker-modal {
+  position: fixed;
+  left: 310px;
+  top: 50%;
+  width: 300px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  height: 85dvh;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid #bcbcbe;
+  overflow: hidden;
+}
+
+.onepress-typo-portal .fontpicker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #dcdcde;
+  flex-shrink: 0;
+}
+
+.onepress-typo-portal .fontpicker-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.onepress-typo-portal .fontpicker-close {
+  flex-shrink: 0;
+}
+
+.onepress-typo-portal .fontpicker-search-wrap {
+  padding: 10px 14px 8px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #f0f0f1;
+}
+
+.onepress-typo-portal .fontpicker-search {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  border: 1px solid #8c8f94;
+  border-radius: 4px;
+  box-shadow: 0 0 0 transparent;
+}
+
+.onepress-typo-portal .fontpicker-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 14px 10px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #ccc;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.onepress-typo-portal .fontpicker-cat {
+  margin: 0;
+  padding: 4px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #50575e;
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.onepress-typo-portal .fontpicker-cat:hover {
+  color: #1d2327;
+  border-color: #8c8f94;
+}
+
+.onepress-typo-portal .fontpicker-cat.is-active {
+  color: #fff;
+  background: #2271b1;
+  border-color: #2271b1;
+}
+
+.onepress-typo-portal .fontpicker-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 0 12px;
+}
+
+.onepress-typo-portal .fontpicker-group-label {
+  padding: 8px 14px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #646970;
+}
+
+.onepress-typo-portal .fontpicker-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  margin: 0;
+  padding: 10px 14px;
+  text-align: left;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  min-height: 100px;
+}
+
+.onepress-typo-portal .fontpicker-row:hover {
+  background: #f6f7f7;
+}
+
+.onepress-typo-portal .fontpicker-row.is-selected {
+  background: #f0f6fc;
+  box-shadow: inset 3px 0 0 #2271b1;
+}
+
+.onepress-typo-portal .fontpicker-row__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1d2327;
+  width: 100%;
+  display: block;
+}
+
+.onepress-typo-portal .fontpicker-row__sample {
+  font-size: 14px;
+  line-height: 1.35;
+  color: #50575e;
+  word-break: break-word;
+  width: 100%;
+  display: block;
+}
+
+.onepress-typo-portal .fontpicker-row--default .fontpicker-row__name {
+  font-weight: 500;
+}
+
+.onepress-typo-portal .fontpicker-empty {
+  margin: 16px 14px 24px;
+  font-size: 13px;
+  color: #646970;
+  text-align: center;
+}

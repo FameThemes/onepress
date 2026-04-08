@@ -10,6 +10,7 @@ import { installDeparam } from './customizer/jquery-deparam';
 import { initModalEditors } from './customizer/modal-editor';
 import { registerPlusSection } from './customizer/plus-section';
 import { installWpEditor } from './customizer/wp-editor';
+import './customizer/typography-controls.js';
 
 const api = wp.customize;
 const $ = jQuery;

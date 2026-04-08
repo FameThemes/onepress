@@ -3,6 +3,8 @@
 /**
  * Load Controls Files
  */
+require_once get_template_directory() . '/inc/typography/typography.php';
+require_once get_template_directory() . '/inc/customize-controls/control-theme-typography.php';
 require_once get_template_directory() . '/inc/customize-controls/section-plus.php';
 require_once get_template_directory() . '/inc/customize-controls/control-misc.php';
 require_once get_template_directory() . '/inc/customize-controls/control-custom-textarea.php';

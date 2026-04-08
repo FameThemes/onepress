@@ -33,13 +33,17 @@ class OnePress_Editor
 	 */
 	function assets()
 	{
-		if (function_exists('onepress_typography_render_style')) {
-			$typo = onepress_typography_render_style(false, true);
-			if ($typo['url']) {
-				wp_register_style('onepress-editor-fonts', $typo['url']); // Font style url.
-				wp_enqueue_style('onepress-editor-fonts'); // Font style url.
+		if (function_exists('onepress_typo_render_style')) {
+			$typo = onepress_typo_render_style(false, true);
+			if (is_array($typo)) {
+				if (!empty($typo['url'])) {
+					wp_register_style('onepress-editor-fonts', $typo['url']);
+					wp_enqueue_style('onepress-editor-fonts');
+				}
+				if (!empty($typo['code'])) {
+					wp_add_inline_style('wp-edit-post', $typo['code']);
+				}
 			}
-			wp_add_inline_style('wp-edit-post', $typo['code']);
 		}
 
 		wp_add_inline_style('wp-edit-post', $this->css());

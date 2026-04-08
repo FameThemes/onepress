@@ -97,6 +97,7 @@ function onepress_customize_register($wp_customize)
 	require_once $path . '/inc/customize-configs/options-blog-posts.php';
 	require_once $path . '/inc/customize-configs/options-single.php';
 	require_once $path . '/inc/customize-configs/options-footer.php';
+	require_once $path . '/inc/customize-configs/options-typography-example.php';
 
 	/**
 	 * @since 2.1.1
@@ -154,7 +155,7 @@ function onepress_customize_register($wp_customize)
 		$wp_customize->get_panel('woocommerce')->priority = 300;
 	}
 }
-add_action('customize_register', 'onepress_customize_register');
+add_action( 'customize_register', 'onepress_customize_register', 20 );
 /**
  * Selective refresh
  */
