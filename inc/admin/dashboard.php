@@ -87,9 +87,8 @@ class Onepress_Dashboard
 	function admin_scripts($hook)
 	{
 		if ($hook === 'widgets.php' || $hook === 'appearance_page_ft_onepress') {
-			$theme_directory_url = get_template_directory_uri();
-
-			wp_enqueue_style('onepress-admin-css', $theme_directory_url . '/assets/css/admin.css');
+			
+			onepress_load_build_script('admin', [], true);
 			// Add recommend plugin css
 			wp_enqueue_style('plugin-install');
 			wp_enqueue_script('plugin-install');
@@ -328,7 +327,7 @@ class Onepress_Dashboard
 					<?php if (is_child_theme()) {
 						$child_theme = wp_get_theme();
 					?>
-						<form method="post" action="<?php echo esc_attr($current_action_link); ?>" class="demo-import-boxed copy-settings-form">
+						<form method="post" action="<?php echo esc_attr($current_action_link); ?>" class="demo-import-boxed copy-settings-form" data-confirm="<?php echo esc_attr(__('Are you sure you want to copy?', 'onepress')); ?>">
 							<p>
 								<strong> <?php printf(__('You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress'),  esc_html($child_theme->Name)); ?></strong>
 							</p>
@@ -717,18 +716,6 @@ class Onepress_Dashboard
 			<?php do_action('onepress_more_tabs_details', $actions); ?>
 
 		</div>
-		<script type="text/javascript">
-			jQuery(document).ready(function($) {
-				$('body').addClass('about-php');
-
-			$('.copy-settings-form').on('submit', function() {
-				var c = confirm(<?php echo wp_json_encode(__('Are you sure you want to copy?', 'onepress')); ?>);
-				if (!c) {
-					return false;
-				}
-			});
-			});
-		</script>
 <?php
 	}
 

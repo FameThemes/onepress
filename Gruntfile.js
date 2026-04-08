@@ -63,7 +63,7 @@ module.exports = function (grunt) {
         src: [
           "**",
           "!node_modules/**",
-          "!build/**",
+          "!src/**",
           "!css/sourcemap/**",
           "!.git/**",
           "!bin/**",
@@ -73,18 +73,22 @@ module.exports = function (grunt) {
           "!phpunit.xml.dist",
           "!*.sh",
           "!*.map",
+          "!**/*.map",
           "!Gruntfile.js",
           "!package.json",
           "!.gitignore",
           "!phpunit.xml",
           "!README.md",
           "!sass/**",
+          "!src/**",
           "!codesniffer.ruleset.xml",
           "!vendor/**",
           "!composer.json",
           "!composer.lock",
           "!package-lock.json",
           "!phpcs.xml.dist",
+          "!webpack.config.js",
+          "!.babelrc",
         ],
         dest: "onepress/",
       },
@@ -122,9 +126,6 @@ module.exports = function (grunt) {
       theme_main: {
         src: [
           "style.css",
-          "assets/sass/style.scss",
-          "editor-style.css",
-          "assets/sass/editor.scss",
         ],
         overwrite: true,
         replacements: [
@@ -158,9 +159,16 @@ module.exports = function (grunt) {
         },
       },
     },
+
+    shell: {
+      build: {
+        command: 'yarn build'
+      }
+    }
   });
 
   // Load NPM tasks to be used here
+  grunt.loadNpmTasks("grunt-shell");
   grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-postcss");
   grunt.loadNpmTasks("grunt-contrib-sass");
@@ -195,13 +203,16 @@ module.exports = function (grunt) {
   ]);
   grunt.registerTask("release", function (ver) {
     let newVersion = pkgInfo.version;
+    grunt.task.run("shell:build");
     grunt.task.run("bumpup:" + newVersion);
     grunt.task.run("replace");
-
+    grunt.task.run("zipfile");
+    
+    
     // i18n
     // grunt.task.run(['addtextdomain', 'makepot']);
     // re create css file and min
-    grunt.task.run(["css", "postcss", "concat", "uglify"]);
+    // grunt.task.run(["css", "postcss", "concat", "uglify"]);
   });
 
   grunt.registerTask("load-icon", function () {

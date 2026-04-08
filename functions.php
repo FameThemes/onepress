@@ -181,7 +181,7 @@ if (!function_exists('onepress_setup')) :
 		/*
 		 * This theme styles the visual editor to resemble the theme style.
 		 */
-		add_editor_style(array('editor-style.css', onepress_fonts_url()));
+		add_editor_style(array('assets/admin/editor.css', onepress_fonts_url()));
 
 		if (get_theme_mod('onepress_gallery_disable')) {
 			/**
@@ -252,8 +252,9 @@ function onepress_widgets_init()
 		register_sidebar(
 			array(
 				'name'          => esc_html(sprintf(
-					 /* translators: 1: widget number */
-					__('Footer %s', 'onepress'), $i
+					/* translators: 1: widget number */
+					__('Footer %s', 'onepress'),
+					$i
 				)),
 				'id'            => 'footer-' . $i,
 				'description'   => '',
@@ -267,6 +268,54 @@ function onepress_widgets_init()
 }
 add_action('widgets_init', 'onepress_widgets_init');
 
+function onepress_load_build_script($key, $deps = [], $is_admin = false)
+{
+	$min_ext  = defined('WP_DEBUG') && WP_DEBUG ? '' : '.minified';
+	$dir =  get_template_directory() . '/assets/';
+	$dir_url =  get_template_directory_uri() . '/assets/';
+	if (!$is_admin) {
+		$dir .= 'frontend/';
+		$dir_url .= 'frontend/';
+	} else {
+		$dir .= 'admin/';
+		$dir_url .= 'admin/';
+	}
+
+	$f = $dir . $key . '.asset.php';
+	if (!file_exists($f)) {
+		return;
+	}
+
+	$asset = include $f;
+	$asset['dependencies'] = array_merge($asset['dependencies'], $deps);
+	$js_file =  $key . $min_ext . '.js';
+	$url_js  = false;
+	if (file_exists($dir . $js_file)) {
+		$url_js = $dir_url . $js_file;
+	}
+	$handle = 'onepress-' . $key;
+	$handle_css = 'onepress-' . $key;
+	$url_css = false;
+	if ($key === 'theme') {
+		$handle_css = 'onepress-style';
+	}
+
+	if (file_exists($dir . $key . '.css')) {
+		$url_css =  $dir_url . $key . '.css';
+	}
+
+	if ($url_js) {
+		wp_register_script($handle, $url_js, $asset['dependencies'], $asset['version'], true);
+		wp_enqueue_script($handle);
+	}
+
+	if ($url_css) {
+		wp_register_style($handle_css, $url_css, [], $asset['version']);
+		wp_enqueue_style($handle_css);
+	}
+	return $handle;
+}
+
 /**
  * Enqueue scripts and styles.
  */
@@ -275,7 +324,7 @@ function onepress_scripts()
 
 	$theme   = wp_get_theme('onepress');
 	$version = $theme->get('Version');
-	$min_ext  = defined('WP_DEBUG') && WP_DEBUG ? '' : '.min';
+	$min_ext  = defined('WP_DEBUG') && WP_DEBUG ? '' : '.minified';
 
 	if (!get_theme_mod('onepress_disable_g_font')) {
 		$google_font_url = onepress_fonts_url();
@@ -284,17 +333,8 @@ function onepress_scripts()
 		}
 	}
 
-	wp_enqueue_style('onepress-animate', get_template_directory_uri() . '/assets/css/animate.min.css', array(), $version);
-	wp_enqueue_style('onepress-fa', get_template_directory_uri() . '/assets/fontawesome-v6/css/all.min.css', array(), '6.5.1');
-	wp_enqueue_style('onepress-fa-shims', get_template_directory_uri() . '/assets/fontawesome-v6/css/v4-shims.min.css', array(), '6.5.1');
-	wp_enqueue_style('onepress-bootstrap', get_template_directory_uri() . '/assets/css/bootstrap.min.css', false, $version);
-	wp_enqueue_style('onepress-style', get_template_directory_uri() . '/style.css');
-
-	$custom_css = onepress_custom_inline_style();
-	wp_add_inline_style('onepress-style', $custom_css);
 
 	$deps = array('jquery');
-
 	// Animation from settings.
 	$onepress_js_settings = array(
 		'onepress_disable_animation'     => get_theme_mod('onepress_animation_disable'),
@@ -325,39 +365,43 @@ function onepress_scripts()
 	if (!$is_shop) {
 		if (!$galley_disable || is_customize_preview()) {
 			$onepress_js_settings['gallery_enable'] = 1;
-			$display                                = get_theme_mod('onepress_gallery_display', 'grid');
+			$display = get_theme_mod('onepress_gallery_display', 'grid');
+
 			if (!is_customize_preview()) {
 				switch ($display) {
+					case 'isotope':
 					case 'masonry':
-						$deps[] = 'onepress-gallery-masonry';
-						wp_register_script('onepress-gallery-masonry', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array(), $version, true);
+						$deps[] = onepress_load_build_script('gallery-isotope');
 						break;
 					case 'justified':
-						$deps[] = 'onepress-gallery-justified';
-						wp_register_script('onepress-gallery-justified', get_template_directory_uri() . '/assets/js/jquery.justifiedGallery.min.js', array(), $version, true);
+						$deps[] = onepress_load_build_script('gallery-justified');
 						break;
 					case 'slider':
 					case 'carousel':
-						$deps[] = 'onepress-gallery-carousel';
-						wp_register_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
+						$deps[] = onepress_load_build_script('gallery-carousel');
 						break;
 					default:
 						break;
 				}
 			} else {
-				$deps[] = 'onepress-gallery-masonry';
-				$deps[] = 'onepress-gallery-justified';
-				$deps[] = 'onepress-gallery-carousel';
-
-				wp_register_script('onepress-gallery-masonry', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array(), $version, true);
-				wp_register_script('onepress-gallery-justified', get_template_directory_uri() . '/assets/js/jquery.justifiedGallery.min.js', array(), $version, true);
-				wp_register_script('onepress-gallery-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), $version, true);
+				$deps[] = onepress_load_build_script('gallery-isotope');
+				$deps[] = onepress_load_build_script('gallery-justified');
+				$deps[] = onepress_load_build_script('gallery-carousel');
 			}
 		}
-		wp_enqueue_style('onepress-gallery-lightgallery', get_template_directory_uri() . '/assets/css/lightgallery.css');
+		onepress_load_build_script('lightgallery', ['jquery']);
+		// wp_enqueue_style('onepress-gallery-lightgallery', get_template_directory_uri() . '/assets/css/lightgallery.css');
 	}
 
-	wp_enqueue_script('onepress-theme', get_template_directory_uri() . '/assets/js/theme-all' . $min_ext . '.js', $deps, $version, true);
+	if (defined('ONEPRESS_PLUS_PATH')) {
+		$deps[] = onepress_load_build_script('gallery-carousel');
+	}
+
+	onepress_load_build_script('theme', $deps);
+
+
+	$custom_css = onepress_custom_inline_style();
+	wp_add_inline_style('onepress-style', $custom_css);
 
 	if (is_singular() && comments_open() && get_option('thread_comments')) {
 		wp_enqueue_script('comment-reply');

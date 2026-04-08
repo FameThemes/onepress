@@ -248,6 +248,219 @@ if ( ! function_exists( 'onepress_get_video_lightbox_image' ) ) {
 	}
 }
 
+if ( ! function_exists( 'onepress_is_self_hosted_video_file_url' ) ) {
+	/**
+	 * True when URL points to a direct video file (not YouTube/Vimeo/etc. embed).
+	 *
+	 * @param string $url URL.
+	 * @return bool
+	 */
+	function onepress_is_self_hosted_video_file_url( $url ) {
+		if ( ! is_string( $url ) || $url === '' ) {
+			return false;
+		}
+		if ( preg_match( '#youtu(\.be|be\.com)|vimeo\.com|dai\.ly|dailymotion\.com/embed|vk\.com/video_ext#i', $url ) ) {
+			return false;
+		}
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+		$ext  = strtolower( pathinfo( (string) $path, PATHINFO_EXTENSION ) );
+
+		return in_array( $ext, array( 'mp4', 'webm', 'ogv', 'ogg', 'mov', 'm4v', 'avi', 'mkv' ), true );
+	}
+}
+
+if ( ! function_exists( 'onepress_videolightbox_mime_for_video_url' ) ) {
+	/**
+	 * @param string $url Video file URL.
+	 * @return string MIME type for HTML5 <source type="…">.
+	 */
+	function onepress_videolightbox_mime_for_video_url( $url ) {
+		$path = wp_parse_url( (string) $url, PHP_URL_PATH );
+		$ext  = strtolower( pathinfo( (string) $path, PATHINFO_EXTENSION ) );
+		$map  = array(
+			'mp4'  => 'video/mp4',
+			'webm' => 'video/webm',
+			'ogv'  => 'video/ogg',
+			'ogg'  => 'video/ogg',
+			'mov'  => 'video/quicktime',
+			'm4v'  => 'video/x-m4v',
+			'avi'  => 'video/x-msvideo',
+			'mkv'  => 'video/x-matroska',
+		);
+
+		return isset( $map[ $ext ] ) ? $map[ $ext ] : 'video/mp4';
+	}
+}
+
+if ( ! function_exists( 'onepress_videolightbox_lightgallery_data_html' ) ) {
+	/**
+	 * Markup for lightGallery 1.x HTML5 video (stored in data-html; requires lg-html5 class).
+	 *
+	 * @param string $src_url Absolute URL to video file.
+	 * @param string $mime    Optional MIME (from attachment); falls back from extension.
+	 * @return string Raw HTML (escape with esc_attr() when placing in data-html).
+	 */
+	function onepress_videolightbox_lightgallery_data_html( $src_url, $mime = '' ) {
+		$safe_url = esc_url( $src_url );
+		if ( $safe_url === '' ) {
+			return '';
+		}
+		$mime = is_string( $mime ) && $mime !== '' ? $mime : onepress_videolightbox_mime_for_video_url( $safe_url );
+
+		return '<video class="lg-video-object lg-html5 lg-object" controls preload="metadata"><source src="' . esc_url( $safe_url ) . '" type="' . esc_attr( $mime ) . '"></video>';
+	}
+}
+
+if ( ! function_exists( 'onepress_videolightbox_poster_url' ) ) {
+	/**
+	 * Optional poster for self-hosted lightbox (section background image mod).
+	 *
+	 * @return string URL or empty.
+	 */
+	function onepress_videolightbox_poster_url() {
+		$image_id = get_theme_mod( 'onepress_videolightbox_image' );
+		$image_id = absint( $image_id );
+		if ( ! $image_id ) {
+			return '';
+		}
+		$url = wp_get_attachment_image_url( $image_id, 'full' );
+
+		return $url ? esc_url( $url ) : '';
+	}
+}
+
+if ( ! function_exists( 'onepress_sanitize_news_layout' ) ) {
+	/**
+	 * @param string $value Raw value.
+	 * @return string 'list'|'grid'
+	 */
+	function onepress_sanitize_news_layout( $value ) {
+		$value = is_string( $value ) ? $value : 'list';
+
+		return in_array( $value, array( 'list', 'grid' ), true ) ? $value : 'list';
+	}
+}
+
+if ( ! function_exists( 'onepress_news_snap_columns_per_row' ) ) {
+	/**
+	 * Snap to a row count that divides the 12-column Bootstrap grid evenly.
+	 *
+	 * @param int $n Desired columns per row.
+	 * @return int One of 1, 2, 3, 4, 6, 12.
+	 */
+	function onepress_news_snap_columns_per_row( $n ) {
+		$allowed = array( 1, 2, 3, 4, 6, 12 );
+		$n       = absint( $n );
+		if ( $n < 1 ) {
+			$n = 1;
+		}
+		if ( in_array( $n, $allowed, true ) ) {
+			return $n;
+		}
+		$best = 1;
+		foreach ( $allowed as $a ) {
+			if ( abs( $a - $n ) < abs( $best - $n ) ) {
+				$best = $a;
+			}
+		}
+
+		return $best;
+	}
+}
+
+if ( ! function_exists( 'onepress_news_columns_per_row_to_span' ) ) {
+	/**
+	 * Bootstrap 3 column span (out of 12) for equal columns per row.
+	 *
+	 * @param int $cols_per_row Columns per row (1–12, snapped).
+	 * @return int Span 1–12.
+	 */
+	function onepress_news_columns_per_row_to_span( $cols_per_row ) {
+		$c   = onepress_news_snap_columns_per_row( $cols_per_row );
+		$map = array(
+			1  => 12,
+			2  => 6,
+			3  => 4,
+			4  => 3,
+			6  => 2,
+			12 => 1,
+		);
+
+		return isset( $map[ $c ] ) ? $map[ $c ] : 4;
+	}
+}
+
+if ( ! function_exists( 'onepress_sanitize_news_grid_columns' ) ) {
+	/**
+	 * Three integers "desktop tablet mobile" (space-separated), e.g. "3 2 1".
+	 *
+	 * @param string $input Raw.
+	 * @return string Normalized string.
+	 */
+	function onepress_sanitize_news_grid_columns( $input ) {
+		$input = trim( preg_replace( '/\s+/', ' ', (string) $input ) );
+		if ( $input === '' ) {
+			return '3 2 1';
+		}
+		$parts = explode( ' ', $input );
+		$parts = array_pad( $parts, 3, '1' );
+		$out   = array();
+		foreach ( array_slice( $parts, 0, 3 ) as $p ) {
+			$out[] = (string) onepress_news_snap_columns_per_row( absint( $p ) );
+		}
+
+		return implode( ' ', $out );
+	}
+}
+
+if ( ! function_exists( 'onepress_parse_news_grid_columns' ) ) {
+	/**
+	 * @param string $string Theme mod value.
+	 * @return array{ lg: int, md: int, xs: int } Bootstrap span integers for col-lg-*, col-md-*, col-xs-*.
+	 */
+	function onepress_parse_news_grid_columns( $string ) {
+		$string = trim( (string) $string );
+		if ( $string === '' ) {
+			$string = '3 2 1';
+		}
+		$parts = preg_split( '/\s+/', $string );
+		$parts = array_pad( $parts, 3, '1' );
+
+		return array(
+			'lg' => onepress_news_columns_per_row_to_span( $parts[0] ),
+			'md' => onepress_news_columns_per_row_to_span( $parts[1] ),
+			'xs' => onepress_news_columns_per_row_to_span( $parts[2] ),
+		);
+	}
+}
+
+if ( ! function_exists( 'onepress_get_blog_posts_loop_layout_config' ) ) {
+	/**
+	 * Blog / archive listing layout (Customizer: Blog Posts).
+	 *
+	 * @return array{ layout: string, is_grid: bool, grid_col_class: string }
+	 */
+	function onepress_get_blog_posts_loop_layout_config() {
+		$layout = onepress_sanitize_news_layout( get_theme_mod( 'onepress_blog_posts_layout', 'list' ) );
+		$grid_col_class = '';
+		if ( $layout === 'grid' ) {
+			$spans = onepress_parse_news_grid_columns( get_theme_mod( 'onepress_blog_posts_grid_columns', '2 2 1' ) );
+			$grid_col_class = sprintf(
+				'col-lg-%d col-md-%d col-xs-%d blog-posts-loop__col',
+				(int) $spans['lg'],
+				(int) $spans['md'],
+				(int) $spans['xs']
+			);
+		}
+
+		return array(
+			'layout'         => $layout,
+			'is_grid'        => ( $layout === 'grid' ),
+			'grid_col_class' => $grid_col_class,
+		);
+	}
+}
+
 
 if ( ! function_exists( 'onepress_before_section' ) ) {
 	/**

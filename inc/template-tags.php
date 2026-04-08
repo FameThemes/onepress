@@ -542,41 +542,34 @@ if (! function_exists('onepress_hex_to_rgba')) {
 	 */
 	function onepress_hex_to_rgba($color, $alpha = 1)
 	{
-		$color = str_replace('#', '', $color);
-		if ('' === $color) {
+		if (! function_exists('onepress_sanitize_css_color')) {
 			return '';
 		}
 
-		if (strpos(trim($color), 'rgb') !== false) {
-			return $color;
+		$safe = onepress_sanitize_css_color($color);
+		if ('' === $safe) {
+			return '';
 		}
 
-		// 3 or 6 hex digits, or the empty string.
-		if (preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', '#' . $color)) {
-			// convert to rgb
-			$colour = $color;
-			if (strlen($colour) == 6) {
-				list($r, $g, $b) = array($colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5]);
-			} elseif (strlen($colour) == 3) {
-				list($r, $g, $b) = array($colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2]);
+		// 3- or 6-digit hex: combine with $alpha (legacy hero overlay behaviour).
+		if (preg_match('/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $safe)) {
+			$hex = substr($safe, 1);
+			if (3 === strlen($hex)) {
+				$r = hexdec($hex[0] . $hex[0]);
+				$g = hexdec($hex[1] . $hex[1]);
+				$b = hexdec($hex[2] . $hex[2]);
 			} else {
-				return false;
+				$r = hexdec(substr($hex, 0, 2));
+				$g = hexdec(substr($hex, 2, 2));
+				$b = hexdec(substr($hex, 4, 2));
 			}
-			$r = hexdec($r);
-			$g = hexdec($g);
-			$b = hexdec($b);
-			return 'rgba(' . join(
-				',',
-				array(
-					'r' => $r,
-					'g' => $g,
-					'b' => $b,
-					'a' => $alpha,
-				)
-			) . ')';
+			$alpha = is_numeric($alpha) ? (float) $alpha : 1;
+			$alpha = max(0, min(1, $alpha));
+			return 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $alpha . ')';
 		}
 
-		return false;
+		// 4/8-digit hex, rgb/hsl/color()/var(), etc.: already a full CSS color.
+		return $safe;
 	}
 }
 
@@ -1081,10 +1074,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 		 */
 		function onepress_get_section_about_data()
 		{
-			$boxes = get_theme_mod('onepress_about_boxes');
-			if (is_string($boxes)) {
-				$boxes = json_decode($boxes, true);
-			}
+			$boxes = onepress_normalize_repeatable_theme_mod_rows(get_theme_mod('onepress_about_boxes'));
 			$page_ids = array();
 			if (! empty($boxes) && is_array($boxes)) {
 				foreach ($boxes as $k => $v) {
@@ -1116,10 +1106,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 		 */
 		function onepress_get_section_counter_data()
 		{
-			$boxes = get_theme_mod('onepress_counter_boxes');
-			if (is_string($boxes)) {
-				$boxes = json_decode($boxes, true);
-			}
+			$boxes = onepress_normalize_repeatable_theme_mod_rows(get_theme_mod('onepress_counter_boxes'));
 			if (empty($boxes) || ! is_array($boxes)) {
 				$boxes = array();
 			}
@@ -1135,10 +1122,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 		 */
 		function onepress_get_section_services_data()
 		{
-			$services = get_theme_mod('onepress_services');
-			if (is_string($services)) {
-				$services = json_decode($services, true);
-			}
+			$services = onepress_normalize_repeatable_theme_mod_rows(get_theme_mod('onepress_services'));
 			$page_ids = array();
 			if (! empty($services) && is_array($services)) {
 				foreach ($services as $k => $v) {
@@ -1171,10 +1155,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 		 */
 		function onepress_get_section_team_data()
 		{
-			$members = get_theme_mod('onepress_team_members');
-			if (is_string($members)) {
-				$members = json_decode($members, true);
-			}
+			$members = onepress_normalize_repeatable_theme_mod_rows(get_theme_mod('onepress_team_members'));
 			if (! is_array($members)) {
 				$members = array();
 			}
@@ -1191,10 +1172,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 		 */
 		function onepress_get_features_data()
 		{
-			$array = get_theme_mod('onepress_features_boxes');
-			if (is_string($array)) {
-				$array = json_decode($array, true);
-			}
+			$array = onepress_normalize_repeatable_theme_mod_rows(get_theme_mod('onepress_features_boxes'));
 			if (! empty($array) && is_array($array)) {
 				foreach ($array as $k => $v) {
 					$array[$k] = wp_parse_args(
@@ -1207,9 +1185,9 @@ if (! function_exists('onepress_custom_inline_style')) {
 						)
 					);
 
-					// Get/Set social icons
+					// Get/Set icon class prefix (skip for inline SVG).
 					$array[$k]['icon'] = trim($array[$k]['icon']);
-					if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa') !== 0) {
+					if ($array[$k]['icon'] !== '' && ! onepress_is_svg_icon_markup($array[$k]['icon']) && strpos($array[$k]['icon'], 'fa') !== 0) {
 						$array[$k]['icon'] = 'fa-' . $array[$k]['icon'];
 					}
 				}
@@ -1251,6 +1229,10 @@ if (! function_exists('onepress_custom_inline_style')) {
 					$icons = array();
 					$array[$k]['icon'] = trim($array[$k]['icon']);
 
+					if ($array[$k]['icon'] !== '' && onepress_is_svg_icon_markup($array[$k]['icon'])) {
+						continue;
+					}
+
 					if ($array[$k]['icon'] != '' && strpos($array[$k]['icon'], 'fa') !== 0) {
 						$icons[$array[$k]['icon']] = 'fa-' . $array[$k]['icon'];
 					} else {
@@ -1268,7 +1250,11 @@ if (! function_exists('onepress_custom_inline_style')) {
 
 			foreach ((array) $array as $s) {
 				if ($s && $s['icon'] != '') {
-					$html .= '<a target="_blank" href="' . $s['link'] . '" title="' . esc_attr($s['network']) . '"><i class="fa ' . esc_attr($s['icon']) . '"></i></a>';
+					if (onepress_is_svg_icon_markup($s['icon'])) {
+						$html .= '<a target="_blank" href="' . esc_url($s['link']) . '" class="footer-social-icon-svg" title="' . esc_attr($s['network']) . '">' . onepress_sanitize_inline_svg_markup($s['icon']) . '</a>';
+					} else {
+						$html .= '<a target="_blank" href="' . esc_url($s['link']) . '" title="' . esc_attr($s['network']) . '"><i class="fa ' . esc_attr($s['icon']) . '"></i></a>';
+					}
 				}
 			}
 
@@ -1576,7 +1562,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 				if ($html) {
 					$div .= '<div class="gallery-masonry-wrap  gallery-grid-wrap">';
 					$div .= '<div data-col="' . $col . '" class="g-zoom-in gallery-masonry ' . $class . ' gallery-grid g-col-' . $col . '">';
-					$div .= $html;
+					$div .= $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 					$div .= '</div>';
 					$div .= '</div>';
 				}
@@ -1586,7 +1572,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 				if ($html) {
 					$div .= '<div class="gallery-carousel-wrap">';
 					$div .= '<div data-col="' . $col . '" class="g-zoom-in gallery-carousel owl-theme owl-carousel owl-carousel' . $class . '">';
-					$div .= $html;
+					$div .= $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 					$div .= '</div>';
 					$div .= '</div>';
 				}
@@ -1595,7 +1581,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 				$html = onepress_gallery_html($data, true, 'full');
 				if ($html) {
 					$div .= '<div class="gallery-slider owl-theme owl-carousel owl-carousel' . $class . '">';
-					$div .= $html;
+					$div .= $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 					$div .= '</div>';
 				}
 				break;
@@ -1606,7 +1592,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 					$row_height = absint(get_theme_mod('onepress_g_row_height', 120));
 					$div .= '<div class="gallery-justified-wrap">';
 					$div .= '<div data-row-height="' . $row_height . '" data-spacing="' . $gallery_spacing . '" class="g-zoom-in gallery-justified' . $class . '">';
-					$div .= $html;
+					$div .= $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 					$div .= '</div>';
 					$div .= '</div>';
 				}
@@ -1616,7 +1602,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 				if ($html) {
 					$div .= '<div class="gallery-grid-wrap">';
 					$div .= '<div class="gallery-grid g-zoom-in ' . $class . ' g-col-' . $col . '">';
-					$div .= $html;
+					$div .= $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 					$div .= '</div>';
 					$div .= '</div>';
 				}

@@ -111,6 +111,47 @@ $wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_
 	)
 ) );
 
+$wp_customize->add_setting(
+	'onepress_news_layout',
+	array(
+		'default'           => 'list',
+		'sanitize_callback' => 'onepress_sanitize_news_layout',
+	)
+);
+$wp_customize->add_control(
+	'onepress_news_layout',
+	array(
+		'label'       => esc_html__( 'Blog layout', 'onepress' ),
+		'section'     => 'onepress_news_settings',
+		'type'        => 'select',
+		'choices'     => array(
+			'list' => esc_html__( 'List', 'onepress' ),
+			'grid' => esc_html__( 'Grid', 'onepress' ),
+		),
+		'description' => esc_html__( 'List shows one post per row. Grid shows multiple columns on wide screens.', 'onepress' ),
+	)
+);
+
+$wp_customize->add_setting(
+	'onepress_news_grid_columns',
+	array(
+		'default'           => '2 2 1',
+		'sanitize_callback' => 'onepress_sanitize_news_grid_columns',
+	)
+);
+$wp_customize->add_control(
+	'onepress_news_grid_columns',
+	array(
+		'label'       => esc_html__( 'Number columns to show', 'onepress' ),
+		'section'     => 'onepress_news_settings',
+		'type'        => 'text',
+		'input_attrs' => array(
+			'placeholder' => '3 2 1',
+		),
+		'description' => esc_html__( 'One string of three numbers separated by spaces: desktop, tablet, then mobile (e.g. 3 2 1). Use 1, 2, 3, 4, 6, or 12 so columns divide the 12-column grid evenly.', 'onepress' ),
+	)
+);
+
 /**
  * @since 2.1.0
  */

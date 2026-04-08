@@ -1,0 +1,63 @@
+/*!
+ * FitVids 1.1
+ *
+ * Copyright 2013, Chris Coyier - http://css-tricks.com + Dave Rupert - http://daverupert.com
+ * Credit to Thierry Koblentz - http://www.alistapart.com/articles/creating-intrinsic-ratios-for-video/
+ * Released under the WTFPL license - http://sam.zoy.org/wtfpl/
+ *
+ */
+
+/*!
+ * Jarallax v2.1.3 (https://github.com/nk-o/jarallax)
+ * Copyright 2022 nK <https://nkdev.info>
+ * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
+ */
+
+/*!
+ * Morphext - Text Rotating Plugin for jQuery
+ * https://github.com/MrSaints/Morphext
+ *
+ * Built on jQuery Boilerplate
+ * http://jqueryboilerplate.com/
+ *
+ * Copyright 2014 Ian Lai and other contributors
+ * Released under the MIT license
+ * http://ian.mit-license.org/
+ */
+
+/*!
+ * imagesLoaded PACKAGED v5.0.0
+ * JavaScript is all like "You images are done yet or what?"
+ * MIT License
+ */
+
+/*!
+ * imagesLoaded v5.0.0
+ * JavaScript is all like "You images are done yet or what?"
+ * MIT License
+ */
+
+/*!
+ * jQuery Bully Plugin v0.1.3
+ * Examples and documentation at http://pixelgrade.github.io/rellax/
+ * Copyright (c) 2016 PixelGrade http://www.pixelgrade.com
+ * Licensed under MIT http://www.opensource.org/licenses/mit-license.php/
+ */
+
+/*!
+ * jquery.counterup.js 2.1.0
+ *
+ * Copyright 2013, Benjamin Intal http://gambit.ph @bfintal
+ * Released under the GPL v2 License
+ *
+ * Amended by Jeremy Paris, Ciro Mattia Gonano and others
+ *
+ * Date: Feb 24, 2017
+ */
+
+/*!
+Waypoints - 4.0.1
+Copyright © 2011-2016 Caleb Troughton
+Licensed under the MIT license.
+https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
+*/

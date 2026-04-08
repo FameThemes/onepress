@@ -103,18 +103,24 @@ class OnePress_Editor
 	public function css_file()
 	{
 
-		if (!current_user_can('edit_posts')) {
+		if (! current_user_can('edit_posts')) {
 			wp_die(esc_html__('You are not authorized to access this page.', 'onepress'));
 			die();
 		}
 
-		$none = isset($_REQUEST['none']) ? sanitize_text_field($_REQUEST['none']) : false;
-		if (! wp_verify_nonce($none, $this->action)) {
+		// Must match editor_style_url(): query arg name is `nonce` (not `none`).
+		$nonce = isset($_REQUEST['nonce']) ? sanitize_text_field(wp_unslash($_REQUEST['nonce'])) : '';
+		if (! wp_verify_nonce($nonce, $this->action)) {
 			wp_die(esc_html__('Security check!', 'onepress'));
 		}
 
-		header('Content-type: text/css; charset: UTF-8');
-		echo wp_kses_post($this->load_style());
+		nocache_headers();
+		header('Content-Type: text/css; charset=UTF-8');
+
+		// File contents from theme disk; not HTML. wp_kses_post() would strip valid CSS.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $this->load_style();
+		exit;
 	}
 
 	/**

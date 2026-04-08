@@ -1,4 +1,10 @@
 # CHANGELOG
+# 2.3.17
+- NEW: Support grid blog layout for blog page, section news.
+- IMPROVED: Add altt text to hero image slider.
+- IMPROVED: Support self-hosted video lightbox & media control.
+- IMPROVED: Improve customizer controls, support svg icon.
+- IMPROVED: Reorder sanitization and adjust escaping.
 
 # 2.3.16
 - FIXED: Fix security issues.
