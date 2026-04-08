@@ -10,6 +10,48 @@ const MergeIntoSingle = require("webpack-merge-and-include-globally");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 /**
+ * WordPress.org theme review rejects mixed CRLF/LF in shipped JS. Some
+ * dependencies ship CRLF; normalize all emitted .js to LF only.
+ */
+function normalizeLineEndingsPlugin() {
+  return {
+    apply(compiler) {
+      const { Compilation, sources } = compiler.webpack;
+      compiler.hooks.thisCompilation.tap(
+        "NormalizeLineEndingsPlugin",
+        (compilation) => {
+          compilation.hooks.processAssets.tap(
+            {
+              name: "NormalizeLineEndingsPlugin",
+              stage: Compilation.PROCESS_ASSETS_STAGE_REPORT,
+            },
+            () => {
+              for (const { name, source } of compilation.getAssets()) {
+                if (!name.endsWith(".js")) continue;
+                let content = source.source();
+                if (Buffer.isBuffer(content)) {
+                  content = content.toString("utf8");
+                }
+                if (typeof content !== "string" || !content.includes("\r")) {
+                  continue;
+                }
+                const normalized = content
+                  .replace(/\r\n/g, "\n")
+                  .replace(/\r/g, "\n");
+                compilation.updateAsset(
+                  name,
+                  new sources.RawSource(normalized)
+                );
+              }
+            }
+          );
+        }
+      );
+    },
+  };
+}
+
+/**
  * @see https://github.com/WordPress/wp-movies-demo/tree/main
  *
  * Production build does not run ESLint (no eslint-webpack-plugin in @wordpress/scripts).
@@ -65,6 +107,7 @@ module.exports = (env, args) => {
       },
       plugins: [
         ...(defaultConfig[0].plugins || []),
+        normalizeLineEndingsPlugin(),
         new CopyWebpackPlugin({
           patterns: [
             {
