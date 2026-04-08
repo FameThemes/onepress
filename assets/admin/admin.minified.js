@@ -1,0 +1,1 @@
+(()=>{"use strict";jQuery(function(t){t("body").addClass("about-php"),t(".copy-settings-form").on("submit",function(){const n=t(this).data("confirm");if(!confirm(n))return!1})})})();

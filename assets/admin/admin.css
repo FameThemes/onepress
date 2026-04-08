@@ -1,0 +1,386 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/@wordpress/scripts/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/admin/admin.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*--------------------------------------------------------------
+	THEME DASHBOARD
+--------------------------------------------------------------*/
+.famethemes-badge {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: #0073aa;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFUAAABVCAYAAAA49ahaAAAAAXNSR0IArs4c6QAAAYpJREFUeAHt2jGKA0EUxFCP8f2vPDM4VKyCDuSsEmHefifNXvf7+fRRBb5qrdhfINTBIYQa6kBgkOxSQx0IDJJdaqgDgUGySw11IDBIdqmhDgQGyS411IHAINmlhjoQGCR/RvN6P0bnhIbxaN/Pf/CXDDXUgcAg2aWGOhAYJLvUUAcCg2SXGupAYJDsUkMdCAySXWqoA4FBsksNdSAwSHapA1Tlkdr4XsbjsPE9jEaXaiiiESpAjBmqoYhGqAAxZqiGIhqhAsSYoRqKaIQKEGOGaiiiESpAjBmqoYhGqAAxZqiGIhqhAsSYoRqKaIQKEGMe80h9yn9jG4/lXapxmmiEChBjhmooohEqQIwZqqGIRqgAMWaohiIaoQLEmKEaimiEChBjhmooohEqQIwZqqGIRqgAMWaohiIaoQLEmMc8UhuPwwaI0ehSDUU0QgWIMUM1FNEIFSDGDNVQRCNUgBgzVEMRjVABYsxQDUU0QgWIMUM1FNEIFSDGDNVQRCNUgBgzVEMRjVABYswHs34UpggOW5wAAAAASUVORK5CYII=) !important;
+  background-position: no-repeat scroll center 24px;
+  background-repeat: no-repeat;
+  background-size: 65px 65px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  color: #78c8e6;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  height: 40px;
+  margin: 5px 0 0;
+  padding-top: 100px;
+  text-align: center;
+  text-rendering: optimizelegibility;
+  width: 130px;
+  text-decoration: none;
+}
+
+.theme_info_wrapper p span {
+  margin-left: 30px;
+}
+
+.theme_info_wrapper a.fame_social {
+  margin-left: 15px;
+}
+
+.info-tab-content {
+  margin: 40px 0px;
+}
+
+.theme_info_left {
+  width: 61%;
+  margin-right: 4%;
+  float: left;
+}
+
+.theme_info_right {
+  width: 35%;
+  float: right;
+}
+
+.theme_info_right img {
+  width: 100%;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+}
+
+.theme_info h3 {
+  font-size: 17px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.theme_info h4 {
+  font-size: 17px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.theme_info .theme_link {
+  margin-bottom: 30px;
+}
+
+#free_pro .free-pro-table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+#free_pro .free-pro-table td {
+  padding: 10px 0 15px;
+  border-top: 1px solid #ccc;
+}
+
+#free_pro .free-pro-table th {
+  padding-bottom: 20px;
+}
+
+#free_pro .free-pro-table h3,
+#free_pro .free-pro-table td p {
+  margin: 0;
+}
+
+#free_pro .free-pro-table .only-lite,
+#free_pro .free-pro-table .only-pro {
+  width: 15%;
+  text-align: center;
+}
+
+#free_pro .free-pro-table .only-lite .dashicons-before:before,
+#free_pro .free-pro-table .only-pro .dashicons-before:before {
+  width: 35px;
+  height: 35px;
+  font-size: 35px;
+}
+
+#free_pro .free-pro-table .only-lite .dashicons-before:before {
+  color: #00a878;
+}
+
+#free_pro .free-pro-table .only-pro .dashicons-before:before {
+  color: #ff3439;
+}
+
+#free_pro .ti-about-page-text-center {
+  text-align: center;
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+.clearfix {
+  display: block;
+}
+
+@media screen and (max-width: 782px) {
+  .theme_info_left {
+    width: 100%;
+    margin-right: none;
+  }
+  .theme_info_right {
+    width: 100%;
+  }
+}
+/*--------------------------------------------------------------
+	x
+--------------------------------------------------------------*/
+.theme-action-count {
+  padding: 0 6px;
+  display: inline-block;
+  background-color: #d54e21;
+  color: #fff;
+  font-size: 9px;
+  line-height: 17px;
+  font-weight: 600;
+  margin: 1px 0 0 2px;
+  vertical-align: top;
+  border-radius: 10px;
+  z-index: 26;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.action-required {
+  border-left: 3px solid #f8800c;
+  padding: 10px 25px 5px;
+  background: #FFFFFF;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.action-required h3 {
+  margin-top: 10px;
+}
+
+.action-required .dismiss {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  text-decoration: none;
+  color: #d54e21;
+}
+
+.theme_info_boxed {
+  background: #FFFFFF;
+  text-align: center;
+  padding: 20px 30px 20px 30px;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.demo-import-boxed {
+  background: #fff none repeat scroll 0 0;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  line-height: 2.1em;
+  margin-bottom: 25px;
+  max-width: 1050px;
+  overflow: auto;
+  padding: 0 12px;
+  position: relative;
+  border-left: 4px solid #0085ba;
+}
+
+/* Recommend plugins */
+.recommend-plugins > h3 {
+  margin-bottom: 20px;
+}
+
+.rcp::after {
+  clear: both;
+  content: "";
+  display: block;
+}
+
+.rcp {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-left: -25px;
+  margin-right: -25px;
+  padding: 20px 25px 10px;
+}
+
+.rcp h4 {
+  margin: 0px;
+}
+
+.rcp a {
+  text-decoration: none;
+}
+
+.rcp .action-btn {
+  display: inline-block;
+}
+
+.rcp .plugin-detail {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.onepress-notice {
+  background: #fff;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  margin: 5px 15px 2px;
+  padding: 1px 15px 10px;
+  border-left: 4px solid #ffb900 !important;
+}
+
+.onepress-notice div {
+  margin-top: -10px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.onepress-notice .button-dismiss {
+  margin-left: 10px;
+}
+
+.theme_info_wrapper .onepress-notice {
+  margin: 15px 0px;
+}
+
+/* Customize Sections*/
+.onepress-admin-sections-wrapper {
+  background: #fff;
+  padding: 15px 15px 0px;
+  border: 1px solid #e5e5e5;
+  margin-bottom: 1em;
+}
+
+.onepress-admin-sections {
+  margin: 15px -15px 0;
+}
+
+.onepress-admin-section:first-child .onepress-admin-section-inner {
+  border-top: 1px solid #EEEEEE;
+}
+
+.onepress-admin-section-inner {
+  padding: 15px;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+.admin-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.see-only .admin-section-header {
+  padding-left: 35px;
+}
+
+.admin-section-body {
+  padding: 15px 0px 15px 35px;
+}
+
+.onepress-admin-sections-form .submit {
+  padding: 15px 0px 0px;
+  margin: 0px;
+}
+
+.note-bubble {
+  font-size: 12px;
+}
+
+#sections-manager-notice {
+  display: block !important;
+}
+
+.onepress-admin-section:last-child {
+  margin-bottom: 0px;
+  border-bottom: none;
+}
+
+.onepress-admin-section:last-child .onepress-admin-section-inner {
+  border-bottom: none;
+}
+
+.onepress-admin-section label {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+/* Switch */
+.switch-button {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 16px;
+  margin: 0px 10px 0px 0px;
+}
+
+.switch-button input {
+  display: none;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #dedede;
+  transition: 0.4s;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 0px;
+  bottom: 0px;
+  background-color: white;
+  transition: 0.4s;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
+}
+
+input:checked + .switch-slider {
+  background: #89c12d;
+}
+
+input:disabled + .switch-slider {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+input:focus + .switch-slider {
+  box-shadow: 0 0 1px #46b450;
+}
+
+input:checked + .switch-slider:before {
+  left: calc(100% - 16px);
+  /*background-color: #46b450;*/
+}
+
+/* Rounded sliders */
+.switch-slider {
+  border-radius: 34px;
+}
+
+.switch-slider:before {
+  border-radius: 50%;
+}
+
+/*# sourceMappingURL=admin.css.map*/

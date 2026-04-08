@@ -16,11 +16,20 @@ if (!$disable) :
 	$more_text = get_theme_mod('onepress_news_more_text', esc_html__('Read Our Blog', 'onepress'));
 	$desc = get_theme_mod('onepress_news_desc');
 
+	$news_layout   = onepress_sanitize_news_layout( get_theme_mod( 'onepress_news_layout', 'list' ) );
+	$grid_columns  = get_theme_mod( 'onepress_news_grid_columns', '2 2 1' );
+	$section_class = apply_filters( 'onepress_section_class', 'section-news section-padding onepage-section', 'news' );
+	if ( $news_layout === 'grid' ) {
+		$section_class .= ' section-news--layout-grid';
+	} else {
+		$section_class .= ' section-news--layout-list';
+	}
+
 ?>
 	<?php if (!onepress_is_selective_refresh()) { ?>
 		<section id="<?php if ($id != '') {
 							echo esc_attr($id);
-						} ?>" <?php do_action('onepress_section_atts', 'news'); ?> class="<?php echo esc_attr(apply_filters('onepress_section_class', 'section-news section-padding onepage-section', 'news')); ?>">
+						} ?>" <?php do_action('onepress_section_atts', 'news'); ?> class="<?php echo esc_attr( $section_class ); ?>">
 		<?php } ?>
 		<?php do_action('onepress_section_before_inner', 'news'); ?>
 		<div class="<?php echo esc_attr(apply_filters('onepress_section_container_class', 'container', 'news')); ?>">
@@ -33,14 +42,14 @@ if (!$disable) :
 						echo '<h2 class="section-title">' . esc_html($title) . '</h2>';
 					} ?>
 					<?php if ($desc) {
-						echo '<div class="section-desc">' . wp_kses_post(apply_filters('onepress_the_content', $desc)) . '</div>';
+						echo '<div class="section-desc">' . apply_filters('onepress_the_content', wp_kses_post($desc)) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped	
 					} ?>
 				</div>
 			<?php } ?>
 			<div class="section-content">
 				<div class="row">
 					<div class="col-sm-12">
-						<div class="blog-entry wow slideInUp">
+						<div class="blog-entry wow slideInUp <?php echo $news_layout === 'grid' ? ' blog-entry--grid' : ''; ?>">
 							<?php
 
 							$cat = absint(get_theme_mod('onepress_news_cat'));
@@ -74,22 +83,56 @@ if (!$disable) :
 
 							$query = new WP_Query($args);
 
+							$grid_col_class = '';
+							if ( $news_layout === 'grid' ) {
+								$spans = onepress_parse_news_grid_columns( $grid_columns );
+								$grid_col_class = sprintf(
+									'col-lg-%d col-md-%d col-xs-%d section-news-grid__col',
+									(int) $spans['lg'],
+									(int) $spans['md'],
+									(int) $spans['xs']
+								);
+							}
+
 							?>
 							<?php if ($query->have_posts()) : ?>
+
+								<?php
+								if ( $news_layout === 'grid' ) {
+									onepress_loop_set_prop( 'news_layout', 'grid' );
+								}
+								?>
+
+								<?php if ( $news_layout === 'grid' ) : ?>
+								<div class="row section-news-row">
+								<?php endif; ?>
 
 								<?php /* Start the Loop */ ?>
 								<?php while ($query->have_posts()) :
 									$query->the_post(); ?>
 									<?php
+									if ( $news_layout === 'grid' ) {
+										echo '<div class="' . esc_attr( $grid_col_class ) . '">';
+									}
 									/*
 									 * Include the Post-Format-specific template for the content.
 									 * If you want to override this in a child theme, then include a file
 									 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
 									 */
 									get_template_part('template-parts/content', 'list');
+									if ( $news_layout === 'grid' ) {
+										echo '</div>';
+									}
 									?>
 
 								<?php endwhile; ?>
+
+								<?php if ( $news_layout === 'grid' ) : ?>
+								</div>
+								<?php
+								onepress_loop_remove_prop( 'news_layout' );
+								endif;
+								?>
 							<?php else : ?>
 								<?php get_template_part('template-parts/content', 'none'); ?>
 							<?php endif;

@@ -7,9 +7,55 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const glob = require("glob");
 const path = require("path");
 const MergeIntoSingle = require("webpack-merge-and-include-globally");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+
+/**
+ * WordPress.org theme review rejects mixed CRLF/LF in shipped JS. Some
+ * dependencies ship CRLF; normalize all emitted .js to LF only.
+ */
+function normalizeLineEndingsPlugin() {
+  return {
+    apply(compiler) {
+      const { Compilation, sources } = compiler.webpack;
+      compiler.hooks.thisCompilation.tap(
+        "NormalizeLineEndingsPlugin",
+        (compilation) => {
+          compilation.hooks.processAssets.tap(
+            {
+              name: "NormalizeLineEndingsPlugin",
+              stage: Compilation.PROCESS_ASSETS_STAGE_REPORT,
+            },
+            () => {
+              for (const { name, source } of compilation.getAssets()) {
+                if (!name.endsWith(".js")) continue;
+                let content = source.source();
+                if (Buffer.isBuffer(content)) {
+                  content = content.toString("utf8");
+                }
+                if (typeof content !== "string" || !content.includes("\r")) {
+                  continue;
+                }
+                const normalized = content
+                  .replace(/\r\n/g, "\n")
+                  .replace(/\r/g, "\n");
+                compilation.updateAsset(
+                  name,
+                  new sources.RawSource(normalized)
+                );
+              }
+            }
+          );
+        }
+      );
+    },
+  };
+}
 
 /**
  * @see https://github.com/WordPress/wp-movies-demo/tree/main
+ *
+ * Production build does not run ESLint (no eslint-webpack-plugin in @wordpress/scripts).
+ * Use `npm run lint:js` separately; admin bundle rules are relaxed in `.eslintrc.js`.
  */
 
 const plugins = defaultConfig.plugins || [];
@@ -28,7 +74,11 @@ module.exports = (env, args) => {
       "./src/frontend/libs/gallery/jquery.justified.js",
     [`frontend/gallery-carousel${suffix}`]:
       "./src/frontend/libs/gallery/owl.carousel.js",
-    [`admin/editor${suffix}`]: "./src/frontend/sass/editor.scss",
+    [`admin/editor${suffix}`]: "./src/frontend/styles/editor.scss",
+    [`admin/customizer${suffix}`]: "./src/admin/customizer.js",
+    [`admin/customizer-liveview${suffix}`]: "./src/admin/customizer-liveview.js",
+    [`admin/admin${suffix}`]: "./src/admin/admin.js",
+    [`frontend/lightgallery${suffix}`]: "./src/frontend/lightgallery.js",
   };
 
   return [
@@ -37,7 +87,7 @@ module.exports = (env, args) => {
       entry,
       output: {
         ...defaultConfig[0].output,
-        path: path.resolve(__dirname, "assets/build"),
+        path: path.resolve(__dirname, "assets"),
         // filename: "build/[name].bundle.js",
         // assetModuleFilename: (pathData) => {
         //   const ext = path.extname(pathData.filename).toLowerCase();
@@ -55,6 +105,19 @@ module.exports = (env, args) => {
         //   return "media/[name][ext]"; // Mặc định: PDF, mp4, webm, v.v.
         // },
       },
+      plugins: [
+        ...(defaultConfig[0].plugins || []),
+        normalizeLineEndingsPlugin(),
+        new CopyWebpackPlugin({
+          patterns: [
+            {
+              from: path.resolve(__dirname, "src/images"),
+              to: "images",
+              noErrorOnMissing: true,
+            },
+          ],
+        }),
+      ],
       optimization: undefined,
       devServer: undefined,
     },

@@ -121,6 +121,9 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 		if (is_string( $value ) ) {
 			$value = json_decode( $value, true );
 		}
+		if ( is_array( $value ) && isset( $value['_items'] ) && is_array( $value['_items'] ) ) {
+			$value = $value['_items'];
+		}
 		if ( empty ( $value ) ){
 			$value = $this->defined_values;
 		} elseif ( is_array( $this->defined_values ) && ! empty ( $this->defined_values ) ) {
@@ -149,7 +152,22 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 		$this->json['default_empty_title']    = $this->default_empty_title;
 		$this->json['value']         = $value;
 		$this->json['id_key']        = $this->id_key;
-		$this->json['fields']        = $this->fields;
+		
+		// Sanitize fields data before passing to JavaScript
+		$sanitized_fields = array();
+		foreach ($this->fields as $key => $field) {
+			$sanitized_fields[$key] = $field;
+			if (isset($field['title'])) {
+				// Allow safe HTML tags in title (like <strong>, <em>, etc.)
+				$sanitized_fields[$key]['title'] = wp_kses_post($field['title']);
+			}
+			if (isset($field['desc'])) {
+				// Allow safe HTML tags in description (like <strong>, <em>, <a>, <p>, etc.)
+				// wp_kses_post() removes dangerous tags like <script>, <iframe> while keeping safe ones
+				$sanitized_fields[$key]['desc'] = wp_kses_post($field['desc']);
+			}
+		}
+		$this->json['fields'] = $sanitized_fields;
 
 	}
 
@@ -187,7 +205,10 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 			<ul class="list-repeatable"></ul>
 		</div>
 		<div class="repeatable-actions">
-			<span class="button-secondary add-new-repeat-item"><?php echo ( $this->add_text ) ? esc_html( $this->add_text ) : esc_html__( 'Add an item', 'onepress' ); ?></span>
+			<div>
+				<span class="button-secondary add-new-repeat-item"><?php echo ( $this->add_text ) ? esc_html( $this->add_text ) : esc_html__( 'Add an item', 'onepress' ); ?></span>
+			</div>
+			<span class="limited-msg"></span>
 		</div>
 		<?php
 	}
@@ -229,7 +250,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 									#>
 									<# if ( field.type !== 'checkbox' ) { #>
 									<# if ( field.title ) { #>
-									<label class="field-label">{{ field.title }}</label>
+									<label class="field-label">{{{ field.title }}}</label>
 									<# } #>
 
 									<# if ( field.desc ) { #>
@@ -248,11 +269,11 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 									<# if ( field.title ) { #>
 									<label class="checkbox-label">
 										<input data-live-id="{{ field.id }}" type="checkbox" <# if ( field.value ) { #> checked="checked" <# } #> value="1" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
-										{{ field.title }}</label>
+										{{{ field.title }}}</label>
 									<# } #>
 
 									<# if ( field.desc ) { #>
-									<p class="field-desc description">{{ field.desc }}</p>
+									<p class="field-desc description">{{{ field.desc }}}</p>
 									<# } #>
 
 
@@ -317,7 +338,7 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 										</div>
 										<# } #>
 
-										<div class="actions">
+										<div class="media-actions actions">
 											<button class="button remove-button " <# if ( ! field.value.url ){ #> style="display:none"; <# } #> type="button"><?php esc_html_e( 'Remove', 'onepress' ) ?></button>
 											<button class="button upload-button" data-media="{{field.media}}" data-add-txt="<?php esc_attr_e( 'Add', 'onepress' ); ?>" data-change-txt="<?php esc_attr_e( 'Change', 'onepress' ); ?>" type="button"><# if ( ! field.value.url  ){ #> <?php esc_html_e( 'Add', 'onepress' ); ?> <# } else { #> <?php esc_html_e( 'Change', 'onepress' ); ?> <# } #> </button>
 											<div style="clear:both"></div>
@@ -327,17 +348,25 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 										<textarea data-live-id="{{{ field.id }}}" data-repeat-name="_items[__i__][{{ field.id }}]">{{ field.value }}</textarea>
 										<# }  else if ( field.type == 'icon'  ) { #>
 										<#
-										var icon_class = field.value;
-										if ( icon_class.indexOf( 'fa-' ) != 0 ) {
-										icon_class = 'fa-' + field.value;
-										} else {
-										icon_class = icon_class.replace( 'fa ', '' );
+										var rawIcon = field.value ? String( field.value ) : '';
+										var svgProbe = rawIcon.replace( /^\uFEFF/, '' ).replace( /^\s+/, '' ).replace( /^\s*<\?xml[^>]*>\s*/i, '' ).replace( /^\s*<!DOCTYPE[^>]*>\s*/i, '' );
+										var isSvgIcon = /^<\s*svg[\s>]/i.test( svgProbe );
+										var icon_class = rawIcon;
+										if ( ! isSvgIcon ) {
+											if ( icon_class.indexOf( 'fa-' ) != 0 ) {
+												icon_class = 'fa-' + field.value;
+											} else {
+												icon_class = icon_class.replace( 'fa ', '' );
+											}
+											icon_class = icon_class.replace( 'fa-fa', '' );
 										}
-										icon_class = icon_class.replace( 'fa-fa', '' );
-
 										#>
 										<div class="icon-wrapper">
+											<# if ( isSvgIcon ) { #>
+											<span class="onepress-svg-preview">{{{ svgProbe }}}</span>
+											<# } else { #>
 											<i class="fa {{ icon_class }}"></i>
+											<# } #>
 											<input data-live-id="{{ field.id }}" type="hidden" value="{{ field.value }}" data-repeat-name="_items[__i__][{{ field.id }}]" class="">
 										</div>
 										<a href="#" class="remove-icon"><?php esc_html_e( 'Remove', 'onepress' ); ?></a>

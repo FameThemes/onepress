@@ -31,7 +31,6 @@ class Onepress_Dashboard
 
 	function save_settings()
 	{
-
 		if (isset($_POST['onepress_settings_nonce'])) {
 			if (!isset($_POST['onepress_settings_nonce']) || !wp_verify_nonce($_POST['onepress_settings_nonce'], $this->action_key)) {
 				wp_die(esc_html__('Security check!', 'onepress'));
@@ -88,9 +87,8 @@ class Onepress_Dashboard
 	function admin_scripts($hook)
 	{
 		if ($hook === 'widgets.php' || $hook === 'appearance_page_ft_onepress') {
-			$theme_directory_url = get_template_directory_uri();
-
-			wp_enqueue_style('onepress-admin-css', $theme_directory_url . '/assets/css/admin.css');
+			
+			onepress_load_build_script('admin', [], true);
 			// Add recommend plugin css
 			wp_enqueue_style('plugin-install');
 			wp_enqueue_script('plugin-install');
@@ -180,7 +178,7 @@ class Onepress_Dashboard
 						?>
 					</label>
 					<?php if ($see_only) { ?>
-						<span class="note-bubble"><?php esc_html('Plus Feature', 'onepress'); ?></span>
+						<span class="note-bubble"><?php esc_html_e('Plus Feature', 'onepress'); ?></span>
 					<?php } ?>
 				</div>
 			</div>
@@ -200,7 +198,7 @@ class Onepress_Dashboard
 		if ($this->save_status) {
 		?>
 			<div id="sections-manager-notice" class="updated notice notice-success is-dismissible">
-				<p><?php esc_html('Settings saved', 'onepress'); ?></p>
+				<p><?php esc_html_e('Settings saved', 'onepress'); ?></p>
 			</div>
 		<?php
 		}
@@ -236,11 +234,12 @@ class Onepress_Dashboard
 		$theme_data = wp_get_theme('onepress');
 
 		if (isset($_GET['onepress_action_dismiss'])) {
+			$key = sanitize_text_field($_GET['onepress_action_dismiss']);
 			$actions_dismiss =  get_option('onepress_actions_dismiss');
 			if (!is_array($actions_dismiss)) {
 				$actions_dismiss = array();
 			}
-			$actions_dismiss[sanitize_text_field($_GET['onepress_action_dismiss'])] = 'dismiss';
+			$actions_dismiss[$key] = 'dismiss';
 			update_option('onepress_actions_dismiss', $actions_dismiss);
 		}
 
@@ -328,7 +327,7 @@ class Onepress_Dashboard
 					<?php if (is_child_theme()) {
 						$child_theme = wp_get_theme();
 					?>
-						<form method="post" action="<?php echo esc_attr($current_action_link); ?>" class="demo-import-boxed copy-settings-form">
+						<form method="post" action="<?php echo esc_attr($current_action_link); ?>" class="demo-import-boxed copy-settings-form" data-confirm="<?php echo esc_attr(__('Are you sure you want to copy?', 'onepress')); ?>">
 							<p>
 								<strong> <?php printf(__('You\'re using %1$s theme, It\'s a child theme of OnePress', 'onepress'),  esc_html($child_theme->Name)); ?></strong>
 							</p>
@@ -352,7 +351,7 @@ class Onepress_Dashboard
 								?>
 								<input type="submit" class="button button-secondary" value="<?php esc_attr_e('Copy now', 'onepress'); ?>">
 							</p>
-							<?php if (isset($_GET['copied']) && $_GET['copied'] == 1) { ?>
+							<?php if (isset($_GET['copied']) && absint($_GET['copied']) == 1) { ?>
 								<p><?php esc_html_e('Your settings were copied.', 'onepress'); ?></p>
 							<?php } ?>
 							<?php wp_nonce_field('copy_action_nonce', 'copy_action_nonce'); ?>
@@ -433,7 +432,7 @@ class Onepress_Dashboard
 						<?php } ?>
 						<?php do_action('onepress_more_required_details', $actions); ?>
 					<?php  } else { ?>
-						<h3><?php esc_html(sprintf(__('Keep %s updated', 'onepress'), $theme_data->Name)); ?></h3>
+						<h3><?php echo esc_html(sprintf(__('Keep %s updated', 'onepress'), $theme_data->Name)); ?></h3>
 						<p><?php esc_html_e('Hooray! There are no required actions for you right now.', 'onepress'); ?></p>
 					<?php } ?>
 				</div>
@@ -717,18 +716,6 @@ class Onepress_Dashboard
 			<?php do_action('onepress_more_tabs_details', $actions); ?>
 
 		</div>
-		<script type="text/javascript">
-			jQuery(document).ready(function($) {
-				$('body').addClass('about-php');
-
-				$('.copy-settings-form').on('submit', function() {
-					var c = confirm('<?php echo esc_attr_e('Are you sure want to copy ?', 'onepress'); ?>');
-					if (!c) {
-						return false;
-					}
-				});
-			});
-		</script>
 <?php
 	}
 
@@ -800,6 +787,11 @@ class Onepress_Dashboard
 	{
 		// Action for dismiss
 		if (isset($_GET['onepress_action_notice'])) {
+			if (!current_user_can('edit_theme_options')) {
+				wp_die(esc_html__('You are not authorized to access this page.', 'onepress'));
+				die();
+			}
+
 			$actions_dismiss =  get_option('onepress_actions_dismiss');
 			if (!is_array($actions_dismiss)) {
 				$actions_dismiss = array();
@@ -819,6 +811,11 @@ class Onepress_Dashboard
 
 		// Action for copy options
 		if (isset($_POST['copy_from']) && isset($_POST['copy_to'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+			if (!current_user_can('edit_theme_options')) {
+				wp_die(esc_html__('You are not authorized to access this page.', 'onepress'));
+				die();
+			}
 
 			$nonce = isset($_POST['copy_action_nonce']) ? sanitize_text_field($_POST['copy_action_nonce']) : '';
 			if (!wp_verify_nonce($nonce, 'copy_action_nonce')) {
