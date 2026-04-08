@@ -73,6 +73,7 @@ module.exports = function (grunt) {
           "!phpunit.xml.dist",
           "!*.sh",
           "!*.map",
+          "!**/*.map",
           "!Gruntfile.js",
           "!package.json",
           "!.gitignore",
@@ -205,6 +206,8 @@ module.exports = function (grunt) {
     grunt.task.run("shell:build");
     grunt.task.run("bumpup:" + newVersion);
     grunt.task.run("replace");
+    grunt.task.run("zipfile");
+    
     
     // i18n
     // grunt.task.run(['addtextdomain', 'makepot']);
