@@ -6,7 +6,15 @@
  * Contains handlers to make Theme Customizer preview reload changes asynchronously.
  */
 
+import { bindOnePressBackgroundPreview } from './customizer/background/previewBindings';
+import { bindOnePressTypographyPreview } from './customizer/typography/previewBindings';
+import { bindOnePressSpacingPreview } from './customizer/spacing/previewBindings';
+
 ( function( $ , api ) {
+
+	bindOnePressBackgroundPreview( api );
+	bindOnePressTypographyPreview( api );
+	bindOnePressSpacingPreview( api );
 
 
     // Site footer bg

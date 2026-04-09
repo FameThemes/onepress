@@ -25,6 +25,7 @@
     "@wordpress/components": "^27.3.0",
     "@wordpress/element": "^5.32.0",
     "@wordpress/i18n": "^4.57.0",
+    "@wordpress/icons": "^12.1.0",
     "@wordpress/interactivity": "^5.5.0",
     "@wordpress/scripts": "^30.20.0",
     "array-move": "^4.0.0",

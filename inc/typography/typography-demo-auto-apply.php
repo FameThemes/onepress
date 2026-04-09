@@ -8,7 +8,7 @@
 if ( function_exists( 'onepress_typo_helper_auto_apply' ) ) {
 	onepress_typo_helper_auto_apply(
 		'onepress_typo_demo_heading',
-		'.site-title a',
+		'#features .section-content',
 		null,
 		'theme_mod',
 		''

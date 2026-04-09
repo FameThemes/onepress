@@ -1,0 +1,216 @@
+/* Background Customizer control */
+
+.customize-control-onepress_background {
+  overflow: visible;
+}
+
+.customize-control-onepress_background .onepress-background-wrap,
+.customize-control-onepress_background .onepress-background-react-root {
+  overflow: visible;
+}
+
+.onepress-background-wrap {
+  .customize-control-title {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .customize-control-description {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+.onepress-bg-control-root {
+  position: relative;
+  width: 100%;
+}
+
+.onepress-bg-control-root--open {
+  z-index: 500050;
+}
+
+.onepress-bg-app {
+  position: relative;
+  width: 100%;
+  // display: flex;
+  // flex-direction: column;
+  align-items: stretch;
+}
+
+.onepress-bg-app__toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.onepress-bg-app__devices {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.onepress-bg-app__device-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid #c4c8ce;
+  border-radius: 4px;
+  background: #fff;
+  color: #50575e;
+  cursor: pointer;
+}
+
+.onepress-bg-app__device-btn:hover,
+.onepress-bg-app__device-btn:focus {
+  border-color: #2271b1;
+  color: #2271b1;
+  outline: none;
+}
+
+.onepress-bg-app__device-btn.is-active {
+  border-color: #2271b1;
+  background: #f0f6fc;
+  color: #2271b1;
+}
+
+.onepress-bg-app__device-btn .dashicons {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.onepress-bg-app__states {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.onepress-bg-app__state-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border: 1px solid #c4c8ce;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 12px;
+  color: #1d2327;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.onepress-bg-app__state-btn__fill {
+  position: absolute;
+  inset: 1px;
+  border-radius: 3px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.onepress-bg-app__state-btn__fill--empty {
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #ddd 25%, transparent 25%),
+    linear-gradient(-45deg, #ddd 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ddd 75%),
+    linear-gradient(-45deg, transparent 75%, #ddd 75%);
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    0 4px,
+    4px -4px,
+    -4px 0;
+}
+
+.onepress-bg-app__state-btn__label {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  padding: 2px 7px;
+  border-radius: 4px;
+  line-height: 1.35;
+  font-weight: inherit;
+  color: #FFF;
+  text-shadow: 0 0 2px #222;
+}
+
+.onepress-bg-app__state-btn:hover,
+.onepress-bg-app__state-btn:focus {
+  border-color: #2271b1;
+  outline: none;
+}
+
+.onepress-bg-app__state-btn.is-active {
+  border-color: #2271b1;
+  color: #2271b1;
+  font-weight: 600;
+}
+
+/* Inline dropdown below state row (same pattern as Typography) */
+.onepress-bg-settings-dropdown.onepress-bg-portal {
+  margin-top: 3px;
+  width: 100%;
+  max-width: min(420px, calc(100vw - 32px));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.onepress-bg-popover {
+  padding: 12px;
+  min-width: 0;
+}
+
+.onepress-bg-popover__head {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #dcdcde;
+}
+
+.onepress-bg-popover__title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.onepress-bg-popover__tabs .components-tab-panel__tabs {
+  margin-bottom: 10px;
+}
+
+.onepress-bg-popover__panel {
+  min-height: 80px;
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
+}
+
+.onepress-bg-color-panel .components-color-picker {
+  margin-bottom: 8px;
+}
+
+.onepress-bg-image-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.onepress-bg-image-panel__thumb {
+  display: block;
+  max-width: 100%;
+  max-height: 120px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  border: 1px solid #dcdcde;
+}

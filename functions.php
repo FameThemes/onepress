@@ -414,8 +414,11 @@ function onepress_scripts()
 	}
 
 	$onepress_js_settings['parallax_speed'] = 0.5;
-	$onepress_js_settings =  apply_filters('onepress_js_settings', $onepress_js_settings);
-	wp_localize_script('onepress-theme', 'onepress_js_settings', $onepress_js_settings);
+	$onepress_js_settings_filtered = apply_filters( 'onepress_js_settings', $onepress_js_settings );
+	if ( is_array( $onepress_js_settings_filtered ) ) {
+		$onepress_js_settings = $onepress_js_settings_filtered;
+	}
+	wp_localize_script( 'onepress-theme', 'onepress_js_settings', $onepress_js_settings );
 }
 add_action('wp_enqueue_scripts', 'onepress_scripts');
 
@@ -679,6 +682,18 @@ require get_template_directory() . '/inc/extras.php';
 require get_template_directory() . '/inc/typography/typography.php';
 require get_template_directory() . '/inc/typography/helper.php';
 require get_template_directory() . '/inc/typography/typography-demo-auto-apply.php';
+
+/**
+ * Spacing (Customizer + front-end CSS).
+ */
+require get_template_directory() . '/inc/spacing/helper.php';
+require get_template_directory() . '/inc/spacing/spacing-demo-auto-apply.php';
+
+/**
+ * Background (Customizer + front-end CSS).
+ */
+require get_template_directory() . '/inc/background/helper.php';
+require get_template_directory() . '/inc/background/background-demo-auto-apply.php';
 
 /**
  * Dots Navigation class

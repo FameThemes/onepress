@@ -5,6 +5,8 @@
  */
 require_once get_template_directory() . '/inc/typography/typography.php';
 require_once get_template_directory() . '/inc/customize-controls/control-theme-typography.php';
+require_once get_template_directory() . '/inc/customize-controls/control-theme-spacing.php';
+require_once get_template_directory() . '/inc/customize-controls/control-theme-background.php';
 require_once get_template_directory() . '/inc/customize-controls/section-plus.php';
 require_once get_template_directory() . '/inc/customize-controls/control-misc.php';
 require_once get_template_directory() . '/inc/customize-controls/control-custom-textarea.php';
@@ -67,7 +69,27 @@ function onepres_customizer_control_scripts()
 	$handle = onepress_load_build_script('customizer', ['customize-controls', 'wp-color-picker'], true);
 	wp_localize_script($handle, 'ONEPRESS_CUSTOMIZER_DATA', $customizer_data);
 
-	
+	$typo_bp = apply_filters(
+		'onepress_typo_responsive_breakpoints',
+		array(
+			'tablet' => '991px',
+			'mobile' => '767px',
+		)
+	);
+	if ( ! is_array( $typo_bp ) ) {
+		$typo_bp = array(
+			'tablet' => '991px',
+			'mobile' => '767px',
+		);
+	}
+	$bg_breakpoints = apply_filters(
+		'onepress_background_responsive_breakpoints',
+		$typo_bp
+	);
+	if ( ! is_array( $bg_breakpoints ) ) {
+		$bg_breakpoints = $typo_bp;
+	}
+	wp_localize_script($handle, 'onepressBackgroundBreakpoints', $bg_breakpoints);
 }
 
 add_action('customize_controls_enqueue_scripts', 'onepres_customizer_control_scripts', 99);

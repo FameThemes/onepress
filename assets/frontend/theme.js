@@ -1143,7 +1143,7 @@ jQuery(function ($) {
       var $that = this;
       this.phrases = [];
       this.element.addClass("morphext");
-      $.each(this.element.text().split(this.settings.separator), function (key, value) {
+      $.each(this.element.html().split(this.settings.separator), function (key, value) {
         $that.phrases.push($.trim(value));
       });
       this.index = -1;

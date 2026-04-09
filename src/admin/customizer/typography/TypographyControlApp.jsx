@@ -4,19 +4,23 @@
 import {
 	useCallback,
 	useEffect,
-	useId,
 	useMemo,
 	useRef,
 	useState,
 } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { createPortal } from 'react-dom';
+import { Popover } from '@wordpress/components';
 import {
-	FontPickerModal,
+	Icon,
+	justifyStretch,
+	justifyStretchVertical,
+} from '@wordpress/icons';
+import {
+	FontPickerPanel,
 	removeAllPickerPreviewLinks,
 	removeSelectedFontLink,
 	setSelectedGoogleFontLink,
-} from './typography/FontPickerModal.jsx';
+} from './FontPickerModal.jsx';
 
 const SIZE_UNITS = ['px', 'em', 'rem', '%'];
 
@@ -115,6 +119,20 @@ function composeNumberUnit(value, unit, fallbackUnit = 'px') {
 	return `${n}${u}`;
 }
 
+/**
+ * Missing / empty / explicit `none` → stored as "none" for decoration & transform toggles.
+ *
+ * @param {string|undefined} raw
+ * @returns {string}
+ */
+function normalizeTextDecorationTransform(raw) {
+	const v = raw == null ? '' : String(raw).trim();
+	if (!v || v.toLowerCase() === 'none') {
+		return 'none';
+	}
+	return v;
+}
+
 function parseInitialState(rawValue, fields) {
 	const base = {
 		fontId: '',
@@ -137,9 +155,8 @@ function parseInitialState(rawValue, fields) {
 		letterSpacingTabletUnit: 'px',
 		letterSpacingMobile: '',
 		letterSpacingMobileUnit: 'px',
-		textDecoration: '',
-		textTransform: '',
-		color: '',
+		textDecoration: 'none',
+		textTransform: 'none',
 	};
 
 	if (!rawValue || !String(rawValue).trim()) {
@@ -221,9 +238,12 @@ function parseInitialState(rawValue, fields) {
 		letterSpacingMobileUnit: fields.letter_spacing
 			? letterSpacingMobileParsed.unit
 			: 'px',
-		textDecoration: fields.text_decoration ? css['text-decoration'] || '' : '',
-		textTransform: fields.text_transform ? css['text-transform'] || '' : '',
-		color: fields.color ? css.color || css['font-color'] || '' : '',
+		textDecoration: fields.text_decoration
+			? normalizeTextDecorationTransform(css['text-decoration'])
+			: '',
+		textTransform: fields.text_transform
+			? normalizeTextDecorationTransform(css['text-transform'])
+			: '',
 	};
 }
 
@@ -399,11 +419,8 @@ function getEffectiveFontMetrics(state, device) {
 	};
 }
 
-function buildCssAndPreview(state, fields, webfonts, cssSelector, previewDevice) {
+function buildTypographySettingCss(state, fields, webfonts) {
 	const css = {};
-	let fontId = '';
-	let fontUrl = '';
-	let styleToken = '';
 
 	if (fields.font_size) {
 		const value = composeNumberUnit(state.fontSize, state.fontSizeUnit, 'px');
@@ -482,173 +499,33 @@ function buildCssAndPreview(state, fields, webfonts, cssSelector, previewDevice)
 		}
 	}
 
-	if (fields.text_decoration && state.textDecoration) {
-		css['text-decoration'] = state.textDecoration;
+	if (fields.text_decoration) {
+		css['text-decoration'] = state.textDecoration || 'none';
 	}
 
-	if (fields.text_transform && state.textTransform) {
-		css['text-transform'] = state.textTransform;
-	}
-
-	if (fields.color && state.color) {
-		css.color = state.color;
+	if (fields.text_transform) {
+		css['text-transform'] = state.textTransform || 'none';
 	}
 
 	if (fields.font_family && fields.font_style) {
-		styleToken = state.styleSelect || '';
+		const styleToken = state.styleSelect || '';
 		const { weight, style } = parseStyleSelect(styleToken);
 		css['font-style'] = style || 'normal';
 		css['font-weight'] = weight === '' ? '' : weight;
 	}
 
 	if (fields.font_family) {
-		fontId = state.fontId || '';
+		const fontId = state.fontId || '';
 		if (fontId && webfonts[fontId]) {
 			const font = webfonts[fontId];
 			css['font-family'] = font.name;
-			fontUrl = font.url || '';
 		}
 	}
 
-	const device =
-		previewDevice && PREVIEW_DEVICES.includes(previewDevice)
-			? previewDevice
-			: 'desktop';
-	const metrics = getEffectiveFontMetrics(state, device);
-	const previewCss = { ...css };
-
-	if (fields.font_size) {
-		delete previewCss['font-size'];
-		delete previewCss['font-size-tablet'];
-		delete previewCss['font-size-mobile'];
-		if (metrics.fontSize) {
-			previewCss['font-size'] = metrics.fontSize;
-		}
-	}
-	if (fields.line_height) {
-		delete previewCss['line-height'];
-		delete previewCss['line-height-tablet'];
-		delete previewCss['line-height-mobile'];
-		if (metrics.lineHeight) {
-			previewCss['line-height'] = metrics.lineHeight;
-		}
-	}
-	if (fields.letter_spacing) {
-		delete previewCss['letter-spacing'];
-		delete previewCss['letter-spacing-tablet'];
-		delete previewCss['letter-spacing-mobile'];
-		if (metrics.letterSpacing) {
-			previewCss['letter-spacing'] = metrics.letterSpacing;
-		}
-	}
-
-	return {
-		css,
-		preview: {
-			font_id: fontId,
-			style: styleToken,
-			css_selector: cssSelector,
-			css: previewCss,
-			font_url: fontUrl,
-		},
-	};
+	return css;
 }
 
-function applyPreview(settings) {
-	const iframe = document.querySelector('#customize-preview iframe');
-	const doc = iframe?.contentDocument;
-	if (!doc || !settings.css_selector) {
-		return;
-	}
-
-	if (settings.font_url) {
-		const lid = `google-font-${settings.font_id}`;
-		doc.getElementById(lid)?.remove();
-		const link = doc.createElement('link');
-		link.id = lid;
-		link.rel = 'stylesheet';
-		link.href = settings.font_url;
-		link.type = 'text/css';
-		doc.head.appendChild(link);
-	}
-
-	const nodes = doc.querySelectorAll(settings.css_selector);
-	nodes.forEach((el) => {
-		el.removeAttribute('style');
-		for (const [prop, val] of Object.entries(settings.css)) {
-			if (val !== undefined && val !== null && val !== '') {
-				el.style.setProperty(prop, String(val));
-			}
-		}
-	});
-}
-
-function clamp255(n) {
-	return Math.max(0, Math.min(255, Math.round(Number(n))));
-}
-
-function clamp01(n) {
-	return Math.max(0, Math.min(1, Number(n)));
-}
-
-function toHex2(n) {
-	return clamp255(n).toString(16).padStart(2, '0');
-}
-
-/**
- * Parse any CSS color string to RGBA (uses canvas; Customizer is always in a browser).
- *
- * @param {string} str
- * @returns {{ r: number, g: number, b: number, a: number }}
- */
-function parseColorToRgba(str) {
-	if (typeof str !== 'string' || !str.trim()) {
-		return { r: 0, g: 0, b: 0, a: 1 };
-	}
-	const canvas = document.createElement('canvas');
-	canvas.width = 1;
-	canvas.height = 1;
-	const ctx = canvas.getContext('2d');
-	if (!ctx) {
-		return { r: 0, g: 0, b: 0, a: 1 };
-	}
-	ctx.fillStyle = '#000000';
-	ctx.fillStyle = str.trim();
-	ctx.fillRect(0, 0, 1, 1);
-	const d = ctx.getImageData(0, 0, 1, 1).data;
-	return {
-		r: d[0],
-		g: d[1],
-		b: d[2],
-		a: d[3] / 255,
-	};
-}
-
-/**
- * @param {{ r: number, g: number, b: number, a: number }} c
- * @returns {string}
- */
-function formatColorCss(c) {
-	const r = clamp255(c.r);
-	const g = clamp255(c.g);
-	const b = clamp255(c.b);
-	const a = clamp01(c.a);
-	if (a >= 0.999) {
-		return `#${toHex2(r)}${toHex2(g)}${toHex2(b)}`;
-	}
-	const rounded = Math.round(a * 1000) / 1000;
-	return `rgba(${r}, ${g}, ${b}, ${rounded})`;
-}
-
-/** Solid #rrggbb for native color input (no alpha). */
-function getHexForColorInput(color) {
-	const { r, g, b } = parseColorToRgba(
-		typeof color === 'string' && color.trim() ? color : '#000000'
-	);
-	return `#${toHex2(r)}${toHex2(g)}${toHex2(b)}`;
-}
-
-function renderResponsiveUnitField({
+function ResponsiveUnitField({
 	label,
 	fieldKey,
 	previewDevice,
@@ -656,12 +533,20 @@ function renderResponsiveUnitField({
 	state,
 	patch,
 	min,
+	leadingIcon = null,
 }) {
 	const keys =
 		RESPONSIVE_UNIT_KEYS[fieldKey][previewDevice] ||
 		RESPONSIVE_UNIT_KEYS[fieldKey].desktop;
 	const value = state[keys.value];
 	const unit = state[keys.unit];
+
+	const [unitPopoverOpen, setUnitPopoverOpen] = useState(false);
+	const [unitAnchorEl, setUnitAnchorEl] = useState(null);
+
+	useEffect(() => {
+		setUnitPopoverOpen(false);
+	}, [previewDevice, fieldKey]);
 
 	const deviceButtons = [
 		{
@@ -694,9 +579,8 @@ function renderResponsiveUnitField({
 						<button
 							key={d.id}
 							type="button"
-							className={`setting-group__device-btn${
-								previewDevice === d.id ? ' is-active' : ''
-							}`}
+							className={`setting-group__device-btn${previewDevice === d.id ? ' is-active' : ''
+								}`}
 							title={d.title}
 							aria-label={d.title}
 							aria-pressed={previewDevice === d.id}
@@ -707,7 +591,17 @@ function renderResponsiveUnitField({
 					))}
 				</div>
 			</div>
-			<div className="unit-row">
+			<div
+				className={
+					'unit-row' +
+					(leadingIcon ? ' unit-row--has-leading-icon' : '')
+				}
+			>
+				{leadingIcon ? (
+					<span className="unit-row__icon" aria-hidden="true">
+						<Icon icon={leadingIcon} size={20} />
+					</span>
+				) : null}
 				<input
 					type="number"
 					className="input"
@@ -716,34 +610,84 @@ function renderResponsiveUnitField({
 					value={value}
 					onChange={(e) => patch({ [keys.value]: e.target.value })}
 				/>
-				<select
-					className="input"
-					value={unit}
-					onChange={(e) => patch({ [keys.unit]: e.target.value })}
-				>
-					{SIZE_UNITS.map((u) => (
-						<option key={u} value={u}>
-							{u}
-						</option>
-					))}
-				</select>
+				<div className="unit-row__unit-wrap">
+					<button
+						type="button"
+						ref={setUnitAnchorEl}
+						className="input unit-popover-trigger"
+						aria-expanded={unitPopoverOpen}
+						aria-haspopup="dialog"
+						aria-label={__('Unit', 'onepress')}
+						onClick={() => setUnitPopoverOpen((o) => !o)}
+					>
+						<span className="unit-popover-trigger__value">{unit}</span>
+					</button>
+					{unitPopoverOpen && (
+						<Popover
+							anchor={unitAnchorEl}
+							className="onepress-typo-unit-popover-shell"
+							onClose={() => setUnitPopoverOpen(false)}
+							placement="bottom-start"
+							offset={4}
+							focusOnMount={false}
+						>
+							<div
+								className="onepress-typo-unit-popover"
+								role="listbox"
+								aria-label={__('Unit', 'onepress')}
+							>
+								{SIZE_UNITS.map((u) => (
+									<button
+										key={u}
+										type="button"
+										role="option"
+										aria-selected={unit === u}
+										className={
+											'onepress-typo-unit-popover__item' +
+											(unit === u ? ' is-selected' : '')
+										}
+										onClick={() => {
+											patch({ [keys.unit]: u });
+											setUnitPopoverOpen(false);
+										}}
+									>
+										{u}
+									</button>
+								))}
+							</div>
+						</Popover>
+					)}
+				</div>
 			</div>
 		</div>
 	);
 }
 
-function renderSpanChoices({ options, value, onChange }) {
-	const onKeyPick = (event, next) => {
+function renderSpanChoices({
+	options,
+	value,
+	onChange,
+	toggleable = false,
+	noneValue = 'none',
+}) {
+	const resolvePick = (optValue) => {
+		if (toggleable && value === optValue) {
+			return noneValue;
+		}
+		return optValue;
+	};
+
+	const onKeyPick = (event, optValue) => {
 		if (event.key === 'Enter' || event.key === ' ') {
 			event.preventDefault();
-			onChange(next);
+			onChange(resolvePick(optValue));
 		}
 	};
 
 	return (
 		<div className="choice-row">
 			{options.map((opt) => {
-				const active = value === opt.value;
+				const active = value === opt.value && value !== noneValue;
 				return (
 					<span
 						key={opt.value || 'default'}
@@ -752,7 +696,7 @@ function renderSpanChoices({ options, value, onChange }) {
 						tabIndex={0}
 						aria-pressed={active}
 						title={opt.label}
-						onClick={() => onChange(opt.value)}
+						onClick={() => onChange(resolvePick(opt.value))}
 						onKeyDown={(e) => onKeyPick(e, opt.value)}
 					>
 						<span className={`choice-icon ${opt.iconClass}`}>{opt.icon}</span>
@@ -769,9 +713,19 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 	const labels = params.labels;
 	const cssSelector = params.css_selector || '';
 	const controlId = control.id;
+	const controlLabel =
+		typeof params.label === 'string' && params.label.trim()
+			? params.label.trim()
+			: '';
+	const controlDescription =
+		typeof params.description === 'string' && params.description.trim()
+			? params.description
+			: '';
 
 	const settingRef = useRef(null);
 	settingRef.current = control.setting || control.settings?.default;
+	const controlWrapRef = useRef(null);
+	const fontSelectorRef = useRef(null);
 
 	const [state, setState] = useState(() => parseInitialState(params.value, fields));
 	const [previewDevice, setPreviewDevice] = useState('desktop');
@@ -825,26 +779,6 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 		}
 	}, []);
 
-	const handleColorSwatchChange = useCallback((e) => {
-		const hex = e.target.value;
-		const prev = parseColorToRgba(state.color || '#000000');
-		const { r, g, b } = parseColorToRgba(hex);
-		patch({ color: formatColorCss({ r, g, b, a: prev.a }) });
-	}, [state.color, patch]);
-
-	const handleColorAlphaChange = useCallback(
-		(e) => {
-			const a = Number(e.target.value) / 100;
-			const base =
-				state.color && typeof state.color === 'string' && state.color.trim()
-					? state.color
-					: '#000000';
-			const { r, g, b } = parseColorToRgba(base);
-			patch({ color: formatColorCss({ r, g, b, a }) });
-		},
-		[state.color, patch]
-	);
-
 	useEffect(() => {
 		const api =
 			typeof window !== 'undefined' && window.wp?.customize;
@@ -871,10 +805,17 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 		setFontPickerOpen(false);
 	}, [controlId]);
 
-	const openFontPicker = useCallback(() => {
-		removeAllPickerPreviewLinks(controlId);
-		setFontPickerOpen(true);
-	}, [controlId]);
+	const openFontPicker = useCallback(
+		(e) => {
+			if (e) {
+				e.stopPropagation();
+			}
+			removeAllPickerPreviewLinks(controlId);
+			setSettingsOpen(true);
+			setFontPickerOpen((open) => !open);
+		},
+		[controlId]
+	);
 
 	const selectFontFromPicker = useCallback(
 		(fontId) => {
@@ -912,65 +853,86 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 	}, [controlId]);
 
 	useEffect(() => {
-		const { css, preview } = buildCssAndPreview(
-			state,
-			fields,
-			webfonts,
-			cssSelector,
-			previewDevice
-		);
+		const css = buildTypographySettingCss(state, fields, webfonts);
 		const setting = settingRef.current;
 		if (setting) {
 			setting.set(JSON.stringify(css));
 		}
-		applyPreview(preview);
-	}, [state, fields, webfonts, cssSelector, previewDevice]);
+	}, [state, fields, webfonts]);
 
 	useEffect(() => {
 		if (!settingsOpen) {
 			return undefined;
 		}
 		const onKey = (e) => {
-			if (e.key === 'Escape') {
-				setSettingsOpen(false);
+			if (e.key !== 'Escape') {
+				return;
 			}
+			if (fontPickerOpen) {
+				closeFontPicker();
+				e.preventDefault();
+				return;
+			}
+			setSettingsOpen(false);
 		};
 		document.addEventListener('keydown', onKey);
 		return () => document.removeEventListener('keydown', onKey);
-	}, [settingsOpen]);
+	}, [settingsOpen, fontPickerOpen, closeFontPicker]);
 
-	const colorAlphaId = useId();
+	useEffect(() => {
+		if (!settingsOpen && !fontPickerOpen) {
+			return undefined;
+		}
+		const onDocDown = (e) => {
+			const root = controlWrapRef.current;
+			if (!root) {
+				return;
+			}
+			// wp.components.Popover renders in a portal (body); clicks there are not
+			// inside controlWrapRef but must not close the Typography options panel.
+			const t = e.target;
+			if (
+				t &&
+				typeof t.closest === 'function' &&
+				t.closest('.components-popover')
+			) {
+				return;
+			}
+			if (!root.contains(e.target)) {
+				setFontPickerOpen(false);
+				setSettingsOpen(false);
+				return;
+			}
+			if (
+				fontPickerOpen &&
+				fontSelectorRef.current &&
+				!fontSelectorRef.current.contains(e.target)
+			) {
+				setFontPickerOpen(false);
+			}
+		};
+		document.addEventListener('mousedown', onDocDown);
+		return () => document.removeEventListener('mousedown', onDocDown);
+	}, [settingsOpen, fontPickerOpen]);
 
-	const colorRgba = useMemo(
-		() =>
-			parseColorToRgba(
-				state.color &&
-					typeof state.color === 'string' &&
-					state.color.trim()
-					? state.color
-					: '#000000'
-			),
-		[state.color]
-	);
-
-	const selectorSample = __('The quick brown fox jumps over the lazy dog.', 'onepress');
 	const selectorStack = selectedFont ? `"${selectedFont.name}", sans-serif` : 'inherit';
 	const sizeBadge =
 		state.fontSize !== '' ? `${state.fontSize}${state.fontSizeUnit}` : labels.option_default;
 	const textDecorationChoices = [
-		{ value: '', label: labels.option_default, icon: 'D', iconClass: 'default' },
-		{ value: 'none', label: __('None', 'onepress'), icon: 'N', iconClass: 'none' },
-		{ value: 'overline', label: __('Overline', 'onepress'), icon: 'O', iconClass: 'overline' },
-		{ value: 'underline', label: __('Underline', 'onepress'), icon: 'U', iconClass: 'underline' },
-		{ value: 'line-through', label: __('Line through', 'onepress'), icon: 'S', iconClass: 'line-through' },
+		// none = no items selected
+		// { value: 'none', label: __('None', 'onepress'), icon: 'Aa', iconClass: 'none' },
+		{ value: 'overline', label: __('Overline', 'onepress'), icon: 'Aa', iconClass: 'overline' },
+		{ value: 'underline', label: __('Underline', 'onepress'), icon: 'Aa', iconClass: 'underline' },
+		{ value: 'line-through', label: __('Line through', 'onepress'), icon: 'Aa', iconClass: 'line-through' },
 	];
 	const textTransformChoices = [
-		{ value: '', label: labels.option_default, icon: 'Aa', iconClass: 'default' },
-		{ value: 'none', label: __('None', 'onepress'), icon: 'Aa', iconClass: 'none' },
+		// none = no items selected
+		// { value: 'none', label: __('None', 'onepress'), icon: 'Aa', iconClass: 'none' },
 		{ value: 'uppercase', label: __('Uppercase', 'onepress'), icon: 'AA', iconClass: 'uppercase' },
 		{ value: 'lowercase', label: __('Lowercase', 'onepress'), icon: 'aa', iconClass: 'lowercase' },
 		{ value: 'capitalize', label: __('Capitalize', 'onepress'), icon: 'Aa', iconClass: 'capitalize' },
 	];
+
 	const summaryPreviewStyle = {
 		fontFamily: selectorStack,
 	};
@@ -998,243 +960,225 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 			summaryPreviewStyle.letterSpacing = v;
 		}
 	}
-	if (fields.text_transform && state.textTransform) {
-		summaryPreviewStyle.textTransform = state.textTransform;
+	if (fields.text_transform) {
+		summaryPreviewStyle.textTransform = state.textTransform || 'none';
 	}
-	if (fields.text_decoration && state.textDecoration) {
-		summaryPreviewStyle.textDecoration = state.textDecoration;
-	}
-	if (fields.color && state.color) {
-		summaryPreviewStyle.color = state.color;
+	if (fields.text_decoration) {
+		summaryPreviewStyle.textDecoration = state.textDecoration || 'none';
 	}
 
 	return (
-		<>
+		<div
+			ref={controlWrapRef}
+			className={
+				'onepress-typo-control' +
+				(settingsOpen ? ' onepress-typo-control--open' : '')
+			}
+		>
+			{controlLabel ? (
+				<span className="customize-control-title">{controlLabel}</span>
+			) : null}
+			{controlDescription ? (
+				<span
+					className="description customize-control-description"
+					dangerouslySetInnerHTML={{ __html: controlDescription }}
+				/>
+			) : null}
 			<button
 				type="button"
-				className="onepress-typo-summary-card"
-				onClick={() => setSettingsOpen(true)}
-				aria-label={__('Open typography options', 'onepress')}
+				className="onepress-typo-summary-card flex items-center w-full"
+				onClick={() => {
+					setSettingsOpen((prev) => {
+						if (prev) {
+							setFontPickerOpen(false);
+						}
+						return !prev;
+					});
+				}}
+				aria-expanded={settingsOpen}
+				aria-label={__('Typography options', 'onepress')}
 			>
-				<span className="onepress-typo-summary-meta">
+				<span className="onepress-typo-summary-meta flex justify-between items-center w-full">
 					<span className="onepress-typo-chip" style={{ fontFamily: selectorStack }}>
 						{selectedFont ? selectedFont.name : labels.option_default}
 					</span>
-					<span className="onepress-typo-chip">{selectedStyleLabel}</span>
-					<span className="onepress-typo-chip">{sizeBadge}</span>
+					<span className='flex gap-1'>
+						<span className="onepress-typo-chip">{selectedStyleLabel}</span>
+						<span className="onepress-typo-chip">{sizeBadge}</span>
+					</span>
 				</span>
-				<span className="onepress-typo-summary-preview" style={summaryPreviewStyle}>
-					{selectorSample}
-				</span>
+				{/* <span className="onepress-typo-summary-preview" style={summaryPreviewStyle}>…</span> */}
 			</button>
 
-			{settingsOpen &&
-				createPortal(
-					<div
-						className="onepress-typo-portal settings-backdrop"
-						onMouseDown={(e) => {
-							if (e.target === e.currentTarget) {
+			{settingsOpen && (
+				<div
+					className="onepress-typo-dropdown onepress-typo-settings-dropdown onepress-typo-portal"
+					role="dialog"
+					aria-modal="false"
+					aria-label={__('Typography options', 'onepress')}
+				>
+					{/* <div className="settings-head">
+						<strong>{__('Typography options', 'onepress')}</strong>
+						<button
+							type="button"
+							className="button-link"
+							onClick={() => {
+								setFontPickerOpen(false);
 								setSettingsOpen(false);
-							}
-						}}
-					>
-						<div
-							className="settings-modal"
-							role="dialog"
-							aria-modal="true"
-							aria-label={__('Typography options', 'onepress')}
+							}}
 						>
-							<div className="settings-head">
-								<strong>{__('Typography options', 'onepress')}</strong>
-								<button
-									type="button"
-									className="button-link"
-									onClick={() => setSettingsOpen(false)}
-								>
-									{__('Close', 'onepress')}
-								</button>
-							</div>
-							<div className="settings-body">
-								{fields.font_family && (
-									<div className="setting-group">
-										<span className="customize-control-title">{labels.family}:</span>
-										<div className="font-family-row">
-											<span
-												className="input font-family-value clickable"
-												role="button"
-												tabIndex={0}
-												aria-label={__('Open font selector', 'onepress')}
-												onClick={openFontPicker}
-												onKeyDown={(e) => {
-													if (e.key === 'Enter' || e.key === ' ') {
-														e.preventDefault();
-														openFontPicker();
-													}
-												}}
-											>
-												{selectedFont
-													? selectedFont.name
-													: labels.option_default}
-											</span>
-											{selectedFont && (
-												<button
-													type="button"
-													className="font-family-clear"
-													aria-label={__(
-														'Remove font and use theme default',
-														'onepress'
-													)}
-													title={__(
-														'Remove font and use theme default',
-														'onepress'
-													)}
-													onClick={(e) => {
-														e.stopPropagation();
-														clearSelectedFont();
-													}}
-												>
-													<span
-														className="dashicons dashicons-trash"
-														aria-hidden
-													/>
-												</button>
+							{__('Close', 'onepress')}
+						</button>
+					</div> */}
+					<div className="settings-body">
+						{fields.font_family && (
+							<div
+								className="setting-group font-family-setting"
+								ref={fontSelectorRef}
+							>
+								<span className="customize-control-title">{labels.family}</span>
+								<div className="font-family-row">
+									<span
+										className="input font-family-value clickable"
+										role="button"
+										tabIndex={0}
+										aria-label={__('Open font selector', 'onepress')}
+										aria-expanded={fontPickerOpen}
+										onClick={(e) => openFontPicker(e)}
+										onKeyDown={(e) => {
+											if (e.key === 'Enter' || e.key === ' ') {
+												e.preventDefault();
+												openFontPicker(e);
+											}
+										}}
+									>
+										{selectedFont
+											? selectedFont.name
+											: labels.option_default}
+									</span>
+									{selectedFont && (
+										<button
+											type="button"
+											className="font-family-clear"
+											aria-label={__(
+												'Remove font and use theme default',
+												'onepress'
 											)}
-										</div>
-									</div>
-								)}
-
-								{fields.font_family && fields.font_style && (
-									<div className="setting-group">
-										<span className="customize-control-title">{labels.style}</span>
-										<select
-											className="input"
-											value={state.styleSelect}
-											onChange={(e) => patch({ styleSelect: e.target.value })}
+											title={__(
+												'Remove font and use theme default',
+												'onepress'
+											)}
+											onClick={(e) => {
+												e.stopPropagation();
+												clearSelectedFont();
+											}}
 										>
-											{styleOptions.map((o, idx) => (
-												<option key={`${idx}-${o.value}`} value={o.value}>
-													{o.label}
-												</option>
-											))}
-										</select>
-									</div>
-								)}
-
-								{fields.font_size &&
-									renderResponsiveUnitField({
-										label: labels.size,
-										fieldKey: 'font_size',
-										previewDevice,
-										onSelectDevice: selectPreviewDevice,
-										state,
-										patch,
-										min: 0,
-									})}
-
-								{fields.line_height &&
-									renderResponsiveUnitField({
-										label: labels.line_height,
-										fieldKey: 'line_height',
-										previewDevice,
-										onSelectDevice: selectPreviewDevice,
-										state,
-										patch,
-										min: 0,
-									})}
-
-								{fields.letter_spacing &&
-									renderResponsiveUnitField({
-										label: labels.letter_spacing,
-										fieldKey: 'letter_spacing',
-										previewDevice,
-										onSelectDevice: selectPreviewDevice,
-										state,
-										patch,
-										min: -1000,
-									})}
-
-								{fields.text_decoration && (
-									<div className="setting-group">
-										<span className="customize-control-title">{labels.text_decoration}</span>
-										{renderSpanChoices({
-											options: textDecorationChoices,
-											value: state.textDecoration,
-											onChange: (next) => patch({ textDecoration: next }),
-										})}
-									</div>
-								)}
-
-								{fields.text_transform && (
-									<div className="setting-group">
-										<span className="customize-control-title">{labels.text_transform}</span>
-										{renderSpanChoices({
-											options: textTransformChoices,
-											value: state.textTransform,
-											onChange: (next) => patch({ textTransform: next }),
-										})}
-									</div>
-								)}
-
-								{fields.color && (
-									<div className="setting-group">
-										<span className="customize-control-title">{labels.color}</span>
-										<span className="color-row">
-											<span className="color-swatch-wrap">
-												<input
-													type="color"
-													className="color-swatch"
-													aria-label={labels.color}
-													value={getHexForColorInput(state.color)}
-													onChange={handleColorSwatchChange}
-												/>
-											</span>
-											<input
-												type="text"
-												className="input"
-												value={state.color}
-												placeholder={labels.option_default}
-												onChange={(e) => patch({ color: e.target.value })}
+											<span
+												className="dashicons dashicons-trash"
+												aria-hidden
 											/>
-										</span>
-										<div className="color-alpha-row">
-											<label
-												className="color-alpha-label"
-												htmlFor={colorAlphaId}
-											>
-												{__('Opacity', 'onepress')}
-											</label>
-											<input
-												id={colorAlphaId}
-												type="range"
-												className="color-alpha-range"
-												min={0}
-												max={100}
-												value={Math.round(colorRgba.a * 100)}
-												onChange={handleColorAlphaChange}
-												aria-valuetext={`${Math.round(colorRgba.a * 100)}%`}
-											/>
-											<span className="color-alpha-value">
-												{Math.round(colorRgba.a * 100)}%
-											</span>
-										</div>
-									</div>
+										</button>
+									)}
+								</div>
+								{fontPickerOpen && (
+									<FontPickerPanel
+										open={fontPickerOpen}
+										variant="dropdown"
+										controlId={controlId}
+										webfonts={webfonts}
+										fontGroups={fontGroups}
+										currentFontId={state.fontId}
+										defaultLabel={labels.option_default}
+										onClose={closeFontPicker}
+										onSelectFont={selectFontFromPicker}
+									/>
 								)}
 							</div>
-						</div>
-					</div>,
-					document.body
-				)}
+						)}
 
-			<FontPickerModal
-				open={fontPickerOpen}
-				controlId={controlId}
-				webfonts={webfonts}
-				fontGroups={fontGroups}
-				currentFontId={state.fontId}
-				defaultLabel={labels.option_default}
-				onClose={closeFontPicker}
-				onSelectFont={selectFontFromPicker}
-			/>
-		</>
+						{fields.font_family && fields.font_style && (
+							<div className="setting-group">
+								<span className="customize-control-title">{labels.style}</span>
+								<select
+									className="input"
+									value={state.styleSelect}
+									onChange={(e) => patch({ styleSelect: e.target.value })}
+								>
+									{styleOptions.map((o, idx) => (
+										<option key={`${idx}-${o.value}`} value={o.value}>
+											{o.label}
+										</option>
+									))}
+								</select>
+							</div>
+						)}
+
+						{fields.font_size && (
+							<ResponsiveUnitField
+								label={labels.size}
+								fieldKey="font_size"
+								previewDevice={previewDevice}
+								onSelectDevice={selectPreviewDevice}
+								state={state}
+								patch={patch}
+								min={0}
+							/>
+						)}
+
+						{fields.line_height && (
+							<ResponsiveUnitField
+								label={labels.line_height}
+								fieldKey="line_height"
+								previewDevice={previewDevice}
+								onSelectDevice={selectPreviewDevice}
+								state={state}
+								patch={patch}
+								min={0}
+								leadingIcon={justifyStretchVertical}
+							/>
+						)}
+
+						{fields.letter_spacing && (
+							<ResponsiveUnitField
+								label={labels.letter_spacing}
+								fieldKey="letter_spacing"
+								previewDevice={previewDevice}
+								onSelectDevice={selectPreviewDevice}
+								state={state}
+								patch={patch}
+								min={-1000}
+								leadingIcon={justifyStretch}
+							/>
+						)}
+
+						{fields.text_decoration && (
+							<div className="setting-group">
+								<span className="customize-control-title">{labels.text_decoration}</span>
+								{renderSpanChoices({
+									options: textDecorationChoices,
+									value: state.textDecoration,
+									onChange: (next) => patch({ textDecoration: next }),
+									toggleable: true,
+									noneValue: 'none',
+								})}
+							</div>
+						)}
+
+						{fields.text_transform && (
+							<div className="setting-group">
+								<span className="customize-control-title">{labels.text_transform}</span>
+								{renderSpanChoices({
+									options: textTransformChoices,
+									value: state.textTransform,
+									onChange: (next) => patch({ textTransform: next }),
+									toggleable: true,
+									noneValue: 'none',
+								})}
+							</div>
+						)}
+					</div>
+				</div>
+			)}
+		</div>
 	);
 }

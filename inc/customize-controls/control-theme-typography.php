@@ -51,7 +51,6 @@ class OnePress_Typo_Customize_Control extends WP_Customize_Control {
 				'text_decoration' => esc_html__( 'Text Decoration', 'onepress' ),
 				'letter_spacing'  => esc_html__( 'Letter Spacing', 'onepress' ),
 				'text_transform'  => esc_html__( 'Text Transform', 'onepress' ),
-				'color'           => esc_html__( 'Color', 'onepress' ),
 			)
 		);
 
@@ -80,7 +79,6 @@ class OnePress_Typo_Customize_Control extends WP_Customize_Control {
 			$fields,
 			array(
 				'font_family'     => false,
-				'color'           => false,
 				'font_style'      => false,
 				'font_size'       => false,
 				'line_height'     => false,
@@ -136,7 +134,11 @@ class OnePress_Typo_Customize_Control extends WP_Customize_Control {
 		static $onepress_typo_customizer_localized = false;
 		if ( ! $onepress_typo_customizer_localized ) {
 			// Unique object names — avoids collision with OnePress Plus (typographyWebfonts / fontStyleLabels).
-			wp_localize_script( $handle, 'onepressTypoWebfonts', onepress_typo_get_customizer_fonts() );
+			$typo_fonts = onepress_typo_get_customizer_fonts();
+			if ( ! is_array( $typo_fonts ) ) {
+				$typo_fonts = array();
+			}
+			wp_localize_script( $handle, 'onepressTypoWebfonts', $typo_fonts );
 			wp_localize_script(
 				$handle,
 				'onepressTypoFontStyleLabels',
@@ -170,17 +172,6 @@ class OnePress_Typo_Customize_Control extends WP_Customize_Control {
 	public function content_template() {
 		?>
 			<div class="typography-wrap">
-
-				<div class="typography-header">
-					<# if ( data.label ) { #>
-						<span class="customize-control-title">{{ data.label }}</span>
-						<# } #>
-
-							<# if ( data.description ) { #>
-								<span class="description customize-control-description">{{{ data.description }}}</span>
-								<# } #>
-				</div>
-
 				<div class="typography-settings">
 					<div class="onepress-typo-react-root"></div>
 				</div>

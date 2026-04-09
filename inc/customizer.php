@@ -169,6 +169,103 @@ function onepress_customize_preview_js()
 {	
 	$handle = onepress_load_build_script('customizer-liveview', ['customize-preview', 'customize-selective-refresh'], true);
 	wp_enqueue_script($handle);
+	$typo_breakpoints = apply_filters(
+		'onepress_typo_responsive_breakpoints',
+		array(
+			'tablet' => '991px',
+			'mobile' => '767px',
+		)
+	);
+	if ( ! is_array( $typo_breakpoints ) ) {
+		$typo_breakpoints = array(
+			'tablet' => '991px',
+			'mobile' => '767px',
+		);
+	}
+	$bg_breakpoints = apply_filters(
+		'onepress_background_responsive_breakpoints',
+		$typo_breakpoints
+	);
+	if ( ! is_array( $bg_breakpoints ) ) {
+		$bg_breakpoints = $typo_breakpoints;
+	}
+	wp_localize_script( $handle, 'onepressBackgroundBreakpoints', $bg_breakpoints );
+
+	$typo_base_px = (int) apply_filters( 'onepress_typo_css_base_px', 16 );
+	if ( $typo_base_px < 1 ) {
+		$typo_base_px = 16;
+	}
+	// Scalars must not be passed to wp_localize_script (WP 5.7+); use inline script.
+	wp_add_inline_script(
+		$handle,
+		'window.onepressTypoCssBasePx = ' . $typo_base_px . ';',
+		'before'
+	);
+
+	$typo_pm_selectors = apply_filters(
+		'onepress_typo_postmessage_selectors',
+		array(
+			'onepress_typo_demo_heading' => '#features .section-content',
+		)
+	);
+	if ( ! is_array( $typo_pm_selectors ) ) {
+		$typo_pm_selectors = array();
+	}
+	wp_localize_script(
+		$handle,
+		'onepressTypoPostMessageSelectors',
+		$typo_pm_selectors
+	);
+
+	if ( function_exists( 'onepress_typo_get_customizer_fonts' ) ) {
+		$typo_webfonts = onepress_typo_get_customizer_fonts();
+		if ( ! is_array( $typo_webfonts ) ) {
+			$typo_webfonts = array();
+		}
+		wp_localize_script(
+			$handle,
+			'onepressTypoWebfonts',
+			$typo_webfonts
+		);
+	}
+
+	$spacing_pm_selectors = apply_filters(
+		'onepress_spacing_postmessage_selectors',
+		array(
+			'onepress_spacing_demo_site_title' => '.site-title',
+		)
+	);
+	if ( ! is_array( $spacing_pm_selectors ) ) {
+		$spacing_pm_selectors = array();
+	}
+	wp_localize_script(
+		$handle,
+		'onepressSpacingPostMessageSelectors',
+		$spacing_pm_selectors
+	);
+
+	$bg_pm_ids = apply_filters(
+		'onepress_background_postmessage_setting_ids',
+		array(
+			'onepress_bg_demo_header',
+		)
+	);
+	if ( ! is_array( $bg_pm_ids ) ) {
+		$bg_pm_ids = array();
+	}
+	$bg_pm_ids = array_values(
+		array_filter(
+			array_map( 'strval', $bg_pm_ids ),
+			static function ( $id ) {
+				return is_string( $id ) && $id !== '';
+			}
+		)
+	);
+	wp_localize_script(
+		$handle,
+		'onepressBackgroundPostMessageSettingIds',
+		$bg_pm_ids
+	);
 }
 add_action('customize_preview_init', 'onepress_customize_preview_js', 65);
 

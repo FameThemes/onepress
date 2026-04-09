@@ -10,7 +10,6 @@ import {
 	useState,
 } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { createPortal } from 'react-dom';
 
 const PICKER_LINK_PREFIX = 'onepress-typo-picker-';
 
@@ -187,22 +186,29 @@ function FontPickerRow({
 			}
 			onClick={() => onPick(fontId)}
 		>
-			<span
+			{/* <span
 				className="fontpicker-row__name"
 			>
 				{name}
-			</span>
+			</span> */}
 			<span
 				className="fontpicker-row__sample"
 				style={{ fontFamily: stack }}
 			>
-				{sampleText}
+				{name}
+				{/* {sampleText} */}
 			</span>
 		</button>
 	);
 }
 
-export function FontPickerModal({
+/**
+ * Font list UI (inline dropdown under font family row, or legacy modal wrapper).
+ *
+ * @param {object} props
+ * @param {'dropdown'|'modal'} [props.variant]
+ */
+export function FontPickerPanel({
 	open,
 	controlId,
 	webfonts,
@@ -211,8 +217,8 @@ export function FontPickerModal({
 	defaultLabel,
 	onClose,
 	onSelectFont,
+	variant = 'dropdown',
 }) {
-	const panelRef = useRef(null);
 	const searchRef = useRef(null);
 	const [scrollRoot, setScrollRoot] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
@@ -306,34 +312,23 @@ export function FontPickerModal({
 		return () => document.removeEventListener('keydown', onKey);
 	}, [open, onClose, searchQuery, categoryKey]);
 
-	const handleBackdrop = useCallback(
-		(e) => {
-			if (e.target === panelRef.current) {
-				onClose();
-			}
-		},
-		[onClose]
-	);
-
 	if (!open) {
 		return null;
 	}
 
-	return createPortal(
+	const panelClass =
+		'fontpicker-panel' +
+		(variant === 'dropdown' ? ' fontpicker-panel--dropdown' : ' fontpicker-modal');
+
+	return (
 		<div
-			className="onepress-typo-portal fontpicker-backdrop"
-			ref={panelRef}
-			onMouseDown={handleBackdrop}
-			role="presentation"
+			className={panelClass}
+			role="dialog"
+			aria-modal={variant === 'modal'}
+			aria-label={__( 'Font selector', 'onepress' )}
+			onMouseDown={(e) => e.stopPropagation()}
 		>
-			<div
-				className="fontpicker-modal"
-				role="dialog"
-				aria-modal="true"
-				aria-label={__( 'Font selector', 'onepress' )}
-				onMouseDown={(e) => e.stopPropagation()}
-			>
-				<div className="fontpicker-head">
+				{/* <div className="fontpicker-head">
 					<span className="fontpicker-title">
 						{__( 'Font selector', 'onepress' )}
 					</span>
@@ -344,7 +339,7 @@ export function FontPickerModal({
 					>
 						{__( 'Close', 'onepress' )}
 					</button>
-				</div>
+				</div> */}
 				<div className="fontpicker-search-wrap">
 					<label
 						className="screen-reader-text"
@@ -365,7 +360,7 @@ export function FontPickerModal({
 						spellCheck="false"
 					/>
 				</div>
-				<div
+				{/* <div
 					className="fontpicker-categories"
 					role="tablist"
 					aria-label={__( 'Font categories', 'onepress' )}
@@ -387,7 +382,7 @@ export function FontPickerModal({
 							{tab.label}
 						</button>
 					))}
-				</div>
+				</div> */}
 				<div
 					className="fontpicker-scroll"
 					ref={setScrollRoot}
@@ -411,9 +406,9 @@ export function FontPickerModal({
 					) : (
 						filteredGroups.map((g) => (
 							<div key={g.type} className="fontpicker-group">
-								<div className="fontpicker-group-label">
+								{/* <div className="fontpicker-group-label">
 									{g.type}
-								</div>
+								</div> */}
 								{g.fonts.map((f) => (
 									<FontPickerRow
 										key={f.id}
@@ -431,8 +426,11 @@ export function FontPickerModal({
 						))
 					)}
 				</div>
-			</div>
-		</div>,
-		document.body
+		</div>
 	);
+}
+
+/** @deprecated Use FontPickerPanel; kept for external imports. */
+export function FontPickerModal(props) {
+	return <FontPickerPanel {...props} />;
 }

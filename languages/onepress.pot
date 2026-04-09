@@ -3,124 +3,179 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/TypographyControlApp.jsx:1017
-msgid "Open typography options"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:142
+msgid "Select background image"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:1048
-msgid "Typography options"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:143
+msgid "Use this image"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:1054
-#: src/admin/customizer/typography/FontPickerModal.jsx:345
-msgid "Close"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:237
+msgid "Clear color"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:1066
-msgid "Open font selector"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:263
+msgid "Replace image"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:1087
-msgid "Remove font and use theme default"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:264
+msgid "Select image"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:1204
-msgid "Opacity"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:268
+msgid "Remove"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:670
-msgid "Desktop preview"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:280
+msgid "Size"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:675
-msgid "Tablet preview"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:286
+msgid "Repeat"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:680
-msgid "Mobile preview"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:292
+msgid "Position"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:691
-msgid "Customizer preview device"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:298
+msgid "Attachment"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:956
-#: src/admin/customizer/typography/FontPickerModal.jsx:220
-msgid "The quick brown fox jumps over the lazy dog."
+#: src/admin/customizer/background/BackgroundControlApp.jsx:30
+msgid "Desktop"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:963
-msgid "Overline"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:31
+msgid "Tablet"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:964
-msgid "Underline"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:32
+msgid "Mobile"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:965
-msgid "Line through"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:332
+msgid "Color"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:969
-msgid "None"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:333
+msgid "Gradient"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:970
-msgid "Uppercase"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:334
+msgid "Image"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:971
-msgid "Lowercase"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:335
+msgid "State"
 msgstr ""
 
-#: src/admin/customizer/TypographyControlApp.jsx:972
-msgid "Capitalize"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:36
+msgid "Normal"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:229
-msgid "All"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:37
+msgid "Hover"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:230
-msgid "System"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:38
+msgid "Focus"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:233
-msgid "Sans-serif"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:40
+msgid "Focus visible"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:234
-msgid "Serif"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:41
+msgid "Active"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:235
-msgid "Monospace"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:42
+msgid "Visited"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:236
-msgid "Display"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:444
+#. 1: state label, 2: device label
+msgid "%1$s · %2$s"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:237
-msgid "Handwriting"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:46
+msgid "Cover"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:338
-msgid "Font selector"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:47
+msgid "Contain"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:353
-msgid "Search fonts"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:48
+msgid "Auto"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:360
-msgid "Search fonts…"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:52
+msgid "No repeat"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:371
-msgid "Font categories"
+#: src/admin/customizer/background/BackgroundControlApp.jsx:54
+msgid "Repeat X"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:409
-msgid "No fonts found."
+#: src/admin/customizer/background/BackgroundControlApp.jsx:55
+msgid "Repeat Y"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:56
+msgid "Space"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:57
+msgid "Round"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:61
+msgid "Center"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:62
+msgid "Top"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:63
+msgid "Bottom"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:64
+msgid "Left"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:65
+msgid "Right"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:66
+msgid "Top left"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:67
+msgid "Top right"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:68
+msgid "Bottom left"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:69
+msgid "Bottom right"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:73
+msgid "Scroll"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:74
+msgid "Fixed"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:75
+msgid "Local"
 msgstr ""
