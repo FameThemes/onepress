@@ -3,179 +3,269 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:142
-msgid "Select background image"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:143
-msgid "Use this image"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:237
-msgid "Clear color"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:263
-msgid "Replace image"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:264
-msgid "Select image"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:268
-msgid "Remove"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:280
-msgid "Size"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:286
-msgid "Repeat"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:292
-msgid "Position"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:298
-msgid "Attachment"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:30
+#: src/admin/customizer/CustomizerPreviewDeviceButtons.jsx:14
+#: src/admin/customizer/background/BackgroundControlApp.jsx:34
 msgid "Desktop"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:31
+#: src/admin/customizer/CustomizerPreviewDeviceButtons.jsx:15
+#: src/admin/customizer/background/BackgroundControlApp.jsx:35
 msgid "Tablet"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:32
+#: src/admin/customizer/CustomizerPreviewDeviceButtons.jsx:16
+#: src/admin/customizer/background/BackgroundControlApp.jsx:36
 msgid "Mobile"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:332
+#: src/admin/customizer/CustomizerPreviewDeviceButtons.jsx:19
+msgid "Desktop preview"
+msgstr ""
+
+#: src/admin/customizer/CustomizerPreviewDeviceButtons.jsx:20
+msgid "Tablet preview"
+msgstr ""
+
+#: src/admin/customizer/CustomizerPreviewDeviceButtons.jsx:21
+msgid "Mobile preview"
+msgstr ""
+
+#: src/admin/customizer/CustomizerPreviewDeviceButtons.jsx:46
+msgid "Customizer preview device"
+msgstr ""
+
+#: src/admin/customizer/CustomizerPreviewDeviceButtons.jsx:61
+#. 1: device after click, e.g. "Tablet preview"
+msgid "Click for %s"
+msgstr ""
+
+#: src/admin/customizer/CustomizerPreviewDeviceButtons.jsx:67
+#. 1: current device, 2: instruction for next device
+msgid "Current: %1$s. %2$s"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:146
+msgid "Select background image"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:147
+msgid "Use this image"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:250
+msgid "Clear color"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:276
+msgid "Replace image"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:277
+msgid "Select image"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:281
+msgid "Remove"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:293
+msgid "Size"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:299
+msgid "Repeat"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:305
+msgid "Position"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:311
+msgid "Attachment"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:345
 msgid "Color"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:333
+#: src/admin/customizer/background/BackgroundControlApp.jsx:346
 msgid "Gradient"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:334
+#: src/admin/customizer/background/BackgroundControlApp.jsx:347
 msgid "Image"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:335
+#: src/admin/customizer/background/BackgroundControlApp.jsx:348
 msgid "State"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:36
+#: src/admin/customizer/background/BackgroundControlApp.jsx:40
 msgid "Normal"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:37
+#: src/admin/customizer/background/BackgroundControlApp.jsx:41
 msgid "Hover"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:38
+#: src/admin/customizer/background/BackgroundControlApp.jsx:42
 msgid "Focus"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:40
+#: src/admin/customizer/background/BackgroundControlApp.jsx:44
 msgid "Focus visible"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:41
+#: src/admin/customizer/background/BackgroundControlApp.jsx:45
 msgid "Active"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:42
-msgid "Visited"
-msgstr ""
-
-#: src/admin/customizer/background/BackgroundControlApp.jsx:444
+#: src/admin/customizer/background/BackgroundControlApp.jsx:457
 #. 1: state label, 2: device label
 msgid "%1$s · %2$s"
 msgstr ""
 
 #: src/admin/customizer/background/BackgroundControlApp.jsx:46
+msgid "Visited"
+msgstr ""
+
+#: src/admin/customizer/background/BackgroundControlApp.jsx:50
 msgid "Cover"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:47
+#: src/admin/customizer/background/BackgroundControlApp.jsx:51
 msgid "Contain"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:48
+#: src/admin/customizer/background/BackgroundControlApp.jsx:52
 msgid "Auto"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:52
+#: src/admin/customizer/background/BackgroundControlApp.jsx:56
 msgid "No repeat"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:54
+#: src/admin/customizer/background/BackgroundControlApp.jsx:58
 msgid "Repeat X"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:55
+#: src/admin/customizer/background/BackgroundControlApp.jsx:59
 msgid "Repeat Y"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:56
+#: src/admin/customizer/background/BackgroundControlApp.jsx:60
 msgid "Space"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:57
+#: src/admin/customizer/background/BackgroundControlApp.jsx:61
 msgid "Round"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:61
+#: src/admin/customizer/background/BackgroundControlApp.jsx:65
 msgid "Center"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:62
+#: src/admin/customizer/background/BackgroundControlApp.jsx:66
+#: src/admin/customizer/spacing/SpacingControlApp.jsx:265
 msgid "Top"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:63
+#: src/admin/customizer/background/BackgroundControlApp.jsx:67
+#: src/admin/customizer/spacing/SpacingControlApp.jsx:267
 msgid "Bottom"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:64
+#: src/admin/customizer/background/BackgroundControlApp.jsx:68
+#: src/admin/customizer/spacing/SpacingControlApp.jsx:268
 msgid "Left"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:65
+#: src/admin/customizer/background/BackgroundControlApp.jsx:69
+#: src/admin/customizer/spacing/SpacingControlApp.jsx:266
 msgid "Right"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:66
+#: src/admin/customizer/background/BackgroundControlApp.jsx:70
 msgid "Top left"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:67
+#: src/admin/customizer/background/BackgroundControlApp.jsx:71
 msgid "Top right"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:68
+#: src/admin/customizer/background/BackgroundControlApp.jsx:72
 msgid "Bottom left"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:69
+#: src/admin/customizer/background/BackgroundControlApp.jsx:73
 msgid "Bottom right"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:73
+#: src/admin/customizer/background/BackgroundControlApp.jsx:77
 msgid "Scroll"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:74
+#: src/admin/customizer/background/BackgroundControlApp.jsx:78
 msgid "Fixed"
 msgstr ""
 
-#: src/admin/customizer/background/BackgroundControlApp.jsx:75
+#: src/admin/customizer/background/BackgroundControlApp.jsx:79
 msgid "Local"
+msgstr ""
+
+#: src/admin/customizer/spacing/SpacingControlApp.jsx:263
+msgid "Padding"
+msgstr ""
+
+#: src/admin/customizer/spacing/SpacingControlApp.jsx:264
+msgid "Margin"
+msgstr ""
+
+#: src/admin/customizer/spacing/SpacingControlApp.jsx:269
+#: src/admin/customizer/typography/TypographyControlApp.jsx:610
+msgid "Unit"
+msgstr ""
+
+#: src/admin/customizer/spacing/SpacingControlApp.jsx:270
+msgid "Link sides"
+msgstr ""
+
+#: src/admin/customizer/spacing/SpacingControlApp.jsx:271
+msgid "Unlink sides"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:1021
+msgid "Open font selector"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:1043
+msgid "Remove font and use theme default"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:897
+msgid "Overline"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:898
+msgid "Underline"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:899
+msgid "Line through"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:904
+msgid "Uppercase"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:905
+msgid "Lowercase"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:906
+msgid "Capitalize"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:994
+msgid "Typography options"
 msgstr ""

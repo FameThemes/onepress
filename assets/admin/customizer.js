@@ -4930,6 +4930,110 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/admin/customizer/CustomizerPreviewDeviceButtons.jsx":
+/*!*****************************************************************!*\
+  !*** ./src/admin/customizer/CustomizerPreviewDeviceButtons.jsx ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CustomizerPreviewDeviceButtons: () => (/* binding */ CustomizerPreviewDeviceButtons),
+/* harmony export */   getCustomizerPreviewDeviceDefinitions: () => (/* binding */ getCustomizerPreviewDeviceDefinitions)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+
+/**
+ * Shared Customizer preview device control: one button, cycles desktop → tablet → mobile.
+ */
+
+
+/**
+ * @param {{ labels?: 'preview' | 'short' }} [options]
+ * @returns {{ id: string, icon: string, title: string }[]}
+ */
+function getCustomizerPreviewDeviceDefinitions(options = {}) {
+  const useShort = options.labels === 'short';
+  const titles = useShort ? {
+    desktop: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Desktop', 'onepress'),
+    tablet: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tablet', 'onepress'),
+    mobile: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mobile', 'onepress')
+  } : {
+    desktop: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Desktop preview', 'onepress'),
+    tablet: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tablet preview', 'onepress'),
+    mobile: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mobile preview', 'onepress')
+  };
+  return [{
+    id: 'desktop',
+    icon: 'dashicons-desktop',
+    title: titles.desktop
+  }, {
+    id: 'tablet',
+    icon: 'dashicons-tablet',
+    title: titles.tablet
+  }, {
+    id: 'mobile',
+    icon: 'dashicons-smartphone',
+    title: titles.mobile
+  }];
+}
+
+/**
+ * @param {object} props
+ * @param {{ id: string, icon: string, title: string }[]} props.devices  Order defines cycle: [0]→[1]→[2]→[0]…
+ * @param {string} props.activeDevice
+ * @param {(id: string) => void} props.onSelectDevice
+ * @param {string} props.groupClassName Extra wrapper class (e.g. BEM block); base: onepress-customizer-preview-device
+ * @param {string} props.buttonClassName Extra button class; base: onepress-customizer-preview-device__btn (styles in customizer.scss)
+ * @param {string} [props.groupAriaLabel] Prepended to the button aria-label for context.
+ */
+function CustomizerPreviewDeviceButtons({
+  devices,
+  activeDevice,
+  onSelectDevice,
+  groupClassName,
+  buttonClassName,
+  groupAriaLabel = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Customizer preview device', 'onepress')
+}) {
+  if (!devices?.length) {
+    return null;
+  }
+  let idx = devices.findIndex(d => d.id === activeDevice);
+  if (idx < 0) {
+    idx = 0;
+  }
+  const current = devices[idx];
+  const next = devices[(idx + 1) % devices.length];
+  const cycleHint = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)(/* translators: 1: device after click, e.g. "Tablet preview" */
+  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Click for %s', 'onepress'), next.title);
+  const title = `${current.title} — ${cycleHint}`;
+  const ariaLabel = `${groupAriaLabel}. ${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)(/* translators: 1: current device, 2: instruction for next device */
+  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Current: %1$s. %2$s', 'onepress'), current.title, cycleHint)}`;
+  const cycle = () => {
+    onSelectDevice(next.id);
+  };
+  const groupCn = ['onepress-customizer-preview-device', groupClassName].filter(Boolean).join(' ');
+  const btnCn = ['onepress-customizer-preview-device__btn', buttonClassName, 'is-active'].filter(Boolean).join(' ');
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: groupCn
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    className: btnCn,
+    title: title,
+    "aria-label": ariaLabel,
+    onClick: cycle
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: `dashicons ${current.icon}`,
+    "aria-hidden": true
+  })));
+}
+
+/***/ }),
+
 /***/ "./src/admin/customizer/alpha-color-picker.js":
 /*!****************************************************!*\
   !*** ./src/admin/customizer/alpha-color-picker.js ***!
@@ -5214,11 +5318,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./buildBackgroundCss.js */ "./src/admin/customizer/background/buildBackgroundCss.js");
+/* harmony import */ var _CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../CustomizerPreviewDeviceButtons.jsx */ "./src/admin/customizer/CustomizerPreviewDeviceButtons.jsx");
+/* harmony import */ var _buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./buildBackgroundCss.js */ "./src/admin/customizer/background/buildBackgroundCss.js");
 
 /**
  * Background Customizer control — states × responsive layers, inline dropdown below state row.
  */
+
 
 
 
@@ -5320,9 +5426,9 @@ function createEmptyData(selector, states) {
   };
   for (const s of states) {
     data[s] = {
-      desktop: (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.createDefaultLayer)(),
-      tablet: (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.createDefaultLayer)(),
-      mobile: (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.createDefaultLayer)()
+      desktop: (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.createDefaultLayer)(),
+      tablet: (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.createDefaultLayer)(),
+      mobile: (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.createDefaultLayer)()
     };
   }
   return data;
@@ -5345,7 +5451,7 @@ function mergeSavedData(saved, selector, states) {
     for (const d of PREVIEW_DEVICES) {
       if (saved[s][d] && typeof saved[s][d] === 'object') {
         base[s][d] = {
-          ...(0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.createDefaultLayer)(),
+          ...(0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.createDefaultLayer)(),
           ...saved[s][d]
         };
       }
@@ -5400,7 +5506,7 @@ function BackgroundLayerEditor({
         tab: 'gradient'
       } : {
         tab: 'gradient',
-        gradient: _buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.DEFAULT_BACKGROUND_GRADIENT
+        gradient: _buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.DEFAULT_BACKGROUND_GRADIENT
       });
       return;
     }
@@ -5410,7 +5516,7 @@ function BackgroundLayerEditor({
         tab: 'color'
       } : {
         tab: 'color',
-        color: _buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.DEFAULT_BACKGROUND_COLOR
+        color: _buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.DEFAULT_BACKGROUND_COLOR
       });
       return;
     }
@@ -5443,15 +5549,24 @@ function BackgroundLayerEditor({
     onChange: hex => onChangeLayer({
       tab: 'color',
       color: hex
-    })
+    }),
+    style: {
+      width: '100%',
+      padding: '0',
+      margin: '0px'
+    }
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
     variant: "tertiary",
+    style: {
+      width: '100%',
+      padding: '0'
+    },
     onClick: () => onChangeLayer({
       tab: 'color',
       color: ''
     })
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Clear color', 'onepress'))), tabItem.name === 'gradient' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.GradientPicker, {
-    value: gradientValue || _buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.DEFAULT_BACKGROUND_GRADIENT,
+    value: gradientValue || _buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.DEFAULT_BACKGROUND_GRADIENT,
     onChange: current => onChangeLayer({
       tab: 'gradient',
       gradient: current || ''
@@ -5581,7 +5696,7 @@ function BackgroundControlApp({
       }
     }));
   }, []);
-  const currentLayer = activeState && data[activeState] ? data[activeState][previewDevice] || (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.createDefaultLayer)() : (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.createDefaultLayer)();
+  const currentLayer = activeState && data[activeState] ? data[activeState][previewDevice] || (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.createDefaultLayer)() : (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.createDefaultLayer)();
   const changeCurrentLayer = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(partial => {
     if (activeState == null) {
       return;
@@ -5657,21 +5772,23 @@ function BackgroundControlApp({
     document.addEventListener('pointerdown', onDocDown, true);
     return () => document.removeEventListener('pointerdown', onDocDown, true);
   }, [dropdownOpen, closeDropdown]);
-  const deviceIcons = [{
-    id: 'desktop',
-    icon: 'dashicons-desktop'
-  }, {
-    id: 'tablet',
-    icon: 'dashicons-tablet'
-  }, {
-    id: 'mobile',
-    icon: 'dashicons-smartphone'
-  }];
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: 'onepress-bg-control-root' + (dropdownOpen ? ' onepress-bg-control-root--open' : '')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between items-center"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "title"
   }, controlLabel ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "customize-control-title"
-  }, controlLabel) : null, controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }, controlLabel) : null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_4__.CustomizerPreviewDeviceButtons, {
+    devices: (0,_CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_4__.getCustomizerPreviewDeviceDefinitions)({
+      labels: 'short'
+    }),
+    activeDevice: previewDevice,
+    onSelectDevice: selectPreviewDevice,
+    groupClassName: "onepress-bg-app__devices",
+    buttonClassName: "onepress-bg-app__device-btn"
+  })), controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "description customize-control-description",
     dangerouslySetInnerHTML: {
       __html: controlDescription
@@ -5682,26 +5799,15 @@ function BackgroundControlApp({
     className: "onepress-bg-app__toolbar",
     ref: toolbarRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-bg-app__devices"
-  }, deviceIcons.map(d => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    key: d.id,
-    type: "button",
-    className: `onepress-bg-app__device-btn${previewDevice === d.id ? ' is-active' : ''}`,
-    title: DEVICE_LABELS[d.id],
-    "aria-label": DEVICE_LABELS[d.id],
-    "aria-pressed": previewDevice === d.id,
-    onClick: () => selectPreviewDevice(d.id)
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: `dashicons ${d.icon}`,
-    "aria-hidden": true
-  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "relative"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-bg-app__states",
     role: "group",
     "aria-label": labels.state
   }, states.map(s => {
-    const previewLayer = data[s]?.[previewDevice] || (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.createDefaultLayer)();
-    const previewDecls = (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.layerToDeclarations)(previewLayer);
-    const previewFillStyle = (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_4__.declarationsToReactStyle)(previewDecls);
+    const previewLayer = data[s]?.[previewDevice] || (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.createDefaultLayer)();
+    const previewDecls = (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.layerToDeclarations)(previewLayer);
+    const previewFillStyle = (0,_buildBackgroundCss_js__WEBPACK_IMPORTED_MODULE_5__.declarationsToReactStyle)(previewDecls);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
       key: s,
       type: "button",
@@ -5718,7 +5824,7 @@ function BackgroundControlApp({
     }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "onepress-bg-app__state-btn__label"
     }, STATE_LABELS[s] || s));
-  }))), dropdownOpen ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), dropdownOpen ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ref: dropdownPanelRef,
     id: `onepress-bg-dropdown-${controlId}`,
     className: "onepress-bg-settings-dropdown onepress-bg-portal",
@@ -5727,16 +5833,12 @@ function BackgroundControlApp({
     "aria-label": popoverTitle
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-bg-popover"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-bg-popover__head"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", {
-    className: "onepress-bg-popover__title"
-  }, popoverTitle)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BackgroundLayerEditor, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BackgroundLayerEditor, {
     key: `${activeState}-${previewDevice}`,
     layer: currentLayer,
     onChangeLayer: changeCurrentLayer,
     labels: labels
-  }))) : null));
+  }))) : null))));
 }
 
 /***/ }),
@@ -8657,10 +8759,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../CustomizerPreviewDeviceButtons.jsx */ "./src/admin/customizer/CustomizerPreviewDeviceButtons.jsx");
 
 /**
  * Spacing Customizer control — padding / margin, responsive (Customizer React).
  */
+
 
 
 
@@ -8920,19 +9024,6 @@ function SpacingControlApp({
     };
   }, []);
   useSpacingSync(settingRef, state, prefix);
-  const deviceButtons = [{
-    id: 'desktop',
-    icon: 'dashicons-desktop',
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Desktop preview', 'onepress')
-  }, {
-    id: 'tablet',
-    icon: 'dashicons-tablet',
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Tablet preview', 'onepress')
-  }, {
-    id: 'mobile',
-    icon: 'dashicons-smartphone',
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Mobile preview', 'onepress')
-  }];
   const dev = PREVIEW_DEVICES.includes(previewDevice) ? previewDevice : 'desktop';
   const dSuffix = DEVICE_KEY[dev];
   const sideKey = side => dSuffix ? `${side}${dSuffix}` : side;
@@ -8983,9 +9074,30 @@ function SpacingControlApp({
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-spacing-control-root"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between items-center w-full"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between items-center w-full"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "title"
   }, controlLabel ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "customize-control-title"
-  }, controlLabel) : null, controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }, controlLabel) : null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between items-center gap-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-spacing-app__unit"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(UnitPopover, {
+    unit: currentUnit,
+    onChangeUnit: u => patch({
+      [unitKey]: u
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_4__.CustomizerPreviewDeviceButtons, {
+    devices: (0,_CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_4__.getCustomizerPreviewDeviceDefinitions)(),
+    activeDevice: previewDevice,
+    onSelectDevice: selectPreviewDevice,
+    groupClassName: "onepress-spacing-app__devices",
+    buttonClassName: "onepress-spacing-app__device-btn"
+  })))), controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "description customize-control-description",
     dangerouslySetInnerHTML: {
       __html: controlDescription
@@ -8995,31 +9107,9 @@ function SpacingControlApp({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-spacing-app__head"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-spacing-app__devices",
-    role: "group",
-    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Customizer preview device', 'onepress')
-  }, deviceButtons.map(d => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    key: d.id,
-    type: "button",
-    className: `onepress-spacing-app__device-btn${previewDevice === d.id ? ' is-active' : ''}`,
-    title: d.title,
-    "aria-label": d.title,
-    "aria-pressed": previewDevice === d.id,
-    onClick: () => selectPreviewDevice(d.id)
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: `dashicons ${d.icon}`,
-    "aria-hidden": true
-  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-spacing-app__head-spacer",
     "aria-hidden": "true"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-spacing-app__unit"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(UnitPopover, {
-    unit: currentUnit,
-    onChangeUnit: u => patch({
-      [unitKey]: u
-    })
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-spacing-app__sides"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "inputs"
@@ -9466,11 +9556,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/icon/index.mjs");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/justify-stretch-vertical.mjs");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/justify-stretch.mjs");
-/* harmony import */ var _FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./FontPickerModal.jsx */ "./src/admin/customizer/typography/FontPickerModal.jsx");
+/* harmony import */ var _CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../CustomizerPreviewDeviceButtons.jsx */ "./src/admin/customizer/CustomizerPreviewDeviceButtons.jsx");
+/* harmony import */ var _FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./FontPickerModal.jsx */ "./src/admin/customizer/typography/FontPickerModal.jsx");
 
 /**
  * Typography Customizer control UI (React, no jQuery).
  */
+
 
 
 
@@ -9885,41 +9977,19 @@ function ResponsiveUnitField({
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     setUnitPopoverOpen(false);
   }, [previewDevice, fieldKey]);
-  const deviceButtons = [{
-    id: 'desktop',
-    icon: 'dashicons-desktop',
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Desktop preview', 'onepress')
-  }, {
-    id: 'tablet',
-    icon: 'dashicons-tablet',
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Tablet preview', 'onepress')
-  }, {
-    id: 'mobile',
-    icon: 'dashicons-smartphone',
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Mobile preview', 'onepress')
-  }];
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "setting-group setting-group--unit"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "setting-group__head"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "customize-control-title"
-  }, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "setting-group__devices",
-    role: "group",
-    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Customizer preview device', 'onepress')
-  }, deviceButtons.map(d => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    key: d.id,
-    type: "button",
-    className: `setting-group__device-btn${previewDevice === d.id ? ' is-active' : ''}`,
-    title: d.title,
-    "aria-label": d.title,
-    "aria-pressed": previewDevice === d.id,
-    onClick: () => onSelectDevice(d.id)
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: `dashicons ${d.icon}`,
-    "aria-hidden": true
-  }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_7__.CustomizerPreviewDeviceButtons, {
+    devices: (0,_CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_7__.getCustomizerPreviewDeviceDefinitions)(),
+    activeDevice: previewDevice,
+    onSelectDevice: onSelectDevice,
+    groupClassName: "setting-group__devices",
+    buttonClassName: "setting-group__device-btn"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: 'unit-row' + (leadingIcon ? ' unit-row--has-leading-icon' : '')
   }, leadingIcon ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "unit-row__icon",
@@ -10085,14 +10155,14 @@ function TypographyControlApp({
     };
   }, []);
   const closeFontPicker = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
-    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.removeAllPickerPreviewLinks)(controlId);
+    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.removeAllPickerPreviewLinks)(controlId);
     setFontPickerOpen(false);
   }, [controlId]);
   const openFontPicker = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(e => {
     if (e) {
       e.stopPropagation();
     }
-    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.removeAllPickerPreviewLinks)(controlId);
+    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.removeAllPickerPreviewLinks)(controlId);
     setSettingsOpen(true);
     setFontPickerOpen(open => !open);
   }, [controlId]);
@@ -10101,7 +10171,7 @@ function TypographyControlApp({
       fontId,
       styleSelect: ''
     });
-    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.removeAllPickerPreviewLinks)(controlId);
+    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.removeAllPickerPreviewLinks)(controlId);
     setFontPickerOpen(false);
   }, [controlId, patch]);
   const clearSelectedFont = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
@@ -10109,8 +10179,8 @@ function TypographyControlApp({
       fontId: '',
       styleSelect: ''
     });
-    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.removeAllPickerPreviewLinks)(controlId);
-    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.removeSelectedFontLink)(controlId);
+    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.removeAllPickerPreviewLinks)(controlId);
+    (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.removeSelectedFontLink)(controlId);
     setFontPickerOpen(false);
   }, [controlId, patch]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
@@ -10119,15 +10189,15 @@ function TypographyControlApp({
     }
     const font = state.fontId ? webfonts[state.fontId] : null;
     if (font && font.font_type === 'google' && font.url) {
-      (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.setSelectedGoogleFontLink)(controlId, state.fontId, font.url);
+      (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.setSelectedGoogleFontLink)(controlId, state.fontId, font.url);
     } else {
-      (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.removeSelectedFontLink)(controlId);
+      (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.removeSelectedFontLink)(controlId);
     }
   }, [fontPickerOpen, state.fontId, webfonts, controlId]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     return () => {
-      (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.removeAllPickerPreviewLinks)(controlId);
-      (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.removeSelectedFontLink)(controlId);
+      (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.removeAllPickerPreviewLinks)(controlId);
+      (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.removeSelectedFontLink)(controlId);
     };
   }, [controlId]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
@@ -10267,7 +10337,9 @@ function TypographyControlApp({
     dangerouslySetInnerHTML: {
       __html: controlDescription
     }
-  }) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "relative"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     type: "button",
     className: "onepress-typo-summary-card flex items-center w-full",
     onClick: () => {
@@ -10332,7 +10404,7 @@ function TypographyControlApp({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-trash",
     "aria-hidden": true
-  }))), fontPickerOpen && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_7__.FontPickerPanel, {
+  }))), fontPickerOpen && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_8__.FontPickerPanel, {
     open: fontPickerOpen,
     variant: "dropdown",
     controlId: controlId,
@@ -10381,11 +10453,12 @@ function TypographyControlApp({
     patch: patch,
     min: -1000,
     leadingIcon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"]
-  }), fields.text_decoration && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "setting-group"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "customize-control-title"
-  }, labels.text_decoration), renderSpanChoices({
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2 justify-between"
+  }, fields.text_decoration && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "setting-group",
+    title: labels.text_decoration
+  }, renderSpanChoices({
     options: textDecorationChoices,
     value: state.textDecoration,
     onChange: next => patch({
@@ -10394,10 +10467,9 @@ function TypographyControlApp({
     toggleable: true,
     noneValue: 'none'
   })), fields.text_transform && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "setting-group"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "customize-control-title"
-  }, labels.text_transform), renderSpanChoices({
+    className: "setting-group",
+    title: labels.text_transform
+  }, renderSpanChoices({
     options: textTransformChoices,
     value: state.textTransform,
     onChange: next => patch({
@@ -10405,7 +10477,7 @@ function TypographyControlApp({
     }),
     toggleable: true,
     noneValue: 'none'
-  })))));
+  })))))));
 }
 
 /***/ }),

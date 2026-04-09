@@ -132,6 +132,10 @@
   border: 1px solid #c3c4c7;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  z-index: 100;
 }
 
 .onepress-typo-settings-dropdown.onepress-typo-portal .settings-head {
@@ -234,52 +238,6 @@
   justify-content: space-between;
   gap: 8px;
   flex-wrap: wrap;
-}
-
-.onepress-typo-portal .setting-group__devices {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-.onepress-typo-portal .setting-group__device-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  margin: 0;
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  background: #fff;
-  color: #50575e;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.onepress-typo-portal .setting-group__device-btn .dashicons {
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-}
-
-.onepress-typo-portal .setting-group__device-btn:hover {
-  border-color: #2271b1;
-  color: #0a4b78;
-}
-
-.onepress-typo-portal .setting-group__device-btn:focus {
-  outline: 2px solid transparent;
-  box-shadow: 0 0 0 1px #2271b1;
-}
-
-.onepress-typo-portal .setting-group__device-btn.is-active {
-  border-color: #2271b1;
-  background: #eaf4ff;
-  color: #0a4b78;
-  border-color: #0a4b78;
 }
 
 .onepress-typo-portal .unit-row {
@@ -407,7 +365,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 28px;
+  min-width: 20px;
   height: 26px;
   padding: 0 6px;
   border: 1px solid #c4c8ce;

@@ -110,6 +110,14 @@
   width: 100%;
 }
 
+.relative {
+  position: relative;
+}
+
+#customize-theme-controls .customize-pane-child {
+  min-height: calc(100dvh - 92px);
+}
+
 li#accordion-panel-onepress_options > .accordion-section-title,
 li#accordion-panel-onepress_typo > .accordion-section-title {
   /* padding-left: 14px; */
@@ -784,6 +792,42 @@ body .wp-full-overlay {
   margin-bottom: 20px;
 }
 
+/* Shared: preview device cycle (CustomizerPreviewDeviceButtons.jsx) */
+.onepress-customizer-preview-device {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.onepress-customizer-preview-device__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: #fff;
+  color: #50575e;
+  cursor: pointer;
+  border: 0px none;
+}
+
+.onepress-customizer-preview-device__btn:hover,
+.onepress-customizer-preview-device__btn:focus {
+  color: #2271b1;
+  outline: none;
+}
+
+.onepress-customizer-preview-device__btn .dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.onepress-typo-portal .onepress-customizer-preview-device.setting-group__devices {
+  flex-shrink: 0;
+}
+
 .customize-control-onepress_typo {
   overflow: visible;
 }
@@ -913,6 +957,10 @@ body .wp-full-overlay {
   border: 1px solid #c3c4c7;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  z-index: 100;
 }
 
 .onepress-typo-settings-dropdown.onepress-typo-portal .settings-head {
@@ -1015,52 +1063,6 @@ body .wp-full-overlay {
   justify-content: space-between;
   gap: 8px;
   flex-wrap: wrap;
-}
-
-.onepress-typo-portal .setting-group__devices {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-.onepress-typo-portal .setting-group__device-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  margin: 0;
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  background: #fff;
-  color: #50575e;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.onepress-typo-portal .setting-group__device-btn .dashicons {
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-}
-
-.onepress-typo-portal .setting-group__device-btn:hover {
-  border-color: #2271b1;
-  color: #0a4b78;
-}
-
-.onepress-typo-portal .setting-group__device-btn:focus {
-  outline: 2px solid transparent;
-  box-shadow: 0 0 0 1px #2271b1;
-}
-
-.onepress-typo-portal .setting-group__device-btn.is-active {
-  border-color: #2271b1;
-  background: #eaf4ff;
-  color: #0a4b78;
-  border-color: #0a4b78;
 }
 
 .onepress-typo-portal .unit-row {
@@ -1187,7 +1189,7 @@ body .wp-full-overlay {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 28px;
+  min-width: 20px;
   height: 26px;
   padding: 0 6px;
   border: 1px solid #c4c8ce;
@@ -1431,60 +1433,8 @@ body .wp-full-overlay {
   width: 100%;
 }
 
-.onepress-spacing-app__head {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 0;
-  margin-bottom: 10px;
-}
-
-.onepress-spacing-app__head-spacer {
-  flex: 1 1 auto;
-  min-width: 12px;
-  min-height: 1px;
-}
-
 .onepress-spacing-app__unit {
   flex: 0 0 auto;
-}
-
-.onepress-spacing-app__devices {
-  display: inline-flex;
-  gap: 2px;
-}
-
-.onepress-spacing-app__device-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 26px;
-  padding: 0;
-  border: 1px solid #c4c8ce;
-  border-radius: 4px;
-  background: #fff;
-  color: #50575e;
-  cursor: pointer;
-}
-
-.onepress-spacing-app__device-btn:hover,
-.onepress-spacing-app__device-btn:focus {
-  border-color: #2271b1;
-  color: #2271b1;
-  outline: none;
-}
-
-.onepress-spacing-app__device-btn.is-active {
-  border-color: #2271b1;
-  background: #f0f6fc;
-  color: #2271b1;
-}
-
-.onepress-spacing-app__device-btn .dashicons {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
 }
 
 .onepress-spacing-unit-trigger {
@@ -1492,15 +1442,17 @@ body .wp-full-overlay {
   align-items: center;
   justify-content: center;
   width: auto;
-  min-width: 44px;
-  height: 30px;
-  padding: 0 10px;
-  border: 1px solid #c4c8ce;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 0px none;
   border-radius: 4px;
   background: #fff;
   font-size: 13px;
   color: #1d2327;
   cursor: pointer;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .onepress-spacing-unit-trigger:hover,
@@ -1671,42 +1623,7 @@ body .wp-full-overlay {
 }
 
 .onepress-bg-app__devices {
-  display: flex;
-  gap: 2px;
   margin-bottom: 10px;
-}
-
-.onepress-bg-app__device-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 26px;
-  padding: 0;
-  border: 1px solid #c4c8ce;
-  border-radius: 4px;
-  background: #fff;
-  color: #50575e;
-  cursor: pointer;
-}
-
-.onepress-bg-app__device-btn:hover,
-.onepress-bg-app__device-btn:focus {
-  border-color: #2271b1;
-  color: #2271b1;
-  outline: none;
-}
-
-.onepress-bg-app__device-btn.is-active {
-  border-color: #2271b1;
-  background: #f0f6fc;
-  color: #2271b1;
-}
-
-.onepress-bg-app__device-btn .dashicons {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
 }
 
 .onepress-bg-app__states {
@@ -1729,6 +1646,7 @@ body .wp-full-overlay {
   color: #1d2327;
   cursor: pointer;
   overflow: hidden;
+  flex: 1;
 }
 
 .onepress-bg-app__state-btn__fill {
@@ -1783,6 +1701,10 @@ body .wp-full-overlay {
   border: 1px solid #c3c4c7;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  position: absolute;
+  top: 31px;
+  right: 0;
+  z-index: 100;
 }
 
 .onepress-bg-popover {

@@ -80,6 +80,13 @@
 .w-full {
   width: 100%;
 }
+.relative {
+  position: relative;
+}
+
+#customize-theme-controls .customize-pane-child {
+  min-height: calc(100dvh - 92px);
+}
 
 li#accordion-panel-onepress_options > .accordion-section-title,
 li#accordion-panel-onepress_typo > .accordion-section-title {
@@ -758,6 +765,42 @@ body .wp-full-overlay {
   border-left: 4px solid rgb(213, 78, 33);
   display: block;
   margin-bottom: 20px;
+}
+
+/* Shared: preview device cycle (CustomizerPreviewDeviceButtons.jsx) */
+.onepress-customizer-preview-device {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.onepress-customizer-preview-device__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: #fff;
+  color: #50575e;
+  cursor: pointer;
+  border: 0px none;
+}
+
+.onepress-customizer-preview-device__btn:hover,
+.onepress-customizer-preview-device__btn:focus {
+  color: #2271b1;
+  outline: none;
+}
+
+.onepress-customizer-preview-device__btn .dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.onepress-typo-portal .onepress-customizer-preview-device.setting-group__devices {
+  flex-shrink: 0;
 }
 
 @import "customizer/typography/typography-controls";

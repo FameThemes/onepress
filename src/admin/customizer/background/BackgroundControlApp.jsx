@@ -17,6 +17,10 @@ import {
 	TabPanel,
 } from '@wordpress/components';
 import {
+	CustomizerPreviewDeviceButtons,
+	getCustomizerPreviewDeviceDefinitions,
+} from '../CustomizerPreviewDeviceButtons.jsx';
+import {
 	createDefaultLayer,
 	DEFAULT_BACKGROUND_COLOR,
 	DEFAULT_BACKGROUND_GRADIENT,
@@ -176,9 +180,9 @@ function BackgroundLayerEditor({ layer, onChangeLayer, labels }) {
 					hasG
 						? { tab: 'gradient' }
 						: {
-								tab: 'gradient',
-								gradient: DEFAULT_BACKGROUND_GRADIENT,
-							}
+							tab: 'gradient',
+							gradient: DEFAULT_BACKGROUND_GRADIENT,
+						}
 				);
 				return;
 			}
@@ -188,9 +192,9 @@ function BackgroundLayerEditor({ layer, onChangeLayer, labels }) {
 					hasC
 						? { tab: 'color' }
 						: {
-								tab: 'color',
-								color: DEFAULT_BACKGROUND_COLOR,
-							}
+							tab: 'color',
+							color: DEFAULT_BACKGROUND_COLOR,
+						}
 				);
 				return;
 			}
@@ -211,99 +215,108 @@ function BackgroundLayerEditor({ layer, onChangeLayer, labels }) {
 			initialTabName={tab}
 			onSelect={onTabSelect}
 		>
-				{(tabItem) => (
-					<div className="onepress-bg-popover__panel">
-						{tabItem.name === 'color' && (
-							<div className="onepress-bg-color-panel">
-								<ColorPicker
-									enableAlpha
-									color={colorVal}
-									onChange={(hex) =>
-										onChangeLayer({
-											tab: 'color',
-											color: hex,
-										})
-									}
-								/>
-								<Button
-									variant="tertiary"
-									onClick={() =>
-										onChangeLayer({
-											tab: 'color',
-											color: '',
-										})
-									}
-								>
-									{__('Clear color', 'onepress')}
-								</Button>
-							</div>
-						)}
-						{tabItem.name === 'gradient' && (
-							<GradientPicker
-								value={
-									gradientValue || DEFAULT_BACKGROUND_GRADIENT
-								}
-								onChange={(current) =>
+			{(tabItem) => (
+				<div className="onepress-bg-popover__panel">
+					{tabItem.name === 'color' && (
+						<div className="onepress-bg-color-panel">
+							<ColorPicker
+								enableAlpha
+								color={colorVal}
+								onChange={(hex) =>
 									onChangeLayer({
-										tab: 'gradient',
-										gradient: current || '',
+										tab: 'color',
+										color: hex,
 									})
 								}
-								clearable
-								gradients={[]}
-								disableCustomGradients={false}
-								aria-label={labels.gradient}
+								style={{
+									width: '100%',
+									padding: '0',
+									margin: '0px',
+								}}
 							/>
-						)}
-						{tabItem.name === 'image' && (
-							<div className="onepress-bg-image-panel">
-								<div className="onepress-bg-image-panel__actions">
-									<Button variant="secondary" onClick={pickImage}>
-										{layer.imageUrl
-											? __('Replace image', 'onepress')
-											: __('Select image', 'onepress')}
-									</Button>
-									{layer.imageUrl ? (
-										<Button variant="tertiary" onClick={clearImage}>
-											{__('Remove', 'onepress')}
-										</Button>
-									) : null}
-								</div>
+							<Button
+								variant="tertiary"
+								style={{
+									width: '100%',
+									padding: '0',
+								}}
+								onClick={() =>
+									onChangeLayer({
+										tab: 'color',
+										color: '',
+									})
+								}
+							>
+								{__('Clear color', 'onepress')}
+							</Button>
+						</div>
+					)}
+					{tabItem.name === 'gradient' && (
+						<GradientPicker
+							value={
+								gradientValue || DEFAULT_BACKGROUND_GRADIENT
+							}
+							onChange={(current) =>
+								onChangeLayer({
+									tab: 'gradient',
+									gradient: current || '',
+								})
+							}
+							clearable
+							gradients={[]}
+							disableCustomGradients={false}
+							aria-label={labels.gradient}
+						/>
+					)}
+					{tabItem.name === 'image' && (
+						<div className="onepress-bg-image-panel">
+							<div className="onepress-bg-image-panel__actions">
+								<Button variant="secondary" onClick={pickImage}>
+									{layer.imageUrl
+										? __('Replace image', 'onepress')
+										: __('Select image', 'onepress')}
+								</Button>
 								{layer.imageUrl ? (
-									<img
-										className="onepress-bg-image-panel__thumb"
-										src={layer.imageUrl}
-										alt=""
-									/>
+									<Button variant="tertiary" onClick={clearImage}>
+										{__('Remove', 'onepress')}
+									</Button>
 								) : null}
-								<SelectControl
-									label={__('Size', 'onepress')}
-									value={layer.size || 'cover'}
-									options={IMAGE_SIZES}
-									onChange={(v) => onChangeLayer({ size: v })}
-								/>
-								<SelectControl
-									label={__('Repeat', 'onepress')}
-									value={layer.repeat || 'no-repeat'}
-									options={IMAGE_REPEATS}
-									onChange={(v) => onChangeLayer({ repeat: v })}
-								/>
-								<SelectControl
-									label={__('Position', 'onepress')}
-									value={layer.position || 'center center'}
-									options={IMAGE_POSITIONS}
-									onChange={(v) => onChangeLayer({ position: v })}
-								/>
-								<SelectControl
-									label={__('Attachment', 'onepress')}
-									value={layer.attachment || 'scroll'}
-									options={ATTACHMENTS}
-									onChange={(v) => onChangeLayer({ attachment: v })}
-								/>
 							</div>
-						)}
-					</div>
-				)}
+							{layer.imageUrl ? (
+								<img
+									className="onepress-bg-image-panel__thumb"
+									src={layer.imageUrl}
+									alt=""
+								/>
+							) : null}
+							<SelectControl
+								label={__('Size', 'onepress')}
+								value={layer.size || 'cover'}
+								options={IMAGE_SIZES}
+								onChange={(v) => onChangeLayer({ size: v })}
+							/>
+							<SelectControl
+								label={__('Repeat', 'onepress')}
+								value={layer.repeat || 'no-repeat'}
+								options={IMAGE_REPEATS}
+								onChange={(v) => onChangeLayer({ repeat: v })}
+							/>
+							<SelectControl
+								label={__('Position', 'onepress')}
+								value={layer.position || 'center center'}
+								options={IMAGE_POSITIONS}
+								onChange={(v) => onChangeLayer({ position: v })}
+							/>
+							<SelectControl
+								label={__('Attachment', 'onepress')}
+								value={layer.attachment || 'scroll'}
+								options={ATTACHMENTS}
+								onChange={(v) => onChangeLayer({ attachment: v })}
+							/>
+						</div>
+					)}
+				</div>
+			)}
 		</TabPanel>
 	);
 }
@@ -440,11 +453,11 @@ export function BackgroundControlApp({ control }) {
 	const popoverTitle =
 		activeState != null
 			? sprintf(
-					/* translators: 1: state label, 2: device label */
-					__('%1$s · %2$s', 'onepress'),
-					STATE_LABELS[activeState] || activeState,
-					DEVICE_LABELS[previewDevice] || previewDevice
-				)
+				/* translators: 1: state label, 2: device label */
+				__('%1$s · %2$s', 'onepress'),
+				STATE_LABELS[activeState] || activeState,
+				DEVICE_LABELS[previewDevice] || previewDevice
+			)
 			: '';
 
 	const closeDropdown = useCallback(() => {
@@ -512,12 +525,6 @@ export function BackgroundControlApp({ control }) {
 			document.removeEventListener('pointerdown', onDocDown, true);
 	}, [dropdownOpen, closeDropdown]);
 
-	const deviceIcons = [
-		{ id: 'desktop', icon: 'dashicons-desktop' },
-		{ id: 'tablet', icon: 'dashicons-tablet' },
-		{ id: 'mobile', icon: 'dashicons-smartphone' },
-	];
-
 	return (
 		<div
 			className={
@@ -525,9 +532,25 @@ export function BackgroundControlApp({ control }) {
 				(dropdownOpen ? ' onepress-bg-control-root--open' : '')
 			}
 		>
-			{controlLabel ? (
-				<span className="customize-control-title">{controlLabel}</span>
-			) : null}
+			<div className='flex justify-between items-center'>
+				<div className='title'>
+					{controlLabel ? (
+						<span className="customize-control-title">{controlLabel}</span>
+					) : null}
+				</div>
+				<CustomizerPreviewDeviceButtons
+					devices={getCustomizerPreviewDeviceDefinitions({
+						labels: 'short',
+					})}
+					activeDevice={previewDevice}
+					onSelectDevice={selectPreviewDevice}
+					groupClassName="onepress-bg-app__devices"
+					buttonClassName="onepress-bg-app__device-btn"
+				/>
+			</div>
+
+
+
 			{controlDescription ? (
 				<span
 					className="description customize-control-description"
@@ -535,92 +558,81 @@ export function BackgroundControlApp({ control }) {
 				/>
 			) : null}
 			<div className="onepress-bg-app">
-			<div className="onepress-bg-app__toolbar" ref={toolbarRef}>
-			<div className="onepress-bg-app__devices">
-				{deviceIcons.map((d) => (
-					<button
-						key={d.id}
-						type="button"
-						className={`onepress-bg-app__device-btn${
-							previewDevice === d.id ? ' is-active' : ''
-						}`}
-						title={DEVICE_LABELS[d.id]}
-						aria-label={DEVICE_LABELS[d.id]}
-						aria-pressed={previewDevice === d.id}
-						onClick={() => selectPreviewDevice(d.id)}
-					>
-						<span className={`dashicons ${d.icon}`} aria-hidden />
-					</button>
-				))}
-			</div>
+				<div className="onepress-bg-app__toolbar" ref={toolbarRef}>
 
-			<div className="onepress-bg-app__states" role="group" aria-label={labels.state}>
-				{states.map((s) => {
-					const previewLayer =
-						data[s]?.[previewDevice] || createDefaultLayer();
-					const previewDecls = layerToDeclarations(previewLayer);
-					const previewFillStyle = declarationsToReactStyle(previewDecls);
-					return (
-						<button
-							key={s}
-							type="button"
-							className={
-								'onepress-bg-app__state-btn' +
-								(activeState === s ? ' is-active' : '')
-							}
-							aria-pressed={activeState === s}
-							aria-expanded={activeState === s}
-							aria-haspopup="dialog"
-							aria-controls={
-								activeState === s
-									? `onepress-bg-dropdown-${controlId}`
-									: undefined
-							}
-							onClick={() => onStateButtonClick(s)}
-						>
-							<span
-								className={
-									'onepress-bg-app__state-btn__fill' +
-									(!previewFillStyle
-										? ' onepress-bg-app__state-btn__fill--empty'
-										: '')
-								}
-								style={previewFillStyle || undefined}
-								aria-hidden
-							/>
-							<span className="onepress-bg-app__state-btn__label">
-								{STATE_LABELS[s] || s}
-							</span>
-						</button>
-					);
-				})}
-			</div>
-			</div>
 
-			{dropdownOpen ? (
-				<div
-					ref={dropdownPanelRef}
-					id={`onepress-bg-dropdown-${controlId}`}
-					className="onepress-bg-settings-dropdown onepress-bg-portal"
-					role="dialog"
-					aria-modal="false"
-					aria-label={popoverTitle}
-				>
-					<div className="onepress-bg-popover">
-						<div className="onepress-bg-popover__head">
-							<strong className="onepress-bg-popover__title">
-								{popoverTitle}
-							</strong>
+					<div className='relative'>
+						<div className="onepress-bg-app__states" role="group" aria-label={labels.state}>
+							{states.map((s) => {
+								const previewLayer =
+									data[s]?.[previewDevice] || createDefaultLayer();
+								const previewDecls = layerToDeclarations(previewLayer);
+								const previewFillStyle = declarationsToReactStyle(previewDecls);
+								return (
+									<button
+										key={s}
+										type="button"
+										className={
+											'onepress-bg-app__state-btn' +
+											(activeState === s ? ' is-active' : '')
+										}
+										aria-pressed={activeState === s}
+										aria-expanded={activeState === s}
+										aria-haspopup="dialog"
+										aria-controls={
+											activeState === s
+												? `onepress-bg-dropdown-${controlId}`
+												: undefined
+										}
+										onClick={() => onStateButtonClick(s)}
+									>
+										<span
+											className={
+												'onepress-bg-app__state-btn__fill' +
+												(!previewFillStyle
+													? ' onepress-bg-app__state-btn__fill--empty'
+													: '')
+											}
+											style={previewFillStyle || undefined}
+											aria-hidden
+										/>
+										<span className="onepress-bg-app__state-btn__label">
+											{STATE_LABELS[s] || s}
+										</span>
+									</button>
+								);
+							})}
 						</div>
-						<BackgroundLayerEditor
-							key={`${activeState}-${previewDevice}`}
-							layer={currentLayer}
-							onChangeLayer={changeCurrentLayer}
-							labels={labels}
-						/>
+
+						{dropdownOpen ? (
+							<div
+								ref={dropdownPanelRef}
+								id={`onepress-bg-dropdown-${controlId}`}
+								className="onepress-bg-settings-dropdown onepress-bg-portal"
+								role="dialog"
+								aria-modal="false"
+								aria-label={popoverTitle}
+							>
+								<div className="onepress-bg-popover">
+									{/* <div className="onepress-bg-popover__head">
+										<strong className="onepress-bg-popover__title">
+											{popoverTitle}
+										</strong>
+									</div> */}
+									<BackgroundLayerEditor
+										key={`${activeState}-${previewDevice}`}
+										layer={currentLayer}
+										onChangeLayer={changeCurrentLayer}
+										labels={labels}
+									/>
+								</div>
+							</div>
+						) : null}
+
 					</div>
+
 				</div>
-			) : null}
+
 			</div>
 		</div>
 	);

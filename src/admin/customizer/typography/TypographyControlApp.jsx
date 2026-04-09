@@ -16,6 +16,10 @@ import {
 	justifyStretchVertical,
 } from '@wordpress/icons';
 import {
+	CustomizerPreviewDeviceButtons,
+	getCustomizerPreviewDeviceDefinitions,
+} from '../CustomizerPreviewDeviceButtons.jsx';
+import {
 	FontPickerPanel,
 	removeAllPickerPreviewLinks,
 	removeSelectedFontLink,
@@ -548,48 +552,17 @@ function ResponsiveUnitField({
 		setUnitPopoverOpen(false);
 	}, [previewDevice, fieldKey]);
 
-	const deviceButtons = [
-		{
-			id: 'desktop',
-			icon: 'dashicons-desktop',
-			title: __('Desktop preview', 'onepress'),
-		},
-		{
-			id: 'tablet',
-			icon: 'dashicons-tablet',
-			title: __('Tablet preview', 'onepress'),
-		},
-		{
-			id: 'mobile',
-			icon: 'dashicons-smartphone',
-			title: __('Mobile preview', 'onepress'),
-		},
-	];
-
 	return (
 		<div className="setting-group setting-group--unit">
 			<div className="setting-group__head">
 				<span className="customize-control-title">{label}</span>
-				<div
-					className="setting-group__devices"
-					role="group"
-					aria-label={__('Customizer preview device', 'onepress')}
-				>
-					{deviceButtons.map((d) => (
-						<button
-							key={d.id}
-							type="button"
-							className={`setting-group__device-btn${previewDevice === d.id ? ' is-active' : ''
-								}`}
-							title={d.title}
-							aria-label={d.title}
-							aria-pressed={previewDevice === d.id}
-							onClick={() => onSelectDevice(d.id)}
-						>
-							<span className={`dashicons ${d.icon}`} aria-hidden />
-						</button>
-					))}
-				</div>
+				<CustomizerPreviewDeviceButtons
+					devices={getCustomizerPreviewDeviceDefinitions()}
+					activeDevice={previewDevice}
+					onSelectDevice={onSelectDevice}
+					groupClassName="setting-group__devices"
+					buttonClassName="setting-group__device-btn"
+				/>
 			</div>
 			<div
 				className={
@@ -984,40 +957,43 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 					dangerouslySetInnerHTML={{ __html: controlDescription }}
 				/>
 			) : null}
-			<button
-				type="button"
-				className="onepress-typo-summary-card flex items-center w-full"
-				onClick={() => {
-					setSettingsOpen((prev) => {
-						if (prev) {
-							setFontPickerOpen(false);
-						}
-						return !prev;
-					});
-				}}
-				aria-expanded={settingsOpen}
-				aria-label={__('Typography options', 'onepress')}
-			>
-				<span className="onepress-typo-summary-meta flex justify-between items-center w-full">
-					<span className="onepress-typo-chip" style={{ fontFamily: selectorStack }}>
-						{selectedFont ? selectedFont.name : labels.option_default}
-					</span>
-					<span className='flex gap-1'>
-						<span className="onepress-typo-chip">{selectedStyleLabel}</span>
-						<span className="onepress-typo-chip">{sizeBadge}</span>
-					</span>
-				</span>
-				{/* <span className="onepress-typo-summary-preview" style={summaryPreviewStyle}>…</span> */}
-			</button>
 
-			{settingsOpen && (
-				<div
-					className="onepress-typo-dropdown onepress-typo-settings-dropdown onepress-typo-portal"
-					role="dialog"
-					aria-modal="false"
+			<div className='relative'>
+
+				<button
+					type="button"
+					className="onepress-typo-summary-card flex items-center w-full"
+					onClick={() => {
+						setSettingsOpen((prev) => {
+							if (prev) {
+								setFontPickerOpen(false);
+							}
+							return !prev;
+						});
+					}}
+					aria-expanded={settingsOpen}
 					aria-label={__('Typography options', 'onepress')}
 				>
-					{/* <div className="settings-head">
+					<span className="onepress-typo-summary-meta flex justify-between items-center w-full">
+						<span className="onepress-typo-chip" style={{ fontFamily: selectorStack }}>
+							{selectedFont ? selectedFont.name : labels.option_default}
+						</span>
+						<span className='flex gap-1'>
+							<span className="onepress-typo-chip">{selectedStyleLabel}</span>
+							<span className="onepress-typo-chip">{sizeBadge}</span>
+						</span>
+					</span>
+					{/* <span className="onepress-typo-summary-preview" style={summaryPreviewStyle}>…</span> */}
+				</button>
+
+				{settingsOpen && (
+					<div
+						className="onepress-typo-dropdown onepress-typo-settings-dropdown onepress-typo-portal"
+						role="dialog"
+						aria-modal="false"
+						aria-label={__('Typography options', 'onepress')}
+					>
+						{/* <div className="settings-head">
 						<strong>{__('Typography options', 'onepress')}</strong>
 						<button
 							type="button"
@@ -1030,155 +1006,162 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 							{__('Close', 'onepress')}
 						</button>
 					</div> */}
-					<div className="settings-body">
-						{fields.font_family && (
-							<div
-								className="setting-group font-family-setting"
-								ref={fontSelectorRef}
-							>
-								<span className="customize-control-title">{labels.family}</span>
-								<div className="font-family-row">
-									<span
-										className="input font-family-value clickable"
-										role="button"
-										tabIndex={0}
-										aria-label={__('Open font selector', 'onepress')}
-										aria-expanded={fontPickerOpen}
-										onClick={(e) => openFontPicker(e)}
-										onKeyDown={(e) => {
-											if (e.key === 'Enter' || e.key === ' ') {
-												e.preventDefault();
-												openFontPicker(e);
-											}
-										}}
-									>
-										{selectedFont
-											? selectedFont.name
-											: labels.option_default}
-									</span>
-									{selectedFont && (
-										<button
-											type="button"
-											className="font-family-clear"
-											aria-label={__(
-												'Remove font and use theme default',
-												'onepress'
-											)}
-											title={__(
-												'Remove font and use theme default',
-												'onepress'
-											)}
-											onClick={(e) => {
-												e.stopPropagation();
-												clearSelectedFont();
+						<div className="settings-body">
+							{fields.font_family && (
+								<div
+									className="setting-group font-family-setting"
+									ref={fontSelectorRef}
+								>
+									<span className="customize-control-title">{labels.family}</span>
+									<div className="font-family-row">
+										<span
+											className="input font-family-value clickable"
+											role="button"
+											tabIndex={0}
+											aria-label={__('Open font selector', 'onepress')}
+											aria-expanded={fontPickerOpen}
+											onClick={(e) => openFontPicker(e)}
+											onKeyDown={(e) => {
+												if (e.key === 'Enter' || e.key === ' ') {
+													e.preventDefault();
+													openFontPicker(e);
+												}
 											}}
 										>
-											<span
-												className="dashicons dashicons-trash"
-												aria-hidden
-											/>
-										</button>
+											{selectedFont
+												? selectedFont.name
+												: labels.option_default}
+										</span>
+										{selectedFont && (
+											<button
+												type="button"
+												className="font-family-clear"
+												aria-label={__(
+													'Remove font and use theme default',
+													'onepress'
+												)}
+												title={__(
+													'Remove font and use theme default',
+													'onepress'
+												)}
+												onClick={(e) => {
+													e.stopPropagation();
+													clearSelectedFont();
+												}}
+											>
+												<span
+													className="dashicons dashicons-trash"
+													aria-hidden
+												/>
+											</button>
+										)}
+									</div>
+									{fontPickerOpen && (
+										<FontPickerPanel
+											open={fontPickerOpen}
+											variant="dropdown"
+											controlId={controlId}
+											webfonts={webfonts}
+											fontGroups={fontGroups}
+											currentFontId={state.fontId}
+											defaultLabel={labels.option_default}
+											onClose={closeFontPicker}
+											onSelectFont={selectFontFromPicker}
+										/>
 									)}
 								</div>
-								{fontPickerOpen && (
-									<FontPickerPanel
-										open={fontPickerOpen}
-										variant="dropdown"
-										controlId={controlId}
-										webfonts={webfonts}
-										fontGroups={fontGroups}
-										currentFontId={state.fontId}
-										defaultLabel={labels.option_default}
-										onClose={closeFontPicker}
-										onSelectFont={selectFontFromPicker}
-									/>
+							)}
+
+							{fields.font_family && fields.font_style && (
+								<div className="setting-group">
+									<span className="customize-control-title">{labels.style}</span>
+									<select
+										className="input"
+										value={state.styleSelect}
+										onChange={(e) => patch({ styleSelect: e.target.value })}
+									>
+										{styleOptions.map((o, idx) => (
+											<option key={`${idx}-${o.value}`} value={o.value}>
+												{o.label}
+											</option>
+										))}
+									</select>
+								</div>
+							)}
+
+							{fields.font_size && (
+								<ResponsiveUnitField
+									label={labels.size}
+									fieldKey="font_size"
+									previewDevice={previewDevice}
+									onSelectDevice={selectPreviewDevice}
+									state={state}
+									patch={patch}
+									min={0}
+								/>
+							)}
+
+							{fields.line_height && (
+								<ResponsiveUnitField
+									label={labels.line_height}
+									fieldKey="line_height"
+									previewDevice={previewDevice}
+									onSelectDevice={selectPreviewDevice}
+									state={state}
+									patch={patch}
+									min={0}
+									leadingIcon={justifyStretchVertical}
+								/>
+							)}
+
+							{fields.letter_spacing && (
+								<ResponsiveUnitField
+									label={labels.letter_spacing}
+									fieldKey="letter_spacing"
+									previewDevice={previewDevice}
+									onSelectDevice={selectPreviewDevice}
+									state={state}
+									patch={patch}
+									min={-1000}
+									leadingIcon={justifyStretch}
+								/>
+							)}
+
+
+							<div className='flex gap-2 justify-between'>
+								{fields.text_decoration && (
+									<div className="setting-group" title={labels.text_decoration}>
+										{/* <span className="customize-control-title">{labels.text_decoration}</span> */}
+										{renderSpanChoices({
+											options: textDecorationChoices,
+											value: state.textDecoration,
+											onChange: (next) => patch({ textDecoration: next }),
+											toggleable: true,
+											noneValue: 'none',
+										})}
+									</div>
+								)}
+
+								{fields.text_transform && (
+									<div className="setting-group" title={labels.text_transform}>
+										{/* <span className="customize-control-title">{labels.text_transform}</span> */}
+										{renderSpanChoices({
+											options: textTransformChoices,
+											value: state.textTransform,
+											onChange: (next) => patch({ textTransform: next }),
+											toggleable: true,
+											noneValue: 'none',
+										})}
+									</div>
 								)}
 							</div>
-						)}
 
-						{fields.font_family && fields.font_style && (
-							<div className="setting-group">
-								<span className="customize-control-title">{labels.style}</span>
-								<select
-									className="input"
-									value={state.styleSelect}
-									onChange={(e) => patch({ styleSelect: e.target.value })}
-								>
-									{styleOptions.map((o, idx) => (
-										<option key={`${idx}-${o.value}`} value={o.value}>
-											{o.label}
-										</option>
-									))}
-								</select>
-							</div>
-						)}
 
-						{fields.font_size && (
-							<ResponsiveUnitField
-								label={labels.size}
-								fieldKey="font_size"
-								previewDevice={previewDevice}
-								onSelectDevice={selectPreviewDevice}
-								state={state}
-								patch={patch}
-								min={0}
-							/>
-						)}
-
-						{fields.line_height && (
-							<ResponsiveUnitField
-								label={labels.line_height}
-								fieldKey="line_height"
-								previewDevice={previewDevice}
-								onSelectDevice={selectPreviewDevice}
-								state={state}
-								patch={patch}
-								min={0}
-								leadingIcon={justifyStretchVertical}
-							/>
-						)}
-
-						{fields.letter_spacing && (
-							<ResponsiveUnitField
-								label={labels.letter_spacing}
-								fieldKey="letter_spacing"
-								previewDevice={previewDevice}
-								onSelectDevice={selectPreviewDevice}
-								state={state}
-								patch={patch}
-								min={-1000}
-								leadingIcon={justifyStretch}
-							/>
-						)}
-
-						{fields.text_decoration && (
-							<div className="setting-group">
-								<span className="customize-control-title">{labels.text_decoration}</span>
-								{renderSpanChoices({
-									options: textDecorationChoices,
-									value: state.textDecoration,
-									onChange: (next) => patch({ textDecoration: next }),
-									toggleable: true,
-									noneValue: 'none',
-								})}
-							</div>
-						)}
-
-						{fields.text_transform && (
-							<div className="setting-group">
-								<span className="customize-control-title">{labels.text_transform}</span>
-								{renderSpanChoices({
-									options: textTransformChoices,
-									value: state.textTransform,
-									onChange: (next) => patch({ textTransform: next }),
-									toggleable: true,
-									noneValue: 'none',
-								})}
-							</div>
-						)}
+						</div>
 					</div>
-				</div>
-			)}
+				)}
+			</div>
+
 		</div>
 	);
 }

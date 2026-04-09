@@ -77,7 +77,7 @@ if ( class_exists( 'OnePress_Spacing_Customize_Control' ) && function_exists( 'o
 				'label'            => esc_html__( 'Demo: site title spacing', 'onepress' ),
 				'description'      => esc_html__( 'Padding for .site-title; live preview via postMessage (no full reload). Save & publish for the front end.', 'onepress' ),
 				'section'          => 'onepress_typo_demo',
-				'css_selector'     => '.site-title',
+				'css_selector'     => '#features .container',
 				'spacing_property' => 'padding',
 			)
 		)

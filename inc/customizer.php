@@ -232,7 +232,7 @@ function onepress_customize_preview_js()
 	$spacing_pm_selectors = apply_filters(
 		'onepress_spacing_postmessage_selectors',
 		array(
-			'onepress_spacing_demo_site_title' => '.site-title',
+			'onepress_spacing_demo_site_title' => '#features .container',
 		)
 	);
 	if ( ! is_array( $spacing_pm_selectors ) ) {

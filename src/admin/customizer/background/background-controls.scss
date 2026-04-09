@@ -46,42 +46,7 @@
 }
 
 .onepress-bg-app__devices {
-  display: flex;
-  gap: 2px;
   margin-bottom: 10px;
-}
-
-.onepress-bg-app__device-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 26px;
-  padding: 0;
-  border: 1px solid #c4c8ce;
-  border-radius: 4px;
-  background: #fff;
-  color: #50575e;
-  cursor: pointer;
-}
-
-.onepress-bg-app__device-btn:hover,
-.onepress-bg-app__device-btn:focus {
-  border-color: #2271b1;
-  color: #2271b1;
-  outline: none;
-}
-
-.onepress-bg-app__device-btn.is-active {
-  border-color: #2271b1;
-  background: #f0f6fc;
-  color: #2271b1;
-}
-
-.onepress-bg-app__device-btn .dashicons {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
 }
 
 .onepress-bg-app__states {
@@ -104,6 +69,7 @@
   color: #1d2327;
   cursor: pointer;
   overflow: hidden;
+  flex: 1;
 }
 
 .onepress-bg-app__state-btn__fill {
@@ -166,6 +132,10 @@
   border: 1px solid #c3c4c7;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  position: absolute;
+  top: 31px;
+  left: 0;
+  z-index: 100;
 }
 
 .onepress-bg-popover {
