@@ -177,8 +177,7 @@ function FontPickerRow({
 			: `"${name}", sans-serif`;
 
 	return (
-		<button
-			type="button"
+		<span
 			ref={rowRef}
 			className={
 				'fontpicker-row' +
@@ -198,7 +197,7 @@ function FontPickerRow({
 				{name}
 				{/* {sampleText} */}
 			</span>
-		</button>
+		</span>
 	);
 }
 
@@ -387,8 +386,7 @@ export function FontPickerPanel({
 					className="fontpicker-scroll"
 					ref={setScrollRoot}
 				>
-					<button
-						type="button"
+					<span
 						className={
 							'fontpicker-row fontpicker-row--default' +
 							(!currentFontId ? ' is-selected' : '')
@@ -398,7 +396,7 @@ export function FontPickerPanel({
 						<span className="fontpicker-row__name">
 							{defaultLabel}
 						</span>
-					</button>
+					</span>
 					{filteredGroups.length === 0 ? (
 						<p className="fontpicker-empty" role="status">
 							{__( 'No fonts found.', 'onepress' )}

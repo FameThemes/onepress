@@ -143,8 +143,14 @@ if ( ! function_exists( 'onepress_background_state_pseudo' ) ) {
 			return '';
 		}
 		$base_sel = isset( $data['_meta']['selector'] ) ? trim( (string) $data['_meta']['selector'] ) : '';
-		if ( '' === $base_sel ) {
-			return '';
+		$sel_map  = array();
+		if ( isset( $data['_meta']['selectorsByState'] ) && is_array( $data['_meta']['selectorsByState'] ) ) {
+			foreach ( $data['_meta']['selectorsByState'] as $sk => $sels ) {
+				$k = sanitize_key( (string) $sk );
+				if ( '' !== $k ) {
+					$sel_map[ $k ] = sanitize_text_field( (string) $sels );
+				}
+			}
 		}
 		$states = isset( $data['_meta']['states'] ) && is_array( $data['_meta']['states'] ) && ! empty( $data['_meta']['states'] )
 			? $data['_meta']['states']
@@ -169,7 +175,11 @@ if ( ! function_exists( 'onepress_background_state_pseudo' ) ) {
 			if ( '' === $state_key ) {
 				continue;
 			}
-			$sel = onepress_background_build_state_selector( $base_sel, $state_key );
+			if ( isset( $sel_map[ $state_key ] ) && trim( $sel_map[ $state_key ] ) !== '' ) {
+				$sel = trim( $sel_map[ $state_key ] );
+			} else {
+				$sel = onepress_background_build_state_selector( $base_sel, $state_key );
+			}
 			if ( '' === $sel ) {
 				continue;
 			}
@@ -194,7 +204,8 @@ if ( ! function_exists( 'onepress_background_state_pseudo' ) ) {
 			}
 		}
 
-		return trim( implode( "\n\n", array_filter( $chunks ) ) );
+		$out = trim( implode( "\n\n", array_filter( $chunks ) ) );
+		return $out;
 	}
 
 	/**
@@ -254,6 +265,24 @@ if ( ! function_exists( 'onepress_background_state_pseudo' ) ) {
 			}
 			if ( empty( $out['_meta']['states'] ) ) {
 				$out['_meta']['states'] = array( 'normal' );
+			}
+			if ( isset( $value['_meta']['selectorsByState'] ) && is_array( $value['_meta']['selectorsByState'] ) ) {
+				$out['_meta']['selectorsByState'] = array();
+				foreach ( $value['_meta']['selectorsByState'] as $sk => $sels ) {
+					$k = sanitize_key( (string) $sk );
+					if ( '' !== $k && in_array( $k, $known_states, true ) ) {
+						$out['_meta']['selectorsByState'][ $k ] = sanitize_text_field( (string) $sels );
+					}
+				}
+			}
+			if ( isset( $value['_meta']['stateLabels'] ) && is_array( $value['_meta']['stateLabels'] ) ) {
+				$out['_meta']['stateLabels'] = array();
+				foreach ( $value['_meta']['stateLabels'] as $sk => $lab ) {
+					$k = sanitize_key( (string) $sk );
+					if ( '' !== $k && in_array( $k, $known_states, true ) ) {
+						$out['_meta']['stateLabels'][ $k ] = sanitize_text_field( (string) $lab );
+					}
+				}
 			}
 		} else {
 			return '';

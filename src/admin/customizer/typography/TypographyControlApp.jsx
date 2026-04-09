@@ -9,7 +9,6 @@ import {
 	useState,
 } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Popover } from '@wordpress/components';
 import {
 	Icon,
 	justifyStretch,
@@ -19,6 +18,8 @@ import {
 	CustomizerPreviewDeviceButtons,
 	getCustomizerPreviewDeviceDefinitions,
 } from '../CustomizerPreviewDeviceButtons.jsx';
+import { CustomizerUnitSelectPopover } from '../CustomizerUnitSelectPopover.jsx';
+import { getCustomizeControlDefaultRaw } from '../getCustomizeControlDefaultRaw.js';
 import {
 	FontPickerPanel,
 	removeAllPickerPreviewLinks,
@@ -545,24 +546,34 @@ function ResponsiveUnitField({
 	const value = state[keys.value];
 	const unit = state[keys.unit];
 
-	const [unitPopoverOpen, setUnitPopoverOpen] = useState(false);
-	const [unitAnchorEl, setUnitAnchorEl] = useState(null);
-
-	useEffect(() => {
-		setUnitPopoverOpen(false);
-	}, [previewDevice, fieldKey]);
-
 	return (
 		<div className="setting-group setting-group--unit">
-			<div className="setting-group__head">
-				<span className="customize-control-title">{label}</span>
-				<CustomizerPreviewDeviceButtons
-					devices={getCustomizerPreviewDeviceDefinitions()}
-					activeDevice={previewDevice}
-					onSelectDevice={onSelectDevice}
-					groupClassName="setting-group__devices"
-					buttonClassName="setting-group__device-btn"
-				/>
+			<div className="setting-group__head w-full flex justify-between items-center">
+				<div className='flex gap-1'>
+					<span className="customize-control-title">{label}</span>
+					<CustomizerPreviewDeviceButtons
+						devices={getCustomizerPreviewDeviceDefinitions()}
+						activeDevice={previewDevice}
+						onSelectDevice={onSelectDevice}
+						groupClassName="setting-group__devices"
+						buttonClassName="setting-group__device-btn"
+					/>
+				</div>
+
+				<div className="unit-row__unit-wrap">
+					<CustomizerUnitSelectPopover
+						key={`${fieldKey}-${previewDevice}`}
+						units={SIZE_UNITS}
+						value={unit}
+						onChange={(u) => patch({ [keys.unit]: u })}
+						placement="bottom-start"
+						triggerClassName="opc-input select unit-popover-trigger"
+						triggerActiveClass="active"
+					/>
+				</div>
+
+
+
 			</div>
 			<div
 				className={
@@ -577,60 +588,13 @@ function ResponsiveUnitField({
 				) : null}
 				<input
 					type="number"
-					className="input"
+					className="opc-input"
 					min={min}
 					step="any"
 					value={value}
 					onChange={(e) => patch({ [keys.value]: e.target.value })}
 				/>
-				<div className="unit-row__unit-wrap">
-					<button
-						type="button"
-						ref={setUnitAnchorEl}
-						className="input unit-popover-trigger"
-						aria-expanded={unitPopoverOpen}
-						aria-haspopup="dialog"
-						aria-label={__('Unit', 'onepress')}
-						onClick={() => setUnitPopoverOpen((o) => !o)}
-					>
-						<span className="unit-popover-trigger__value">{unit}</span>
-					</button>
-					{unitPopoverOpen && (
-						<Popover
-							anchor={unitAnchorEl}
-							className="onepress-typo-unit-popover-shell"
-							onClose={() => setUnitPopoverOpen(false)}
-							placement="bottom-start"
-							offset={4}
-							focusOnMount={false}
-						>
-							<div
-								className="onepress-typo-unit-popover"
-								role="listbox"
-								aria-label={__('Unit', 'onepress')}
-							>
-								{SIZE_UNITS.map((u) => (
-									<button
-										key={u}
-										type="button"
-										role="option"
-										aria-selected={unit === u}
-										className={
-											'onepress-typo-unit-popover__item' +
-											(unit === u ? ' is-selected' : '')
-										}
-										onClick={() => {
-											patch({ [keys.unit]: u });
-											setUnitPopoverOpen(false);
-										}}
-									>
-										{u}
-									</button>
-								))}
-							</div>
-						</Popover>
-					)}
-				</div>
+
 			</div>
 		</div>
 	);
@@ -664,7 +628,7 @@ function renderSpanChoices({
 				return (
 					<span
 						key={opt.value || 'default'}
-						className={`choice-btn${active ? ' is-active' : ''}`}
+						className={`choice-btn ${active ? ' is-active button-primary' : 'button-secondary'}`}
 						role="button"
 						tabIndex={0}
 						aria-pressed={active}
@@ -806,6 +770,14 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 		setFontPickerOpen(false);
 	}, [controlId, patch]);
 
+	const resetToDefault = useCallback(() => {
+		setFontPickerOpen(false);
+		removeAllPickerPreviewLinks(controlId);
+		removeSelectedFontLink(controlId);
+		const raw = getCustomizeControlDefaultRaw(control);
+		setState(parseInitialState(raw || '', fields));
+	}, [control, controlId, fields]);
+
 	useEffect(() => {
 		if (fontPickerOpen) {
 			return;
@@ -940,6 +912,8 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 		summaryPreviewStyle.textDecoration = state.textDecoration || 'none';
 	}
 
+	console.log('state.styleSelect', state)
+
 	return (
 		<div
 			ref={controlWrapRef}
@@ -948,21 +922,32 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 				(settingsOpen ? ' onepress-typo-control--open' : '')
 			}
 		>
-			{controlLabel ? (
-				<span className="customize-control-title">{controlLabel}</span>
-			) : null}
-			{controlDescription ? (
-				<span
-					className="description customize-control-description"
-					dangerouslySetInnerHTML={{ __html: controlDescription }}
-				/>
-			) : null}
+			<div className='flex items-center w-full gap-1 justify-between'>
+				<div className='ctitle'>
+					{controlLabel ? (
+						<span className="customize-control-title">{controlLabel}</span>
+					) : null}
+				</div>
+
+				<button
+					type="button"
+					className="onepress-customizer-reset-default"
+					onClick={resetToDefault}
+					aria-label={__('Reset to default', 'onepress')}
+					title={__('Reset to default', 'onepress')}
+				>
+					<span
+						className="dashicons dashicons-image-rotate"
+						aria-hidden
+					/>
+				</button>
+			</div>
 
 			<div className='relative'>
 
 				<button
 					type="button"
-					className="onepress-typo-summary-card flex items-center w-full"
+					className="onepress-typo-summary-card opc-input select flex items-center w-full"
 					onClick={() => {
 						setSettingsOpen((prev) => {
 							if (prev) {
@@ -979,8 +964,9 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 							{selectedFont ? selectedFont.name : labels.option_default}
 						</span>
 						<span className='flex gap-1'>
-							<span className="onepress-typo-chip">{selectedStyleLabel}</span>
-							<span className="onepress-typo-chip">{sizeBadge}</span>
+							{selectedStyleLabel != labels.option_default && <><span className="onepress-typo-chip">{selectedStyleLabel}</span>
+								/</>}
+							{labels.option_default != sizeBadge && <span className="onepress-typo-chip">{sizeBadge}</span>}
 						</span>
 					</span>
 					{/* <span className="onepress-typo-summary-preview" style={summaryPreviewStyle}>…</span> */}
@@ -1015,7 +1001,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 									<span className="customize-control-title">{labels.family}</span>
 									<div className="font-family-row">
 										<span
-											className="input font-family-value clickable"
+											className="opc-input select font-family-value clickable"
 											role="button"
 											tabIndex={0}
 											aria-label={__('Open font selector', 'onepress')}
@@ -1033,8 +1019,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 												: labels.option_default}
 										</span>
 										{selectedFont && (
-											<button
-												type="button"
+											<span
 												className="font-family-clear"
 												aria-label={__(
 													'Remove font and use theme default',
@@ -1050,10 +1035,10 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 												}}
 											>
 												<span
-													className="dashicons dashicons-trash"
+													className="dashicons dashicons-no-alt"
 													aria-hidden
 												/>
-											</button>
+											</span>
 										)}
 									</div>
 									{fontPickerOpen && (
@@ -1076,7 +1061,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 								<div className="setting-group">
 									<span className="customize-control-title">{labels.style}</span>
 									<select
-										className="input"
+										className="opc-input select"
 										value={state.styleSelect}
 										onChange={(e) => patch({ styleSelect: e.target.value })}
 									>
@@ -1161,6 +1146,13 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 					</div>
 				)}
 			</div>
+
+			{controlDescription ? (
+				<span
+					className="description customize-control-description"
+					dangerouslySetInnerHTML={{ __html: controlDescription }}
+				/>
+			) : null}
 
 		</div>
 	);

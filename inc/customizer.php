@@ -244,6 +244,24 @@ function onepress_customize_preview_js()
 		$spacing_pm_selectors
 	);
 
+	$slider_pm_config = apply_filters(
+		'onepress_slider_postmessage_config',
+		array(
+			'onepress_slider_demo_logo_width' => array(
+				'selector' => '.custom-logo-link img, .custom-logo-link svg',
+				'property' => 'width',
+			),
+		)
+	);
+	if ( ! is_array( $slider_pm_config ) ) {
+		$slider_pm_config = array();
+	}
+	wp_localize_script(
+		$handle,
+		'onepressSliderPostMessageConfig',
+		$slider_pm_config
+	);
+
 	$bg_pm_ids = apply_filters(
 		'onepress_background_postmessage_setting_ids',
 		array(

@@ -8,11 +8,12 @@ import {
 	useState,
 } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Popover } from '@wordpress/components';
 import {
 	CustomizerPreviewDeviceButtons,
 	getCustomizerPreviewDeviceDefinitions,
 } from '../CustomizerPreviewDeviceButtons.jsx';
+import { CustomizerUnitSelectPopover } from '../CustomizerUnitSelectPopover.jsx';
+import { getCustomizeControlDefaultRaw } from '../getCustomizeControlDefaultRaw.js';
 
 const SIZE_UNITS = ['px', 'em', 'rem', '%'];
 const PREVIEW_DEVICES = ['desktop', 'tablet', 'mobile'];
@@ -170,62 +171,6 @@ function useSpacingSync(settingRef, state, prefix) {
 	}, [state, prefix, settingRef]);
 }
 
-function UnitPopover({ unit, onChangeUnit }) {
-	const [open, setOpen] = useState(false);
-	const [anchorEl, setAnchorEl] = useState(null);
-
-	return (
-		<>
-			<button
-				type="button"
-				ref={setAnchorEl}
-				className="input onepress-spacing-unit-trigger"
-				aria-expanded={open}
-				aria-haspopup="dialog"
-				aria-label={__('Unit', 'onepress')}
-				onClick={() => setOpen((o) => !o)}
-			>
-				<span className="onepress-spacing-unit-trigger__value">{unit}</span>
-			</button>
-			{open && (
-				<Popover
-					anchor={anchorEl}
-					className="onepress-spacing-unit-popover-shell"
-					onClose={() => setOpen(false)}
-					placement="bottom-end"
-					offset={4}
-					focusOnMount={false}
-				>
-					<div
-						className="onepress-spacing-unit-popover"
-						role="listbox"
-						aria-label={__('Unit', 'onepress')}
-					>
-						{SIZE_UNITS.map((u) => (
-							<button
-								key={u}
-								type="button"
-								role="option"
-								aria-selected={unit === u}
-								className={
-									'onepress-spacing-unit-popover__item' +
-									(unit === u ? ' is-selected' : '')
-								}
-								onClick={() => {
-									onChangeUnit(u);
-									setOpen(false);
-								}}
-							>
-								{u}
-							</button>
-						))}
-					</div>
-				</Popover>
-			)}
-		</>
-	);
-}
-
 /**
  * @param {object} props
  */
@@ -353,6 +298,21 @@ export function SpacingControlApp({ control }) {
 		patch({ [linkedKey]: false });
 	};
 
+	const resetToDefault = useCallback(() => {
+		const raw = getCustomizeControlDefaultRaw(control);
+		let obj = {};
+		try {
+			const str = raw && String(raw).trim() ? String(raw) : '';
+			obj = str ? JSON.parse(str) : {};
+			if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+				obj = {};
+			}
+		} catch {
+			obj = {};
+		}
+		setState(flatJsonToState(prefix, obj));
+	}, [control, prefix]);
+
 	const sideLabels = {
 		top: labels.top,
 		right: labels.right,
@@ -366,18 +326,15 @@ export function SpacingControlApp({ control }) {
 			<div className='flex justify-between items-center w-full'>
 
 				<div className='flex justify-between items-center w-full'>
-					<div className='title'>
-						{controlLabel ? (
-							<span className="customize-control-title">{controlLabel}</span>
-						) : null}
-					</div>
-					<div className='flex justify-between items-center gap-2'>
-						<div className="onepress-spacing-app__unit">
-							<UnitPopover
-								unit={currentUnit}
-								onChangeUnit={(u) => patch({ [unitKey]: u })}
-							/>
+					<div className='flex justify-between items-center gap-1'>
+						<div className='title'>
+							{controlLabel ? (
+								<span className="customize-control-title">{controlLabel}</span>
+							) : null}
 						</div>
+
+
+
 						<CustomizerPreviewDeviceButtons
 							devices={getCustomizerPreviewDeviceDefinitions()}
 							activeDevice={previewDevice}
@@ -385,6 +342,32 @@ export function SpacingControlApp({ control }) {
 							groupClassName="onepress-spacing-app__devices"
 							buttonClassName="onepress-spacing-app__device-btn"
 						/>
+
+					</div>
+					<div className='flex justify-between items-center gap-1'>
+						<button
+							type="button"
+							className="onepress-customizer-reset-default"
+							onClick={resetToDefault}
+							aria-label={__('Reset to default', 'onepress')}
+							title={__('Reset to default', 'onepress')}
+						>
+							<span
+								className="dashicons dashicons-image-rotate"
+								aria-hidden
+							/>
+						</button>
+						<div className="onepress-spacing-app__unit">
+							<CustomizerUnitSelectPopover
+								key={previewDevice}
+								units={SIZE_UNITS}
+								value={currentUnit}
+								onChange={(u) => patch({ [unitKey]: u })}
+								placement="bottom-end"
+								triggerClassName="toplv opc-input select unit-popover-trigger "
+							/>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -396,55 +379,51 @@ export function SpacingControlApp({ control }) {
 					dangerouslySetInnerHTML={{ __html: controlDescription }}
 				/>
 			) : null}
+
+
 			<div className="onepress-spacing-app">
-				<div className="onepress-spacing-app__head">
-
-
-					<div className="onepress-spacing-app__head-spacer" aria-hidden="true" />
-
-				</div>
 				<div className="onepress-spacing-app__sides">
 					<div className='inputs'>
 						{SIDE_KEYS.map((side) => (
-							<div key={side} className="onepress-spacing-side">
+							<div key={side} className="spacing-side">
 								<input
 									type="number"
-									className="input onepress-spacing-side__input"
+									className="input"
 									min={prefix === 'margin' ? undefined : 0}
 									step="any"
 									value={state[sideKey(side)] ?? ''}
 									onChange={(e) => setSide(side, e.target.value)}
 									aria-label={sideLabels[side]}
 								/>
-								<span className="onepress-spacing-side__label">
+								<span className="label">
 									{sideLabels[side]}
 								</span>
 							</div>
 						))}
-					</div>
-					<div className="onepress-spacing-app__link-wrap">
-						<button
-							type="button"
-							className={
-								'onepress-spacing-link-btn' +
-								(linked ? ' is-linked' : '')
-							}
-							onClick={toggleLinked}
-							aria-pressed={linked}
-							title={linked ? labels.unlink : labels.link}
-							aria-label={linked ? labels.unlink : labels.link}
-						>
+						<div className="spacing-side link-wrap">
 							<span
 								className={
-									'dashicons ' +
-									(linked
-										? 'dashicons-admin-links'
-										: 'dashicons-editor-unlink')
+									'link-btn' +
+									(linked ? ' is-linked' : '')
 								}
-								aria-hidden
-							/>
-						</button>
+								onClick={toggleLinked}
+								aria-pressed={linked}
+								title={linked ? labels.unlink : labels.link}
+								aria-label={linked ? labels.unlink : labels.link}
+							>
+								<span
+									className={
+										'dashicons ' +
+										(linked
+											? 'dashicons-admin-links'
+											: 'dashicons-editor-unlink')
+									}
+									aria-hidden
+								/>
+							</span>
+						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>

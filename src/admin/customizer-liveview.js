@@ -9,12 +9,14 @@
 import { bindOnePressBackgroundPreview } from './customizer/background/previewBindings';
 import { bindOnePressTypographyPreview } from './customizer/typography/previewBindings';
 import { bindOnePressSpacingPreview } from './customizer/spacing/previewBindings';
+import { bindOnePressSliderPreview } from './customizer/slider/previewBindings';
 
 ( function( $ , api ) {
 
 	bindOnePressBackgroundPreview( api );
 	bindOnePressTypographyPreview( api );
 	bindOnePressSpacingPreview( api );
+	bindOnePressSliderPreview( api );
 
 
     // Site footer bg

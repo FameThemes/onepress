@@ -690,6 +690,12 @@ require get_template_directory() . '/inc/spacing/helper.php';
 require get_template_directory() . '/inc/spacing/spacing-demo-auto-apply.php';
 
 /**
+ * Slider / single dimension (Customizer + front-end CSS).
+ */
+require get_template_directory() . '/inc/slider/helper.php';
+require get_template_directory() . '/inc/slider/slider-demo-auto-apply.php';
+
+/**
  * Background (Customizer + front-end CSS).
  */
 require get_template_directory() . '/inc/background/helper.php';

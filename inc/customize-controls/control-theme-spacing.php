@@ -68,6 +68,11 @@ if ( class_exists( 'WP_Customize_Control', false ) && ! class_exists( 'OnePress_
 		public function to_json() {
 			parent::to_json();
 
+			if ( isset( $this->settings['default'] ) && $this->settings['default'] instanceof WP_Customize_Setting ) {
+				$def                   = $this->settings['default']->default;
+				$this->json['default'] = is_string( $def ) ? $def : wp_json_encode( $def );
+			}
+
 			$raw   = $this->value();
 			$value = is_string( $raw ) ? json_decode( $raw, true ) : null;
 			if ( ! is_array( $value ) ) {

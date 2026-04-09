@@ -42,6 +42,24 @@ export function buildStateSelector(baseSelector, stateKey) {
 }
 
 /**
+ * Full selector for a state: use _meta.selectorsByState[stateKey] when set, else base + pseudo.
+ *
+ * @param {{ selector?: string, selectorsByState?: Record<string, string> }} meta
+ * @param {string} stateKey
+ * @returns {string}
+ */
+export function resolveSelectorForState(meta, stateKey) {
+	const map = meta?.selectorsByState;
+	if (map && typeof map === 'object' && !Array.isArray(map)) {
+		const raw = map[stateKey];
+		if (raw != null && String(raw).trim()) {
+			return String(raw).trim();
+		}
+	}
+	return buildStateSelector(String(meta?.selector || '').trim(), stateKey);
+}
+
+/**
  * @returns {object}
  */
 export function createDefaultLayer() {
@@ -192,13 +210,10 @@ export function buildBackgroundCss(data, breakpoints) {
 	if (!data || !data._onepressBackground || !data._meta) {
 		return '';
 	}
-	const baseSel = String(data._meta.selector || '').trim();
-	if (!baseSel) {
-		return '';
-	}
+	const meta = data._meta;
 	const states =
-		Array.isArray(data._meta.states) && data._meta.states.length
-			? data._meta.states
+		Array.isArray(meta.states) && meta.states.length
+			? meta.states
 			: ['normal'];
 
 	const bp = {
@@ -209,7 +224,7 @@ export function buildBackgroundCss(data, breakpoints) {
 	const chunks = [];
 
 	for (const stateKey of states) {
-		const sel = buildStateSelector(baseSel, stateKey);
+		const sel = resolveSelectorForState(meta, stateKey);
 		if (!sel) {
 			continue;
 		}

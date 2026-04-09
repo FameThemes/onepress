@@ -12,6 +12,7 @@ import { registerPlusSection } from './customizer/plus-section';
 import { installWpEditor } from './customizer/wp-editor';
 import './customizer/typography/typography-controls.js';
 import './customizer/spacing/spacing-controls.js';
+import './customizer/slider/slider-controls.js';
 import './customizer/background/background-controls.js';
 
 const api = wp.customize;

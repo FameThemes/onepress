@@ -15,6 +15,7 @@ import {
 	GradientPicker,
 	SelectControl,
 	TabPanel,
+	Tooltip,
 } from '@wordpress/components';
 import {
 	CustomizerPreviewDeviceButtons,
@@ -26,7 +27,9 @@ import {
 	DEFAULT_BACKGROUND_GRADIENT,
 	declarationsToReactStyle,
 	layerToDeclarations,
+	STATE_PSEUDO,
 } from './buildBackgroundCss.js';
+import { getCustomizeControlDefaultRaw } from '../getCustomizeControlDefaultRaw.js';
 
 const PREVIEW_DEVICES = ['desktop', 'tablet', 'mobile'];
 
@@ -80,10 +83,85 @@ const ATTACHMENTS = [
 ];
 
 /**
- * @param {string} selector
- * @param {string[]} states
+ * @param {object} params control.params from PHP
+ * @returns {{ selector: string, selectorsByState: Record<string, string>|null, states: string[], stateLabels: Record<string, string> }}
  */
-function createEmptyData(selector, states) {
+function parseBackgroundControlMeta(params) {
+	const known = new Set(Object.keys(STATE_PSEUDO));
+	let stateList = ['normal', 'hover'];
+	const stateLabels = {};
+	const sp = params?.states;
+
+	if (Array.isArray(sp) && sp.length) {
+		stateList = sp.filter((k) => known.has(k));
+		if (!stateList.length) {
+			stateList = ['normal', 'hover'];
+		}
+	} else if (sp && typeof sp === 'object') {
+		stateList = [];
+		for (const k of Object.keys(sp)) {
+			if (known.has(k)) {
+				stateList.push(k);
+				const lab = sp[k];
+				if (lab != null && String(lab).trim()) {
+					stateLabels[k] = String(lab).trim();
+				}
+			}
+		}
+		if (!stateList.length) {
+			stateList = ['normal', 'hover'];
+		}
+	}
+
+	let selectorStr =
+		typeof params?.selector === 'string' ? params.selector.trim() : '';
+	const rawMap =
+		params?.selectors_by_state || params?.selectorsByState || null;
+	let selectorsByState = null;
+	if (rawMap && typeof rawMap === 'object' && !Array.isArray(rawMap)) {
+		selectorsByState = {};
+		for (const k of Object.keys(rawMap)) {
+			if (!known.has(k)) {
+				continue;
+			}
+			const v = String(rawMap[k] ?? '').trim();
+			if (v) {
+				selectorsByState[k] = v;
+			}
+		}
+		if (!Object.keys(selectorsByState).length) {
+			selectorsByState = null;
+		}
+	}
+	if (!selectorStr && selectorsByState) {
+		selectorStr =
+			(selectorsByState.normal ||
+				stateList.map((s) => selectorsByState[s]).find(Boolean) ||
+				'').trim();
+	}
+
+	const sl = params?.state_labels || params?.stateLabels;
+	if (sl && typeof sl === 'object' && !Array.isArray(sl)) {
+		for (const k of Object.keys(sl)) {
+			if (known.has(k) && sl[k] != null && String(sl[k]).trim()) {
+				stateLabels[k] = String(sl[k]).trim();
+			}
+		}
+	}
+
+	return {
+		selector: selectorStr,
+		selectorsByState,
+		states: stateList,
+		stateLabels,
+	};
+}
+
+/**
+ * @param {{ selector: string, selectorsByState: object|null, states: string[], stateLabels: Record<string, string> }} meta
+ */
+function createEmptyData(meta) {
+	const { selector, selectorsByState, states, stateLabels } = meta;
 	const data = {
 		_onepressBackground: true,
 		_meta: {
@@ -91,6 +169,12 @@ function createEmptyData(selector, states) {
 			states: [...states],
 		},
 	};
+	if (selectorsByState && Object.keys(selectorsByState).length) {
+		data._meta.selectorsByState = { ...selectorsByState };
+	}
+	if (stateLabels && Object.keys(stateLabels).length) {
+		data._meta.stateLabels = { ...stateLabels };
+	}
 	for (const s of states) {
 		data[s] = {
 			desktop: createDefaultLayer(),
@@ -103,19 +187,14 @@ function createEmptyData(selector, states) {
 
 /**
  * @param {object|null} saved
- * @param {string} selector
- * @param {string[]} states
+ * @param {{ selector: string, selectorsByState: object|null, states: string[], stateLabels: Record<string, string> }} meta
  */
-function mergeSavedData(saved, selector, states) {
-	const base = createEmptyData(selector, states);
-	if (
-		!saved ||
-		typeof saved !== 'object' ||
-		Array.isArray(saved)
-	) {
+function mergeSavedData(saved, meta) {
+	const base = createEmptyData(meta);
+	if (!saved || typeof saved !== 'object' || Array.isArray(saved)) {
 		return base;
 	}
-	for (const s of states) {
+	for (const s of meta.states) {
 		if (!saved[s] || typeof saved[s] !== 'object') {
 			continue;
 		}
@@ -270,18 +349,7 @@ function BackgroundLayerEditor({ layer, onChangeLayer, labels }) {
 					)}
 					{tabItem.name === 'image' && (
 						<div className="onepress-bg-image-panel">
-							<div className="onepress-bg-image-panel__actions">
-								<Button variant="secondary" onClick={pickImage}>
-									{layer.imageUrl
-										? __('Replace image', 'onepress')
-										: __('Select image', 'onepress')}
-								</Button>
-								{layer.imageUrl ? (
-									<Button variant="tertiary" onClick={clearImage}>
-										{__('Remove', 'onepress')}
-									</Button>
-								) : null}
-							</div>
+
 							{layer.imageUrl ? (
 								<img
 									className="onepress-bg-image-panel__thumb"
@@ -289,35 +357,60 @@ function BackgroundLayerEditor({ layer, onChangeLayer, labels }) {
 									alt=""
 								/>
 							) : null}
-							<SelectControl
-								label={__('Size', 'onepress')}
-								value={layer.size || 'cover'}
-								options={IMAGE_SIZES}
-								onChange={(v) => onChangeLayer({ size: v })}
-							/>
-							<SelectControl
-								label={__('Repeat', 'onepress')}
-								value={layer.repeat || 'no-repeat'}
-								options={IMAGE_REPEATS}
-								onChange={(v) => onChangeLayer({ repeat: v })}
-							/>
-							<SelectControl
-								label={__('Position', 'onepress')}
-								value={layer.position || 'center center'}
-								options={IMAGE_POSITIONS}
-								onChange={(v) => onChangeLayer({ position: v })}
-							/>
-							<SelectControl
-								label={__('Attachment', 'onepress')}
-								value={layer.attachment || 'scroll'}
-								options={ATTACHMENTS}
-								onChange={(v) => onChangeLayer({ attachment: v })}
-							/>
+
+							<div className="onepress-bg-image-panel__actions">
+								{layer.imageUrl ? <>
+									<Button variant="secondary" onClick={pickImage}>
+										{layer.imageUrl
+											? __('Replace image', 'onepress')
+											: __('Select image', 'onepress')}
+									</Button>
+									{layer.imageUrl ? (
+										<Button variant="tertiary" onClick={clearImage}>
+											{__('Remove', 'onepress')}
+										</Button>
+									) : null}
+								</> : <>
+									<Button variant="secondary" className='w-full text-center' onClick={pickImage}>
+										{__('Select image', 'onepress')}
+									</Button>
+								</>}
+							</div>
+
+							{layer.imageUrl && String(layer.imageUrl).trim() ? (
+								<>
+									<SelectControl
+										label={__('Size', 'onepress')}
+										value={layer.size || 'cover'}
+										options={IMAGE_SIZES}
+										onChange={(v) => onChangeLayer({ size: v })}
+									/>
+									<SelectControl
+										label={__('Repeat', 'onepress')}
+										value={layer.repeat || 'no-repeat'}
+										options={IMAGE_REPEATS}
+										onChange={(v) => onChangeLayer({ repeat: v })}
+									/>
+									<SelectControl
+										label={__('Position', 'onepress')}
+										value={layer.position || 'center center'}
+										options={IMAGE_POSITIONS}
+										onChange={(v) => onChangeLayer({ position: v })}
+									/>
+									<SelectControl
+										label={__('Attachment', 'onepress')}
+										value={layer.attachment || 'scroll'}
+										options={ATTACHMENTS}
+										onChange={(v) => onChangeLayer({ attachment: v })}
+									/>
+								</>
+							) : null}
 						</div>
 					)}
 				</div>
-			)}
-		</TabPanel>
+			)
+			}
+		</TabPanel >
 	);
 }
 
@@ -335,11 +428,10 @@ export function BackgroundControlApp({ control }) {
 		typeof params.description === 'string' && params.description.trim()
 			? params.description
 			: '';
-	const selector = String(params.selector || '').trim();
-	const states = useMemo(() => {
-		const s = params.states;
-		return Array.isArray(s) && s.length ? s : ['normal', 'hover'];
-	}, [params.states]);
+	const bgMeta = useMemo(
+		() => parseBackgroundControlMeta(params),
+		[params]
+	);
 
 	const labels = {
 		color: __('Color', 'onepress'),
@@ -368,7 +460,7 @@ export function BackgroundControlApp({ control }) {
 	}
 
 	const [data, setData] = useState(() =>
-		mergeSavedData(parsed, selector, states)
+		mergeSavedData(parsed, parseBackgroundControlMeta(params))
 	);
 
 	const [previewDevice, setPreviewDevice] = useState('desktop');
@@ -441,21 +533,32 @@ export function BackgroundControlApp({ control }) {
 		const merged = {
 			...data,
 			_onepressBackground: true,
-			_meta: { selector, states: [...states] },
+			_meta: {
+				selector: bgMeta.selector,
+				states: [...bgMeta.states],
+				...(bgMeta.selectorsByState
+					? { selectorsByState: { ...bgMeta.selectorsByState } }
+					: {}),
+				...(Object.keys(bgMeta.stateLabels).length
+					? { stateLabels: { ...bgMeta.stateLabels } }
+					: {}),
+			},
 		};
 		const json = JSON.stringify(merged);
 		const setting = settingRef.current;
 		if (setting && typeof setting.set === 'function') {
 			setting.set(json);
 		}
-	}, [data, selector, states]);
+	}, [data, bgMeta]);
 
 	const popoverTitle =
 		activeState != null
 			? sprintf(
 				/* translators: 1: state label, 2: device label */
 				__('%1$s · %2$s', 'onepress'),
-				STATE_LABELS[activeState] || activeState,
+				bgMeta.stateLabels[activeState] ||
+				STATE_LABELS[activeState] ||
+				activeState,
 				DEVICE_LABELS[previewDevice] || previewDevice
 			)
 			: '';
@@ -525,6 +628,17 @@ export function BackgroundControlApp({ control }) {
 			document.removeEventListener('pointerdown', onDocDown, true);
 	}, [dropdownOpen, closeDropdown]);
 
+	const resetToDefault = useCallback(() => {
+		const raw = getCustomizeControlDefaultRaw(control);
+		let nextParsed = null;
+		try {
+			nextParsed = raw && String(raw).trim() ? JSON.parse(raw) : null;
+		} catch {
+			nextParsed = null;
+		}
+		setData(mergeSavedData(nextParsed, bgMeta));
+	}, [control, bgMeta]);
+
 	return (
 		<div
 			className={
@@ -533,45 +647,61 @@ export function BackgroundControlApp({ control }) {
 			}
 		>
 			<div className='flex justify-between items-center'>
-				<div className='title'>
-					{controlLabel ? (
-						<span className="customize-control-title">{controlLabel}</span>
-					) : null}
+				<div className='flex items-center gap-1'>
+					<div className='title'>
+						{controlLabel ? (
+							<span className="customize-control-title">{controlLabel}</span>
+						) : null}
+					</div>
+
+					<CustomizerPreviewDeviceButtons
+						devices={getCustomizerPreviewDeviceDefinitions({
+							labels: 'short',
+						})}
+						activeDevice={previewDevice}
+						onSelectDevice={selectPreviewDevice}
+						groupClassName="onepress-bg-app__devices"
+						buttonClassName="onepress-bg-app__device-btn"
+					/>
 				</div>
-				<CustomizerPreviewDeviceButtons
-					devices={getCustomizerPreviewDeviceDefinitions({
-						labels: 'short',
-					})}
-					activeDevice={previewDevice}
-					onSelectDevice={selectPreviewDevice}
-					groupClassName="onepress-bg-app__devices"
-					buttonClassName="onepress-bg-app__device-btn"
-				/>
-			</div>
 
-
-
-			{controlDescription ? (
-				<span
-					className="description customize-control-description"
-					dangerouslySetInnerHTML={{ __html: controlDescription }}
-				/>
-			) : null}
-			<div className="onepress-bg-app">
-				<div className="onepress-bg-app__toolbar" ref={toolbarRef}>
-
-
-					<div className='relative'>
-						<div className="onepress-bg-app__states" role="group" aria-label={labels.state}>
-							{states.map((s) => {
-								const previewLayer =
-									data[s]?.[previewDevice] || createDefaultLayer();
-								const previewDecls = layerToDeclarations(previewLayer);
-								const previewFillStyle = declarationsToReactStyle(previewDecls);
-								return (
-									<button
+				<div className='relative items flex gap-1 items-center'>
+					<button
+						type="button"
+						className="onepress-customizer-reset-default"
+						onClick={resetToDefault}
+						aria-label={__('Reset to default', 'onepress')}
+						title={__('Reset to default', 'onepress')}
+					>
+						<span
+							className="dashicons dashicons-image-rotate"
+							aria-hidden
+						/>
+					</button>
+					<div className="bg-states flex gap-1 items-center" role="group" aria-label={labels.state}>
+						{bgMeta.states.map((s) => {
+							const previewLayer =
+								data[s]?.[previewDevice] || createDefaultLayer();
+							const previewDecls = layerToDeclarations(previewLayer);
+							const previewFillStyle = declarationsToReactStyle(previewDecls);
+							const imageTabNoUrl =
+								(previewLayer.tab || 'color') === 'image' &&
+								!(
+									previewLayer.imageUrl &&
+									String(previewLayer.imageUrl).trim()
+								);
+							const fillEmpty = !previewFillStyle || imageTabNoUrl;
+							return (
+								<Tooltip
+									text={
+										bgMeta.stateLabels[s] ||
+										STATE_LABELS[s] ||
+										s
+									}
+									placement="top"
+								>
+									<span
 										key={s}
-										type="button"
 										className={
 											'onepress-bg-app__state-btn' +
 											(activeState === s ? ' is-active' : '')
@@ -589,51 +719,63 @@ export function BackgroundControlApp({ control }) {
 										<span
 											className={
 												'onepress-bg-app__state-btn__fill' +
-												(!previewFillStyle
+												(fillEmpty
 													? ' onepress-bg-app__state-btn__fill--empty'
 													: '')
 											}
-											style={previewFillStyle || undefined}
+											style={
+												imageTabNoUrl
+													? undefined
+													: previewFillStyle || undefined
+											}
 											aria-hidden
 										/>
 										<span className="onepress-bg-app__state-btn__label">
-											{STATE_LABELS[s] || s}
-										</span>
-									</button>
-								);
-							})}
-						</div>
 
-						{dropdownOpen ? (
-							<div
-								ref={dropdownPanelRef}
-								id={`onepress-bg-dropdown-${controlId}`}
-								className="onepress-bg-settings-dropdown onepress-bg-portal"
-								role="dialog"
-								aria-modal="false"
-								aria-label={popoverTitle}
-							>
-								<div className="onepress-bg-popover">
-									{/* <div className="onepress-bg-popover__head">
+										</span>
+									</span>
+								</Tooltip>
+							);
+						})}
+					</div>
+
+					{dropdownOpen ? (
+						<div
+							ref={dropdownPanelRef}
+							id={`onepress-bg-dropdown-${controlId}`}
+							className="onepress-bg-settings-dropdown onepress-bg-portal"
+							role="dialog"
+							aria-modal="false"
+							aria-label={popoverTitle}
+						>
+							<div className="onepress-bg-popover">
+								{/* <div className="onepress-bg-popover__head">
 										<strong className="onepress-bg-popover__title">
 											{popoverTitle}
 										</strong>
 									</div> */}
-									<BackgroundLayerEditor
-										key={`${activeState}-${previewDevice}`}
-										layer={currentLayer}
-										onChangeLayer={changeCurrentLayer}
-										labels={labels}
-									/>
-								</div>
+								<BackgroundLayerEditor
+									key={`${activeState}-${previewDevice}`}
+									layer={currentLayer}
+									onChangeLayer={changeCurrentLayer}
+									labels={labels}
+								/>
 							</div>
-						) : null}
-
-					</div>
+						</div>
+					) : null}
 
 				</div>
 
+
 			</div>
+
+			{controlDescription ? (
+				<span
+					className="description customize-control-description"
+					dangerouslySetInnerHTML={{ __html: controlDescription }}
+				/>
+			) : null}
+
 		</div>
 	);
 }

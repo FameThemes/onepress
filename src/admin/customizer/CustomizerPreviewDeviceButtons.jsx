@@ -89,15 +89,14 @@ export function CustomizerPreviewDeviceButtons({
 
 	return (
 		<div className={groupCn}>
-			<button
-				type="button"
+			<span
 				className={btnCn}
 				title={title}
 				aria-label={ariaLabel}
 				onClick={cycle}
 			>
 				<span className={`dashicons ${current.icon}`} aria-hidden />
-			</button>
+			</span>
 		</div>
 	);
 }

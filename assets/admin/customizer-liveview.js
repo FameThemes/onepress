@@ -19,6 +19,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   createDefaultLayer: () => (/* binding */ createDefaultLayer),
 /* harmony export */   declarationsToReactStyle: () => (/* binding */ declarationsToReactStyle),
 /* harmony export */   layerToDeclarations: () => (/* binding */ layerToDeclarations),
+/* harmony export */   resolveSelectorForState: () => (/* binding */ resolveSelectorForState),
 /* harmony export */   ruleBlock: () => (/* binding */ ruleBlock)
 /* harmony export */ });
 /**
@@ -59,6 +60,24 @@ function buildStateSelector(baseSelector, stateKey) {
     return base;
   }
   return base.split(',').map(s => s.trim() + pseudo).join(', ');
+}
+
+/**
+ * Full selector for a state: use _meta.selectorsByState[stateKey] when set, else base + pseudo.
+ *
+ * @param {{ selector?: string, selectorsByState?: Record<string, string> }} meta
+ * @param {string} stateKey
+ * @returns {string}
+ */
+function resolveSelectorForState(meta, stateKey) {
+  const map = meta?.selectorsByState;
+  if (map && typeof map === 'object' && !Array.isArray(map)) {
+    const raw = map[stateKey];
+    if (raw != null && String(raw).trim()) {
+      return String(raw).trim();
+    }
+  }
+  return buildStateSelector(String(meta?.selector || '').trim(), stateKey);
 }
 
 /**
@@ -208,18 +227,15 @@ function buildBackgroundCss(data, breakpoints) {
   if (!data || !data._onepressBackground || !data._meta) {
     return '';
   }
-  const baseSel = String(data._meta.selector || '').trim();
-  if (!baseSel) {
-    return '';
-  }
-  const states = Array.isArray(data._meta.states) && data._meta.states.length ? data._meta.states : ['normal'];
+  const meta = data._meta;
+  const states = Array.isArray(meta.states) && meta.states.length ? meta.states : ['normal'];
   const bp = {
     tablet: breakpoints?.tablet || '991px',
     mobile: breakpoints?.mobile || '767px'
   };
   const chunks = [];
   for (const stateKey of states) {
-    const sel = buildStateSelector(baseSel, stateKey);
+    const sel = resolveSelectorForState(meta, stateKey);
     if (!sel) {
       continue;
     }
@@ -332,6 +348,176 @@ function bindOnePressBackgroundPreview(api) {
         const run = val => applyBackgroundPreview(id, val);
         setting.bind(run);
         run(setting.get());
+      });
+    });
+  });
+}
+
+/***/ }),
+
+/***/ "./src/admin/customizer/slider/buildSliderPreviewCss.js":
+/*!**************************************************************!*\
+  !*** ./src/admin/customizer/slider/buildSliderPreviewCss.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   buildSliderPreviewCss: () => (/* binding */ buildSliderPreviewCss),
+/* harmony export */   sliderPreviewStyleId: () => (/* binding */ sliderPreviewStyleId)
+/* harmony export */ });
+/**
+ * Slider / single-property CSS for Customizer preview <style> injection.
+ * Mirrors inc/slider/helper.php — onepress_slider_css.
+ */
+
+const ALLOWED_PROPERTIES = new Set(['width', 'max-width', 'min-width', 'height', 'max-height', 'min-height', 'flex-basis']);
+
+/**
+ * @param {string} prop
+ * @returns {string}
+ */
+function sanitizeProperty(prop) {
+  const p = String(prop || '').trim().toLowerCase();
+  return ALLOWED_PROPERTIES.has(p) ? p : '';
+}
+
+/**
+ * @param {string} settingId
+ * @returns {string}
+ */
+function sliderPreviewStyleId(settingId) {
+  return `onepress-slider-preview-${settingId}`.replace(/[^a-zA-Z0-9_-]/g, '-');
+}
+
+/**
+ * @param {Record<string, string>} data
+ * @param {string} selector
+ * @param {string} property
+ * @param {{ tablet?: string, mobile?: string }} [breakpoints]
+ * @returns {string}
+ */
+function buildSliderPreviewCss(data, selector, property, breakpoints) {
+  const prop = sanitizeProperty(property);
+  if (!prop || !data || typeof data !== 'object' || !selector?.trim()) {
+    return '';
+  }
+  const tabletBp = breakpoints?.tablet || '991px';
+  const mobileBp = breakpoints?.mobile || '767px';
+  const pair = (num, unit) => {
+    const n = num != null && String(num).trim() !== '' ? String(num).trim() : '';
+    if (n === '' || Number.isNaN(Number(n))) {
+      return '';
+    }
+    const u = unit && String(unit).trim() ? String(unit).trim() : 'px';
+    return `${n}${u}`;
+  };
+  const baseVal = pair(data.value, data.unit || 'px');
+  const tabVal = pair(data.valueTablet, data.unitTablet || data.unit || 'px');
+  const mobVal = pair(data.valueMobile, data.unitMobile || data.unit || 'px');
+  const block = val => {
+    if (!val) {
+      return '';
+    }
+    return `${selector.trim()} {\n\t${prop}: ${val};\n}`;
+  };
+  let out = block(baseVal);
+  if (tabVal) {
+    const rule = block(tabVal);
+    if (rule) {
+      out += `\n@media (max-width: ${tabletBp}) {\n${rule}\n}\n`;
+    }
+  }
+  if (mobVal) {
+    const rule = block(mobVal);
+    if (rule) {
+      out += `\n@media (max-width: ${mobileBp}) {\n${rule}\n}\n`;
+    }
+  }
+  return out.trim();
+}
+
+/***/ }),
+
+/***/ "./src/admin/customizer/slider/previewBindings.js":
+/*!********************************************************!*\
+  !*** ./src/admin/customizer/slider/previewBindings.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   bindOnePressSliderPreview: () => (/* binding */ bindOnePressSliderPreview)
+/* harmony export */ });
+/* harmony import */ var _buildSliderPreviewCss_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./buildSliderPreviewCss.js */ "./src/admin/customizer/slider/buildSliderPreviewCss.js");
+/**
+ * Customizer preview iframe: slider CSS via postMessage.
+ */
+
+function getBreakpoints() {
+  const b = typeof window !== 'undefined' && window.onepressBackgroundBreakpoints;
+  if (b && typeof b === 'object') {
+    return {
+      tablet: b.tablet || '991px',
+      mobile: b.mobile || '767px'
+    };
+  }
+  return {
+    tablet: '991px',
+    mobile: '767px'
+  };
+}
+
+/**
+ * @param {string} settingId
+ * @param {{ selector: string, property?: string }} conf
+ * @param {unknown} val
+ */
+function applySliderPreview(settingId, conf, val) {
+  const selector = conf?.selector;
+  const property = conf?.property || 'width';
+  let data = null;
+  try {
+    data = typeof val === 'string' && val.trim() ? JSON.parse(val) : null;
+  } catch {
+    data = null;
+  }
+  const elId = (0,_buildSliderPreviewCss_js__WEBPACK_IMPORTED_MODULE_0__.sliderPreviewStyleId)(settingId);
+  let el = document.getElementById(elId);
+  if (!data || typeof data !== 'object') {
+    el?.remove();
+    return;
+  }
+  const css = (0,_buildSliderPreviewCss_js__WEBPACK_IMPORTED_MODULE_0__.buildSliderPreviewCss)(data, selector, property, getBreakpoints());
+  if (!css?.trim()) {
+    el?.remove();
+    return;
+  }
+  if (!el) {
+    el = document.createElement('style');
+    el.id = elId;
+    el.className = 'onepress-slider-preview-inline';
+    document.head.appendChild(el);
+  }
+  el.textContent = css;
+}
+
+/**
+ * @param {import('wp-customize').Customize} api wp.customize
+ */
+function bindOnePressSliderPreview(api) {
+  api.bind('preview-ready', () => {
+    const map = typeof window !== 'undefined' && window.onepressSliderPostMessageConfig;
+    if (!map || typeof map !== 'object') {
+      return;
+    }
+    Object.keys(map).forEach(id => {
+      const conf = map[id];
+      if (!conf || typeof conf !== 'object' || typeof conf.selector !== 'string' || !conf.selector.trim()) {
+        return;
+      }
+      api(id, setting => {
+        setting.bind(val => applySliderPreview(id, conf, val));
       });
     });
   });
@@ -865,6 +1051,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _customizer_background_previewBindings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./customizer/background/previewBindings */ "./src/admin/customizer/background/previewBindings.js");
 /* harmony import */ var _customizer_typography_previewBindings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./customizer/typography/previewBindings */ "./src/admin/customizer/typography/previewBindings.js");
 /* harmony import */ var _customizer_spacing_previewBindings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./customizer/spacing/previewBindings */ "./src/admin/customizer/spacing/previewBindings.js");
+/* harmony import */ var _customizer_slider_previewBindings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./customizer/slider/previewBindings */ "./src/admin/customizer/slider/previewBindings.js");
 /**
  * customizer.js
  *
@@ -876,10 +1063,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 (function ($, api) {
   (0,_customizer_background_previewBindings__WEBPACK_IMPORTED_MODULE_0__.bindOnePressBackgroundPreview)(api);
   (0,_customizer_typography_previewBindings__WEBPACK_IMPORTED_MODULE_1__.bindOnePressTypographyPreview)(api);
   (0,_customizer_spacing_previewBindings__WEBPACK_IMPORTED_MODULE_2__.bindOnePressSpacingPreview)(api);
+  (0,_customizer_slider_previewBindings__WEBPACK_IMPORTED_MODULE_3__.bindOnePressSliderPreview)(api);
 
   // Site footer bg
   /*

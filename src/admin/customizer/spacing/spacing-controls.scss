@@ -27,152 +27,97 @@
   width: 100%;
 }
 
-
 .onepress-spacing-app__unit {
   flex: 0 0 auto;
 }
 
-.onepress-spacing-unit-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 5px;
-  border: 0px none;
-  border-radius: 4px;
-  background: #fff;
-  font-size: 13px;
-  color: #1d2327;
-  cursor: pointer;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.onepress-spacing-unit-trigger:hover,
-.onepress-spacing-unit-trigger:focus {
-  border-color: #2271b1;
-  outline: none;
-}
-
 .onepress-spacing-app__sides {
-  
   display: flex;
   align-items: flex-end;
   gap: 8px;
 }
 
-.onepress-spacing-app__sides  .inputs {
-  display: flex;
-  flex-grow: 1;
-  gap:0;
-}
-.onepress-spacing-app__sides  .inputs input {
+.onepress-spacing-app__sides .inputs input {
   border-radius: 0px;
   padding-right: 0px;
 }
 
-.onepress-spacing-side {
-  flex:1;
+.onepress-spacing-app__sides .inputs {
+  display: flex;
+  flex-grow: 1;
+  gap: 0;
+}
+.spacing-side {
+  .input,
+  .link-btn {
+    width: 100%;
+    box-sizing: border-box;
+    border-left: 1px solid var(--wp-input-border);
+    border-top: 1px solid var(--wp-input-border);
+    border-bottom: 1px solid var(--wp-input-border);
+    border-right: 0px none;
+    border-radius: 0px;
+    height: 30px;
+    min-height: auto;
+    
+  }
+  .input {
+    padding: 0px 0px 0px 4px;
+  }
+  &:first-child .input {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+  &:last-child .input {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+
+  .label {
+    display: block;
+    margin-top: 4px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #787c82;
+    text-align: center;
+  }
+
+  .link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 30px;
+    padding: 0;
+    cursor: pointer;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-right: 1px solid var(--wp-input-border);
+  }
 }
 
-.onepress-spacing-side__input {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.onepress-spacing-side__label {
-  display: block;
-  margin-top: 4px;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #787c82;
-  text-align: center;
-}
-
-.onepress-spacing-app__link-wrap {
+.link-wrap {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   padding-bottom: 22px;
-}
-
-.onepress-spacing-link-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
   height: 30px;
-  padding: 0;
-  border: 1px solid #c4c8ce;
-  border-radius: 4px;
-  background: #f6f7f7;
-  color: #50575e;
-  cursor: pointer;
-}
-
-.onepress-spacing-link-btn:hover,
-.onepress-spacing-link-btn:focus {
-  border-color: #2271b1;
-  color: #2271b1;
-  outline: none;
-}
-
-.onepress-spacing-link-btn.is-linked {
-  background: #f0f6fc;
-  border-color: #2271b1;
-  color: #2271b1;
-}
-
-.onepress-spacing-link-btn .dashicons {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
-}
-
-/* Unit popover (portaled) */
-.onepress-spacing-unit-popover-shell.components-popover {
-  z-index: 500100 !important;
-
-  .components-popover__content {
-    min-width: 0;
-    width: 50px;
-    max-width: 50px;
-    box-sizing: border-box;
+  &:hover,
+  &:focus {
+    border-color: #2271b1;
+    color: #2271b1;
+    outline: none;
   }
-}
-
-.onepress-spacing-unit-popover {
-  box-sizing: border-box;
-  padding: 4px;
-  width: 50px;
-  min-width: 50px;
-  max-width: 50px;
-}
-
-.onepress-spacing-unit-popover__item {
-  display: block;
-  width: 100%;
-  margin: 0;
-  padding: 6px 4px;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
-  font-size: 13px;
-  line-height: 1.3;
-  text-align: left;
-  color: #1d2327;
-  cursor: pointer;
-}
-
-.onepress-spacing-unit-popover__item:hover {
-  background: #f0f0f1;
-}
-
-.onepress-spacing-unit-popover__item.is-selected {
-  font-weight: 700;
-  color: #2271b1;
+  .is-linked {
+    background: #f0f6fc;
+    border-color: #2271b1;
+    color: #2271b1;
+  }
+  .dashicons {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
 }

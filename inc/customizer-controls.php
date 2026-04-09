@@ -6,6 +6,7 @@
 require_once get_template_directory() . '/inc/typography/typography.php';
 require_once get_template_directory() . '/inc/customize-controls/control-theme-typography.php';
 require_once get_template_directory() . '/inc/customize-controls/control-theme-spacing.php';
+require_once get_template_directory() . '/inc/customize-controls/control-theme-slider.php';
 require_once get_template_directory() . '/inc/customize-controls/control-theme-background.php';
 require_once get_template_directory() . '/inc/customize-controls/section-plus.php';
 require_once get_template_directory() . '/inc/customize-controls/control-misc.php';

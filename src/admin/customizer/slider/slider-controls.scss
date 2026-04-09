@@ -1,0 +1,98 @@
+/* Responsive slider control (Customizer) */
+
+.customize-control-onepress_slider {
+  overflow: visible;
+}
+
+.customize-control-onepress_slider .onepress-slider-wrap,
+.customize-control-onepress_slider .onepress-slider-settings,
+.customize-control-onepress_slider .onepress-slider-react-root {
+  overflow: visible;
+}
+
+.onepress-slider-wrap {
+  .onepress-slider-control-root > .customize-control-title {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .onepress-slider-control-root > .customize-control-description {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+.onepress-slider-control-root {
+  position: relative;
+  width: 100%;
+}
+
+.onepress-slider-control-root__head {
+  margin-bottom: 8px;
+}
+
+.onepress-slider-app__unit {
+  flex: 0 0 auto;
+}
+
+.onepress-slider-app {
+  margin-top: 4px;
+}
+
+.onepress-slider-app__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.onepress-slider-app__range {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 24px;
+  appearance: none;
+  background: transparent;
+  accent-color: #2271b1;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    margin-top: -6px;
+    border-radius: 50%;
+    background: #2271b1;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: #dcdcde;
+  }
+
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #2271b1;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+  }
+
+  &::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: #dcdcde;
+  }
+}
+
+.onepress-slider-app__number {
+  flex: 0 0 64px;
+  width: 64px;
+  min-width: 64px;
+  text-align: center;
+  box-sizing: border-box;
+}
