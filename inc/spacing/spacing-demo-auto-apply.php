@@ -8,7 +8,7 @@
 if ( function_exists( 'onepress_spacing_helper_auto_apply' ) ) {
 	onepress_spacing_helper_auto_apply(
 		'onepress_spacing_demo_site_title',
-		'.site-title',
+		'#features .container',
 		null,
 		'theme_mod',
 		''
