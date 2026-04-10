@@ -6767,6 +6767,7 @@ function registerDynamicOptionBlocks(api, userCfg) {
     }
     const $grip = $('<span class="onepress-dynamic-drag-handle" aria-hidden="true"></span>');
     $grip.attr('title', 'Drag to reorder');
+    h3.addClass('dynamic-section-title');
     h3.prepend($grip);
   }
   function bindExtraNoteActive(showSid, noteSid) {

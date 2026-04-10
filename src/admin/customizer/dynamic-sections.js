@@ -226,6 +226,7 @@ export function registerDynamicOptionBlocks(api, userCfg) {
 			'<span class="onepress-dynamic-drag-handle" aria-hidden="true"></span>'
 		);
 		$grip.attr('title', 'Drag to reorder');
+		h3.addClass('dynamic-section-title');
 		h3.prepend($grip);
 	}
 
