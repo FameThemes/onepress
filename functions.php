@@ -672,6 +672,11 @@ require get_template_directory() . '/inc/metabox.php';
 require get_template_directory() . '/inc/template-tags.php';
 
 /**
+ * Customizer → front-end inline CSS (see inc/customizer-inline-styles.php).
+ */
+require get_template_directory() . '/inc/customizer-inline-styles.php';
+
+/**
  * Custom functions that act independently of the theme templates.
  */
 require get_template_directory() . '/inc/extras.php';
@@ -682,6 +687,7 @@ require get_template_directory() . '/inc/extras.php';
 require get_template_directory() . '/inc/customize-controls/typography/fonts.php';
 require get_template_directory() . '/inc/customize-controls/typography/helper.php';
 require get_template_directory() . '/inc/customize-controls/typography/typography-auto-apply.php';
+require get_template_directory() . '/inc/migrate/bootstrap.php';
 
 /**
  * Spacing (Customizer + front-end CSS).

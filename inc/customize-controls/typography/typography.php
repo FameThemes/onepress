@@ -85,13 +85,13 @@ class OnePress_Typo_Customize_Control extends WP_Customize_Control {
 		$fields = wp_parse_args(
 			$fields,
 			array(
-				'font_family'     => false,
-				'font_style'      => false,
-				'font_size'       => false,
-				'line_height'     => false,
-				'letter_spacing'  => false,
-				'text_transform'  => false,
-				'text_decoration' => false,
+				'font_family'     => true,
+				'font_style'      => true,
+				'font_size'       => true,
+				'line_height'     => true,
+				'letter_spacing'  => true,
+				'text_transform'  => true,
+				'text_decoration' => true,
 			)
 		);
 

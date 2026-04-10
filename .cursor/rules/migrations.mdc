@@ -1,0 +1,16 @@
+---
+description: One-shot theme migrations in inc/migrate/ — single option flag onepress_migrate_from_onepress_plus
+alwaysApply: false
+---
+
+# Data migrations (`inc/migrate/`)
+
+- **No deletion of stored user data:** Do **not** call `remove_theme_mod()`, `delete_option()`, or otherwise erase values at **source** keys when migrating. Only **copy** (or derive) into **destination** keys with the new structure. Legacy theme mods and options may remain in the database alongside the new keys. Exception: you may **normalize only destination** records (e.g. strip a field from JSON on the **new** key after its value was copied to another **new** key) so the new schema is consistent — never strip or delete the Plus / legacy **source** keys.
+- **Location:** `inc/migrate/bootstrap.php` loads migration modules (e.g. `typography-from-onepress-plus.php`). Add new migration files here and require them from the bootstrap (or a dedicated loader) instead of scattering `update_option` / `set_theme_mod` logic under `inc/customize-configs/`.
+- **Single completion flag for the Plus typography bundle:** option **`onepress_migrate_from_onepress_plus`**. Completed when value equals **`onepress_migrate_from_onepress_plus_done_value()`** (currently **`'2'`** — bump in code when new Plus→theme rows are added). Legacy stored value **`'1'`** is not final and will trigger one more migration pass. Do **not** add parallel `onepress_*_migrated_*` options for this flow.
+- **Plus→theme typography copy** (`onepress_migrate_typography_copy_plus_to_theme_slots`) runs on **every** `after_setup_theme` (priority 5) while each destination theme mod is still empty, so configuring Plus after the one-shot flag is set still fills the theme. Filter **`onepress_migrate_enable_typography_copy_from_plus`** to disable.
+- **Plus sources are only** the setting IDs listed in **`plugins/onepress-plus/inc/typography/auto-apply.php`**. Do not map from `onepress_typo_section_*` (not used by Plus). Theme destination ids (`onepress_typo_nav`, etc.) exist only in the theme Customizer.
+- **Canonical Plus → theme map** (same order as auto-apply): `onepress_typo_p`→`onepress_typo_paragraphs`, `onepress_typo_site_title`→`onepress_typo_branding_title`, `onepress_typo_site_tagline`→`onepress_typo_branding_tagline`, `onepress_typo_menu`→`onepress_typo_nav`, `onepress_hero_heading`→`onepress_typo_hero_heading`, `onepress_typo_heading`→`onepress_typo_headings`, `onepress_slider_slide_typo_title`→`onepress_typo_slider_slide_title`, `onepress_slider_slide_typo_content`→`onepress_typo_slider_slide_content`. Site Colors: `onepress_typo_*_color` where Plus JSON may include `color`.
+- **Re-run for testing:** delete or change `onepress_migrate_from_onepress_plus` so it is not equal to the current done value; next `after_setup_theme` runs the migration again.
+- **Disable without editing core:** `add_filter( 'onepress_migrate_enable_from_onepress_plus', '__return_false' );` before the migration runs.
+- **Helpers** for typography migration live next to the migration file; avoid duplicating the same option checks in multiple theme files.

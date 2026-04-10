@@ -97,9 +97,12 @@ function onepress_customize_register($wp_customize)
 	require_once $path . '/inc/customize-configs/options-blog-posts.php';
 	require_once $path . '/inc/customize-configs/options-single.php';
 	require_once $path . '/inc/customize-configs/options-footer.php';
-	require_once $path . '/inc/customize-configs/option-demo-example.php';
-	require_once $path . '/inc/customize-dynamic-sections.php';
-	require_once $path . '/inc/customize-configs/option-dynamic-section-demo.php';
+	require_once $path . '/inc/customize-configs/section-typo.php';
+
+	// Demo Example
+	// require_once $path . '/inc/customize-configs/option-demo-example.php';
+	// require_once $path . '/inc/customize-dynamic-sections.php';
+	// require_once $path . '/inc/customize-configs/option-dynamic-section-demo.php';
 
 	/**
 	 * @since 2.1.1

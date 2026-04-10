@@ -15,7 +15,7 @@ alwaysApply: false
 ## CSS variables (high consistency)
 
 - **Shared tokens** (inputs, buttons, borders matching WP): define once (e.g. `:root` at the top of `customizer.scss`) and **reuse** instead of scattering literals — follow the existing `--wp-*`-style names in that file where appropriate.
-- **OnePress-only tokens:** `--onepress-…`.
+- **OnePress-only tokens (admin / `#customize-controls`):** `--onepress-…`. Front-end theme `:root` variables are defined in `src/frontend/styles/` **without** that prefix (see `scss-css.mdc`).
 - When changing a “system” value (primary blue, input border), update **one variable** so all controls stay in sync.
 
 ## Tailwind-like utility classes (reuse)

@@ -6595,6 +6595,7 @@ function registerDynamicOptionBlocks(api, userCfg) {
   const sectionTypeNew = cfg.sectionTypeNew;
   const addSectionId = cfg.addSectionId;
   const sortableDataKey = 'onepressDynamicSortable_' + panelId;
+  const deleteInnerControlType = 'onepress_dyn_del_inner_' + panelId.replace(/[^a-z0-9]+/gi, '_');
   function escapeRe(s) {
     return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
@@ -6849,6 +6850,163 @@ function registerDynamicOptionBlocks(api, userCfg) {
       $root.sortable('refresh');
     }
   }
+  function sectionHiddenSettingId(bid) {
+    return blockOptionSettingBase(bid) + '_section_hidden';
+  }
+  function removeDynamicBlock(blockId) {
+    const sectionId = blockSectionId(blockId);
+    const base = blockOptionSettingBase(blockId);
+    const sec = api.section.has(sectionId) ? api.section(sectionId) : null;
+    const stripFromCustomizer = function () {
+      const innerDelId = sectionId + '_delete_inner';
+      if (api.control.has(innerDelId)) {
+        api.control.remove(innerDelId);
+      }
+      cfg.fieldNames.forEach(function (field) {
+        const sid = base + '_' + field;
+        if (api.control.has(sid)) {
+          api.control.remove(sid);
+        }
+        if (api.has(sid)) {
+          api.remove(sid);
+        }
+      });
+      const order = parseOrderSetting().filter(function (id) {
+        return id !== String(blockId);
+      });
+      api(orderSettingId).set(JSON.stringify(order));
+      refreshPanelSortable();
+      if (typeof api.reflowPaneContents === 'function') {
+        api.reflowPaneContents();
+      }
+    };
+    const removeDomAndSection = function () {
+      stripFromCustomizer();
+      if (sec) {
+        sec.container.remove();
+        api.section.remove(sectionId);
+      }
+    };
+    if (sec && sec.expanded && sec.expanded()) {
+      sec.collapse({
+        completeCallback: removeDomAndSection
+      });
+    } else {
+      removeDomAndSection();
+    }
+  }
+  if (!api.controlConstructor[deleteInnerControlType]) {
+    api.controlConstructor[deleteInnerControlType] = api.Control.extend({
+      ready() {
+        const control = this;
+        const bid = control.params.block_id;
+        const $btn = $('<button type="button" class="button button-secondary onepress-dynamic-section-delete-inner" />');
+        $btn.append('<span class="dashicons dashicons-trash" aria-hidden="true"></span> ');
+        $btn.append(document.createTextNode('Remove this section'));
+        control.container.addClass('customize-control-onepress-dynamic-delete-inner').empty().append($('<p class="description customize-control-description" />').text('Removes this block from the list. Save & Publish to update stored options.')).append($btn);
+        $btn.on('click', function (e) {
+          e.preventDefault();
+          if (!window.confirm('Remove this section from the list? Save & Publish to update stored options.')) {
+            return;
+          }
+          removeDynamicBlock(bid);
+        });
+      }
+    });
+  }
+  function installSectionToolbar(section) {
+    const bid = section.params.block_id;
+    if (!bid || section._onepressDynamicToolbar) {
+      return;
+    }
+    const h3 = section.headContainer.find('.accordion-section-title').first();
+    if (!h3.length) {
+      return;
+    }
+    const hasHidden = cfg.fieldNames.indexOf('section_hidden') !== -1;
+    const showListDelete = cfg.deleteInList === true;
+    if (!hasHidden && !showListDelete) {
+      return;
+    }
+    section._onepressDynamicToolbar = true;
+    const $grip = h3.find('.onepress-dynamic-drag-handle').first();
+    let $vis = null;
+    let $del = null;
+    if (showListDelete) {
+      $del = $('<button type="button" class="button-link onepress-dynamic-section-delete" />');
+      $del.attr({
+        'aria-label': 'Remove section',
+        title: 'Remove section from list'
+      });
+      $del.append('<span class="dashicons dashicons-trash" aria-hidden="true"></span>');
+      $del.on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!window.confirm('Remove this section from the list? Save & Publish to update stored options.')) {
+          return;
+        }
+        removeDynamicBlock(bid);
+      });
+    }
+    if (hasHidden) {
+      $vis = $('<button type="button" class="button-link onepress-dynamic-section-visibility" />');
+      $vis.attr({
+        'aria-label': 'Toggle visibility in preview',
+        title: 'Hide or show in preview'
+      });
+      const $icon = $('<span class="dashicons dashicons-visibility" aria-hidden="true"></span>');
+      $vis.append($icon);
+      function readHidden() {
+        const sid = sectionHiddenSettingId(bid);
+        if (!api.has(sid)) {
+          return false;
+        }
+        const v = api(sid).get();
+        return v === 1 || v === '1' || v === true;
+      }
+      function applyHiddenVisual(hidden) {
+        section.container.toggleClass('onepress-dynamic-section-is-hidden', hidden);
+        $vis.toggleClass('is-section-hidden', hidden);
+        $vis.attr('aria-pressed', hidden ? 'true' : 'false');
+      }
+      api(sectionHiddenSettingId(bid), function (setting) {
+        setting.bind(function () {
+          applyHiddenVisual(readHidden());
+        });
+      });
+      applyHiddenVisual(readHidden());
+      $vis.on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const sid = sectionHiddenSettingId(bid);
+        if (!api.has(sid)) {
+          return;
+        }
+        api(sid).set(readHidden() ? 0 : 1);
+      });
+    }
+    if ($grip.length) {
+      let $anchor = $grip;
+      if ($vis && $vis.length) {
+        $anchor.after($vis);
+        $anchor = $vis;
+      }
+      if ($del && $del.length) {
+        $anchor.after($del);
+      }
+    } else {
+      if ($vis && $vis.length) {
+        h3.prepend($vis);
+      }
+      if ($del && $del.length) {
+        if ($vis && $vis.length) {
+          $vis.after($del);
+        } else {
+          h3.prepend($del);
+        }
+      }
+    }
+  }
   const DynamicBlockSection = api.Section.extend({
     ready() {
       const section = this;
@@ -6858,6 +7016,7 @@ function registerDynamicOptionBlocks(api, userCfg) {
         syncSectionTitle(section, bid, blockOptionSettingBase(bid) + '_title');
       }
       installDragHandle(section);
+      installSectionToolbar(section);
       section.active.validate = function () {
         const id = section.params.block_id;
         if (!id) {
@@ -6892,6 +7051,11 @@ function registerDynamicOptionBlocks(api, userCfg) {
             }));
             api.control(sid).active.set(true);
           }
+          priority += 1;
+          return;
+        }
+        if (field === 'section_hidden') {
+          // Toggled from the section row (eye); no duplicate control here.
           priority += 1;
           return;
         }
@@ -6970,6 +7134,19 @@ function registerDynamicOptionBlocks(api, userCfg) {
       if (!section[bindExtraKey] && api.control.has(noteSid) && api.has(showSid)) {
         section[bindExtraKey] = true;
         bindExtraNoteActive(showSid, noteSid);
+      }
+      if (!cfg.deleteInList) {
+        const delId = section.id + '_delete_inner';
+        if (!api.control.has(delId)) {
+          api.control.add(new api.controlConstructor[deleteInnerControlType](delId, {
+            type: deleteInnerControlType,
+            section: section.id,
+            priority: 10000,
+            settings: {},
+            block_id: bid
+          }));
+          api.control(delId).active.set(true);
+        }
       }
     }
   });
@@ -7106,7 +7283,8 @@ function normalizeCfg(c) {
       customizeAction: '',
       fieldNames: [],
       requiredFields: ['title', 'slider'],
-      fieldDefaults: {}
+      fieldDefaults: {},
+      deleteInList: false
     };
   }
   return {
@@ -7121,7 +7299,8 @@ function normalizeCfg(c) {
     customizeAction: String(c.customizeAction || ''),
     fieldNames: Array.isArray(c.fieldNames) ? c.fieldNames.map(String) : [],
     requiredFields: Array.isArray(c.requiredFields) ? c.requiredFields.map(String) : ['title', 'slider'],
-    fieldDefaults: c.fieldDefaults && typeof c.fieldDefaults === 'object' ? c.fieldDefaults : {}
+    fieldDefaults: c.fieldDefaults && typeof c.fieldDefaults === 'object' ? c.fieldDefaults : {},
+    deleteInList: c.deleteInList === true
   };
 }
 
@@ -10864,6 +11043,7 @@ function normalizeTextDecorationTransform(raw) {
 function parseInitialState(rawValue, fields) {
   const base = {
     fontId: '',
+    fontFamilyName: '',
     styleSelect: '',
     fontSize: '',
     fontSizeUnit: 'px',
@@ -10916,6 +11096,7 @@ function parseInitialState(rawValue, fields) {
   return {
     ...base,
     fontId,
+    fontFamilyName: fontFamily || '',
     styleSelect,
     fontSize: fields.font_size ? fontSizeParsed.value : '',
     fontSizeUnit: fields.font_size ? fontSizeParsed.unit : 'px',
@@ -10938,6 +11119,43 @@ function parseInitialState(rawValue, fields) {
     textDecoration: fields.text_decoration ? normalizeTextDecorationTransform(css['text-decoration']) : '',
     textTransform: fields.text_transform ? normalizeTextDecorationTransform(css['text-transform']) : ''
   };
+}
+
+/**
+ * Authoritative Customizer value (avoids empty params.value on first paint clobbering DB).
+ *
+ * @param {object} control
+ * @param {string} [paramsValue]
+ * @returns {string}
+ */
+function getTypographyControlInitialRaw(control, paramsValue) {
+  const setting = control.setting || control.settings?.default;
+  if (setting && typeof setting.get === 'function') {
+    const v = setting.get();
+    if (v != null && String(v).trim() !== '') {
+      return String(v);
+    }
+  }
+  return typeof paramsValue === 'string' ? paramsValue : '';
+}
+
+/** Stable JSON compare (key order–independent). */
+function typographySettingJsonMatches(a, b) {
+  const norm = s => {
+    try {
+      const o = JSON.parse(s);
+      if (!o || typeof o !== 'object' || Array.isArray(o)) {
+        return s;
+      }
+      return JSON.stringify(Object.keys(o).sort().reduce((acc, k) => {
+        acc[k] = o[k];
+        return acc;
+      }, {}));
+    } catch {
+      return s;
+    }
+  };
+  return norm(a || '') === norm(b || '');
 }
 function groupFonts(webfonts) {
   const buckets = new Map();
@@ -11122,6 +11340,9 @@ function buildTypographySettingCss(state, fields, webfonts) {
     if (fontId && webfonts[fontId]) {
       const font = webfonts[fontId];
       css['font-family'] = font.name;
+    } else if (state.fontFamilyName && String(state.fontFamilyName).trim() !== '') {
+      // Plus / migrated fonts (e.g. Google) not yet in onepressTypoWebfonts must round-trip.
+      css['font-family'] = String(state.fontFamilyName).trim();
     }
   }
   return css;
@@ -11237,7 +11458,7 @@ function TypographyControlApp({
   settingRef.current = control.setting || control.settings?.default;
   const controlWrapRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   const fontSelectorRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-  const [state, setState] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(() => parseInitialState(params.value, fields));
+  const [state, setState] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(() => parseInitialState(getTypographyControlInitialRaw(control, params.value), fields));
   const [previewDevice, setPreviewDevice] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('desktop');
   const [settingsOpen, setSettingsOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [fontPickerOpen, setFontPickerOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
@@ -11308,17 +11529,20 @@ function TypographyControlApp({
     setFontPickerOpen(open => !open);
   }, [controlId]);
   const selectFontFromPicker = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(fontId => {
+    const font = webfonts[fontId];
     patch({
       fontId,
-      styleSelect: ''
+      styleSelect: '',
+      fontFamilyName: font?.name || ''
     });
     (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_9__.removeAllPickerPreviewLinks)(controlId);
     setFontPickerOpen(false);
-  }, [controlId, patch]);
+  }, [controlId, patch, webfonts]);
   const clearSelectedFont = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
     patch({
       fontId: '',
-      styleSelect: ''
+      styleSelect: '',
+      fontFamilyName: ''
     });
     (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_9__.removeAllPickerPreviewLinks)(controlId);
     (0,_FontPickerModal_jsx__WEBPACK_IMPORTED_MODULE_9__.removeSelectedFontLink)(controlId);
@@ -11351,9 +11575,23 @@ function TypographyControlApp({
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     const css = buildTypographySettingCss(state, fields, webfonts);
     const setting = settingRef.current;
-    if (setting) {
-      setting.set(JSON.stringify(css));
+    if (!setting || typeof setting.get !== 'function') {
+      return;
     }
+    const next = JSON.stringify(css);
+    let cur = '';
+    try {
+      cur = setting.get();
+      if (typeof cur !== 'string') {
+        cur = cur != null ? String(cur) : '';
+      }
+    } catch {
+      cur = '';
+    }
+    if (typographySettingJsonMatches(next, cur)) {
+      return;
+    }
+    setting.set(next);
   }, [state, fields, webfonts]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (!settingsOpen) {

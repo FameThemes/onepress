@@ -14,6 +14,8 @@ export function registerDynamicOptionBlocks(api, userCfg) {
 	const sectionTypeNew = cfg.sectionTypeNew;
 	const addSectionId = cfg.addSectionId;
 	const sortableDataKey = 'onepressDynamicSortable_' + panelId;
+	const deleteInnerControlType =
+		'onepress_dyn_del_inner_' + panelId.replace(/[^a-z0-9]+/gi, '_');
 
 	function escapeRe(s) {
 		return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -335,6 +337,220 @@ export function registerDynamicOptionBlocks(api, userCfg) {
 		}
 	}
 
+	function sectionHiddenSettingId(bid) {
+		return blockOptionSettingBase(bid) + '_section_hidden';
+	}
+
+	function removeDynamicBlock(blockId) {
+		const sectionId = blockSectionId(blockId);
+		const base = blockOptionSettingBase(blockId);
+		const sec = api.section.has(sectionId)
+			? api.section(sectionId)
+			: null;
+
+		const stripFromCustomizer = function () {
+			const innerDelId = sectionId + '_delete_inner';
+			if (api.control.has(innerDelId)) {
+				api.control.remove(innerDelId);
+			}
+			cfg.fieldNames.forEach(function (field) {
+				const sid = base + '_' + field;
+				if (api.control.has(sid)) {
+					api.control.remove(sid);
+				}
+				if (api.has(sid)) {
+					api.remove(sid);
+				}
+			});
+			const order = parseOrderSetting().filter(function (id) {
+				return id !== String(blockId);
+			});
+			api(orderSettingId).set(JSON.stringify(order));
+			refreshPanelSortable();
+			if (typeof api.reflowPaneContents === 'function') {
+				api.reflowPaneContents();
+			}
+		};
+
+		const removeDomAndSection = function () {
+			stripFromCustomizer();
+			if (sec) {
+				sec.container.remove();
+				api.section.remove(sectionId);
+			}
+		};
+
+		if (sec && sec.expanded && sec.expanded()) {
+			sec.collapse({
+				completeCallback: removeDomAndSection,
+			});
+		} else {
+			removeDomAndSection();
+		}
+	}
+
+	if (!api.controlConstructor[deleteInnerControlType]) {
+		api.controlConstructor[deleteInnerControlType] = api.Control.extend({
+			ready() {
+				const control = this;
+				const bid = control.params.block_id;
+				const $btn = $(
+					'<button type="button" class="button button-secondary onepress-dynamic-section-delete-inner" />'
+				);
+				$btn.append(
+					'<span class="dashicons dashicons-trash" aria-hidden="true"></span> '
+				);
+				$btn.append(
+					document.createTextNode('Remove this section')
+				);
+				control.container
+					.addClass('customize-control-onepress-dynamic-delete-inner')
+					.empty()
+					.append(
+						$(
+							'<p class="description customize-control-description" />'
+						).text(
+							'Removes this block from the list. Save & Publish to update stored options.'
+						)
+					)
+					.append($btn);
+				$btn.on('click', function (e) {
+					e.preventDefault();
+					if (
+						!window.confirm(
+							'Remove this section from the list? Save & Publish to update stored options.'
+						)
+					) {
+						return;
+					}
+					removeDynamicBlock(bid);
+				});
+			},
+		});
+	}
+
+	function installSectionToolbar(section) {
+		const bid = section.params.block_id;
+		if (!bid || section._onepressDynamicToolbar) {
+			return;
+		}
+
+		const h3 = section.headContainer.find('.accordion-section-title').first();
+		if (!h3.length) {
+			return;
+		}
+
+		const hasHidden = cfg.fieldNames.indexOf('section_hidden') !== -1;
+		const showListDelete = cfg.deleteInList === true;
+
+		if (!hasHidden && !showListDelete) {
+			return;
+		}
+
+		section._onepressDynamicToolbar = true;
+
+		const $grip = h3.find('.onepress-dynamic-drag-handle').first();
+		let $vis = null;
+		let $del = null;
+
+		if (showListDelete) {
+			$del = $(
+				'<button type="button" class="button-link onepress-dynamic-section-delete" />'
+			);
+			$del.attr({
+				'aria-label': 'Remove section',
+				title: 'Remove section from list',
+			});
+			$del.append(
+				'<span class="dashicons dashicons-trash" aria-hidden="true"></span>'
+			);
+
+			$del.on('click', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				if (
+					!window.confirm(
+						'Remove this section from the list? Save & Publish to update stored options.'
+					)
+				) {
+					return;
+				}
+				removeDynamicBlock(bid);
+			});
+		}
+
+		if (hasHidden) {
+			$vis = $(
+				'<button type="button" class="button-link onepress-dynamic-section-visibility" />'
+			);
+			$vis.attr({
+				'aria-label': 'Toggle visibility in preview',
+				title: 'Hide or show in preview',
+			});
+			const $icon = $(
+				'<span class="dashicons dashicons-visibility" aria-hidden="true"></span>'
+			);
+			$vis.append($icon);
+
+			function readHidden() {
+				const sid = sectionHiddenSettingId(bid);
+				if (!api.has(sid)) {
+					return false;
+				}
+				const v = api(sid).get();
+				return v === 1 || v === '1' || v === true;
+			}
+
+			function applyHiddenVisual(hidden) {
+				section.container.toggleClass(
+					'onepress-dynamic-section-is-hidden',
+					hidden
+				);
+				$vis.toggleClass('is-section-hidden', hidden);
+				$vis.attr('aria-pressed', hidden ? 'true' : 'false');
+			}
+
+			api(sectionHiddenSettingId(bid), function (setting) {
+				setting.bind(function () {
+					applyHiddenVisual(readHidden());
+				});
+			});
+			applyHiddenVisual(readHidden());
+
+			$vis.on('click', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				const sid = sectionHiddenSettingId(bid);
+				if (!api.has(sid)) {
+					return;
+				}
+				api(sid).set(readHidden() ? 0 : 1);
+			});
+		}
+
+		if ($grip.length) {
+			let $anchor = $grip;
+			if ($vis && $vis.length) {
+				$anchor.after($vis);
+				$anchor = $vis;
+			}
+			if ($del && $del.length) {
+				$anchor.after($del);
+			}
+		} else {
+			if ($vis && $vis.length) {
+				h3.prepend($vis);
+			}
+			if ($del && $del.length) {
+				if ($vis && $vis.length) {
+					$vis.after($del);
+				} else {
+					h3.prepend($del);
+				}
+			}
+		}
+	}
+
 	const DynamicBlockSection = api.Section.extend({
 		ready() {
 			const section = this;
@@ -348,6 +564,7 @@ export function registerDynamicOptionBlocks(api, userCfg) {
 				);
 			}
 			installDragHandle(section);
+			installSectionToolbar(section);
 
 			section.active.validate = function () {
 				const id = section.params.block_id;
@@ -387,6 +604,12 @@ export function registerDynamicOptionBlocks(api, userCfg) {
 						);
 						api.control(sid).active.set(true);
 					}
+					priority += 1;
+					return;
+				}
+
+				if (field === 'section_hidden') {
+					// Toggled from the section row (eye); no duplicate control here.
 					priority += 1;
 					return;
 				}
@@ -479,6 +702,25 @@ export function registerDynamicOptionBlocks(api, userCfg) {
 			) {
 				section[bindExtraKey] = true;
 				bindExtraNoteActive(showSid, noteSid);
+			}
+
+			if (!cfg.deleteInList) {
+				const delId = section.id + '_delete_inner';
+				if (!api.control.has(delId)) {
+					api.control.add(
+						new api.controlConstructor[deleteInnerControlType](
+							delId,
+							{
+								type: deleteInnerControlType,
+								section: section.id,
+								priority: 10000,
+								settings: {},
+								block_id: bid,
+							}
+						)
+					);
+					api.control(delId).active.set(true);
+				}
 			}
 		},
 	});
@@ -650,6 +892,7 @@ function normalizeCfg(c) {
 			fieldNames: [],
 			requiredFields: ['title', 'slider'],
 			fieldDefaults: {},
+			deleteInList: false,
 		};
 	}
 	return {
@@ -674,5 +917,6 @@ function normalizeCfg(c) {
 			c.fieldDefaults && typeof c.fieldDefaults === 'object'
 				? c.fieldDefaults
 				: {},
+		deleteInList: c.deleteInList === true,
 	};
 }

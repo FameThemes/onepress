@@ -4,41 +4,41 @@ msgstr ""
 "X-Generator: babel-plugin-makepot\n"
 
 #: src/admin/customizer/typography/TypographyControlApp.jsx:1005
-msgid "Open font selector"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1026
-msgid "Remove font and use theme default"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:869
-msgid "Overline"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:870
-msgid "Underline"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:871
-msgid "Line through"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:876
-msgid "Uppercase"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:877
-msgid "Lowercase"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:878
-msgid "Capitalize"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:935
 msgid "Reset to default"
 msgstr ""
 
-#: src/admin/customizer/typography/TypographyControlApp.jsx:978
+#: src/admin/customizer/typography/TypographyControlApp.jsx:1048
 msgid "Typography options"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:1075
+msgid "Open font selector"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:1096
+msgid "Remove font and use theme default"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:939
+msgid "Overline"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:940
+msgid "Underline"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:941
+msgid "Line through"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:946
+msgid "Uppercase"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:947
+msgid "Lowercase"
+msgstr ""
+
+#: src/admin/customizer/typography/TypographyControlApp.jsx:948
+msgid "Capitalize"
 msgstr ""

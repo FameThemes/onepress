@@ -21,7 +21,12 @@ alwaysApply: false
 
 - Effective selector shape: **`.onepress-typo-control .inputs`** (descendant), not `.onepress-typo-control__inputs`.
 - **State** (JS / WP-style): keep **`is-active`**, **`is-selected`**, **`is-open`** on the node that toggles (e.g. `.onepress-typo-control .tab.is-active`).
-- **Custom properties:** still **`--onepress-…`** when needed (e.g. `--onepress-typo-preview-size`).
+- **Custom properties (admin / control UI only):** **`--onepress-…`** when needed (e.g. `--onepress-switch-track-width`, `--onepress-layout-columns`).
+
+## Front-end theme (`src/frontend/styles/`)
+
+- **Customizer → `:root` bridge** (`inc/customizer-inline-styles.php`, `_css_var.scss`, `_customizer_bridge.scss`, related partials): use **semantic names without the `onepress-` prefix** — e.g. `--typo-body-color`, `--typo-hero-heading-color`, `--color-primary`, `--header-bg`, `--menu-link-color`, `--hero-overlay`, `--gallery-spacing`.
+- Reserve **`--onepress-…`** for **admin Customizer SCSS** (`src/admin/`), not for this front-end variable set.
 
 ## Rest of admin / legacy markup
 

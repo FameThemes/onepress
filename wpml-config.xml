@@ -98,9 +98,14 @@
             <key name='onepress_contact_fax' />
             <key name='onepress_footer_copyright_text' />
             <key name='onepress_hide_author_link' />
-            <key name='onepress_typo_p' />
-            <key name='onepress_typo_menu' />
-            <key name='onepress_typo_heading' />
+            <key name='onepress_typo_paragraphs' />
+            <key name='onepress_typo_hero_heading' />
+            <key name='onepress_typo_branding_title' />
+            <key name='onepress_typo_branding_tagline' />
+            <key name='onepress_typo_nav' />
+            <key name='onepress_typo_headings' />
+            <key name='onepress_typo_slider_slide_title' />
+            <key name='onepress_typo_slider_slide_content' />
             <key name='onepress_team_members' />
 			<key name='onepress_slider_slides' />
             <key name='onepress_section_order_styling' />

@@ -8,7 +8,7 @@
 $wp_customize->add_section(
 	'onepress_header_settings',
 	array(
-		'priority'    => 5,
+		'priority'    => 10,
 		'title'       => esc_html__( 'Header', 'onepress' ),
 		'description' => '',
 		'panel'       => 'onepress_options',

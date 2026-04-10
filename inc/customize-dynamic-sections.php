@@ -15,6 +15,9 @@
  *       ),
  *   ) );
  *
+ * Optional: `js_delete_in_list` (bool, default false) — show trash on the panel row; when false,
+ * the script adds a remove control inside each block section instead.
+ *
  * Pair with JS: `registerDynamicOptionBlocks( wp.customize, window.ONEPRESS_DYNAMIC_BLOCKS[i] )`
  * (configs are passed via {@see onepress_dynamic_option_blocks_localize_script()}, including
  * `addSectionTitle` from `add_section_title`).
@@ -177,6 +180,7 @@ class OnePress_Dynamic_Option_Blocks {
 				'fieldNames'         => array_keys( $cfg['fields'] ),
 				'requiredFields'     => $cfg['js_required_fields'],
 				'fieldDefaults'      => $field_defaults,
+				'deleteInList'       => ! empty( $cfg['js_delete_in_list'] ),
 			);
 		}
 		return $out;
@@ -203,6 +207,7 @@ class OnePress_Dynamic_Option_Blocks {
 			'js_section_type_new'   => 'onepress_dynamic_new',
 			'js_customize_action'   => '',
 			'js_required_fields'   => array( 'title', 'slider' ),
+			'js_delete_in_list'    => false,
 		);
 		$config = wp_parse_args( $raw, $defaults );
 		$config = apply_filters( 'onepress_dynamic_option_blocks_config', $config );

@@ -40,6 +40,10 @@ body, button, input, select, textarea {
     color: variables.$text;
 }
 
+body, body p, .entry-content p, .hero-small-text {
+	color: var(--typo-body-color, #{variables.$text});
+}
+
 pre,
 code,
 input,

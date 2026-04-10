@@ -4,7 +4,7 @@
  *
  * Storage keys (wp_options) keep the `demo` segment:
  * - onepress_dynamic_demo_order
- * - onepress_dynamic_demo_block_{ID}_{title|slider|show_extra|extra_note}
+ * - onepress_dynamic_demo_block_{ID}_{title|section_hidden|show_extra|extra_note|slider}
  *
  * @package onepress
  */
@@ -25,12 +25,17 @@ $onepress_slider_default_json = wp_json_encode(
 );
 
 $onepress_dynamic_demo_fields = array(
-	'title'       => array(
+	'title'          => array(
 		'default'           => '',
 		'sanitize_callback' => 'sanitize_text_field',
 		'transport'         => 'refresh',
 	),
-	'show_extra'  => array(
+	'section_hidden' => array(
+		'default'           => 0,
+		'sanitize_callback' => 'onepress_sanitize_switch',
+		'transport'         => 'refresh',
+	),
+	'show_extra'     => array(
 		'default'           => 0,
 		'sanitize_callback' => 'onepress_sanitize_switch',
 		'transport'         => 'refresh',
@@ -55,7 +60,7 @@ onepress_register_dynamic_option_blocks(
 		'section_id_prefix'    => 'onepress_dynamic_block_',
 		'panel_id'             => 'onepress_dynamic',
 		'panel_title'          => esc_html__( 'Dynamic sections demo', 'onepress' ),
-		'panel_description'    => '<p>' . esc_html__( 'Blocks are saved as WordPress options. Each section has a title, optional fields with dependent visibility, and a slider. Drag ⋮⋮ to reorder; order is saved when you Save & Publish.', 'onepress' ) . '</p>',
+		'panel_description'    => '<p>' . esc_html__( 'Blocks are saved as WordPress options. Use the eye on each row to hide from the preview. Remove a block with “Remove this section” inside its panel (or set js_delete_in_list to true in PHP to show trash on the row). Drag ⋮⋮ to reorder.', 'onepress' ) . '</p>',
 		'panel_priority'       => 36,
 		'add_section_id'       => 'onepress_dynamic_add',
 		'add_section_title'    => esc_html__( 'Create new section', 'onepress' ),

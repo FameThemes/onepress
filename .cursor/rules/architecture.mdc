@@ -8,3 +8,5 @@ alwaysApply: true
 Canonical overview: **`ARCHITECTURE.md`** at the theme root (folders, `functions.php` → `inc/`, `src/` → `assets/`, Customizer PHP/JS, webpack entries).
 
 For conventions: other files in `.cursor/rules/` and `.claude/`.
+
+**Migrations:** `inc/migrate/` (loaded via `inc/migrate/bootstrap.php` from `functions.php`). One-shot Plus-related work uses the single option `onepress_migrate_from_onepress_plus` — see **`migrations.mdc`** and `.claude/migrations.md`.

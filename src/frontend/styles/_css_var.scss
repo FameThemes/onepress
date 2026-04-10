@@ -1,0 +1,8 @@
+@use "variables" as v;
+
+// Customizer bridge: defaults mirrored in :root; inline CSS from the Customizer overrides these.
+:root {
+	--color-primary: #{v.$primary};
+	--hero-overlay: rgba(0, 0, 0, 0.3);
+	--gallery-spacing: 20px;
+}

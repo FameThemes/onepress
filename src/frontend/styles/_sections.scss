@@ -126,6 +126,14 @@
 /* Section: Hero
 ------------------------------*/
 
+#main .video-section section.hero-slideshow-wrapper {
+    background: transparent;
+}
+
+.body-desktop .parallax-hero .hero-slideshow-wrapper:after {
+    display: none !important;
+}
+
 .hero-slideshow-wrapper {
     width: 100%;
     position: relative;
@@ -137,7 +145,7 @@
         left: 0px;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: var(--hero-overlay);
         display: block;
         content: "";
     }
@@ -155,6 +163,7 @@
         .hero-large-text {
             -webkit-transition-delay: 0.7s; /* Safari */
             transition-delay: 0.7s;
+            color: var(--typo-hero-heading-color, inherit);
         }
         .hero-small-text {
             -webkit-transition-delay: 0.8s; /* Safari */
@@ -167,6 +176,12 @@
         .hcl2-content {
             -webkit-transition-delay: 0.7s; /* Safari */
             transition-delay: 0.7s;
+
+            h1,
+            h2,
+            h3 {
+                color: var(--typo-hero-heading-color, inherit);
+            }
         }
 
     }
@@ -432,6 +447,15 @@
 /* Hero Text Style1. */
 .hero-content-style1 {
     text-align: center;
+
+    .morphext {
+        color: var(--morphext-color, inherit);
+        background-color: var(--morphext-bg, transparent);
+        padding: var(--morphext-padding, 0);
+        text-shadow: var(--morphext-text-shadow, inherit);
+        border-radius: var(--morphext-border-radius, 0);
+    }
+
     h2 {
         color: #FFFFFF;
         font-size: 35px;
@@ -564,7 +588,7 @@
             background-color: var(--icon-hover-bg-color);
         }
         .icon-background-default {
-            color: var(--icon-hover-bg-color);
+            color: var(--feature-icon-hover-color, var(--icon-hover-bg-color));
         }
     }
     @include variables.for(medium-screens) {
@@ -721,6 +745,10 @@
     .hero-slideshow-wrapper::after {
         background: none;
     }
+
+    .jarallax-container .parallax-bg:before {
+        background-color: var(--hero-overlay);
+    }
 }
 
 .section-parallax, #parallax-hero {
@@ -741,7 +769,8 @@
             left: 0px;
             right: 0px;
             bottom: 0px;
-            background: rgba(0, 0, 0, .3);
+            background-color: var(--hero-overlay);
+            opacity: 1;
             display: block;
             width: 100%;
             height: 100%;
@@ -1244,8 +1273,32 @@ div.wpcf7-response-output {
 /* Section: Gallery
 ------------------------------*/
 
+.gallery-carousel .g-item {
+    padding: 0 calc(var(--gallery-spacing) * 0.5);
+}
+
+.gallery-carousel-wrap {
+    margin-left: calc(var(--gallery-spacing) * -0.5);
+    margin-right: calc(var(--gallery-spacing) * -0.5);
+}
+
+.gallery-grid .g-item,
+.gallery-masonry .g-item .inner {
+    padding: calc(var(--gallery-spacing) * 0.5);
+}
+
+.gallery-grid-wrap,
+.gallery-masonry-wrap {
+    margin-left: calc(var(--gallery-spacing) * -0.5);
+    margin-right: calc(var(--gallery-spacing) * -0.5);
+}
+
+.gallery-justified-wrap {
+    margin-left: calc(var(--gallery-spacing) * -1);
+    margin-right: calc(var(--gallery-spacing) * -1);
+}
+
 .gallery-grid .g-item {
-    padding: 10px;
     float: left;
 }
 

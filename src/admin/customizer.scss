@@ -1333,6 +1333,7 @@ body .wp-full-overlay {
   min-width: 0;
   text-align: left;
   padding-left: 5px;
+  text-decoration: none;
 }
 
 #sub-accordion-panel-onepress_dynamic li.onepress-dynamic-sortable-placeholder {
@@ -1345,11 +1346,110 @@ body .wp-full-overlay {
   list-style: none;
 }
 
+/* Hidden block: muted row + eye-with-slash control state */
+#sub-accordion-panel-onepress_dynamic
+  li.accordion-section.onepress-dynamic-section-is-hidden {
+  opacity: 0.62;
+
+  > .accordion-section-title,
+  > .accordion-section-title .accordion-trigger,
+  > .accordion-section-title button {
+    color: #8c8f94;
+  }
+}
+
+#sub-accordion-panel-onepress_dynamic .onepress-dynamic-section-visibility,
+#sub-accordion-panel-onepress_dynamic .onepress-dynamic-section-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  margin: 0 2px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  color: #50575e;
+  background: transparent;
+  box-shadow: none;
+  vertical-align: middle;
+}
+
+#sub-accordion-panel-onepress_dynamic .onepress-dynamic-section-visibility:hover,
+#sub-accordion-panel-onepress_dynamic .onepress-dynamic-section-delete:hover {
+  color: #2271b1;
+  background: #f0f0f1;
+}
+
+#sub-accordion-panel-onepress_dynamic .onepress-dynamic-section-delete:hover {
+  color: #b32d2e;
+}
+
+#sub-accordion-panel-onepress_dynamic
+  .onepress-dynamic-section-visibility
+  .dashicons {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+#sub-accordion-panel-onepress_dynamic .onepress-dynamic-section-visibility {
+  position: relative;
+}
+
+/* “Eye off”: muted icon + diagonal bar */
+#sub-accordion-panel-onepress_dynamic
+  .onepress-dynamic-section-visibility.is-section-hidden
+  .dashicons {
+  opacity: 0.45;
+}
+
+#sub-accordion-panel-onepress_dynamic
+  .onepress-dynamic-section-visibility.is-section-hidden::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 2px;
+  margin: -1px 0 0 -10px;
+  background: currentColor;
+  transform: rotate(-42deg);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+#sub-accordion-panel-onepress_dynamic
+  .onepress-dynamic-section-delete
+  .dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+/* Remove block — control inside expanded section (default) */
+.customize-control-onepress-dynamic-delete-inner {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #dcdcde;
+}
+
+.customize-control-onepress-dynamic-delete-inner .onepress-dynamic-section-delete-inner {
+  margin-top: 8px;
+}
+
+.customize-control-onepress-dynamic-delete-inner .onepress-dynamic-section-delete-inner .dashicons {
+  margin-top: 3px;
+  vertical-align: text-top;
+}
+
 
 .control-panel {
   .control-section-onepress_dynamic_new {
     h3.accordion-section-title {
-      padding: 10px 15p 30px !important;
+      padding: 10px 15px 30px !important;
       background: transparent !important;
       border: 0px none !important;
       &::after {

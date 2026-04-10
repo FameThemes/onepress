@@ -1,0 +1,98 @@
+@use "variables" as v;
+
+// Customizer-driven colors (values from :root via inc/customizer-inline-styles.php).
+a,
+.screen-reader-text:hover,
+.screen-reader-text:active,
+.screen-reader-text:focus,
+.header-social a,
+.onepress-menu a:hover,
+.onepress-menu ul li a:hover,
+.onepress-menu li.onepress-current-item > a,
+.onepress-menu ul li.current-menu-item > a,
+.onepress-menu > li a.menu-actived,
+.onepress-menu.onepress-menu-mobile li.onepress-current-item > a,
+.site-footer a,
+.site-footer .footer-social a:hover,
+.site-footer .btt a:hover,
+.highlight,
+#comments .comment .comment-wrapper .comment-meta .comment-time:hover,
+#comments .comment .comment-wrapper .comment-meta .comment-reply-link:hover,
+#comments .comment .comment-wrapper .comment-meta .comment-edit-link:hover,
+.btn-theme-primary-outline,
+.sidebar .widget a:hover,
+.section-services .service-item .service-image i,
+.counter_item .counter__number,
+.team-member .member-thumb .member-profile a:hover,
+.icon-background-default {
+	color: var(--color-primary);
+}
+
+input[type="reset"],
+input[type="submit"],
+input[type="submit"],
+input[type="reset"]:hover,
+input[type="submit"]:hover,
+input[type="submit"]:hover .nav-links a:hover,
+.btn-theme-primary,
+.btn-theme-primary-outline:hover,
+.section-testimonials .card-theme-primary,
+.woocommerce #respond input#submit,
+.woocommerce a.button,
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce button.button.alt,
+.pirate-forms-submit-button,
+.pirate-forms-submit-button:hover,
+input[type="reset"],
+input[type="submit"],
+input[type="submit"],
+.pirate-forms-submit-button,
+.contact-form div.wpforms-container-full .wpforms-form .wpforms-submit,
+.contact-form div.wpforms-container-full .wpforms-form .wpforms-submit:hover,
+.nav-links a:hover,
+.nav-links a.current,
+.nav-links .page-numbers:hover,
+.nav-links .page-numbers.current {
+	background: var(--color-primary);
+}
+
+.btn-theme-primary-outline,
+.btn-theme-primary-outline:hover,
+.pricing__item:hover,
+.section-testimonials .card-theme-primary,
+.entry-content blockquote {
+	border-color: var(--color-primary);
+}
+
+.woocommerce #respond input#submit.alt,
+.woocommerce a.button.alt,
+.woocommerce button.button.alt,
+.woocommerce input.button.alt {
+	background-color: var(--color-primary);
+}
+
+.woocommerce #respond input#submit.alt:hover,
+.woocommerce a.button.alt:hover,
+.woocommerce button.button.alt:hover,
+.woocommerce input.button.alt:hover {
+	background-color: var(--color-primary);
+}
+
+.section-slider .section-op-slider .item--title {
+	color: var(--typo-slider-title-color, inherit);
+}
+
+.section-slider .section-op-slider .item--desc {
+	color: var(--typo-slider-desc-color, inherit);
+}
+
+#page .is-transparent .site-header.no-scroll .site-title,
+#page .is-transparent .site-header.no-scroll .site-title .site-text-logo,
+#page .is-transparent .site-header.no-scroll .site-text-logo {
+	color: var(--transparent-header-title, #ffffff);
+}
+
+#page .is-transparent .site-header.no-scroll .site-description {
+	color: var(--transparent-header-tagline, #ffffff);
+}

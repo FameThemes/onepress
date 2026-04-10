@@ -10,7 +10,7 @@ Use when editing admin / Customizer CSS or SCSS (theme bundle).
 ## 2. CSS variables
 
 - Use **centralized variables** for colors, borders, input typography, etc. (e.g. the `:root` block at the top of `customizer.scss`).
-- Theme-specific tokens: `--onepress-…`.
+- **Admin / Customizer UI** tokens: `--onepress-…` (e.g. switch, layout grid). **Front-end** Customizer bridge variables live in `src/frontend/styles/` and use **no** `onepress-` prefix (`--typo-*`, `--color-primary`, …).
 
 ## 3. Tailwind-like utilities
 

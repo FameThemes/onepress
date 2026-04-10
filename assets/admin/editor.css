@@ -42,6 +42,10 @@ body, button, input, select, textarea {
   color: #777777;
 }
 
+body, body p, .entry-content p, .hero-small-text {
+  color: var(--typo-body-color, #777777);
+}
+
 pre,
 code,
 input,

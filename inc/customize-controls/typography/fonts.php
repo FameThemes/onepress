@@ -14,19 +14,35 @@ if ( ! function_exists( 'onepress_typo_sanitize_field' ) ) {
 	 */
 	function onepress_typo_sanitize_field( $value ) {
 		if ( is_string( $value ) ) {
-			$value = json_decode( $value, true );
+			$decoded = json_decode( $value, true );
+			$value   = ( null !== $decoded ) ? $decoded : $value;
 		}
 
 		if ( ! is_array( $value ) ) {
 			return false;
 		}
 
+		$clean = array();
 		foreach ( $value as $k => $v ) {
-			$value[ strtolower( $k ) ] = sanitize_text_field( $v );
+			if ( ! is_scalar( $v ) ) {
+				continue;
+			}
+			$key            = str_replace( '_', '-', strtolower( (string) $k ) );
+			$clean[ $key ] = sanitize_text_field( (string) $v );
 		}
 
-		$value = array_filter( $value );
-		return wp_json_encode( $value );
+		$clean = array_filter(
+			$clean,
+			static function ( $item ) {
+				return null !== $item && '' !== $item && false !== $item;
+			}
+		);
+
+		if ( array() === $clean ) {
+			return false;
+		}
+
+		return wp_json_encode( $clean );
 	}
 }
 

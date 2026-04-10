@@ -141,6 +141,7 @@ function normalizeTextDecorationTransform(raw) {
 function parseInitialState(rawValue, fields) {
 	const base = {
 		fontId: '',
+		fontFamilyName: '',
 		styleSelect: '',
 		fontSize: '',
 		fontSizeUnit: 'px',
@@ -216,6 +217,7 @@ function parseInitialState(rawValue, fields) {
 	return {
 		...base,
 		fontId,
+		fontFamilyName: fontFamily || '',
 		styleSelect,
 		fontSize: fields.font_size ? fontSizeParsed.value : '',
 		fontSizeUnit: fields.font_size ? fontSizeParsed.unit : 'px',
@@ -250,6 +252,47 @@ function parseInitialState(rawValue, fields) {
 			? normalizeTextDecorationTransform(css['text-transform'])
 			: '',
 	};
+}
+
+/**
+ * Authoritative Customizer value (avoids empty params.value on first paint clobbering DB).
+ *
+ * @param {object} control
+ * @param {string} [paramsValue]
+ * @returns {string}
+ */
+function getTypographyControlInitialRaw(control, paramsValue) {
+	const setting = control.setting || control.settings?.default;
+	if (setting && typeof setting.get === 'function') {
+		const v = setting.get();
+		if (v != null && String(v).trim() !== '') {
+			return String(v);
+		}
+	}
+	return typeof paramsValue === 'string' ? paramsValue : '';
+}
+
+/** Stable JSON compare (key order–independent). */
+function typographySettingJsonMatches(a, b) {
+	const norm = (s) => {
+		try {
+			const o = JSON.parse(s);
+			if (!o || typeof o !== 'object' || Array.isArray(o)) {
+				return s;
+			}
+			return JSON.stringify(
+				Object.keys(o)
+					.sort()
+					.reduce((acc, k) => {
+						acc[k] = o[k];
+						return acc;
+					}, {})
+			);
+		} catch {
+			return s;
+		}
+	};
+	return norm(a || '') === norm(b || '');
 }
 
 function groupFonts(webfonts) {
@@ -524,6 +567,12 @@ function buildTypographySettingCss(state, fields, webfonts) {
 		if (fontId && webfonts[fontId]) {
 			const font = webfonts[fontId];
 			css['font-family'] = font.name;
+		} else if (
+			state.fontFamilyName &&
+			String(state.fontFamilyName).trim() !== ''
+		) {
+			// Plus / migrated fonts (e.g. Google) not yet in onepressTypoWebfonts must round-trip.
+			css['font-family'] = String(state.fontFamilyName).trim();
 		}
 	}
 
@@ -664,7 +713,9 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 	const controlWrapRef = useRef(null);
 	const fontSelectorRef = useRef(null);
 
-	const [state, setState] = useState(() => parseInitialState(params.value, fields));
+	const [state, setState] = useState(() =>
+		parseInitialState(getTypographyControlInitialRaw(control, params.value), fields)
+	);
 	const [previewDevice, setPreviewDevice] = useState('desktop');
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [fontPickerOpen, setFontPickerOpen] = useState(false);
@@ -756,15 +807,20 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 
 	const selectFontFromPicker = useCallback(
 		(fontId) => {
-			patch({ fontId, styleSelect: '' });
+			const font = webfonts[fontId];
+			patch({
+				fontId,
+				styleSelect: '',
+				fontFamilyName: font?.name || '',
+			});
 			removeAllPickerPreviewLinks(controlId);
 			setFontPickerOpen(false);
 		},
-		[controlId, patch]
+		[controlId, patch, webfonts]
 	);
 
 	const clearSelectedFont = useCallback(() => {
-		patch({ fontId: '', styleSelect: '' });
+		patch({ fontId: '', styleSelect: '', fontFamilyName: '' });
 		removeAllPickerPreviewLinks(controlId);
 		removeSelectedFontLink(controlId);
 		setFontPickerOpen(false);
@@ -800,9 +856,23 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 	useEffect(() => {
 		const css = buildTypographySettingCss(state, fields, webfonts);
 		const setting = settingRef.current;
-		if (setting) {
-			setting.set(JSON.stringify(css));
+		if (!setting || typeof setting.get !== 'function') {
+			return;
 		}
+		const next = JSON.stringify(css);
+		let cur = '';
+		try {
+			cur = setting.get();
+			if (typeof cur !== 'string') {
+				cur = cur != null ? String(cur) : '';
+			}
+		} catch {
+			cur = '';
+		}
+		if (typographySettingJsonMatches(next, cur)) {
+			return;
+		}
+		setting.set(next);
 	}, [state, fields, webfonts]);
 
 	useEffect(() => {
