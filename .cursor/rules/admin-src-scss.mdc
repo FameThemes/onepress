@@ -1,0 +1,34 @@
+---
+description: src/admin SCSS — WP admin alignment, CSS vars, Tailwind-like utilities
+globs: "src/admin/**/*.scss"
+alwaysApply: false
+---
+
+# SCSS in `src/admin/` (Customizer / admin bundle)
+
+## Prefer WordPress admin & Customize defaults
+
+- Reuse **core markup and classes** when they fit: `.button`, `.button-primary`, `.customize-control-title`, `.description`, media-style patterns, etc.
+- **Do not** override global wp-admin selectors unless scoped under **`#customize-controls`**, **`body.wp-customize`**, or a control root like **`onepress-*-control`** so default WP outside the Customizer is unaffected.
+- For colors, borders, and type, stay **visually aligned** with the Customize screen: prefer variables already meaningful in that context; add theme tokens only where core is insufficient.
+
+## CSS variables (high consistency)
+
+- **Shared tokens** (inputs, buttons, borders matching WP): define once (e.g. `:root` at the top of `customizer.scss`) and **reuse** instead of scattering literals — follow the existing `--wp-*`-style names in that file where appropriate.
+- **OnePress-only tokens:** `--onepress-…`.
+- When changing a “system” value (primary blue, input border), update **one variable** so all controls stay in sync.
+
+## Tailwind-like utility classes (reuse)
+
+- For **layout / alignment / spacing** only (no strong custom look), prefer **existing utilities** at the top of `customizer.scss`: `.flex`, `.flex-column`, `.gap-1`–`.gap-4`, `.justify-*`, `.items-*`, `.w-full`, `.relative`, `.text-center`, etc.
+- **New utilities:** same idea — **one job per class**, **kebab-case**, short names (e.g. `.gap-5`, `.min-w-0`). Do **not** redefine WP **component** classes (`.button`, `.media-frame`, …).
+- This bundle is usually loaded only in the Customizer, so generic utility names rarely clash; if the same stylesheet is shared with broader admin later, **scope or prefix** utilities if conflicts appear.
+
+## With OnePress controls
+
+- Control shell: `onepress-{feature}-control` (see `scss-css.mdc`).
+- Inside: combine **functional** inner classes with utilities, e.g. root `onepress-typo-control` plus `flex gap-2 items-center` on a row that needs no bespoke styling.
+
+## After edits
+
+- Run **`npm run build`** from the theme root.

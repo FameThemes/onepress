@@ -1,0 +1,10 @@
+---
+description: Theme layout, Customizer flow, build pipeline — full detail in ARCHITECTURE.md
+alwaysApply: true
+---
+
+# Theme architecture
+
+Canonical overview: **`ARCHITECTURE.md`** at the theme root (folders, `functions.php` → `inc/`, `src/` → `assets/`, Customizer PHP/JS, webpack entries).
+
+For conventions: other files in `.cursor/rules/` and `.claude/`.

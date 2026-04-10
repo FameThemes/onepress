@@ -1,6 +1,6 @@
 /**
  * Build CSS for OnePress background Customizer control.
- * Logic must stay in sync with inc/background/helper.php (onepress_background_build_css).
+ * Logic must stay in sync with inc/customize-controls/background/helper.php (onepress_background_build_css).
  */
 
 /** Default gradient when the user opens the Gradient tab (must match BackgroundLayerEditor UI). */
@@ -78,7 +78,7 @@ export function createDefaultLayer() {
 
 /**
  * Image tab with no URL: explicit reset so color/gradient from this control (or theme head CSS) do not linger.
- * Keep in sync with onepress_background_image_tab_empty_declarations() in inc/background/helper.php.
+ * Keep in sync with onepress_background_image_tab_empty_declarations() in inc/customize-controls/background/helper.php.
  *
  * @returns {Record<string, string>}
  */

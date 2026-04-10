@@ -102,7 +102,7 @@ if ( ! function_exists( 'onepress_typo_render_code' ) ) {
 			}
 
 			if ( ! function_exists( 'onepress_typo_get_fonts' ) ) {
-				include_once dirname( __FILE__ ) . '/typography.php';
+				include_once dirname( __FILE__ ) . '/fonts.php';
 			}
 			$fonts = onepress_typo_get_google_fonts();
 

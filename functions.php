@@ -679,27 +679,27 @@ require get_template_directory() . '/inc/extras.php';
 /**
  * Typography (Customizer control + front-end CSS).
  */
-require get_template_directory() . '/inc/typography/typography.php';
-require get_template_directory() . '/inc/typography/helper.php';
-require get_template_directory() . '/inc/typography/typography-demo-auto-apply.php';
+require get_template_directory() . '/inc/customize-controls/typography/fonts.php';
+require get_template_directory() . '/inc/customize-controls/typography/helper.php';
+require get_template_directory() . '/inc/customize-controls/typography/typography-auto-apply.php';
 
 /**
  * Spacing (Customizer + front-end CSS).
  */
-require get_template_directory() . '/inc/spacing/helper.php';
-require get_template_directory() . '/inc/spacing/spacing-demo-auto-apply.php';
+require get_template_directory() . '/inc/customize-controls/spacing/helper.php';
+require get_template_directory() . '/inc/customize-controls/spacing/spacing-auto-apply.php';
 
 /**
  * Slider / single dimension (Customizer + front-end CSS).
  */
-require get_template_directory() . '/inc/slider/helper.php';
-require get_template_directory() . '/inc/slider/slider-demo-auto-apply.php';
+require get_template_directory() . '/inc/customize-controls/slider/helper.php';
+require get_template_directory() . '/inc/customize-controls/slider/slider-auto-apply.php';
 
 /**
  * Background (Customizer + front-end CSS).
  */
-require get_template_directory() . '/inc/background/helper.php';
-require get_template_directory() . '/inc/background/background-demo-auto-apply.php';
+require get_template_directory() . '/inc/customize-controls/background/helper.php';
+require get_template_directory() . '/inc/customize-controls/background/background-auto-apply.php';
 
 /**
  * Dots Navigation class

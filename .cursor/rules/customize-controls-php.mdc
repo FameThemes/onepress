@@ -1,0 +1,30 @@
+---
+description: New Customizer controls — folder layout under inc/customize-controls + require wiring
+globs: "inc/customize-controls/**/*.php"
+alwaysApply: false
+---
+
+# PHP layout for Customizer controls (`inc/customize-controls/`)
+
+## One folder per control
+
+- Add each new control under **`inc/customize-controls/{control-name}/`** using **kebab-case** or short lowercase slug consistent with existing folders (`layout`, `switch`, `background`, `typography`, …).
+- **Main PHP file:** **`{control-name}/{control-name}.php`** — e.g. `layout/layout.php`, `switch/switch.php`. This file should define the `WP_Customize_Control` subclass (and related hooks for that control if minimal).
+
+## Colocate related files
+
+- Put **all assets for that control** in the **same folder**: `helper.php`, extra sanitizers, small templates, or control-specific PHP only used by this control. Avoid scattering sibling files across `inc/` without a clear reason.
+
+## Register the control in the theme
+
+- Add **`require_once`** for the main file (and any extra files if not loaded by the main file) in **`inc/customizer-controls.php`**, following the existing list order/pattern.
+
+## Cross-cutting UI (JS/SCSS)
+
+- Scripts and styles usually live under **`src/admin/`** (bundled via theme build); keep PHP paths/URIs consistent with how sibling controls enqueue assets. After SCSS changes: **`npm run build`**.
+
+## Do / don’t
+
+- ✅ `inc/customize-controls/my-widget/my-widget.php` + `my-widget/helper.php` in the same directory
+- ❌ Dropping a new `class-my-widget-control.php` loose under `inc/` when it is a Customizer control
+- ❌ Splitting one control’s PHP across multiple unrelated top-level folders

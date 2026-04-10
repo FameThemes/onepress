@@ -203,6 +203,14 @@ export function SliderControlApp({ control }) {
 		return Math.min(sliderMax, Math.max(sliderMin, n));
 	}, [currentValue, sliderMin, sliderMax]);
 
+	const rangeFillPct = useMemo(() => {
+		const span = sliderMax - sliderMin;
+		if (span <= 0) {
+			return 0;
+		}
+		return ((rangeDisplayValue - sliderMin) / span) * 100;
+	}, [rangeDisplayValue, sliderMin, sliderMax]);
+
 	const setValueForDevice = useCallback(
 		(nextRaw) => {
 			const clamped = clampNumeric(nextRaw);
@@ -232,8 +240,8 @@ export function SliderControlApp({ control }) {
 	);
 
 	return (
-		<div className="onepress-slider-control-root">
-			<div className="onepress-slider-control-root__head flex justify-between items-center w-full">
+		<div className="onepress-slider-control">
+			<div className="head flex justify-between items-center w-full">
 				<div className="flex items-center gap-1">
 					<div className="title">
 						{controlLabel ? (
@@ -246,8 +254,8 @@ export function SliderControlApp({ control }) {
 						devices={getCustomizerPreviewDeviceDefinitions()}
 						activeDevice={previewDevice}
 						onSelectDevice={selectPreviewDevice}
-						groupClassName="onepress-spacing-app__devices"
-						buttonClassName="onepress-spacing-app__device-btn"
+						groupClassName="devices"
+						buttonClassName="device-btn"
 					/>
 				</div>
 				<div className="flex items-center gap-1">
@@ -263,7 +271,7 @@ export function SliderControlApp({ control }) {
 							aria-hidden
 						/>
 					</button>
-					<div className="onepress-slider-app__unit">
+					<div className="unit">
 						<CustomizerUnitSelectPopover
 							key={previewDevice}
 							units={SIZE_UNITS}
@@ -276,18 +284,13 @@ export function SliderControlApp({ control }) {
 				</div>
 			</div>
 
-			{controlDescription ? (
-				<span
-					className="description customize-control-description"
-					dangerouslySetInnerHTML={{ __html: controlDescription }}
-				/>
-			) : null}
-
-			<div className="onepress-slider-app">
-				<div className="onepress-slider-app__row">
+			<div className="row">
 					<input
 						type="range"
-						className="onepress-slider-app__range"
+						className="range"
+						style={{
+							'--onepress-slider-fill-pct': `${rangeFillPct}%`,
+						}}
 						min={sliderMin}
 						max={sliderMax}
 						step={sliderStep}
@@ -295,10 +298,10 @@ export function SliderControlApp({ control }) {
 						aria-label={
 							controlLabel
 								? sprintf(
-										/* translators: %s: control label */
-										__('%s — slider', 'onepress'),
-										controlLabel
-									)
+									/* translators: %s: control label */
+									__('%s — slider', 'onepress'),
+									controlLabel
+								)
 								: __('Value slider', 'onepress')
 						}
 						onChange={(e) =>
@@ -308,7 +311,7 @@ export function SliderControlApp({ control }) {
 					<input
 						id={valueInputId}
 						type="number"
-						className="opc-input onepress-slider-app__number"
+						className="opc-input number"
 						min={sliderMin}
 						max={sliderMax}
 						step={sliderStep}
@@ -324,8 +327,14 @@ export function SliderControlApp({ control }) {
 							setValueForDevice(v);
 						}}
 					/>
-				</div>
 			</div>
+
+			{controlDescription ? (
+				<span
+					className="description customize-control-description"
+					dangerouslySetInnerHTML={{ __html: controlDescription }}
+				/>
+			) : null}
 		</div>
 	);
 }

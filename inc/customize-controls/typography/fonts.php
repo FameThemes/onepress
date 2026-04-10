@@ -1,6 +1,6 @@
 <?php
 /**
- * Typography font lists + sanitize (theme). Prefix: onepress_typo_
+ * Typography font lists + sanitize (Customizer typography control). Prefix: onepress_typo_
  *
  * @package onepress
  */

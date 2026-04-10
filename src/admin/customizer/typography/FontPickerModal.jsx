@@ -180,18 +180,18 @@ function FontPickerRow({
 		<span
 			ref={rowRef}
 			className={
-				'fontpicker-row' +
+				'row' +
 				(isSelected ? ' is-selected' : '')
 			}
 			onClick={() => onPick(fontId)}
 		>
 			{/* <span
-				className="fontpicker-row__name"
+				className="row-name"
 			>
 				{name}
 			</span> */}
 			<span
-				className="fontpicker-row__sample"
+				className="sample"
 				style={{ fontFamily: stack }}
 			>
 				{name}
@@ -316,8 +316,9 @@ export function FontPickerPanel({
 	}
 
 	const panelClass =
-		'fontpicker-panel' +
-		(variant === 'dropdown' ? ' fontpicker-panel--dropdown' : ' fontpicker-modal');
+		variant === 'dropdown'
+			? 'onepress-font-picker-dropdown'
+			: 'onepress-font-picker-modal';
 
 	return (
 		<div
@@ -327,19 +328,19 @@ export function FontPickerPanel({
 			aria-label={__( 'Font selector', 'onepress' )}
 			onMouseDown={(e) => e.stopPropagation()}
 		>
-				{/* <div className="fontpicker-head">
-					<span className="fontpicker-title">
+				{/* <div className="head">
+					<span className="title">
 						{__( 'Font selector', 'onepress' )}
 					</span>
 					<button
 						type="button"
-						className="fontpicker-close button-link"
+						className="close button-link"
 						onClick={onClose}
 					>
 						{__( 'Close', 'onepress' )}
 					</button>
 				</div> */}
-				<div className="fontpicker-search-wrap">
+				<div className="search-wrap">
 					<label
 						className="screen-reader-text"
 						htmlFor={`onepress-typo-font-search-${controlId}`}
@@ -350,7 +351,7 @@ export function FontPickerPanel({
 						ref={searchRef}
 						id={`onepress-typo-font-search-${controlId}`}
 						type="search"
-						className="fontpicker-search"
+						className="search"
 						placeholder={__( 'Search fonts…', 'onepress' )}
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
@@ -360,7 +361,7 @@ export function FontPickerPanel({
 					/>
 				</div>
 				{/* <div
-					className="fontpicker-categories"
+					className="categories"
 					role="tablist"
 					aria-label={__( 'Font categories', 'onepress' )}
 				>
@@ -371,7 +372,7 @@ export function FontPickerPanel({
 							role="tab"
 							aria-selected={categoryKey === tab.key}
 							className={
-								'fontpicker-cat' +
+								'cat' +
 								(categoryKey === tab.key
 									? ' is-active'
 									: '')
@@ -383,28 +384,28 @@ export function FontPickerPanel({
 					))}
 				</div> */}
 				<div
-					className="fontpicker-scroll"
+					className="scroll"
 					ref={setScrollRoot}
 				>
 					<span
 						className={
-							'fontpicker-row fontpicker-row--default' +
+							'row row-default' +
 							(!currentFontId ? ' is-selected' : '')
 						}
 						onClick={() => onSelectFont('')}
 					>
-						<span className="fontpicker-row__name">
+						<span className="row-name">
 							{defaultLabel}
 						</span>
 					</span>
 					{filteredGroups.length === 0 ? (
-						<p className="fontpicker-empty" role="status">
+						<p className="empty" role="status">
 							{__( 'No fonts found.', 'onepress' )}
 						</p>
 					) : (
 						filteredGroups.map((g) => (
-							<div key={g.type} className="fontpicker-group">
-								{/* <div className="fontpicker-group-label">
+							<div key={g.type} className="group">
+								{/* <div className="group-label">
 									{g.type}
 								</div> */}
 								{g.fonts.map((f) => (

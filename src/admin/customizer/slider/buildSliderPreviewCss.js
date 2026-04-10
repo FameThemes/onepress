@@ -1,6 +1,6 @@
 /**
  * Slider / single-property CSS for Customizer preview <style> injection.
- * Mirrors inc/slider/helper.php — onepress_slider_css.
+ * Mirrors inc/customize-controls/slider/helper.php — onepress_slider_css.
  */
 
 const ALLOWED_PROPERTIES = new Set([

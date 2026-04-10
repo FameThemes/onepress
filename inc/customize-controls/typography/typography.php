@@ -3,6 +3,8 @@
  * Typography Customizer control (loads only in Customizer when WP_Customize_Control exists).
  *
  * @package onepress
+ * @see inc/customize-controls/typography/fonts.php
+ * @see inc/customize-controls/typography/helper.php
  */
 
 if ( class_exists( 'WP_Customize_Control', false ) && ! class_exists( 'OnePress_Typo_Customize_Control', false ) ) {
@@ -100,7 +102,7 @@ class OnePress_Typo_Customize_Control extends WP_Customize_Control {
 	}
 
 	public static function get_url() {
-		return trailingslashit( get_template_directory_uri() ) . 'inc/typography/';
+		return trailingslashit( get_template_directory_uri() ) . 'inc/customize-controls/typography/';
 	}
 
 	public static function get_default_fonts() {

@@ -8,6 +8,7 @@ import { registerRepeatableControl } from './customizer/control-repeatable';
 import { initIconPicker } from './customizer/icon-picker';
 import { installDeparam } from './customizer/jquery-deparam';
 import { initModalEditors } from './customizer/modal-editor';
+import { registerDynamicOptionBlocks } from './customizer/dynamic-sections';
 import { registerPlusSection } from './customizer/plus-section';
 import { installWpEditor } from './customizer/wp-editor';
 import './customizer/typography/typography-controls.js';
@@ -19,6 +20,12 @@ const api = wp.customize;
 const $ = jQuery;
 
 registerPlusSection(api);
+const onepressDynamicBlocks = window.ONEPRESS_DYNAMIC_BLOCKS;
+if (Array.isArray(onepressDynamicBlocks)) {
+	onepressDynamicBlocks.forEach(function (blockCfg) {
+		registerDynamicOptionBlocks(api, blockCfg);
+	});
+}
 installDeparam($);
 installAlphaColorPicker($);
 registerAlphaColorControl(api, $);

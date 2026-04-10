@@ -1,6 +1,6 @@
 <?php
 /**
- * Demo: map theme mod to front-end CSS (see options-typography-example.php).
+ * Map typography theme mod to front-end CSS (see option-demo-example.php).
  *
  * @package onepress
  */

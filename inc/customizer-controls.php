@@ -3,21 +3,24 @@
 /**
  * Load Controls Files
  */
-require_once get_template_directory() . '/inc/typography/typography.php';
-require_once get_template_directory() . '/inc/customize-controls/control-theme-typography.php';
-require_once get_template_directory() . '/inc/customize-controls/control-theme-spacing.php';
-require_once get_template_directory() . '/inc/customize-controls/control-theme-slider.php';
-require_once get_template_directory() . '/inc/customize-controls/control-theme-background.php';
-require_once get_template_directory() . '/inc/customize-controls/section-plus.php';
-require_once get_template_directory() . '/inc/customize-controls/control-misc.php';
-require_once get_template_directory() . '/inc/customize-controls/control-custom-textarea.php';
-require_once get_template_directory() . '/inc/customize-controls/control-theme-support.php';
-require_once get_template_directory() . '/inc/customize-controls/control-editor.php';
-require_once get_template_directory() . '/inc/customize-controls/control-color-alpha.php';
-require_once get_template_directory() . '/inc/customize-controls/control-repeater.php';
-require_once get_template_directory() . '/inc/customize-controls/control-category.php';
-require_once get_template_directory() . '/inc/customize-controls/control-pages.php';
-require_once get_template_directory() . '/inc/customize-controls/control-media.php';
+require_once get_template_directory() . '/inc/customize-controls/typography/fonts.php';
+require_once get_template_directory() . '/inc/customize-controls/typography/helper.php';
+require_once get_template_directory() . '/inc/customize-controls/typography/typography.php';
+require_once get_template_directory() . '/inc/customize-controls/spacing/spacing.php';
+require_once get_template_directory() . '/inc/customize-controls/slider/slider.php';
+require_once get_template_directory() . '/inc/customize-controls/background/background.php';
+require_once get_template_directory() . '/inc/customize-controls/section-plus/section-plus.php';
+require_once get_template_directory() . '/inc/customize-controls/misc/misc.php';
+require_once get_template_directory() . '/inc/customize-controls/custom-textarea/custom-textarea.php';
+require_once get_template_directory() . '/inc/customize-controls/theme-support/theme-support.php';
+require_once get_template_directory() . '/inc/customize-controls/editor/editor.php';
+require_once get_template_directory() . '/inc/customize-controls/color-alpha/color-alpha.php';
+require_once get_template_directory() . '/inc/customize-controls/repeater/repeater.php';
+require_once get_template_directory() . '/inc/customize-controls/category/category.php';
+require_once get_template_directory() . '/inc/customize-controls/pages/pages.php';
+require_once get_template_directory() . '/inc/customize-controls/media/media.php';
+require_once get_template_directory() . '/inc/customize-controls/switch/switch.php';
+require_once get_template_directory() . '/inc/customize-controls/layout/layout.php';
 
 
 class OnePress_Editor_Scripts
@@ -67,8 +70,16 @@ function onepres_customizer_control_scripts()
 		'multiple_map_notice' => esc_html__('Please setup your main Latitude & Longitude first', 'onepress'),
 	);
 
-	$handle = onepress_load_build_script('customizer', ['customize-controls', 'wp-color-picker'], true);
+	$handle = onepress_load_build_script(
+		'customizer',
+		array( 'customize-controls', 'wp-color-picker', 'jquery-ui-sortable' ),
+		true
+	);
 	wp_localize_script($handle, 'ONEPRESS_CUSTOMIZER_DATA', $customizer_data);
+
+	if ( function_exists( 'onepress_dynamic_option_blocks_localize_script' ) ) {
+		onepress_dynamic_option_blocks_localize_script( $handle );
+	}
 
 	$typo_bp = apply_filters(
 		'onepress_typo_responsive_breakpoints',

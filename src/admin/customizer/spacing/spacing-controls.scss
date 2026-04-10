@@ -11,113 +11,113 @@
 }
 
 .onepress-spacing-wrap {
-  .onepress-spacing-control-root > .customize-control-title {
+  .onepress-spacing-control > .customize-control-title {
     display: block;
     margin-bottom: 6px;
   }
 
-  .onepress-spacing-control-root > .customize-control-description {
+  .onepress-spacing-control > .customize-control-description {
     display: block;
     margin-bottom: 10px;
   }
 }
 
-.onepress-spacing-control-root {
+.onepress-spacing-control {
   position: relative;
   width: 100%;
-}
 
-.onepress-spacing-app__unit {
-  flex: 0 0 auto;
-}
+  .unit {
+    flex: 0 0 auto;
+  }
 
-.onepress-spacing-app__sides {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-}
+  .sides {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+  }
 
-.onepress-spacing-app__sides .inputs input {
-  border-radius: 0px;
-  padding-right: 0px;
-}
-
-.onepress-spacing-app__sides .inputs {
-  display: flex;
-  flex-grow: 1;
-  gap: 0;
-}
-.spacing-side {
-  .input,
-  .link-btn {
-    width: 100%;
-    box-sizing: border-box;
-    border-left: 1px solid var(--wp-input-border);
-    border-top: 1px solid var(--wp-input-border);
-    border-bottom: 1px solid var(--wp-input-border);
-    border-right: 0px none;
+  .sides .inputs input {
     border-radius: 0px;
-    height: 30px;
-    min-height: auto;
-    
-  }
-  .input {
-    padding: 0px 0px 0px 4px;
-  }
-  &:first-child .input {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-  }
-  &:last-child .input {
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    padding-right: 0px;
   }
 
-  .label {
-    display: block;
-    margin-top: 4px;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #787c82;
-    text-align: center;
+  .sides .inputs {
+    display: flex;
+    flex-grow: 1;
+    gap: 0;
   }
 
-  .link-btn {
-    display: inline-flex;
+  .spacing-side {
+    .input,
+    .link-btn {
+      width: 100%;
+      box-sizing: border-box;
+      border-left: 1px solid var(--wp-input-border);
+      border-top: 1px solid var(--wp-input-border);
+      border-bottom: 1px solid var(--wp-input-border);
+      border-right: 0px none;
+      border-radius: 0px;
+      height: 30px;
+      min-height: auto;
+    }
+    .input {
+      padding: 0px 0px 0px 4px;
+    }
+    &:first-child .input {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+    &:last-child .input {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+
+    .label {
+      display: block;
+      margin-top: 4px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #787c82;
+      text-align: center;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 30px;
+      padding: 0;
+      cursor: pointer;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      border-right: 1px solid var(--wp-input-border);
+    }
+  }
+
+  .link-wrap {
+    flex: 0 0 auto;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    width: 36px;
+    padding-bottom: 22px;
     height: 30px;
-    padding: 0;
-    cursor: pointer;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-right: 1px solid var(--wp-input-border);
-  }
-}
-
-.link-wrap {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  padding-bottom: 22px;
-  height: 30px;
-  &:hover,
-  &:focus {
-    border-color: #2271b1;
-    color: #2271b1;
-    outline: none;
-  }
-  .is-linked {
-    background: #f0f6fc;
-    border-color: #2271b1;
-    color: #2271b1;
-  }
-  .dashicons {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
+    &:hover,
+    &:focus {
+      border-color: #2271b1;
+      color: #2271b1;
+      outline: none;
+    }
+    .is-linked {
+      background: #f0f6fc;
+      border-color: #2271b1;
+      color: #2271b1;
+    }
+    .dashicons {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
   }
 }

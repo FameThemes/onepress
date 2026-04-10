@@ -3,6 +3,7 @@
  * Responsive slider Customizer control (single CSS length, React).
  *
  * @package onepress
+ * @see inc/customize-controls/slider/helper.php
  */
 
 if ( class_exists( 'WP_Customize_Control', false ) && ! class_exists( 'OnePress_Slider_Customize_Control', false ) ) {

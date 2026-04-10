@@ -555,8 +555,8 @@ function ResponsiveUnitField({
 						devices={getCustomizerPreviewDeviceDefinitions()}
 						activeDevice={previewDevice}
 						onSelectDevice={onSelectDevice}
-						groupClassName="setting-group__devices"
-						buttonClassName="setting-group__device-btn"
+						groupClassName="devices"
+						buttonClassName="device-btn"
 					/>
 				</div>
 
@@ -912,14 +912,12 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 		summaryPreviewStyle.textDecoration = state.textDecoration || 'none';
 	}
 
-	console.log('state.styleSelect', state)
-
 	return (
 		<div
 			ref={controlWrapRef}
 			className={
-				'onepress-typo-control' +
-				(settingsOpen ? ' onepress-typo-control--open' : '')
+				'onepress-typography-control' +
+				(settingsOpen ? ' onepress-typography-control--open' : '')
 			}
 		>
 			<div className='flex items-center w-full gap-1 justify-between'>
@@ -947,7 +945,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 
 				<button
 					type="button"
-					className="onepress-typo-summary-card opc-input select flex items-center w-full"
+					className={`summary-card opc-input select flex items-center w-full ${settingsOpen ? 'active' : ''}`}
 					onClick={() => {
 						setSettingsOpen((prev) => {
 							if (prev) {
@@ -959,22 +957,22 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 					aria-expanded={settingsOpen}
 					aria-label={__('Typography options', 'onepress')}
 				>
-					<span className="onepress-typo-summary-meta flex justify-between items-center w-full">
-						<span className="onepress-typo-chip" style={{ fontFamily: selectorStack }}>
+					<span className="summary-meta flex justify-between items-center w-full">
+						<span className="chip" style={{ fontFamily: selectorStack }}>
 							{selectedFont ? selectedFont.name : labels.option_default}
 						</span>
 						<span className='flex gap-1'>
-							{selectedStyleLabel != labels.option_default && <><span className="onepress-typo-chip">{selectedStyleLabel}</span>
+							{selectedStyleLabel != labels.option_default && <><span className="chip">{selectedStyleLabel}</span>
 								/</>}
-							{labels.option_default != sizeBadge && <span className="onepress-typo-chip">{sizeBadge}</span>}
+							{labels.option_default != sizeBadge && <span className="chip">{sizeBadge}</span>}
 						</span>
 					</span>
-					{/* <span className="onepress-typo-summary-preview" style={summaryPreviewStyle}>…</span> */}
+					{/* <span className="summary-preview" style={summaryPreviewStyle}>…</span> */}
 				</button>
 
 				{settingsOpen && (
 					<div
-						className="onepress-typo-dropdown onepress-typo-settings-dropdown onepress-typo-portal"
+						className="onepress-typography-settings"
 						role="dialog"
 						aria-modal="false"
 						aria-label={__('Typography options', 'onepress')}
@@ -1001,7 +999,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 									<span className="customize-control-title">{labels.family}</span>
 									<div className="font-family-row">
 										<span
-											className="opc-input select font-family-value clickable"
+											className={`opc-input select font-family-value clickable ${fontPickerOpen ? 'active' : ''}`}
 											role="button"
 											tabIndex={0}
 											aria-label={__('Open font selector', 'onepress')}

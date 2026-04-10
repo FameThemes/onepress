@@ -1,6 +1,6 @@
 <?php
 /**
- * Demo: output saved background CSS on the front end (see options-typography-example.php).
+ * Output saved background CSS on the front end (see option-demo-example.php).
  *
  * @package onepress
  */

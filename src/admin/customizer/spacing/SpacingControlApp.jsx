@@ -321,7 +321,7 @@ export function SpacingControlApp({ control }) {
 	};
 
 	return (
-		<div className="onepress-spacing-control-root">
+		<div className="onepress-spacing-control">
 
 			<div className='flex justify-between items-center w-full'>
 
@@ -339,8 +339,8 @@ export function SpacingControlApp({ control }) {
 							devices={getCustomizerPreviewDeviceDefinitions()}
 							activeDevice={previewDevice}
 							onSelectDevice={selectPreviewDevice}
-							groupClassName="onepress-spacing-app__devices"
-							buttonClassName="onepress-spacing-app__device-btn"
+							groupClassName="devices"
+							buttonClassName="device-btn"
 						/>
 
 					</div>
@@ -357,7 +357,7 @@ export function SpacingControlApp({ control }) {
 								aria-hidden
 							/>
 						</button>
-						<div className="onepress-spacing-app__unit">
+						<div className="unit">
 							<CustomizerUnitSelectPopover
 								key={previewDevice}
 								units={SIZE_UNITS}
@@ -381,8 +381,7 @@ export function SpacingControlApp({ control }) {
 			) : null}
 
 
-			<div className="onepress-spacing-app">
-				<div className="onepress-spacing-app__sides">
+			<div className="sides">
 					<div className='inputs'>
 						{SIDE_KEYS.map((side) => (
 							<div key={side} className="spacing-side">
@@ -424,7 +423,6 @@ export function SpacingControlApp({ control }) {
 						</div>
 					</div>
 
-				</div>
 			</div>
 		</div>
 	);

@@ -159,6 +159,10 @@
 .opc-input[type=number] {
   padding-left: 0px;
 }
+.opc-input.active {
+  border-color: var(--wp-input-focus-border);
+  box-shadow: 0 0 0 1px var(--wp-input-focus-border);
+}
 
 .opc-input.select {
   border-radius: 3px;
@@ -200,6 +204,262 @@
 }
 
 /* END Custom  INPUT --------------- */
+/* Customizer: toggle switch (OnePress_Switch_Customize_Control) — sizes via vars on block */
+.onepress-switch-control {
+  --onepress-switch-track-width: 36px;
+  --onepress-switch-track-height: 20px;
+  --onepress-switch-inset: 2px;
+  --onepress-switch-thumb-size: calc(
+    var(--onepress-switch-track-height) - 2 * var(--onepress-switch-inset)
+  );
+  --onepress-switch-travel: calc(
+    var(--onepress-switch-track-width) - 2 * var(--onepress-switch-inset) - var(
+        --onepress-switch-thumb-size
+      )
+  );
+  width: 100%;
+}
+
+.onepress-switch-control__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--onepress-switch-track-height);
+}
+
+.onepress-switch-control__head .customize-control-title {
+  flex: 0 1 auto;
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+}
+
+.onepress-switch-control__spacer {
+  flex: 1 1 auto;
+  min-width: 8px;
+}
+
+.onepress-switch {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--onepress-switch-track-width);
+  height: var(--onepress-switch-track-height);
+  margin: 0;
+  cursor: pointer;
+}
+
+.onepress-switch__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.onepress-switch__input:focus {
+  outline: none;
+}
+
+.onepress-switch__input:focus-visible + .onepress-switch__track {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--wp-primary-btn-bg, #2271b1);
+}
+
+.onepress-switch__track {
+  position: relative;
+  display: block;
+  width: var(--onepress-switch-track-width);
+  height: var(--onepress-switch-track-height);
+  box-sizing: border-box;
+  border-radius: calc(var(--onepress-switch-track-height) / 2);
+  background: #c3c4c7;
+  transition: background-color 0.15s ease;
+  pointer-events: none;
+}
+
+.onepress-switch__thumb {
+  position: absolute;
+  top: var(--onepress-switch-inset);
+  right: var(--onepress-switch-inset);
+  width: var(--onepress-switch-thumb-size);
+  height: var(--onepress-switch-thumb-size);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease;
+}
+
+.onepress-switch__input:checked + .onepress-switch__track {
+  background: var(--wp-primary-btn-bg, #2271b1);
+}
+
+.onepress-switch__input:checked + .onepress-switch__track .onepress-switch__thumb {
+  transform: translateX(var(--onepress-switch-travel));
+}
+
+.onepress-switch-control .description.customize-control-description {
+  display: block;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.rtl .onepress-switch__input:checked + .onepress-switch__track .onepress-switch__thumb {
+  transform: translateX(calc(-1*(-1 * var(--onepress-switch-travel))));
+}
+
+/* Customizer: layout picker (OnePress_Layout_Customize_Control) — root + inner functional classes */
+.onepress-layout-control {
+  --onepress-layout-columns: 2;
+  --onepress-layout-gap: 10px;
+  --onepress-layout-thumb-radius: 4px;
+  --onepress-layout-thumb-bg: #fff;
+  --onepress-layout-border: #c3c4c7;
+  --onepress-layout-border-active: var(--wp-primary-btn-bg, #2271b1);
+  /* Fallback if a .choice omits --onepress-layout-item-min-height (set inline from PHP). */
+  --onepress-layout-thumb-min-height: 72px;
+  width: 100%;
+}
+.onepress-layout-control .head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.onepress-layout-control .head .customize-control-title {
+  flex: 0 1 auto;
+  margin: 0;
+  padding: 0;
+}
+.onepress-layout-control .help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  color: #787c82;
+  text-decoration: none;
+  background: #f0f0f1;
+  border: 1px solid #dcdcde;
+}
+.onepress-layout-control .help:hover,
+.onepress-layout-control .help:focus {
+  color: var(--wp-primary-btn-bg, #2271b1);
+  border-color: var(--wp-primary-btn-bg, #2271b1);
+  outline: none;
+}
+.onepress-layout-control .help .dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+.onepress-layout-control fieldset.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--onepress-layout-columns), minmax(0, 1fr));
+  gap: var(--onepress-layout-gap);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.onepress-layout-control .choice {
+  position: relative;
+  margin: 0;
+  min-width: 0;
+}
+.onepress-layout-control .choice .input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.onepress-layout-control .choice .label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--onepress-layout-item-min-height, var(--onepress-layout-thumb-min-height));
+  margin: 0;
+  padding: 8px;
+  background: var(--onepress-layout-thumb-bg);
+  border: 1px solid var(--onepress-layout-border);
+  border-radius: var(--onepress-layout-thumb-radius);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  text-align: center;
+  box-sizing: border-box;
+}
+.onepress-layout-control .choice.type-svg .label, .onepress-layout-control .choice.type-image .label {
+  padding: 8px 8px 2px;
+  align-items: end;
+}
+.onepress-layout-control .choice .input:checked + .label {
+  border-color: var(--onepress-layout-border-active);
+  box-shadow: 0 0 0 1px var(--onepress-layout-border-active);
+  background: var(--onepress-layout-border-active);
+}
+.onepress-layout-control .choice .input:checked + .label .text {
+  color: #fff;
+}
+.onepress-layout-control .choice .input:focus {
+  outline: none;
+}
+.onepress-layout-control .choice .input:focus-visible + .label {
+  border-color: var(--onepress-layout-border-active);
+  box-shadow: 0 0 0 1px var(--onepress-layout-border-active), 0 0 0 3px rgba(34, 113, 177, 0.25);
+}
+.onepress-layout-control .choice .thumb {
+  display: block;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  max-height: calc(var(--onepress-layout-item-min-height, var(--onepress-layout-thumb-min-height)) - 16px);
+  -o-object-fit: contain;
+     object-fit: contain;
+  background: #fff;
+  border-radius: var(--onepress-layout-thumb-radius);
+}
+.onepress-layout-control .choice .svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: #fff;
+  color: #50575e;
+  border-radius: var(--onepress-layout-thumb-radius);
+}
+.onepress-layout-control .choice .svg svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: calc(var(--onepress-layout-item-min-height, var(--onepress-layout-thumb-min-height)) - 16px);
+}
+.onepress-layout-control .choice .text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1d2327;
+  line-height: 1.35;
+  padding: 4px 2px;
+}
+.onepress-layout-control .description.customize-control-description {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
 #customize-theme-controls .customize-pane-child {
   min-height: calc(100dvh - 92px);
 }
@@ -909,7 +1169,7 @@ body .wp-full-overlay {
   font-size: 16px;
 }
 
-.onepress-typo-portal .onepress-customizer-preview-device.setting-group__devices {
+.onepress-typography-settings .onepress-customizer-preview-device.devices {
   flex-shrink: 0;
 }
 
@@ -992,23 +1252,23 @@ body .wp-full-overlay {
   overflow: visible;
 }
 
-.customize-control-onepress_typo .onepress-typo-control > .customize-control-title {
+.customize-control-onepress_typo .onepress-typography-control > .customize-control-title {
   display: block;
   margin-bottom: 6px;
 }
 
-.customize-control-onepress_typo .onepress-typo-control > .customize-control-description {
+.customize-control-onepress_typo .onepress-typography-control > .customize-control-description {
   display: block;
   margin-bottom: 10px;
 }
 
-.customize-control-onepress_typo .onepress-typo-summary-meta {
+.customize-control-onepress_typo .onepress-typography-control .summary-meta {
   display: flex;
   gap: 4px;
   justify-content: space-between;
 }
 
-.customize-control-onepress_typo .onepress-typo-summary-preview {
+.customize-control-onepress_typo .summary-preview {
   font-size: 16px;
   line-height: 1.35;
   color: #3c434a;
@@ -1020,51 +1280,16 @@ body .wp-full-overlay {
   overflow: visible;
 }
 
-.onepress-typo-control {
+.onepress-typography-control {
   position: relative;
   width: 100%;
 }
 
-.onepress-typo-control--open {
+.onepress-typography-control--open {
   z-index: 500050;
 }
 
-.onepress-typo-portal .font-selector-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 3px;
-  width: 100%;
-  margin: 0;
-  padding: 10px 12px;
-  text-align: right;
-  cursor: pointer;
-  border: 1px solid #c3c4c7;
-  border-radius: 4px;
-  background: #fff;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-}
-
-.onepress-typo-portal .font-selector-btn:hover {
-  border-color: #2271b1;
-  color: #1d2327;
-}
-
-.onepress-typo-portal .font-selector-btn__name {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.3;
-  color: #1d2327;
-}
-
-.onepress-typo-portal .font-selector-btn__sample {
-  font-size: 15px;
-  line-height: 1.4;
-  color: #50575e;
-  word-break: break-word;
-}
-
-.onepress-typo-settings-dropdown.onepress-typo-portal {
+.onepress-typography-settings {
   margin-top: 3px;
   width: 100%;
   display: flex;
@@ -1079,12 +1304,39 @@ body .wp-full-overlay {
   right: 0;
   z-index: 100;
 }
-
-.onepress-typo-settings-dropdown.onepress-typo-portal .settings-head {
-  flex-shrink: 0;
+.onepress-typography-settings .font-selector-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: right;
+  cursor: pointer;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
-
-.onepress-typo-portal .settings-head {
+.onepress-typography-settings .font-selector-btn:hover {
+  border-color: #2271b1;
+  color: #1d2327;
+}
+.onepress-typography-settings .font-selector-btn__name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1d2327;
+}
+.onepress-typography-settings .font-selector-btn__sample {
+  font-size: 15px;
+  line-height: 1.4;
+  color: #50575e;
+  word-break: break-word;
+}
+.onepress-typography-settings .settings-head {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1092,8 +1344,7 @@ body .wp-full-overlay {
   padding: 10px 12px;
   border-bottom: 1px solid #e6e7ea;
 }
-
-.onepress-typo-portal .settings-body {
+.onepress-typography-settings .settings-body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 8px;
@@ -1103,23 +1354,21 @@ body .wp-full-overlay {
   flex: 1;
   min-height: 0;
 }
-
-.onepress-typo-portal .setting-group {
+.onepress-typography-settings .setting-group {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
-.onepress-typo-portal .setting-group .customize-control-title {
+.onepress-typography-settings .setting-group .customize-control-title {
   margin-bottom: 0;
 }
-
-.onepress-typo-portal .font-family-row {
+.onepress-typography-settings .font-family-row {
   display: flex;
   align-items: stretch;
   gap: 6px;
   position: relative;
 }
-.onepress-typo-portal .font-family-row .font-family-clear {
+.onepress-typography-settings .font-family-row .font-family-clear {
   position: absolute;
   top: 17px;
   transform: translateY(-50%);
@@ -1136,47 +1385,41 @@ body .wp-full-overlay {
   cursor: pointer;
   line-height: 1;
 }
-.onepress-typo-portal .font-family-row .dashicons {
+.onepress-typography-settings .font-family-row .dashicons {
   font-size: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
-
-.onepress-typo-portal .font-family-clear .onepress-typo-portal .font-family-clear:hover {
+.onepress-typography-settings .font-family-clear:hover {
   border-color: #d63638;
   color: #d63638;
   background: #fcf0f1;
 }
-
-.onepress-typo-portal .font-family-clear:focus {
+.onepress-typography-settings .font-family-clear:focus {
   outline: 2px solid transparent;
   box-shadow: 0 0 0 1px #2271b1;
 }
-
-.onepress-typo-portal .setting-group--unit .setting-group__head {
+.onepress-typography-settings .setting-group--unit .setting-group__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   flex-wrap: wrap;
 }
-
-.onepress-typo-portal .unit-row {
+.onepress-typography-settings .unit-row {
   display: flex;
   gap: 4px;
   align-items: center;
   flex-direction: row;
 }
-
-.onepress-typo-portal .unit-row--has-leading-icon {
+.onepress-typography-settings .unit-row--has-leading-icon {
   position: relative;
 }
-.onepress-typo-portal .unit-row--has-leading-icon .opc-input {
+.onepress-typography-settings .unit-row--has-leading-icon .opc-input {
   padding-right: 30px;
 }
-
-.onepress-typo-portal .unit-row__icon {
+.onepress-typography-settings .unit-row__icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1188,54 +1431,44 @@ body .wp-full-overlay {
   right: 5px;
   transform: translateY(-50%);
 }
-
-.onepress-typo-portal .unit-row__icon svg {
+.onepress-typography-settings .unit-row__icon svg {
   display: block;
 }
-
-.onepress-typo-portal .unit-row__unit-wrap {
+.onepress-typography-settings .unit-row__unit-wrap {
   position: relative;
   flex: 0 0 45px;
   width: 45px;
 }
-
-.onepress-typo-portal .choice-row {
+.onepress-typography-settings .choice-row {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
 }
-
-.onepress-typo-portal .choice-icon {
+.onepress-typography-settings .choice-icon {
   font-size: 11px;
   line-height: 1;
   font-weight: 600;
 }
-
-.onepress-typo-portal .choice-icon.overline {
+.onepress-typography-settings .choice-icon.overline {
   text-decoration: overline;
 }
-
-.onepress-typo-portal .choice-icon.underline {
+.onepress-typography-settings .choice-icon.underline {
   text-decoration: underline;
 }
-
-.onepress-typo-portal .choice-icon.line-through {
+.onepress-typography-settings .choice-icon.line-through {
   text-decoration: line-through;
 }
-
-.onepress-typo-portal .choice-icon.uppercase {
+.onepress-typography-settings .choice-icon.uppercase {
   text-transform: uppercase;
 }
-
-.onepress-typo-portal .choice-icon.lowercase {
+.onepress-typography-settings .choice-icon.lowercase {
   text-transform: lowercase;
 }
-
-.onepress-typo-portal .choice-icon.capitalize {
+.onepress-typography-settings .choice-icon.capitalize {
   text-transform: capitalize;
 }
-
-.onepress-typo-portal .fontpicker-panel {
+.onepress-typography-settings .onepress-font-picker-dropdown,
+.onepress-typography-settings .onepress-font-picker-modal {
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -1243,21 +1476,8 @@ body .wp-full-overlay {
   border: 1px solid #bcbcbe;
   overflow: hidden;
 }
-
-.onepress-typo-portal .fontpicker-panel--dropdown {
-  position: relative;
-  width: 100%;
-  margin-top: 6px;
-  max-height: min(44vh, 400px);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  z-index: 2;
-}
-
-.onepress-typo-portal .fontpicker-panel--dropdown .fontpicker-scroll {
-  max-height: min(28vh, 220px);
-}
-
-.onepress-typo-portal .fontpicker-head {
+.onepress-typography-settings .onepress-font-picker-dropdown .head,
+.onepress-typography-settings .onepress-font-picker-modal .head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1266,23 +1486,23 @@ body .wp-full-overlay {
   border-bottom: 1px solid #dcdcde;
   flex-shrink: 0;
 }
-
-.onepress-typo-portal .fontpicker-title {
+.onepress-typography-settings .onepress-font-picker-dropdown .title,
+.onepress-typography-settings .onepress-font-picker-modal .title {
   font-size: 14px;
   font-weight: 600;
 }
-
-.onepress-typo-portal .fontpicker-close {
+.onepress-typography-settings .onepress-font-picker-dropdown .close,
+.onepress-typography-settings .onepress-font-picker-modal .close {
   flex-shrink: 0;
 }
-
-.onepress-typo-portal .fontpicker-search-wrap {
+.onepress-typography-settings .onepress-font-picker-dropdown .search-wrap,
+.onepress-typography-settings .onepress-font-picker-modal .search-wrap {
   padding: 10px 14px 8px;
   flex-shrink: 0;
   border-bottom: 1px solid #f0f0f1;
 }
-
-.onepress-typo-portal .fontpicker-search {
+.onepress-typography-settings .onepress-font-picker-dropdown .search,
+.onepress-typography-settings .onepress-font-picker-modal .search {
   box-sizing: border-box;
   width: 100%;
   margin: 0;
@@ -1293,8 +1513,8 @@ body .wp-full-overlay {
   border-radius: 4px;
   box-shadow: 0 0 0 transparent;
 }
-
-.onepress-typo-portal .fontpicker-categories {
+.onepress-typography-settings .onepress-font-picker-dropdown .categories,
+.onepress-typography-settings .onepress-font-picker-modal .categories {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
@@ -1304,8 +1524,8 @@ body .wp-full-overlay {
   max-height: 120px;
   overflow-y: auto;
 }
-
-.onepress-typo-portal .fontpicker-cat {
+.onepress-typography-settings .onepress-font-picker-dropdown .cat,
+.onepress-typography-settings .onepress-font-picker-modal .cat {
   margin: 0;
   padding: 4px 10px;
   font-size: 12px;
@@ -1316,26 +1536,26 @@ body .wp-full-overlay {
   border-radius: 12px;
   cursor: pointer;
 }
-
-.onepress-typo-portal .fontpicker-cat:hover {
+.onepress-typography-settings .onepress-font-picker-dropdown .cat:hover,
+.onepress-typography-settings .onepress-font-picker-modal .cat:hover {
   color: #1d2327;
   border-color: #8c8f94;
 }
-
-.onepress-typo-portal .fontpicker-cat.is-active {
+.onepress-typography-settings .onepress-font-picker-dropdown .cat.is-active,
+.onepress-typography-settings .onepress-font-picker-modal .cat.is-active {
   color: #fff;
   background: #2271b1;
   border-color: #2271b1;
 }
-
-.onepress-typo-portal .fontpicker-scroll {
+.onepress-typography-settings .onepress-font-picker-dropdown .scroll,
+.onepress-typography-settings .onepress-font-picker-modal .scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   padding: 0px 0 12px;
 }
-
-.onepress-typo-portal .fontpicker-group-label {
+.onepress-typography-settings .onepress-font-picker-dropdown .group-label,
+.onepress-typography-settings .onepress-font-picker-modal .group-label {
   padding: 8px 14px 4px;
   font-size: 11px;
   font-weight: 600;
@@ -1343,8 +1563,8 @@ body .wp-full-overlay {
   letter-spacing: 0.04em;
   color: #646970;
 }
-
-.onepress-typo-portal .fontpicker-row {
+.onepress-typography-settings .onepress-font-picker-dropdown .row,
+.onepress-typography-settings .onepress-font-picker-modal .row {
   display: block;
   gap: 2px;
   width: 100%;
@@ -1357,22 +1577,33 @@ body .wp-full-overlay {
   font-size: 16px;
   font-size: 14px;
 }
-
-.onepress-typo-portal .fontpicker-row:hover {
+.onepress-typography-settings .onepress-font-picker-dropdown .row:hover,
+.onepress-typography-settings .onepress-font-picker-modal .row:hover {
   background: #439de6;
   color: #fff;
 }
-
-.onepress-typo-portal .fontpicker-row.is-selected {
+.onepress-typography-settings .onepress-font-picker-dropdown .row.is-selected,
+.onepress-typography-settings .onepress-font-picker-modal .row.is-selected {
   background: var(--wp-primary-btn-bg);
   color: #fff;
 }
-
-.onepress-typo-portal .fontpicker-empty {
+.onepress-typography-settings .onepress-font-picker-dropdown .empty,
+.onepress-typography-settings .onepress-font-picker-modal .empty {
   margin: 16px 14px 24px;
   font-size: 13px;
   color: #646970;
   text-align: center;
+}
+.onepress-typography-settings .onepress-font-picker-dropdown {
+  position: relative;
+  width: 100%;
+  margin-top: 6px;
+  max-height: min(44vh, 400px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  z-index: 2;
+}
+.onepress-typography-settings .onepress-font-picker-dropdown .scroll {
+  max-height: min(28vh, 220px);
 }
 
 /* Spacing control (padding / margin) — Customizer */
@@ -1386,43 +1617,38 @@ body .wp-full-overlay {
   overflow: visible;
 }
 
-.onepress-spacing-wrap .onepress-spacing-control-root > .customize-control-title {
+.onepress-spacing-wrap .onepress-spacing-control > .customize-control-title {
   display: block;
   margin-bottom: 6px;
 }
-.onepress-spacing-wrap .onepress-spacing-control-root > .customize-control-description {
+.onepress-spacing-wrap .onepress-spacing-control > .customize-control-description {
   display: block;
   margin-bottom: 10px;
 }
 
-.onepress-spacing-control-root {
+.onepress-spacing-control {
   position: relative;
   width: 100%;
 }
-
-.onepress-spacing-app__unit {
+.onepress-spacing-control .unit {
   flex: 0 0 auto;
 }
-
-.onepress-spacing-app__sides {
+.onepress-spacing-control .sides {
   display: flex;
   align-items: flex-end;
   gap: 8px;
 }
-
-.onepress-spacing-app__sides .inputs input {
+.onepress-spacing-control .sides .inputs input {
   border-radius: 0px;
   padding-left: 0px;
 }
-
-.onepress-spacing-app__sides .inputs {
+.onepress-spacing-control .sides .inputs {
   display: flex;
   flex-grow: 1;
   gap: 0;
 }
-
-.spacing-side .input,
-.spacing-side .link-btn {
+.onepress-spacing-control .spacing-side .input,
+.onepress-spacing-control .spacing-side .link-btn {
   width: 100%;
   box-sizing: border-box;
   border-right: 1px solid var(--wp-input-border);
@@ -1433,18 +1659,18 @@ body .wp-full-overlay {
   height: 30px;
   min-height: auto;
 }
-.spacing-side .input {
+.onepress-spacing-control .spacing-side .input {
   padding: 0px 4px 0px 0px;
 }
-.spacing-side:first-child .input {
+.onepress-spacing-control .spacing-side:first-child .input {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-.spacing-side:last-child .input {
+.onepress-spacing-control .spacing-side:last-child .input {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-.spacing-side .label {
+.onepress-spacing-control .spacing-side .label {
   display: block;
   margin-top: 4px;
   font-size: 9px;
@@ -1454,7 +1680,7 @@ body .wp-full-overlay {
   color: #787c82;
   text-align: center;
 }
-.spacing-side .link-btn {
+.onepress-spacing-control .spacing-side .link-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1466,25 +1692,24 @@ body .wp-full-overlay {
   border-bottom-left-radius: 3px;
   border-left: 1px solid var(--wp-input-border);
 }
-
-.link-wrap {
+.onepress-spacing-control .link-wrap {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   padding-bottom: 22px;
   height: 30px;
 }
-.link-wrap:hover, .link-wrap:focus {
+.onepress-spacing-control .link-wrap:hover, .onepress-spacing-control .link-wrap:focus {
   border-color: #2271b1;
   color: #2271b1;
   outline: none;
 }
-.link-wrap .is-linked {
+.onepress-spacing-control .link-wrap .is-linked {
   background: #f0f6fc;
   border-color: #2271b1;
   color: #2271b1;
 }
-.link-wrap .dashicons {
+.onepress-spacing-control .link-wrap .dashicons {
   width: 18px;
   height: 18px;
   font-size: 18px;
@@ -1501,54 +1726,49 @@ body .wp-full-overlay {
   overflow: visible;
 }
 
-.onepress-slider-wrap .onepress-slider-control-root > .customize-control-title {
+.onepress-slider-wrap .onepress-slider-control > .customize-control-title {
   display: block;
   margin-bottom: 6px;
 }
-.onepress-slider-wrap .onepress-slider-control-root > .customize-control-description {
+.onepress-slider-wrap .onepress-slider-control > .customize-control-description {
   display: block;
   margin-bottom: 10px;
 }
 
-.onepress-slider-control-root {
+.onepress-slider-control {
   position: relative;
   width: 100%;
 }
-
-.onepress-slider-control-root__head {
+.onepress-slider-control .head {
   margin-bottom: 8px;
 }
-
-.onepress-slider-app__unit {
+.onepress-slider-control .unit {
   flex: 0 0 auto;
 }
-
-.onepress-slider-app {
+.onepress-slider-control .row {
   margin-top: 4px;
-}
-
-.onepress-slider-app__row {
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
 }
-
-.onepress-slider-app__range {
+.onepress-slider-control .range {
   flex: 1 1 auto;
   min-width: 0;
-  height: 24px;
+  height: 25px;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
   background: transparent;
-  accent-color: #2271b1;
+  /* WebKit/Chromium: filled segment via --onepress-slider-fill-pct (set in JSX) */
+  --onepress-slider-fill-pct: 0%;
+  /* Firefox: filled portion to the thumb */
 }
-.onepress-slider-app__range::-webkit-slider-thumb {
+.onepress-slider-control .range::-webkit-slider-thumb {
   -webkit-appearance: none;
           appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   margin-top: -6px;
   border-radius: 50%;
   background: #2271b1;
@@ -1556,27 +1776,31 @@ body .wp-full-overlay {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
   cursor: pointer;
 }
-.onepress-slider-app__range::-webkit-slider-runnable-track {
-  height: 4px;
+.onepress-slider-control .range::-webkit-slider-runnable-track {
+  height: 5px;
   border-radius: 2px;
-  background: #dcdcde;
+  background: linear-gradient(to left, #2271b1 0, #2271b1 var(--onepress-slider-fill-pct, 0%), #dcdcde var(--onepress-slider-fill-pct, 0%), #dcdcde 100%);
 }
-.onepress-slider-app__range::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
+.onepress-slider-control .range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #2271b1;
   border: 2px solid #fff;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
   cursor: pointer;
 }
-.onepress-slider-app__range::-moz-range-track {
+.onepress-slider-control .range::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: #2271b1;
+}
+.onepress-slider-control .range::-moz-range-track {
   height: 4px;
   border-radius: 2px;
   background: #dcdcde;
 }
-
-.onepress-slider-app__number {
+.onepress-slider-control .number {
   flex: 0 0 64px;
   width: 64px;
   min-width: 64px;
@@ -1756,6 +1980,86 @@ body .wp-full-overlay {
   margin-bottom: 12px;
   border-radius: 4px;
   border: 1px solid #dcdcde;
+}
+
+/* Dynamic sections — “new block” row (Menus-style); hide empty accordion body */
+#accordion-section-onepress_dynamic_add .onepress-dynamic-new__content {
+  display: none !important;
+}
+
+#accordion-section-onepress_dynamic_add .onepress-dynamic-new-heading {
+  margin: 0;
+  padding: 0;
+}
+
+#accordion-section-onepress_dynamic_add .customize-add-dynamic-block-button {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Drag-sort block sections in panel */
+#sub-accordion-panel-onepress_dynamic > li.accordion-section {
+  position: relative;
+}
+
+#sub-accordion-panel-onepress_dynamic .onepress-dynamic-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 100%;
+  min-height: 28px;
+  margin: 0 0 0 4px;
+  cursor: grab;
+  color: #787c82;
+  font-size: 14px;
+  line-height: 1;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+#sub-accordion-panel-onepress_dynamic .onepress-dynamic-drag-handle::before {
+  content: "⋮⋮";
+  letter-spacing: -2px;
+}
+
+#sub-accordion-panel-onepress_dynamic .onepress-dynamic-drag-handle:active {
+  cursor: grabbing;
+}
+
+#sub-accordion-panel-onepress_dynamic .accordion-section-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+#sub-accordion-panel-onepress_dynamic .accordion-section-title > button {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: right;
+}
+
+#sub-accordion-panel-onepress_dynamic li.onepress-dynamic-sortable-placeholder {
+  min-height: 44px;
+  margin-bottom: 0;
+  background: #f6f7f7;
+  border: 1px dashed #2271b1;
+  border-radius: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+.control-panel .control-section-onepress_dynamic_new h3.accordion-section-title {
+  padding: 10px 15p 30px !important;
+  background: transparent !important;
+  border: 0px none !important;
+}
+.control-panel .control-section-onepress_dynamic_new h3.accordion-section-title::after {
+  display: none;
 }
 /*!*****************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/@wordpress/scripts/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/frontend/fontawesome-v6/css/all.min.css ***!

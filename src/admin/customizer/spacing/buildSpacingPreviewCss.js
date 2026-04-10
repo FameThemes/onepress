@@ -1,6 +1,6 @@
 /**
  * Spacing CSS for Customizer preview <style> injection.
- * Mirrors inc/spacing/helper.php — onepress_spacing_css + onepress_spacing_css_block.
+ * Mirrors inc/customize-controls/spacing/helper.php — onepress_spacing_css + onepress_spacing_css_block.
  */
 
 const PREFIXES = ['padding', 'margin'];

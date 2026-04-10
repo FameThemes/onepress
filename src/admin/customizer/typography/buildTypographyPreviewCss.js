@@ -1,6 +1,6 @@
 /**
  * Typography CSS string for Customizer preview <style> injection.
- * Mirrors inc/typography/helper.php — onepress_typo_css + onepress_typo_css_block.
+ * Mirrors inc/customize-controls/typography/helper.php — onepress_typo_css + onepress_typo_css_block.
  */
 
 const RESPONSIVE_KEYS = [

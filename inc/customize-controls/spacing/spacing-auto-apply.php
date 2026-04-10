@@ -1,6 +1,6 @@
 <?php
 /**
- * Demo: map spacing theme mod to front-end CSS (see options-typography-example.php).
+ * Map spacing theme mod to front-end CSS (see option-demo-example.php).
  *
  * @package onepress
  */

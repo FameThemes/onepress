@@ -3,6 +3,7 @@
  * Spacing Customizer control (padding / margin, responsive).
  *
  * @package onepress
+ * @see inc/customize-controls/spacing/helper.php
  */
 
 if ( class_exists( 'WP_Customize_Control', false ) && ! class_exists( 'OnePress_Spacing_Customize_Control', false ) ) {

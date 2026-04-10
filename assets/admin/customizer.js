@@ -6141,7 +6141,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /**
  * Build CSS for OnePress background Customizer control.
- * Logic must stay in sync with inc/background/helper.php (onepress_background_build_css).
+ * Logic must stay in sync with inc/customize-controls/background/helper.php (onepress_background_build_css).
  */
 
 /** Default gradient when the user opens the Gradient tab (must match BackgroundLayerEditor UI). */
@@ -6216,7 +6216,7 @@ function createDefaultLayer() {
 
 /**
  * Image tab with no URL: explicit reset so color/gradient from this control (or theme head CSS) do not linger.
- * Keep in sync with onepress_background_image_tab_empty_declarations() in inc/background/helper.php.
+ * Keep in sync with onepress_background_image_tab_empty_declarations() in inc/customize-controls/background/helper.php.
  *
  * @returns {Record<string, string>}
  */
@@ -6565,6 +6565,563 @@ function registerRepeatableControl(api, $) {
       }
     }
   });
+}
+
+/***/ }),
+
+/***/ "./src/admin/customizer/dynamic-sections.js":
+/*!**************************************************!*\
+  !*** ./src/admin/customizer/dynamic-sections.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   registerDynamicOptionBlocks: () => (/* binding */ registerDynamicOptionBlocks)
+/* harmony export */ });
+/**
+ * Dynamic Customizer “option blocks” — pairs with {@see onepress_register_dynamic_option_blocks()} (PHP).
+ *
+ * @param {import('wp-customize').Customize} api  wp.customize
+ * @param {Record<string, unknown>}          userCfg Same shape as ONEPRESS_DYNAMIC_BLOCKS[i]
+ */
+function registerDynamicOptionBlocks(api, userCfg) {
+  const $ = jQuery;
+  const cfg = normalizeCfg(userCfg);
+  const panelId = cfg.panelId;
+  const orderSettingId = cfg.orderSettingId;
+  const sectionTypeBlock = cfg.sectionTypeBlock;
+  const sectionTypeNew = cfg.sectionTypeNew;
+  const addSectionId = cfg.addSectionId;
+  const sortableDataKey = 'onepressDynamicSortable_' + panelId;
+  function escapeRe(s) {
+    return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+  function blockSectionId(blockId) {
+    return cfg.blockSectionPrefix + String(blockId);
+  }
+  function blockOptionSettingBase(blockId) {
+    return cfg.blockOptionPrefix + String(blockId);
+  }
+  function collectBlockIdsFromSettings() {
+    const names = cfg.fieldNames;
+    if (!names.length) {
+      return [];
+    }
+    const fieldPat = names.map(escapeRe).join('|');
+    const re = new RegExp('^' + escapeRe(cfg.blockOptionPrefix) + '(\\d+)_(' + fieldPat + ')$');
+    const ids = {};
+    api.each(function (setting, id) {
+      const m = id.match(re);
+      if (!m) {
+        return;
+      }
+      const bid = m[1];
+      const field = m[2];
+      if (!ids[bid]) {
+        ids[bid] = {};
+      }
+      ids[bid][field] = true;
+    });
+    const req = cfg.requiredFields;
+    return Object.keys(ids).filter(function (bid) {
+      return req.every(function (f) {
+        return ids[bid][f];
+      });
+    });
+  }
+  function parseOrderSetting() {
+    let order = [];
+    try {
+      const raw = api(orderSettingId) && api(orderSettingId).get ? api(orderSettingId).get() : '[]';
+      order = JSON.parse(raw || '[]');
+    } catch (e) {
+      order = [];
+    }
+    if (!Array.isArray(order)) {
+      order = [];
+    }
+    return order.map(function (x) {
+      return String(x);
+    }).filter(function (id) {
+      return /^\d+$/.test(id);
+    });
+  }
+  function getOrderedBlockIds() {
+    const order = parseOrderSetting();
+    const fromSettings = collectBlockIdsFromSettings();
+    if (order.length) {
+      const set = {};
+      fromSettings.forEach(function (id) {
+        set[id] = true;
+      });
+      const merged = order.filter(function (id) {
+        return set[id];
+      });
+      fromSettings.forEach(function (id) {
+        if (merged.indexOf(id) === -1) {
+          merged.push(id);
+        }
+      });
+      return merged;
+    }
+    return fromSettings.sort(function (a, b) {
+      return parseInt(a, 10) - parseInt(b, 10);
+    });
+  }
+  function appendIdToOrder(blockId) {
+    const sid = String(blockId);
+    const order = parseOrderSetting();
+    if (order.indexOf(sid) === -1) {
+      order.push(sid);
+    }
+    api(orderSettingId).set(JSON.stringify(order));
+  }
+  function focusNewlyAddedSection(sectionInst, blockId) {
+    const titleControlId = blockOptionSettingBase(blockId) + '_title';
+    const deferFn = window._ && typeof window._.defer === 'function' ? window._.defer.bind(window._) : function (fn) {
+      setTimeout(fn, 0);
+    };
+    function afterPaint(fn) {
+      if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(fn);
+        });
+      } else {
+        setTimeout(fn, 32);
+      }
+    }
+    function focusTitleControl() {
+      api.control(titleControlId, function (control) {
+        control.deferred.embedded.done(function () {
+          afterPaint(function () {
+            if (control.focus && typeof control.focus === 'function') {
+              control.focus();
+              return;
+            }
+            const $in = control.container.find('input, textarea').filter(':visible').first();
+            if ($in.length) {
+              $in.trigger('focus');
+            }
+          });
+        });
+      });
+    }
+    api.panel(panelId, function (panel) {
+      function afterPanelReady() {
+        sectionInst.deferred.embedded.done(function () {
+          if (typeof api.reflowPaneContents === 'function') {
+            api.reflowPaneContents();
+          }
+          deferFn(function () {
+            sectionInst.expand({
+              completeCallback: function () {
+                deferFn(focusTitleControl);
+              }
+            });
+          });
+        });
+      }
+      if (panel.expanded && !panel.expanded()) {
+        panel.expand({
+          completeCallback: afterPanelReady
+        });
+      } else {
+        afterPanelReady();
+      }
+    });
+  }
+  function syncSectionTitle(section, bid, titleSid) {
+    api(titleSid, function (setting) {
+      function refresh() {
+        const v = String(setting.get() || '').trim();
+        const t = v || 'Untitled';
+        section.params.title = t;
+        const $headBtn = section.headContainer.find('.accordion-section-title .accordion-trigger, .accordion-section-title button').first();
+        if ($headBtn.length) {
+          $headBtn.text(t);
+        }
+        const $pane = $('#sub-accordion-section-' + section.id);
+        let $h3 = $pane.find('.customize-section-title h3').first();
+        if (!$h3.length) {
+          $h3 = section.contentContainer.find('.customize-section-title h3').first();
+        }
+        if ($h3.length) {
+          const $action = $h3.children('.customize-action').detach();
+          $h3.empty();
+          if ($action.length) {
+            $h3.append($action);
+          }
+          $h3.append(document.createTextNode(t));
+        }
+      }
+      setting.bind(refresh);
+      refresh();
+    });
+  }
+  function installDragHandle(section) {
+    const h3 = section.headContainer.find('.accordion-section-title').first();
+    if (!h3.length || h3.find('.onepress-dynamic-drag-handle').length) {
+      return;
+    }
+    const $grip = $('<span class="onepress-dynamic-drag-handle" aria-hidden="true"></span>');
+    $grip.attr('title', 'Drag to reorder');
+    h3.prepend($grip);
+  }
+  function bindExtraNoteActive(showSid, noteSid) {
+    api.control(noteSid, function (noteControl) {
+      const showSetting = api(showSid);
+      function refresh() {
+        const v = showSetting.get();
+        const on = v === 1 || v === '1' || v === true || String(v).toLowerCase() === 'true';
+        noteControl.active.set(!!on);
+      }
+      showSetting.bind(refresh);
+      refresh();
+    });
+  }
+  function onPanelSortUpdate() {
+    const $root = $('#sub-accordion-panel-' + panelId);
+    if (!$root.length) {
+      return;
+    }
+    const ids = [];
+    const blockRe = new RegExp('^accordion-section-(' + escapeRe(cfg.blockSectionPrefix) + '\\d+)$');
+    const addLid = 'accordion-section-' + addSectionId;
+    $root.children('li.accordion-section').each(function () {
+      const lid = this.id || '';
+      if (lid === addLid) {
+        return;
+      }
+      const m = lid.match(blockRe);
+      if (!m) {
+        return;
+      }
+      const full = m[1];
+      const num = full.replace(new RegExp('^' + escapeRe(cfg.blockSectionPrefix)), '');
+      if (/^\d+$/.test(num)) {
+        ids.push(num);
+      }
+    });
+    api(orderSettingId).set(JSON.stringify(ids));
+    ids.forEach(function (bid, i) {
+      const sid = blockSectionId(bid);
+      if (api.section.has(sid)) {
+        api.section(sid).priority.set(10 + i);
+      }
+    });
+    if (typeof api.reflowPaneContents === 'function') {
+      api.reflowPaneContents();
+    }
+  }
+  function initPanelSortable() {
+    const $root = $('#sub-accordion-panel-' + panelId);
+    if (!$root.length) {
+      return;
+    }
+    if ($root.data(sortableDataKey)) {
+      if ($root.hasClass('ui-sortable')) {
+        $root.sortable('refresh');
+      }
+      return;
+    }
+    $root.sortable({
+      items: '> li.accordion-section:not(#accordion-section-' + addSectionId + ')',
+      handle: '.onepress-dynamic-drag-handle',
+      axis: 'y',
+      tolerance: 'pointer',
+      placeholder: 'onepress-dynamic-sortable-placeholder',
+      update: onPanelSortUpdate
+    });
+    $root.data(sortableDataKey, true);
+  }
+  function scheduleInitSortable() {
+    const deferFn = window._ && typeof window._.defer === 'function' ? window._.defer.bind(window._) : function (fn) {
+      setTimeout(fn, 0);
+    };
+    deferFn(initPanelSortable);
+  }
+  function refreshPanelSortable() {
+    const $root = $('#sub-accordion-panel-' + panelId);
+    if ($root.length && $root.data(sortableDataKey) && $root.hasClass('ui-sortable')) {
+      $root.sortable('refresh');
+    }
+  }
+  const DynamicBlockSection = api.Section.extend({
+    ready() {
+      const section = this;
+      section.populateControls();
+      const bid = section.params.block_id;
+      if (bid) {
+        syncSectionTitle(section, bid, blockOptionSettingBase(bid) + '_title');
+      }
+      installDragHandle(section);
+      section.active.validate = function () {
+        const id = section.params.block_id;
+        if (!id) {
+          return false;
+        }
+        const t = blockOptionSettingBase(id) + '_title';
+        return api.has(t) && api(t).get() !== false;
+      };
+    },
+    populateControls() {
+      const section = this;
+      const bid = section.params.block_id;
+      if (!bid) {
+        return;
+      }
+      const base = blockOptionSettingBase(bid);
+      let priority = 1;
+      const bindExtraKey = '_onepressDynamicExtraNoteBound';
+      cfg.fieldNames.forEach(function (field) {
+        const sid = base + '_' + field;
+        if (field === 'title') {
+          if (!api.control.has(sid)) {
+            api.control.add(new api.Control(sid, {
+              type: 'text',
+              label: 'Section title',
+              description: 'Updates the section label in the sidebar; saved as a theme option.',
+              section: section.id,
+              settings: {
+                default: sid
+              },
+              priority: priority
+            }));
+            api.control(sid).active.set(true);
+          }
+          priority += 1;
+          return;
+        }
+        if (field === 'show_extra') {
+          if (!api.control.has(sid)) {
+            api.control.add(new api.Control(sid, {
+              type: 'checkbox',
+              label: 'Show extra note field',
+              description: 'JS: toggles visibility of the next control (same idea as PHP active_callback).',
+              section: section.id,
+              settings: {
+                default: sid
+              },
+              priority: priority
+            }));
+            api.control(sid).active.set(true);
+          }
+          priority += 1;
+          return;
+        }
+        if (field === 'extra_note') {
+          if (!api.control.has(sid)) {
+            api.control.add(new api.Control(sid, {
+              type: 'text',
+              label: 'Extra note',
+              description: 'Visible when “Show extra note field” is checked.',
+              section: section.id,
+              settings: {
+                default: sid
+              },
+              priority: priority
+            }));
+            api.control(sid).active.set(false);
+          }
+          priority += 1;
+          return;
+        }
+        if (field === 'slider') {
+          if (api.controlConstructor.onepress_slider && !api.control.has(sid)) {
+            api.control.add(new api.controlConstructor.onepress_slider(sid, {
+              type: 'onepress_slider',
+              label: 'Slider (max-width)',
+              description: 'Theme option: ' + sid,
+              section: section.id,
+              settings: {
+                default: sid
+              },
+              priority: priority,
+              css_selector: '.site-header .site-branding',
+              css_property: 'max-width',
+              slider_min: 40,
+              slider_max: 600,
+              slider_step: 1
+            }));
+            api.control(sid).active.set(true);
+          }
+          priority += 1;
+          return;
+        }
+        if (!api.control.has(sid)) {
+          api.control.add(new api.Control(sid, {
+            type: 'text',
+            label: field,
+            section: section.id,
+            settings: {
+              default: sid
+            },
+            priority: priority
+          }));
+          api.control(sid).active.set(true);
+        }
+        priority += 1;
+      });
+      const showSid = base + '_show_extra';
+      const noteSid = base + '_extra_note';
+      if (!section[bindExtraKey] && api.control.has(noteSid) && api.has(showSid)) {
+        section[bindExtraKey] = true;
+        bindExtraNoteActive(showSid, noteSid);
+      }
+    }
+  });
+  const DynamicNewSection = api.Section.extend({
+    attachEvents() {
+      const section = this;
+      const $title = section.headContainer.find('.accordion-section-title');
+      $title.empty();
+      const $h3 = $('<span class="onepress-dynamic-new-heading"></span>');
+      const $btn = $('<button type="button" class="button button-secondary customize-add-dynamic-block-button" aria-expanded="false"></button>').text(cfg.addSectionTitle);
+      $h3.append($btn);
+      $title.append($h3);
+      $btn.on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = placeholderBlockId();
+        const maxPri = maxBlockPriorityInPanel();
+        const newSection = addDynamicBlockSection(id, {
+          skipCreateSettings: false,
+          priority: maxPri + 1
+        });
+        appendIdToOrder(id);
+        const deferFn = window._ && typeof window._.defer === 'function' ? window._.defer.bind(window._) : function (fn) {
+          setTimeout(fn, 0);
+        };
+        deferFn(function () {
+          if (typeof api.reflowPaneContents === 'function') {
+            api.reflowPaneContents();
+          }
+          refreshPanelSortable();
+          scheduleInitSortable();
+        });
+        focusNewlyAddedSection(newSection, id);
+      });
+      section.contentContainer.addClass('onepress-dynamic-new__content');
+      api.Section.prototype.attachEvents.apply(section, arguments);
+    },
+    isContextuallyActive() {
+      return true;
+    }
+  });
+  api.sectionConstructor[sectionTypeBlock] = DynamicBlockSection;
+  api.sectionConstructor[sectionTypeNew] = DynamicNewSection;
+  function placeholderBlockId() {
+    return Math.floor(Math.random() * 800000000) + 100000000;
+  }
+  function maxBlockPriorityInPanel() {
+    let max = 9;
+    api.section.each(function (s) {
+      if (s.params.panel !== panelId) {
+        return;
+      }
+      if (s.params.type !== sectionTypeBlock) {
+        return;
+      }
+      const p = s.priority.get();
+      if (p > max) {
+        max = p;
+      }
+    });
+    return max;
+  }
+  function addDynamicBlockSection(blockId, options) {
+    const opts = options || {};
+    const skipCreate = opts.skipCreateSettings === true;
+    const sectionId = blockSectionId(blockId);
+    if (api.section.has(sectionId)) {
+      return api.section(sectionId);
+    }
+    if (!skipCreate) {
+      cfg.fieldNames.forEach(function (field) {
+        const sid = blockOptionSettingBase(blockId) + '_' + field;
+        const def = Object.prototype.hasOwnProperty.call(cfg.fieldDefaults, field) ? cfg.fieldDefaults[field] : '';
+        if (!api.has(sid)) {
+          api.create(sid, sid, def, {
+            transport: 'refresh',
+            previewer: api.previewer
+          });
+        }
+      });
+    }
+    const titleSid = blockOptionSettingBase(blockId) + '_title';
+    const title = api(titleSid) && api(titleSid).get && String(api(titleSid).get()) || '';
+    const pri = typeof opts.priority === 'number' ? opts.priority : maxBlockPriorityInPanel() + 1;
+    const section = new DynamicBlockSection(sectionId, {
+      type: sectionTypeBlock,
+      panel: panelId,
+      title: title.trim() ? title : 'Untitled',
+      priority: pri,
+      block_id: String(blockId),
+      customizeAction: cfg.customizeAction
+    });
+    api.section.add(section);
+    return section;
+  }
+  api.bind('ready', function () {
+    const ordered = getOrderedBlockIds();
+    ordered.forEach(function (bid, i) {
+      addDynamicBlockSection(bid, {
+        skipCreateSettings: true,
+        priority: 10 + i
+      });
+    });
+    api.section(addSectionId, function (addSection) {
+      addSection.isContextuallyActive = function () {
+        return true;
+      };
+      addSection.active.set(true);
+    });
+    api.panel(panelId, function (panel) {
+      panel.active.set(true);
+      panel.expanded.bind(function (ex) {
+        if (ex) {
+          scheduleInitSortable();
+        }
+      });
+      if (panel.expanded && panel.expanded()) {
+        scheduleInitSortable();
+      }
+    });
+  });
+}
+function normalizeCfg(c) {
+  if (!c || typeof c !== 'object') {
+    return {
+      panelId: '',
+      orderSettingId: '',
+      blockSectionPrefix: '',
+      blockOptionPrefix: '',
+      sectionTypeBlock: '',
+      sectionTypeNew: '',
+      addSectionId: '',
+      addSectionTitle: 'Create new section',
+      customizeAction: '',
+      fieldNames: [],
+      requiredFields: ['title', 'slider'],
+      fieldDefaults: {}
+    };
+  }
+  return {
+    panelId: String(c.panelId || ''),
+    orderSettingId: String(c.orderSettingId || ''),
+    blockSectionPrefix: String(c.blockSectionPrefix || ''),
+    blockOptionPrefix: String(c.blockOptionPrefix || ''),
+    sectionTypeBlock: String(c.sectionTypeBlock || ''),
+    sectionTypeNew: String(c.sectionTypeNew || ''),
+    addSectionId: String(c.addSectionId || ''),
+    addSectionTitle: String(c.addSectionTitle != null && c.addSectionTitle !== '' ? c.addSectionTitle : 'Create new section'),
+    customizeAction: String(c.customizeAction || ''),
+    fieldNames: Array.isArray(c.fieldNames) ? c.fieldNames.map(String) : [],
+    requiredFields: Array.isArray(c.requiredFields) ? c.requiredFields.map(String) : ['title', 'slider'],
+    fieldDefaults: c.fieldDefaults && typeof c.fieldDefaults === 'object' ? c.fieldDefaults : {}
+  };
 }
 
 /***/ }),
@@ -9210,6 +9767,13 @@ function SliderControlApp({
     }
     return Math.min(sliderMax, Math.max(sliderMin, n));
   }, [currentValue, sliderMin, sliderMax]);
+  const rangeFillPct = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useMemo)(() => {
+    const span = sliderMax - sliderMin;
+    if (span <= 0) {
+      return 0;
+    }
+    return (rangeDisplayValue - sliderMin) / span * 100;
+  }, [rangeDisplayValue, sliderMin, sliderMax]);
   const setValueForDevice = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(nextRaw => {
     const clamped = clampNumeric(nextRaw);
     patch({
@@ -9232,9 +9796,9 @@ function SliderControlApp({
   }, [control]);
   const valueInputId = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useMemo)(() => `onepress-slider-num-${control.id || 'slider'}`.replace(/[^a-zA-Z0-9_-]/g, '-'), [control.id]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-slider-control-root"
+    className: "onepress-slider-control"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-slider-control-root__head flex justify-between items-center w-full"
+    className: "head flex justify-between items-center w-full"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex items-center gap-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -9245,8 +9809,8 @@ function SliderControlApp({
     devices: (0,_CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_3__.getCustomizerPreviewDeviceDefinitions)(),
     activeDevice: previewDevice,
     onSelectDevice: selectPreviewDevice,
-    groupClassName: "onepress-spacing-app__devices",
-    buttonClassName: "onepress-spacing-app__device-btn"
+    groupClassName: "devices",
+    buttonClassName: "device-btn"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex items-center gap-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
@@ -9259,7 +9823,7 @@ function SliderControlApp({
     className: "dashicons dashicons-image-rotate",
     "aria-hidden": true
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-slider-app__unit"
+    className: "unit"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CustomizerUnitSelectPopover_jsx__WEBPACK_IMPORTED_MODULE_4__.CustomizerUnitSelectPopover, {
     key: previewDevice,
     units: SIZE_UNITS,
@@ -9269,18 +9833,14 @@ function SliderControlApp({
     }),
     placement: "bottom-end",
     triggerClassName: "toplv opc-input select unit-popover-trigger"
-  })))), controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "description customize-control-description",
-    dangerouslySetInnerHTML: {
-      __html: controlDescription
-    }
-  }) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-slider-app"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-slider-app__row"
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "row"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "range",
-    className: "onepress-slider-app__range",
+    className: "range",
+    style: {
+      '--onepress-slider-fill-pct': `${rangeFillPct}%`
+    },
     min: sliderMin,
     max: sliderMax,
     step: sliderStep,
@@ -9291,7 +9851,7 @@ function SliderControlApp({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     id: valueInputId,
     type: "number",
-    className: "opc-input onepress-slider-app__number",
+    className: "opc-input number",
     min: sliderMin,
     max: sliderMax,
     step: sliderStep,
@@ -9308,7 +9868,12 @@ function SliderControlApp({
       }
       setValueForDevice(v);
     }
-  }))));
+  })), controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "description customize-control-description",
+    dangerouslySetInnerHTML: {
+      __html: controlDescription
+    }
+  }) : null);
 }
 
 /***/ }),
@@ -9668,7 +10233,7 @@ function SpacingControlApp({
     left: labels.left
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-spacing-control-root"
+    className: "onepress-spacing-control"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between items-center w-full"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -9683,8 +10248,8 @@ function SpacingControlApp({
     devices: (0,_CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_3__.getCustomizerPreviewDeviceDefinitions)(),
     activeDevice: previewDevice,
     onSelectDevice: selectPreviewDevice,
-    groupClassName: "onepress-spacing-app__devices",
-    buttonClassName: "onepress-spacing-app__device-btn"
+    groupClassName: "devices",
+    buttonClassName: "device-btn"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between items-center gap-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
@@ -9697,7 +10262,7 @@ function SpacingControlApp({
     className: "dashicons dashicons-image-rotate",
     "aria-hidden": true
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-spacing-app__unit"
+    className: "unit"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CustomizerUnitSelectPopover_jsx__WEBPACK_IMPORTED_MODULE_4__.CustomizerUnitSelectPopover, {
     key: previewDevice,
     units: SIZE_UNITS,
@@ -9713,9 +10278,7 @@ function SpacingControlApp({
       __html: controlDescription
     }
   }) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-spacing-app"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-spacing-app__sides"
+    className: "sides"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "inputs"
   }, SIDE_KEYS.map(side => {
@@ -9745,7 +10308,7 @@ function SpacingControlApp({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: 'dashicons ' + (linked ? 'dashicons-admin-links' : 'dashicons-editor-unlink'),
     "aria-hidden": true
-  })))))));
+  }))))));
 }
 
 /***/ }),
@@ -9966,10 +10529,10 @@ function FontPickerRow({
   const stack = fontMeta && fontMeta.font_type === 'default' ? `"${name}", sans-serif` : `"${name}", sans-serif`;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     ref: rowRef,
-    className: 'fontpicker-row' + (isSelected ? ' is-selected' : ''),
+    className: 'row' + (isSelected ? ' is-selected' : ''),
     onClick: () => onPick(fontId)
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "fontpicker-row__sample",
+    className: "sample",
     style: {
       fontFamily: stack
     }
@@ -10077,7 +10640,7 @@ function FontPickerPanel({
   if (!open) {
     return null;
   }
-  const panelClass = 'fontpicker-panel' + (variant === 'dropdown' ? ' fontpicker-panel--dropdown' : ' fontpicker-modal');
+  const panelClass = variant === 'dropdown' ? 'onepress-font-picker-dropdown' : 'onepress-font-picker-modal';
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: panelClass,
     role: "dialog",
@@ -10085,7 +10648,7 @@ function FontPickerPanel({
     "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Font selector', 'onepress'),
     onMouseDown: e => e.stopPropagation()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "fontpicker-search-wrap"
+    className: "search-wrap"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "screen-reader-text",
     htmlFor: `onepress-typo-font-search-${controlId}`
@@ -10093,7 +10656,7 @@ function FontPickerPanel({
     ref: searchRef,
     id: `onepress-typo-font-search-${controlId}`,
     type: "search",
-    className: "fontpicker-search",
+    className: "search",
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Search fonts…', 'onepress'),
     value: searchQuery,
     onChange: e => setSearchQuery(e.target.value),
@@ -10101,19 +10664,19 @@ function FontPickerPanel({
     autoCorrect: "off",
     spellCheck: "false"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "fontpicker-scroll",
+    className: "scroll",
     ref: setScrollRoot
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: 'fontpicker-row fontpicker-row--default' + (!currentFontId ? ' is-selected' : ''),
+    className: 'row row-default' + (!currentFontId ? ' is-selected' : ''),
     onClick: () => onSelectFont('')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "fontpicker-row__name"
+    className: "row-name"
   }, defaultLabel)), filteredGroups.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "fontpicker-empty",
+    className: "empty",
     role: "status"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('No fonts found.', 'onepress')) : filteredGroups.map(g => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: g.type,
-    className: "fontpicker-group"
+    className: "group"
   }, g.fonts.map(f => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(FontPickerRow, {
     key: f.id,
     controlId: controlId,
@@ -10587,8 +11150,8 @@ function ResponsiveUnitField({
     devices: (0,_CustomizerPreviewDeviceButtons_jsx__WEBPACK_IMPORTED_MODULE_6__.getCustomizerPreviewDeviceDefinitions)(),
     activeDevice: previewDevice,
     onSelectDevice: onSelectDevice,
-    groupClassName: "setting-group__devices",
-    buttonClassName: "setting-group__device-btn"
+    groupClassName: "devices",
+    buttonClassName: "device-btn"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "unit-row__unit-wrap"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CustomizerUnitSelectPopover_jsx__WEBPACK_IMPORTED_MODULE_7__.CustomizerUnitSelectPopover, {
@@ -10911,10 +11474,9 @@ function TypographyControlApp({
   if (fields.text_decoration) {
     summaryPreviewStyle.textDecoration = state.textDecoration || 'none';
   }
-  console.log('state.styleSelect', state);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ref: controlWrapRef,
-    className: 'onepress-typo-control' + (settingsOpen ? ' onepress-typo-control--open' : '')
+    className: 'onepress-typography-control' + (settingsOpen ? ' onepress-typography-control--open' : '')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex items-center w-full gap-1 justify-between"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -10934,7 +11496,7 @@ function TypographyControlApp({
     className: "relative"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     type: "button",
-    className: "onepress-typo-summary-card opc-input select flex items-center w-full",
+    className: `summary-card opc-input select flex items-center w-full ${settingsOpen ? 'active' : ''}`,
     onClick: () => {
       setSettingsOpen(prev => {
         if (prev) {
@@ -10946,20 +11508,20 @@ function TypographyControlApp({
     "aria-expanded": settingsOpen,
     "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Typography options', 'onepress')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "onepress-typo-summary-meta flex justify-between items-center w-full"
+    className: "summary-meta flex justify-between items-center w-full"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "onepress-typo-chip",
+    className: "chip",
     style: {
       fontFamily: selectorStack
     }
   }, selectedFont ? selectedFont.name : labels.option_default), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "flex gap-1"
   }, selectedStyleLabel != labels.option_default && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "onepress-typo-chip"
+    className: "chip"
   }, selectedStyleLabel), "/"), labels.option_default != sizeBadge && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "onepress-typo-chip"
+    className: "chip"
   }, sizeBadge)))), settingsOpen && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-typo-dropdown onepress-typo-settings-dropdown onepress-typo-portal",
+    className: "onepress-typography-settings",
     role: "dialog",
     "aria-modal": "false",
     "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Typography options', 'onepress')
@@ -10973,7 +11535,7 @@ function TypographyControlApp({
   }, labels.family), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-family-row"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "opc-input select font-family-value clickable",
+    className: `opc-input select font-family-value clickable ${fontPickerOpen ? 'active' : ''}`,
     role: "button",
     tabIndex: 0,
     "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Open font selector', 'onepress'),
@@ -11504,12 +12066,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _customizer_icon_picker__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./customizer/icon-picker */ "./src/admin/customizer/icon-picker.js");
 /* harmony import */ var _customizer_jquery_deparam__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./customizer/jquery-deparam */ "./src/admin/customizer/jquery-deparam.js");
 /* harmony import */ var _customizer_modal_editor__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./customizer/modal-editor */ "./src/admin/customizer/modal-editor.js");
-/* harmony import */ var _customizer_plus_section__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./customizer/plus-section */ "./src/admin/customizer/plus-section.js");
-/* harmony import */ var _customizer_wp_editor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./customizer/wp-editor */ "./src/admin/customizer/wp-editor.js");
-/* harmony import */ var _customizer_typography_typography_controls_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./customizer/typography/typography-controls.js */ "./src/admin/customizer/typography/typography-controls.js");
-/* harmony import */ var _customizer_spacing_spacing_controls_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./customizer/spacing/spacing-controls.js */ "./src/admin/customizer/spacing/spacing-controls.js");
-/* harmony import */ var _customizer_slider_slider_controls_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./customizer/slider/slider-controls.js */ "./src/admin/customizer/slider/slider-controls.js");
-/* harmony import */ var _customizer_background_background_controls_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./customizer/background/background-controls.js */ "./src/admin/customizer/background/background-controls.js");
+/* harmony import */ var _customizer_dynamic_sections__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./customizer/dynamic-sections */ "./src/admin/customizer/dynamic-sections.js");
+/* harmony import */ var _customizer_plus_section__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./customizer/plus-section */ "./src/admin/customizer/plus-section.js");
+/* harmony import */ var _customizer_wp_editor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./customizer/wp-editor */ "./src/admin/customizer/wp-editor.js");
+/* harmony import */ var _customizer_typography_typography_controls_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./customizer/typography/typography-controls.js */ "./src/admin/customizer/typography/typography-controls.js");
+/* harmony import */ var _customizer_spacing_spacing_controls_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./customizer/spacing/spacing-controls.js */ "./src/admin/customizer/spacing/spacing-controls.js");
+/* harmony import */ var _customizer_slider_slider_controls_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./customizer/slider/slider-controls.js */ "./src/admin/customizer/slider/slider-controls.js");
+/* harmony import */ var _customizer_background_background_controls_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./customizer/background/background-controls.js */ "./src/admin/customizer/background/background-controls.js");
+
 
 
 
@@ -11527,12 +12091,18 @@ __webpack_require__.r(__webpack_exports__);
 
 const api = wp.customize;
 const $ = jQuery;
-(0,_customizer_plus_section__WEBPACK_IMPORTED_MODULE_9__.registerPlusSection)(api);
+(0,_customizer_plus_section__WEBPACK_IMPORTED_MODULE_10__.registerPlusSection)(api);
+const onepressDynamicBlocks = window.ONEPRESS_DYNAMIC_BLOCKS;
+if (Array.isArray(onepressDynamicBlocks)) {
+  onepressDynamicBlocks.forEach(function (blockCfg) {
+    (0,_customizer_dynamic_sections__WEBPACK_IMPORTED_MODULE_9__.registerDynamicOptionBlocks)(api, blockCfg);
+  });
+}
 (0,_customizer_jquery_deparam__WEBPACK_IMPORTED_MODULE_7__.installDeparam)($);
 (0,_customizer_alpha_color_picker__WEBPACK_IMPORTED_MODULE_2__.installAlphaColorPicker)($);
 (0,_customizer_control_alpha_color__WEBPACK_IMPORTED_MODULE_3__.registerAlphaColorControl)(api, $);
 (0,_customizer_control_repeatable__WEBPACK_IMPORTED_MODULE_5__.registerRepeatableControl)(api, $);
-(0,_customizer_wp_editor__WEBPACK_IMPORTED_MODULE_10__.installWpEditor)($);
+(0,_customizer_wp_editor__WEBPACK_IMPORTED_MODULE_11__.installWpEditor)($);
 (0,_customizer_modal_editor__WEBPACK_IMPORTED_MODULE_8__.initModalEditors)(api, $);
 jQuery(window).ready(function () {
   (0,_customizer_control_bindings__WEBPACK_IMPORTED_MODULE_4__.initControlBindings)($);

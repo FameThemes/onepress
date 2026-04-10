@@ -1,0 +1,43 @@
+---
+description: OnePress SCSS/CSS — Customizer controls (root prefix + inner names), variables, legacy BEM
+globs: "**/*.scss"
+alwaysApply: false
+---
+
+# SCSS / CSS (Customizer & theme admin)
+
+## Customizer controls (preferred for new work)
+
+- **One prefixed root only** per control UI: **`onepress-{feature}-control`** (kebab-case), e.g. `onepress-typo-control`, `onepress-slider-control`.
+- **Inside that root**, child nodes use **short, functional class names** — **no** repeated `onepress-` on every element. Name by role/feature: `.inputs`, `.toolbar`, `.preview`, `.row`, `.font-picker`.
+- **Scope in SCSS** by nesting under the root so short names do not leak globally:
+
+```scss
+.onepress-typo-control {
+  .inputs { /* … */ }
+  .toolbar { /* … */ }
+}
+```
+
+- Effective selector shape: **`.onepress-typo-control .inputs`** (descendant), not `.onepress-typo-control__inputs`.
+- **State** (JS / WP-style): keep **`is-active`**, **`is-selected`**, **`is-open`** on the node that toggles (e.g. `.onepress-typo-control .tab.is-active`).
+- **Custom properties:** still **`--onepress-…`** when needed (e.g. `--onepress-typo-preview-size`).
+
+## Rest of admin / legacy markup
+
+- Some existing controls still use **full BEM** (`__` / `--`) on inner nodes. The layout control uses **root + inner** (e.g. `.onepress-layout-control .label`). Prefer that pattern for **new** controls; refactor old ones only when touching them.
+- Modifiers on the **root** only when needed: e.g. `.onepress-typo-control.is-disabled` or `.onepress-typo-control--compact` if you must style the whole shell.
+
+## General
+
+- Custom theme-owned surfaces use the **`onepress-`** prefix on at least the **control root** (and other top-level blocks where appropriate).
+- Colocate Customizer styles in `src/admin/customizer.scss` or partials under `src/admin/customizer/**`.
+- For **WP admin alignment, CSS variables, and shared Tailwind-like utilities** in `src/admin/`, see **`admin-src-scss.mdc`** (applies to `src/admin/**/*.scss`).
+- After SCSS changes: **`npm run build`** in the theme root.
+- Use **kebab-case**; avoid camelCase in class names.
+
+## Do / don’t (Customizer)
+
+- ✅ `.onepress-typo-control` with inner `.inputs`, `.sidebar`
+- ❌ Bare `.inputs` as a top-level global selector (always nest under `.onepress-{feature}-control` or equivalent scoped root)
+- ❌ Re-prefixing every inner node (`onepress-typo-control__x`) in **new** controls

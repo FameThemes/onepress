@@ -1,0 +1,28 @@
+---
+description: Follow WordPress Coding Standards (PHP, JS, HTML, CSS, accessibility)
+alwaysApply: true
+---
+
+# WordPress Coding Standards (WPCS)
+
+Theme code should align with the official **[WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/)** and linked handbooks:
+
+- **[PHP](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/)** — spacing, naming, Yoda where required, `elseif`, no short tags, etc.
+- **[JavaScript](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/javascript/)** — admin / Customizer bundles in `src/admin/`.
+- **[HTML](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/html/)** — valid markup, semantics, attributes.
+- **[CSS](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/css/)** — together with theme rules in `scss-css.mdc` / `admin-src-scss.mdc`.
+- **[Accessibility](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/accessibility/)** — aim for **WCAG 2.x AA** patterns (labels, focus, contrast, ARIA when needed).
+
+## WordPress security & i18n habits
+
+- **Escape output:** `esc_html()`, `esc_attr()`, `esc_url()`, `wp_kses_post()`, etc., as appropriate.
+- **Sanitize input** in settings and `sanitize_callback` on Customizer settings.
+- **Internationalization:** use `__()`, `_e()`, `esc_html__()`, … with the theme **text domain** (e.g. `'onepress'`) for user-facing strings.
+
+## Scope
+
+- **Third-party / vendored** libraries are not rewritten to WPCS; glue code and theme-owned files should still follow WPCS where it applies.
+
+## Tooling (optional)
+
+- Local checks may use **PHPCS** with the **WordPress** ruleset (`wp-coding-standards/wpcs`) when installed; match project config if present.

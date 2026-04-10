@@ -1,0 +1,37 @@
+---
+description: DOM classes for Customizer (root onepress-*-control + inner functional) + PHP symbols
+globs: "**/*.{php,js,jsx}"
+alwaysApply: false
+---
+
+# Markup classes (PHP, jQuery, React)
+
+## Customizer controls
+
+- **Outermost wrapper** of the control UI: **`onepress-{feature}-control`** (matches SCSS root in `.cursor/rules/scss-css.mdc`).
+- **Children:** use **functional** class names only (no `onepress-` on each child), e.g. `class="inputs"`, `class="toolbar preview"`. PHP / JSX must match the classes assumed in SCSS under that root.
+- **Query / mount:** prefer scoping selectors — e.g. `'.onepress-typo-control .inputs'`, or `root.querySelector('.inputs')` when `root` is the control element.
+
+## Legacy / existing controls
+
+- Older markup may still use **BEM-style** inner classes (`__element`). When editing those files, stay consistent with existing strings until refactored.
+
+## Shared rules
+
+- PHP: **`esc_attr()`** for dynamic class fragments.
+- React/JSX: same class strings as SCSS; append state classes (`is-active`) on the toggled node.
+- jQuery: identical class names to PHP/React for the same control.
+
+## IDs and `name` attributes
+
+- Theme-owned: keep **`onepress-…`** prefixes where useful for uniqueness (settings, host roots). Valid unique `id` in HTML.
+
+## PHP symbols (not CSS)
+
+- **Classes:** `OnePress_{Feature}_Customize_Control`, etc.
+- **Functions:** `onepress_{snake_case}`.
+- **Customizer `type`:** e.g. `onepress_typography`, `onepress_layout`.
+
+## File layout (Customizer control PHP)
+
+- New controls live under **`inc/customize-controls/{control-name}/{control-name}.php`** with related PHP colocated; **`require_once`** in **`inc/customizer-controls.php`**. See **`customize-controls-php.mdc`**.

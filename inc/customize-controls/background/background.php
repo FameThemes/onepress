@@ -3,6 +3,7 @@
  * Background Customizer control (states × responsive, React + postMessage).
  *
  * @package onepress
+ * @see inc/customize-controls/background/helper.php
  */
 
 if ( class_exists( 'WP_Customize_Control', false ) && ! class_exists( 'OnePress_Background_Customize_Control', false ) ) {

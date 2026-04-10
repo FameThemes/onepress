@@ -24,7 +24,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /**
  * Build CSS for OnePress background Customizer control.
- * Logic must stay in sync with inc/background/helper.php (onepress_background_build_css).
+ * Logic must stay in sync with inc/customize-controls/background/helper.php (onepress_background_build_css).
  */
 
 /** Default gradient when the user opens the Gradient tab (must match BackgroundLayerEditor UI). */
@@ -99,7 +99,7 @@ function createDefaultLayer() {
 
 /**
  * Image tab with no URL: explicit reset so color/gradient from this control (or theme head CSS) do not linger.
- * Keep in sync with onepress_background_image_tab_empty_declarations() in inc/background/helper.php.
+ * Keep in sync with onepress_background_image_tab_empty_declarations() in inc/customize-controls/background/helper.php.
  *
  * @returns {Record<string, string>}
  */
@@ -368,7 +368,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /**
  * Slider / single-property CSS for Customizer preview <style> injection.
- * Mirrors inc/slider/helper.php — onepress_slider_css.
+ * Mirrors inc/customize-controls/slider/helper.php — onepress_slider_css.
  */
 
 const ALLOWED_PROPERTIES = new Set(['width', 'max-width', 'min-width', 'height', 'max-height', 'min-height', 'flex-basis']);
@@ -538,7 +538,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /**
  * Spacing CSS for Customizer preview <style> injection.
- * Mirrors inc/spacing/helper.php — onepress_spacing_css + onepress_spacing_css_block.
+ * Mirrors inc/customize-controls/spacing/helper.php — onepress_spacing_css + onepress_spacing_css_block.
  */
 
 const PREFIXES = ['padding', 'margin'];
@@ -731,7 +731,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /**
  * Typography CSS string for Customizer preview <style> injection.
- * Mirrors inc/typography/helper.php — onepress_typo_css + onepress_typo_css_block.
+ * Mirrors inc/customize-controls/typography/helper.php — onepress_typo_css + onepress_typo_css_block.
  */
 
 const RESPONSIVE_KEYS = ['font-size-tablet', 'font-size-mobile', 'line-height-tablet', 'line-height-mobile', 'letter-spacing-tablet', 'letter-spacing-mobile'];
