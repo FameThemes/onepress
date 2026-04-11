@@ -47,58 +47,27 @@ return array(
 		'priority'    => 2,
 	),
 	// Typography text colors (migrated from OnePress Plus typography `color` field; see inc/migrate/typography-from-onepress-plus.php).
+
 	array(
-		'id'            => 'onepress_typo_paragraphs_color',
+		'id'            => 'onepress_base_color',
 		'control'       => 'color',
 		'default'       => '',
-		'label'         => esc_html__( 'Paragraph & body text color', 'onepress' ),
-		'description'   => esc_html__( 'Applies to paragraphs, entry content, and hero intro text. Linked to Typography → Paragraphs.', 'onepress' ),
+		'label'         => esc_html__( 'Body & Paragraphs text color', 'onepress' ),
+		'description'   => esc_html__( 'Applies to paragraphs, entry content, and hero intro text.', 'onepress' ),
 		'section'       => 'onepress_colors_settings',
 		'priority'      => 15,
 	),
 	array(
-		'id'            => 'onepress_typo_hero_heading_color',
+		'id'            => 'onepress_heading_color',
 		'control'       => 'color',
 		'default'       => '',
-		'label'         => esc_html__( 'Hero headline color', 'onepress' ),
-		'description'   => esc_html__( 'Applies to hero titles. Linked to Typography → Hero.', 'onepress' ),
+		'label'         => esc_html__( 'Headings color', 'onepress' ),
+		'description'   => esc_html__( 'Applies to headings.', 'onepress' ),
 		'section'       => 'onepress_colors_settings',
 		'priority'      => 16,
 	),
-	array(
-		'id'            => 'onepress_typo_branding_title_color',
-		'control'       => 'color',
-		'default'       => '',
-		'label'         => esc_html__( 'Site title color', 'onepress' ),
-		'description'   => esc_html__( 'Linked to Typography → Site title.', 'onepress' ),
-		'section'       => 'onepress_colors_settings',
-		'priority'      => 17,
-	),
-	array(
-		'id'            => 'onepress_typo_branding_tagline_color',
-		'control'       => 'color',
-		'default'       => '',
-		'label'         => esc_html__( 'Site tagline color', 'onepress' ),
-		'description'   => esc_html__( 'Linked to Typography → Site tagline.', 'onepress' ),
-		'section'       => 'onepress_colors_settings',
-		'priority'      => 18,
-	),
-	array(
-		'id'            => 'onepress_typo_slider_slide_title_color',
-		'control'       => 'color',
-		'default'       => '',
-		'label'         => esc_html__( 'Slider title color', 'onepress' ),
-		'description'   => esc_html__( 'Linked to Typography → Slider slide title.', 'onepress' ),
-		'section'       => 'onepress_colors_settings',
-		'priority'      => 19,
-	),
-	array(
-		'id'            => 'onepress_typo_slider_slide_content_color',
-		'control'       => 'color',
-		'default'       => '',
-		'label'         => esc_html__( 'Slider text color', 'onepress' ),
-		'description'   => esc_html__( 'Linked to Typography → Slider slide text.', 'onepress' ),
-		'section'       => 'onepress_colors_settings',
-		'priority'      => 20,
-	),
+
+
+	
+	
 );

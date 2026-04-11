@@ -41,6 +41,9 @@ function onepress_customize_control_class_map() {
 /**
  * Default `add_setting` args per logical `control` type.
  *
+ * Optional `transport` here is applied only when the option entry does not declare `transport`
+ * at the top level or under `setting` (see {@see onepress_customize_register_options()}).
+ *
  * @param string $control_type Logical type from the `control` entry key or `input_type` for `wp` controls.
  * @return array<string, mixed>
  */
@@ -51,6 +54,10 @@ function onepress_customize_register_default_setting_args( $control_type ) {
 
 	switch ( $control_type ) {
 		case 'color':
+			$defaults['sanitize_callback'] = 'onepress_sanitize_color_alpha';
+			$defaults['default']           = '';
+			$defaults['transport']         = 'postMessage';
+			break;
 		case 'alpha-color':
 			$defaults['sanitize_callback'] = 'onepress_sanitize_color_alpha';
 			$defaults['default']           = '';
@@ -265,16 +272,20 @@ function onepress_customize_register_options( WP_Customize_Manager $wp_customize
 			$input_type = isset( $entry['input_type'] ) ? (string) $entry['input_type'] : 'text';
 			if ( ! $skip_setting ) {
 				$type_defaults = onepress_customize_register_default_setting_args( $input_type );
+				$default_transport = array_key_exists( 'transport', $type_defaults ) ? $type_defaults['transport'] : null;
+				unset( $type_defaults['transport'] );
 				$setting_extra = isset( $entry['setting'] ) && is_array( $entry['setting'] ) ? $entry['setting'] : array();
 				$setting_args  = wp_parse_args( $setting_extra, $type_defaults );
 				if ( array_key_exists( 'default', $entry ) ) {
 					$setting_args['default'] = $entry['default'];
 				}
-				if ( array_key_exists( 'transport', $entry ) ) {
-					$setting_args['transport'] = $entry['transport'];
-				}
 				if ( array_key_exists( 'sanitize_callback', $entry ) ) {
 					$setting_args['sanitize_callback'] = $entry['sanitize_callback'];
+				}
+				if ( array_key_exists( 'transport', $entry ) ) {
+					$setting_args['transport'] = $entry['transport'];
+				} elseif ( ! array_key_exists( 'transport', $setting_args ) && null !== $default_transport ) {
+					$setting_args['transport'] = $default_transport;
 				}
 				$wp_customize->add_setting( $setting_id, $setting_args );
 			}
@@ -338,17 +349,21 @@ function onepress_customize_register_options( WP_Customize_Manager $wp_customize
 
 		if ( ! $skip_setting ) {
 			$type_defaults = onepress_customize_register_default_setting_args( $defaults_key );
+			$default_transport = array_key_exists( 'transport', $type_defaults ) ? $type_defaults['transport'] : null;
+			unset( $type_defaults['transport'] );
 			$setting_extra = isset( $entry['setting'] ) && is_array( $entry['setting'] ) ? $entry['setting'] : array();
 			$setting_args  = wp_parse_args( $setting_extra, $type_defaults );
 
 			if ( array_key_exists( 'default', $entry ) ) {
 				$setting_args['default'] = $entry['default'];
 			}
-			if ( array_key_exists( 'transport', $entry ) ) {
-				$setting_args['transport'] = $entry['transport'];
-			}
 			if ( array_key_exists( 'sanitize_callback', $entry ) ) {
 				$setting_args['sanitize_callback'] = $entry['sanitize_callback'];
+			}
+			if ( array_key_exists( 'transport', $entry ) ) {
+				$setting_args['transport'] = $entry['transport'];
+			} elseif ( ! array_key_exists( 'transport', $setting_args ) && null !== $default_transport ) {
+				$setting_args['transport'] = $default_transport;
 			}
 
 			$wp_customize->add_setting( $setting_id, $setting_args );

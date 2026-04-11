@@ -60,7 +60,7 @@
 	font-weight: 500;
 	text-transform: none;
 	letter-spacing: -0.6px;
-	font-family: variables.$font_text;
+	font-family: var(--typo-h16-font-family, var(--base-typo-font-text));
 	font-size: 25px;
 	line-height: 1.3;
 

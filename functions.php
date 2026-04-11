@@ -687,6 +687,11 @@ require get_template_directory() . '/inc/customize-controls/typography/typograph
 require get_template_directory() . '/inc/customize-controls/typography/css-vars.php';
 
 /**
+ * Customizer color controls → `--color-*` helpers (used by customizer-inline-styles.php).
+ */
+require get_template_directory() . '/inc/customize-color-css-vars.php';
+
+/**
  * Customizer → front-end inline CSS (see inc/customizer-inline-styles.php).
  */
 require get_template_directory() . '/inc/customizer-inline-styles.php';

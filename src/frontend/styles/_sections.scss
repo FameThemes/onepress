@@ -442,8 +442,8 @@
     text-align: center;
 
     .morphext {
-        color: var(--morphext-color, inherit);
-        background-color: var(--morphext-bg, transparent);
+        color: var(--color-hcl1-r-color, inherit);
+        background-color: var(--color-hcl1-r-bg-color, transparent);
         padding: var(--morphext-padding, 0);
         text-shadow: var(--morphext-text-shadow, inherit);
         border-radius: var(--morphext-border-radius, 0);
@@ -581,7 +581,7 @@
             background-color: var(--icon-hover-bg-color);
         }
         .icon-background-default {
-            color: var(--feature-icon-hover-color, var(--icon-hover-bg-color));
+            color: var(--color-secondary-color, var(--icon-hover-bg-color));
         }
     }
     @include variables.for(medium-screens) {

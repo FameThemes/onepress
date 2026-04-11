@@ -10,20 +10,20 @@
 //   - _contents.scss   → .entry-header .entry-title
 //   - onepress-plus.scss (.section-op-slider .item--title / .item--desc) → slider defaults
 //
-// @include typo-customizer-properties($slug, $props, …) — base var(DV, VF); responsive do :root @media (PHP).
+// @include typo-customizer-properties($slug, $props, …) — base var(DV, VF); responsive via :root @media (PHP).
 //
-// Cấu trúc $props: mỗi cặp css-property => VF (value fallback từ theme / Sass).
-//   - false / null → bỏ qua (base + không responsive cho key đó)
-//   - $typo-customizer-var-only → chỉ custom property, không VF literal
-//   - khác        → VF dùng trong var(…, VF)
+// $props structure: each css-property => VF (fallback from theme / Sass).
+//   - false / null → skip (no base + no responsive for that key)
+//   - $typo-customizer-var-only → custom property only, no literal VF
+//   - otherwise   → VF used inside var(…, VF)
 //
-// DV: --typo-<slug>-<property> — Customizer đặt trên :root (PHP: css-vars.php).
-// Tablet/mobile: cùng tên biến, ghi đè trong @media (max-width: …) { :root { … } } — không dùng hậu tố -tablet/-mobile.
-// Base rule: property: var(DV, VF) hoặc var(DV) nếu var-only.
-// $color: toàn bộ phần sau `color:` hoặc null để bỏ.
-// $color-first: true → in color trước các thuộc tính khác (vd. nav).
+// DV: --typo-<slug>-<property> — set on :root by Customizer (PHP: css-vars.php).
+// Tablet/mobile: same variable names, overridden in @media (max-width: …) { :root { … } } — no -tablet/-mobile suffix.
+// Base rule: property: var(DV, VF) or var(DV) if var-only.
+// $color: full value after `color:` or null to omit.
+// $color-first: true → emit color before other properties (e.g. nav).
 //
-// Sentinel: chỉ `var(--typo-…)` (Customizer), không fallback Sass — dùng trong map thay vì chuỗi "var" trần.
+// Sentinel: only `var(--typo-…)` (Customizer), no Sass fallback — use in map instead of a raw "var" string.
 $typo-customizer-var-only: "var";
 
 // 14px at 16px root — same as @include v.rem("font-size", 14px) in _document.scss
@@ -88,12 +88,11 @@ body {
       "letter-spacing": 0,
       "text-decoration": none,
       "text-transform": none,
-    ),
-    $color: var(--typo-body, var(--base-color-text))
+    )
   );
 }
 
-// apply for all headings 1-6
+// All headings h1–h6 (shared h16 stack)
 h1,
 h2,
 h3,
@@ -104,7 +103,7 @@ h6 {
   @include typo-customizer-properties(
     $k,
     (
-      "font-family": var(--base-typo-font-heading),
+      "font-family": var(--typo-h16-font-family, var(--base-typo-font-heading)),
       "font-weight": var(--base-typo-heading-weight),
       "font-style": normal,
       "font-size": null,
@@ -116,7 +115,7 @@ h6 {
   );
 }
 
-// apply for each headings 1-6
+// Per-heading h1–h6 (news, archive, blog, section titles)
 @for $i from 1 through 6 {
   h#{$i},
   h#{$i}.section-news h#{$i}.entry-title,
@@ -150,7 +149,7 @@ h6 {
   @include typo-customizer-properties(
     $k,
     (
-      "font-family": var(--typo-h16-font-family),
+      "font-family": var(--typo-h16-font-family, var(--base-typo-font-heading)),
       "font-weight": 800,
       "font-style": normal,
       "font-size": 40px,
@@ -162,9 +161,9 @@ h6 {
   );
 }
 
-// Section title
+// Section subtitle
 .site-main .section-title-area .section-subtitle {
-  $k: section-title;
+  $k: section-subtitle;
   @include typo-customizer-properties(
     $k,
     (
@@ -216,7 +215,8 @@ h6 {
       "letter-spacing": 4px,
       "text-decoration": none,
       "text-transform": uppercase,
-    )
+    ),
+    $color: var(--color-typo-hero-heading-color, inherit)
   );
 }
 
@@ -235,13 +235,16 @@ h6 {
       "text-decoration": none,
       "text-transform": uppercase,
     ),
-    $color: var(--typo-branding-title, #000000)
+    $color:
+      var(
+        --color-typo-branding-title-color,
+        var(--color-logo-text-color, #000000)
+      )
   );
 }
 
 #page .site-branding .site-description {
   $k: branding-tagline;
-
   @include typo-customizer-properties(
     $k,
     (
@@ -252,11 +255,15 @@ h6 {
       "text-decoration": none,
       "text-transform": none,
     ),
-    $color: var(--typo-branding-tagline, #000000)
+    $color:
+      var(
+        --color-typo-branding-tagline-color,
+        var(--color-tagline-text-color, #000000)
+      )
   );
 }
 
-#page .onepress-menu a {
+.onepress-menu a {
   $k: nav;
   @include typo-customizer-properties(
     $k,
@@ -269,7 +276,7 @@ h6 {
       "text-decoration": none,
       "text-transform": uppercase,
     ),
-    $color: var(--typo-nav, var(--menu-link-color, #{v.$heading})),
+    $color: var(--typo-nav, var(--color-menu-color, #{v.$heading})),
     $color-first: true
   );
 }
@@ -340,7 +347,7 @@ h6 {
       "text-decoration": none,
       "text-transform": uppercase,
     ),
-    $color: var(--typo-slider-slide-title, #ffffff)
+    $color: var(--color-typo-slider-slide-title-color, #ffffff)
   );
 }
 
@@ -359,23 +366,23 @@ h6 {
       "text-decoration": none,
       "text-transform": none,
     ),
-    $color: var(--typo-slider-slide-content, #ffffff)
+    $color: var(--color-typo-slider-slide-content-color, #ffffff)
   );
 }
 
-#features .section-content {
-  $k: demo-heading;
+// #features .section-content {
+//   $k: demo-heading;
 
-  @include typo-customizer-properties(
-    $k,
-    (
-      "font-family": v.$font_text,
-      "font-style": normal,
-      "font-size": $_typo-body-font-size,
-      "line-height": $_typo-body-lh,
-      "text-decoration": none,
-      "text-transform": none,
-    ),
-    $color: var(--typo-demo-heading, #{v.$text})
-  );
-}
+//   @include typo-customizer-properties(
+//     $k,
+//     (
+//       "font-family": v.$font_text,
+//       "font-style": normal,
+//       "font-size": $_typo-body-font-size,
+//       "line-height": $_typo-body-lh,
+//       "text-decoration": none,
+//       "text-transform": none,
+//     ),
+//     $color: var(--typo-demo-heading, #{v.$text})
+//   );
+// }

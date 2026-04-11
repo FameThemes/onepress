@@ -92,18 +92,18 @@
 Footer widgets
  */
 #footer-widgets {
-	color: var(--footer-widgets-color);
-	background-color: var(--footer-widgets-bg);
+	color: var(--color-footer-widgets-color);
+	background-color: var(--color-footer-widgets-bg-color);
 
 	.widget-title {
-		color: var(--footer-widgets-title-color, #ffffff);
+		color: var(--color-footer-widgets-title-color, #ffffff);
 	}
 
 	.sidebar .widget a {
-		color: var(--footer-widgets-link-color);
+		color: var(--color-footer-widgets-link-color);
 
 		&:hover {
-			color: var(--footer-widgets-link-hover-color);
+			color: var(--color-footer-widgets-link-hover-color);
 		}
 	}
 }

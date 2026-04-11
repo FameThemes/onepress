@@ -1,7 +1,7 @@
 /**
  * Customizer control alpha-color: Popover below row + ColorPicker.
  */
-import { ColorPicker, Popover } from '@wordpress/components';
+import { Button, ColorPicker, Popover } from '@wordpress/components';
 import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
@@ -52,14 +52,6 @@ function cssToPickerFormat(css, enableAlpha) {
 	return enableAlpha ? '#ffffffff' : '#ffffff';
 }
 
-function commitToInput($, input, value) {
-	if (!input) {
-		return;
-	}
-	input.value = value;
-	$(input).trigger('input').trigger('change');
-}
-
 export function AlphaColorControlApp({ control }) {
 	const wrap = control.container[0];
 	const host =
@@ -71,7 +63,6 @@ export function AlphaColorControlApp({ control }) {
 	const showOpacity = host?.dataset?.showOpacity !== 'false';
 	const defaultColor = host?.dataset?.defaultColor ?? '';
 
-	const $ = window.jQuery;
 	const enableAlpha = showOpacity;
 
 	const rowRef = useRef(null);
@@ -100,27 +91,32 @@ export function AlphaColorControlApp({ control }) {
 
 	const onPickerChange = useCallback(
 		(nextHex) => {
-			setColor(nextHex);
-			setRawValue(nextHex);
-			commitToInput($, input, nextHex);
+			const s =
+				nextHex == null || String(nextHex).trim() === ''
+					? ''
+					: String(nextHex);
+			control.setting.set(s);
 		},
-		[$, input]
+		[control]
 	);
 
 	const resetToDefault = useCallback(() => {
 		const raw = defaultColor != null ? String(defaultColor) : '';
-		setRawValue(raw);
-		setColor(cssToPickerFormat(raw, enableAlpha));
-		commitToInput($, input, raw);
-	}, [$, input, defaultColor, enableAlpha]);
-
-	const pickerDefault =
-		cssToPickerFormat(defaultColor, enableAlpha) ||
-		(enableAlpha ? '#ffffffff' : '#ffffff');
+		control.setting.set(raw);
+	}, [control, defaultColor]);
 
 	const closePicker = useCallback(() => {
 		setOpen(false);
 	}, []);
+
+	const clearColor = useCallback(() => {
+		control.setting.set('');
+		closePicker();
+	}, [control, closePicker]);
+
+	const pickerDefault =
+		cssToPickerFormat(defaultColor, enableAlpha) ||
+		(enableAlpha ? '#ffffffff' : '#ffffff');
 
 	const togglePicker = useCallback(() => {
 		setOpen((v) => !v);
@@ -203,6 +199,15 @@ export function AlphaColorControlApp({ control }) {
 							enableAlpha={enableAlpha}
 							defaultValue={pickerDefault}
 						/>
+						<div className="onepress-alpha-color-popover__footer">
+							<Button
+								variant="link"
+								isDestructive
+								onClick={clearColor}
+							>
+								{__('Clear color', 'onepress')}
+							</Button>
+						</div>
 					</div>
 				</Popover>
 			) : null}

@@ -127,7 +127,7 @@ textarea {
   font-family: var(--base-typo-font-text);
   font-size: var(--base-typo-body-size);
   line-height: var(--base-typo-body-line-height);
-  color: var(--base-color-text);
+  color: var(--color-base-color, var(--base-color-text));
 }
 pre,
 code,
@@ -181,7 +181,7 @@ h3 a,
 h4 a,
 h5 a,
 h6 a {
-  color: var(--base-color-heading);
+  color: var(--color-heading-color, var(--base-color-heading));
   text-decoration: none;
 }
 h1 {
@@ -654,7 +654,7 @@ body.mce-content-body {
   font-weight: 500;
   text-transform: none;
   letter-spacing: -0.6px;
-  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-family: var(--typo-h16-font-family, var(--base-typo-font-text));
   font-size: 25px;
   line-height: 1.3;
 }

@@ -8,7 +8,7 @@
 	line-height: 75px;
 	position: relative;
 	width: 100%;
-	background: var(--header-bg, #ffffff);
+	background: var(--color-header-bg-color, #ffffff);
 	z-index: 1000;
 	-webkit-transition: all 1s ease-out;
 	/* Safari */
@@ -75,11 +75,11 @@
 
 			#nav-toggle {
 				span {
-					background-color: var(--nav-toggle-bg, #ffffff);
+					background-color: var(--color-menu-toggle-button-color, #ffffff);
 
 					&::before,
 					&::after {
-						background-color: var(--nav-toggle-bg, #ffffff);
+						background-color: var(--color-menu-toggle-button-color, #ffffff);
 					}
 				}
 
@@ -92,7 +92,7 @@
 		}
 
 		&.header-fixed {
-			background: var(--header-bg, #ffffff);
+			background: var(--color-header-bg-color, #ffffff);
 
 			&.no-scroll {
 				background: transparent;
@@ -105,7 +105,7 @@
 @include variables.for(large-screens) {
 	.is-transparent .no-scroll.site-header {
 		.onepress-menu>li>a {
-			color: var(--menu-link-color, rgba(255, 255, 255, 0.9));
+			color: var(--color-menu-color, rgba(255, 255, 255, 0.9));
 		}
 	}
 }
@@ -336,10 +336,10 @@
 	}
 
 	> li > a {
-		color: var(--menu-link-color, #333333);
+		color: var(--color-menu-color, #333333);
 
 		&:hover {
-			color: var(--menu-hover-color, #{variables.$primary});
+			color: var(--color-menu-hover-color, #{variables.$primary});
 			-webkit-transition: all 0.5s ease-in-out;
 			-moz-transition: all 0.5s ease-in-out;
 			-o-transition: all 0.5s ease-in-out;
@@ -367,7 +367,7 @@
 	}
 
 	> li.onepress-current-item > a {
-		color: var(--menu-hover-color, #{variables.$primary});
+		color: var(--color-menu-hover-color, #{variables.$primary});
 		-webkit-transition: all 0.5s ease-in-out;
 		-moz-transition: all 0.5s ease-in-out;
 		-o-transition: all 0.5s ease-in-out;
@@ -402,7 +402,7 @@
 
 		> li > a:hover,
 		> li.onepress-current-item > a {
-			background: var(--menu-hover-bg, transparent);
+			background: var(--color-menu-hover-bg-color, transparent);
 		}
 	}
 
@@ -576,7 +576,7 @@
 		display: inline-block;
 		height: 3px;
 		width: 24px;
-		background: var(--nav-toggle-bg, #000000);
+		background: var(--color-menu-toggle-button-color, #000000);
 
 		&:before {
 			top: -8px;
@@ -592,7 +592,7 @@
 			display: inline-block;
 			height: 3px;
 			width: 24px;
-			background: var(--nav-toggle-bg, #000000);
+			background: var(--color-menu-toggle-button-color, #000000);
 			content: "";
 			right: 0;
 			-webkit-transform: translateZ(0);
@@ -635,7 +635,7 @@
 
 	&:before,
 	&:after {
-		background: var(--nav-toggle-bg, #000000);
+		background: var(--color-menu-toggle-button-color, #000000);
 	}
 }
 
@@ -678,7 +678,7 @@
 		width: 100%;
 		display: block;
 		content: " ";
-		background: var(--page-header-overlay-bg, transparent);
+		background: var(--color-page-cover-overlay, transparent);
 	}
 
 	.entry-title,
@@ -688,7 +688,7 @@
 		font-weight: 600;
 		letter-spacing: 1px;
 		text-transform: uppercase;
-		color: var(--page-header-title-color, inherit);
+		color: var(--color-page-cover-color, inherit);
 	}
 
 	p {
@@ -718,14 +718,14 @@
 			left: 0;
 			width: 100%;
 			display: block;
-			background: var(--page-header-overlay-bg, rgba(0, 0, 0, 0.3));
+			background: var(--color-page-cover-overlay, rgba(0, 0, 0, 0.3));
 			content: " ";
 		}
 
 		.entry-title {
 			font-size: 2.5rem;
 			font-weight: 800;
-			color: var(--page-header-title-color, #ffffff);
+			color: var(--color-page-cover-color, #ffffff);
 		}
 
 		.entry-tagline {
@@ -757,7 +757,7 @@
 /* Footer
 ------------------------------*/
 .site-footer {
-	background-color: var(--footer-bg, #111111);
+	background-color: var(--color-footer-bg, #111111);
 	color: #bbbbbb;
 	font-size: 14px;
 
@@ -781,7 +781,7 @@
 		}
 
 		.follow-heading {
-			color: var(--footer-top-text, #ffffff);
+			color: var(--color-footer-top-color, #ffffff);
 			margin-bottom: 20px;
 			letter-spacing: 0.8px;
 		}
@@ -846,7 +846,7 @@
 
 		a {
 			font-size: var(--icon-size);
-			color: var(--footer-top-text, #ffffff);
+			color: var(--color-footer-top-color, #ffffff);
 			width: var(--icon-size);
 			height: var(--icon-size);
 			display: inline-flex;
@@ -879,16 +879,19 @@
 		position: relative;
 		text-align: center;
 		padding: 35px 0px;
-		background: var(--footer-site-info-bg, #222222);
+		background: var(--color-footer-info-bg, #222222);
 		font-weight: 500;
-		color: var(--footer-site-info-text, #bbbbbb);
+		color: var(--color-footer-c-color, rgba(255, 255, 255, 0.7));
 
 		a {
-			color: var(--footer-site-info-link, #dddddd);
+			color: var(--color-footer-c-link-color, rgba(255, 255, 255, 0.9));
 
 			&:hover {
 				text-decoration: underline;
-				color: var(--footer-site-info-link-hover, var(--footer-site-info-link, #dddddd));
+				color: var(
+					--color-footer-c-link-hover-color,
+					var(--color-footer-c-link-color, rgba(255, 255, 255, 0.9))
+				);
 			}
 		}
 
@@ -899,8 +902,8 @@
 
 	.btt a {
 		border-radius: 0px 20px 0 0;
-		color: var(--footer-site-info-link, #999999);
-		background: var(--footer-site-info-bg, #222222);
+		color: var(--color-footer-c-link-color, #999999);
+		background: var(--color-footer-info-bg, #222222);
 		display: block;
 		font-size: 30px;
 		height: 50px;
@@ -918,7 +921,7 @@
 		-o-transform: rotate(-45deg);
 
 		&:hover {
-			color: var(--footer-site-info-link-hover, #{variables.$primary});
+			color: var(--color-footer-c-link-hover-color, #{variables.$primary});
 		}
 
 		i {
