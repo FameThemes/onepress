@@ -157,7 +157,7 @@ async function fetchInstalledFontFaceKeys(familyId) {
 	const keys = new Set();
 	let page = 1;
 	const perPage = 100;
-	for (;;) {
+	for (; ;) {
 		/** @type {unknown} */
 		const batch = await apiFetch({
 			path: `${FONT_FAMILIES_PATH}/${familyId}/font-faces?per_page=${perPage}&page=${page}&_locale=user`,
@@ -297,7 +297,7 @@ async function installGoogleCollectionFontFamily(collectionItem) {
 		} catch (err) {
 			const code =
 				err && typeof err === 'object' && 'code' in err
-					? String(/** @type {{ code?: string }} */ (err).code)
+					? String(/** @type {{ code?: string }} */(err).code)
 					: '';
 			if (code === 'rest_duplicate_font_face') {
 				added += 1;
@@ -626,7 +626,7 @@ async function fetchAllFontFamiliesFromRest() {
 	const all = [];
 	let page = 1;
 	const perPage = 100;
-	for (;;) {
+	for (; ;) {
 		const path = `${FONT_FAMILIES_PATH}?per_page=${perPage}&page=${page}&_locale=user`;
 		/** @type {unknown} */
 		const batch = await apiFetch({ path });
@@ -859,8 +859,8 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 			const el = document.getElementById('customize-controls');
 			const w =
 				el &&
-				typeof el.offsetWidth === 'number' &&
-				el.offsetWidth > 0
+					typeof el.offsetWidth === 'number' &&
+					el.offsetWidth > 0
 					? el.offsetWidth
 					: 300;
 			setCustomizeControlsWidth(w);
@@ -984,7 +984,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 				return;
 			}
 			const name = displayNameFromFontFamilyItem(item);
-			const label = name || __( 'this font', 'onepress' );
+			const label = name || __('this font', 'onepress');
 			if (
 				!window.confirm(
 					sprintf(
@@ -1013,14 +1013,14 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 				setLibraryActionMessage(
 					sprintf(
 						/* translators: %s: Font family name. */
-						__( '"%s" was removed.', 'onepress' ),
+						__('"%s" was removed.', 'onepress'),
 						label
 					)
 				);
 			} catch (e) {
 				setLibraryActionMessage(
 					restErrorMessage(e) ||
-						__( 'Could not remove font.', 'onepress' )
+					__('Could not remove font.', 'onepress')
 				);
 			} finally {
 				setRemovingFamilyId(null);
@@ -1099,13 +1099,13 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 					const more =
 						fails.length > 4
 							? sprintf(
-									/* translators: %d: Additional failure count. */
-									__(
-										' …and %d more.',
-										'onepress'
-									),
-									fails.length - 4
-								)
+								/* translators: %d: Additional failure count. */
+								__(
+									' …and %d more.',
+									'onepress'
+								),
+								fails.length - 4
+							)
 							: '';
 					if (ok > 0) {
 						setUploadActionMessage(
@@ -1218,7 +1218,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 			} catch (e) {
 				setInstallActionMessage(
 					restErrorMessage(e) ||
-						__('Could not install font.', 'onepress')
+					__('Could not install font.', 'onepress')
 				);
 			} finally {
 				setInstallingSlug('');
@@ -1250,9 +1250,9 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 	}
 
 	const tabs = /** @type {const} */ ([
-		{ id: 'library', label: __( 'Library', 'onepress' ) },
-		{ id: 'upload', label: __( 'Upload', 'onepress' ) },
-		{ id: 'install', label: __( 'Install', 'onepress' ) },
+		{ id: 'library', label: __('Library', 'onepress') },
+		{ id: 'upload', label: __('Upload', 'onepress') },
+		{ id: 'install', label: __('Install', 'onepress') },
 	]);
 
 	const onDialogKeyDown = (e) => {
@@ -1275,7 +1275,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 			<button
 				type="button"
 				className="onepress-manage-fonts-portal__backdrop"
-				aria-label={__( 'Close', 'onepress' )}
+				aria-label={__('Close', 'onepress')}
 				onClick={onClose}
 			/>
 			<div
@@ -1291,7 +1291,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 						id="onepress-manage-fonts-title"
 						className="onepress-manage-fonts-portal__title"
 					>
-						{__( 'Manage fonts', 'onepress' )}
+						{__('Manage fonts', 'onepress')}
 					</h2>
 					<button
 						ref={closeBtnRef}
@@ -1299,13 +1299,13 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 						className="button-link onepress-manage-fonts-portal__close"
 						onClick={onClose}
 					>
-						{__( 'Close', 'onepress' )}
+						{__('Close', 'onepress')}
 					</button>
 				</div>
 				<div
 					className="onepress-manage-fonts-portal__tabs"
 					role="tablist"
-					aria-label={__( 'Font sources', 'onepress' )}
+					aria-label={__('Font sources', 'onepress')}
 				>
 					{tabs.map((t) => (
 						<button
@@ -1320,7 +1320,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 								'onepress-manage-fonts-portal__tab' +
 								(tab === t.id ? ' is-active' : '')
 							}
-							onClick={() => setTab(/** @type {ManageFontsTab} */ (t.id))}
+							onClick={() => setTab(/** @type {ManageFontsTab} */(t.id))}
 						>
 							{t.label}
 						</button>
@@ -1352,19 +1352,19 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 								className="screen-reader-text"
 								htmlFor="onepress-manage-fonts-library-search"
 							>
-								{__( 'Search library', 'onepress' )}
+								{__('Search library', 'onepress')}
 							</label>
 							<input
 								id="onepress-manage-fonts-library-search"
 								type="search"
 								className="onepress-manage-fonts-portal__search"
-								placeholder={__( 'Search…', 'onepress' )}
+								placeholder={__('Search…', 'onepress')}
 								value={libraryQuery}
 								onChange={(e) => setLibraryQuery(e.target.value)}
 							/>
 							{libraryLoading ? (
 								<p className="onepress-manage-fonts-portal__status" role="status">
-									{__( 'Loading…', 'onepress' )}
+									{__('Loading…', 'onepress')}
 								</p>
 							) : filteredLibrary.length === 0 ? (
 								<p className="onepress-manage-fonts-portal__status" role="status">
@@ -1376,21 +1376,21 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 							) : (
 								<ul
 									className="onepress-manage-fonts-portal__list"
-									aria-label={__( 'Installed font families', 'onepress' )}
+									aria-label={__('Installed font families', 'onepress')}
 								>
 									{filteredLibrary.map((item, index) => {
 										const name = displayNameFromFontFamilyItem(item);
 										const key =
 											item &&
-											typeof item === 'object' &&
-											'id' in item &&
-											item.id != null
+												typeof item === 'object' &&
+												'id' in item &&
+												item.id != null
 												? `lib-${item.id}`
 												: `lib-${index}-${name}`;
 										const rowId =
 											item &&
-											typeof item === 'object' &&
-											item.id != null
+												typeof item === 'object' &&
+												item.id != null
 												? Number(item.id)
 												: NaN;
 										const rowBusy =
@@ -1401,7 +1401,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 												<div className="onepress-manage-fonts-portal__list-row-main">
 													<span className="onepress-manage-fonts-portal__list-name">
 														{name ||
-															__( '(Unnamed font)', 'onepress' )}
+															__('(Unnamed font)', 'onepress')}
 													</span>
 												</div>
 												<div className="onepress-manage-fonts-portal__list-row-actions">
@@ -1419,13 +1419,13 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 													>
 														{rowBusy
 															? __(
-																	'Removing…',
-																	'onepress'
-																)
+																'Removing…',
+																'onepress'
+															)
 															: __(
-																	'Remove',
-																	'onepress'
-																)}
+																'Remove',
+																'onepress'
+															)}
 													</button>
 												</div>
 											</li>
@@ -1483,7 +1483,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 									if (
 										relatedTarget &&
 										currentTarget.contains(
-											/** @type {Node} */ (relatedTarget)
+											/** @type {Node} */(relatedTarget)
 										)
 									) {
 										return;
@@ -1523,13 +1523,13 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 								<p className="onepress-manage-fonts-upload-zone__title">
 									{uploadBusy
 										? __(
-												'Uploading…',
-												'onepress'
-											)
+											'Uploading…',
+											'onepress'
+										)
 										: __(
-												'Drop font files here',
-												'onepress'
-											)}
+											'Drop font files here',
+											'onepress'
+										)}
 								</p>
 								<p className="onepress-manage-fonts-upload-zone__types">
 									{__(
@@ -1579,20 +1579,20 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 								className="screen-reader-text"
 								htmlFor="onepress-manage-fonts-install-search"
 							>
-								{__( 'Search fonts to install', 'onepress' )}
+								{__('Search fonts to install', 'onepress')}
 							</label>
 							<input
 								id="onepress-manage-fonts-install-search"
 								type="search"
 								className="onepress-manage-fonts-portal__search"
-								placeholder={__( 'Search…', 'onepress' )}
+								placeholder={__('Search…', 'onepress')}
 								value={installQuery}
 								onChange={(e) => setInstallQuery(e.target.value)}
 								disabled={installLoading}
 							/>
 							{installLoading ? (
 								<p className="onepress-manage-fonts-portal__status" role="status">
-									{__( 'Loading…', 'onepress' )}
+									{__('Loading…', 'onepress')}
 								</p>
 							) : installError ? (
 								<p className="onepress-manage-fonts-portal__status" role="alert">
@@ -1628,10 +1628,10 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 										const cats = categoriesLabelFromCollectionItem(item);
 										const slugRaw =
 											item &&
-											typeof item === 'object' &&
-											item.font_family_settings &&
-											typeof item.font_family_settings === 'object' &&
-											item.font_family_settings.slug
+												typeof item === 'object' &&
+												item.font_family_settings &&
+												typeof item.font_family_settings === 'object' &&
+												item.font_family_settings.slug
 												? String(item.font_family_settings.slug).trim()
 												: '';
 										const slugKey = slugRaw ? kebabCase(slugRaw) : '';
@@ -1645,7 +1645,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 												<div className="onepress-manage-fonts-portal__list-row-main">
 													<span className="onepress-manage-fonts-portal__list-name">
 														{name ||
-															__( '(Unnamed font)', 'onepress' )}
+															__('(Unnamed font)', 'onepress')}
 													</span>
 													{cats ? (
 														<span className="onepress-manage-fonts-portal__list-meta">
@@ -1667,8 +1667,8 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 														}
 													>
 														{rowBusy
-															? __( 'Installing…', 'onepress' )
-															: __( 'Install', 'onepress' )}
+															? __('Installing…', 'onepress')
+															: __('Install', 'onepress')}
 													</button>
 												</div>
 											</li>
@@ -1784,17 +1784,17 @@ export function FontPickerPanel({
 			className={panelClass}
 			role="dialog"
 			aria-modal={variant === 'modal'}
-			aria-label={__( 'Font selector', 'onepress' )}
+			aria-label={__('Font selector', 'onepress')}
 			onMouseDown={(e) => e.stopPropagation()}
 		>
-				{manageFontsOpen && (
-					<ManageFontsModal
-						open={manageFontsOpen}
-						onClose={() => setManageFontsOpen(false)}
-						onFontLibraryRefresh={onFontLibraryRefresh}
-					/>
-				)}
-				{/* <div className="head">
+			{manageFontsOpen && (
+				<ManageFontsModal
+					open={manageFontsOpen}
+					onClose={() => setManageFontsOpen(false)}
+					onFontLibraryRefresh={onFontLibraryRefresh}
+				/>
+			)}
+			{/* <div className="head">
 					<span className="title">
 						{__( 'Font selector', 'onepress' )}
 					</span>
@@ -1806,37 +1806,39 @@ export function FontPickerPanel({
 						{__( 'Close', 'onepress' )}
 					</button>
 				</div> */}
-				<div className="search-wrap onepress-font-picker-search-row">
-					<label
-						className="screen-reader-text"
-						htmlFor={`onepress-typo-font-search-${controlId}`}
-					>
-						{__( 'Search fonts', 'onepress' )}
-					</label>
-					<input
-						ref={searchRef}
-						id={`onepress-typo-font-search-${controlId}`}
-						type="search"
-						className="search"
-						placeholder={__( 'Search fonts…', 'onepress' )}
-						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
-						autoComplete="off"
-						autoCorrect="off"
-						spellCheck="false"
-					/>
-					<button
-						type="button"
-						className="button"
-						onClick={(e) => {
-							e.stopPropagation();
-							setManageFontsOpen(true);
-						}}
-					>
-						{__( 'Manage fonts', 'onepress' )}
-					</button>
-				</div>
-				{/* <div
+			<div className="search-wrap onepress-font-picker-search-row">
+				<label
+					className="screen-reader-text"
+					htmlFor={`onepress-typo-font-search-${controlId}`}
+				>
+					{__('Search fonts', 'onepress')}
+				</label>
+				<input
+					ref={searchRef}
+					id={`onepress-typo-font-search-${controlId}`}
+					type="search"
+					className="search"
+					placeholder={__('Search fonts…', 'onepress')}
+					value={searchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
+					autoComplete="off"
+					autoCorrect="off"
+					spellCheck="false"
+				/>
+				<button
+					type="button"
+					className="flex items-center justify-center"
+					onClick={(e) => {
+						e.stopPropagation();
+						setManageFontsOpen(true);
+					}}
+					title={__('Manage fonts', 'onepress')}
+				>
+					<span class="dashicons dashicons-list-view"></span>
+
+				</button>
+			</div>
+			{/* <div
 					className="categories"
 					role="tablist"
 					aria-label={__( 'Font categories', 'onepress' )}
@@ -1859,47 +1861,47 @@ export function FontPickerPanel({
 						</button>
 					))}
 				</div> */}
-				<div
-					className="scroll"
-					ref={setScrollRoot}
+			<div
+				className="scroll"
+				ref={setScrollRoot}
+			>
+				<span
+					className={
+						'row row-default' +
+						(!currentFontId ? ' is-selected' : '')
+					}
+					onClick={() => onSelectFont('')}
 				>
-					<span
-						className={
-							'row row-default' +
-							(!currentFontId ? ' is-selected' : '')
-						}
-						onClick={() => onSelectFont('')}
-					>
-						<span className="row-name">
-							{defaultLabel}
-						</span>
+					<span className="row-name">
+						{defaultLabel}
 					</span>
-					{filteredGroups.length === 0 ? (
-						<p className="empty" role="status">
-							{__( 'No fonts found.', 'onepress' )}
-						</p>
-					) : (
-						filteredGroups.map((g) => (
-							<div key={g.type} className="group">
-								{/* <div className="group-label">
+				</span>
+				{filteredGroups.length === 0 ? (
+					<p className="empty" role="status">
+						{__('No fonts found.', 'onepress')}
+					</p>
+				) : (
+					filteredGroups.map((g) => (
+						<div key={g.type} className="group">
+							{/* <div className="group-label">
 									{g.type}
 								</div> */}
-								{g.fonts.map((f) => (
-									<FontPickerRow
-										key={f.id}
-										controlId={controlId}
-										fontId={f.id}
-										name={f.name}
-										fontMeta={webfonts[f.id]}
-										isSelected={currentFontId === f.id}
-										onPick={onSelectFont}
-										scrollRoot={scrollRoot}
-									/>
-								))}
-							</div>
-						))
-					)}
-				</div>
+							{g.fonts.map((f) => (
+								<FontPickerRow
+									key={f.id}
+									controlId={controlId}
+									fontId={f.id}
+									name={f.name}
+									fontMeta={webfonts[f.id]}
+									isSelected={currentFontId === f.id}
+									onPick={onSelectFont}
+									scrollRoot={scrollRoot}
+								/>
+							))}
+						</div>
+					))
+				)}
+			</div>
 		</div>
 	);
 }

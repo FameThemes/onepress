@@ -3,16 +3,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/color-alpha/AlphaColorControlApp.jsx:140
-msgid "Reset to default"
-msgstr ""
-
-#: src/admin/customizer/color-alpha/AlphaColorControlApp.jsx:165
-msgid "Open color picker"
-msgstr ""
-
-#: src/admin/customizer/color-alpha/AlphaColorControlApp.jsx:208
-msgid "Clear color"
 #: src/admin/customizer/typography/FontPickerModal.jsx:1016
 #. %s: Font family name.
 msgid "\"%s\" was removed."
@@ -196,11 +186,11 @@ msgstr ""
 msgid "Search fonts…"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1836
+#: src/admin/customizer/typography/FontPickerModal.jsx:1835
 msgid "Manage fonts"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1879
+#: src/admin/customizer/typography/FontPickerModal.jsx:1881
 msgid "No fonts found."
 msgstr ""
 
@@ -247,3 +237,4 @@ msgstr ""
 #: src/admin/customizer/typography/FontPickerModal.jsx:992
 #. %s: Font family name.
 msgid "Remove \"%s\" from your library? This cannot be undone."
+msgstr ""
