@@ -78,8 +78,9 @@ function onepress_customize_register($wp_customize)
 	Onepress_Dots_Navigation::get_instance()->add_customize($wp_customize, 'onepress_sections_nav');
 
 	$config_dir = $path . '/inc/customize-configs/';
-	require_once $config_dir . 'option-demo-example.php';
-	require_once $config_dir . 'option-dynamic-section-demo.php';
+
+	// require_once $config_dir . 'option-demo-example.php';
+	// require_once $config_dir . 'option-dynamic-section-demo.php';
 
 	/**
 	 * Hook to add other customize
@@ -220,6 +221,26 @@ function onepress_customize_preview_js()
 		$handle,
 		'onepressBackgroundPostMessageSettingIds',
 		$bg_pm_ids
+	);
+
+	$color_pm_ids = function_exists( 'onepress_customize_color_preview_postmessage_setting_ids' )
+		? onepress_customize_color_preview_postmessage_setting_ids()
+		: array();
+	if ( ! is_array( $color_pm_ids ) ) {
+		$color_pm_ids = array();
+	}
+	$color_pm_ids = array_values(
+		array_filter(
+			array_map( 'strval', $color_pm_ids ),
+			static function ( $id ) {
+				return is_string( $id ) && '' !== $id;
+			}
+		)
+	);
+	wp_localize_script(
+		$handle,
+		'onepressColorPostMessageSettingIds',
+		$color_pm_ids
 	);
 }
 add_action('customize_preview_init', 'onepress_customize_preview_js', 65);

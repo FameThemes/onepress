@@ -2,11 +2,11 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/admin/customizer/background/buildBackgroundCss.js":
+/***/ "./src/admin/customizer/background/buildBackgroundCss.js"
 /*!***************************************************************!*\
   !*** ./src/admin/customizer/background/buildBackgroundCss.js ***!
   \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -267,13 +267,13 @@ function backgroundStyleElementId(settingId) {
   return `onepress-bg-inline-${settingId}`.replace(/[^a-zA-Z0-9_-]/g, '-');
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/background/previewBindings.js":
+/***/ "./src/admin/customizer/background/previewBindings.js"
 /*!************************************************************!*\
   !*** ./src/admin/customizer/background/previewBindings.js ***!
   \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -353,13 +353,77 @@ function bindOnePressBackgroundPreview(api) {
   });
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/slider/buildSliderPreviewCss.js":
+/***/ "./src/admin/customizer/color/previewBindings.js"
+/*!*******************************************************!*\
+  !*** ./src/admin/customizer/color/previewBindings.js ***!
+  \*******************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   bindOnePressColorPreview: () => (/* binding */ bindOnePressColorPreview)
+/* harmony export */ });
+/**
+ * Customizer preview iframe: `--color-*` custom properties via postMessage.
+ * Mirrors {@see onepress_theme_mod_id_to_color_css_var()} in PHP.
+ *
+ * @param {import('wp-customize').Customize} api wp.customize
+ */
+function bindOnePressColorPreview(api) {
+  const ids = typeof window !== 'undefined' && Array.isArray(window.onepressColorPostMessageSettingIds) ? window.onepressColorPostMessageSettingIds : [];
+  if (!ids.length) {
+    return;
+  }
+
+  /**
+   * @param {string} settingId
+   * @returns {string}
+   */
+  function settingIdToCssVar(settingId) {
+    let s = String(settingId);
+    if (s.startsWith('onepress_')) {
+      s = s.slice('onepress_'.length);
+    }
+    return '--color-' + s.replace(/_/g, '-');
+  }
+
+  /**
+   * @param {string} settingId
+   * @param {unknown} raw
+   */
+  function applyColorVar(settingId, raw) {
+    const prop = settingIdToCssVar(settingId);
+    const v = raw != null && String(raw).trim() !== '' ? String(raw).trim() : '';
+    if (v) {
+      document.documentElement.style.setProperty(prop, v);
+    } else {
+      // Must override :root vars from #onepress-style-inline-css so cleared values use SCSS fallbacks.
+      document.documentElement.style.setProperty(prop, 'initial');
+    }
+  }
+  api.bind('preview-ready', () => {
+    ids.forEach(id => {
+      const sid = String(id).trim();
+      if (!sid) {
+        return;
+      }
+      api(sid, setting => {
+        applyColorVar(sid, setting.get());
+        setting.bind(to => applyColorVar(sid, to));
+      });
+    });
+  });
+}
+
+/***/ },
+
+/***/ "./src/admin/customizer/slider/buildSliderPreviewCss.js"
 /*!**************************************************************!*\
   !*** ./src/admin/customizer/slider/buildSliderPreviewCss.js ***!
   \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -437,13 +501,13 @@ function buildSliderPreviewCss(data, selector, property, breakpoints) {
   return out.trim();
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/slider/previewBindings.js":
+/***/ "./src/admin/customizer/slider/previewBindings.js"
 /*!********************************************************!*\
   !*** ./src/admin/customizer/slider/previewBindings.js ***!
   \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -523,13 +587,13 @@ function bindOnePressSliderPreview(api) {
   });
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/spacing/buildSpacingPreviewCss.js":
+/***/ "./src/admin/customizer/spacing/buildSpacingPreviewCss.js"
 /*!****************************************************************!*\
   !*** ./src/admin/customizer/spacing/buildSpacingPreviewCss.js ***!
   \****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -627,13 +691,13 @@ function buildSpacingPreviewCss(css, selector, breakpoints) {
   return out.trim();
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/spacing/previewBindings.js":
+/***/ "./src/admin/customizer/spacing/previewBindings.js"
 /*!*********************************************************!*\
   !*** ./src/admin/customizer/spacing/previewBindings.js ***!
   \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -716,13 +780,13 @@ function bindOnePressSpacingPreview(api) {
   });
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/typography/buildTypographyPreviewCss.js":
+/***/ "./src/admin/customizer/typography/buildTypographyPreviewCss.js"
 /*!**********************************************************************!*\
   !*** ./src/admin/customizer/typography/buildTypographyPreviewCss.js ***!
   \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -1037,13 +1101,13 @@ function buildTypographyPreviewCssVars(flat, settingId, basePx = 16, breakpoints
   return formatTypographyPreviewCssVarsFromLayers(layers, breakpoints || getTypographyPreviewBreakpoints());
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/typography/previewBindings.js":
+/***/ "./src/admin/customizer/typography/previewBindings.js"
 /*!************************************************************!*\
   !*** ./src/admin/customizer/typography/previewBindings.js ***!
   \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -1153,7 +1217,7 @@ function bindOnePressTypographyPreview(api) {
   });
 }
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -1175,6 +1239,12 @@ function bindOnePressTypographyPreview(api) {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -1219,9 +1289,10 @@ var __webpack_exports__ = {};
   \******************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _customizer_background_previewBindings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./customizer/background/previewBindings */ "./src/admin/customizer/background/previewBindings.js");
-/* harmony import */ var _customizer_typography_previewBindings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./customizer/typography/previewBindings */ "./src/admin/customizer/typography/previewBindings.js");
-/* harmony import */ var _customizer_spacing_previewBindings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./customizer/spacing/previewBindings */ "./src/admin/customizer/spacing/previewBindings.js");
-/* harmony import */ var _customizer_slider_previewBindings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./customizer/slider/previewBindings */ "./src/admin/customizer/slider/previewBindings.js");
+/* harmony import */ var _customizer_color_previewBindings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./customizer/color/previewBindings */ "./src/admin/customizer/color/previewBindings.js");
+/* harmony import */ var _customizer_typography_previewBindings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./customizer/typography/previewBindings */ "./src/admin/customizer/typography/previewBindings.js");
+/* harmony import */ var _customizer_spacing_previewBindings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./customizer/spacing/previewBindings */ "./src/admin/customizer/spacing/previewBindings.js");
+/* harmony import */ var _customizer_slider_previewBindings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./customizer/slider/previewBindings */ "./src/admin/customizer/slider/previewBindings.js");
 /**
  * customizer.js
  *
@@ -1234,11 +1305,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 (function ($, api) {
   (0,_customizer_background_previewBindings__WEBPACK_IMPORTED_MODULE_0__.bindOnePressBackgroundPreview)(api);
-  (0,_customizer_typography_previewBindings__WEBPACK_IMPORTED_MODULE_1__.bindOnePressTypographyPreview)(api);
-  (0,_customizer_spacing_previewBindings__WEBPACK_IMPORTED_MODULE_2__.bindOnePressSpacingPreview)(api);
-  (0,_customizer_slider_previewBindings__WEBPACK_IMPORTED_MODULE_3__.bindOnePressSliderPreview)(api);
+  (0,_customizer_color_previewBindings__WEBPACK_IMPORTED_MODULE_1__.bindOnePressColorPreview)(api);
+  (0,_customizer_typography_previewBindings__WEBPACK_IMPORTED_MODULE_2__.bindOnePressTypographyPreview)(api);
+  (0,_customizer_spacing_previewBindings__WEBPACK_IMPORTED_MODULE_3__.bindOnePressSpacingPreview)(api);
+  (0,_customizer_slider_previewBindings__WEBPACK_IMPORTED_MODULE_4__.bindOnePressSliderPreview)(api);
 
   // Site footer bg
   /*
@@ -1252,19 +1325,20 @@ __webpack_require__.r(__webpack_exports__);
   */
 
   // Site footer info bg
-  wp.customize('onepress_footer_info_bg', function (value) {
-    value.bind(function (to) {
-      $('.site-footer .site-info, .site-footer .btt a').css({
-        'background': to
-      });
-      $('.site-footer .site-info').css({
-        color: 'rgba(255, 255, 255, 0.7)'
-      });
-      $('.site-footer .btt a, .site-footer .site-info a').css({
-        color: 'rgba(255, 255, 255, 0.9)'
-      });
-    });
-  });
+  // wp.customize( 'onepress_footer_info_bg', function( value ) {
+  //     value.bind( function( to ) {
+  //         $( '.site-footer .site-info, .site-footer .btt a' ).css( {
+  //             'background': to
+  //         } );
+
+  //         $( '.site-footer .site-info').css( {
+  //             color: 'rgba(255, 255, 255, 0.7)',
+  //         } );
+  //         $( '.site-footer .btt a, .site-footer .site-info a').css( {
+  //             color: 'rgba(255, 255, 255, 0.9)',
+  //         } );
+  //     } );
+  // } );
 
   /**
    * Handle rendering of partials.
@@ -1276,22 +1350,22 @@ __webpack_require__.r(__webpack_exports__);
   });
 
   // Header text color.
-  wp.customize('header_textcolor', function (value) {
-    value.bind(function (to) {
-      if ('blank' === to) {
-        $('.site-title a, .site-description').css({
-          'clip': 'rect(1px, 1px, 1px, 1px)',
-          'position': 'absolute'
-        });
-      } else {
-        $('.site-title a, .site-description').css({
-          'clip': 'auto',
-          'color': to,
-          'position': 'relative'
-        });
-      }
-    });
-  });
+  // wp.customize( 'header_textcolor', function( value ) {
+  //     value.bind( function( to ) {
+  //         if ( 'blank' === to ) {
+  //             $( '.site-title a, .site-description' ).css( {
+  //                 'clip': 'rect(1px, 1px, 1px, 1px)',
+  //                 'position': 'absolute'
+  //             } );
+  //         } else {
+  //             $( '.site-title a, .site-description' ).css( {
+  //                 'clip': 'auto',
+  //                 'color': to,
+  //                 'position': 'relative'
+  //             } );
+  //         }
+  //     } );
+  // } );
 
   // Site footer widgets
   wp.customize('onepress_btt_disable', function (value) {

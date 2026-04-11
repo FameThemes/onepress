@@ -150,12 +150,12 @@ if ( class_exists( 'OnePress_Background_Customize_Control' ) && function_exists(
 		array(
 			'_onepressBackground' => true,
 			'_meta'               => array(
-				'selector'          => '.site-header',
+				'selector'          => '.site-headerd_test',
 				'states'            => array( 'normal', 'hover', 'focus' ),
 				'selectorsByState'  => array(
-					'normal' => '.site-header',
-					'hover'  => '.site-header:hover',
-					'focus'  => '.site-header:focus',
+					'normal' => '.site-headerd_test',
+					'hover'  => '.site-headerd_test:hover',
+					'focus'  => '.site-headerd_test:focus',
 				),
 				'stateLabels'       => array(
 					'normal' => esc_html__( 'Normal', 'onepress' ),

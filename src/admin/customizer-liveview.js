@@ -7,6 +7,7 @@
  */
 
 import { bindOnePressBackgroundPreview } from './customizer/background/previewBindings';
+import { bindOnePressColorPreview } from './customizer/color/previewBindings';
 import { bindOnePressTypographyPreview } from './customizer/typography/previewBindings';
 import { bindOnePressSpacingPreview } from './customizer/spacing/previewBindings';
 import { bindOnePressSliderPreview } from './customizer/slider/previewBindings';
@@ -14,6 +15,7 @@ import { bindOnePressSliderPreview } from './customizer/slider/previewBindings';
 ( function( $ , api ) {
 
 	bindOnePressBackgroundPreview( api );
+	bindOnePressColorPreview( api );
 	bindOnePressTypographyPreview( api );
 	bindOnePressSpacingPreview( api );
 	bindOnePressSliderPreview( api );
@@ -31,20 +33,20 @@ import { bindOnePressSliderPreview } from './customizer/slider/previewBindings';
     */
 
     // Site footer info bg
-    wp.customize( 'onepress_footer_info_bg', function( value ) {
-        value.bind( function( to ) {
-            $( '.site-footer .site-info, .site-footer .btt a' ).css( {
-                'background': to
-            } );
+    // wp.customize( 'onepress_footer_info_bg', function( value ) {
+    //     value.bind( function( to ) {
+    //         $( '.site-footer .site-info, .site-footer .btt a' ).css( {
+    //             'background': to
+    //         } );
 
-            $( '.site-footer .site-info').css( {
-                color: 'rgba(255, 255, 255, 0.7)',
-            } );
-            $( '.site-footer .btt a, .site-footer .site-info a').css( {
-                color: 'rgba(255, 255, 255, 0.9)',
-            } );
-        } );
-    } );
+    //         $( '.site-footer .site-info').css( {
+    //             color: 'rgba(255, 255, 255, 0.7)',
+    //         } );
+    //         $( '.site-footer .btt a, .site-footer .site-info a').css( {
+    //             color: 'rgba(255, 255, 255, 0.9)',
+    //         } );
+    //     } );
+    // } );
 
 
     /**
@@ -58,22 +60,22 @@ import { bindOnePressSliderPreview } from './customizer/slider/previewBindings';
 
 
     // Header text color.
-    wp.customize( 'header_textcolor', function( value ) {
-        value.bind( function( to ) {
-            if ( 'blank' === to ) {
-                $( '.site-title a, .site-description' ).css( {
-                    'clip': 'rect(1px, 1px, 1px, 1px)',
-                    'position': 'absolute'
-                } );
-            } else {
-                $( '.site-title a, .site-description' ).css( {
-                    'clip': 'auto',
-                    'color': to,
-                    'position': 'relative'
-                } );
-            }
-        } );
-    } );
+    // wp.customize( 'header_textcolor', function( value ) {
+    //     value.bind( function( to ) {
+    //         if ( 'blank' === to ) {
+    //             $( '.site-title a, .site-description' ).css( {
+    //                 'clip': 'rect(1px, 1px, 1px, 1px)',
+    //                 'position': 'absolute'
+    //             } );
+    //         } else {
+    //             $( '.site-title a, .site-description' ).css( {
+    //                 'clip': 'auto',
+    //                 'color': to,
+    //                 'position': 'relative'
+    //             } );
+    //         }
+    //     } );
+    // } );
 
 
     // Site footer widgets

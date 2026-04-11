@@ -89,7 +89,6 @@ body {
       "text-decoration": none,
       "text-transform": none,
     ),
-    $color: var(--typo-body, var(--base-color-text))
   );
 }
 
@@ -164,7 +163,7 @@ h6 {
 
 // Section title
 .site-main .section-title-area .section-subtitle {
-  $k: section-title;
+  $k: section-subtitle;
   @include typo-customizer-properties(
     $k,
     (
@@ -216,7 +215,8 @@ h6 {
       "letter-spacing": 4px,
       "text-decoration": none,
       "text-transform": uppercase,
-    )
+    ),
+    $color: var(--color-typo-hero-heading-color, inherit)
   );
 }
 
@@ -235,7 +235,7 @@ h6 {
       "text-decoration": none,
       "text-transform": uppercase,
     ),
-    $color: var(--typo-branding-title, #000000)
+    $color: var(--color-typo-branding-title-color, var(--color-logo-text-color, #000000))
   );
 }
 
@@ -252,11 +252,11 @@ h6 {
       "text-decoration": none,
       "text-transform": none,
     ),
-    $color: var(--typo-branding-tagline, #000000)
+    $color: var(--color-typo-branding-tagline-color, var(--color-tagline-text-color, #000000))
   );
 }
 
-#page .onepress-menu a {
+.onepress-menu a {
   $k: nav;
   @include typo-customizer-properties(
     $k,
@@ -269,7 +269,7 @@ h6 {
       "text-decoration": none,
       "text-transform": uppercase,
     ),
-    $color: var(--typo-nav, var(--menu-link-color, #{v.$heading})),
+    $color: var(--typo-nav, var(--color-menu-color, #{v.$heading})),
     $color-first: true
   );
 }
@@ -340,7 +340,7 @@ h6 {
       "text-decoration": none,
       "text-transform": uppercase,
     ),
-    $color: var(--typo-slider-slide-title, #ffffff)
+    $color: var(--color-typo-slider-slide-title-color, #ffffff)
   );
 }
 
@@ -359,23 +359,23 @@ h6 {
       "text-decoration": none,
       "text-transform": none,
     ),
-    $color: var(--typo-slider-slide-content, #ffffff)
+    $color: var(--color-typo-slider-slide-content-color, #ffffff)
   );
 }
 
-#features .section-content {
-  $k: demo-heading;
+// #features .section-content {
+//   $k: demo-heading;
 
-  @include typo-customizer-properties(
-    $k,
-    (
-      "font-family": v.$font_text,
-      "font-style": normal,
-      "font-size": $_typo-body-font-size,
-      "line-height": $_typo-body-lh,
-      "text-decoration": none,
-      "text-transform": none,
-    ),
-    $color: var(--typo-demo-heading, #{v.$text})
-  );
-}
+//   @include typo-customizer-properties(
+//     $k,
+//     (
+//       "font-family": v.$font_text,
+//       "font-style": normal,
+//       "font-size": $_typo-body-font-size,
+//       "line-height": $_typo-body-lh,
+//       "text-decoration": none,
+//       "text-transform": none,
+//     ),
+//     $color: var(--typo-demo-heading, #{v.$text})
+//   );
+// }

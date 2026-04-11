@@ -376,6 +376,14 @@ function onepress_customizer_partials( $wp_customize ) {
 
 	);
 
+	if ( function_exists( 'onepress_customize_color_preview_postmessage_setting_ids' ) ) {
+		$css_settings = array_merge(
+			$css_settings,
+			onepress_customize_color_preview_postmessage_setting_ids()
+		);
+		$css_settings = array_values( array_unique( array_filter( array_map( 'strval', $css_settings ) ) ) );
+	}
+
 	/**
 	 * @since 2.1.1
 	 */

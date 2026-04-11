@@ -5,113 +5,113 @@
 
 // Design tokens consumed in this partial (--base-typo-*, --base-color-*, --base-space-*).
 :root {
-	/* color */
-	--base-color-text: #{variables.$text};
-	--base-color-heading: #{variables.$heading};
-	--base-color-primary: #{variables.$primary};
-	--base-color-body-bg: #ffffff;
-	--base-color-site-bg: #ffffff;
-	--base-color-selection-bg: #000000;
-	--base-color-selection-text: #ffffff;
-	--base-color-border: #{variables.$border};
-	--base-color-meta: #{variables.$meta};
-	--base-color-mark-bg: #fff9c0;
-	--base-color-form-input-bg: #f2f2f2;
-	--base-color-form-input-text: #000000;
-	--base-color-form-focus-bg: #e9e9e9;
-	--base-color-form-focus-border: #ebebeb;
-	--base-color-button-text: #ffffff;
-	--base-color-tap-clear: rgba(0, 0, 0, 0);
+  /* color */
+  --base-color-text: #{variables.$text};
+  --base-color-heading: #{variables.$heading};
+  --base-color-primary: #{variables.$primary};
+  --base-color-body-bg: #ffffff;
+  --base-color-site-bg: #ffffff;
+  --base-color-selection-bg: #000000;
+  --base-color-selection-text: #ffffff;
+  --base-color-border: #{variables.$border};
+  --base-color-meta: #{variables.$meta};
+  --base-color-mark-bg: #fff9c0;
+  --base-color-form-input-bg: #f2f2f2;
+  --base-color-form-input-text: #000000;
+  --base-color-form-focus-bg: #e9e9e9;
+  --base-color-form-focus-border: #ebebeb;
+  --base-color-button-text: #ffffff;
+  --base-color-tap-clear: rgba(0, 0, 0, 0);
 
-	/* typography — fonts */
-	--base-typo-font-text: #{variables.$font_text};
-	--base-typo-font-heading: #{variables.$font_heading};
-	--base-typo-font-mono: #{variables.$monaco};
+  /* typography — fonts */
+  --base-typo-font-text: #{variables.$font_text};
+  --base-typo-font-heading: #{variables.$font_heading};
+  --base-typo-font-mono: #{variables.$monaco};
 
-	/* typography — scale (html root; responsive overrides follow :root) */
-	--base-typo-html-root: 16px;
+  /* typography — scale (html root; responsive overrides follow :root) */
+  --base-typo-html-root: 16px;
 
-	/* typography — body */
-	--base-typo-body-size: 0.875rem;
-	--base-typo-body-line-height: 1.7;
+  /* typography — body */
+  --base-typo-body-size: 0.875rem;
+  --base-typo-body-line-height: 1.7;
 
-	/* typography — headings (shared) */
-	--base-typo-heading-weight: 600;
-	--base-typo-heading-margin-bottom: 15px;
+  /* typography — headings (shared) */
+  --base-typo-heading-weight: 600;
+  --base-typo-heading-margin-bottom: 15px;
 
-	/* typography — h1–h6 sizes & line-heights */
-	--base-typo-h1-line-height: 1.3;
-	--base-typo-h1-size: 2.0625rem;
-	--base-typo-h2-line-height: 1.2;
-	--base-typo-h2-size: 1.5625rem;
-	--base-typo-h3-size: 1.25rem;
-	--base-typo-h4-size: 1.0625rem;
-	--base-typo-h5-size: 0.9375rem;
-	--base-typo-h6-size: 0.75rem;
-	--base-typo-h6-letter-spacing: 1px;
-	--base-typo-h5-weight: 700;
-	--base-typo-h6-weight: 700;
+  /* typography — h1–h6 sizes & line-heights */
+  --base-typo-h1-line-height: 1.3;
+  --base-typo-h1-size: 2.0625rem;
+  --base-typo-h2-line-height: 1.2;
+  --base-typo-h2-size: 1.5625rem;
+  --base-typo-h3-size: 1.25rem;
+  --base-typo-h4-size: 1.0625rem;
+  --base-typo-h5-size: 0.9375rem;
+  --base-typo-h6-size: 0.75rem;
+  --base-typo-h6-letter-spacing: 1px;
+  --base-typo-h5-weight: 700;
+  --base-typo-h6-weight: 700;
 
-	/* typography — misc */
-	--base-typo-blockquote-cite-size: 13px;
-	--base-typo-abbr-size: 0.95em;
-	--base-typo-abbr-letter-spacing: 1px;
-	--base-typo-small-ratio: 82%;
-	--base-typo-big-ratio: 125%;
-	--base-typo-table-th-size: 14px;
-	--base-typo-table-th-letter-spacing: 2px;
-	--base-typo-table-cell-line-height: 1.42857;
-	--base-typo-form-button-size: 13px;
-	--base-typo-form-button-letter-spacing: 1px;
-	--base-typo-form-button-line-height: 1;
-	--base-typo-input-size: 15px;
-	--base-typo-input-line-height: 22px;
-	--base-typo-input-weight: normal;
-	--base-typo-mce-body-size: 13px;
-	--base-typo-pre-line-height: 1.7;
+  /* typography — misc */
+  --base-typo-blockquote-cite-size: 13px;
+  --base-typo-abbr-size: 0.95em;
+  --base-typo-abbr-letter-spacing: 1px;
+  --base-typo-small-ratio: 82%;
+  --base-typo-big-ratio: 125%;
+  --base-typo-table-th-size: 14px;
+  --base-typo-table-th-letter-spacing: 2px;
+  --base-typo-table-cell-line-height: 1.42857;
+  --base-typo-form-button-size: 13px;
+  --base-typo-form-button-letter-spacing: 1px;
+  --base-typo-form-button-line-height: 1;
+  --base-typo-input-size: 15px;
+  --base-typo-input-line-height: 22px;
+  --base-typo-input-weight: normal;
+  --base-typo-mce-body-size: 13px;
+  --base-typo-pre-line-height: 1.7;
 
-	/* spacing */
-	--base-space-0: 0;
-	--base-space-unit: #{variables.$base};
-	--base-space-block: 15px;
-	--base-space-h4-bottom: 12px;
-	--base-space-code-x: 7px;
-	--base-space-code-y: 5px;
-	--base-space-list-indent: 20px;
-	--base-space-list-item-y: #{math.div(variables.$base, 2.5)};
-	--base-space-table-cell: 5px;
-	--base-space-form-button-y: 15px;
-	--base-space-form-button-x: 23px;
-	--base-space-form-button-margin-y: 3px;
-	--base-space-input-padding: 10px;
-	--base-space-align-wide: 3.5em;
-	--base-space-screen-reader-padding: 17px;
-	--base-space-screen-reader-offset: 5px;
-	--base-space-mce-y: 20px;
-	--base-space-mce-x: 40px;
+  /* spacing */
+  --base-space-0: 0;
+  --base-space-unit: #{variables.$base};
+  --base-space-block: 15px;
+  --base-space-h4-bottom: 12px;
+  --base-space-code-x: 7px;
+  --base-space-code-y: 5px;
+  --base-space-list-indent: 20px;
+  --base-space-list-item-y: #{math.div(variables.$base, 2.5)};
+  --base-space-table-cell: 5px;
+  --base-space-form-button-y: 15px;
+  --base-space-form-button-x: 23px;
+  --base-space-form-button-margin-y: 3px;
+  --base-space-input-padding: 10px;
+  --base-space-align-wide: 3.5em;
+  --base-space-screen-reader-padding: 17px;
+  --base-space-screen-reader-offset: 5px;
+  --base-space-mce-y: 20px;
+  --base-space-mce-x: 40px;
 }
 
 // Responsive token overrides (same custom properties as :root; order matters for overlapping down() queries).
 @include variables.media-breakpoint-down(md) {
-	html {
-		--base-typo-html-root: 15px;
-	}
+  html {
+    --base-typo-html-root: 15px;
+  }
 }
 
 @include variables.media-breakpoint-down(sm) {
-	html {
-		--base-typo-html-root: 14px;
-	}
+  html {
+    --base-typo-html-root: 14px;
+  }
 }
 
 @include variables.media-breakpoint-up(md) {
-	h1 {
-		--base-typo-h1-size: 2.5rem;
-	}
+  h1 {
+    --base-typo-h1-size: 2.5rem;
+  }
 
-	h2 {
-		--base-typo-h2-size: 2rem;
-	}
+  h2 {
+    --base-typo-h2-size: 2rem;
+  }
 }
 
 /*------------------------------
@@ -120,23 +120,23 @@
 
 html,
 body {
-	margin: var(--base-space-0);
-	padding: var(--base-space-0);
+  margin: var(--base-space-0);
+  padding: var(--base-space-0);
 }
 
 html {
-	box-sizing: border-box;
-	-webkit-tap-highlight-color: var(--base-color-tap-clear);
-	font-size: var(--base-typo-html-root);
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: var(--base-color-tap-clear);
+  font-size: var(--base-typo-html-root);
 }
 
 body {
-	background: var(--base-color-body-bg);
+  background: var(--base-color-body-bg);
 }
 
 .site {
-	background: var(--base-color-site-bg);
-	position: relative;
+  background: var(--base-color-site-bg);
+  position: relative;
 }
 
 body,
@@ -144,45 +144,45 @@ button,
 input,
 select,
 textarea {
-	font-family: var(--base-typo-font-text);
-	font-size: var(--base-typo-body-size);
-	line-height: var(--base-typo-body-line-height);
-	color: var(--base-color-text);
+  font-family: var(--base-typo-font-text);
+  font-size: var(--base-typo-body-size);
+  line-height: var(--base-typo-body-line-height);
+  color: var(--color-base-color, var(--base-color-text));
 }
 
 pre,
 code,
 input,
 textarea {
-	font: inherit;
+  font: inherit;
 }
 
 ::-moz-selection {
-	background: var(--base-color-selection-bg);
-	color: var(--base-color-selection-text);
+  background: var(--base-color-selection-bg);
+  color: var(--base-color-selection-text);
 }
 
 ::selection {
-	background: var(--base-color-selection-bg);
-	color: var(--base-color-selection-text);
+  background: var(--base-color-selection-bg);
+  color: var(--base-color-selection-text);
 }
 /*------------------------------
 	2.2 Links
 ------------------------------*/
 a {
-	color: var(--base-color-primary);
-	text-decoration: none;
-	outline: none;
-	&:hover {
-		text-decoration: none;
-		color: var(--base-color-text);
-		text-decoration: underline;
-	}
-	&:active,
-	&:focus,
-	&:hover {
-		outline: none;
-	}
+  color: var(--base-color-primary);
+  text-decoration: none;
+  outline: none;
+  &:hover {
+    text-decoration: none;
+    color: var(--base-color-text);
+    text-decoration: underline;
+  }
+  &:active,
+  &:focus,
+  &:hover {
+    outline: none;
+  }
 }
 
 /*------------------------------
@@ -194,53 +194,53 @@ h3,
 h4,
 h5,
 h6 {
-	clear: both;
-	font-family: var(--base-typo-font-heading);
-	font-weight: var(--base-typo-heading-weight);
-	margin-bottom: var(--base-space-block);
-	margin-top: var(--base-space-0);
-	@extend .break;
-	color: var(--base-color-heading);
-	& a {
-		color: var(--base-color-heading);
-		text-decoration: none;
-	}
+  clear: both;
+  font-family: var(--base-typo-font-heading);
+  font-weight: var(--base-typo-heading-weight);
+  margin-bottom: var(--base-space-block);
+  margin-top: var(--base-space-0);
+  @extend .break;
+  color: var(--color-heading-color, var(--base-color-heading));
+  & a {
+    color: var(--color-heading-color, var(--base-color-heading));
+    text-decoration: none;
+  }
 }
 
 h1 {
-	line-height: var(--base-typo-h1-line-height);
-	font-size: var(--base-typo-h1-size);
-	span {
-		font-weight: bold;
-	}
+  line-height: var(--base-typo-h1-line-height);
+  font-size: var(--base-typo-h1-size);
+  span {
+    font-weight: bold;
+  }
 }
 
 h2 {
-	line-height: var(--base-typo-h2-line-height);
-	font-size: var(--base-typo-h2-size);
+  line-height: var(--base-typo-h2-line-height);
+  font-size: var(--base-typo-h2-size);
 }
 
 h3 {
-	font-size: var(--base-typo-h3-size);
-	font-weight: var(--base-typo-heading-weight);
+  font-size: var(--base-typo-h3-size);
+  font-weight: var(--base-typo-heading-weight);
 }
 
 h4 {
-	font-size: var(--base-typo-h4-size);
-	margin-bottom: var(--base-space-h4-bottom);
+  font-size: var(--base-typo-h4-size);
+  margin-bottom: var(--base-space-h4-bottom);
 }
 
 h5 {
-	text-transform: uppercase;
-	font-size: var(--base-typo-h5-size);
-	font-weight: var(--base-typo-h5-weight);
+  text-transform: uppercase;
+  font-size: var(--base-typo-h5-size);
+  font-weight: var(--base-typo-h5-weight);
 }
 
 h6 {
-	font-weight: var(--base-typo-h6-weight);
-	text-transform: uppercase;
-	font-size: var(--base-typo-h6-size);
-	letter-spacing: var(--base-typo-h6-letter-spacing);
+  font-weight: var(--base-typo-h6-weight);
+  text-transform: uppercase;
+  font-size: var(--base-typo-h6-size);
+  letter-spacing: var(--base-typo-h6-letter-spacing);
 }
 
 /*------------------------------
@@ -260,64 +260,64 @@ table,
 dt,
 dd,
 hr {
-	margin-bottom: var(--base-space-block);
-	margin-top: var(--base-space-0);
+  margin-bottom: var(--base-space-block);
+  margin-top: var(--base-space-0);
 }
 p,
 ul,
 ol,
 dl,
 blockquote {
-	@extend .break;
+  @extend .break;
 }
 
 /*------------------------------
 	2.5 Content
 ------------------------------*/
 img {
-	height: auto;
-	max-width: 100%;
-	vertical-align: middle;
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
 }
 
 b,
 strong {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 blockquote {
-	clear: both;
-	margin: var(--base-space-unit) var(--base-space-0);
-	p {
-		font-style: italic;
-	}
-	cite {
-		font-style: normal;
-		margin-bottom: var(--base-space-unit);
-		font-size: var(--base-typo-blockquote-cite-size);
-	}
+  clear: both;
+  margin: var(--base-space-unit) var(--base-space-0);
+  p {
+    font-style: italic;
+  }
+  cite {
+    font-style: normal;
+    margin-bottom: var(--base-space-unit);
+    font-size: var(--base-typo-blockquote-cite-size);
+  }
 }
 
 dfn,
 cite,
 em,
 i {
-	font-style: italic;
+  font-style: italic;
 }
 
 figure {
-	margin: var(--base-space-0);
+  margin: var(--base-space-0);
 }
 
 address {
-	margin: var(--base-space-unit) var(--base-space-0);
+  margin: var(--base-space-unit) var(--base-space-0);
 }
 
 hr {
-	border: 0;
-	border-top: 1px solid var(--base-color-border);
-	height: 1px;
-	margin-bottom: var(--base-space-unit);
+  border: 0;
+  border-top: 1px solid var(--base-color-border);
+  height: 1px;
+  margin-bottom: var(--base-space-unit);
 }
 
 tt,
@@ -326,90 +326,90 @@ pre,
 code,
 samp,
 var {
-	font-family: var(--base-typo-font-mono);
-	background-color: var(--base-color-border);
-	padding: var(--base-space-code-y) var(--base-space-code-x);
-	@include variables.border-radius;
+  font-family: var(--base-typo-font-mono);
+  background-color: var(--base-color-border);
+  padding: var(--base-space-code-y) var(--base-space-code-x);
+  @include variables.border-radius;
 }
 
 pre {
-	overflow: auto;
-	white-space: pre-wrap;
-	max-width: 100%;
-	line-height: var(--base-typo-pre-line-height);
-	margin: var(--base-space-unit) var(--base-space-0);
-	padding: var(--base-space-unit);
-	@extend .break;
+  overflow: auto;
+  white-space: pre-wrap;
+  max-width: 100%;
+  line-height: var(--base-typo-pre-line-height);
+  margin: var(--base-space-unit) var(--base-space-0);
+  padding: var(--base-space-unit);
+  @extend .break;
 }
 
 details {
-	summary {
-		font-weight: bold;
-		margin-bottom: var(--base-space-unit);
-	}
-	:focus {
-		outline: none;
-	}
+  summary {
+    font-weight: bold;
+    margin-bottom: var(--base-space-unit);
+  }
+  :focus {
+    outline: none;
+  }
 }
 
 abbr,
 acronym,
 dfn {
-	cursor: help;
-	font-size: var(--base-typo-abbr-size);
-	text-transform: uppercase;
-	border-bottom: 1px dotted var(--base-color-border);
-	letter-spacing: var(--base-typo-abbr-letter-spacing);
+  cursor: help;
+  font-size: var(--base-typo-abbr-size);
+  text-transform: uppercase;
+  border-bottom: 1px dotted var(--base-color-border);
+  letter-spacing: var(--base-typo-abbr-letter-spacing);
 }
 
 mark {
-	background-color: var(--base-color-mark-bg);
-	text-decoration: none;
+  background-color: var(--base-color-mark-bg);
+  text-decoration: none;
 }
 
 small {
-	font-size: var(--base-typo-small-ratio);
+  font-size: var(--base-typo-small-ratio);
 }
 
 big {
-	font-size: var(--base-typo-big-ratio);
+  font-size: var(--base-typo-big-ratio);
 }
 
 ul,
 ol {
-	padding-left: var(--base-space-list-indent);
+  padding-left: var(--base-space-list-indent);
 }
 
 ul {
-	list-style: disc;
+  list-style: disc;
 }
 
 ol {
-	list-style: decimal;
+  list-style: decimal;
 }
 
 ul li,
 ol li {
-	margin: var(--base-space-list-item-y) var(--base-space-0);
+  margin: var(--base-space-list-item-y) var(--base-space-0);
 }
 
 dt {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 dd {
-	margin: var(--base-space-0) var(--base-space-unit) var(--base-space-unit);
+  margin: var(--base-space-0) var(--base-space-unit) var(--base-space-unit);
 }
 
 /*------------------------------
 	2.6 Table
 ------------------------------*/
 table {
-	width: 100%;
-	margin-bottom: var(--base-space-unit);
-	border: 1px solid var(--base-color-border);
-	border-collapse: collapse;
-	border-spacing: var(--base-space-0);
+  width: 100%;
+  margin-bottom: var(--base-space-unit);
+  border: 1px solid var(--base-color-border);
+  border-collapse: collapse;
+  border-spacing: var(--base-space-0);
 }
 
 table > thead > tr > th,
@@ -418,30 +418,30 @@ table > tfoot > tr > th,
 table > thead > tr > td,
 table > tbody > tr > td,
 table > tfoot > tr > td {
-	border: 1px solid var(--base-color-border);
-	line-height: var(--base-typo-table-cell-line-height);
-	padding: var(--base-space-table-cell);
-	vertical-align: middle;
-	//text-align: center;
+  border: 1px solid var(--base-color-border);
+  line-height: var(--base-typo-table-cell-line-height);
+  padding: var(--base-space-table-cell);
+  vertical-align: middle;
+  //text-align: center;
 }
 
 table > thead > tr > th,
 table > thead > tr > td {
-	border-bottom-width: 2px;
+  border-bottom-width: 2px;
 }
 
 table th {
-	font-size: var(--base-typo-table-th-size);
-	letter-spacing: var(--base-typo-table-th-letter-spacing);
-	text-transform: uppercase;
+  font-size: var(--base-typo-table-th-size);
+  letter-spacing: var(--base-typo-table-th-letter-spacing);
+  text-transform: uppercase;
 }
 
 /*------------------------------
 	2.7 Form
 ------------------------------*/
 fieldset {
-	padding: var(--base-space-unit);
-	border: 1px solid var(--base-color-border);
+  padding: var(--base-space-unit);
+  border: 1px solid var(--base-color-border);
 }
 
 input[type="reset"],
@@ -450,28 +450,28 @@ input[type="submit"],
 /* 3rd plugins support */
 .pirate-forms-submit-button,
 .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit {
-	cursor: pointer;
-	background: var(--base-color-primary);
-	border: none;
-	display: inline-block;
-	color: var(--base-color-button-text);
-	letter-spacing: var(--base-typo-form-button-letter-spacing);
-	text-transform: uppercase;
-	line-height: var(--base-typo-form-button-line-height);
-	text-align: center;
-	padding: var(--base-space-form-button-y) var(--base-space-form-button-x)
-		var(--base-space-form-button-y) var(--base-space-form-button-x);
-	@include variables.border-radius(2px);
-	box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
-	margin: var(--base-space-form-button-margin-y) var(--base-space-0);
-	text-decoration: none;
-	font-weight: var(--base-typo-heading-weight);
-	font-size: var(--base-typo-form-button-size);
-	&:hover {
-		opacity: 0.8;
-		background: var(--base-color-primary);
-		border: none;
-	}
+  cursor: pointer;
+  background: var(--base-color-primary);
+  border: none;
+  display: inline-block;
+  color: var(--base-color-button-text);
+  letter-spacing: var(--base-typo-form-button-letter-spacing);
+  text-transform: uppercase;
+  line-height: var(--base-typo-form-button-line-height);
+  text-align: center;
+  padding: var(--base-space-form-button-y) var(--base-space-form-button-x)
+    var(--base-space-form-button-y) var(--base-space-form-button-x);
+  @include variables.border-radius(2px);
+  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+  margin: var(--base-space-form-button-margin-y) var(--base-space-0);
+  text-decoration: none;
+  font-weight: var(--base-typo-heading-weight);
+  font-size: var(--base-typo-form-button-size);
+  &:hover {
+    opacity: 0.8;
+    background: var(--base-color-primary);
+    border: none;
+  }
 }
 
 input[type="button"]:hover,
@@ -482,19 +482,19 @@ input[type="submit"]:hover,
 input[type="submit"]:focus,
 button:hover,
 button:focus {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 textarea {
-	resize: vertical;
+  resize: vertical;
 }
 select {
-	max-width: 100%;
-	overflow: auto;
-	vertical-align: top;
-	outline: none;
-	border: 1px solid var(--base-color-border);
-	padding: calc(var(--base-space-unit) * 0.5);
+  max-width: 100%;
+  overflow: auto;
+  vertical-align: top;
+  outline: none;
+  border: 1px solid var(--base-color-border);
+  padding: calc(var(--base-space-unit) * 0.5);
 }
 
 textarea:not(.editor-post-title__input),
@@ -511,47 +511,47 @@ input[type="text"],
 input[type="time"],
 input[type="url"],
 input[type="week"] {
-	padding: var(--base-space-input-padding);
-	max-width: 100%;
-	border: 0px;
-	font-size: var(--base-typo-input-size);
-	font-weight: var(--base-typo-input-weight);
-	line-height: var(--base-typo-input-line-height);
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-	-o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-	transition: all 0.2s linear;
-	-moz-transition: all 0.2s linear;
-	-webkit-transition: all 0.2s linear;
-	-o-transition: all 0.2s linear;
-	background-color: var(--base-color-form-input-bg);
-	border-bottom: 1px solid var(--base-color-site-bg);
-	box-sizing: border-box;
-	color: var(--base-color-form-input-text);
-	&:focus {
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-		-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-		-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-		-o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-		transition: all 0.2s linear;
-		-moz-transition: all 0.2s linear;
-		-webkit-transition: all 0.2s linear;
-		-o-transition: all 0.2s linear;
-		border-color: var(--base-color-form-focus-border);
-		border-bottom: 1px solid var(--base-color-site-bg) !important;
-		background: var(--base-color-form-focus-bg);
-	}
+  padding: var(--base-space-input-padding);
+  max-width: 100%;
+  border: 0px;
+  font-size: var(--base-typo-input-size);
+  font-weight: var(--base-typo-input-weight);
+  line-height: var(--base-typo-input-line-height);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  -o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  background-color: var(--base-color-form-input-bg);
+  border-bottom: 1px solid var(--base-color-site-bg);
+  box-sizing: border-box;
+  color: var(--base-color-form-input-text);
+  &:focus {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    -o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -webkit-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    border-color: var(--base-color-form-focus-border);
+    border-bottom: 1px solid var(--base-color-site-bg) !important;
+    background: var(--base-color-form-focus-bg);
+  }
 }
 
 button::-moz-focus-inner {
-	border: 0;
-	padding: 0;
+  border: 0;
+  padding: 0;
 }
 
 input[type="radio"],
 input[type="checkbox"] {
-	margin: var(--base-space-0) calc(var(--base-space-unit) * 0.5);
+  margin: var(--base-space-0) calc(var(--base-space-unit) * 0.5);
 }
 
 /*------------------------------
@@ -559,26 +559,26 @@ input[type="checkbox"] {
 ------------------------------*/
 /* Text meant only for screen readers */
 .screen-reader-text {
-	clip: rect(1px, 1px, 1px, 1px);
-	position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
 }
 
 .screen-reader-text:hover,
 .screen-reader-text:active,
 .screen-reader-text:focus {
-	background-color: var(--base-color-meta);
-	@include variables.border-radius(3px);
-	clip: auto !important;
-	color: var(--base-color-primary);
-	display: block;
-	height: auto;
-	left: var(--base-space-screen-reader-offset);
-	line-height: normal;
-	padding: var(--base-space-screen-reader-padding);
-	text-decoration: none;
-	top: var(--base-space-screen-reader-offset);
-	width: auto;
-	z-index: 100000; /* Above WP toolbar */
+  background-color: var(--base-color-meta);
+  @include variables.border-radius(3px);
+  clip: auto !important;
+  color: var(--base-color-primary);
+  display: block;
+  height: auto;
+  left: var(--base-space-screen-reader-offset);
+  line-height: normal;
+  padding: var(--base-space-screen-reader-padding);
+  text-decoration: none;
+  top: var(--base-space-screen-reader-offset);
+  width: auto;
+  z-index: 100000; /* Above WP toolbar */
 }
 
 /*------------------------------
@@ -589,20 +589,20 @@ input[type="checkbox"] {
 	2.9 Alignments
 ------------------------------*/
 .alignleft {
-	display: inline;
-	float: left;
-	margin-right: var(--base-space-align-wide);
+  display: inline;
+  float: left;
+  margin-right: var(--base-space-align-wide);
 }
 
 .alignright {
-	display: inline;
-	float: right;
-	margin-left: var(--base-space-align-wide);
+  display: inline;
+  float: right;
+  margin-left: var(--base-space-align-wide);
 }
 
 .aligncenter {
-	clear: both;
-	@include variables.center-block;
+  clear: both;
+  @include variables.center-block;
 }
 
 /*------------------------------
@@ -620,7 +620,7 @@ input[type="checkbox"] {
 .site-content:after,
 .site-footer:before,
 .site-footer:after {
-	@include variables.clearfix;
+  @include variables.clearfix;
 }
 
 .clear:after,
@@ -629,7 +629,7 @@ input[type="checkbox"] {
 .site-header:after,
 .site-content:after,
 .site-footer:after {
-	@include variables.clearfix-after;
+  @include variables.clearfix-after;
 }
 
 /*------------------------------
@@ -638,32 +638,32 @@ input[type="checkbox"] {
 /* Globally hidden elements when Infinite Scroll is supported and in use. */
 .infinite-scroll .posts-navigation, /* Older / Newer Posts Navigation (always hidden) */
 .infinite-scroll.neverending .site-footer {
-	/* Theme Footer (when set to scrolling) */
-	display: none;
+  /* Theme Footer (when set to scrolling) */
+  display: none;
 }
 
 /* When Infinite Scroll has reached its end we need to re-display elements that were hidden (via .neverending) before. */
 .infinity-end.neverending .site-footer {
-	display: block;
+  display: block;
 }
 
 /*------------------------------
 	3.1 Helper.
 ------------------------------*/
 .hide {
-	display: none;
+  display: none;
 }
 
 .clearleft {
-	clear: left;
+  clear: left;
 }
 
 .break {
-	word-break: break-word;
-	word-wrap: break-word;
+  word-break: break-word;
+  word-wrap: break-word;
 }
 
 body.mce-content-body {
-	margin: var(--base-space-mce-y) var(--base-space-mce-x);
-	font-size: var(--base-typo-mce-body-size);
+  margin: var(--base-space-mce-y) var(--base-space-mce-x);
+  font-size: var(--base-typo-mce-body-size);
 }

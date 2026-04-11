@@ -6,5 +6,5 @@
  */
 
 if ( function_exists( 'onepress_background_helper_auto_apply' ) ) {
-	onepress_background_helper_auto_apply( 'onepress_bg_demo_header', 'theme_mod' );
+	// onepress_background_helper_auto_apply( 'onepress_bg_demo_header', 'theme_mod' );
 }

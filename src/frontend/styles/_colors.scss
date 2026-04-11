@@ -23,7 +23,7 @@ a,
 .counter_item .counter__number,
 .team-member .member-thumb .member-profile a:hover,
 .icon-background-default {
-	color: var(--color-primary);
+	color: var(--color-primary-color);
 }
 
 input[type="reset"],
@@ -52,7 +52,7 @@ input[type="submit"],
 .nav-links a.current,
 .nav-links .page-numbers:hover,
 .nav-links .page-numbers.current {
-	background: var(--color-primary);
+	background: var(--color-primary-color);
 }
 
 .btn-theme-primary-outline,
@@ -60,29 +60,29 @@ input[type="submit"],
 .pricing__item:hover,
 .section-testimonials .card-theme-primary,
 .entry-content blockquote {
-	border-color: var(--color-primary);
+	border-color: var(--color-primary-color);
 }
 
 .woocommerce #respond input#submit.alt,
 .woocommerce a.button.alt,
 .woocommerce button.button.alt,
 .woocommerce input.button.alt {
-	background-color: var(--color-primary);
+	background-color: var(--color-primary-color);
 }
 
 .woocommerce #respond input#submit.alt:hover,
 .woocommerce a.button.alt:hover,
 .woocommerce button.button.alt:hover,
 .woocommerce input.button.alt:hover {
-	background-color: var(--color-primary);
+	background-color: var(--color-primary-color);
 }
 
 #page .is-transparent .site-header.no-scroll .site-title,
 #page .is-transparent .site-header.no-scroll .site-title .site-text-logo,
 #page .is-transparent .site-header.no-scroll .site-text-logo {
-	color: var(--transparent-header-title, #ffffff);
+	color: var(--color-transparent-site-title-c, #ffffff);
 }
 
 #page .is-transparent .site-header.no-scroll .site-description {
-	color: var(--transparent-header-tagline, #ffffff);
+	color: var(--color-transparent-tag-title-c, #ffffff);
 }

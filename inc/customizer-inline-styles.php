@@ -19,51 +19,31 @@ if ( ! function_exists( 'onepress_custom_inline_style_prefetch_theme_mods' ) ) {
 	 */
 	function onepress_custom_inline_style_prefetch_theme_mods() {
 		$keys = array(
-			'onepress_logo_height'                  => false,
-			'onepress_transparent_logo_height'        => false,
-			'onepress_submenu_width'                => false,
-			'onepress_hero_overlay_color'           => '#000000',
-			'onepress_hero_overlay_opacity'         => 0.3,
-			'onepress_transparent_site_title_c'     => false,
-			'onepress_transparent_tag_title_c'      => false,
-			'onepress_primary_color'                => false,
-			'onepress_secondary_color'              => false,
-			'onepress_menu_item_padding'            => false,
-			'onepress_page_cover_align'             => false,
-			'onepress_page_normal_align'            => false,
-			'onepress_page_cover_color'             => false,
-			'onepress_typo_paragraphs_color'        => false,
-			'onepress_typo_hero_heading_color'      => false,
-			'onepress_typo_branding_title_color'    => false,
-			'onepress_typo_branding_tagline_color'  => false,
-			'onepress_typo_slider_slide_title_color' => false,
-			'onepress_typo_slider_slide_content_color' => false,
-			'onepress_page_cover_overlay'          => false,
-			'onepress_page_cover_pd_top'            => false,
-			'onepress_page_cover_pd_bottom'         => false,
-			'onepress_header_bg_color'              => false,
-			'onepress_menu_color'                   => false,
-			'onepress_menu_hover_color'             => false,
-			'onepress_menu_hover_bg_color'          => false,
-			'onepress_menu_toggle_button_color'     => false,
-			'onepress_logo_text_color'              => false,
-			'onepress_tagline_text_color'           => false,
-			'onepress_hcl1_r_color'                 => false,
-			'onepress_hcl1_r_bg_color'             => false,
-			'onepress_footer_bg'                    => false,
-			'onepress_footer_top_color'             => false,
-			'onepress_footer_info_bg'               => false,
-			'onepress_footer_c_color'               => false,
-			'onepress_footer_c_link_color'          => false,
-			'onepress_footer_c_link_hover_color'    => false,
-			'footer_widgets_color'                  => false,
-			'footer_widgets_bg_color'               => false,
-			'footer_widgets_title_color'            => false,
-			'footer_widgets_link_color'             => false,
-			'footer_widgets_link_hover_color'       => false,
-			'onepress_g_spacing'                    => 20,
-			'single_layout_content_width'           => false,
+			'onepress_logo_height'             => false,
+			'onepress_transparent_logo_height' => false,
+			'onepress_submenu_width'           => false,
+			'onepress_hero_overlay_color'      => '#000000',
+			'onepress_hero_overlay_opacity'    => 0.3,
+			'onepress_menu_item_padding'     => false,
+			'onepress_page_cover_align'      => false,
+			'onepress_page_normal_align'     => false,
+			'onepress_page_cover_color'      => false,
+			'onepress_page_cover_overlay'    => false,
+			'onepress_page_cover_pd_top'     => false,
+			'onepress_page_cover_pd_bottom'  => false,
+			'onepress_g_spacing'             => 20,
+			'single_layout_content_width'    => false,
 		);
+
+		if ( function_exists( 'onepress_customize_option_color_setting_ids' ) && function_exists( 'onepress_customize_color_control_defaults_map' ) ) {
+			$color_defaults = onepress_customize_color_control_defaults_map();
+			foreach ( onepress_customize_option_color_setting_ids() as $cid ) {
+				if ( array_key_exists( $cid, $keys ) ) {
+					continue;
+				}
+				$keys[ $cid ] = array_key_exists( $cid, $color_defaults ) ? $color_defaults[ $cid ] : false;
+			}
+		}
 
 		// Typography JSON theme_mods → :root (see onepress_typo_declarations_from_prefetched_mods). Merge full key list so
 		// body / H1–H6 / section title, etc. are prefetched — helper auto_apply uses empty css_selector and does not emit rules.
@@ -90,6 +70,10 @@ if ( ! function_exists( 'onepress_custom_inline_style_prefetch_theme_mods' ) ) {
 if ( ! function_exists( 'onepress_custom_inline_style_root_declarations' ) ) {
 	/**
 	 * Map Customizer theme mods to :root custom properties (consumed in src/frontend/styles).
+	 *
+	 * Plain `'control' => 'color'` settings are emitted as `--color-*` via
+	 * {@see onepress_customize_color_declarations_from_prefetched_mods()} (see inc/customize-color-css-vars.php).
+	 * Alpha page cover colors and composite values (e.g. hero overlay) stay explicit here.
 	 *
 	 * @param array<string, mixed> $m Prefetched theme mods.
 	 * @return array<string, string> Property name => value (unescaped CSS).
@@ -122,26 +106,6 @@ if ( ! function_exists( 'onepress_custom_inline_style_root_declarations' ) ) {
 			$props['--submenu-max-width'] = $submenu_w . 'px';
 		}
 
-		$t_title = onepress_sanitize_color_alpha( $m['onepress_transparent_site_title_c'] );
-		if ( $t_title ) {
-			$props['--transparent-header-title'] = $t_title;
-		}
-
-		$t_tag = onepress_sanitize_color_alpha( $m['onepress_transparent_tag_title_c'] );
-		if ( $t_tag ) {
-			$props['--transparent-header-tagline'] = $t_tag;
-		}
-
-		$primary = onepress_sanitize_color_alpha( $m['onepress_primary_color'] );
-		if ( '' !== $primary ) {
-			$props['--color-primary'] =  $primary;
-		}
-
-		$secondary = onepress_sanitize_color_alpha( $m['onepress_secondary_color'] );
-		if ( '' !== $secondary ) {
-			$props['--feature-icon-hover-color'] = $secondary;
-		}
-
 		$menu_pad = absint( $m['onepress_menu_item_padding'] );
 		if ( $menu_pad > 0 ) {
 			$props['--menu-link-padding-x'] = $menu_pad . 'px';
@@ -157,56 +121,14 @@ if ( ! function_exists( 'onepress_custom_inline_style_root_declarations' ) ) {
 			$props['--page-normal-text-align'] = $normal_align;
 		}
 
-		$cover_title = onepress_sanitize_color_alpha( $m['onepress_page_cover_color'] );
-		if ( $cover_title ) {
-			$props['--page-header-title-color'] = $cover_title;
-		}
-
-		$typo_body = onepress_sanitize_color_alpha( $m['onepress_typo_paragraphs_color'] );
-		if ( $typo_body ) {
-			$props['--typo-body'] = $typo_body;
-		}
-
-		$typo_hero = onepress_sanitize_color_alpha( $m['onepress_typo_hero_heading_color'] );
-		if ( $typo_hero ) {
-			$props['--typo-hero-heading'] = $typo_hero;
-		}
-
-		$brand_title = onepress_sanitize_color_alpha( $m['onepress_typo_branding_title_color'] );
-		if ( ! $brand_title ) {
-			$lt = onepress_sanitize_color_alpha( $m['onepress_logo_text_color'] );
-			if ( '' !== $lt ) {
-				$brand_title =  $lt;
+		foreach ( array( 'onepress_page_cover_color', 'onepress_page_cover_overlay' ) as $alpha_cover_id ) {
+			if ( ! array_key_exists( $alpha_cover_id, $m ) || ! function_exists( 'onepress_theme_mod_id_to_color_css_var' ) ) {
+				continue;
 			}
-		}
-		if ( $brand_title ) {
-			$props['--typo-branding-title'] = $brand_title;
-		}
-
-		$brand_tag = onepress_sanitize_color_alpha( $m['onepress_typo_branding_tagline_color'] );
-		if ( ! $brand_tag ) {
-			$tg = onepress_sanitize_color_alpha( $m['onepress_tagline_text_color'] );
-			if ( '' !== $tg ) {
-				$brand_tag =  $tg;
+			$cover_san = onepress_sanitize_color_alpha( $m[ $alpha_cover_id ] );
+			if ( $cover_san ) {
+				$props[ onepress_theme_mod_id_to_color_css_var( $alpha_cover_id ) ] = $cover_san;
 			}
-		}
-		if ( $brand_tag ) {
-			$props['--typo-branding-tagline'] = $brand_tag;
-		}
-
-		$slider_title = onepress_sanitize_color_alpha( $m['onepress_typo_slider_slide_title_color'] );
-		if ( $slider_title ) {
-			$props['--typo-slider-slide-title'] = $slider_title;
-		}
-
-		$slider_desc = onepress_sanitize_color_alpha( $m['onepress_typo_slider_slide_content_color'] );
-		if ( $slider_desc ) {
-			$props['--typo-slider-slide-content'] = $slider_desc;
-		}
-
-		$cover_overlay = onepress_sanitize_color_alpha( $m['onepress_page_cover_overlay'] );
-		if ( $cover_overlay ) {
-			$props['--page-header-overlay-bg'] = $cover_overlay;
 		}
 
 		$pd_top = absint( $m['onepress_page_cover_pd_top'] );
@@ -219,105 +141,18 @@ if ( ! function_exists( 'onepress_custom_inline_style_root_declarations' ) ) {
 			$props['--page-header-padding-bottom'] = $pd_bottom . '%';
 		}
 
-		$header_bg = onepress_sanitize_color_alpha( $m['onepress_header_bg_color'] );
-		if ( $header_bg ) {
-			$props['--header-bg'] =  $header_bg;
+		$r_bg = '';
+		if ( array_key_exists( 'onepress_hcl1_r_bg_color', $m ) ) {
+			$r_bg = onepress_sanitize_color_alpha( $m['onepress_hcl1_r_bg_color'] );
 		}
-
-		$menu_link = onepress_sanitize_color_alpha( $m['onepress_menu_color'] );
-		if ( $menu_link ) {
-			$props['--menu-link-color'] =  $menu_link;
-		}
-
-		$menu_hover = onepress_sanitize_color_alpha( $m['onepress_menu_hover_color'] );
-		if ( $menu_hover ) {
-			$props['--menu-hover-color'] =  $menu_hover;
-		}
-
-		$menu_hover_bg = onepress_sanitize_color_alpha( $m['onepress_menu_hover_bg_color'] );
-		if ( $menu_hover_bg ) {
-			$props['--menu-hover-bg'] =  $menu_hover_bg;
-		}
-
-		$toggle = onepress_sanitize_color_alpha( $m['onepress_menu_toggle_button_color'] );
-		if ( $toggle ) {
-			$props['--nav-toggle-bg'] = $toggle;
-		}
-
-		$r_text = onepress_sanitize_color_alpha( $m['onepress_hcl1_r_color'] );
-		if ( $r_text ) {
-			$props['--morphext-color'] = $r_text;
-		}
-
-		$r_bg = onepress_sanitize_color_alpha( $m['onepress_hcl1_r_bg_color'] );
 		if ( $r_bg ) {
-			$props['--morphext-bg']             = $r_bg;
 			$props['--morphext-padding']        = '0px 20px';
 			$props['--morphext-text-shadow']    = 'none';
 			$props['--morphext-border-radius'] = '3px';
 		}
 
-		$footer_bg = onepress_sanitize_color_alpha( $m['onepress_footer_bg'] );
-		if ( $footer_bg ) {
-			$props['--footer-bg'] = $footer_bg;
-		}
-
-		$footer_top = onepress_sanitize_color_alpha( $m['onepress_footer_top_color'] );
-		if ( $footer_top ) {
-			$props['--footer-top-text'] = $footer_top;
-		} elseif ( $footer_bg ) {
-			$props['--footer-top-text'] = 'rgba(255, 255, 255, 0.9)';
-		}
-
-		$footer_info_bg = onepress_sanitize_color_alpha( $m['onepress_footer_info_bg'] );
-		$c_color        = onepress_sanitize_color_alpha( $m['onepress_footer_c_color'] );
-		$c_link         = onepress_sanitize_color_alpha( $m['onepress_footer_c_link_color'] );
-		$c_link_hover   = onepress_sanitize_color_alpha( $m['onepress_footer_c_link_hover_color'] );
-
-		if ( $footer_info_bg ) {
-			$props['--footer-site-info-bg'] = $footer_info_bg;
-			if ( $c_color ) {
-				$props['--footer-site-info-text'] = $c_color;
-				$props['--footer-site-info-link'] = $c_color;
-			} else {
-				$props['--footer-site-info-text'] = 'rgba(255, 255, 255, 0.7)';
-				$props['--footer-site-info-link'] = 'rgba(255, 255, 255, 0.9)';
-			}
-		} elseif ( $c_color ) {
-			$props['--footer-site-info-text'] = $c_color;
-		}
-
-		if ( $c_link ) {
-			$props['--footer-site-info-link'] = $c_link;
-		}
-
-		if ( $c_link_hover ) {
-			$props['--footer-site-info-link-hover'] = $c_link_hover;
-		}
-
-		$fw_color = onepress_sanitize_color_alpha( $m['footer_widgets_color'] );
-		if ( $fw_color ) {
-			$props['--footer-widgets-color'] = $fw_color;
-		}
-
-		$fw_bg = onepress_sanitize_color_alpha( $m['footer_widgets_bg_color'] );
-		if ( $fw_bg ) {
-			$props['--footer-widgets-bg'] = $fw_bg;
-		}
-
-		$fw_title = onepress_sanitize_color_alpha( $m['footer_widgets_title_color'] );
-		if ( $fw_title ) {
-			$props['--footer-widgets-title-color'] = $fw_title;
-		}
-
-		$fw_link = onepress_sanitize_color_alpha( $m['footer_widgets_link_color'] );
-		if ( $fw_link ) {
-			$props['--footer-widgets-link-color'] = $fw_link;
-		}
-
-		$fw_link_h = onepress_sanitize_color_alpha( $m['footer_widgets_link_hover_color'] );
-		if ( $fw_link_h ) {
-			$props['--footer-widgets-link-hover-color'] = $fw_link_h;
+		if ( function_exists( 'onepress_customize_color_declarations_from_prefetched_mods' ) ) {
+			$props = array_merge( $props, onepress_customize_color_declarations_from_prefetched_mods( $m ) );
 		}
 
 		$g_space = absint( $m['onepress_g_spacing'] );

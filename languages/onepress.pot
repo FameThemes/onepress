@@ -3,59 +3,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1120
-msgid "Text decoration none"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1121
-msgid "Overline"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1122
-msgid "Underline"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1123
-msgid "Line through"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1127
-msgid "Uppercase"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1128
-msgid "Lowercase"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1129
-msgid "Capitalize"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1196
+#: src/admin/customizer/color-alpha/AlphaColorControlApp.jsx:140
 msgid "Reset to default"
 msgstr ""
 
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1241
-msgid "Typography options"
+#: src/admin/customizer/color-alpha/AlphaColorControlApp.jsx:165
+msgid "Open color picker"
 msgstr ""
 
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1268
-msgid "Open font selector"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:1289
-msgid "Remove font and use theme default"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:768
-#. %s: field label
-msgid "%s — slider"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:771
-msgid "Value slider"
-msgstr ""
-
-#: src/admin/customizer/typography/TypographyControlApp.jsx:784
-msgid "Value"
+#: src/admin/customizer/color-alpha/AlphaColorControlApp.jsx:208
+msgid "Clear color"
 msgstr ""
