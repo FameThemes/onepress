@@ -1394,11 +1394,13 @@ body .wp-full-overlay {
   background: #fff;
   border: 1px solid #c3c4c7;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  /* visible so the top caret (::before/::after) is not clipped */
+  overflow: visible;
   position: absolute;
-  top: 33px;
+  top: 37px;
   left: 0;
   z-index: 100;
+  /* Popover arrow pointing at the summary trigger above */
   /* Slider row (Font size / line height / letter spacing) — same UX as onepress_slider */
 }
 .onepress-typography-settings .font-selector-btn {
@@ -1432,6 +1434,31 @@ body .wp-full-overlay {
   color: #50575e;
   word-break: break-word;
 }
+.onepress-typography-settings::before, .onepress-typography-settings::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top: none;
+  pointer-events: none;
+}
+.onepress-typography-settings::before {
+  top: -10px;
+  border-width: 0 10px 10px 10px;
+  border-bottom-color: #c3c4c7;
+  z-index: 1;
+}
+.onepress-typography-settings::after {
+  top: -8px;
+  border-width: 0 9px 9px 9px;
+  border-bottom-color: #fff;
+  z-index: 2;
+}
 .onepress-typography-settings .settings-head {
   flex-shrink: 0;
   display: flex;
@@ -1450,6 +1477,7 @@ body .wp-full-overlay {
   overflow-y: auto;
   flex: 1;
   min-height: 0;
+  border-radius: 0 0 3px 3px;
 }
 .onepress-typography-settings .setting-group {
   display: flex;
@@ -1618,7 +1646,6 @@ body .wp-full-overlay {
   background: #fff;
   border-radius: 4px;
   border: 1px solid #bcbcbe;
-  overflow: hidden;
 }
 .onepress-typography-settings .onepress-font-picker-dropdown .head,
 .onepress-typography-settings .onepress-font-picker-modal .head {
@@ -1738,6 +1765,9 @@ body .wp-full-overlay {
   color: #646970;
   text-align: center;
 }
+.onepress-typography-settings .onepress-font-picker-modal {
+  overflow: hidden;
+}
 .onepress-typography-settings .onepress-font-picker-dropdown {
   position: relative;
   width: 100%;
@@ -1745,6 +1775,36 @@ body .wp-full-overlay {
   max-height: min(44vh, 400px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   z-index: 2;
+  overflow: visible;
+}
+.onepress-typography-settings .onepress-font-picker-dropdown::before, .onepress-typography-settings .onepress-font-picker-dropdown::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top: none;
+  pointer-events: none;
+}
+.onepress-typography-settings .onepress-font-picker-dropdown::before {
+  top: -10px;
+  border-width: 0 10px 10px 10px;
+  border-bottom-color: #bcbcbe;
+  z-index: 1;
+}
+.onepress-typography-settings .onepress-font-picker-dropdown::after {
+  top: -8px;
+  border-width: 0 9px 9px 9px;
+  border-bottom-color: #fff;
+  z-index: 2;
+}
+.onepress-typography-settings .onepress-font-picker-dropdown .search-wrap {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 .onepress-typography-settings .onepress-font-picker-dropdown .scroll {
   max-height: min(28vh, 220px);

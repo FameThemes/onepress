@@ -86,11 +86,42 @@
   background: #fff;
   border: 1px solid #c3c4c7;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  /* visible so the top caret (::before/::after) is not clipped */
+  overflow: visible;
   position: absolute;
-  top: 33px;
+  top: 37px;
   left: 0;
   z-index: 100;
+
+  /* Popover arrow pointing at the summary trigger above */
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top: none;
+    pointer-events: none;
+  }
+
+  &::before {
+    top: -10px;
+    border-width: 0 10px 10px 10px;
+    border-bottom-color: #c3c4c7;
+    z-index: 1;
+  }
+
+  &::after {
+    top: -8px;
+    border-width: 0 9px 9px 9px;
+    border-bottom-color: #fff;
+    z-index: 2;
+  }
 
   .settings-head {
     flex-shrink: 0;
@@ -111,6 +142,7 @@
     overflow-y: auto;
     flex: 1;
     min-height: 0;
+    border-radius: 0 0 3px 3px;
   }
 
   .setting-group {
@@ -309,7 +341,6 @@
     background: #fff;
     border-radius: 4px;
     border: 1px solid #bcbcbe;
-    overflow: hidden;
 
     .head {
       display: flex;
@@ -431,6 +462,10 @@
     }
   }
 
+  .onepress-font-picker-modal {
+    overflow: hidden;
+  }
+
   .onepress-font-picker-dropdown {
     position: relative;
     width: 100%;
@@ -438,6 +473,41 @@
     max-height: min(44vh, 400px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     z-index: 2;
+    overflow: visible;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-top: none;
+      pointer-events: none;
+    }
+
+    &::before {
+      top: -10px;
+      border-width: 0 10px 10px 10px;
+      border-bottom-color: #bcbcbe;
+      z-index: 1;
+    }
+
+    &::after {
+      top: -8px;
+      border-width: 0 9px 9px 9px;
+      border-bottom-color: #fff;
+      z-index: 2;
+    }
+
+    .search-wrap {
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+    }
 
     .scroll {
       max-height: min(28vh, 220px);
