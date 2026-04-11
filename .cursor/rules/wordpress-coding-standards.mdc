@@ -18,6 +18,7 @@ Theme code should align with the official **[WordPress Coding Standards](https:/
 - **Escape output:** `esc_html()`, `esc_attr()`, `esc_url()`, `wp_kses_post()`, etc., as appropriate.
 - **Sanitize input** in settings and `sanitize_callback` on Customizer settings.
 - **Internationalization:** use `__()`, `_e()`, `esc_html__()`, … with the theme **text domain** (e.g. `'onepress'`) for user-facing strings.
+- **Declarative Customizer options** (`inc/customize-configs/` merged via `customize-option-definitions.php`): translate **`title` / `label` / `description` / choices / etc.** in those definition files (**prefer `esc_html__()`**); do **not** bulk-translate the same strings in **`inc/customizer-register.php`**. Full detail: **`customizer-declarative-i18n.mdc`**.
 
 ## Scope
 

@@ -130,7 +130,7 @@
 
     .font-family-clear {
       position: absolute;
-      top: 17px;
+      top: 16px;
       transform: translateY(-50%);
       right: 25px;
       display: inline-flex;
@@ -138,12 +138,13 @@
       justify-content: center;
       flex-shrink: 0;
       width: 28px;
-      min-height: 30px;
+      min-height: 25px;
       margin: 0;
       padding: 0;
       color: #50575e;
       cursor: pointer;
       line-height: 1;
+      border-radius: 5px;
     }
 
     .dashicons {
@@ -180,40 +181,95 @@
     flex-direction: row;
   }
 
-  .unit-row--has-leading-icon {
-    position: relative;
-    .opc-input {
-      padding-left: 30px;
+  /* Slider row (Font size / line height / letter spacing) — same UX as onepress_slider */
+  .typography-slider-row {
+    margin-top: 4px;
+    width: 100%;
+    gap: 10px;
+
+    .typography-range {
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 25px;
+      appearance: none;
+      background: transparent;
+      --onepress-slider-fill-pct: 0%;
+
+      &::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        margin-top: -6px;
+        border-radius: 50%;
+        background: #2271b1;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+      }
+
+      &::-webkit-slider-runnable-track {
+        height: 5px;
+        border-radius: 2px;
+        background: linear-gradient(
+          to right,
+          #2271b1 0,
+          #2271b1 var(--onepress-slider-fill-pct, 0%),
+          #dcdcde var(--onepress-slider-fill-pct, 0%),
+          #dcdcde 100%
+        );
+      }
+
+      &::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #2271b1;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+      }
+
+      &::-moz-range-progress {
+        height: 4px;
+        border-radius: 2px;
+        background: #2271b1;
+      }
+
+      &::-moz-range-track {
+        height: 4px;
+        border-radius: 2px;
+        background: #dcdcde;
+      }
     }
-  }
 
-  .unit-row__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    flex-shrink: 0;
-    color: #6e6f70;
-    position: absolute;
-    top: 50%;
-    left: 5px;
-    transform: translateY(-50%);
-  }
-
-  .unit-row__icon svg {
-    display: block;
+    .typography-range-number {
+      flex: 0 0 64px;
+      width: 64px;
+      min-width: 64px;
+      text-align: center;
+      box-sizing: border-box;
+    }
   }
 
   .unit-row__unit-wrap {
     position: relative;
     flex: 0 0 45px;
-    width: 45px;
   }
 
   .choice-row {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+    .choice-btn {
+      line-height: 1;
+      padding: 3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      min-height: 28px;
+      min-width: 28px;
+    }
   }
 
   .choice-icon {

@@ -1,257 +1,198 @@
 <?php
 /**
- * Section: Contact
+ * Section: Contact (declarative list, merged in customize-option-definitions.php).
+ *
+ * @package onepress
  */
-$wp_customize->add_panel( 'onepress_contact' ,
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( ! class_exists( 'Onepress_Config', false ) || ! Onepress_Config::is_section_active( 'contact' ) ) {
+	return array();
+}
+
+return array(
 	array(
+		'type'            => 'panel',
+		'id'              => 'onepress_contact',
 		'priority'        => 270,
 		'title'           => esc_html__( 'Section: Contact', 'onepress' ),
 		'description'     => '',
-		'active_callback' => 'onepress_showon_frontpage'
-	)
-);
-
-$wp_customize->add_section( 'onepress_contact_settings' ,
+		'active_callback' => 'onepress_showon_frontpage',
+	),
 	array(
+		'type'        => 'section',
+		'id'          => 'onepress_contact_settings',
 		'priority'    => 3,
 		'title'       => esc_html__( 'Section Settings', 'onepress' ),
 		'description' => '',
 		'panel'       => 'onepress_contact',
-	)
-);
-
-// Show Content
-$wp_customize->add_setting( 'onepress_contact_disable',
+	),
 	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'onepress_contact_disable',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__('Hide this section?', 'onepress'),
+		'id'          => 'onepress_contact_disable',
+		'control'     => 'wp',
+		'input_type'  => 'checkbox',
 		'section'     => 'onepress_contact_settings',
-		'description' => esc_html__('Check this box to hide this section.', 'onepress'),
-	)
-);
-
-// Section ID
-$wp_customize->add_setting( 'onepress_contact_id',
+		'label'       => esc_html__( 'Hide this section?', 'onepress' ),
+		'description' => esc_html__( 'Check this box to hide this section.', 'onepress' ),
+		'default'     => '',
+	),
 	array(
+		'id'                => 'onepress_contact_id',
+		'control'           => 'wp',
+		'input_type'        => 'text',
+		'section'           => 'onepress_contact_settings',
+		'label'             => esc_html__( 'Section ID:', 'onepress' ),
+		'description'       => esc_html__( 'The section ID should be English character, lowercase and no space.', 'onepress' ),
+		'default'           => esc_html__( 'contact', 'onepress' ),
 		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => esc_html__('contact', 'onepress'),
-	)
-);
-$wp_customize->add_control( 'onepress_contact_id',
+	),
 	array(
-		'label'     => esc_html__('Section ID:', 'onepress'),
-		'section' 		=> 'onepress_contact_settings',
-		'description'   => esc_html__( 'The section ID should be English character, lowercase and no space.', 'onepress' )
-	)
-);
-
-// Title
-$wp_customize->add_setting( 'onepress_contact_title',
+		'id'          => 'onepress_contact_title',
+		'control'     => 'wp',
+		'input_type'  => 'text',
+		'section'     => 'onepress_contact_settings',
+		'label'       => esc_html__( 'Section Title', 'onepress' ),
+		'description' => '',
+		'default'     => esc_html__( 'Get in touch', 'onepress' ),
+	),
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__('Get in touch', 'onepress'),
-	)
-);
-$wp_customize->add_control( 'onepress_contact_title',
+		'id'          => 'onepress_contact_subtitle',
+		'control'     => 'wp',
+		'input_type'  => 'text',
+		'section'     => 'onepress_contact_settings',
+		'label'       => esc_html__( 'Section Subtitle', 'onepress' ),
+		'description' => '',
+		'default'     => esc_html__( 'Section subtitle', 'onepress' ),
+	),
 	array(
-		'label'     => esc_html__('Section Title', 'onepress'),
-		'section' 		=> 'onepress_contact_settings',
-		'description'   => '',
-	)
-);
-
-// Sub Title
-$wp_customize->add_setting( 'onepress_contact_subtitle',
+		'id'          => 'onepress_contact_desc',
+		'control'     => 'editor',
+		'section'     => 'onepress_contact_settings',
+		'label'       => esc_html__( 'Section Description', 'onepress' ),
+		'description' => '',
+		'default'     => '',
+		'setting'     => array(
+			'sanitize_callback' => 'onepress_sanitize_text',
+			'default'           => '',
+		),
+	),
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => esc_html__('Section subtitle', 'onepress'),
-	)
-);
-$wp_customize->add_control( 'onepress_contact_subtitle',
+		'type'     => 'callback',
+		'callback' => static function ( $wp_customize ) {
+			if ( function_exists( 'onepress_add_upsell_for_section' ) ) {
+				onepress_add_upsell_for_section( $wp_customize, 'onepress_contact_settings' );
+			}
+		},
+	),
 	array(
-		'label'     => esc_html__('Section Subtitle', 'onepress'),
-		'section' 		=> 'onepress_contact_settings',
-		'description'   => '',
-	)
-);
-
-// Description
-$wp_customize->add_setting( 'onepress_contact_desc',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control( new OnePress_Editor_Custom_Control(
-	$wp_customize,
-	'onepress_contact_desc',
-	array(
-		'label' 		=> esc_html__('Section Description', 'onepress'),
-		'section' 		=> 'onepress_contact_settings',
-		'description'   => '',
-	)
-));
-
-
-onepress_add_upsell_for_section( $wp_customize, 'onepress_contact_settings' );
-
-
-$wp_customize->add_section( 'onepress_contact_content' ,
-	array(
+		'type'        => 'section',
+		'id'          => 'onepress_contact_content',
 		'priority'    => 6,
 		'title'       => esc_html__( 'Section Content', 'onepress' ),
 		'description' => '',
 		'panel'       => 'onepress_contact',
-	)
-);
-// Contact form 7 guide.
-$wp_customize->add_setting( 'onepress_contact_cf7_guide',
+	),
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text'
-	)
-);
-$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_contact_cf7_guide',
+		'id'            => 'onepress_contact_cf7_guide',
+		'control'       => 'misc',
+		'type'          => 'custom_message',
+		'section'       => 'onepress_contact_content',
+		'description'   => wp_kses_post(
+			__( 'Paste your form shortcode from contact form plugin here, e.g <code>[wpforms  id="123"]</code>', 'onepress' )
+		),
+		'setting'       => array(
+			'sanitize_callback' => 'onepress_sanitize_text',
+		),
+	),
 	array(
+		'id'          => 'onepress_contact_cf7',
+		'control'     => 'wp',
+		'input_type'  => 'text',
 		'section'     => 'onepress_contact_content',
-		'type'        => 'custom_message',
-		'description' => wp_kses_post( 'Paste your form shortcode from contact form plugin here, e.g <code>[wpforms  id="123"]</code>', 'onepress' )
-	)
-));
-
-// Contact Form 7 Shortcode
-$wp_customize->add_setting( 'onepress_contact_cf7',
-	array(
+		'label'       => esc_html__( 'Contact Form Shortcode.', 'onepress' ),
+		'description' => '',
+		'default'     => '',
 		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'onepress_contact_cf7',
+	),
 	array(
-		'label'     	=> esc_html__('Contact Form Shortcode.', 'onepress'),
-		'section' 		=> 'onepress_contact_content',
-		'description'   => '',
-	)
-);
-
-// Show CF7
-$wp_customize->add_setting( 'onepress_contact_cf7_disable',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'onepress_contact_cf7_disable',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__('Hide contact form completely.', 'onepress'),
+		'id'          => 'onepress_contact_cf7_disable',
+		'control'     => 'wp',
+		'input_type'  => 'checkbox',
 		'section'     => 'onepress_contact_content',
-		'description' => esc_html__('Check this box to hide contact form.', 'onepress'),
-	)
-);
-
-// Contact Text
-$wp_customize->add_setting( 'onepress_contact_text',
+		'label'       => esc_html__( 'Hide contact form completely.', 'onepress' ),
+		'description' => esc_html__( 'Check this box to hide contact form.', 'onepress' ),
+		'default'     => '',
+	),
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control( new OnePress_Editor_Custom_Control(
-	$wp_customize,
-	'onepress_contact_text',
-	array(
-		'label'     	=> esc_html__('Contact Text', 'onepress'),
-		'section' 		=> 'onepress_contact_content',
-		'description'   => '',
-	)
-));
-
-// hr
-$wp_customize->add_setting( 'onepress_contact_text_hr', array( 'sanitize_callback' => 'onepress_sanitize_text' ) );
-$wp_customize->add_control( new OnePress_Misc_Control( $wp_customize, 'onepress_contact_text_hr',
-	array(
+		'id'          => 'onepress_contact_text',
+		'control'     => 'editor',
 		'section'     => 'onepress_contact_content',
-		'type'        => 'hr'
-	)
-));
-
-// Address Box
-$wp_customize->add_setting( 'onepress_contact_address_title',
+		'label'       => esc_html__( 'Contact Text', 'onepress' ),
+		'description' => '',
+		'default'     => '',
+		'setting'     => array(
+			'sanitize_callback' => 'onepress_sanitize_text',
+			'default'           => '',
+		),
+	),
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
+		'id'      => 'onepress_contact_text_hr',
+		'control' => 'misc',
+		'type'    => 'hr',
+		'section' => 'onepress_contact_content',
+		'setting' => array(
+			'sanitize_callback' => 'onepress_sanitize_text',
+		),
+	),
+	array(
+		'id'          => 'onepress_contact_address_title',
+		'control'     => 'wp',
+		'input_type'  => 'text',
+		'section'     => 'onepress_contact_content',
+		'label'       => esc_html__( 'Contact Box Title', 'onepress' ),
+		'description' => '',
+		'default'     => '',
+	),
+	array(
+		'id'                => 'onepress_contact_address',
+		'control'           => 'wp',
+		'input_type'        => 'text',
+		'section'           => 'onepress_contact_content',
+		'label'             => esc_html__( 'Address', 'onepress' ),
+		'description'       => '',
 		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'onepress_contact_address_title',
-	array(
-		'label'     	=> esc_html__('Contact Box Title', 'onepress'),
-		'section' 		=> 'onepress_contact_content',
-		'description'   => '',
-	)
-);
-
-// Contact Text
-$wp_customize->add_setting( 'onepress_contact_address',
-	array(
 		'sanitize_callback' => 'onepress_sanitize_text',
+	),
+	array(
+		'id'                => 'onepress_contact_phone',
+		'control'           => 'wp',
+		'input_type'        => 'text',
+		'section'           => 'onepress_contact_content',
+		'label'             => esc_html__( 'Phone', 'onepress' ),
+		'description'       => '',
 		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'onepress_contact_address',
-	array(
-		'label'     => esc_html__('Address', 'onepress'),
-		'section' 		=> 'onepress_contact_content',
-		'description'   => '',
-	)
-);
-
-// Contact Phone
-$wp_customize->add_setting( 'onepress_contact_phone',
-	array(
 		'sanitize_callback' => 'onepress_sanitize_text',
+	),
+	array(
+		'id'          => 'onepress_contact_email',
+		'control'     => 'wp',
+		'input_type'  => 'text',
+		'section'     => 'onepress_contact_content',
+		'label'       => esc_html__( 'Email', 'onepress' ),
+		'description' => '',
+		'default'     => '',
+	),
+	array(
+		'id'                => 'onepress_contact_fax',
+		'control'           => 'wp',
+		'input_type'        => 'text',
+		'section'           => 'onepress_contact_content',
+		'label'             => esc_html__( 'Fax', 'onepress' ),
+		'description'       => '',
 		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'onepress_contact_phone',
-	array(
-		'label'     	=> esc_html__('Phone', 'onepress'),
-		'section' 		=> 'onepress_contact_content',
-		'description'   => '',
-	)
-);
-
-// Contact Email
-$wp_customize->add_setting( 'onepress_contact_email',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'onepress_contact_email',
-	array(
-		'label'     	=> esc_html__('Email', 'onepress'),
-		'section' 		=> 'onepress_contact_content',
-		'description'   => '',
-	)
-);
-
-// Contact Fax
-$wp_customize->add_setting( 'onepress_contact_fax',
-	array(
 		'sanitize_callback' => 'onepress_sanitize_text',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'onepress_contact_fax',
-	array(
-		'label'     	=> esc_html__('Fax', 'onepress'),
-		'section' 		=> 'onepress_contact_content',
-		'description'   => '',
-	)
+	),
 );

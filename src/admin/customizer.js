@@ -2,7 +2,7 @@ import './customizer.scss';
 import '../frontend/fontawesome-v6/css/all.min.css';
 
 import { installAlphaColorPicker } from './customizer/alpha-color-picker';
-import { registerAlphaColorControl } from './customizer/control-alpha-color';
+import './customizer/color-alpha/color-alpha-controls';
 import { initControlBindings } from './customizer/control-bindings';
 import { registerRepeatableControl } from './customizer/control-repeatable';
 import { initIconPicker } from './customizer/icon-picker';
@@ -28,7 +28,6 @@ if (Array.isArray(onepressDynamicBlocks)) {
 }
 installDeparam($);
 installAlphaColorPicker($);
-registerAlphaColorControl(api, $);
 registerRepeatableControl(api, $);
 installWpEditor($);
 initModalEditors(api, $);

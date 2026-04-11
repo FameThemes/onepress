@@ -188,6 +188,7 @@
   font-weight: 500;
   color: #2c3338;
   border: 0px none;
+  gap: 4px;
   padding-left: 31px;
   padding-right: 15px;
   min-height: 16px;
@@ -402,7 +403,8 @@
   text-align: center;
   box-sizing: border-box;
 }
-.onepress-layout-control .choice.type-svg .label, .onepress-layout-control .choice.type-image .label {
+.onepress-layout-control .choice.type-svg .label,
+.onepress-layout-control .choice.type-image .label {
   padding: 8px 8px 2px;
   align-items: end;
 }
@@ -582,6 +584,12 @@ li#accordion-panel-onepress_typo > .accordion-section-title {
   flex-direction: column;
 }
 
+.repeatable-actions .limited-msg {
+  text-align: right;
+  width: 100%;
+  margin: 0;
+}
+
 .media-actions {
   flex-direction: row;
 }
@@ -737,7 +745,97 @@ body .wp-full-overlay {
     transform: translateY(0);
   }
 }
-/* COLOR PICKER ALPHA */
+/* Alpha color control — React (title + swatch, Modal + ColorPicker) */
+.customize-control-alpha-color .onepress-alpha-color-control__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.customize-control-alpha-color .onepress-alpha-color-control__row .customize-control-title {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.onepress-alpha-color-control__actions {
+  flex-shrink: 0;
+}
+
+.components-popover .components-color-picker, .components-popover .react-colorful {
+  width: 100% !important;
+}
+
+.onepress-alpha-color-control__swatch-wrap {
+  display: inline-block;
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+.onepress-alpha-color-control__swatch-wrap.active {
+  border-color: var(--wp-input-focus-border);
+}
+
+/* Checkerboard only when empty — avoids noisy edges around solid swatches */
+.onepress-alpha-color-control__swatch-wrap--empty {
+  background-color: #e8e8e8;
+  background-image: linear-gradient(-45deg, #d4d4d4 25%, transparent 25%, transparent 75%, #d4d4d4 75%), linear-gradient(-45deg, #d4d4d4 25%, transparent 25%, transparent 75%, #d4d4d4 75%);
+  background-size: 10px 10px;
+  background-position: 100% 0, right 5px top 5px;
+}
+
+.onepress-alpha-color-control__swatch {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.onepress-alpha-color-control__swatch--empty {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.customize-control-alpha-color .onepress-alpha-color-control .description {
+  display: block;
+  margin-top: 0;
+}
+
+/* Popover color panel (anchored below .onepress-alpha-color-control__row) */
+.onepress-alpha-color-popover .components-popover__content {
+  z-index: 500050;
+  width: auto;
+  min-width: 260px;
+  max-width: min(100vw - 32px, 360px);
+}
+
+.onepress-alpha-color-popover__inner {
+  padding: 12px;
+}
+
+.onepress-alpha-color-popover__title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+/* COLOR PICKER ALPHA (jQuery / repeatable fields) */
 /**
  * Alpha Color Picker CSS
  */
@@ -1301,6 +1399,7 @@ body .wp-full-overlay {
   top: 33px;
   right: 0;
   z-index: 100;
+  /* Slider row (Font size / line height / letter spacing) — same UX as onepress_slider */
 }
 .onepress-typography-settings .font-selector-btn {
   display: flex;
@@ -1368,7 +1467,7 @@ body .wp-full-overlay {
 }
 .onepress-typography-settings .font-family-row .font-family-clear {
   position: absolute;
-  top: 17px;
+  top: 16px;
   transform: translateY(-50%);
   left: 25px;
   display: inline-flex;
@@ -1376,12 +1475,13 @@ body .wp-full-overlay {
   justify-content: center;
   flex-shrink: 0;
   width: 28px;
-  min-height: 30px;
+  min-height: 25px;
   margin: 0;
   padding: 0;
   color: #50575e;
   cursor: pointer;
   line-height: 1;
+  border-radius: 5px;
 }
 .onepress-typography-settings .font-family-row .dashicons {
   font-size: 18px;
@@ -1411,36 +1511,82 @@ body .wp-full-overlay {
   align-items: center;
   flex-direction: row;
 }
-.onepress-typography-settings .unit-row--has-leading-icon {
-  position: relative;
+.onepress-typography-settings .typography-slider-row {
+  margin-top: 4px;
+  width: 100%;
+  gap: 10px;
 }
-.onepress-typography-settings .unit-row--has-leading-icon .opc-input {
-  padding-right: 30px;
+.onepress-typography-settings .typography-slider-row .typography-range {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 25px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: transparent;
+  --onepress-slider-fill-pct: 0%;
 }
-.onepress-typography-settings .unit-row__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  flex-shrink: 0;
-  color: #6e6f70;
-  position: absolute;
-  top: 50%;
-  right: 5px;
-  transform: translateY(-50%);
+.onepress-typography-settings .typography-slider-row .typography-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+          appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: #2271b1;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
 }
-.onepress-typography-settings .unit-row__icon svg {
-  display: block;
+.onepress-typography-settings .typography-slider-row .typography-range::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 2px;
+  background: linear-gradient(to left, #2271b1 0, #2271b1 var(--onepress-slider-fill-pct, 0%), #dcdcde var(--onepress-slider-fill-pct, 0%), #dcdcde 100%);
+}
+.onepress-typography-settings .typography-slider-row .typography-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #2271b1;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+}
+.onepress-typography-settings .typography-slider-row .typography-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: #2271b1;
+}
+.onepress-typography-settings .typography-slider-row .typography-range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #dcdcde;
+}
+.onepress-typography-settings .typography-slider-row .typography-range-number {
+  flex: 0 0 64px;
+  width: 64px;
+  min-width: 64px;
+  text-align: center;
+  box-sizing: border-box;
 }
 .onepress-typography-settings .unit-row__unit-wrap {
   position: relative;
   flex: 0 0 45px;
-  width: 45px;
 }
 .onepress-typography-settings .choice-row {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+}
+.onepress-typography-settings .choice-row .choice-btn {
+  line-height: 1;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  min-height: 28px;
+  min-width: 28px;
 }
 .onepress-typography-settings .choice-icon {
   font-size: 11px;

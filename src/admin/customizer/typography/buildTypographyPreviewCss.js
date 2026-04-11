@@ -1,6 +1,9 @@
 /**
- * Typography CSS string for Customizer preview <style> injection.
- * Mirrors inc/customize-controls/typography/helper.php — onepress_typo_css + onepress_typo_css_block.
+ * Typography CSS for Customizer preview <style> injection.
+ *
+ * - buildTypographyPreviewCss — mirrors helper.php onepress_typo_css() (real properties on a selector + @media).
+ * - buildTypographyPreviewCssVars / layers — mirror css-vars.php onepress_typo_flat_to_var_declaration_layers()
+ *   + onepress_custom_inline_style() (:root defaults, then @media with same custom property names, no *-tablet suffixes).
  */
 
 const RESPONSIVE_KEYS = [
@@ -11,6 +14,29 @@ const RESPONSIVE_KEYS = [
 	'letter-spacing-tablet',
 	'letter-spacing-mobile',
 ];
+
+const DEFAULT_TYPO_BREAKPOINTS = Object.freeze({
+	tablet: '991px',
+	mobile: '767px',
+});
+
+/**
+ * Same source as spacing/slider preview: wp_localize_script(…, 'onepressBackgroundBreakpoints', …).
+ * Aligns with PHP filter onepress_typo_responsive_breakpoints.
+ *
+ * @returns {{ tablet: string, mobile: string }}
+ */
+export function getTypographyPreviewBreakpoints() {
+	const b =
+		typeof window !== 'undefined' && window.onepressBackgroundBreakpoints;
+	if (b && typeof b === 'object') {
+		return {
+			tablet: String(b.tablet || DEFAULT_TYPO_BREAKPOINTS.tablet),
+			mobile: String(b.mobile || DEFAULT_TYPO_BREAKPOINTS.mobile),
+		};
+	}
+	return { ...DEFAULT_TYPO_BREAKPOINTS };
+}
 
 /**
  * @param {string} settingId
@@ -95,8 +121,9 @@ export function buildTypographyPreviewCss(
 		return '';
 	}
 
-	const tabletBp = breakpoints?.tablet || '991px';
-	const mobileBp = breakpoints?.mobile || '767px';
+	const bps = breakpoints || getTypographyPreviewBreakpoints();
+	const tabletBp = bps.tablet || DEFAULT_TYPO_BREAKPOINTS.tablet;
+	const mobileBp = bps.mobile || DEFAULT_TYPO_BREAKPOINTS.mobile;
 
 	const base = { ...css };
 	for (const k of RESPONSIVE_KEYS) {
@@ -143,4 +170,183 @@ export function buildTypographyPreviewCss(
 	}
 
 	return out;
+}
+
+/**
+ * @param {string} settingId
+ * @returns {string}
+ */
+export function typographySettingIdToSlug(settingId) {
+	let s = String(settingId || '').trim();
+	if (s.startsWith('onepress_')) {
+		s = s.slice('onepress_'.length);
+	}
+	return s.replace(/_/g, '-');
+}
+
+/**
+ * @param {string} slug Normalized segment (matches onepress_typo_setting_id_to_slug in css-vars.php).
+ * @returns {string} Custom property name for JSON "color".
+ */
+function typographyJsonColorPropertyName(slug) {
+	const t = String(slug || '').trim();
+	return t ? `--${t}` : '';
+}
+
+/**
+ * @param {string} value
+ * @param {number} basePx
+ * @returns {string}
+ */
+function fontSizeToVarValue(value, basePx) {
+	const s = String(value || '').trim();
+	if (!s) {
+		return '';
+	}
+	if (/%|em|rem|ch|ex|vh|vw$/i.test(s)) {
+		return s;
+	}
+	const n = parseInt(s, 10);
+	if (!Number.isFinite(n) || n <= 0) {
+		return '';
+	}
+	return `${n / Math.max(1, basePx)}rem`;
+}
+
+/**
+ * Split theme-mod JSON into :root / tablet / mobile custom property maps (same names per layer; JSON *-tablet keys only).
+ *
+ * @param {Record<string, string>} flat
+ * @param {string} slug From typographySettingIdToSlug(settingId).
+ * @param {number} [basePx=16]
+ * @returns {{ root: Record<string, string>, tablet: Record<string, string>, mobile: Record<string, string> }}
+ */
+export function typographyJsonToCustomPropertyLayers(flat, slug, basePx = 16) {
+	const prefix = `--${slug}-`;
+	const root = {};
+	const tablet = {};
+	const mobile = {};
+
+	if (flat['font-family']) {
+		const fam = String(flat['font-family']).trim();
+		if (fam) {
+			root[`${prefix}font-family`] = `"${fam.replace(/"/g, '\\"')}"`;
+		}
+	}
+	if (flat['font-weight']) {
+		root[`${prefix}font-weight`] = String(flat['font-weight']);
+	}
+	if (flat['font-style'] && flat['font-style'] !== 'normal') {
+		root[`${prefix}font-style`] = String(flat['font-style']);
+	}
+
+	const setFontSize = (layer, jsonKey) => {
+		if (!flat[jsonKey]) {
+			return;
+		}
+		const v = fontSizeToVarValue(flat[jsonKey], basePx);
+		if (v) {
+			layer[`${prefix}font-size`] = v;
+		}
+	};
+	setFontSize(root, 'font-size');
+	setFontSize(tablet, 'font-size-tablet');
+	setFontSize(mobile, 'font-size-mobile');
+
+	const setSpacing = (layer, jsonKey, cssName) => {
+		if (!flat[jsonKey]) {
+			return;
+		}
+		layer[`${prefix}${cssName}`] = String(flat[jsonKey]);
+	};
+	setSpacing(root, 'line-height', 'line-height');
+	setSpacing(tablet, 'line-height-tablet', 'line-height');
+	setSpacing(mobile, 'line-height-mobile', 'line-height');
+	setSpacing(root, 'letter-spacing', 'letter-spacing');
+	setSpacing(tablet, 'letter-spacing-tablet', 'letter-spacing');
+	setSpacing(mobile, 'letter-spacing-mobile', 'letter-spacing');
+
+	for (const tk of ['text-decoration', 'text-transform']) {
+		if (flat[tk]) {
+			root[`${prefix}${tk}`] = String(flat[tk]);
+		}
+	}
+
+	if (flat.color && String(flat.color).trim()) {
+		root[typographyJsonColorPropertyName(slug)] = String(flat.color).trim();
+	}
+
+	return { root, tablet, mobile };
+}
+
+/**
+ * @param {{ root: Record<string, string>, tablet: Record<string, string>, mobile: Record<string, string> }} layers
+ * @param {{ tablet?: string, mobile?: string }} [breakpoints]
+ * @returns {string}
+ */
+export function formatTypographyPreviewCssVarsFromLayers(layers, breakpoints) {
+	const bps = breakpoints || getTypographyPreviewBreakpoints();
+	const tabletBp = bps.tablet || DEFAULT_TYPO_BREAKPOINTS.tablet;
+	const mobileBp = bps.mobile || DEFAULT_TYPO_BREAKPOINTS.mobile;
+
+	const joinDecls = (obj) =>
+		Object.entries(obj)
+			.map(([k, v]) => `${k}:${v}`)
+			.join(';');
+
+	const { root, tablet, mobile } = layers;
+	let out = '';
+	if (Object.keys(root).length) {
+		out += `:root{${joinDecls(root)};}`;
+	}
+	if (Object.keys(tablet).length) {
+		out += `@media (max-width: ${tabletBp}){:root{${joinDecls(tablet)};}}`;
+	}
+	if (Object.keys(mobile).length) {
+		out += `@media (max-width: ${mobileBp}){:root{${joinDecls(mobile)};}}`;
+	}
+	return out;
+}
+
+/**
+ * @param {Record<string, string>} flat
+ * @param {string} settingId
+ * @param {number} [basePx=16]
+ * @param {{ tablet?: string, mobile?: string }} [breakpoints] Defaults from getTypographyPreviewBreakpoints().
+ * @returns {string} :root + @media overrides (same custom property names as desktop).
+ */
+export function buildTypographyPreviewCssVars(
+	flat,
+	settingId,
+	basePx = 16,
+	breakpoints
+) {
+	const slug = typographySettingIdToSlug(settingId);
+	if (!slug || !flat || typeof flat !== 'object') {
+		return '';
+	}
+
+	const keys = Object.keys(flat).filter(
+		(k) =>
+			flat[k] !== undefined &&
+			flat[k] !== null &&
+			String(flat[k]).trim() !== ''
+	);
+	if (!keys.length) {
+		return '';
+	}
+
+	const layers = typographyJsonToCustomPropertyLayers(flat, slug, basePx);
+	if (
+		!Object.keys(layers.root).length &&
+		!Object.keys(layers.tablet).length &&
+		!Object.keys(layers.mobile).length
+	) {
+		return '';
+	}
+
+	return formatTypographyPreviewCssVarsFromLayers(
+		layers,
+		breakpoints || getTypographyPreviewBreakpoints()
+	);
 }

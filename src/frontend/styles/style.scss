@@ -91,4 +91,5 @@ html, body {
 @include meta.load-css("external_plugins");
 @include meta.load-css("bully");
 @include meta.load-css("gutenberg");
-@include meta.load-css("customizer_bridge");
+@include meta.load-css("colors");
+@include meta.load-css("typhography");

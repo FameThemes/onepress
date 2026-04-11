@@ -1,74 +1,54 @@
 <?php
 /**
- * Site Identity.
+ * Site Identity (title_tagline section).
+ *
+ * @package onepress
  */
 
-$is_old_logo = get_theme_mod( 'onepress_site_image_logo' );
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-$wp_customize->add_setting( 'onepress_hide_sitetitle',
+$is_old_logo   = get_theme_mod( 'onepress_site_image_logo' );
+$hide_default = $is_old_logo ? 1 : 0;
+
+return array(
 	array(
+		'id'                => 'onepress_hide_sitetitle',
+		'control'           => 'wp',
+		'input_type'        => 'checkbox',
+		'section'           => 'title_tagline',
+		'label'             => esc_html__( 'Hide site title', 'onepress' ),
+		'default'           => $hide_default,
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => $is_old_logo ? 1 : 0,
-	)
-);
-$wp_customize->add_control(
-	'onepress_hide_sitetitle',
+	),
 	array(
-		'label'   => esc_html__( 'Hide site title', 'onepress' ),
-		'section' => 'title_tagline',
-		'type'    => 'checkbox',
-	)
-);
-
-$wp_customize->add_setting( 'onepress_hide_tagline',
-	array(
+		'id'                => 'onepress_hide_tagline',
+		'control'           => 'wp',
+		'input_type'        => 'checkbox',
+		'section'           => 'title_tagline',
+		'label'             => esc_html__( 'Hide site tagline', 'onepress' ),
+		'default'           => $hide_default,
 		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => $is_old_logo ? 1 : 0,
-	)
-);
-$wp_customize->add_control(
-	'onepress_hide_tagline',
+	),
 	array(
-		'label'   => esc_html__( 'Hide site tagline', 'onepress' ),
-		'section' => 'title_tagline',
-		'type'    => 'checkbox',
-
-	)
-);
-
-// Retina Logo
-$wp_customize->add_setting( 'onepress_retina_logo',
+		'id'            => 'onepress_retina_logo',
+		'control_class' => 'WP_Customize_Image_Control',
+		'section'       => 'title_tagline',
+		'label'         => esc_html__( 'Retina Logo', 'onepress' ),
+		'transport'     => 'postMessage',
+		'setting'       => array(
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '',
+		),
+	),
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => '',
-		'transport'         => 'postMessage'
-	)
-);
-$wp_customize->add_control(
-	new WP_Customize_Image_Control(
-		$wp_customize,
-		'onepress_retina_logo',
-		array(
-			'label'   => esc_html__( 'Retina Logo', 'onepress' ),
-			'section' => 'title_tagline',
-		)
-	)
-);
-
-
-// Logo Width
-$wp_customize->add_setting( 'onepress_logo_height',
-	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => '',
-		'transport'         => 'postMessage'
-	)
-);
-$wp_customize->add_control(
-	'onepress_logo_height',
-	array(
-		'label'   => esc_html__( 'Logo Height In Pixel', 'onepress' ),
-		'section' => 'title_tagline',
-	)
-
+		'id'          => 'onepress_logo_height',
+		'control'     => 'wp',
+		'input_type'  => 'text',
+		'section'     => 'title_tagline',
+		'label'       => esc_html__( 'Logo Height In Pixel', 'onepress' ),
+		'transport'   => 'postMessage',
+		'default'     => '',
+	),
 );

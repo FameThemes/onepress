@@ -1,0 +1,37 @@
+---
+description: Declarative Customizer option strings — translate in customize-configs, not in customizer-register
+globs:
+  - "inc/customize-configs/**/*.php"
+  - "inc/customizer-register.php"
+  - "inc/customize-option-definitions.php"
+alwaysApply: false
+---
+
+# Declarative Customizer options — internationalization
+
+Merged option entries come from `inc/customize-configs/` (see `inc/customize-option-definitions.php`). User-visible strings must be extractable by gettext **at the definition site**.
+
+## Where to translate
+
+- **Do translate** in definition PHP files: `options-*.php`, `site-identity.php`, and any other return-array files merged into `onepress_get_customize_option_definitions()`.
+- Use the theme text domain: **`'onepress'`**.
+- **Prefer** **`esc_html__( 'Message', 'onepress' )`** for plain `title`, `label`, `description`, choice labels, field `title` values, etc.
+- For **HTML** snippets (e.g. help text with links): **`wp_kses_post( __( '…', 'onepress' ) )`** (or equivalent) **in the definition file**, not only as a bare string.
+- Placeholders in `input_attrs`: prefer **`esc_attr__( '…', 'onepress' )`** when the placeholder is a translatable hint.
+
+## Where not to translate
+
+- **`inc/customizer-register.php`** must **not** re-wrap declarative UI strings with `__()` / `esc_html__()` (no central “translate all title/label/description/choices” pass). Registration should pass through values from definitions; for `description_html` / `limited_msg`, only sanitize with **`wp_kses_post()`** on values that are already translated in the definition file.
+- **Developer-only** messages (e.g. `_doing_it_wrong`) stay in `customizer-register.php` and should use `esc_html__()` / `__()` there so literals remain extractable.
+
+## Extractable literals
+
+- Avoid patterns like **`esc_html( $x ? $x : '(empty)' )`** where the fallback is a human-readable string: gettext will not see `'(empty)'` as a msgid. Use a variable assigned from **`esc_html__( '(empty)', 'onepress' )`** (or translate the full message) so the string appears inside a translation function in source code.
+
+## Defaults vs labels
+
+- **Setting `default`** values for free-text content (e.g. default copy) are often kept as **plain source-language strings** unless the product explicitly wants localized defaults; **labels and descriptions** around those controls should still use `esc_html__()`.
+
+## Early load
+
+- Definition files may be merged when `onepress_get_customize_option_definitions()` runs outside the Customizer. If WordPress logs **text domain loaded too early**, fix load order / `load_theme_textdomain` timing rather than moving UI translation back into `customizer-register.php`.

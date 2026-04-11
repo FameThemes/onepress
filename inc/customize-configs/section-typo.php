@@ -1,237 +1,255 @@
 <?php
 /**
- * Theme typography (aligned with OnePress Plus inc/typography/auto-apply.php targets).
+ * Theme typography — declarative entries (merged in customize-option-definitions.php).
+ *
+ * The first entry is type `callback`: it runs only inside {@see 'customize_register'} (see
+ * onepress_customize_register_options) and calls register_control_type() so WordPress knows about
+ * OnePress_Typo_Customize_Control before any `control => typography` row is added.
  *
  * @package onepress
  */
 
-if ( ! isset( $wp_customize ) || ! ( $wp_customize instanceof WP_Customize_Manager ) ) {
-	return;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-if ( class_exists( 'OnePress_Typo_Customize_Control', false ) ) {
-	$wp_customize->register_control_type( 'OnePress_Typo_Customize_Control' );
-}
+$onepress_typo_json_default = wp_json_encode( array() );
 
-if ( ! class_exists( 'OnePress_Typo_Customize_Control', false ) ) {
-	return;
-}
-
-$wp_customize->add_section(
-	'onepress_typo_section',
+$definitions = array(
+	// Customizer only: register the PHP control class so JS templates / selective refresh work for rows below.
 	array(
+		'type'     => 'callback',
+		'callback' => static function ( $wp_customize ) {
+			if ( class_exists( 'OnePress_Typo_Customize_Control', false ) && method_exists( $wp_customize, 'register_control_type' ) ) {
+				$wp_customize->register_control_type( 'OnePress_Typo_Customize_Control' );
+			}
+		},
+	),
+	array(
+		'type'        => 'section',
+		'id'          => 'onepress_typo_section',
 		'title'       => esc_html__( 'Typography', 'onepress' ),
 		'description' => esc_html__( 'Font styles for branding, navigation, headings, hero, body, and slider content.', 'onepress' ),
 		'panel'       => 'onepress_options',
 		'priority'    => 6,
-	)
-);
-
-$onepress_typo_section_default = wp_json_encode( array() );
-
-$wp_customize->add_setting(
-	'onepress_typo_branding_title',
+	),
 	array(
-		'default'           => $onepress_typo_section_default,
-		'sanitize_callback' => 'onepress_typo_sanitize_field',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Typo_Customize_Control(
-		$wp_customize,
-		'onepress_typo_branding_title',
-		array(
-			'label'        => esc_html__( 'Site title', 'onepress' ),
-			'description'  => esc_html__( 'Logo text and site name in the header.', 'onepress' ),
-			'section'      => 'onepress_typo_section',
-			'priority'     => 3,
-			'css_selector' => '#page .site-branding .site-title, #page .site-branding .site-text-logo',
-			
-		)
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_typo_branding_tagline',
+		'id'           => 'onepress_typo_group_base',
+		'control'      => 'heading',
+		'skip_setting' => true,
+		'label'        => esc_html__( 'Base Typography', 'onepress' ),
+		'section'      => 'onepress_typo_section',
+		'priority'     => 1,
+	),
 	array(
-		'default'           => $onepress_typo_section_default,
-		'sanitize_callback' => 'onepress_typo_sanitize_field',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Typo_Customize_Control(
-		$wp_customize,
-		'onepress_typo_branding_tagline',
-		array(
-			'label'        => esc_html__( 'Site tagline', 'onepress' ),
-			'description'  => esc_html__( 'Tagline under the site title.', 'onepress' ),
-			'section'      => 'onepress_typo_section',
-			'priority'     => 4,
-			'css_selector' => '#page .site-branding .site-description',
-			
-		)
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_typo_nav',
+		'id'            => 'onepress_typo_body',
+		'control'       => 'typography',
+		'label'         => esc_html__( 'Body Font', 'onepress' ),
+		'description'   => esc_html__( 'Select how you want your body text to appear.', 'onepress' ),
+		'section'       => 'onepress_typo_section',
+		'priority'      => 4,
+		'css_selector'  => '',
+		'default'       => $onepress_typo_json_default,
+		'transport'     => 'postMessage',
+		'setting'       => array(
+			'sanitize_callback' => 'onepress_typo_sanitize_field',
+		),
+	),
 	array(
-		'default'           => $onepress_typo_section_default,
-		'sanitize_callback' => 'onepress_typo_sanitize_field',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Typo_Customize_Control(
-		$wp_customize,
-		'onepress_typo_nav',
-		array(
-			'label'        => esc_html__( 'Menus', 'onepress' ),
-			'description'  => esc_html__( 'Primary navigation links.', 'onepress' ),
-			'section'      => 'onepress_typo_section',
-			'priority'     => 10,
-			'css_selector' => '#page .onepress-menu a',
-			
-		)
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_typo_headings',
+		'id'            => 'onepress_typo_h16',
+		'control'       => 'typography',
+		'label'         => esc_html__( 'Headings (H1-H6) Font', 'onepress' ),
+		'description'   => esc_html__( 'Select how you want your headings (H1-H6) text to appear.', 'onepress' ),
+		'section'       => 'onepress_typo_section',
+		'priority'      => 5,
+		'css_selector'  => '',
+		'fields'        => array(
+			'font_size'   => false,
+			'line_height' => false,
+		),
+		'default'       => $onepress_typo_json_default,
+		'transport'     => 'postMessage',
+		'setting'       => array(
+			'sanitize_callback' => 'onepress_typo_sanitize_field',
+		),
+	),
 	array(
-		'default'           => $onepress_typo_section_default,
-		'sanitize_callback' => 'onepress_typo_sanitize_field',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Typo_Customize_Control(
-		$wp_customize,
-		'onepress_typo_headings',
-		array(
-			'label'        => esc_html__( 'Headings', 'onepress' ),
-			'description'  => esc_html__( 'Site headings and section titles.', 'onepress' ),
-			'section'      => 'onepress_typo_section',
-			'priority'     => 20,
-			'css_selector' => 'body h1, body h2, body h3, body h4, body h5, body h6, .entry-header .entry-title, body .section-title-area .section-title, body .section-title-area .section-subtitle, body .hero-content-style1 h2',
-			
-		)
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_typo_hero_heading',
+		'id'           => 'onepress_typo_group_brading',
+		'control'      => 'heading',
+		'skip_setting' => true,
+		'label'        => esc_html__( 'Branding Typography', 'onepress' ),
+		'section'      => 'onepress_typo_section',
+		'priority'     => 10,
+	),
 	array(
-		'default'           => $onepress_typo_section_default,
-		'sanitize_callback' => 'onepress_typo_sanitize_field',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Typo_Customize_Control(
-		$wp_customize,
-		'onepress_typo_hero_heading',
-		array(
-			'label'        => esc_html__( 'Hero', 'onepress' ),
-			'description'  => esc_html__( 'Hero headline and two-column hero titles.', 'onepress' ),
-			'section'      => 'onepress_typo_section',
-			'priority'     => 30,
-			'css_selector' => '.hero__content .hero-large-text, .hero__content .hcl2-content h1, .hero__content .hcl2-content h2, .hero__content .hcl2-content h3',
-			
-		)
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_typo_paragraphs',
+		'id'            => 'onepress_typo_branding_title',
+		'control'       => 'typography',
+		'label'         => esc_html__( 'Site title', 'onepress' ),
+		'description'   => esc_html__( 'Logo text and site name in the header.', 'onepress' ),
+		'section'       => 'onepress_typo_section',
+		'priority'      => 11,
+		'css_selector'  => '',
+		'default'       => $onepress_typo_json_default,
+		'transport'     => 'postMessage',
+		'setting'       => array(
+			'sanitize_callback' => 'onepress_typo_sanitize_field',
+		),
+	),
 	array(
-		'default'           => $onepress_typo_section_default,
-		'sanitize_callback' => 'onepress_typo_sanitize_field',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Typo_Customize_Control(
-		$wp_customize,
-		'onepress_typo_paragraphs',
-		array(
-			'label'        => esc_html__( 'Paragraphs', 'onepress' ),
-			'description'  => esc_html__( 'Body copy, entries, and hero intro text.', 'onepress' ),
-			'section'      => 'onepress_typo_section',
-			'priority'     => 40,
-			'css_selector' => 'body, body p, .entry-content p, .hero-small-text',
-			
-		)
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_typo_slider_slide_title',
+		'id'            => 'onepress_typo_branding_tagline',
+		'control'       => 'typography',
+		'label'         => esc_html__( 'Site tagline', 'onepress' ),
+		'description'   => esc_html__( 'Tagline under the site title.', 'onepress' ),
+		'section'       => 'onepress_typo_section',
+		'priority'      => 12,
+		'css_selector'  => '',
+		'default'       => $onepress_typo_json_default,
+		'transport'     => 'postMessage',
+		'setting'       => array(
+			'sanitize_callback' => 'onepress_typo_sanitize_field',
+		),
+	),
 	array(
-		'default'           => $onepress_typo_section_default,
-		'sanitize_callback' => 'onepress_typo_sanitize_field',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Typo_Customize_Control(
-		$wp_customize,
-		'onepress_typo_slider_slide_title',
-		array(
-			'label'        => esc_html__( 'Slider slide title', 'onepress' ),
-			'description'  => esc_html__( 'Hero / front page slider item titles.', 'onepress' ),
-			'section'      => 'onepress_typo_section',
-			'priority'     => 50,
-			'css_selector' => '.section-slider .section-op-slider .item--title',
-			
-		)
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_typo_slider_slide_content',
+		'id'           => 'onepress_typo_group_nav',
+		'control'      => 'heading',
+		'skip_setting' => true,
+		'label'        => esc_html__( 'Menu Typography', 'onepress' ),
+		'section'      => 'onepress_typo_section',
+		'priority'     => 20,
+	),
 	array(
-		'default'           => $onepress_typo_section_default,
-		'sanitize_callback' => 'onepress_typo_sanitize_field',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Typo_Customize_Control(
-		$wp_customize,
-		'onepress_typo_slider_slide_content',
-		array(
-			'label'        => esc_html__( 'Slider slide text', 'onepress' ),
-			'description'  => esc_html__( 'Hero / front page slider item descriptions.', 'onepress' ),
-			'section'      => 'onepress_typo_section',
-			'priority'     => 51,
-			'css_selector' => '.section-slider .section-op-slider .item--desc',
-		)
-	)
+		'id'            => 'onepress_typo_nav',
+		'control'       => 'typography',
+		'label'         => esc_html__( 'Menu Font', 'onepress' ),
+		'description'   => esc_html__( 'Select how you want your menu to appear.', 'onepress' ),
+		'section'       => 'onepress_typo_section',
+		'priority'      => 21,
+		'css_selector'  => '',
+		'default'       => $onepress_typo_json_default,
+		'transport'     => 'postMessage',
+		'setting'       => array(
+			'sanitize_callback' => 'onepress_typo_sanitize_field',
+		),
+	),
+
+	array(
+		'id'           => 'onepress_typo_group_hs',
+		'control'      => 'heading',
+		'skip_setting' => true,
+		'label'        => esc_html__( 'Heading Typography', 'onepress' ),
+		'section'      => 'onepress_typo_section',
+		'priority'     => 60,
+	),
 );
 
-if ( ! function_exists( 'onepress_typo_section_postmessage_selectors' ) ) {
-	/**
-	 * Live preview: map setting IDs to CSS selectors for typography postMessage.
-	 *
-	 * @param array<string, string> $selectors Setting ID => selector.
-	 * @return array<string, string>
-	 */
-	function onepress_typo_section_postmessage_selectors( $selectors ) {
-		if ( ! is_array( $selectors ) ) {
-			$selectors = array();
-		}
-		$selectors['onepress_typo_branding_title']   = '#page .site-branding .site-title, #page .site-branding .site-text-logo';
-		$selectors['onepress_typo_branding_tagline'] = '#page .site-branding .site-description';
-		$selectors['onepress_typo_nav']              = '#page .onepress-menu a';
-		$selectors['onepress_typo_headings']         = 'body h1, body h2, body h3, body h4, body h5, body h6, .entry-header .entry-title, body .section-title-area .section-title, body .section-title-area .section-subtitle, body .hero-content-style1 h2';
-		$selectors['onepress_typo_hero_heading']     = '.hero__content .hero-large-text, .hero__content .hcl2-content h1, .hero__content .hcl2-content h2, .hero__content .hcl2-content h3';
-		$selectors['onepress_typo_paragraphs']       = 'body, body p, .entry-content p, .hero-small-text';
-		$selectors['onepress_typo_slider_slide_title']   = '.section-slider .section-op-slider .item--title';
-		$selectors['onepress_typo_slider_slide_content'] = '.section-slider .section-op-slider .item--desc';
-		return $selectors;
-	}
+for ( $i = 1; $i <= 6; $i++ ) {
+	$definitions[] = array(
+		'id'            => 'onepress_typo_h' . $i,
+		'control'       => 'typography',
+		'label'         => sprintf( esc_html__( 'H%s Font', 'onepress' ), (string) $i ),
+		'section'       => 'onepress_typo_section',
+		'priority'      => 60 + $i,
+		'css_selector'  => '',
+		'default'       => $onepress_typo_json_default,
+		'transport'     => 'postMessage',
+		'setting'       => array(
+			'sanitize_callback' => 'onepress_typo_sanitize_field',
+		),
+	);
 }
-add_filter( 'onepress_typo_postmessage_selectors', 'onepress_typo_section_postmessage_selectors', 20 );
+
+$definitions[] = array(
+	'id'           => 'onepress_typo_group_site',
+	'control'      => 'heading',
+	'skip_setting' => true,
+	'label'        => esc_html__( 'Section typography', 'onepress' ),
+	'section'      => 'onepress_typo_section',
+	'priority'     => 80,
+);
+$definitions[] = array(
+	'id'            => 'onepress_typo_hero_heading',
+	'control'       => 'typography',
+	'label'         => esc_html__( 'Hero Heading Font', 'onepress' ),
+	'description'   => esc_html__( 'Select how you want your hero heading text to appear.', 'onepress' ),
+	'section'       => 'onepress_typo_section',
+	'priority'      => 90,
+	'css_selector'  => '',
+	'default'       => $onepress_typo_json_default,
+	'transport'     => 'postMessage',
+	'setting'       => array(
+		'sanitize_callback' => 'onepress_typo_sanitize_field',
+	),
+);
+$definitions[] = array(
+	'id'            => 'onepress_typo_section_title',
+	'control'       => 'typography',
+	'label'         => esc_html__( 'Section Heading Font', 'onepress' ),
+	'description'   => esc_html__( 'Select how you want your section headings to appear.', 'onepress' ),
+	'section'       => 'onepress_typo_section',
+	'priority'      => 100,
+	'css_selector'  => '',
+	'default'       => $onepress_typo_json_default,
+	'transport'     => 'postMessage',
+	'setting'       => array(
+		'sanitize_callback' => 'onepress_typo_sanitize_field',
+	),
+);
+$definitions[] = array(
+	'id'            => 'onepress_typo_section_subtitle',
+	'control'       => 'typography',
+	'label'         => esc_html__( 'Section Subtitle Font', 'onepress' ),
+	'description'   => esc_html__( 'Select how you want your section subtitles to appear.', 'onepress' ),
+	'section'       => 'onepress_typo_section',
+	'priority'      => 110,
+	'css_selector'  => '',
+	'default'       => $onepress_typo_json_default,
+	'transport'     => 'postMessage',
+	'setting'       => array(
+		'sanitize_callback' => 'onepress_typo_sanitize_field',
+	),
+);
+
+// $definitions[] = array(
+// 	'id'            => 'onepress_typo_slider_slide_title',
+// 	'control'       => 'typography',
+// 	'label'         => esc_html__( 'Slider slide title', 'onepress' ),
+// 	'description'   => esc_html__( 'Hero / front page slider item titles.', 'onepress' ),
+// 	'section'       => 'onepress_typo_section',
+// 	'priority'      => 120,
+// 	'css_selector'  => '',
+// 	'default'       => $onepress_typo_json_default,
+// 	'transport'     => 'postMessage',
+// 	'setting'       => array(
+// 		'sanitize_callback' => 'onepress_typo_sanitize_field',
+// 	),
+// );
+
+// $definitions[] = array(
+// 	'id'            => 'onepress_typo_slider_slide_content',
+// 	'control'       => 'typography',
+// 	'label'         => esc_html__( 'Slider slide text', 'onepress' ),
+// 	'description'   => esc_html__( 'Hero / front page slider item descriptions.', 'onepress' ),
+// 	'section'       => 'onepress_typo_section',
+// 	'priority'      => 120,
+// 	'css_selector'  => '',
+// 	'default'       => $onepress_typo_json_default,
+// 	'transport'     => 'postMessage',
+// 	'setting'       => array(
+// 		'sanitize_callback' => 'onepress_typo_sanitize_field',
+// 	),
+// );
+
+if ( ! class_exists( 'OnePress_Plus', false ) && class_exists( 'OnePress_Typography_Upsell_Customize_Control', false ) ) {
+	$definitions[] = array(
+		'id'            => 'onepress_typography_plus_upsell',
+		'control'       => 'misc',
+		'control_class' => 'OnePress_Typography_Upsell_Customize_Control',
+		'section'       => 'onepress_typo_section',
+		'priority'      => 9999999,
+		'setting'       => array(
+			'sanitize_callback' => 'onepress_sanitize_text',
+		),
+	);
+}
+
+return $definitions;

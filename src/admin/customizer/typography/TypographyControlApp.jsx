@@ -8,12 +8,7 @@ import {
 	useRef,
 	useState,
 } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
-import {
-	Icon,
-	justifyStretch,
-	justifyStretchVertical,
-} from '@wordpress/icons';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	CustomizerPreviewDeviceButtons,
 	getCustomizerPreviewDeviceDefinitions,
@@ -58,27 +53,44 @@ function getFontId(fontName) {
 }
 
 function cssToStyleSelect(weight, fontStyle) {
-	const w =
-		weight === undefined || weight === null || weight === ''
-			? ''
-			: String(weight);
+	const hasWeight =
+		weight !== undefined &&
+		weight !== null &&
+		String(weight).trim() !== '';
+	let w = hasWeight ? String(weight).trim() : '';
+	const wLower = w.toLowerCase();
+	if (hasWeight && (wLower === 'normal' || wLower === 'regular')) {
+		w = '400';
+	}
 	const fs =
 		fontStyle === undefined || fontStyle === null || fontStyle === ''
 			? 'normal'
 			: String(fontStyle);
+	const fsLower = fs.toLowerCase();
+	const fsNorm = fsLower === 'regular' ? 'normal' : fsLower;
 
-	if (w === '700' && (fs === 'normal' || fs === '')) {
+	if (!hasWeight) {
+		if (fsNorm === 'normal' || fs === '') {
+			return '';
+		}
+		if (fsNorm === 'italic') {
+			return 'italic';
+		}
+		return fs;
+	}
+
+	if (w === '700' && (fsNorm === 'normal' || fs === '')) {
 		return '700';
 	}
-	if (w === '700' && fs === 'italic') {
+	if (w === '700' && fsNorm === 'italic') {
 		return '700italic';
 	}
 
-	if (w === '' || w === '400') {
-		if (fs === 'normal' || fs === 'regular') {
+	if (w === '400') {
+		if (fsNorm === 'normal' || fs === '') {
 			return 'regular';
 		}
-		if (fs === 'italic') {
+		if (fsNorm === 'italic') {
 			return 'italic';
 		}
 		return fs;
@@ -86,13 +98,13 @@ function cssToStyleSelect(weight, fontStyle) {
 
 	const num = parseInt(w, 10);
 	if (!Number.isNaN(num)) {
-		if (fs === 'normal' || fs === '') {
+		if (fsNorm === 'normal' || fs === '') {
 			return String(num);
 		}
-		return String(num) + fs;
+		return String(num) + fsNorm;
 	}
 
-	return 'regular';
+	return '';
 }
 
 function parseCssNumberUnit(val, fallbackUnit = 'px') {
@@ -125,14 +137,18 @@ function composeNumberUnit(value, unit, fallbackUnit = 'px') {
 }
 
 /**
- * Missing / empty / explicit `none` → stored as "none" for decoration & transform toggles.
+ * Parse stored CSS keyword: missing/blank → "" (no option selected).
+ * Explicit CSS `none` → "none" like any other value.
  *
  * @param {string|undefined} raw
  * @returns {string}
  */
 function normalizeTextDecorationTransform(raw) {
 	const v = raw == null ? '' : String(raw).trim();
-	if (!v || v.toLowerCase() === 'none') {
+	if (!v) {
+		return '';
+	}
+	if (v.toLowerCase() === 'none') {
 		return 'none';
 	}
 	return v;
@@ -161,8 +177,8 @@ function parseInitialState(rawValue, fields) {
 		letterSpacingTabletUnit: 'px',
 		letterSpacingMobile: '',
 		letterSpacingMobileUnit: 'px',
-		textDecoration: 'none',
-		textTransform: 'none',
+		textDecoration: '',
+		textTransform: '',
 	};
 
 	if (!rawValue || !String(rawValue).trim()) {
@@ -364,7 +380,13 @@ function buildStyleOptions(fontId, webfonts, labels, defaultLabel) {
 }
 
 function parseStyleSelect(styleVal) {
-	const s = styleVal || '';
+	const s = String(styleVal || '').trim();
+	if (s === 'regular' || s === 'normal') {
+		return { weight: '', style: 'normal' };
+	}
+	if (s === 'italic') {
+		return { weight: '', style: 'italic' };
+	}
 	const weight = parseInt(s, 10);
 	if (Number.isNaN(weight)) {
 		const style = s === 'regular' ? 'normal' : s || 'normal';
@@ -548,18 +570,30 @@ function buildTypographySettingCss(state, fields, webfonts) {
 	}
 
 	if (fields.text_decoration) {
-		css['text-decoration'] = state.textDecoration || 'none';
+		const td = String(state.textDecoration ?? '').trim();
+		if (td !== '') {
+			css['text-decoration'] = td;
+		}
 	}
 
 	if (fields.text_transform) {
-		css['text-transform'] = state.textTransform || 'none';
+		const tt = String(state.textTransform ?? '').trim();
+		if (tt !== '') {
+			css['text-transform'] = tt;
+		}
 	}
 
 	if (fields.font_family && fields.font_style) {
-		const styleToken = state.styleSelect || '';
-		const { weight, style } = parseStyleSelect(styleToken);
-		css['font-style'] = style || 'normal';
-		css['font-weight'] = weight === '' ? '' : weight;
+		const styleToken = String(state.styleSelect ?? '').trim();
+		if (styleToken !== '') {
+			const { weight, style } = parseStyleSelect(styleToken);
+			// `regular` / `normal` / italic-only tokens leave weight ""; still emit a valid font-weight (normal = 400).
+			css['font-weight'] =
+				weight !== '' ? String(weight) : 'normal';
+			if (style && style !== 'normal') {
+				css['font-style'] = style;
+			}
+		}
 	}
 
 	if (fields.font_family) {
@@ -579,6 +613,42 @@ function buildTypographySettingCss(state, fields, webfonts) {
 	return css;
 }
 
+/**
+ * Slider min/max/step per typography metric and CSS unit (aligned with onepress_slider UX).
+ *
+ * @param {string} fieldKey
+ * @param {string} unit
+ * @returns {{ min: number, max: number, step: number }}
+ */
+function getTypographySliderBounds(fieldKey, unit) {
+	const u = String(unit || 'px').toLowerCase();
+	switch (fieldKey) {
+		case 'font_size':
+			if (u === '%') {
+				return { min: 50, max: 500, step: 1 };
+			}
+			if (u === 'em' || u === 'rem') {
+				return { min: 0.25, max: 10, step: 0.05 };
+			}
+			return { min: 8, max: 200, step: 1 };
+		case 'line_height':
+			if (u === 'em' || u === 'rem') {
+				return { min: 0, max: 5, step: 0.05 };
+			}
+			return { min: 0, max: 200, step: 1 };
+		case 'letter_spacing':
+			if (u === 'em' || u === 'rem') {
+				return { min: -2, max: 2, step: 0.025 };
+			}
+			if (u === '%') {
+				return { min: -100, max: 100, step: 0.5 };
+			}
+			return { min: -100, max: 100, step: 0.5 };
+		default:
+			return { min: 0, max: 100, step: 1 };
+	}
+}
+
 function ResponsiveUnitField({
 	label,
 	fieldKey,
@@ -586,14 +656,73 @@ function ResponsiveUnitField({
 	onSelectDevice,
 	state,
 	patch,
-	min,
-	leadingIcon = null,
 }) {
 	const keys =
 		RESPONSIVE_UNIT_KEYS[fieldKey][previewDevice] ||
 		RESPONSIVE_UNIT_KEYS[fieldKey].desktop;
 	const value = state[keys.value];
 	const unit = state[keys.unit];
+
+	const { min: sliderMin, max: sliderMax, step: sliderStep } = useMemo(
+		() => getTypographySliderBounds(fieldKey, unit),
+		[fieldKey, unit]
+	);
+
+	const clampNumeric = useCallback(
+		(raw) => {
+			const s = raw === '' || raw == null ? '' : String(raw).trim();
+			if (s === '') {
+				return '';
+			}
+			const n = Number(s);
+			if (Number.isNaN(n)) {
+				return '';
+			}
+			const c = Math.min(sliderMax, Math.max(sliderMin, n));
+			if (sliderStep >= 1) {
+				return String(Math.round(c / sliderStep) * sliderStep);
+			}
+			const decimals = String(sliderStep).split('.')[1]?.length ?? 0;
+			return String(Number(c.toFixed(decimals)));
+		},
+		[sliderMin, sliderMax, sliderStep]
+	);
+
+	const setValueForDevice = useCallback(
+		(nextRaw) => {
+			patch({ [keys.value]: clampNumeric(nextRaw) });
+		},
+		[clampNumeric, patch, keys.value]
+	);
+
+	const rangeDisplayValue = useMemo(() => {
+		const n = Number(value);
+		if (value === '' || Number.isNaN(n)) {
+			/* Letter spacing empty → treat as 0 so slider thumb sits centered (-100…100). */
+			if (fieldKey === 'letter_spacing') {
+				return 0;
+			}
+			return sliderMin;
+		}
+		return Math.min(sliderMax, Math.max(sliderMin, n));
+	}, [value, sliderMin, sliderMax, fieldKey]);
+
+	const rangeFillPct = useMemo(() => {
+		const span = sliderMax - sliderMin;
+		if (span <= 0) {
+			return 0;
+		}
+		return ((rangeDisplayValue - sliderMin) / span) * 100;
+	}, [rangeDisplayValue, sliderMin, sliderMax]);
+
+	const valueInputId = useMemo(
+		() =>
+			`onepress-typo-num-${fieldKey}-${previewDevice}-${keys.value}`.replace(
+				/[^a-zA-Z0-9_-]/g,
+				'-'
+			),
+		[fieldKey, previewDevice, keys.value]
+	);
 
 	return (
 		<div className="setting-group setting-group--unit">
@@ -620,30 +749,48 @@ function ResponsiveUnitField({
 						triggerActiveClass="active"
 					/>
 				</div>
-
-
-
 			</div>
-			<div
-				className={
-					'unit-row' +
-					(leadingIcon ? ' unit-row--has-leading-icon' : '')
-				}
-			>
-				{leadingIcon ? (
-					<span className="unit-row__icon" aria-hidden="true">
-						<Icon icon={leadingIcon} size={20} />
-					</span>
-				) : null}
+			<div className="unit-row unit-row--slider typography-slider-row">
 				<input
-					type="number"
-					className="opc-input"
-					min={min}
-					step="any"
-					value={value}
-					onChange={(e) => patch({ [keys.value]: e.target.value })}
+					type="range"
+					className="typography-range range"
+					style={{
+						'--onepress-slider-fill-pct': `${rangeFillPct}%`,
+					}}
+					min={sliderMin}
+					max={sliderMax}
+					step={sliderStep}
+					value={rangeDisplayValue}
+					aria-label={
+						label
+							? sprintf(
+									/* translators: %s: field label */
+									__('%s — slider', 'onepress'),
+									label
+								)
+							: __('Value slider', 'onepress')
+					}
+					onChange={(e) => setValueForDevice(e.target.value)}
 				/>
-
+				<input
+					id={valueInputId}
+					type="number"
+					className="opc-input number typography-range-number"
+					min={sliderMin}
+					max={sliderMax}
+					step={sliderStep}
+					value={value}
+					placeholder=""
+					aria-label={__('Value', 'onepress')}
+					onChange={(e) => {
+						const v = e.target.value;
+						if (v === '') {
+							patch({ [keys.value]: '' });
+							return;
+						}
+						setValueForDevice(v);
+					}}
+				/>
 			</div>
 		</div>
 	);
@@ -654,7 +801,7 @@ function renderSpanChoices({
 	value,
 	onChange,
 	toggleable = false,
-	noneValue = 'none',
+	noneValue = '',
 }) {
 	const resolvePick = (optValue) => {
 		if (toggleable && value === optValue) {
@@ -673,10 +820,16 @@ function renderSpanChoices({
 	return (
 		<div className="choice-row">
 			{options.map((opt) => {
-				const active = value === opt.value && value !== noneValue;
+				const active =
+					value === opt.value &&
+					(noneValue === ''
+						? opt.value !== '' || value === ''
+						: value !== noneValue);
 				return (
 					<span
-						key={opt.value || 'default'}
+						key={
+							opt.value === '' ? 'choice-empty' : opt.value || 'default'
+						}
 						className={`choice-btn ${active ? ' is-active button-primary' : 'button-secondary'}`}
 						role="button"
 						tabIndex={0}
@@ -711,6 +864,8 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 	const settingRef = useRef(null);
 	settingRef.current = control.setting || control.settings?.default;
 	const controlWrapRef = useRef(null);
+	const settingsPanelRef = useRef(null);
+	const summaryTriggerRef = useRef(null);
 	const fontSelectorRef = useRef(null);
 
 	const [state, setState] = useState(() =>
@@ -899,12 +1054,6 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 			return undefined;
 		}
 		const onDocDown = (e) => {
-			const root = controlWrapRef.current;
-			if (!root) {
-				return;
-			}
-			// wp.components.Popover renders in a portal (body); clicks there are not
-			// inside controlWrapRef but must not close the Typography options panel.
 			const t = e.target;
 			if (
 				t &&
@@ -913,18 +1062,52 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 			) {
 				return;
 			}
-			if (!root.contains(e.target)) {
+
+			const root = controlWrapRef.current;
+			const panel = settingsPanelRef.current;
+			const summaryBtn = summaryTriggerRef.current;
+
+			if (!root || !root.contains(t)) {
+				// Customizer live preview (#customize-preview + iframe): keep panel open
+				// so users can click the site while adjusting typography.
+				if (
+					t &&
+					typeof t.closest === 'function' &&
+					t.closest('#customize-preview')
+				) {
+					return;
+				}
 				setFontPickerOpen(false);
 				setSettingsOpen(false);
 				return;
 			}
-			if (
-				fontPickerOpen &&
-				fontSelectorRef.current &&
-				!fontSelectorRef.current.contains(e.target)
-			) {
-				setFontPickerOpen(false);
+
+			if (!settingsOpen) {
+				return;
 			}
+
+			const insidePanel = panel && panel.contains(t);
+			const onSummaryToggle = summaryBtn && summaryBtn.contains(t);
+
+			if (insidePanel) {
+				if (
+					fontPickerOpen &&
+					fontSelectorRef.current &&
+					!fontSelectorRef.current.contains(t)
+				) {
+					setFontPickerOpen(false);
+				}
+				return;
+			}
+
+			// Outside .onepress-typography-settings (e.g. title row, description).
+			// Skip closing on summary mousedown so its click handler can toggle.
+			if (onSummaryToggle) {
+				return;
+			}
+
+			setFontPickerOpen(false);
+			setSettingsOpen(false);
 		};
 		document.addEventListener('mousedown', onDocDown);
 		return () => document.removeEventListener('mousedown', onDocDown);
@@ -934,14 +1117,12 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 	const sizeBadge =
 		state.fontSize !== '' ? `${state.fontSize}${state.fontSizeUnit}` : labels.option_default;
 	const textDecorationChoices = [
-		// none = no items selected
-		// { value: 'none', label: __('None', 'onepress'), icon: 'Aa', iconClass: 'none' },
+		{ value: 'none', label: __('Text decoration none', 'onepress'), icon: 'Aa', iconClass: 'none' },
 		{ value: 'overline', label: __('Overline', 'onepress'), icon: 'Aa', iconClass: 'overline' },
 		{ value: 'underline', label: __('Underline', 'onepress'), icon: 'Aa', iconClass: 'underline' },
 		{ value: 'line-through', label: __('Line through', 'onepress'), icon: 'Aa', iconClass: 'line-through' },
 	];
 	const textTransformChoices = [
-		// none = no items selected
 		// { value: 'none', label: __('None', 'onepress'), icon: 'Aa', iconClass: 'none' },
 		{ value: 'uppercase', label: __('Uppercase', 'onepress'), icon: 'AA', iconClass: 'uppercase' },
 		{ value: 'lowercase', label: __('Lowercase', 'onepress'), icon: 'aa', iconClass: 'lowercase' },
@@ -953,9 +1134,13 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 	};
 
 	if (fields.font_family && fields.font_style) {
-		const { weight, style } = parseStyleSelect(state.styleSelect || '');
-		summaryPreviewStyle.fontStyle = style || 'normal';
-		summaryPreviewStyle.fontWeight = weight === '' ? '' : weight;
+		const sel = String(state.styleSelect || '').trim();
+		if (sel !== '') {
+			const { weight, style } = parseStyleSelect(sel);
+			summaryPreviewStyle.fontStyle = style || 'normal';
+			summaryPreviewStyle.fontWeight =
+				weight !== '' ? weight : 'normal';
+		}
 	}
 	if (fields.font_size) {
 		const v = composeNumberUnit(state.fontSize, state.fontSizeUnit, 'px');
@@ -976,10 +1161,16 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 		}
 	}
 	if (fields.text_transform) {
-		summaryPreviewStyle.textTransform = state.textTransform || 'none';
+		const tt = String(state.textTransform || '').trim();
+		if (tt !== '') {
+			summaryPreviewStyle.textTransform = tt;
+		}
 	}
 	if (fields.text_decoration) {
-		summaryPreviewStyle.textDecoration = state.textDecoration || 'none';
+		const td = String(state.textDecoration || '').trim();
+		if (td !== '') {
+			summaryPreviewStyle.textDecoration = td;
+		}
 	}
 
 	return (
@@ -1014,6 +1205,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 			<div className='relative'>
 
 				<button
+					ref={summaryTriggerRef}
 					type="button"
 					className={`summary-card opc-input select flex items-center w-full ${settingsOpen ? 'active' : ''}`}
 					onClick={() => {
@@ -1042,6 +1234,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 
 				{settingsOpen && (
 					<div
+						ref={settingsPanelRef}
 						className="onepress-typography-settings"
 						role="dialog"
 						aria-modal="false"
@@ -1150,7 +1343,6 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 									onSelectDevice={selectPreviewDevice}
 									state={state}
 									patch={patch}
-									min={0}
 								/>
 							)}
 
@@ -1162,8 +1354,6 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 									onSelectDevice={selectPreviewDevice}
 									state={state}
 									patch={patch}
-									min={0}
-									leadingIcon={justifyStretchVertical}
 								/>
 							)}
 
@@ -1175,8 +1365,6 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 									onSelectDevice={selectPreviewDevice}
 									state={state}
 									patch={patch}
-									min={-1000}
-									leadingIcon={justifyStretch}
 								/>
 							)}
 
@@ -1190,7 +1378,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 											value: state.textDecoration,
 											onChange: (next) => patch({ textDecoration: next }),
 											toggleable: true,
-											noneValue: 'none',
+											noneValue: '',
 										})}
 									</div>
 								)}
@@ -1203,7 +1391,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 											value: state.textTransform,
 											onChange: (next) => patch({ textTransform: next }),
 											toggleable: true,
-											noneValue: 'none',
+											noneValue: '',
 										})}
 									</div>
 								)}

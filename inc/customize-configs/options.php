@@ -1,51 +1,55 @@
 <?php
 /**
- * Site Options
+ * Theme Options panel and legacy Custom CSS for WordPress older than 4.7.
  *
  * @package onepress
  */
 
-$wp_customize->add_panel(
-	'onepress_options',
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+$definitions = array(
 	array(
+		'type'           => 'panel',
+		'id'             => 'onepress_options',
 		'priority'       => 5,
 		'capability'     => 'edit_theme_options',
 		'theme_supports' => '',
 		'title'          => esc_html__( 'Theme Options', 'onepress' ),
 		'description'    => '',
-	)
+	),
 );
 
-
-if ( ! function_exists( 'wp_get_custom_css' ) ) {  // Back-compat for WordPress < 4.7.
-
-	// Custom CSS Settings.
-	$wp_customize->add_section(
-		'onepress_custom_code',
-		array(
-			'title' => __( 'Custom CSS', 'onepress' ),
-			'panel' => 'onepress_options',
-		)
+if ( ! function_exists( 'wp_get_custom_css' ) ) {
+	$definitions[] = array(
+		'type'        => 'section',
+		'id'          => 'onepress_custom_code',
+		'title'       => esc_html__( 'Custom CSS', 'onepress' ),
+		'panel'       => 'onepress_options',
 	);
-
-
-	$wp_customize->add_setting(
-		'onepress_custom_css',
-		array(
+	$definitions[] = array(
+		'id'          => 'onepress_custom_css',
+		'control'     => 'wp',
+		'input_type'  => 'textarea',
+		'label'       => esc_html__( 'Custom CSS', 'onepress' ),
+		'section'     => 'onepress_custom_code',
+		'setting'     => array(
 			'default'           => '',
 			'sanitize_callback' => 'onepress_sanitize_css',
 			'type'              => 'option',
-		)
-	);
-
-	$wp_customize->add_control(
-		'onepress_custom_css',
-		array(
-			'label'   => __( 'Custom CSS', 'onepress' ),
-			'section' => 'onepress_custom_code',
-			'type'    => 'textarea',
-		)
+		),
 	);
 } else {
-	$wp_customize->get_section( 'custom_css' )->priority = 994;
+	$definitions[] = array(
+		'type'     => 'callback',
+		'callback' => static function ( $wp_customize ) {
+			$section = $wp_customize->get_section( 'custom_css' );
+			if ( $section ) {
+				$section->priority = 994;
+			}
+		},
+	);
 }
+
+return $definitions;

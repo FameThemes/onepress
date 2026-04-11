@@ -25,7 +25,7 @@ alwaysApply: false
 
 ## Front-end theme (`src/frontend/styles/`)
 
-- **Customizer → `:root` bridge** (`inc/customizer-inline-styles.php`, `_css_var.scss`, `_customizer_bridge.scss`, related partials): use **semantic names without the `onepress-` prefix** — e.g. `--typo-body-color`, `--typo-hero-heading-color`, `--color-primary`, `--header-bg`, `--menu-link-color`, `--hero-overlay`, `--gallery-spacing`.
+- **Customizer → `:root` bridge** (`inc/customizer-inline-styles.php`, `_css_var.scss`, `_colors.scss`, related partials): use **semantic names without the `onepress-` prefix** — e.g. `--typo-body-color`, `--typo-hero-heading-color`, `--color-primary`, `--header-bg`, `--menu-link-color`, `--hero-overlay`, `--gallery-spacing`.
 - Reserve **`--onepress-…`** for **admin Customizer SCSS** (`src/admin/`), not for this front-end variable set.
 
 ## Rest of admin / legacy markup

@@ -88,6 +88,9 @@ function onepress_css_color_allowed_functions_map()
  * Sanitize a CSS <color> value: supports hex, transparent/currentColor, rgb/hsl/hwb/lab/lch/oklab/oklch/color/device-cmyk,
  * color-mix, light-dark, gray(), and var(--custom-property). Named colors (e.g. red, aliceblue) are not accepted.
  *
+ * Hex input may include a leading `#` or omit it (3/4/6/8 hex digits); output normalizes to `#` plus digits for hex.
+ * Do not prefix the return value with `#` again when emitting CSS.
+ *
  * @param mixed  $color Raw input.
  * @param int    $depth Internal recursion guard (e.g. var() fallbacks).
  * @return string Safe color or empty string if invalid.
@@ -187,12 +190,30 @@ function onepress_css_color_parens_balanced($s)
 /**
  * Sanitize color values used in theme options / repeatable fields (alpha-capable CSS colors).
  *
+ * Same rules as {@see onepress_sanitize_css_color()}: hex may be passed with or without `#`.
+ *
  * @param mixed $color Raw input.
- * @return string
+ * @return string Safe CSS color or empty string.
  */
 function onepress_sanitize_color_alpha($color)
 {
 	return onepress_sanitize_css_color($color);
+}
+
+/**
+ * Like {@see onepress_sanitize_color_alpha()} but returns hex digits only (no leading `#`).
+ * For use when building `#' . $digits` in legacy markup. Non-hex results (e.g. rgba()) return empty string.
+ *
+ * @param mixed $color Raw input.
+ * @return string Lowercase hex without `#`, or empty string.
+ */
+function onepress_sanitize_hex_color_no_hash($color)
+{
+	$sanitized = onepress_sanitize_color_alpha($color);
+	if ($sanitized === '' || '#' !== substr($sanitized, 0, 1)) {
+		return '';
+	}
+	return strtolower(substr($sanitized, 1));
 }
 
 
@@ -790,7 +811,7 @@ function onepress_sanitize_repeatable_data_field($input, $setting)
 						$data[$i][$id] = wp_kses_post($value);
 						break;
 					case 'color':
-						$data[$i][$id] = sanitize_hex_color_no_hash($value);
+						$data[$i][$id] = onepress_sanitize_color_alpha($value);
 						break;
 					case 'coloralpha':
 						$data[$i][$id] = onepress_sanitize_color_alpha($value);
@@ -936,17 +957,6 @@ function onepress_sanitize_select($input, $setting = null)
 function onepress_sanitize_number($input)
 {
 	return balanceTags($input);
-}
-
-function onepress_sanitize_hex_color($color)
-{
-	if ($color === '') {
-		return '';
-	}
-	if (preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', $color)) {
-		return $color;
-	}
-	return null;
 }
 
 function onepress_sanitize_text($string)

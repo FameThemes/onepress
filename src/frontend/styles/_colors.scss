@@ -1,5 +1,3 @@
-@use "variables" as v;
-
 // Customizer-driven colors (values from :root via inc/customizer-inline-styles.php).
 a,
 .screen-reader-text:hover,
@@ -77,14 +75,6 @@ input[type="submit"],
 .woocommerce button.button.alt:hover,
 .woocommerce input.button.alt:hover {
 	background-color: var(--color-primary);
-}
-
-.section-slider .section-op-slider .item--title {
-	color: var(--typo-slider-title-color, inherit);
-}
-
-.section-slider .section-op-slider .item--desc {
-	color: var(--typo-slider-desc-color, inherit);
 }
 
 #page .is-transparent .site-header.no-scroll .site-title,

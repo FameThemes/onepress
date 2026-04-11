@@ -47,6 +47,7 @@ function onepress_customize_register($wp_customize)
 	// Load custom controls.
 	$path = get_template_directory();
 	require $path . '/inc/customizer-controls.php';
+	require_once $path . '/inc/customizer-register.php';
 
 	// Remove default sections.
 
@@ -61,91 +62,24 @@ function onepress_customize_register($wp_customize)
 	do_action('onepress_customize_before_register', $wp_customize);
 
 
-	$pages  =  get_pages();
-	$option_pages = array();
-	$option_pages[0] = esc_html__('Select page', 'onepress');
-	foreach ($pages as $p) {
-		$option_pages[$p->ID] = $p->post_title;
-	}
-
-	$users = get_users(array(
-		'orderby'      => 'display_name',
-		'order'        => 'ASC',
-		'number'       => '',
-	));
-
-	$option_users[0] = esc_html__('Select member', 'onepress');
-	foreach ($users as $user) {
-		$option_users[$user->ID] = $user->display_name;
-	}
-
 	/**
-	 * Load Customize Configs
+	 * Declarative customize-configs (return-array), then imperative configs.
+	 *
 	 * @since 2.1.0
 	 */
-	// Site Identity.
-	require_once $path . '/inc/customize-configs/site-identity.php';
+	require_once $path . '/inc/customize-dynamic-sections.php';
 
-	//Site Options
-	require_once $path . '/inc/customize-configs/options.php';
-	require_once $path . '/inc/customize-configs/options-global.php';
-	require_once $path . '/inc/customize-configs/options-colors.php';
-	require_once $path . '/inc/customize-configs/options-header.php';
-	require_once $path . '/inc/customize-configs/options-navigation.php';
-	require_once $path . '/inc/customize-configs/options-sections-navigation.php';
-	require_once $path . '/inc/customize-configs/options-page.php';
-	require_once $path . '/inc/customize-configs/options-blog-posts.php';
-	require_once $path . '/inc/customize-configs/options-single.php';
-	require_once $path . '/inc/customize-configs/options-footer.php';
-	require_once $path . '/inc/customize-configs/section-typo.php';
+	$builder_context = onepress_customize_build_builder_context_data();
+	// Merged after theme setup (see onepress_customize_reset_option_definitions_cache on after_setup_theme).
+	$customize_options = onepress_customize_get_merged_definitions_for_register( $builder_context );
+	$GLOBALS['onepress_customize_options'] = $customize_options;
+	onepress_customize_register_options($wp_customize, $customize_options);
 
-	// Demo Example
-	// require_once $path . '/inc/customize-configs/option-demo-example.php';
-	// require_once $path . '/inc/customize-dynamic-sections.php';
-	// require_once $path . '/inc/customize-configs/option-dynamic-section-demo.php';
+	Onepress_Dots_Navigation::get_instance()->add_customize($wp_customize, 'onepress_sections_nav');
 
-	/**
-	 * @since 2.1.1
-	 * Load sections if enabled
-	 */
-	$sections = Onepress_Config::get_sections();
-
-
-	foreach ($sections as $key => $section) {
-
-		if (Onepress_Config::is_section_active($key)) {
-			$file = $path . '/inc/customize-configs/section-' . $key . '.php';
-			if (file_exists($file)) {
-				require_once $file;
-			}
-		}
-	}
-
-	/*
-	// Section Hero
-	require_once $path. '/inc/customize-configs/section-hero.php';
-	// Section Hero
-	require_once $path. '/inc/customize-configs/section-about.php';
-	// Video Popup
-	require_once $path. '/inc/customize-configs/section-videolightbox.php';
-	// Section Gallery
-	require_once $path. '/inc/customize-configs/section-gallery.php';
-	// Section Features
-	require_once $path. '/inc/customize-configs/section-features.php';
-	// Section Services
-	require_once $path. '/inc/customize-configs/section-services.php';
-	// Section Counter
-	require_once $path. '/inc/customize-configs/section-counter.php';
-	// Section Team
-	require_once $path. '/inc/customize-configs/section-team.php';
-	// Section News
-	require_once $path. '/inc/customize-configs/section-news.php';
-	// Section Contact
-	require_once $path. '/inc/customize-configs/section-contact.php';
-	*/
-
-	// Section Up sell
-	require_once $path . '/inc/customize-configs/section-upsell.php';
+	$config_dir = $path . '/inc/customize-configs/';
+	require_once $config_dir . 'option-demo-example.php';
+	require_once $config_dir . 'option-dynamic-section-demo.php';
 
 	/**
 	 * Hook to add other customize
@@ -160,7 +94,7 @@ function onepress_customize_register($wp_customize)
 		$wp_customize->get_panel('woocommerce')->priority = 300;
 	}
 }
-add_action( 'customize_register', 'onepress_customize_register', 20 );
+add_action('customize_register', 'onepress_customize_register', 20);
 /**
  * Selective refresh
  */
@@ -171,7 +105,7 @@ require get_template_directory() . '/inc/customizer-selective-refresh.php';
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
 function onepress_customize_preview_js()
-{	
+{
 	$handle = onepress_load_build_script('customizer-liveview', ['customize-preview', 'customize-selective-refresh'], true);
 	wp_enqueue_script($handle);
 	$typo_breakpoints = apply_filters(
@@ -181,7 +115,7 @@ function onepress_customize_preview_js()
 			'mobile' => '767px',
 		)
 	);
-	if ( ! is_array( $typo_breakpoints ) ) {
+	if (! is_array($typo_breakpoints)) {
 		$typo_breakpoints = array(
 			'tablet' => '991px',
 			'mobile' => '767px',
@@ -191,13 +125,13 @@ function onepress_customize_preview_js()
 		'onepress_background_responsive_breakpoints',
 		$typo_breakpoints
 	);
-	if ( ! is_array( $bg_breakpoints ) ) {
+	if (! is_array($bg_breakpoints)) {
 		$bg_breakpoints = $typo_breakpoints;
 	}
-	wp_localize_script( $handle, 'onepressBackgroundBreakpoints', $bg_breakpoints );
+	wp_localize_script($handle, 'onepressBackgroundBreakpoints', $bg_breakpoints);
 
-	$typo_base_px = (int) apply_filters( 'onepress_typo_css_base_px', 16 );
-	if ( $typo_base_px < 1 ) {
+	$typo_base_px = (int) apply_filters('onepress_typo_css_base_px', 16);
+	if ($typo_base_px < 1) {
 		$typo_base_px = 16;
 	}
 	// Scalars must not be passed to wp_localize_script (WP 5.7+); use inline script.
@@ -209,11 +143,9 @@ function onepress_customize_preview_js()
 
 	$typo_pm_selectors = apply_filters(
 		'onepress_typo_postmessage_selectors',
-		array(
-			'onepress_typo_demo_heading' => '#features .section-content',
-		)
+		array()
 	);
-	if ( ! is_array( $typo_pm_selectors ) ) {
+	if (! is_array($typo_pm_selectors)) {
 		$typo_pm_selectors = array();
 	}
 	wp_localize_script(
@@ -222,9 +154,9 @@ function onepress_customize_preview_js()
 		$typo_pm_selectors
 	);
 
-	if ( function_exists( 'onepress_typo_get_customizer_fonts' ) ) {
+	if (function_exists('onepress_typo_get_customizer_fonts')) {
 		$typo_webfonts = onepress_typo_get_customizer_fonts();
-		if ( ! is_array( $typo_webfonts ) ) {
+		if (! is_array($typo_webfonts)) {
 			$typo_webfonts = array();
 		}
 		wp_localize_script(
@@ -240,7 +172,7 @@ function onepress_customize_preview_js()
 			'onepress_spacing_demo_site_title' => '#features .container',
 		)
 	);
-	if ( ! is_array( $spacing_pm_selectors ) ) {
+	if (! is_array($spacing_pm_selectors)) {
 		$spacing_pm_selectors = array();
 	}
 	wp_localize_script(
@@ -258,7 +190,7 @@ function onepress_customize_preview_js()
 			),
 		)
 	);
-	if ( ! is_array( $slider_pm_config ) ) {
+	if (! is_array($slider_pm_config)) {
 		$slider_pm_config = array();
 	}
 	wp_localize_script(
@@ -273,14 +205,14 @@ function onepress_customize_preview_js()
 			'onepress_bg_demo_header',
 		)
 	);
-	if ( ! is_array( $bg_pm_ids ) ) {
+	if (! is_array($bg_pm_ids)) {
 		$bg_pm_ids = array();
 	}
 	$bg_pm_ids = array_values(
 		array_filter(
-			array_map( 'strval', $bg_pm_ids ),
-			static function ( $id ) {
-				return is_string( $id ) && $id !== '';
+			array_map('strval', $bg_pm_ids),
+			static function ($id) {
+				return is_string($id) && $id !== '';
 			}
 		)
 	);
@@ -326,8 +258,8 @@ function onepress_customize_controls_enqueue_scripts()
 			array(
 				'search'    => esc_html__('Search', 'onepress'),
 				'svg_code'    => esc_html__('Svg Code', 'onepress'),
-				'apply_svg'   => esc_html__( 'Apply', 'onepress' ),
-				'svg_placeholder' => esc_html__( 'Paste SVG markup here…', 'onepress' ),
+				'apply_svg'   => esc_html__('Apply', 'onepress'),
+				'svg_placeholder' => esc_html__('Paste SVG markup here…', 'onepress'),
 				'fonts' => array(
 					'font-awesome' => array(
 						// Name of icon

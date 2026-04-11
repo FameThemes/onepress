@@ -191,16 +191,31 @@ export function RepeatableControlApp({ control, $, api }) {
 
 	useEffect(() => {
 		const $actions = control.container.find('.repeatable-actions');
+		if (!$actions.length) {
+			return;
+		}
+		// PHP template: .limited-msg sits *inside* .repeatable-actions. Hiding the whole
+		// .repeatable-actions (old behavior) hid the message too; the empty placeholder also
+		// blocked insertAfter($actions). Only hide the add-button row; fill/show .limited-msg.
+		const $addRow = $actions.children('div').first();
+		const $limited = $actions.find('.limited-msg').first();
 		const n = items.length;
-		if (maxItem > 0 && n >= maxItem) {
-			$actions.hide();
-			if (limitedMsg && control.container.find('.limited-msg').length === 0) {
-				$('<p class="limited-msg"/>').html(limitedMsg).insertAfter($actions);
+		const atLimit = maxItem > 0 && n >= maxItem;
+		if (atLimit) {
+			$addRow.hide();
+			if (limitedMsg) {
+				if ($limited.length) {
+					$limited.html(limitedMsg).show();
+				} else {
+					$('<p class="limited-msg" />').html(limitedMsg).insertAfter($actions);
+				}
+			} else {
+				$limited.hide().empty();
 			}
-			control.container.find('.limited-msg').show();
 		} else {
-			$actions.show();
-			control.container.find('.limited-msg').hide();
+			$addRow.show();
+			$limited.hide().empty();
+			$actions.next('p.limited-msg').remove();
 		}
 	}, [items.length, maxItem, limitedMsg, control.container]);
 

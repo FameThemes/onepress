@@ -1,15 +1,21 @@
 <?php
 /**
- *  Dots Navigation Settings
- * @since 2.1.0
+ * Sections navigation (dots) — section only; controls registered in customizer.php.
+ *
+ * @package onepress
  */
-$wp_customize->add_section( 'onepress_sections_nav',
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+return array(
 	array(
+		'type'        => 'section',
+		'id'          => 'onepress_sections_nav',
 		'priority'    => null,
 		'title'       => esc_html__( 'Sections Navigation', 'onepress' ),
 		'description' => '',
 		'panel'       => 'onepress_options',
-	)
+	),
 );
-
-Onepress_Dots_Navigation::get_instance()->add_customize( $wp_customize, 'onepress_sections_nav' );

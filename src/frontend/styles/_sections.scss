@@ -163,7 +163,6 @@
         .hero-large-text {
             -webkit-transition-delay: 0.7s; /* Safari */
             transition-delay: 0.7s;
-            color: var(--typo-hero-heading-color, inherit);
         }
         .hero-small-text {
             -webkit-transition-delay: 0.8s; /* Safari */
@@ -176,12 +175,6 @@
         .hcl2-content {
             -webkit-transition-delay: 0.7s; /* Safari */
             transition-delay: 0.7s;
-
-            h1,
-            h2,
-            h3 {
-                color: var(--typo-hero-heading-color, inherit);
-            }
         }
 
     }

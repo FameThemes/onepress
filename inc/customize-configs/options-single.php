@@ -1,81 +1,63 @@
 <?php
+/**
+ * Single post settings.
+ *
+ * @package onepress
+ */
 
-/* Single Settings
-----------------------------------------------------------------------*/
-$wp_customize->add_section( 'onepress_single',
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+return array(
 	array(
+		'type'        => 'section',
+		'id'          => 'onepress_single',
 		'priority'    => null,
 		'title'       => esc_html__( 'Single Post', 'onepress' ),
 		'description' => '',
 		'panel'       => 'onepress_options',
-	)
-);
-
-
-$wp_customize->add_setting( 'single_layout',
+	),
 	array(
-		'sanitize_callback' => 'onepress_sanitize_select',
+		'id'                => 'single_layout',
+		'control'           => 'wp',
+		'input_type'        => 'select',
+		'label'             => esc_html__( 'Single Layout Sidebar', 'onepress' ),
+		'section'           => 'onepress_single',
 		'default'           => 'default',
-	)
-);
-$wp_customize->add_control( 'single_layout',
-	array(
-		'type'        => 'select',
-		'label'       => esc_html__( 'Single Layout Sidebar', 'onepress' ),
-		'section'     => 'onepress_single',
-		'choices' => array(
-			'default' => esc_html__( 'Default', 'onepress' ),
-			'no-sidebar' => esc_html__( 'No Sidebar', 'onepress' ),
-			'left-sidebar' => esc_html__( 'Left Sidebar', 'onepress' ),
+		'sanitize_callback' => 'onepress_sanitize_select',
+		'choices'           => array(
+			'default'       => esc_html__( 'Default', 'onepress' ),
+			'no-sidebar'    => esc_html__( 'No Sidebar', 'onepress' ),
+			'left-sidebar'  => esc_html__( 'Left Sidebar', 'onepress' ),
 			'right-sidebar' => esc_html__( 'Right Sidebar', 'onepress' ),
-		)
-	)
-);
-
-
-$wp_customize->add_setting( 'single_layout_content_width',
+		),
+	),
 	array(
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'single_layout_content_width',
-	array(
-		'type'        => 'text',
+		'id'          => 'single_layout_content_width',
+		'control'     => 'wp',
+		'input_type'  => 'text',
 		'label'       => esc_html__( 'Single Content Max Width', 'onepress' ),
-		'description'       => esc_html__( 'Enter content max width number, e.g : 800', 'onepress' ),
+		'description' => esc_html__( 'Enter content max width number, e.g : 800', 'onepress' ),
 		'section'     => 'onepress_single',
-	)
-);
-
-
-
-$wp_customize->add_setting( 'single_thumbnail',
+		'default'     => '',
+	),
 	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control( 'single_thumbnail',
-	array(
-		'type'        => 'checkbox',
+		'id'          => 'single_thumbnail',
+		'control'     => 'wp',
+		'input_type'  => 'checkbox',
 		'label'       => esc_html__( 'Show single post thumbnail', 'onepress' ),
+		'description' => esc_html__( 'Check this box to show post thumbnail on single post.', 'onepress' ),
 		'section'     => 'onepress_single',
-		'description' => esc_html__( 'Check this box to show post thumbnail on single post.', 'onepress' )
-	)
-);
-
-$wp_customize->add_setting( 'single_meta',
+		'default'     => '',
+	),
 	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '1',
-	)
-);
-$wp_customize->add_control( 'single_meta',
-	array(
-		'type'        => 'checkbox',
+		'id'          => 'single_meta',
+		'control'     => 'wp',
+		'input_type'  => 'checkbox',
 		'label'       => esc_html__( 'Show single post meta', 'onepress' ),
+		'description' => esc_html__( 'Check this box to show single post meta such as post date, author, category,...', 'onepress' ),
 		'section'     => 'onepress_single',
-		'description' => esc_html__( 'Check this box to show single post meta such as post date, author, category,...', 'onepress' )
-	)
+		'default'     => '1',
+	),
 );

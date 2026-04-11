@@ -109,12 +109,13 @@ if ( ! function_exists( 'onepress_typo_render_code' ) ) {
 			foreach ( $onepress_typo_auto_apply as $k => $settings ) {
 
 				$data = isset( $save_data[ $k ] ) ? $save_data[ $k ] : false;
+				if ( ! is_array( $data ) ) {
+					continue;
+				}
 
 				$font_id = false;
-				if ( isset( $data ) && is_array( $data ) ) {
-					if ( isset( $data['font-family'] ) && '' !== $data['font-family'] ) {
-						$font_id = sanitize_title( $data['font-family'] );
-					}
+				if ( isset( $data['font-family'] ) && '' !== $data['font-family'] ) {
+					$font_id = sanitize_title( $data['font-family'] );
 				}
 
 				if ( '' !== $font_id && isset( $fonts[ $font_id ] ) && 'google' === $fonts[ $font_id ]['font_type'] ) {
@@ -141,13 +142,21 @@ if ( ! function_exists( 'onepress_typo_render_code' ) ) {
 					}
 				}
 
-				if ( $for_editor ) {
-					$selector = $settings['editor_selector'];
-				} else {
-					$selector = $settings['css_selector'];
-				}
+				$selector = $settings['css_selector'];
 				if ( $selector ) {
 					$css[] = onepress_typo_css( $data, $selector );
+				}
+			}
+
+			if ( $for_editor ) {
+				if ( function_exists( 'onepress_typo_editor_css_vars_block' ) ) {
+					$ed_block = onepress_typo_editor_css_vars_block( $save_data, $onepress_typo_auto_apply );
+					if ( $ed_block ) {
+						$css[] = $ed_block;
+					}
+				}
+				if ( function_exists( 'onepress_typo_editor_typography_consumer_css' ) ) {
+					$css[] = onepress_typo_editor_typography_consumer_css();
 				}
 			}
 		}
@@ -364,6 +373,10 @@ if ( ! function_exists( 'onepress_typo_render_code' ) ) {
 		return $code;
 	}
 
+	/**
+	 * Register a typography JSON source. Empty css_selector → no rules from onepress_typo_css();
+	 * :root custom properties + @media overrides come from css-vars.php + onepress_custom_inline_style().
+	 */
 	function onepress_typo_helper_auto_apply( $setting_key, $css_selector = '', $default = null, $data_type = 'theme_mod', $editor_selector = '' ) {
 		global $onepress_typo_auto_apply;
 		if ( ! isset( $onepress_typo_auto_apply ) ) {

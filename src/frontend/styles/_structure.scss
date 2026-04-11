@@ -124,14 +124,8 @@
 	.site-text-logo {
 		margin: 0px;
 		line-height: 1;
-		font-family: variables.$font_heading;
-		font-size: 23px;
-		letter-spacing: 1px;
-		text-transform: uppercase;
-		color: var(--branding-title-color, #000000);
 		display: initial;
 		vertical-align: middle;
-		font-weight: 600;
 
 		&:hover {
 			text-decoration: none;
@@ -170,12 +164,9 @@
 		}
 
 		.site-description {
-			font-size: 12px;
-			line-height: 14px;
 			margin-bottom: 0;
 			position: relative;
 			top: -15px;
-			color: var(--branding-tagline-color, #000000);
 		}
 	}
 }
@@ -334,16 +325,9 @@
 	}
 
 	a {
-		color: #333333;
-		font-family: variables.$font_heading;
 		padding-left: var(--menu-link-padding-x, 17px);
 		padding-right: var(--menu-link-padding-x, 17px);
-		font-size: 13px;
-		font-weight: 600;
-		text-transform: uppercase;
-		text-decoration: none;
 		zoom: 1;
-		letter-spacing: 1px;
 		white-space: nowrap;
 
 		&:hover {
@@ -779,8 +763,6 @@
 
 	a {
 		color: variables.$primary;
-
-		&:hover {}
 	}
 
 	.footer-connect {

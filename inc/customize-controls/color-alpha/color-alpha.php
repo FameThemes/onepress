@@ -1,82 +1,75 @@
 <?php
 
 /**
- * Alpha Color Picker Customizer Control
+ * Alpha color Customizer control — React (Modal + @wordpress/components ColorPicker).
  *
- * This control adds a second slider for opacity to the stock WordPress color picker,
- * and it includes logic to seamlessly convert between RGBa and Hex color values as
- * opacity is added to or removed from a color.
- *
- * This Alpha Color Picker is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this Alpha Color Picker. If not, see <http://www.gnu.org/licenses/>.
+ * @package onepress
  */
 class OnePress_Alpha_Color_Control extends WP_Customize_Control {
 
 	/**
 	 * Official control name.
+	 *
+	 * @var string
 	 */
 	public $type = 'alpha-color';
 
 	/**
-	 * Add support for palettes to be passed in.
+	 * Palette support (reserved; ColorPicker UI does not map this yet).
 	 *
-	 * Supported palette values are true, false, or an array of RGBa and Hex colors.
+	 * @var array<bool|string>|bool|null
 	 */
 	public $palette;
 
 	/**
-	 * Add support for showing the opacity value on the slider handle.
+	 * Show opacity / alpha channel.
+	 *
+	 * @var bool|string|null
 	 */
 	public $show_opacity;
 
 	/**
 	 * Enqueue scripts and styles.
-	 *
-	 * Ideally these would get registered and given proper paths before this control object
-	 * gets initialized, then we could simply enqueue them here, but for completeness as a
-	 * stand alone class we'll register and enqueue them here.
 	 */
 	public function enqueue() {
-
 	}
 
 	/**
 	 * Render the control.
 	 */
 	public function render_content() {
-
-		// Process the palette
 		if ( is_array( $this->palette ) ) {
 			$palette = implode( '|', $this->palette );
 		} else {
-			// Default to true.
 			$palette = ( false === $this->palette || 'false' === $this->palette ) ? 'false' : 'true';
 		}
 
-		// Support passing show_opacity as string or boolean. Default to true.
 		$show_opacity = ( false === $this->show_opacity || 'false' === $this->show_opacity ) ? 'false' : 'true';
 
-		// Begin the output. ?>
-		<label>
-			<?php // Output the label and description if they were passed in.
-			if ( isset( $this->label ) && '' !== $this->label ) {
-				echo '<span class="customize-control-title">' . esc_html( $this->label ) . '</span>';
-			}
-			if ( isset( $this->description ) && '' !== $this->description ) {
-				echo '<span class="description customize-control-description">' . esc_html( $this->description ) . '</span>';
-			} ?>
-			<input class="alpha-color-control" type="text" data-show-opacity="<?php echo esc_attr($show_opacity); ?>" data-palette="<?php echo esc_attr( $palette ); ?>" data-default-color="<?php echo esc_attr( $this->settings['default']->default ); ?>" <?php $this->link(); ?>  />
-		</label>
+		$default = '';
+		if ( isset( $this->settings['default'] ) && $this->settings['default'] instanceof WP_Customize_Setting ) {
+			$default = (string) $this->settings['default']->default;
+		}
+
+		$value = $this->value();
+		if ( ! is_string( $value ) ) {
+			$value = '';
+		}
+		?>
+		<input
+			type="hidden"
+			class="onepress-alpha-color-input"
+			value="<?php echo esc_attr( $value ); ?>"
+			<?php $this->link(); ?>
+		/>
+		<div
+			class="onepress-alpha-color-react-root"
+			data-label="<?php echo esc_attr( (string) $this->label ); ?>"
+			data-description="<?php echo esc_attr( (string) $this->description ); ?>"
+			data-show-opacity="<?php echo esc_attr( $show_opacity ); ?>"
+			data-palette="<?php echo esc_attr( $palette ); ?>"
+			data-default-color="<?php echo esc_attr( $default ); ?>"
+		></div>
 		<?php
 	}
 }

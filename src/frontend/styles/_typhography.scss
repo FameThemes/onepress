@@ -1,0 +1,381 @@
+@use "variables" as v;
+
+// Typography from Customizer → :root (inc/customize-controls/typography/css-vars.php).
+//
+// Fallback stacks mirror:
+//   - _variables.scss  → $font_text, $font_heading, $text, $heading
+//   - _document.scss   → body 14px / 1.7; h1–h6 sizes & line-heights
+//   - _structure.scss (historical) → branding title 23px; nav 13px / 600 / uppercase / 1px ls
+//   - _sections.scss   → .section-title-area .section-title / .section-subtitle
+//   - _contents.scss   → .entry-header .entry-title
+//   - onepress-plus.scss (.section-op-slider .item--title / .item--desc) → slider defaults
+//
+// @include typo-customizer-properties($slug, $props, …) — base var(DV, VF); responsive do :root @media (PHP).
+//
+// Cấu trúc $props: mỗi cặp css-property => VF (value fallback từ theme / Sass).
+//   - false / null → bỏ qua (base + không responsive cho key đó)
+//   - $typo-customizer-var-only → chỉ custom property, không VF literal
+//   - khác        → VF dùng trong var(…, VF)
+//
+// DV: --typo-<slug>-<property> — Customizer đặt trên :root (PHP: css-vars.php).
+// Tablet/mobile: cùng tên biến, ghi đè trong @media (max-width: …) { :root { … } } — không dùng hậu tố -tablet/-mobile.
+// Base rule: property: var(DV, VF) hoặc var(DV) nếu var-only.
+// $color: toàn bộ phần sau `color:` hoặc null để bỏ.
+// $color-first: true → in color trước các thuộc tính khác (vd. nav).
+//
+// Sentinel: chỉ `var(--typo-…)` (Customizer), không fallback Sass — dùng trong map thay vì chuỗi "var" trần.
+$typo-customizer-var-only: "var";
+
+// 14px at 16px root — same as @include v.rem("font-size", 14px) in _document.scss
+$_typo-body-font-size: 0.875rem;
+$_typo-body-lh: 1.7; // _document.scss body, button, …
+
+// Slider / hero headline style (onepress-plus.scss .item--title; _sections .hero-content-style1 h2)
+$_typo-hero-slider-title-size: 35px;
+$_typo-hero-slider-title-lh: 1.3;
+$_typo-hero-slider-title-ls: 2px;
+
+// Slider description (onepress-plus.scss .item--desc)
+$_typo-slider-desc-size: 14px;
+$_typo-slider-desc-lh: 1.5;
+$_typo-slider-desc-ls: 0.4px;
+
+/// @param {String} $slug Theme mod slug (suffix after --typo-)
+/// @param {Map} $props property-name => VF (fallback) | false | null | $typo-customizer-var-only
+/// @param {String | null} $color Full `color` value, or null to omit
+/// @param {Boolean} $color-first Emit `color` before other properties
+@mixin typo-customizer-properties(
+  $slug,
+  $props,
+  $color: null,
+  $color-first: false
+) {
+  $p: "--typo-#{$slug}";
+
+  @if $color-first and $color != null {
+    color: #{$color};
+  }
+
+  @each $prop, $vf in $props {
+    @if $vf != false and $vf != null {
+      $dv: --typo-#{$slug}-#{$prop};
+      @if $vf == $typo-customizer-var-only {
+        #{$prop}: var(#{$dv});
+      } @else {
+        #{$prop}: var(#{$dv}, #{$vf});
+      }
+    }
+  }
+
+  @if not $color-first and $color != null {
+    color: #{$color};
+  }
+}
+
+// Body font
+
+body {
+  $k: body;
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": var(--base-typo-font-text),
+      "font-weight": 400,
+      // $font-weight-base
+      "font-style": normal,
+      "font-size": var(--base-typo-body-size),
+      "line-height": var(--base-typo-body-line-height),
+      "letter-spacing": 0,
+      "text-decoration": none,
+      "text-transform": none,
+    ),
+    $color: var(--typo-body, var(--base-color-text))
+  );
+}
+
+// apply for all headings 1-6
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  $k: h16;
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": var(--base-typo-font-heading),
+      "font-weight": var(--base-typo-heading-weight),
+      "font-style": normal,
+      "font-size": null,
+      "line-height": null,
+      "letter-spacing": $typo-customizer-var-only,
+      "text-decoration": none,
+      "text-transform": none,
+    )
+  );
+}
+
+// apply for each headings 1-6
+@for $i from 1 through 6 {
+  h#{$i},
+  h#{$i}.section-news h#{$i}.entry-title,
+  h#{$i}.archive h#{$i}.entry-title,
+  .blog h#{$i}.entry-title,
+  .section-title-area h#{$i}.section-title {
+    $k: h#{$i};
+    @include typo-customizer-properties(
+      $k,
+      (
+        "font-family":
+          var(--typo-h16-font-family, var(--base-typo-font-heading)),
+        "font-weight":
+          var(--base-typo-h#{$i}-weight, var(--base-typo-heading-weight)),
+        "font-style": var(--typo-h16-font-style, normal),
+        "font-size": var(--base-typo-h#{$i}-size, var(--base-typo-body-size)),
+        /// --base-typo-h1-size
+        "line-height":
+          var(--typo-h#{$i}-line-height, var(--base-typo-body-line-height)),
+        "letter-spacing": var(--typo-h#{$i}-letter-spacing, 0),
+        "text-decoration": none,
+        "text-transform": none,
+      )
+    );
+  }
+}
+
+// Section title
+.site-main .section-title-area .section-title {
+  $k: section-title;
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": var(--typo-h16-font-family),
+      "font-weight": 800,
+      "font-style": normal,
+      "font-size": 40px,
+      "line-height": 1.2,
+      "letter-spacing": 3.5px,
+      "text-decoration": none,
+      "text-transform": uppercase,
+    )
+  );
+}
+
+// Section title
+.site-main .section-title-area .section-subtitle {
+  $k: section-title;
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": var(--typo-h16-font-family, var(--base-typo-font-heading)),
+      "font-weight": 700,
+      "font-style": var(--typo-section-title-font-style, normal),
+      "font-size": 14px,
+      "line-height": 1.1,
+      "letter-spacing": 2px,
+      "text-decoration": none,
+      "text-transform": uppercase,
+    )
+  );
+}
+
+// .hero__content .hero-large-text,
+// .hero__content .hcl2-content h1,
+// .hero__content .hcl2-content h2,
+// .hero__content .hcl2-content h3 {
+//   $k: hero-heading;
+
+//   @include typo-customizer-properties(
+//     $k,
+//     (
+//       "font-family": v.$font_heading,
+//       "font-weight": $typo-customizer-var-only,
+//       "font-style": normal,
+//       "font-size": $typo-customizer-var-only,
+//       "line-height": $typo-customizer-var-only,
+//       "letter-spacing": $typo-customizer-var-only,
+//       "text-decoration": none,
+//       "text-transform": $typo-customizer-var-only,
+//     )
+//   );
+// }
+
+.hero__content .hero-large-text,
+.hero__content .hcl2-content h1,
+.hero__content .hcl2-content h2,
+.hero__content .hcl2-content h3 {
+  $k: hero_heading;
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": var(--typo-h16-font-family, var(--base-typo-font-heading)),
+      "font-size": 75px,
+      "font-weight": 800,
+      "font-style": normal,
+      "letter-spacing": 4px,
+      "text-decoration": none,
+      "text-transform": uppercase,
+    )
+  );
+}
+
+#page .site-branding .site-title,
+#page .site-branding .site-text-logo {
+  $k: branding-title;
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": v.$font_heading,
+      "font-weight": 600,
+      "font-style": normal,
+      "font-size": 23px,
+      "line-height": 1,
+      "letter-spacing": 1px,
+      "text-decoration": none,
+      "text-transform": uppercase,
+    ),
+    $color: var(--typo-branding-title, #000000)
+  );
+}
+
+#page .site-branding .site-description {
+  $k: branding-tagline;
+
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": v.$font_text,
+      "font-style": normal,
+      "font-size": 12px,
+      "line-height": 14px,
+      "text-decoration": none,
+      "text-transform": none,
+    ),
+    $color: var(--typo-branding-tagline, #000000)
+  );
+}
+
+#page .onepress-menu a {
+  $k: nav;
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": v.$font_heading,
+      "font-weight": 600,
+      "font-style": normal,
+      "font-size": 13px,
+      "letter-spacing": 1px,
+      "text-decoration": none,
+      "text-transform": uppercase,
+    ),
+    $color: var(--typo-nav, var(--menu-link-color, #{v.$heading})),
+    $color-first: true
+  );
+}
+
+// // h1–h6, entry title, section titles: per-element sizes live in _document / _sections / _contents.
+// // Only override font-size / line-height / letter-spacing / text-transform when Customizer sets vars.
+// body h1,
+// body h2,
+// body h3,
+// body h4,
+// body h5,
+// body h6,
+// .entry-header .entry-title,
+// body .section-title-area .section-title,
+// body .section-title-area .section-subtitle,
+// body .hero-content-style1 h2 {
+// 	$k: headings;
+
+// 	@include typo-customizer-properties(
+// 		$k,
+// 		(
+// 			"font-family": v.$font_heading,
+// 			"font-weight": 600,
+// 			"font-style": normal,
+// 			// "font-size": $typo-customizer-var-only,
+// 			"font-size": null,
+// 			"line-height": $typo-customizer-var-only,
+// 			"letter-spacing": $typo-customizer-var-only,
+// 			"text-decoration": none,
+// 			"text-transform": $typo-customizer-var-only,
+// 		),
+// 		$color: var(--typo-headings, #{v.$heading})
+// 	);
+// }
+
+// body p,
+// .entry-content p,
+// .hero-small-text {
+//   $k: paragraphs;
+//   @include typo-customizer-properties(
+//     $k,
+//     (
+//       "font-family": var(--base-typo-font-text),
+//       "font-weight": 400,
+//       // $font-weight-base
+//       "font-style": normal,
+//       "font-size": var(--base-typo-body-size),
+//       "line-height": var(--base-typo-body-line-height),
+//       "letter-spacing": 0,
+//       "text-decoration": none,
+//       "text-transform": none,
+//     )
+//   );
+// }
+
+.section-slider .section-op-slider .item--title {
+  $k: slider-slide-title;
+
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": v.$font_heading,
+      "font-weight": 800,
+      "font-style": normal,
+      "font-size": $_typo-hero-slider-title-size,
+      "line-height": $_typo-hero-slider-title-lh,
+      "letter-spacing": $_typo-hero-slider-title-ls,
+      "text-decoration": none,
+      "text-transform": uppercase,
+    ),
+    $color: var(--typo-slider-slide-title, #ffffff)
+  );
+}
+
+.section-slider .section-op-slider .item--desc {
+  $k: slider-slide-content;
+
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": v.$font_text,
+      "font-weight": 100,
+      "font-style": italic,
+      "font-size": $_typo-slider-desc-size,
+      "line-height": $_typo-slider-desc-lh,
+      "letter-spacing": $_typo-slider-desc-ls,
+      "text-decoration": none,
+      "text-transform": none,
+    ),
+    $color: var(--typo-slider-slide-content, #ffffff)
+  );
+}
+
+#features .section-content {
+  $k: demo-heading;
+
+  @include typo-customizer-properties(
+    $k,
+    (
+      "font-family": v.$font_text,
+      "font-style": normal,
+      "font-size": $_typo-body-font-size,
+      "line-height": $_typo-body-lh,
+      "text-decoration": none,
+      "text-transform": none,
+    ),
+    $color: var(--typo-demo-heading, #{v.$text})
+  );
+}

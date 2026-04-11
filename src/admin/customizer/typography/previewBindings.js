@@ -2,21 +2,10 @@
  * Customizer preview iframe: typography CSS via postMessage (matches PHP onepress_typo_css).
  */
 import {
-	buildTypographyPreviewCss,
+	buildTypographyPreviewCssVars,
+	getTypographyPreviewBreakpoints,
 	typographyPreviewStyleId,
 } from './buildTypographyPreviewCss.js';
-
-function getBreakpoints() {
-	const b =
-		typeof window !== 'undefined' && window.onepressBackgroundBreakpoints;
-	if (b && typeof b === 'object') {
-		return {
-			tablet: b.tablet || '991px',
-			mobile: b.mobile || '767px',
-		};
-	}
-	return { tablet: '991px', mobile: '767px' };
-}
 
 function getBasePx() {
 	const n =
@@ -67,10 +56,9 @@ function ensureTypographyGoogleFont(doc, flatCss) {
 
 /**
  * @param {string} settingId
- * @param {string} selector
  * @param {unknown} val
  */
-function applyTypographyPreview(settingId, selector, val) {
+function applyTypographyPreview(settingId, val) {
 	let flat = null;
 	try {
 		flat =
@@ -95,11 +83,11 @@ function applyTypographyPreview(settingId, selector, val) {
 		return;
 	}
 
-	const css = buildTypographyPreviewCss(
+	const css = buildTypographyPreviewCssVars(
 		flat,
-		selector,
-		getBreakpoints(),
-		getBasePx()
+		settingId,
+		getBasePx(),
+		getTypographyPreviewBreakpoints()
 	);
 	if (!css || !css.trim()) {
 		el?.remove();
@@ -128,12 +116,8 @@ export function bindOnePressTypographyPreview(api) {
 			return;
 		}
 		Object.keys(map).forEach((id) => {
-			const selector = map[id];
-			if (!selector || typeof selector !== 'string') {
-				return;
-			}
 			api(id, (setting) => {
-				setting.bind((val) => applyTypographyPreview(id, selector, val));
+				setting.bind((val) => applyTypographyPreview(id, val));
 			});
 		});
 	});

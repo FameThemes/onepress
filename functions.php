@@ -672,6 +672,21 @@ require get_template_directory() . '/inc/metabox.php';
 require get_template_directory() . '/inc/template-tags.php';
 
 /**
+ * Declarative Customizer option definition files (merged list for register + derived keys).
+ */
+require get_template_directory() . '/inc/customize-option-definitions.php';
+
+/**
+ * Typography theme_mod IDs (single list for Customizer, auto_apply, :root CSS).
+ */
+require get_template_directory() . '/inc/customize-controls/typography/typography-setting-keys.php';
+
+/**
+ * Typography → CSS custom properties (used by customizer-inline-styles + helper).
+ */
+require get_template_directory() . '/inc/customize-controls/typography/css-vars.php';
+
+/**
  * Customizer → front-end inline CSS (see inc/customizer-inline-styles.php).
  */
 require get_template_directory() . '/inc/customizer-inline-styles.php';
@@ -685,6 +700,7 @@ require get_template_directory() . '/inc/extras.php';
  * Typography (Customizer control + front-end CSS).
  */
 require get_template_directory() . '/inc/customize-controls/typography/fonts.php';
+// css-vars.php is loaded earlier (before customizer-inline-styles).
 require get_template_directory() . '/inc/customize-controls/typography/helper.php';
 require get_template_directory() . '/inc/customize-controls/typography/typography-auto-apply.php';
 require get_template_directory() . '/inc/migrate/bootstrap.php';

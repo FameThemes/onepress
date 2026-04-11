@@ -117,13 +117,13 @@ class Onepress_Dots_Navigation
 		$wp_customize->add_setting(
 			$this->get_name('__color'),
 			array(
-				'sanitize_callback'    => 'sanitize_hex_color_no_hash',
+				'sanitize_callback'    => 'onepress_sanitize_color_alpha',
 				'sanitize_js_callback' => 'maybe_hash_hex_color',
 				'default'              => '',
 			)
 		);
 		$wp_customize->add_control(
-			new WP_Customize_Color_Control(
+			new OnePress_Alpha_Color_Control(
 				$wp_customize,
 				$this->get_name('__color'),
 				array(
@@ -138,13 +138,13 @@ class Onepress_Dots_Navigation
 		$wp_customize->add_setting(
 			$this->get_name('__color2'),
 			array(
-				'sanitize_callback'    => 'sanitize_hex_color_no_hash',
+				'sanitize_callback'    => 'onepress_sanitize_color_alpha',
 				'sanitize_js_callback' => 'maybe_hash_hex_color',
 				'default'              => '',
 			)
 		);
 		$wp_customize->add_control(
-			new WP_Customize_Color_Control(
+			new OnePress_Alpha_Color_Control(
 				$wp_customize,
 				$this->get_name('__color2'),
 				array(
@@ -355,14 +355,14 @@ class Onepress_Dots_Navigation
 	function custom_style($code = false)
 	{
 		if (get_theme_mod($this->get_name('__enable'), false)) {
-			$color = sanitize_hex_color_no_hash(get_theme_mod($this->get_name('__color')));
+			$color = onepress_sanitize_color_alpha(get_theme_mod($this->get_name('__color')));
 			if ($color) {
-				$code .= " body .c-bully { color: #{$color}; } ";
+				$code .= " body .c-bully { color: {$color}; } ";
 			}
 
-			$color2 = sanitize_hex_color_no_hash(get_theme_mod($this->get_name('__color2')));
+			$color2 = onepress_sanitize_color_alpha(get_theme_mod($this->get_name('__color2')));
 			if ($color2) {
-				$code .= " body .c-bully.c-bully--inversed { color: #{$color2}; } ";
+				$code .= " body .c-bully.c-bully--inversed { color: {$color2}; } ";
 			}
 
 			$bg = get_theme_mod($this->get_name('__label_bg'));

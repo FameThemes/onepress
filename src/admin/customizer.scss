@@ -156,6 +156,7 @@
   font-weight: 500;
   color: #2c3338;
   border: 0px none;
+  gap: 4px;
   padding-right: 31px;
   padding-left: 15px;
   min-height: 16px;
@@ -349,7 +350,10 @@
 
   fieldset.grid {
     display: grid;
-    grid-template-columns: repeat(var(--onepress-layout-columns), minmax(0, 1fr));
+    grid-template-columns: repeat(
+      var(--onepress-layout-columns),
+      minmax(0, 1fr)
+    );
     gap: var(--onepress-layout-gap);
     border: 0;
     padding: 0;
@@ -375,7 +379,6 @@
     border: 0;
   }
 
-
   .choice .label {
     display: flex;
     align-items: center;
@@ -395,12 +398,12 @@
       box-shadow 0.15s ease;
     text-align: center;
     box-sizing: border-box;
-    
   }
 
-  .choice.type-svg .label, .choice.type-image .label {
-   padding: 8px 8px 2px;
-   align-items: end;
+  .choice.type-svg .label,
+  .choice.type-image .label {
+    padding: 8px 8px 2px;
+    align-items: end;
   }
 
   .choice .input:checked + .label {
@@ -583,6 +586,12 @@ li#accordion-panel-onepress_typo > .accordion-section-title {
   gap: 10px;
   flex-direction: column;
 }
+
+.repeatable-actions .limited-msg {
+  text-align: left;
+  width: 100%;
+  margin: 0;
+}
 .media-actions {
   flex-direction: row;
 }
@@ -745,7 +754,117 @@ body .wp-full-overlay {
   }
 }
 
-/* COLOR PICKER ALPHA */
+/* Alpha color control — React (title + swatch, Modal + ColorPicker) */
+
+.customize-control-alpha-color .onepress-alpha-color-control__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.customize-control-alpha-color
+  .onepress-alpha-color-control__row
+  .customize-control-title {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.onepress-alpha-color-control__actions {
+  flex-shrink: 0;
+}
+.components-popover {
+  .components-color-picker, .react-colorful {
+    width: 100% !important;
+  }
+}
+
+.onepress-alpha-color-control__swatch-wrap {
+  display: inline-block;
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  &.active {
+    border-color: var(--wp-input-focus-border);
+  }
+}
+
+/* Checkerboard only when empty — avoids noisy edges around solid swatches */
+.onepress-alpha-color-control__swatch-wrap--empty {
+  background-color: #e8e8e8;
+  background-image:
+    linear-gradient(
+      45deg,
+      #d4d4d4 25%,
+      transparent 25%,
+      transparent 75%,
+      #d4d4d4 75%
+    ),
+    linear-gradient(
+      45deg,
+      #d4d4d4 25%,
+      transparent 25%,
+      transparent 75%,
+      #d4d4d4 75%
+    );
+  background-size: 10px 10px;
+  background-position:
+    0 0,
+    5px 5px;
+}
+
+.onepress-alpha-color-control__swatch {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.onepress-alpha-color-control__swatch--empty {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.customize-control-alpha-color .onepress-alpha-color-control .description {
+  display: block;
+  margin-top: 0;
+}
+
+/* Popover color panel (anchored below .onepress-alpha-color-control__row) */
+.onepress-alpha-color-popover .components-popover__content {
+  z-index: 500050;
+  width: auto;
+  min-width: 260px;
+  max-width: min(100vw - 32px, 360px);
+}
+
+.onepress-alpha-color-popover__inner {
+  padding: 12px;
+}
+
+.onepress-alpha-color-popover__title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+/* COLOR PICKER ALPHA (jQuery / repeatable fields) */
 
 /**
  * Alpha Color Picker CSS
@@ -1377,7 +1496,8 @@ body .wp-full-overlay {
   vertical-align: middle;
 }
 
-#sub-accordion-panel-onepress_dynamic .onepress-dynamic-section-visibility:hover,
+#sub-accordion-panel-onepress_dynamic
+  .onepress-dynamic-section-visibility:hover,
 #sub-accordion-panel-onepress_dynamic .onepress-dynamic-section-delete:hover {
   color: #2271b1;
   background: #f0f0f1;
@@ -1436,15 +1556,17 @@ body .wp-full-overlay {
   border-top: 1px solid #dcdcde;
 }
 
-.customize-control-onepress-dynamic-delete-inner .onepress-dynamic-section-delete-inner {
+.customize-control-onepress-dynamic-delete-inner
+  .onepress-dynamic-section-delete-inner {
   margin-top: 8px;
 }
 
-.customize-control-onepress-dynamic-delete-inner .onepress-dynamic-section-delete-inner .dashicons {
+.customize-control-onepress-dynamic-delete-inner
+  .onepress-dynamic-section-delete-inner
+  .dashicons {
   margin-top: 3px;
   vertical-align: text-top;
 }
-
 
 .control-panel {
   .control-section-onepress_dynamic_new {

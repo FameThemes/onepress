@@ -1,111 +1,75 @@
 <?php
 /**
- * Blog Post Settings
- * 
- * @package onepress
+ * Blog posts settings.
  *
- * @since 2.1.0
- * @since 2.2.1
+ * @package onepress
  */
 
-$wp_customize->add_section(
-	'onepress_blog_posts',
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+return array(
 	array(
+		'type'        => 'section',
+		'id'          => 'onepress_blog_posts',
 		'priority'    => null,
 		'title'       => esc_html__( 'Blog Posts', 'onepress' ),
 		'description' => '',
 		'panel'       => 'onepress_options',
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_disable_archive_prefix',
+	),
 	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control(
-	'onepress_disable_archive_prefix',
-	array(
-		'type'        => 'checkbox',
+		'id'          => 'onepress_disable_archive_prefix',
+		'control'     => 'wp',
+		'input_type'  => 'checkbox',
 		'label'       => esc_html__( 'Disable archive prefix', 'onepress' ),
-		'section'     => 'onepress_blog_posts',
 		'description' => esc_html__( 'Check this to disable archive prefix on category, date, tag page.', 'onepress' ),
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_hide_thumnail_if_not_exists',
-	array(
-		'sanitize_callback' => 'onepress_sanitize_checkbox',
-		'default'           => '',
-	)
-);
-$wp_customize->add_control(
-	'onepress_hide_thumnail_if_not_exists',
-	array(
-		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Hide thumbnail placeholder', 'onepress' ),
 		'section'     => 'onepress_blog_posts',
+		'default'     => '',
+	),
+	array(
+		'id'          => 'onepress_hide_thumnail_if_not_exists',
+		'control'     => 'wp',
+		'input_type'  => 'checkbox',
+		'label'       => esc_html__( 'Hide thumbnail placeholder', 'onepress' ),
 		'description' => esc_html__( 'Hide placeholder if the post thumbnail not exists.', 'onepress' ),
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_blog_posts_settings_hr_layout',
+		'section'     => 'onepress_blog_posts',
+		'default'     => '',
+	),
 	array(
-		'sanitize_callback' => 'onepress_sanitize_text',
-	)
-);
-$wp_customize->add_control(
-	new OnePress_Misc_Control(
-		$wp_customize,
-		'onepress_blog_posts_settings_hr_layout',
-		array(
-			'section' => 'onepress_blog_posts',
-			'type'    => 'hr',
-		)
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_blog_posts_layout',
+		'id'            => 'onepress_blog_posts_settings_hr_layout',
+		'control'       => 'misc',
+		'type'          => 'hr',
+		'section'       => 'onepress_blog_posts',
+		'setting'       => array(
+			'sanitize_callback' => 'onepress_sanitize_text',
+		),
+	),
 	array(
+		'id'                => 'onepress_blog_posts_layout',
+		'control'           => 'wp',
+		'input_type'        => 'select',
+		'label'             => esc_html__( 'Blog listing layout', 'onepress' ),
+		'description'       => esc_html__( 'Applies to blog index, archives, and post listings that use the theme templates.', 'onepress' ),
+		'section'           => 'onepress_blog_posts',
 		'default'           => 'list',
 		'sanitize_callback' => 'onepress_sanitize_news_layout',
-	)
-);
-$wp_customize->add_control(
-	'onepress_blog_posts_layout',
-	array(
-		'label'       => esc_html__( 'Blog listing layout', 'onepress' ),
-		'section'     => 'onepress_blog_posts',
-		'type'        => 'select',
-		'choices'     => array(
+		'choices'           => array(
 			'list' => esc_html__( 'List', 'onepress' ),
 			'grid' => esc_html__( 'Grid', 'onepress' ),
 		),
-		'description' => esc_html__( 'Applies to blog index, archives, and post listings that use the theme templates.', 'onepress' ),
-	)
-);
-
-$wp_customize->add_setting(
-	'onepress_blog_posts_grid_columns',
+	),
 	array(
+		'id'                => 'onepress_blog_posts_grid_columns',
+		'control'           => 'wp',
+		'input_type'        => 'text',
+		'label'             => esc_html__( 'Grid: columns per breakpoint', 'onepress' ),
+		'description'       => esc_html__( 'Three numbers separated by spaces: desktop, tablet, mobile (e.g. 3 2 1). Use 1, 2, 3, 4, 6, or 12 so columns divide the 12-column grid evenly.', 'onepress' ),
+		'section'           => 'onepress_blog_posts',
 		'default'           => '2 2 1',
 		'sanitize_callback' => 'onepress_sanitize_news_grid_columns',
-	)
-);
-$wp_customize->add_control(
-	'onepress_blog_posts_grid_columns',
-	array(
-		'label'       => esc_html__( 'Grid: columns per breakpoint', 'onepress' ),
-		'section'     => 'onepress_blog_posts',
-		'type'        => 'text',
-		'input_attrs' => array(
-			'placeholder' => '3 2 1',
+		'input_attrs'       => array(
+			'placeholder' => esc_attr__( '3 2 1', 'onepress' ),
 		),
-		'description' => esc_html__( 'Three numbers separated by spaces: desktop, tablet, mobile (e.g. 3 2 1). Use 1, 2, 3, 4, 6, or 12 so columns divide the 12-column grid evenly.', 'onepress' ),
-	)
+	),
 );

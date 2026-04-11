@@ -15,6 +15,7 @@ Theme code should follow the **[WordPress Coding Standards](https://developer.wo
 - **Escape** output in HTML/attributes (`esc_html`, `esc_attr`, `esc_url`, …).
 - **Sanitize** input and use `sanitize_callback` on Customizer settings and options.
 - **i18n:** `__`, `esc_html__`, etc., with the theme text domain (e.g. `onepress`).
+- **Declarative Customizer lists** (`inc/customize-configs/`, merged by `customize-option-definitions.php`): put `esc_html__()` / `__()` on UI strings **in those files**; do **not** bulk-translate the same keys in `customizer-register.php`. See [customizer-declarative-i18n.md](./customizer-declarative-i18n.md).
 
 ## OnePress-specific conventions
 
