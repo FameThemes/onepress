@@ -1350,22 +1350,22 @@ __webpack_require__.r(__webpack_exports__);
   });
 
   // Header text color.
-  // wp.customize( 'header_textcolor', function( value ) {
-  //     value.bind( function( to ) {
-  //         if ( 'blank' === to ) {
-  //             $( '.site-title a, .site-description' ).css( {
-  //                 'clip': 'rect(1px, 1px, 1px, 1px)',
-  //                 'position': 'absolute'
-  //             } );
-  //         } else {
-  //             $( '.site-title a, .site-description' ).css( {
-  //                 'clip': 'auto',
-  //                 'color': to,
-  //                 'position': 'relative'
-  //             } );
-  //         }
-  //     } );
-  // } );
+  wp.customize('header_textcolor', function (value) {
+    value.bind(function (to) {
+      if ('blank' === to) {
+        $('.site-title a, .site-description').css({
+          'clip': 'rect(1px, 1px, 1px, 1px)',
+          'position': 'absolute'
+        });
+      } else {
+        $('.site-title a, .site-description').css({
+          'clip': 'auto',
+          'color': to,
+          'position': 'relative'
+        });
+      }
+    });
+  });
 
   // Site footer widgets
   wp.customize('onepress_btt_disable', function (value) {

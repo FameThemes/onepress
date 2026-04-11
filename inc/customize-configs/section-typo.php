@@ -57,6 +57,7 @@ $definitions = array(
 	),
 	array(
 		'id'            => 'onepress_typo_h16',
+		// typo-heading
 		'control'       => 'typography',
 		'label'         => esc_html__( 'Headings (H1-H6) Font', 'onepress' ),
 		'description'   => esc_html__( 'Select how you want your headings (H1-H6) text to appear.', 'onepress' ),

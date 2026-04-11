@@ -69,7 +69,7 @@ function onepress_migrate_typography_plus_copy_rows() {
 			'color'  => 'onepress_typo_hero_heading_color',
 		),
 		array(
-			'dest'   => 'onepress_typo_headings',
+			'dest'   => 'onepress_typo_heading',
 			'source' => 'onepress_typo_heading',
 			'color'  => null,
 		),

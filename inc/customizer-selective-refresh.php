@@ -69,6 +69,38 @@ function onepress_customizer_partials( $wp_customize ) {
 	}
 
 	$selective_refresh_keys = array(
+		// section About
+		array(
+			'id' => 'about',
+			'selector' => '.section-about',
+			'settings' => array_merge(
+				array(
+					'onepress_about_id',
+					'onepress_about_title',
+					'onepress_about_subtitle',
+					'onepress_about_desc',
+					'onepress_about_disable',
+					'onepress_about_boxes',
+					'onepress_about_content_source',
+				),
+				class_exists( 'OnePress_Plus' ) ? array( 'onepress_about_layout' ) : array()
+			),
+		),
+
+		// // Section about
+		// array(
+		// 	'id' => 'about',
+		// 	'selector' => '.section-about',
+		// 	'settings' => array(
+		// 		'onepress_about_boxes',
+		// 		'onepress_about_title',
+		// 		'onepress_about_subtitle',
+		// 		'onepress_about_desc',
+		// 		'onepress_about_content_source',
+		// 		'onepress_about_layout',
+		// 	),
+		// ),
+
 		// section features
 		array(
 			'id' => 'features',
@@ -183,19 +215,7 @@ function onepress_customizer_partials( $wp_customize ) {
 			),
 		),
 
-		// Section about
-		array(
-			'id' => 'about',
-			'selector' => '.section-about',
-			'settings' => array(
-				'onepress_about_boxes',
-				'onepress_about_title',
-				'onepress_about_subtitle',
-				'onepress_about_desc',
-				'onepress_about_content_source',
-				'onepress_about_layout',
-			),
-		),
+		
 
 		// Section team
 		array(
@@ -345,20 +365,20 @@ function onepress_customizer_partials( $wp_customize ) {
 		'onepress_page_cover_pd_top',
 		'onepress_page_cover_pd_bottom',
 
-		'onepress_header_bg_color',
-		'onepress_menu_color',
-		'onepress_menu_hover_color',
-		'onepress_menu_hover_bg_color',
-		'onepress_menu_hover_bg_color',
-		'onepress_menu_toggle_button_color',
+		// 'onepress_header_bg_color',
+		// 'onepress_menu_color',
+		// 'onepress_menu_hover_color',
+		// 'onepress_menu_hover_bg_color',
+		// 'onepress_menu_hover_bg_color',
+		// 'onepress_menu_toggle_button_color',
 
 		'onepress_footer_info_bg',
 		'onepress_footer_bg',
 		'onepress_footer_top_color',
 
-		'onepress_footer_c_color',
-		'onepress_footer_c_link_color',
-		'onepress_footer_c_link_hover_color',
+		// 'onepress_footer_c_color',
+		// 'onepress_footer_c_link_color',
+		// 'onepress_footer_c_link_hover_color',
 
 		'footer_widgets_color',
 		'footer_widgets_bg_color',

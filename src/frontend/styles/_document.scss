@@ -200,7 +200,7 @@ h6 {
   margin-bottom: var(--base-space-block);
   margin-top: var(--base-space-0);
   @extend .break;
-  color: var(--color-heading-color, var(--base-color-heading));
+  color: var(--base-color-heading);
   & a {
     color: var(--color-heading-color, var(--base-color-heading));
     text-decoration: none;

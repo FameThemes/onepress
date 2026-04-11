@@ -86,17 +86,8 @@ if ( ! function_exists( 'onepress_typo_theme_mod_typography_keys' ) ) {
 	 * @return string[]
 	 */
 	function onepress_typo_theme_mod_typography_keys() {
-		$legacy = apply_filters(
-			'onepress_typo_legacy_typography_theme_mod_keys',
-			array(
-				'onepress_typo_headings',
-				'onepress_typo_paragraphs',
-			)
-		);
-		if ( ! is_array( $legacy ) ) {
-			$legacy = array();
-		}
-		$keys = array_merge( onepress_typo_customizer_typography_setting_ids(), $legacy );
+		
+		$keys = onepress_typo_customizer_typography_setting_ids();
 
 		return apply_filters( 'onepress_typo_theme_mod_typography_keys', array_values( array_unique( $keys ) ) );
 	}

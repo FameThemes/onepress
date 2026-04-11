@@ -60,22 +60,22 @@ import { bindOnePressSliderPreview } from './customizer/slider/previewBindings';
 
 
     // Header text color.
-    // wp.customize( 'header_textcolor', function( value ) {
-    //     value.bind( function( to ) {
-    //         if ( 'blank' === to ) {
-    //             $( '.site-title a, .site-description' ).css( {
-    //                 'clip': 'rect(1px, 1px, 1px, 1px)',
-    //                 'position': 'absolute'
-    //             } );
-    //         } else {
-    //             $( '.site-title a, .site-description' ).css( {
-    //                 'clip': 'auto',
-    //                 'color': to,
-    //                 'position': 'relative'
-    //             } );
-    //         }
-    //     } );
-    // } );
+    wp.customize( 'header_textcolor', function( value ) {
+        value.bind( function( to ) {
+            if ( 'blank' === to ) {
+                $( '.site-title a, .site-description' ).css( {
+                    'clip': 'rect(1px, 1px, 1px, 1px)',
+                    'position': 'absolute'
+                } );
+            } else {
+                $( '.site-title a, .site-description' ).css( {
+                    'clip': 'auto',
+                    'color': to,
+                    'position': 'relative'
+                } );
+            }
+        } );
+    } );
 
 
     // Site footer widgets
