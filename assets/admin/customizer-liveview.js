@@ -2,11 +2,11 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/admin/customizer/background/buildBackgroundCss.js":
+/***/ "./src/admin/customizer/background/buildBackgroundCss.js"
 /*!***************************************************************!*\
   !*** ./src/admin/customizer/background/buildBackgroundCss.js ***!
   \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -267,13 +267,13 @@ function backgroundStyleElementId(settingId) {
   return `onepress-bg-inline-${settingId}`.replace(/[^a-zA-Z0-9_-]/g, '-');
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/background/previewBindings.js":
+/***/ "./src/admin/customizer/background/previewBindings.js"
 /*!************************************************************!*\
   !*** ./src/admin/customizer/background/previewBindings.js ***!
   \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -353,13 +353,13 @@ function bindOnePressBackgroundPreview(api) {
   });
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/slider/buildSliderPreviewCss.js":
+/***/ "./src/admin/customizer/slider/buildSliderPreviewCss.js"
 /*!**************************************************************!*\
   !*** ./src/admin/customizer/slider/buildSliderPreviewCss.js ***!
   \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -437,13 +437,13 @@ function buildSliderPreviewCss(data, selector, property, breakpoints) {
   return out.trim();
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/slider/previewBindings.js":
+/***/ "./src/admin/customizer/slider/previewBindings.js"
 /*!********************************************************!*\
   !*** ./src/admin/customizer/slider/previewBindings.js ***!
   \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -523,13 +523,13 @@ function bindOnePressSliderPreview(api) {
   });
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/spacing/buildSpacingPreviewCss.js":
+/***/ "./src/admin/customizer/spacing/buildSpacingPreviewCss.js"
 /*!****************************************************************!*\
   !*** ./src/admin/customizer/spacing/buildSpacingPreviewCss.js ***!
   \****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -627,13 +627,13 @@ function buildSpacingPreviewCss(css, selector, breakpoints) {
   return out.trim();
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/spacing/previewBindings.js":
+/***/ "./src/admin/customizer/spacing/previewBindings.js"
 /*!*********************************************************!*\
   !*** ./src/admin/customizer/spacing/previewBindings.js ***!
   \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -716,13 +716,13 @@ function bindOnePressSpacingPreview(api) {
   });
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/typography/buildTypographyPreviewCss.js":
+/***/ "./src/admin/customizer/typography/buildTypographyPreviewCss.js"
 /*!**********************************************************************!*\
   !*** ./src/admin/customizer/typography/buildTypographyPreviewCss.js ***!
   \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -1037,13 +1037,13 @@ function buildTypographyPreviewCssVars(flat, settingId, basePx = 16, breakpoints
   return formatTypographyPreviewCssVarsFromLayers(layers, breakpoints || getTypographyPreviewBreakpoints());
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/admin/customizer/typography/previewBindings.js":
+/***/ "./src/admin/customizer/typography/previewBindings.js"
 /*!************************************************************!*\
   !*** ./src/admin/customizer/typography/previewBindings.js ***!
   \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -1153,7 +1153,7 @@ function bindOnePressTypographyPreview(api) {
   });
 }
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -1175,6 +1175,12 @@ function bindOnePressTypographyPreview(api) {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
