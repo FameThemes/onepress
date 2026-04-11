@@ -143,77 +143,16 @@ if ( ! function_exists( 'onepress_typo_get_fonts' ) ) {
 
 if ( ! function_exists( 'onepress_typo_get_customizer_fonts' ) ) {
 	/**
-	 * Font list for Customizer JS (capped to avoid huge wp_localize / browser freeze).
+	 * Font list for Customizer JS.
 	 *
-	 * Popular Google fonts are merged in first (see priority slugs) so names like “Lato”
-	 * stay searchable even when the raw JSON order would place them after the slice.
+	 * Default/system and Google lists are not localized; the control loads families from
+	 * the WordPress REST API (`/wp/v2/font-families`). Use `onepress_typo_customizer_fonts`
+	 * to inject additional entries if needed.
 	 *
 	 * @return array
 	 */
 	function onepress_typo_get_customizer_fonts() {
-		$fonts = onepress_typo_get_fonts();
-		$fonts = apply_filters( 'onepress_typo_customizer_fonts', $fonts );
-		$max   = (int) apply_filters( 'onepress_typo_customizer_fonts_max', 400 );
-
-		if ( $max <= 0 || ! is_array( $fonts ) || count( $fonts ) <= $max ) {
-			return $fonts;
-		}
-
-		$defaults = onepress_typo_get_default_fonts();
-		$extra    = array_diff_key( $fonts, $defaults );
-		$slots    = $max - count( $defaults );
-		if ( $slots <= 0 ) {
-			return array_slice( $fonts, 0, $max, true );
-		}
-
-		$priority_slugs = apply_filters(
-			'onepress_typo_customizer_font_priority_slugs',
-			array(
-				'lato',
-				'open-sans',
-				'roboto',
-				'noto-sans',
-				'source-sans-pro',
-				'montserrat',
-				'raleway',
-				'poppins',
-				'merriweather',
-				'playfair-display',
-				'oswald',
-				'ubuntu',
-				'pt-sans',
-				'roboto-condensed',
-				'nunito',
-				'work-sans',
-				'inter',
-				'rubik',
-				'noto-serif',
-				'roboto-slab',
-			)
-		);
-
-		$priority_fonts = array();
-		foreach ( $priority_slugs as $slug ) {
-			if ( count( $priority_fonts ) >= $slots ) {
-				break;
-			}
-			$key = sanitize_title( is_string( $slug ) ? $slug : '' );
-			if ( $key && isset( $extra[ $key ] ) && ! isset( $priority_fonts[ $key ] ) ) {
-				$priority_fonts[ $key ] = $extra[ $key ];
-			}
-		}
-
-		$rest_keys = array_diff( array_keys( $extra ), array_keys( $priority_fonts ) );
-		$rest      = array();
-		$need      = $slots - count( $priority_fonts );
-		foreach ( $rest_keys as $key ) {
-			if ( $need <= 0 ) {
-				break;
-			}
-			$rest[ $key ] = $extra[ $key ];
-			--$need;
-		}
-
-		return array_merge( $defaults, $priority_fonts, $rest );
+		$fonts = array();
+		return apply_filters( 'onepress_typo_customizer_fonts', $fonts );
 	}
 }

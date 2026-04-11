@@ -17,8 +17,10 @@ import { CustomizerUnitSelectPopover } from '../CustomizerUnitSelectPopover.jsx'
 import { getCustomizeControlDefaultRaw } from '../getCustomizeControlDefaultRaw.js';
 import {
 	FontPickerPanel,
+	loadFontFamiliesWebfontsMap,
 	removeAllPickerPreviewLinks,
 	removeSelectedFontLink,
+	resetFontFamiliesLoadCache,
 	setSelectedGoogleFontLink,
 } from './FontPickerModal.jsx';
 
@@ -324,7 +326,7 @@ function groupFonts(webfonts) {
 		buckets.get(type).push({ id, name: font.name });
 	}
 
-	const preferred = ['default', 'google'];
+	const preferred = ['wp_font_family', 'default', 'google'];
 	const out = [];
 	for (const t of preferred) {
 		if (buckets.has(t)) {
@@ -600,7 +602,10 @@ function buildTypographySettingCss(state, fields, webfonts) {
 		const fontId = state.fontId || '';
 		if (fontId && webfonts[fontId]) {
 			const font = webfonts[fontId];
-			css['font-family'] = font.name;
+			css['font-family'] =
+				typeof font.fontFamily === 'string' && font.fontFamily.trim()
+					? font.fontFamily
+					: font.name;
 		} else if (
 			state.fontFamilyName &&
 			String(state.fontFamilyName).trim() !== ''
@@ -847,6 +852,33 @@ function renderSpanChoices({
 }
 
 export function TypographyControlApp({ control, webfonts, styleLabels }) {
+	const [libraryWebfonts, setLibraryWebfonts] = useState({});
+	const allWebfonts = useMemo(
+		() => ({ ...(webfonts || {}), ...libraryWebfonts }),
+		[webfonts, libraryWebfonts]
+	);
+
+	useEffect(() => {
+		let cancelled = false;
+		loadFontFamiliesWebfontsMap().then((map) => {
+			if (!cancelled && map && typeof map === 'object') {
+				setLibraryWebfonts(map);
+			}
+		});
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
+	const refreshFontLibraryFromRest = useCallback(() => {
+		resetFontFamiliesLoadCache();
+		loadFontFamiliesWebfontsMap().then((map) => {
+			if (map && typeof map === 'object') {
+				setLibraryWebfonts(map);
+			}
+		});
+	}, []);
+
 	const params = control.params;
 	const fields = params.fields;
 	const labels = params.labels;
@@ -875,18 +907,18 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [fontPickerOpen, setFontPickerOpen] = useState(false);
 
-	const fontGroups = useMemo(() => groupFonts(webfonts), [webfonts]);
-	const selectedFont = state.fontId ? webfonts[state.fontId] : null;
+	const fontGroups = useMemo(() => groupFonts(allWebfonts), [allWebfonts]);
+	const selectedFont = state.fontId ? allWebfonts[state.fontId] : null;
 
 	const styleOptions = useMemo(
 		() =>
 			buildStyleOptions(
 				state.fontId,
-				webfonts,
+				allWebfonts,
 				styleLabels,
 				labels.option_default
 			),
-		[state.fontId, webfonts, styleLabels, labels.option_default]
+		[state.fontId, allWebfonts, styleLabels, labels.option_default]
 	);
 
 	const selectedStyleLabel = useMemo(() => {
@@ -962,7 +994,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 
 	const selectFontFromPicker = useCallback(
 		(fontId) => {
-			const font = webfonts[fontId];
+			const font = allWebfonts[fontId];
 			patch({
 				fontId,
 				styleSelect: '',
@@ -971,7 +1003,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 			removeAllPickerPreviewLinks(controlId);
 			setFontPickerOpen(false);
 		},
-		[controlId, patch, webfonts]
+		[controlId, patch, allWebfonts]
 	);
 
 	const clearSelectedFont = useCallback(() => {
@@ -993,13 +1025,13 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 		if (fontPickerOpen) {
 			return;
 		}
-		const font = state.fontId ? webfonts[state.fontId] : null;
+		const font = state.fontId ? allWebfonts[state.fontId] : null;
 		if (font && font.font_type === 'google' && font.url) {
 			setSelectedGoogleFontLink(controlId, state.fontId, font.url);
 		} else {
 			removeSelectedFontLink(controlId);
 		}
-	}, [fontPickerOpen, state.fontId, webfonts, controlId]);
+	}, [fontPickerOpen, state.fontId, allWebfonts, controlId]);
 
 	useEffect(() => {
 		return () => {
@@ -1009,7 +1041,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 	}, [controlId]);
 
 	useEffect(() => {
-		const css = buildTypographySettingCss(state, fields, webfonts);
+		const css = buildTypographySettingCss(state, fields, allWebfonts);
 		const setting = settingRef.current;
 		if (!setting || typeof setting.get !== 'function') {
 			return;
@@ -1028,7 +1060,7 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 			return;
 		}
 		setting.set(next);
-	}, [state, fields, webfonts]);
+	}, [state, fields, allWebfonts]);
 
 	useEffect(() => {
 		if (!settingsOpen) {
@@ -1113,7 +1145,11 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 		return () => document.removeEventListener('mousedown', onDocDown);
 	}, [settingsOpen, fontPickerOpen]);
 
-	const selectorStack = selectedFont ? `"${selectedFont.name}", sans-serif` : 'inherit';
+	const selectorStack = selectedFont
+		? typeof selectedFont.fontFamily === 'string' && selectedFont.fontFamily.trim()
+			? selectedFont.fontFamily
+			: `"${selectedFont.name}", sans-serif`
+		: 'inherit';
 	const sizeBadge =
 		state.fontSize !== '' ? `${state.fontSize}${state.fontSizeUnit}` : labels.option_default;
 	const textDecorationChoices = [
@@ -1307,12 +1343,13 @@ export function TypographyControlApp({ control, webfonts, styleLabels }) {
 											open={fontPickerOpen}
 											variant="dropdown"
 											controlId={controlId}
-											webfonts={webfonts}
+											webfonts={allWebfonts}
 											fontGroups={fontGroups}
 											currentFontId={state.fontId}
 											defaultLabel={labels.option_default}
 											onClose={closeFontPicker}
 											onSelectFont={selectFontFromPicker}
+											onFontLibraryRefresh={refreshFontLibraryFromRest}
 										/>
 									)}
 								</div>
