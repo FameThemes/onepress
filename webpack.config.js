@@ -85,6 +85,16 @@ module.exports = (env, args) => {
     {
       ...defaultConfig[0],
       entry,
+      resolve: {
+        ...(defaultConfig[0].resolve || {}),
+        fallback: {
+          ...((defaultConfig[0].resolve && defaultConfig[0].resolve.fallback) ||
+            {}),
+          // lib-font.browser.js has Node-only dynamic imports; browser uses pako + global unbrotli.
+          fs: false,
+          zlib: false,
+        },
+      },
       output: {
         ...defaultConfig[0].output,
         path: path.resolve(__dirname, "assets"),

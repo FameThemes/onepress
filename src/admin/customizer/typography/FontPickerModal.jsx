@@ -13,8 +13,70 @@ import {
 import apiFetch from '@wordpress/api-fetch';
 import { __, _n, sprintf } from '@wordpress/i18n';
 import kebabCase from 'lodash/kebabCase';
+import { Font as OnepressLibFont } from '../../lib-font/load-lib-font.js';
 
 const PICKER_LINK_PREFIX = 'onepress-typo-picker-';
+
+/** Filter DevTools console by this string to see the full upload pipeline. */
+const FONT_UPLOAD_LOG_PREFIX = '[OnePress font upload]';
+
+/**
+ * Step-by-step upload logs (file pick → LibFont → REST). Disable with `window.onepressSuppressFontUploadLog = true`.
+ *
+ * @param {string} step
+ * @param {unknown} [detail]
+ */
+function logFontUploadStep(step, detail) {
+	if (typeof window !== 'undefined' && window.onepressSuppressFontUploadLog) {
+		return;
+	}
+	// eslint-disable-next-line no-console
+	console.info(
+		FONT_UPLOAD_LOG_PREFIX,
+		step,
+		detail !== undefined ? detail : ''
+	);
+}
+
+/**
+ * Always logs (ignores suppress) so failures stay visible.
+ *
+ * @param {string} step
+ * @param {unknown} [detail]
+ */
+function logFontUploadWarn(step, detail) {
+	// eslint-disable-next-line no-console
+	console.warn(
+		FONT_UPLOAD_LOG_PREFIX,
+		step,
+		detail !== undefined ? detail : ''
+	);
+}
+
+logFontUploadStep('bootstrap: module loaded', {
+	OnepressLibFontType: typeof OnepressLibFont,
+});
+
+/**
+ * Verbose LibFont internals: `window.onepressDebugLibFont = true` then reload Customizer.
+ *
+ * @param {'info'|'warn'} level
+ * @param {string} message
+ * @param {unknown} [detail]
+ */
+function onepressLogLibFont(level, message, detail) {
+	if (typeof window === 'undefined' || !window.onepressDebugLibFont) {
+		return;
+	}
+	const prefix = '[OnePress LibFont]';
+	if (level === 'warn') {
+		// eslint-disable-next-line no-console
+		console.warn(prefix, message, detail !== undefined ? detail : '');
+	} else {
+		// eslint-disable-next-line no-console
+		console.info(prefix, message, detail !== undefined ? detail : '');
+	}
+}
 
 const FONT_FAMILIES_PATH = '/wp/v2/font-families';
 
@@ -351,34 +413,6 @@ function formatDisplayNameFromFileBase(base) {
 }
 
 /**
- * @param {unknown} record opentype.js name table entry (string or locale map).
- * @returns {string}
- */
-function pickEnglishFromNameRecord(record) {
-	if (record == null) {
-		return '';
-	}
-	if (typeof record === 'string') {
-		return record.trim();
-	}
-	if (typeof record === 'object') {
-		const o = /** @type {Record<string, string>} */ (record);
-		const direct =
-			o.en ||
-			o['en-US'] ||
-			(typeof o[1033] === 'string' ? o[1033] : '');
-		if (direct && String(direct).trim()) {
-			return String(direct).trim();
-		}
-		const first = Object.values(o).find(
-			(x) => typeof x === 'string' && x.trim()
-		);
-		return typeof first === 'string' ? first.trim() : '';
-	}
-	return '';
-}
-
-/**
  * @param {string} s
  * @returns {string}
  */
@@ -391,72 +425,146 @@ function sanitizeFontMetadataName(s) {
 }
 
 /**
- * Typographic / full name from font file (TTF, OTF, WOFF). WOFF2 is not parsed by opentype.js → null (caller falls back to filename).
+ * Typographic / full name from font file (TTF, OTF, WOFF, WOFF2) via LibFont (src/admin/lib-font).
  *
  * @param {File} file
  * @returns {Promise<string|null>}
  */
 async function getDisplayNameFromFontFile(file) {
-	try {
-		const mod = await import('opentype.js');
-		const parseFn =
-			typeof mod.parse === 'function'
-				? mod.parse
-				: mod.default && typeof mod.default.parse === 'function'
-					? mod.default.parse
-					: null;
-		if (!parseFn) {
-			return null;
-		}
-		const buffer = await file.arrayBuffer();
-		const font = parseFn(buffer);
-		const n = font.names;
-		if (!n || typeof n !== 'object') {
-			return null;
-		}
-
-		const full = sanitizeFontMetadataName(
-			pickEnglishFromNameRecord(n.fullName)
+	logFontUploadStep('libfont:1 start getDisplayNameFromFontFile', {
+		name: file?.name,
+		size: file?.size,
+		type: file?.type,
+	});
+	onepressLogLibFont('info', 'getDisplayNameFromFontFile', file?.name);
+	if (typeof OnepressLibFont !== 'function') {
+		logFontUploadWarn(
+			'libfont:FAIL OnepressLibFont is not a function (bundle/import)',
+			typeof OnepressLibFont
 		);
-		if (full) {
-			return full;
-		}
-
-		const prefFam = sanitizeFontMetadataName(
-			pickEnglishFromNameRecord(n.preferredFamily)
-		);
-		const prefSub = sanitizeFontMetadataName(
-			pickEnglishFromNameRecord(n.preferredSubfamily)
-		);
-		const fam =
-			prefFam ||
-			sanitizeFontMetadataName(
-				pickEnglishFromNameRecord(n.fontFamily)
-			);
-		const sub =
-			prefSub ||
-			sanitizeFontMetadataName(
-				pickEnglishFromNameRecord(n.fontSubfamily)
-			);
-
-		if (
-			fam &&
-			sub &&
-			!/^(regular|normal|book|roman)$/i.test(sub)
-		) {
-			return sanitizeFontMetadataName(`${fam} ${sub}`);
-		}
-		if (fam) {
-			return fam;
-		}
-
-		const ps = pickEnglishFromNameRecord(n.postScriptName);
-		if (ps) {
-			return sanitizeFontMetadataName(ps.replace(/-/g, ' '));
-		}
-
 		return null;
-	} catch {
+	}
+	try {
+		const buffer = await file.arrayBuffer();
+		logFontUploadStep('libfont:2 arrayBuffer read', {
+			byteLength: buffer?.byteLength ?? 0,
+		});
+
+		return await new Promise((resolve) => {
+			let font;
+			try {
+				font = new OnepressLibFont('__onepress_font_upload__', {
+					skipStyleSheet: true,
+				});
+				logFontUploadStep('libfont:3 new Font() ok');
+			} catch (ctorErr) {
+				logFontUploadWarn('libfont:FAIL new Font() threw', ctorErr);
+				resolve(null);
+				return;
+			}
+
+			const finish = (value) => {
+				font.onload = null;
+				font.onerror = null;
+				logFontUploadStep('libfont:9 finish', {
+					file: file?.name,
+					displayName: value,
+				});
+				onepressLogLibFont('info', 'parse finished', {
+					name: file?.name,
+					displayName: value,
+				});
+				resolve(value);
+			};
+
+			font.onload = (evt) => {
+				logFontUploadStep('libfont:5 onload fired', { file: file?.name });
+				try {
+					const detail = evt && evt.detail;
+					const loaded =
+						detail && typeof detail === 'object' && 'font' in detail
+							? detail.font
+							: detail;
+					const nameTable = loaded?.opentype?.tables?.name;
+					if (!nameTable || typeof nameTable.get !== 'function') {
+						logFontUploadWarn(
+							'libfont:FAIL no name table',
+							{
+								file: file?.name,
+								hasOpentype: !!loaded?.opentype,
+								tablesKeys: loaded?.opentype?.tables
+									? Object.keys(loaded.opentype.tables)
+									: [],
+							}
+						);
+						onepressLogLibFont(
+							'warn',
+							'missing name table after load',
+							file?.name
+						);
+						finish(null);
+						return;
+					}
+					logFontUploadStep('libfont:6 name table present, reading IDs');
+
+					const nameGet = (id) =>
+						sanitizeFontMetadataName(String(nameTable.get(id) || ''));
+
+					const full = nameGet(4) || nameGet(18);
+					if (full) {
+						finish(full);
+						return;
+					}
+
+					const prefFam = nameGet(16);
+					const prefSub = nameGet(17);
+					const fam = prefFam || nameGet(1);
+					const sub = prefSub || nameGet(2);
+
+					if (
+						fam &&
+						sub &&
+						!/^(regular|normal|book|roman)$/i.test(sub)
+					) {
+						finish(sanitizeFontMetadataName(`${fam} ${sub}`));
+						return;
+					}
+					if (fam) {
+						finish(fam);
+						return;
+					}
+
+					const ps = String(nameTable.get(6) || '').trim();
+					if (ps) {
+						finish(sanitizeFontMetadataName(ps.replace(/-/g, ' ')));
+						return;
+					}
+
+					logFontUploadStep('libfont:7 no name ID matched, returning null');
+					finish(null);
+				} catch (err) {
+					logFontUploadWarn('libfont:FAIL onload handler threw', err);
+					onepressLogLibFont('warn', 'onload handler error', err);
+					finish(null);
+				}
+			};
+
+			font.onerror = (evt) => {
+				logFontUploadWarn('libfont:FAIL font.onerror', evt?.msg || evt);
+				onepressLogLibFont('warn', 'font.onerror', evt?.msg || evt);
+				finish(null);
+			};
+
+			logFontUploadStep('libfont:4 fromDataBuffer(…)', { file: file.name });
+			font.fromDataBuffer(buffer, file.name).catch((err) => {
+				logFontUploadWarn('libfont:FAIL fromDataBuffer rejected', err);
+				onepressLogLibFont('warn', 'fromDataBuffer rejected', err);
+				finish(null);
+			});
+		});
+	} catch (e) {
+		logFontUploadWarn('libfont:FAIL outer catch', e);
+		onepressLogLibFont('warn', 'getDisplayNameFromFontFile failed', e);
 		return null;
 	}
 }
@@ -507,25 +615,40 @@ async function allocateUniqueFontFamilySlug(baseSlug) {
  * @returns {Promise<void>}
  */
 async function installUploadedFontFile(file) {
+	logFontUploadStep('install:1 start', {
+		name: file?.name,
+		size: file?.size,
+		type: file?.type,
+	});
 	if (!isAllowedFontFile(file)) {
+		logFontUploadWarn('install:FAIL not allowed extension', file?.name);
 		throw new Error(
 			__('Invalid font file type.', 'onepress')
 		);
 	}
+	logFontUploadStep('install:2 extension OK');
 	const rawBase = baseNameFromFileName(file.name);
+	logFontUploadStep('install:3 read display name (LibFont)…');
 	const fromFontMeta = await getDisplayNameFromFontFile(file);
 	const displayName =
 		(fromFontMeta && fromFontMeta.length > 0 ? fromFontMeta : null) ||
 		formatDisplayNameFromFileBase(rawBase) ||
 		rawBase ||
 		'Custom Font';
+	logFontUploadStep('install:4 display name resolved', {
+		fromFontMeta,
+		displayName,
+	});
 	const safeName = displayName.replace(/\\/g, '').replace(/"/g, '').trim();
 	if (!safeName) {
+		logFontUploadWarn('install:FAIL empty safeName', displayName);
 		throw new Error(__('Invalid font file name.', 'onepress'));
 	}
+	logFontUploadStep('install:5 allocate slug…');
 	const slug = await allocateUniqueFontFamilySlug(
 		kebabCase(safeName) || kebabCase(rawBase) || 'custom-font'
 	);
+	logFontUploadStep('install:6 slug', slug);
 	const fontFamilyCss = `"${safeName}", sans-serif`;
 
 	const familyFd = new FormData();
@@ -537,6 +660,7 @@ async function installUploadedFontFile(file) {
 			fontFamily: fontFamilyCss,
 		})
 	);
+	logFontUploadStep('install:7 POST font family', FONT_FAMILIES_PATH);
 	/** @type {{ id?: number }} */
 	const created = await apiFetch({
 		path: `${FONT_FAMILIES_PATH}?_locale=user`,
@@ -546,8 +670,10 @@ async function installUploadedFontFile(file) {
 	const familyId =
 		created && created.id != null ? Number(created.id) : NaN;
 	if (!Number.isFinite(familyId) || familyId <= 0) {
+		logFontUploadWarn('install:FAIL bad family response', created);
 		throw new Error(__('Could not create font family.', 'onepress'));
 	}
+	logFontUploadStep('install:8 family created', { familyId });
 
 	const fileId = 'file-0-0';
 	const faceFd = new FormData();
@@ -562,17 +688,26 @@ async function installUploadedFontFile(file) {
 		})
 	);
 	try {
+		logFontUploadStep('install:9 POST font-faces', {
+			path: `${FONT_FAMILIES_PATH}/${familyId}/font-faces`,
+		});
 		await apiFetch({
 			path: `${FONT_FAMILIES_PATH}/${familyId}/font-faces?_locale=user`,
 			method: 'POST',
 			body: faceFd,
 		});
+		logFontUploadStep('install:10 done (face uploaded)', {
+			familyId,
+			safeName,
+		});
 	} catch (err) {
+		logFontUploadWarn('install:FAIL font-faces POST', err);
 		try {
 			await apiFetch({
 				path: `${FONT_FAMILIES_PATH}/${familyId}?force=true&_locale=user`,
 				method: 'DELETE',
 			});
+			logFontUploadStep('install:rollback family deleted', familyId);
 		} catch {
 			// best effort cleanup
 		}
@@ -1032,6 +1167,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 	const processUploadFiles = useCallback(
 		async (incoming) => {
 			if (uploadRunRef.current) {
+				logFontUploadStep('queue: skip (already running)');
 				return;
 			}
 			const files = Array.isArray(incoming)
@@ -1039,9 +1175,20 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 				: incoming
 					? Array.from(incoming)
 					: [];
+			logFontUploadStep('queue:1 received', {
+				count: files.length,
+				names: files.map((f) => f.name),
+			});
 			const valid = files.filter(isAllowedFontFile);
+			logFontUploadStep('queue:2 after filter', {
+				validCount: valid.length,
+				validNames: valid.map((f) => f.name),
+			});
 			if (valid.length === 0) {
 				if (files.length > 0) {
+					logFontUploadWarn('queue:FAIL no valid files', {
+						received: files.map((f) => f.name),
+					});
 					setUploadActionMessage(
 						__(
 							'No valid font files. Use .woff2, .woff, .ttf, or .otf.',
@@ -1058,11 +1205,22 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 			/** @type {{ name: string, msg: string }[]} */
 			const fails = [];
 			try {
-				for (const file of valid) {
+				for (let i = 0; i < valid.length; i += 1) {
+					const file = valid[i];
+					logFontUploadStep('queue:3 file start', {
+						index: i + 1,
+						of: valid.length,
+						name: file.name,
+					});
 					try {
 						await installUploadedFontFile(file);
 						ok += 1;
+						logFontUploadStep('queue:4 file OK', file.name);
 					} catch (e) {
+						logFontUploadWarn('queue:FAIL file threw', {
+							name: file.name,
+							error: e,
+						});
 						fails.push({
 							name: file.name,
 							msg:
@@ -1074,10 +1232,12 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 						});
 					}
 				}
+				logFontUploadStep('queue:5 reload library snapshot');
 				await reloadLibrarySnapshot();
 				if (typeof onFontLibraryRefresh === 'function') {
 					onFontLibraryRefresh();
 				}
+				logFontUploadStep('queue:6 complete', { ok, failCount: fails.length });
 				if (fails.length === 0) {
 					setUploadActionMessage(
 						sprintf(
@@ -1138,6 +1298,7 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 			} finally {
 				uploadRunRef.current = false;
 				setUploadBusy(false);
+				logFontUploadStep('queue:7 UI unlocked (uploadBusy=false)');
 			}
 		},
 		[reloadLibrarySnapshot, onFontLibraryRefresh]
@@ -1495,6 +1656,9 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 									e.stopPropagation();
 									setUploadDragging(false);
 									if (!uploadBusy && e.dataTransfer?.files) {
+										logFontUploadStep('ui: drop', {
+											count: e.dataTransfer.files.length,
+										});
 										processUploadFiles(e.dataTransfer.files);
 									}
 								}}
@@ -1514,6 +1678,12 @@ function ManageFontsModal({ open, onClose, onFontLibraryRefresh }) {
 									onChange={(e) => {
 										const { files } = e.target;
 										if (files?.length) {
+											logFontUploadStep('ui: input change', {
+												count: files.length,
+												names: Array.from(files).map(
+													(f) => f.name
+												),
+											});
 											processUploadFiles(files);
 										}
 										e.target.value = '';

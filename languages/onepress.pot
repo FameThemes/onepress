@@ -3,238 +3,238 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1016
+#: src/admin/customizer/typography/FontPickerModal.jsx:1122
+msgid "this font"
+msgstr ""
+
+#: src/admin/customizer/typography/FontPickerModal.jsx:1127
+#. %s: Font family name.
+msgid "Remove \"%s\" from your library? This cannot be undone."
+msgstr ""
+
+#: src/admin/customizer/typography/FontPickerModal.jsx:1151
 #. %s: Font family name.
 msgid "\"%s\" was removed."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1023
+#: src/admin/customizer/typography/FontPickerModal.jsx:1158
 msgid "Could not remove font."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1046
+#: src/admin/customizer/typography/FontPickerModal.jsx:1193
 msgid "No valid font files. Use .woff2, .woff, .ttf, or .otf."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1070
+#: src/admin/customizer/typography/FontPickerModal.jsx:1228
 msgid "Could not add font."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1085
+#: src/admin/customizer/typography/FontPickerModal.jsx:1245
 #. %d: Number of fonts added.
 msgid "Added %d font to your library."
 msgid_plural "Added %d fonts to your library."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1103
+#: src/admin/customizer/typography/FontPickerModal.jsx:1263
 #. %d: Additional failure count.
 msgid " …and %d more."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1114
+#: src/admin/customizer/typography/FontPickerModal.jsx:1274
 #. 1: Added count, 2: Fail count, 3: Details, 4: Optional "and N more".
 msgid "Added %1$d. Failed (%2$d): %3$s%4$s"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1128
+#: src/admin/customizer/typography/FontPickerModal.jsx:1288
 #. 1: Error details, 2: Optional suffix.
 msgid "Failed to add fonts: %1$s%2$s"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1185
+#: src/admin/customizer/typography/FontPickerModal.jsx:1346
 #. %s: Font family name.
 msgid "\"%s\" is already installed with all styles."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1196
+#: src/admin/customizer/typography/FontPickerModal.jsx:1357
 #. 1: Font name, 2: Number installed, 3: Number failed.
 msgid "\"%1$s\": installed %2$d style(s); %3$d failed."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1209
+#: src/admin/customizer/typography/FontPickerModal.jsx:1370
 #. 1: Font name, 2: Number of styles.
 msgid "\"%1$s\" installed (%2$d style(s))."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1221
+#: src/admin/customizer/typography/FontPickerModal.jsx:1382
 msgid "Could not install font."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1253
+#: src/admin/customizer/typography/FontPickerModal.jsx:1414
 msgid "Library"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1254
+#: src/admin/customizer/typography/FontPickerModal.jsx:1415
 msgid "Upload"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1302
+#: src/admin/customizer/typography/FontPickerModal.jsx:1463
 msgid "Close"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1308
+#: src/admin/customizer/typography/FontPickerModal.jsx:1469
 msgid "Font sources"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1338
+#: src/admin/customizer/typography/FontPickerModal.jsx:1499
 msgid "Fonts currently available on your site (WordPress font families)."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1355
+#: src/admin/customizer/typography/FontPickerModal.jsx:1516
 msgid "Search library"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1371
+#: src/admin/customizer/typography/FontPickerModal.jsx:1532
 msgid "No fonts in your library yet."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1379
+#: src/admin/customizer/typography/FontPickerModal.jsx:1540
 msgid "Installed font families"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1421
+#: src/admin/customizer/typography/FontPickerModal.jsx:1582
 msgid "Removing…"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1425
+#: src/admin/customizer/typography/FontPickerModal.jsx:1586
 msgid "Remove"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1446
+#: src/admin/customizer/typography/FontPickerModal.jsx:1607
 msgid ""
 "Drag font files here or choose files. The name is read from the font when "
 "possible (TTF, OTF, WOFF); otherwise the file name is used. WOFF2 uses the "
 "file name. Each file becomes one family (400, normal)."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1502
+#: src/admin/customizer/typography/FontPickerModal.jsx:1666
 msgid "Drop font files here or use the select files button."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1525
+#: src/admin/customizer/typography/FontPickerModal.jsx:1695
 msgid "Uploading…"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1529
+#: src/admin/customizer/typography/FontPickerModal.jsx:1699
 msgid "Drop font files here"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1535
+#: src/admin/customizer/typography/FontPickerModal.jsx:1705
 msgid "Supported: .woff2, .woff, .ttf, .otf"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1549
+#: src/admin/customizer/typography/FontPickerModal.jsx:1719
 msgid "Select files"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1565
+#: src/admin/customizer/typography/FontPickerModal.jsx:1735
 msgid ""
 "Install fonts from the Google Fonts collection into your site library "
 "(files stay on your server)."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1582
+#: src/admin/customizer/typography/FontPickerModal.jsx:1752
 msgid "Search fonts to install"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1588
+#: src/admin/customizer/typography/FontPickerModal.jsx:1758
 msgid "Search…"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1595
+#: src/admin/customizer/typography/FontPickerModal.jsx:1765
 msgid "Loading…"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1599
+#: src/admin/customizer/typography/FontPickerModal.jsx:1769
 msgid "Could not load the font collection."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1606
+#: src/admin/customizer/typography/FontPickerModal.jsx:1776
 msgid "No fonts in this collection."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1613
+#: src/admin/customizer/typography/FontPickerModal.jsx:1783
 msgid "No fonts match your search."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1621
+#: src/admin/customizer/typography/FontPickerModal.jsx:1791
 msgid "Google Fonts collection"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1648
+#: src/admin/customizer/typography/FontPickerModal.jsx:1818
 msgid "(Unnamed font)"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1670
+#: src/admin/customizer/typography/FontPickerModal.jsx:1840
 msgid "Installing…"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1671
+#: src/admin/customizer/typography/FontPickerModal.jsx:1841
 msgid "Install"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1787
+#: src/admin/customizer/typography/FontPickerModal.jsx:1957
 msgid "Font selector"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1814
+#: src/admin/customizer/typography/FontPickerModal.jsx:1984
 msgid "Search fonts"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1821
+#: src/admin/customizer/typography/FontPickerModal.jsx:1991
 msgid "Search fonts…"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1835
+#: src/admin/customizer/typography/FontPickerModal.jsx:2005
 msgid "Manage fonts"
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:1881
+#: src/admin/customizer/typography/FontPickerModal.jsx:2051
 msgid "No fonts found."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:211
+#: src/admin/customizer/typography/FontPickerModal.jsx:273
 msgid "Invalid font data."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:217
+#: src/admin/customizer/typography/FontPickerModal.jsx:279
 msgid "This font is missing required fields."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:225
+#: src/admin/customizer/typography/FontPickerModal.jsx:287
 msgid "No font files to install."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:243
+#: src/admin/customizer/typography/FontPickerModal.jsx:305
 msgid "Could not read font family."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:319
+#: src/admin/customizer/typography/FontPickerModal.jsx:381
 msgid "Could not install any font styles."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:499
+#: src/admin/customizer/typography/FontPickerModal.jsx:607
 msgid "Could not allocate a unique font slug."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:512
+#: src/admin/customizer/typography/FontPickerModal.jsx:626
 msgid "Invalid font file type."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:524
+#: src/admin/customizer/typography/FontPickerModal.jsx:645
 msgid "Invalid font file name."
 msgstr ""
 
-#: src/admin/customizer/typography/FontPickerModal.jsx:549
+#: src/admin/customizer/typography/FontPickerModal.jsx:674
 msgid "Could not create font family."
-msgstr ""
-
-#: src/admin/customizer/typography/FontPickerModal.jsx:987
-msgid "this font"
-msgstr ""
-
-#: src/admin/customizer/typography/FontPickerModal.jsx:992
-#. %s: Font family name.
-msgid "Remove \"%s\" from your library? This cannot be undone."
 msgstr ""

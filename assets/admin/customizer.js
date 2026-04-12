@@ -5841,6 +5841,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var lodash_kebabCase__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/kebabCase */ "./node_modules/lodash/kebabCase.js");
 /* harmony import */ var lodash_kebabCase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_kebabCase__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _lib_font_load_lib_font_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../lib-font/load-lib-font.js */ "./src/admin/lib-font/load-lib-font.js");
 
 /**
  * Font picker: lists WordPress Font Library families from REST; optional lazy Google sheet previews for legacy entries.
@@ -5849,7 +5850,60 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 const PICKER_LINK_PREFIX = 'onepress-typo-picker-';
+
+/** Filter DevTools console by this string to see the full upload pipeline. */
+const FONT_UPLOAD_LOG_PREFIX = '[OnePress font upload]';
+
+/**
+ * Step-by-step upload logs (file pick → LibFont → REST). Disable with `window.onepressSuppressFontUploadLog = true`.
+ *
+ * @param {string} step
+ * @param {unknown} [detail]
+ */
+function logFontUploadStep(step, detail) {
+  if (typeof window !== 'undefined' && window.onepressSuppressFontUploadLog) {
+    return;
+  }
+  // eslint-disable-next-line no-console
+  console.info(FONT_UPLOAD_LOG_PREFIX, step, detail !== undefined ? detail : '');
+}
+
+/**
+ * Always logs (ignores suppress) so failures stay visible.
+ *
+ * @param {string} step
+ * @param {unknown} [detail]
+ */
+function logFontUploadWarn(step, detail) {
+  // eslint-disable-next-line no-console
+  console.warn(FONT_UPLOAD_LOG_PREFIX, step, detail !== undefined ? detail : '');
+}
+logFontUploadStep('bootstrap: module loaded', {
+  OnepressLibFontType: typeof _lib_font_load_lib_font_js__WEBPACK_IMPORTED_MODULE_5__.Font
+});
+
+/**
+ * Verbose LibFont internals: `window.onepressDebugLibFont = true` then reload Customizer.
+ *
+ * @param {'info'|'warn'} level
+ * @param {string} message
+ * @param {unknown} [detail]
+ */
+function onepressLogLibFont(level, message, detail) {
+  if (typeof window === 'undefined' || !window.onepressDebugLibFont) {
+    return;
+  }
+  const prefix = '[OnePress LibFont]';
+  if (level === 'warn') {
+    // eslint-disable-next-line no-console
+    console.warn(prefix, message, detail !== undefined ? detail : '');
+  } else {
+    // eslint-disable-next-line no-console
+    console.info(prefix, message, detail !== undefined ? detail : '');
+  }
+}
 const FONT_FAMILIES_PATH = '/wp/v2/font-families';
 const FONT_COLLECTION_GOOGLE_PATH = '/wp/v2/font-collections/google-fonts?_locale=user';
 
@@ -6147,29 +6201,6 @@ function formatDisplayNameFromFileBase(base) {
 }
 
 /**
- * @param {unknown} record opentype.js name table entry (string or locale map).
- * @returns {string}
- */
-function pickEnglishFromNameRecord(record) {
-  if (record == null) {
-    return '';
-  }
-  if (typeof record === 'string') {
-    return record.trim();
-  }
-  if (typeof record === 'object') {
-    const o = /** @type {Record<string, string>} */record;
-    const direct = o.en || o['en-US'] || (typeof o[1033] === 'string' ? o[1033] : '');
-    if (direct && String(direct).trim()) {
-      return String(direct).trim();
-    }
-    const first = Object.values(o).find(x => typeof x === 'string' && x.trim());
-    return typeof first === 'string' ? first.trim() : '';
-  }
-  return '';
-}
-
-/**
  * @param {string} s
  * @returns {string}
  */
@@ -6178,44 +6209,120 @@ function sanitizeFontMetadataName(s) {
 }
 
 /**
- * Typographic / full name from font file (TTF, OTF, WOFF). WOFF2 is not parsed by opentype.js → null (caller falls back to filename).
+ * Typographic / full name from font file (TTF, OTF, WOFF, WOFF2) via LibFont (src/admin/lib-font).
  *
  * @param {File} file
  * @returns {Promise<string|null>}
  */
 async function getDisplayNameFromFontFile(file) {
-  try {
-    const mod = await Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_opentype_js_dist_opentype_module_js"), __webpack_require__.e("_4db5")]).then(__webpack_require__.bind(__webpack_require__, /*! opentype.js */ "./node_modules/opentype.js/dist/opentype.module.js"));
-    const parseFn = typeof mod.parse === 'function' ? mod.parse : mod.default && typeof mod.default.parse === 'function' ? mod.default.parse : null;
-    if (!parseFn) {
-      return null;
-    }
-    const buffer = await file.arrayBuffer();
-    const font = parseFn(buffer);
-    const n = font.names;
-    if (!n || typeof n !== 'object') {
-      return null;
-    }
-    const full = sanitizeFontMetadataName(pickEnglishFromNameRecord(n.fullName));
-    if (full) {
-      return full;
-    }
-    const prefFam = sanitizeFontMetadataName(pickEnglishFromNameRecord(n.preferredFamily));
-    const prefSub = sanitizeFontMetadataName(pickEnglishFromNameRecord(n.preferredSubfamily));
-    const fam = prefFam || sanitizeFontMetadataName(pickEnglishFromNameRecord(n.fontFamily));
-    const sub = prefSub || sanitizeFontMetadataName(pickEnglishFromNameRecord(n.fontSubfamily));
-    if (fam && sub && !/^(regular|normal|book|roman)$/i.test(sub)) {
-      return sanitizeFontMetadataName(`${fam} ${sub}`);
-    }
-    if (fam) {
-      return fam;
-    }
-    const ps = pickEnglishFromNameRecord(n.postScriptName);
-    if (ps) {
-      return sanitizeFontMetadataName(ps.replace(/-/g, ' '));
-    }
+  logFontUploadStep('libfont:1 start getDisplayNameFromFontFile', {
+    name: file?.name,
+    size: file?.size,
+    type: file?.type
+  });
+  onepressLogLibFont('info', 'getDisplayNameFromFontFile', file?.name);
+  if (typeof _lib_font_load_lib_font_js__WEBPACK_IMPORTED_MODULE_5__.Font !== 'function') {
+    logFontUploadWarn('libfont:FAIL OnepressLibFont is not a function (bundle/import)', typeof _lib_font_load_lib_font_js__WEBPACK_IMPORTED_MODULE_5__.Font);
     return null;
-  } catch {
+  }
+  try {
+    var _buffer$byteLength;
+    const buffer = await file.arrayBuffer();
+    logFontUploadStep('libfont:2 arrayBuffer read', {
+      byteLength: (_buffer$byteLength = buffer?.byteLength) !== null && _buffer$byteLength !== void 0 ? _buffer$byteLength : 0
+    });
+    return await new Promise(resolve => {
+      let font;
+      try {
+        font = new _lib_font_load_lib_font_js__WEBPACK_IMPORTED_MODULE_5__.Font('__onepress_font_upload__', {
+          skipStyleSheet: true
+        });
+        logFontUploadStep('libfont:3 new Font() ok');
+      } catch (ctorErr) {
+        logFontUploadWarn('libfont:FAIL new Font() threw', ctorErr);
+        resolve(null);
+        return;
+      }
+      const finish = value => {
+        font.onload = null;
+        font.onerror = null;
+        logFontUploadStep('libfont:9 finish', {
+          file: file?.name,
+          displayName: value
+        });
+        onepressLogLibFont('info', 'parse finished', {
+          name: file?.name,
+          displayName: value
+        });
+        resolve(value);
+      };
+      font.onload = evt => {
+        logFontUploadStep('libfont:5 onload fired', {
+          file: file?.name
+        });
+        try {
+          const detail = evt && evt.detail;
+          const loaded = detail && typeof detail === 'object' && 'font' in detail ? detail.font : detail;
+          const nameTable = loaded?.opentype?.tables?.name;
+          if (!nameTable || typeof nameTable.get !== 'function') {
+            logFontUploadWarn('libfont:FAIL no name table', {
+              file: file?.name,
+              hasOpentype: !!loaded?.opentype,
+              tablesKeys: loaded?.opentype?.tables ? Object.keys(loaded.opentype.tables) : []
+            });
+            onepressLogLibFont('warn', 'missing name table after load', file?.name);
+            finish(null);
+            return;
+          }
+          logFontUploadStep('libfont:6 name table present, reading IDs');
+          const nameGet = id => sanitizeFontMetadataName(String(nameTable.get(id) || ''));
+          const full = nameGet(4) || nameGet(18);
+          if (full) {
+            finish(full);
+            return;
+          }
+          const prefFam = nameGet(16);
+          const prefSub = nameGet(17);
+          const fam = prefFam || nameGet(1);
+          const sub = prefSub || nameGet(2);
+          if (fam && sub && !/^(regular|normal|book|roman)$/i.test(sub)) {
+            finish(sanitizeFontMetadataName(`${fam} ${sub}`));
+            return;
+          }
+          if (fam) {
+            finish(fam);
+            return;
+          }
+          const ps = String(nameTable.get(6) || '').trim();
+          if (ps) {
+            finish(sanitizeFontMetadataName(ps.replace(/-/g, ' ')));
+            return;
+          }
+          logFontUploadStep('libfont:7 no name ID matched, returning null');
+          finish(null);
+        } catch (err) {
+          logFontUploadWarn('libfont:FAIL onload handler threw', err);
+          onepressLogLibFont('warn', 'onload handler error', err);
+          finish(null);
+        }
+      };
+      font.onerror = evt => {
+        logFontUploadWarn('libfont:FAIL font.onerror', evt?.msg || evt);
+        onepressLogLibFont('warn', 'font.onerror', evt?.msg || evt);
+        finish(null);
+      };
+      logFontUploadStep('libfont:4 fromDataBuffer(…)', {
+        file: file.name
+      });
+      font.fromDataBuffer(buffer, file.name).catch(err => {
+        logFontUploadWarn('libfont:FAIL fromDataBuffer rejected', err);
+        onepressLogLibFont('warn', 'fromDataBuffer rejected', err);
+        finish(null);
+      });
+    });
+  } catch (e) {
+    logFontUploadWarn('libfont:FAIL outer catch', e);
+    onepressLogLibFont('warn', 'getDisplayNameFromFontFile failed', e);
     return null;
   }
 }
@@ -6255,17 +6362,32 @@ async function allocateUniqueFontFamilySlug(baseSlug) {
  * @returns {Promise<void>}
  */
 async function installUploadedFontFile(file) {
+  logFontUploadStep('install:1 start', {
+    name: file?.name,
+    size: file?.size,
+    type: file?.type
+  });
   if (!isAllowedFontFile(file)) {
+    logFontUploadWarn('install:FAIL not allowed extension', file?.name);
     throw new Error((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Invalid font file type.', 'onepress'));
   }
+  logFontUploadStep('install:2 extension OK');
   const rawBase = baseNameFromFileName(file.name);
+  logFontUploadStep('install:3 read display name (LibFont)…');
   const fromFontMeta = await getDisplayNameFromFontFile(file);
   const displayName = (fromFontMeta && fromFontMeta.length > 0 ? fromFontMeta : null) || formatDisplayNameFromFileBase(rawBase) || rawBase || 'Custom Font';
+  logFontUploadStep('install:4 display name resolved', {
+    fromFontMeta,
+    displayName
+  });
   const safeName = displayName.replace(/\\/g, '').replace(/"/g, '').trim();
   if (!safeName) {
+    logFontUploadWarn('install:FAIL empty safeName', displayName);
     throw new Error((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Invalid font file name.', 'onepress'));
   }
+  logFontUploadStep('install:5 allocate slug…');
   const slug = await allocateUniqueFontFamilySlug(lodash_kebabCase__WEBPACK_IMPORTED_MODULE_4___default()(safeName) || lodash_kebabCase__WEBPACK_IMPORTED_MODULE_4___default()(rawBase) || 'custom-font');
+  logFontUploadStep('install:6 slug', slug);
   const fontFamilyCss = `"${safeName}", sans-serif`;
   const familyFd = new FormData();
   familyFd.append('font_family_settings', JSON.stringify({
@@ -6273,6 +6395,7 @@ async function installUploadedFontFile(file) {
     name: safeName,
     fontFamily: fontFamilyCss
   }));
+  logFontUploadStep('install:7 POST font family', FONT_FAMILIES_PATH);
   /** @type {{ id?: number }} */
   const created = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2___default()({
     path: `${FONT_FAMILIES_PATH}?_locale=user`,
@@ -6281,8 +6404,12 @@ async function installUploadedFontFile(file) {
   });
   const familyId = created && created.id != null ? Number(created.id) : NaN;
   if (!Number.isFinite(familyId) || familyId <= 0) {
+    logFontUploadWarn('install:FAIL bad family response', created);
     throw new Error((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Could not create font family.', 'onepress'));
   }
+  logFontUploadStep('install:8 family created', {
+    familyId
+  });
   const fileId = 'file-0-0';
   const faceFd = new FormData();
   faceFd.append(fileId, file, file.name);
@@ -6293,17 +6420,26 @@ async function installUploadedFontFile(file) {
     src: fileId
   }));
   try {
+    logFontUploadStep('install:9 POST font-faces', {
+      path: `${FONT_FAMILIES_PATH}/${familyId}/font-faces`
+    });
     await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2___default()({
       path: `${FONT_FAMILIES_PATH}/${familyId}/font-faces?_locale=user`,
       method: 'POST',
       body: faceFd
     });
+    logFontUploadStep('install:10 done (face uploaded)', {
+      familyId,
+      safeName
+    });
   } catch (err) {
+    logFontUploadWarn('install:FAIL font-faces POST', err);
     try {
       await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2___default()({
         path: `${FONT_FAMILIES_PATH}/${familyId}?force=true&_locale=user`,
         method: 'DELETE'
       });
+      logFontUploadStep('install:rollback family deleted', familyId);
     } catch {
       // best effort cleanup
     }
@@ -6686,12 +6822,24 @@ function ManageFontsModal({
   }, [removingFamilyId, reloadLibrarySnapshot, onFontLibraryRefresh]);
   const processUploadFiles = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(async incoming => {
     if (uploadRunRef.current) {
+      logFontUploadStep('queue: skip (already running)');
       return;
     }
     const files = Array.isArray(incoming) ? incoming : incoming ? Array.from(incoming) : [];
+    logFontUploadStep('queue:1 received', {
+      count: files.length,
+      names: files.map(f => f.name)
+    });
     const valid = files.filter(isAllowedFontFile);
+    logFontUploadStep('queue:2 after filter', {
+      validCount: valid.length,
+      validNames: valid.map(f => f.name)
+    });
     if (valid.length === 0) {
       if (files.length > 0) {
+        logFontUploadWarn('queue:FAIL no valid files', {
+          received: files.map(f => f.name)
+        });
         setUploadActionMessage((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No valid font files. Use .woff2, .woff, .ttf, or .otf.', 'onepress'));
       }
       return;
@@ -6703,21 +6851,37 @@ function ManageFontsModal({
     /** @type {{ name: string, msg: string }[]} */
     const fails = [];
     try {
-      for (const file of valid) {
+      for (let i = 0; i < valid.length; i += 1) {
+        const file = valid[i];
+        logFontUploadStep('queue:3 file start', {
+          index: i + 1,
+          of: valid.length,
+          name: file.name
+        });
         try {
           await installUploadedFontFile(file);
           ok += 1;
+          logFontUploadStep('queue:4 file OK', file.name);
         } catch (e) {
+          logFontUploadWarn('queue:FAIL file threw', {
+            name: file.name,
+            error: e
+          });
           fails.push({
             name: file.name,
             msg: restErrorMessage(e) || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Could not add font.', 'onepress')
           });
         }
       }
+      logFontUploadStep('queue:5 reload library snapshot');
       await reloadLibrarySnapshot();
       if (typeof onFontLibraryRefresh === 'function') {
         onFontLibraryRefresh();
       }
+      logFontUploadStep('queue:6 complete', {
+        ok,
+        failCount: fails.length
+      });
       if (fails.length === 0) {
         setUploadActionMessage((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.sprintf)(/* translators: %d: Number of fonts added. */
         (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__._n)('Added %d font to your library.', 'Added %d fonts to your library.', ok, 'onepress'), ok));
@@ -6736,6 +6900,7 @@ function ManageFontsModal({
     } finally {
       uploadRunRef.current = false;
       setUploadBusy(false);
+      logFontUploadStep('queue:7 UI unlocked (uploadBusy=false)');
     }
   }, [reloadLibrarySnapshot, onFontLibraryRefresh]);
   const instQ = installQuery.trim().toLowerCase();
@@ -6949,6 +7114,9 @@ function ManageFontsModal({
       e.stopPropagation();
       setUploadDragging(false);
       if (!uploadBusy && e.dataTransfer?.files) {
+        logFontUploadStep('ui: drop', {
+          count: e.dataTransfer.files.length
+        });
         processUploadFiles(e.dataTransfer.files);
       }
     },
@@ -6966,6 +7134,10 @@ function ManageFontsModal({
         files
       } = e.target;
       if (files?.length) {
+        logFontUploadStep('ui: input change', {
+          count: files.length,
+          names: Array.from(files).map(f => f.name)
+        });
         processUploadFiles(files);
       }
       e.target.value = '';
@@ -8646,6 +8818,8185 @@ function installWpEditor($) {
     });
   };
 }
+
+/***/ },
+
+/***/ "./src/admin/lib-font/inflate.js"
+/*!***************************************!*\
+  !*** ./src/admin/lib-font/inflate.js ***!
+  \***************************************/
+(module) {
+
+/* pako 1.0.10 nodeca/pako */(function (f) {
+  if (true) {
+    module.exports = f();
+  } else // removed by dead control flow
+{ var g; }
+})(function () {
+  var define, module, exports;
+  return function () {
+    function r(e, n, t) {
+      function o(i, f) {
+        if (!n[i]) {
+          if (!e[i]) {
+            var c = undefined;
+            if (!f && c) return require(i, !0);
+            if (u) return u(i, !0);
+            var a = new Error("Cannot find module '" + i + "'");
+            throw a.code = "MODULE_NOT_FOUND", a;
+          }
+          var p = n[i] = {
+            exports: {}
+          };
+          e[i][0].call(p.exports, function (r) {
+            var n = e[i][1][r];
+            return o(n || r);
+          }, p, p.exports, r, e, n, t);
+        }
+        return n[i].exports;
+      }
+      for (var u = undefined, i = 0; i < t.length; i++) o(t[i]);
+      return o;
+    }
+    return r;
+  }()({
+    1: [function (require, module, exports) {
+      'use strict';
+
+      var TYPED_OK = typeof Uint8Array !== 'undefined' && typeof Uint16Array !== 'undefined' && typeof Int32Array !== 'undefined';
+      function _has(obj, key) {
+        return Object.prototype.hasOwnProperty.call(obj, key);
+      }
+      exports.assign = function (obj /*from1, from2, from3, ...*/) {
+        var sources = Array.prototype.slice.call(arguments, 1);
+        while (sources.length) {
+          var source = sources.shift();
+          if (!source) {
+            continue;
+          }
+          if (typeof source !== 'object') {
+            throw new TypeError(source + 'must be non-object');
+          }
+          for (var p in source) {
+            if (_has(source, p)) {
+              obj[p] = source[p];
+            }
+          }
+        }
+        return obj;
+      };
+
+      // reduce buffer size, avoiding mem copy
+      exports.shrinkBuf = function (buf, size) {
+        if (buf.length === size) {
+          return buf;
+        }
+        if (buf.subarray) {
+          return buf.subarray(0, size);
+        }
+        buf.length = size;
+        return buf;
+      };
+      var fnTyped = {
+        arraySet: function (dest, src, src_offs, len, dest_offs) {
+          if (src.subarray && dest.subarray) {
+            dest.set(src.subarray(src_offs, src_offs + len), dest_offs);
+            return;
+          }
+          // Fallback to ordinary array
+          for (var i = 0; i < len; i++) {
+            dest[dest_offs + i] = src[src_offs + i];
+          }
+        },
+        // Join array of chunks to single array.
+        flattenChunks: function (chunks) {
+          var i, l, len, pos, chunk, result;
+
+          // calculate data length
+          len = 0;
+          for (i = 0, l = chunks.length; i < l; i++) {
+            len += chunks[i].length;
+          }
+
+          // join chunks
+          result = new Uint8Array(len);
+          pos = 0;
+          for (i = 0, l = chunks.length; i < l; i++) {
+            chunk = chunks[i];
+            result.set(chunk, pos);
+            pos += chunk.length;
+          }
+          return result;
+        }
+      };
+      var fnUntyped = {
+        arraySet: function (dest, src, src_offs, len, dest_offs) {
+          for (var i = 0; i < len; i++) {
+            dest[dest_offs + i] = src[src_offs + i];
+          }
+        },
+        // Join array of chunks to single array.
+        flattenChunks: function (chunks) {
+          return [].concat.apply([], chunks);
+        }
+      };
+
+      // Enable/Disable typed arrays use, for testing
+      //
+      exports.setTyped = function (on) {
+        if (on) {
+          exports.Buf8 = Uint8Array;
+          exports.Buf16 = Uint16Array;
+          exports.Buf32 = Int32Array;
+          exports.assign(exports, fnTyped);
+        } else {
+          exports.Buf8 = Array;
+          exports.Buf16 = Array;
+          exports.Buf32 = Array;
+          exports.assign(exports, fnUntyped);
+        }
+      };
+      exports.setTyped(TYPED_OK);
+    }, {}],
+    2: [function (require, module, exports) {
+      // String encode/decode helpers
+      'use strict';
+
+      var utils = require('./common');
+
+      // Quick check if we can use fast array to bin string conversion
+      //
+      // - apply(Array) can fail on Android 2.2
+      // - apply(Uint8Array) can fail on iOS 5.1 Safari
+      //
+      var STR_APPLY_OK = true;
+      var STR_APPLY_UIA_OK = true;
+      try {
+        String.fromCharCode.apply(null, [0]);
+      } catch (__) {
+        STR_APPLY_OK = false;
+      }
+      try {
+        String.fromCharCode.apply(null, new Uint8Array(1));
+      } catch (__) {
+        STR_APPLY_UIA_OK = false;
+      }
+
+      // Table with utf8 lengths (calculated by first byte of sequence)
+      // Note, that 5 & 6-byte values and some 4-byte values can not be represented in JS,
+      // because max possible codepoint is 0x10ffff
+      var _utf8len = new utils.Buf8(256);
+      for (var q = 0; q < 256; q++) {
+        _utf8len[q] = q >= 252 ? 6 : q >= 248 ? 5 : q >= 240 ? 4 : q >= 224 ? 3 : q >= 192 ? 2 : 1;
+      }
+      _utf8len[254] = _utf8len[254] = 1; // Invalid sequence start
+
+      // convert string to array (typed, when possible)
+      exports.string2buf = function (str) {
+        var buf,
+          c,
+          c2,
+          m_pos,
+          i,
+          str_len = str.length,
+          buf_len = 0;
+
+        // count binary size
+        for (m_pos = 0; m_pos < str_len; m_pos++) {
+          c = str.charCodeAt(m_pos);
+          if ((c & 0xfc00) === 0xd800 && m_pos + 1 < str_len) {
+            c2 = str.charCodeAt(m_pos + 1);
+            if ((c2 & 0xfc00) === 0xdc00) {
+              c = 0x10000 + (c - 0xd800 << 10) + (c2 - 0xdc00);
+              m_pos++;
+            }
+          }
+          buf_len += c < 0x80 ? 1 : c < 0x800 ? 2 : c < 0x10000 ? 3 : 4;
+        }
+
+        // allocate buffer
+        buf = new utils.Buf8(buf_len);
+
+        // convert
+        for (i = 0, m_pos = 0; i < buf_len; m_pos++) {
+          c = str.charCodeAt(m_pos);
+          if ((c & 0xfc00) === 0xd800 && m_pos + 1 < str_len) {
+            c2 = str.charCodeAt(m_pos + 1);
+            if ((c2 & 0xfc00) === 0xdc00) {
+              c = 0x10000 + (c - 0xd800 << 10) + (c2 - 0xdc00);
+              m_pos++;
+            }
+          }
+          if (c < 0x80) {
+            /* one byte */
+            buf[i++] = c;
+          } else if (c < 0x800) {
+            /* two bytes */
+            buf[i++] = 0xC0 | c >>> 6;
+            buf[i++] = 0x80 | c & 0x3f;
+          } else if (c < 0x10000) {
+            /* three bytes */
+            buf[i++] = 0xE0 | c >>> 12;
+            buf[i++] = 0x80 | c >>> 6 & 0x3f;
+            buf[i++] = 0x80 | c & 0x3f;
+          } else {
+            /* four bytes */
+            buf[i++] = 0xf0 | c >>> 18;
+            buf[i++] = 0x80 | c >>> 12 & 0x3f;
+            buf[i++] = 0x80 | c >>> 6 & 0x3f;
+            buf[i++] = 0x80 | c & 0x3f;
+          }
+        }
+        return buf;
+      };
+
+      // Helper (used in 2 places)
+      function buf2binstring(buf, len) {
+        // On Chrome, the arguments in a function call that are allowed is `65534`.
+        // If the length of the buffer is smaller than that, we can use this optimization,
+        // otherwise we will take a slower path.
+        if (len < 65534) {
+          if (buf.subarray && STR_APPLY_UIA_OK || !buf.subarray && STR_APPLY_OK) {
+            return String.fromCharCode.apply(null, utils.shrinkBuf(buf, len));
+          }
+        }
+        var result = '';
+        for (var i = 0; i < len; i++) {
+          result += String.fromCharCode(buf[i]);
+        }
+        return result;
+      }
+
+      // Convert byte array to binary string
+      exports.buf2binstring = function (buf) {
+        return buf2binstring(buf, buf.length);
+      };
+
+      // Convert binary string (typed, when possible)
+      exports.binstring2buf = function (str) {
+        var buf = new utils.Buf8(str.length);
+        for (var i = 0, len = buf.length; i < len; i++) {
+          buf[i] = str.charCodeAt(i);
+        }
+        return buf;
+      };
+
+      // convert array to string
+      exports.buf2string = function (buf, max) {
+        var i, out, c, c_len;
+        var len = max || buf.length;
+
+        // Reserve max possible length (2 words per char)
+        // NB: by unknown reasons, Array is significantly faster for
+        //     String.fromCharCode.apply than Uint16Array.
+        var utf16buf = new Array(len * 2);
+        for (out = 0, i = 0; i < len;) {
+          c = buf[i++];
+          // quick process ascii
+          if (c < 0x80) {
+            utf16buf[out++] = c;
+            continue;
+          }
+          c_len = _utf8len[c];
+          // skip 5 & 6 byte codes
+          if (c_len > 4) {
+            utf16buf[out++] = 0xfffd;
+            i += c_len - 1;
+            continue;
+          }
+
+          // apply mask on first byte
+          c &= c_len === 2 ? 0x1f : c_len === 3 ? 0x0f : 0x07;
+          // join the rest
+          while (c_len > 1 && i < len) {
+            c = c << 6 | buf[i++] & 0x3f;
+            c_len--;
+          }
+
+          // terminated by end of string?
+          if (c_len > 1) {
+            utf16buf[out++] = 0xfffd;
+            continue;
+          }
+          if (c < 0x10000) {
+            utf16buf[out++] = c;
+          } else {
+            c -= 0x10000;
+            utf16buf[out++] = 0xd800 | c >> 10 & 0x3ff;
+            utf16buf[out++] = 0xdc00 | c & 0x3ff;
+          }
+        }
+        return buf2binstring(utf16buf, out);
+      };
+
+      // Calculate max possible position in utf8 buffer,
+      // that will not break sequence. If that's not possible
+      // - (very small limits) return max size as is.
+      //
+      // buf[] - utf8 bytes array
+      // max   - length limit (mandatory);
+      exports.utf8border = function (buf, max) {
+        var pos;
+        max = max || buf.length;
+        if (max > buf.length) {
+          max = buf.length;
+        }
+
+        // go back from last position, until start of sequence found
+        pos = max - 1;
+        while (pos >= 0 && (buf[pos] & 0xC0) === 0x80) {
+          pos--;
+        }
+
+        // Very small and broken sequence,
+        // return max, because we should return something anyway.
+        if (pos < 0) {
+          return max;
+        }
+
+        // If we came to start of buffer - that means buffer is too small,
+        // return max too.
+        if (pos === 0) {
+          return max;
+        }
+        return pos + _utf8len[buf[pos]] > max ? pos : max;
+      };
+    }, {
+      "./common": 1
+    }],
+    3: [function (require, module, exports) {
+      'use strict';
+
+      // Note: adler32 takes 12% for level 0 and 2% for level 6.
+      // It isn't worth it to make additional optimizations as in original.
+      // Small size is preferable.
+
+      // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+      // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+      //
+      // This software is provided 'as-is', without any express or implied
+      // warranty. In no event will the authors be held liable for any damages
+      // arising from the use of this software.
+      //
+      // Permission is granted to anyone to use this software for any purpose,
+      // including commercial applications, and to alter it and redistribute it
+      // freely, subject to the following restrictions:
+      //
+      // 1. The origin of this software must not be misrepresented; you must not
+      //   claim that you wrote the original software. If you use this software
+      //   in a product, an acknowledgment in the product documentation would be
+      //   appreciated but is not required.
+      // 2. Altered source versions must be plainly marked as such, and must not be
+      //   misrepresented as being the original software.
+      // 3. This notice may not be removed or altered from any source distribution.
+      function adler32(adler, buf, len, pos) {
+        var s1 = adler & 0xffff | 0,
+          s2 = adler >>> 16 & 0xffff | 0,
+          n = 0;
+        while (len !== 0) {
+          // Set limit ~ twice less than 5552, to keep
+          // s2 in 31-bits, because we force signed ints.
+          // in other case %= will fail.
+          n = len > 2000 ? 2000 : len;
+          len -= n;
+          do {
+            s1 = s1 + buf[pos++] | 0;
+            s2 = s2 + s1 | 0;
+          } while (--n);
+          s1 %= 65521;
+          s2 %= 65521;
+        }
+        return s1 | s2 << 16 | 0;
+      }
+      module.exports = adler32;
+    }, {}],
+    4: [function (require, module, exports) {
+      'use strict';
+
+      // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+      // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+      //
+      // This software is provided 'as-is', without any express or implied
+      // warranty. In no event will the authors be held liable for any damages
+      // arising from the use of this software.
+      //
+      // Permission is granted to anyone to use this software for any purpose,
+      // including commercial applications, and to alter it and redistribute it
+      // freely, subject to the following restrictions:
+      //
+      // 1. The origin of this software must not be misrepresented; you must not
+      //   claim that you wrote the original software. If you use this software
+      //   in a product, an acknowledgment in the product documentation would be
+      //   appreciated but is not required.
+      // 2. Altered source versions must be plainly marked as such, and must not be
+      //   misrepresented as being the original software.
+      // 3. This notice may not be removed or altered from any source distribution.
+      module.exports = {
+        /* Allowed flush values; see deflate() and inflate() below for details */
+        Z_NO_FLUSH: 0,
+        Z_PARTIAL_FLUSH: 1,
+        Z_SYNC_FLUSH: 2,
+        Z_FULL_FLUSH: 3,
+        Z_FINISH: 4,
+        Z_BLOCK: 5,
+        Z_TREES: 6,
+        /* Return codes for the compression/decompression functions. Negative values
+        * are errors, positive values are used for special but normal events.
+        */
+        Z_OK: 0,
+        Z_STREAM_END: 1,
+        Z_NEED_DICT: 2,
+        Z_ERRNO: -1,
+        Z_STREAM_ERROR: -2,
+        Z_DATA_ERROR: -3,
+        //Z_MEM_ERROR:     -4,
+        Z_BUF_ERROR: -5,
+        //Z_VERSION_ERROR: -6,
+
+        /* compression levels */
+        Z_NO_COMPRESSION: 0,
+        Z_BEST_SPEED: 1,
+        Z_BEST_COMPRESSION: 9,
+        Z_DEFAULT_COMPRESSION: -1,
+        Z_FILTERED: 1,
+        Z_HUFFMAN_ONLY: 2,
+        Z_RLE: 3,
+        Z_FIXED: 4,
+        Z_DEFAULT_STRATEGY: 0,
+        /* Possible values of the data_type field (though see inflate()) */
+        Z_BINARY: 0,
+        Z_TEXT: 1,
+        //Z_ASCII:                1, // = Z_TEXT (deprecated)
+        Z_UNKNOWN: 2,
+        /* The deflate compression method */
+        Z_DEFLATED: 8
+        //Z_NULL:                 null // Use -1 or null inline, depending on var type
+      };
+    }, {}],
+    5: [function (require, module, exports) {
+      'use strict';
+
+      // Note: we can't get significant speed boost here.
+      // So write code to minimize size - no pregenerated tables
+      // and array tools dependencies.
+
+      // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+      // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+      //
+      // This software is provided 'as-is', without any express or implied
+      // warranty. In no event will the authors be held liable for any damages
+      // arising from the use of this software.
+      //
+      // Permission is granted to anyone to use this software for any purpose,
+      // including commercial applications, and to alter it and redistribute it
+      // freely, subject to the following restrictions:
+      //
+      // 1. The origin of this software must not be misrepresented; you must not
+      //   claim that you wrote the original software. If you use this software
+      //   in a product, an acknowledgment in the product documentation would be
+      //   appreciated but is not required.
+      // 2. Altered source versions must be plainly marked as such, and must not be
+      //   misrepresented as being the original software.
+      // 3. This notice may not be removed or altered from any source distribution.
+
+      // Use ordinary array, since untyped makes no boost here
+      function makeTable() {
+        var c,
+          table = [];
+        for (var n = 0; n < 256; n++) {
+          c = n;
+          for (var k = 0; k < 8; k++) {
+            c = c & 1 ? 0xEDB88320 ^ c >>> 1 : c >>> 1;
+          }
+          table[n] = c;
+        }
+        return table;
+      }
+
+      // Create table on load. Just 255 signed longs. Not a problem.
+      var crcTable = makeTable();
+      function crc32(crc, buf, len, pos) {
+        var t = crcTable,
+          end = pos + len;
+        crc ^= -1;
+        for (var i = pos; i < end; i++) {
+          crc = crc >>> 8 ^ t[(crc ^ buf[i]) & 0xFF];
+        }
+        return crc ^ -1; // >>> 0;
+      }
+      module.exports = crc32;
+    }, {}],
+    6: [function (require, module, exports) {
+      'use strict';
+
+      // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+      // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+      //
+      // This software is provided 'as-is', without any express or implied
+      // warranty. In no event will the authors be held liable for any damages
+      // arising from the use of this software.
+      //
+      // Permission is granted to anyone to use this software for any purpose,
+      // including commercial applications, and to alter it and redistribute it
+      // freely, subject to the following restrictions:
+      //
+      // 1. The origin of this software must not be misrepresented; you must not
+      //   claim that you wrote the original software. If you use this software
+      //   in a product, an acknowledgment in the product documentation would be
+      //   appreciated but is not required.
+      // 2. Altered source versions must be plainly marked as such, and must not be
+      //   misrepresented as being the original software.
+      // 3. This notice may not be removed or altered from any source distribution.
+      function GZheader() {
+        /* true if compressed data believed to be text */
+        this.text = 0;
+        /* modification time */
+        this.time = 0;
+        /* extra flags (not used when writing a gzip file) */
+        this.xflags = 0;
+        /* operating system */
+        this.os = 0;
+        /* pointer to extra field or Z_NULL if none */
+        this.extra = null;
+        /* extra field length (valid if extra != Z_NULL) */
+        this.extra_len = 0; // Actually, we don't need it in JS,
+        // but leave for few code modifications
+
+        //
+        // Setup limits is not necessary because in js we should not preallocate memory
+        // for inflate use constant limit in 65536 bytes
+        //
+
+        /* space at extra (only when reading header) */
+        // this.extra_max  = 0;
+        /* pointer to zero-terminated file name or Z_NULL */
+        this.name = '';
+        /* space at name (only when reading header) */
+        // this.name_max   = 0;
+        /* pointer to zero-terminated comment or Z_NULL */
+        this.comment = '';
+        /* space at comment (only when reading header) */
+        // this.comm_max   = 0;
+        /* true if there was or will be a header crc */
+        this.hcrc = 0;
+        /* true when done reading gzip header (not used when writing a gzip file) */
+        this.done = false;
+      }
+      module.exports = GZheader;
+    }, {}],
+    7: [function (require, module, exports) {
+      'use strict';
+
+      // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+      // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+      //
+      // This software is provided 'as-is', without any express or implied
+      // warranty. In no event will the authors be held liable for any damages
+      // arising from the use of this software.
+      //
+      // Permission is granted to anyone to use this software for any purpose,
+      // including commercial applications, and to alter it and redistribute it
+      // freely, subject to the following restrictions:
+      //
+      // 1. The origin of this software must not be misrepresented; you must not
+      //   claim that you wrote the original software. If you use this software
+      //   in a product, an acknowledgment in the product documentation would be
+      //   appreciated but is not required.
+      // 2. Altered source versions must be plainly marked as such, and must not be
+      //   misrepresented as being the original software.
+      // 3. This notice may not be removed or altered from any source distribution.
+
+      // See state defs from inflate.js
+      var BAD = 30; /* got a data error -- remain here until reset */
+      var TYPE = 12; /* i: waiting for type bits, including last-flag bit */
+
+      /*
+         Decode literal, length, and distance codes and write out the resulting
+         literal and match bytes until either not enough input or output is
+         available, an end-of-block is encountered, or a data error is encountered.
+         When large enough input and output buffers are supplied to inflate(), for
+         example, a 16K input buffer and a 64K output buffer, more than 95% of the
+         inflate execution time is spent in this routine.
+          Entry assumptions:
+               state.mode === LEN
+              strm.avail_in >= 6
+              strm.avail_out >= 258
+              start >= strm.avail_out
+              state.bits < 8
+          On return, state.mode is one of:
+               LEN -- ran out of enough output space or enough available input
+              TYPE -- reached end of block code, inflate() to interpret next block
+              BAD -- error in block data
+          Notes:
+           - The maximum input bits used by a length/distance pair is 15 bits for the
+            length code, 5 bits for the length extra, 15 bits for the distance code,
+            and 13 bits for the distance extra.  This totals 48 bits, or six bytes.
+            Therefore if strm.avail_in >= 6, then there is enough input to avoid
+            checking for available input while decoding.
+           - The maximum bytes that a single length/distance pair can output is 258
+            bytes, which is the maximum length that can be coded.  inflate_fast()
+            requires strm.avail_out >= 258 for each loop to avoid checking for
+            output space.
+       */
+      module.exports = function inflate_fast(strm, start) {
+        var state;
+        var _in; /* local strm.input */
+        var last; /* have enough input while in < last */
+        var _out; /* local strm.output */
+        var beg; /* inflate()'s initial strm.output */
+        var end; /* while out < end, enough space available */
+        //#ifdef INFLATE_STRICT
+        var dmax; /* maximum distance from zlib header */
+        //#endif
+        var wsize; /* window size or zero if not using window */
+        var whave; /* valid bytes in the window */
+        var wnext; /* window write index */
+        // Use `s_window` instead `window`, avoid conflict with instrumentation tools
+        var s_window; /* allocated sliding window, if wsize != 0 */
+        var hold; /* local strm.hold */
+        var bits; /* local strm.bits */
+        var lcode; /* local strm.lencode */
+        var dcode; /* local strm.distcode */
+        var lmask; /* mask for first level of length codes */
+        var dmask; /* mask for first level of distance codes */
+        var here; /* retrieved table entry */
+        var op; /* code bits, operation, extra bits, or */
+        /*  window position, window bytes to copy */
+        var len; /* match length, unused bytes */
+        var dist; /* match distance */
+        var from; /* where to copy match from */
+        var from_source;
+        var input, output; // JS specific, because we have no pointers
+
+        /* copy state to local variables */
+        state = strm.state;
+        //here = state.here;
+        _in = strm.next_in;
+        input = strm.input;
+        last = _in + (strm.avail_in - 5);
+        _out = strm.next_out;
+        output = strm.output;
+        beg = _out - (start - strm.avail_out);
+        end = _out + (strm.avail_out - 257);
+        //#ifdef INFLATE_STRICT
+        dmax = state.dmax;
+        //#endif
+        wsize = state.wsize;
+        whave = state.whave;
+        wnext = state.wnext;
+        s_window = state.window;
+        hold = state.hold;
+        bits = state.bits;
+        lcode = state.lencode;
+        dcode = state.distcode;
+        lmask = (1 << state.lenbits) - 1;
+        dmask = (1 << state.distbits) - 1;
+
+        /* decode literals and length/distances until end-of-block or not enough
+           input data or output space */
+
+        top: do {
+          if (bits < 15) {
+            hold += input[_in++] << bits;
+            bits += 8;
+            hold += input[_in++] << bits;
+            bits += 8;
+          }
+          here = lcode[hold & lmask];
+          dolen: for (;;) {
+            // Goto emulation
+            op = here >>> 24 /*here.bits*/;
+            hold >>>= op;
+            bits -= op;
+            op = here >>> 16 & 0xff /*here.op*/;
+            if (op === 0) {
+              /* literal */
+              //Tracevv((stderr, here.val >= 0x20 && here.val < 0x7f ?
+              //        "inflate:         literal '%c'\n" :
+              //        "inflate:         literal 0x%02x\n", here.val));
+              output[_out++] = here & 0xffff /*here.val*/;
+            } else if (op & 16) {
+              /* length base */
+              len = here & 0xffff /*here.val*/;
+              op &= 15; /* number of extra bits */
+              if (op) {
+                if (bits < op) {
+                  hold += input[_in++] << bits;
+                  bits += 8;
+                }
+                len += hold & (1 << op) - 1;
+                hold >>>= op;
+                bits -= op;
+              }
+              //Tracevv((stderr, "inflate:         length %u\n", len));
+              if (bits < 15) {
+                hold += input[_in++] << bits;
+                bits += 8;
+                hold += input[_in++] << bits;
+                bits += 8;
+              }
+              here = dcode[hold & dmask];
+              dodist: for (;;) {
+                // goto emulation
+                op = here >>> 24 /*here.bits*/;
+                hold >>>= op;
+                bits -= op;
+                op = here >>> 16 & 0xff /*here.op*/;
+                if (op & 16) {
+                  /* distance base */
+                  dist = here & 0xffff /*here.val*/;
+                  op &= 15; /* number of extra bits */
+                  if (bits < op) {
+                    hold += input[_in++] << bits;
+                    bits += 8;
+                    if (bits < op) {
+                      hold += input[_in++] << bits;
+                      bits += 8;
+                    }
+                  }
+                  dist += hold & (1 << op) - 1;
+                  //#ifdef INFLATE_STRICT
+                  if (dist > dmax) {
+                    strm.msg = 'invalid distance too far back';
+                    state.mode = BAD;
+                    break top;
+                  }
+                  //#endif
+                  hold >>>= op;
+                  bits -= op;
+                  //Tracevv((stderr, "inflate:         distance %u\n", dist));
+                  op = _out - beg; /* max distance in output */
+                  if (dist > op) {
+                    /* see if copy from window */
+                    op = dist - op; /* distance back in window */
+                    if (op > whave) {
+                      if (state.sane) {
+                        strm.msg = 'invalid distance too far back';
+                        state.mode = BAD;
+                        break top;
+                      }
+
+                      // (!) This block is disabled in zlib defaults,
+                      // don't enable it for binary compatibility
+                      //#ifdef INFLATE_ALLOW_INVALID_DISTANCE_TOOFAR_ARRR
+                      //                if (len <= op - whave) {
+                      //                  do {
+                      //                    output[_out++] = 0;
+                      //                  } while (--len);
+                      //                  continue top;
+                      //                }
+                      //                len -= op - whave;
+                      //                do {
+                      //                  output[_out++] = 0;
+                      //                } while (--op > whave);
+                      //                if (op === 0) {
+                      //                  from = _out - dist;
+                      //                  do {
+                      //                    output[_out++] = output[from++];
+                      //                  } while (--len);
+                      //                  continue top;
+                      //                }
+                      //#endif
+                    }
+                    from = 0; // window index
+                    from_source = s_window;
+                    if (wnext === 0) {
+                      /* very common case */
+                      from += wsize - op;
+                      if (op < len) {
+                        /* some from window */
+                        len -= op;
+                        do {
+                          output[_out++] = s_window[from++];
+                        } while (--op);
+                        from = _out - dist; /* rest from output */
+                        from_source = output;
+                      }
+                    } else if (wnext < op) {
+                      /* wrap around window */
+                      from += wsize + wnext - op;
+                      op -= wnext;
+                      if (op < len) {
+                        /* some from end of window */
+                        len -= op;
+                        do {
+                          output[_out++] = s_window[from++];
+                        } while (--op);
+                        from = 0;
+                        if (wnext < len) {
+                          /* some from start of window */
+                          op = wnext;
+                          len -= op;
+                          do {
+                            output[_out++] = s_window[from++];
+                          } while (--op);
+                          from = _out - dist; /* rest from output */
+                          from_source = output;
+                        }
+                      }
+                    } else {
+                      /* contiguous in window */
+                      from += wnext - op;
+                      if (op < len) {
+                        /* some from window */
+                        len -= op;
+                        do {
+                          output[_out++] = s_window[from++];
+                        } while (--op);
+                        from = _out - dist; /* rest from output */
+                        from_source = output;
+                      }
+                    }
+                    while (len > 2) {
+                      output[_out++] = from_source[from++];
+                      output[_out++] = from_source[from++];
+                      output[_out++] = from_source[from++];
+                      len -= 3;
+                    }
+                    if (len) {
+                      output[_out++] = from_source[from++];
+                      if (len > 1) {
+                        output[_out++] = from_source[from++];
+                      }
+                    }
+                  } else {
+                    from = _out - dist; /* copy direct from output */
+                    do {
+                      /* minimum length is three */
+                      output[_out++] = output[from++];
+                      output[_out++] = output[from++];
+                      output[_out++] = output[from++];
+                      len -= 3;
+                    } while (len > 2);
+                    if (len) {
+                      output[_out++] = output[from++];
+                      if (len > 1) {
+                        output[_out++] = output[from++];
+                      }
+                    }
+                  }
+                } else if ((op & 64) === 0) {
+                  /* 2nd level distance code */
+                  here = dcode[(here & 0xffff /*here.val*/) + (hold & (1 << op) - 1)];
+                  continue dodist;
+                } else {
+                  strm.msg = 'invalid distance code';
+                  state.mode = BAD;
+                  break top;
+                }
+                break; // need to emulate goto via "continue"
+              }
+            } else if ((op & 64) === 0) {
+              /* 2nd level length code */
+              here = lcode[(here & 0xffff /*here.val*/) + (hold & (1 << op) - 1)];
+              continue dolen;
+            } else if (op & 32) {
+              /* end-of-block */
+              //Tracevv((stderr, "inflate:         end of block\n"));
+              state.mode = TYPE;
+              break top;
+            } else {
+              strm.msg = 'invalid literal/length code';
+              state.mode = BAD;
+              break top;
+            }
+            break; // need to emulate goto via "continue"
+          }
+        } while (_in < last && _out < end);
+
+        /* return unused bytes (on entry, bits < 8, so in won't go too far back) */
+        len = bits >> 3;
+        _in -= len;
+        bits -= len << 3;
+        hold &= (1 << bits) - 1;
+
+        /* update state and return */
+        strm.next_in = _in;
+        strm.next_out = _out;
+        strm.avail_in = _in < last ? 5 + (last - _in) : 5 - (_in - last);
+        strm.avail_out = _out < end ? 257 + (end - _out) : 257 - (_out - end);
+        state.hold = hold;
+        state.bits = bits;
+        return;
+      };
+    }, {}],
+    8: [function (require, module, exports) {
+      'use strict';
+
+      // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+      // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+      //
+      // This software is provided 'as-is', without any express or implied
+      // warranty. In no event will the authors be held liable for any damages
+      // arising from the use of this software.
+      //
+      // Permission is granted to anyone to use this software for any purpose,
+      // including commercial applications, and to alter it and redistribute it
+      // freely, subject to the following restrictions:
+      //
+      // 1. The origin of this software must not be misrepresented; you must not
+      //   claim that you wrote the original software. If you use this software
+      //   in a product, an acknowledgment in the product documentation would be
+      //   appreciated but is not required.
+      // 2. Altered source versions must be plainly marked as such, and must not be
+      //   misrepresented as being the original software.
+      // 3. This notice may not be removed or altered from any source distribution.
+      var utils = require('../utils/common');
+      var adler32 = require('./adler32');
+      var crc32 = require('./crc32');
+      var inflate_fast = require('./inffast');
+      var inflate_table = require('./inftrees');
+      var CODES = 0;
+      var LENS = 1;
+      var DISTS = 2;
+
+      /* Public constants ==========================================================*/
+      /* ===========================================================================*/
+
+      /* Allowed flush values; see deflate() and inflate() below for details */
+      //var Z_NO_FLUSH      = 0;
+      //var Z_PARTIAL_FLUSH = 1;
+      //var Z_SYNC_FLUSH    = 2;
+      //var Z_FULL_FLUSH    = 3;
+      var Z_FINISH = 4;
+      var Z_BLOCK = 5;
+      var Z_TREES = 6;
+
+      /* Return codes for the compression/decompression functions. Negative values
+       * are errors, positive values are used for special but normal events.
+       */
+      var Z_OK = 0;
+      var Z_STREAM_END = 1;
+      var Z_NEED_DICT = 2;
+      //var Z_ERRNO         = -1;
+      var Z_STREAM_ERROR = -2;
+      var Z_DATA_ERROR = -3;
+      var Z_MEM_ERROR = -4;
+      var Z_BUF_ERROR = -5;
+      //var Z_VERSION_ERROR = -6;
+
+      /* The deflate compression method */
+      var Z_DEFLATED = 8;
+
+      /* STATES ====================================================================*/
+      /* ===========================================================================*/
+
+      var HEAD = 1; /* i: waiting for magic header */
+      var FLAGS = 2; /* i: waiting for method and flags (gzip) */
+      var TIME = 3; /* i: waiting for modification time (gzip) */
+      var OS = 4; /* i: waiting for extra flags and operating system (gzip) */
+      var EXLEN = 5; /* i: waiting for extra length (gzip) */
+      var EXTRA = 6; /* i: waiting for extra bytes (gzip) */
+      var NAME = 7; /* i: waiting for end of file name (gzip) */
+      var COMMENT = 8; /* i: waiting for end of comment (gzip) */
+      var HCRC = 9; /* i: waiting for header crc (gzip) */
+      var DICTID = 10; /* i: waiting for dictionary check value */
+      var DICT = 11; /* waiting for inflateSetDictionary() call */
+      var TYPE = 12; /* i: waiting for type bits, including last-flag bit */
+      var TYPEDO = 13; /* i: same, but skip check to exit inflate on new block */
+      var STORED = 14; /* i: waiting for stored size (length and complement) */
+      var COPY_ = 15; /* i/o: same as COPY below, but only first time in */
+      var COPY = 16; /* i/o: waiting for input or output to copy stored block */
+      var TABLE = 17; /* i: waiting for dynamic block table lengths */
+      var LENLENS = 18; /* i: waiting for code length code lengths */
+      var CODELENS = 19; /* i: waiting for length/lit and distance code lengths */
+      var LEN_ = 20; /* i: same as LEN below, but only first time in */
+      var LEN = 21; /* i: waiting for length/lit/eob code */
+      var LENEXT = 22; /* i: waiting for length extra bits */
+      var DIST = 23; /* i: waiting for distance code */
+      var DISTEXT = 24; /* i: waiting for distance extra bits */
+      var MATCH = 25; /* o: waiting for output space to copy string */
+      var LIT = 26; /* o: waiting for output space to write literal */
+      var CHECK = 27; /* i: waiting for 32-bit check value */
+      var LENGTH = 28; /* i: waiting for 32-bit length (gzip) */
+      var DONE = 29; /* finished check, done -- remain here until reset */
+      var BAD = 30; /* got a data error -- remain here until reset */
+      var MEM = 31; /* got an inflate() memory error -- remain here until reset */
+      var SYNC = 32; /* looking for synchronization bytes to restart inflate() */
+
+      /* ===========================================================================*/
+
+      var ENOUGH_LENS = 852;
+      var ENOUGH_DISTS = 592;
+      //var ENOUGH =  (ENOUGH_LENS+ENOUGH_DISTS);
+
+      var MAX_WBITS = 15;
+      /* 32K LZ77 window */
+      var DEF_WBITS = MAX_WBITS;
+      function zswap32(q) {
+        return (q >>> 24 & 0xff) + (q >>> 8 & 0xff00) + ((q & 0xff00) << 8) + ((q & 0xff) << 24);
+      }
+      function InflateState() {
+        this.mode = 0; /* current inflate mode */
+        this.last = false; /* true if processing last block */
+        this.wrap = 0; /* bit 0 true for zlib, bit 1 true for gzip */
+        this.havedict = false; /* true if dictionary provided */
+        this.flags = 0; /* gzip header method and flags (0 if zlib) */
+        this.dmax = 0; /* zlib header max distance (INFLATE_STRICT) */
+        this.check = 0; /* protected copy of check value */
+        this.total = 0; /* protected copy of output count */
+        // TODO: may be {}
+        this.head = null; /* where to save gzip header information */
+
+        /* sliding window */
+        this.wbits = 0; /* log base 2 of requested window size */
+        this.wsize = 0; /* window size or zero if not using window */
+        this.whave = 0; /* valid bytes in the window */
+        this.wnext = 0; /* window write index */
+        this.window = null; /* allocated sliding window, if needed */
+
+        /* bit accumulator */
+        this.hold = 0; /* input bit accumulator */
+        this.bits = 0; /* number of bits in "in" */
+
+        /* for string and stored block copying */
+        this.length = 0; /* literal or length of data to copy */
+        this.offset = 0; /* distance back to copy string from */
+
+        /* for table and code decoding */
+        this.extra = 0; /* extra bits needed */
+
+        /* fixed and dynamic code tables */
+        this.lencode = null; /* starting table for length/literal codes */
+        this.distcode = null; /* starting table for distance codes */
+        this.lenbits = 0; /* index bits for lencode */
+        this.distbits = 0; /* index bits for distcode */
+
+        /* dynamic table building */
+        this.ncode = 0; /* number of code length code lengths */
+        this.nlen = 0; /* number of length code lengths */
+        this.ndist = 0; /* number of distance code lengths */
+        this.have = 0; /* number of code lengths in lens[] */
+        this.next = null; /* next available space in codes[] */
+
+        this.lens = new utils.Buf16(320); /* temporary storage for code lengths */
+        this.work = new utils.Buf16(288); /* work area for code table building */
+
+        /*
+         because we don't have pointers in js, we use lencode and distcode directly
+         as buffers so we don't need codes
+        */
+        //this.codes = new utils.Buf32(ENOUGH);       /* space for code tables */
+        this.lendyn = null; /* dynamic table for length/literal codes (JS specific) */
+        this.distdyn = null; /* dynamic table for distance codes (JS specific) */
+        this.sane = 0; /* if false, allow invalid distance too far */
+        this.back = 0; /* bits back of last unprocessed length/lit */
+        this.was = 0; /* initial length of match */
+      }
+      function inflateResetKeep(strm) {
+        var state;
+        if (!strm || !strm.state) {
+          return Z_STREAM_ERROR;
+        }
+        state = strm.state;
+        strm.total_in = strm.total_out = state.total = 0;
+        strm.msg = ''; /*Z_NULL*/
+        if (state.wrap) {
+          /* to support ill-conceived Java test suite */
+          strm.adler = state.wrap & 1;
+        }
+        state.mode = HEAD;
+        state.last = 0;
+        state.havedict = 0;
+        state.dmax = 32768;
+        state.head = null /*Z_NULL*/;
+        state.hold = 0;
+        state.bits = 0;
+        //state.lencode = state.distcode = state.next = state.codes;
+        state.lencode = state.lendyn = new utils.Buf32(ENOUGH_LENS);
+        state.distcode = state.distdyn = new utils.Buf32(ENOUGH_DISTS);
+        state.sane = 1;
+        state.back = -1;
+        //Tracev((stderr, "inflate: reset\n"));
+        return Z_OK;
+      }
+      function inflateReset(strm) {
+        var state;
+        if (!strm || !strm.state) {
+          return Z_STREAM_ERROR;
+        }
+        state = strm.state;
+        state.wsize = 0;
+        state.whave = 0;
+        state.wnext = 0;
+        return inflateResetKeep(strm);
+      }
+      function inflateReset2(strm, windowBits) {
+        var wrap;
+        var state;
+
+        /* get the state */
+        if (!strm || !strm.state) {
+          return Z_STREAM_ERROR;
+        }
+        state = strm.state;
+
+        /* extract wrap request from windowBits parameter */
+        if (windowBits < 0) {
+          wrap = 0;
+          windowBits = -windowBits;
+        } else {
+          wrap = (windowBits >> 4) + 1;
+          if (windowBits < 48) {
+            windowBits &= 15;
+          }
+        }
+
+        /* set number of window bits, free window if different */
+        if (windowBits && (windowBits < 8 || windowBits > 15)) {
+          return Z_STREAM_ERROR;
+        }
+        if (state.window !== null && state.wbits !== windowBits) {
+          state.window = null;
+        }
+
+        /* update state and reset the rest of it */
+        state.wrap = wrap;
+        state.wbits = windowBits;
+        return inflateReset(strm);
+      }
+      function inflateInit2(strm, windowBits) {
+        var ret;
+        var state;
+        if (!strm) {
+          return Z_STREAM_ERROR;
+        }
+        //strm.msg = Z_NULL;                 /* in case we return an error */
+
+        state = new InflateState();
+
+        //if (state === Z_NULL) return Z_MEM_ERROR;
+        //Tracev((stderr, "inflate: allocated\n"));
+        strm.state = state;
+        state.window = null /*Z_NULL*/;
+        ret = inflateReset2(strm, windowBits);
+        if (ret !== Z_OK) {
+          strm.state = null /*Z_NULL*/;
+        }
+        return ret;
+      }
+      function inflateInit(strm) {
+        return inflateInit2(strm, DEF_WBITS);
+      }
+
+      /*
+       Return state with length and distance decoding tables and index sizes set to
+       fixed code decoding.  Normally this returns fixed tables from inffixed.h.
+       If BUILDFIXED is defined, then instead this routine builds the tables the
+       first time it's called, and returns those tables the first time and
+       thereafter.  This reduces the size of the code by about 2K bytes, in
+       exchange for a little execution time.  However, BUILDFIXED should not be
+       used for threaded applications, since the rewriting of the tables and virgin
+       may not be thread-safe.
+       */
+      var virgin = true;
+      var lenfix, distfix; // We have no pointers in JS, so keep tables separate
+
+      function fixedtables(state) {
+        /* build fixed huffman tables if first call (may not be thread safe) */
+        if (virgin) {
+          var sym;
+          lenfix = new utils.Buf32(512);
+          distfix = new utils.Buf32(32);
+
+          /* literal/length table */
+          sym = 0;
+          while (sym < 144) {
+            state.lens[sym++] = 8;
+          }
+          while (sym < 256) {
+            state.lens[sym++] = 9;
+          }
+          while (sym < 280) {
+            state.lens[sym++] = 7;
+          }
+          while (sym < 288) {
+            state.lens[sym++] = 8;
+          }
+          inflate_table(LENS, state.lens, 0, 288, lenfix, 0, state.work, {
+            bits: 9
+          });
+
+          /* distance table */
+          sym = 0;
+          while (sym < 32) {
+            state.lens[sym++] = 5;
+          }
+          inflate_table(DISTS, state.lens, 0, 32, distfix, 0, state.work, {
+            bits: 5
+          });
+
+          /* do this just once */
+          virgin = false;
+        }
+        state.lencode = lenfix;
+        state.lenbits = 9;
+        state.distcode = distfix;
+        state.distbits = 5;
+      }
+
+      /*
+       Update the window with the last wsize (normally 32K) bytes written before
+       returning.  If window does not exist yet, create it.  This is only called
+       when a window is already in use, or when output has been written during this
+       inflate call, but the end of the deflate stream has not been reached yet.
+       It is also called to create a window for dictionary data when a dictionary
+       is loaded.
+        Providing output buffers larger than 32K to inflate() should provide a speed
+       advantage, since only the last 32K of output is copied to the sliding window
+       upon return from inflate(), and since all distances after the first 32K of
+       output will fall in the output data, making match copies simpler and faster.
+       The advantage may be dependent on the size of the processor's data caches.
+       */
+      function updatewindow(strm, src, end, copy) {
+        var dist;
+        var state = strm.state;
+
+        /* if it hasn't been done already, allocate space for the window */
+        if (state.window === null) {
+          state.wsize = 1 << state.wbits;
+          state.wnext = 0;
+          state.whave = 0;
+          state.window = new utils.Buf8(state.wsize);
+        }
+
+        /* copy state->wsize or less output bytes into the circular window */
+        if (copy >= state.wsize) {
+          utils.arraySet(state.window, src, end - state.wsize, state.wsize, 0);
+          state.wnext = 0;
+          state.whave = state.wsize;
+        } else {
+          dist = state.wsize - state.wnext;
+          if (dist > copy) {
+            dist = copy;
+          }
+          //zmemcpy(state->window + state->wnext, end - copy, dist);
+          utils.arraySet(state.window, src, end - copy, dist, state.wnext);
+          copy -= dist;
+          if (copy) {
+            //zmemcpy(state->window, end - copy, copy);
+            utils.arraySet(state.window, src, end - copy, copy, 0);
+            state.wnext = copy;
+            state.whave = state.wsize;
+          } else {
+            state.wnext += dist;
+            if (state.wnext === state.wsize) {
+              state.wnext = 0;
+            }
+            if (state.whave < state.wsize) {
+              state.whave += dist;
+            }
+          }
+        }
+        return 0;
+      }
+      function inflate(strm, flush) {
+        var state;
+        var input, output; // input/output buffers
+        var next; /* next input INDEX */
+        var put; /* next output INDEX */
+        var have, left; /* available input and output */
+        var hold; /* bit buffer */
+        var bits; /* bits in bit buffer */
+        var _in, _out; /* save starting available input and output */
+        var copy; /* number of stored or match bytes to copy */
+        var from; /* where to copy match bytes from */
+        var from_source;
+        var here = 0; /* current decoding table entry */
+        var here_bits, here_op, here_val; // paked "here" denormalized (JS specific)
+        //var last;                   /* parent table entry */
+        var last_bits, last_op, last_val; // paked "last" denormalized (JS specific)
+        var len; /* length to copy for repeats, bits to drop */
+        var ret; /* return code */
+        var hbuf = new utils.Buf8(4); /* buffer for gzip header crc calculation */
+        var opts;
+        var n; // temporary var for NEED_BITS
+
+        var order = /* permutation of code lengths */
+        [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+        if (!strm || !strm.state || !strm.output || !strm.input && strm.avail_in !== 0) {
+          return Z_STREAM_ERROR;
+        }
+        state = strm.state;
+        if (state.mode === TYPE) {
+          state.mode = TYPEDO;
+        } /* skip check */
+
+        //--- LOAD() ---
+        put = strm.next_out;
+        output = strm.output;
+        left = strm.avail_out;
+        next = strm.next_in;
+        input = strm.input;
+        have = strm.avail_in;
+        hold = state.hold;
+        bits = state.bits;
+        //---
+
+        _in = have;
+        _out = left;
+        ret = Z_OK;
+        inf_leave:
+        // goto emulation
+        for (;;) {
+          switch (state.mode) {
+            case HEAD:
+              if (state.wrap === 0) {
+                state.mode = TYPEDO;
+                break;
+              }
+              //=== NEEDBITS(16);
+              while (bits < 16) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+              }
+              //===//
+              if (state.wrap & 2 && hold === 0x8b1f) {
+                /* gzip header */
+                state.check = 0 /*crc32(0L, Z_NULL, 0)*/;
+                //=== CRC2(state.check, hold);
+                hbuf[0] = hold & 0xff;
+                hbuf[1] = hold >>> 8 & 0xff;
+                state.check = crc32(state.check, hbuf, 2, 0);
+                //===//
+
+                //=== INITBITS();
+                hold = 0;
+                bits = 0;
+                //===//
+                state.mode = FLAGS;
+                break;
+              }
+              state.flags = 0; /* expect zlib header */
+              if (state.head) {
+                state.head.done = false;
+              }
+              if (!(state.wrap & 1) || /* check if zlib header allowed */
+              (((hold & 0xff /*BITS(8)*/) << 8) + (hold >> 8)) % 31) {
+                strm.msg = 'incorrect header check';
+                state.mode = BAD;
+                break;
+              }
+              if ((hold & 0x0f /*BITS(4)*/) !== Z_DEFLATED) {
+                strm.msg = 'unknown compression method';
+                state.mode = BAD;
+                break;
+              }
+              //--- DROPBITS(4) ---//
+              hold >>>= 4;
+              bits -= 4;
+              //---//
+              len = (hold & 0x0f /*BITS(4)*/) + 8;
+              if (state.wbits === 0) {
+                state.wbits = len;
+              } else if (len > state.wbits) {
+                strm.msg = 'invalid window size';
+                state.mode = BAD;
+                break;
+              }
+              state.dmax = 1 << len;
+              //Tracev((stderr, "inflate:   zlib header ok\n"));
+              strm.adler = state.check = 1 /*adler32(0L, Z_NULL, 0)*/;
+              state.mode = hold & 0x200 ? DICTID : TYPE;
+              //=== INITBITS();
+              hold = 0;
+              bits = 0;
+              //===//
+              break;
+            case FLAGS:
+              //=== NEEDBITS(16); */
+              while (bits < 16) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+              }
+              //===//
+              state.flags = hold;
+              if ((state.flags & 0xff) !== Z_DEFLATED) {
+                strm.msg = 'unknown compression method';
+                state.mode = BAD;
+                break;
+              }
+              if (state.flags & 0xe000) {
+                strm.msg = 'unknown header flags set';
+                state.mode = BAD;
+                break;
+              }
+              if (state.head) {
+                state.head.text = hold >> 8 & 1;
+              }
+              if (state.flags & 0x0200) {
+                //=== CRC2(state.check, hold);
+                hbuf[0] = hold & 0xff;
+                hbuf[1] = hold >>> 8 & 0xff;
+                state.check = crc32(state.check, hbuf, 2, 0);
+                //===//
+              }
+              //=== INITBITS();
+              hold = 0;
+              bits = 0;
+              //===//
+              state.mode = TIME;
+            /* falls through */
+            case TIME:
+              //=== NEEDBITS(32); */
+              while (bits < 32) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+              }
+              //===//
+              if (state.head) {
+                state.head.time = hold;
+              }
+              if (state.flags & 0x0200) {
+                //=== CRC4(state.check, hold)
+                hbuf[0] = hold & 0xff;
+                hbuf[1] = hold >>> 8 & 0xff;
+                hbuf[2] = hold >>> 16 & 0xff;
+                hbuf[3] = hold >>> 24 & 0xff;
+                state.check = crc32(state.check, hbuf, 4, 0);
+                //===
+              }
+              //=== INITBITS();
+              hold = 0;
+              bits = 0;
+              //===//
+              state.mode = OS;
+            /* falls through */
+            case OS:
+              //=== NEEDBITS(16); */
+              while (bits < 16) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+              }
+              //===//
+              if (state.head) {
+                state.head.xflags = hold & 0xff;
+                state.head.os = hold >> 8;
+              }
+              if (state.flags & 0x0200) {
+                //=== CRC2(state.check, hold);
+                hbuf[0] = hold & 0xff;
+                hbuf[1] = hold >>> 8 & 0xff;
+                state.check = crc32(state.check, hbuf, 2, 0);
+                //===//
+              }
+              //=== INITBITS();
+              hold = 0;
+              bits = 0;
+              //===//
+              state.mode = EXLEN;
+            /* falls through */
+            case EXLEN:
+              if (state.flags & 0x0400) {
+                //=== NEEDBITS(16); */
+                while (bits < 16) {
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  hold += input[next++] << bits;
+                  bits += 8;
+                }
+                //===//
+                state.length = hold;
+                if (state.head) {
+                  state.head.extra_len = hold;
+                }
+                if (state.flags & 0x0200) {
+                  //=== CRC2(state.check, hold);
+                  hbuf[0] = hold & 0xff;
+                  hbuf[1] = hold >>> 8 & 0xff;
+                  state.check = crc32(state.check, hbuf, 2, 0);
+                  //===//
+                }
+                //=== INITBITS();
+                hold = 0;
+                bits = 0;
+                //===//
+              } else if (state.head) {
+                state.head.extra = null /*Z_NULL*/;
+              }
+              state.mode = EXTRA;
+            /* falls through */
+            case EXTRA:
+              if (state.flags & 0x0400) {
+                copy = state.length;
+                if (copy > have) {
+                  copy = have;
+                }
+                if (copy) {
+                  if (state.head) {
+                    len = state.head.extra_len - state.length;
+                    if (!state.head.extra) {
+                      // Use untyped array for more convenient processing later
+                      state.head.extra = new Array(state.head.extra_len);
+                    }
+                    utils.arraySet(state.head.extra, input, next,
+                    // extra field is limited to 65536 bytes
+                    // - no need for additional size check
+                    copy, /*len + copy > state.head.extra_max - len ? state.head.extra_max : copy,*/
+                    len);
+                    //zmemcpy(state.head.extra + len, next,
+                    //        len + copy > state.head.extra_max ?
+                    //        state.head.extra_max - len : copy);
+                  }
+                  if (state.flags & 0x0200) {
+                    state.check = crc32(state.check, input, copy, next);
+                  }
+                  have -= copy;
+                  next += copy;
+                  state.length -= copy;
+                }
+                if (state.length) {
+                  break inf_leave;
+                }
+              }
+              state.length = 0;
+              state.mode = NAME;
+            /* falls through */
+            case NAME:
+              if (state.flags & 0x0800) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                copy = 0;
+                do {
+                  // TODO: 2 or 1 bytes?
+                  len = input[next + copy++];
+                  /* use constant limit because in js we should not preallocate memory */
+                  if (state.head && len && state.length < 65536 /*state.head.name_max*/) {
+                    state.head.name += String.fromCharCode(len);
+                  }
+                } while (len && copy < have);
+                if (state.flags & 0x0200) {
+                  state.check = crc32(state.check, input, copy, next);
+                }
+                have -= copy;
+                next += copy;
+                if (len) {
+                  break inf_leave;
+                }
+              } else if (state.head) {
+                state.head.name = null;
+              }
+              state.length = 0;
+              state.mode = COMMENT;
+            /* falls through */
+            case COMMENT:
+              if (state.flags & 0x1000) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                copy = 0;
+                do {
+                  len = input[next + copy++];
+                  /* use constant limit because in js we should not preallocate memory */
+                  if (state.head && len && state.length < 65536 /*state.head.comm_max*/) {
+                    state.head.comment += String.fromCharCode(len);
+                  }
+                } while (len && copy < have);
+                if (state.flags & 0x0200) {
+                  state.check = crc32(state.check, input, copy, next);
+                }
+                have -= copy;
+                next += copy;
+                if (len) {
+                  break inf_leave;
+                }
+              } else if (state.head) {
+                state.head.comment = null;
+              }
+              state.mode = HCRC;
+            /* falls through */
+            case HCRC:
+              if (state.flags & 0x0200) {
+                //=== NEEDBITS(16); */
+                while (bits < 16) {
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  hold += input[next++] << bits;
+                  bits += 8;
+                }
+                //===//
+                if (hold !== (state.check & 0xffff)) {
+                  strm.msg = 'header crc mismatch';
+                  state.mode = BAD;
+                  break;
+                }
+                //=== INITBITS();
+                hold = 0;
+                bits = 0;
+                //===//
+              }
+              if (state.head) {
+                state.head.hcrc = state.flags >> 9 & 1;
+                state.head.done = true;
+              }
+              strm.adler = state.check = 0;
+              state.mode = TYPE;
+              break;
+            case DICTID:
+              //=== NEEDBITS(32); */
+              while (bits < 32) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+              }
+              //===//
+              strm.adler = state.check = zswap32(hold);
+              //=== INITBITS();
+              hold = 0;
+              bits = 0;
+              //===//
+              state.mode = DICT;
+            /* falls through */
+            case DICT:
+              if (state.havedict === 0) {
+                //--- RESTORE() ---
+                strm.next_out = put;
+                strm.avail_out = left;
+                strm.next_in = next;
+                strm.avail_in = have;
+                state.hold = hold;
+                state.bits = bits;
+                //---
+                return Z_NEED_DICT;
+              }
+              strm.adler = state.check = 1 /*adler32(0L, Z_NULL, 0)*/;
+              state.mode = TYPE;
+            /* falls through */
+            case TYPE:
+              if (flush === Z_BLOCK || flush === Z_TREES) {
+                break inf_leave;
+              }
+            /* falls through */
+            case TYPEDO:
+              if (state.last) {
+                //--- BYTEBITS() ---//
+                hold >>>= bits & 7;
+                bits -= bits & 7;
+                //---//
+                state.mode = CHECK;
+                break;
+              }
+              //=== NEEDBITS(3); */
+              while (bits < 3) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+              }
+              //===//
+              state.last = hold & 0x01 /*BITS(1)*/;
+              //--- DROPBITS(1) ---//
+              hold >>>= 1;
+              bits -= 1;
+              //---//
+
+              switch (hold & 0x03 /*BITS(2)*/) {
+                case 0:
+                  /* stored block */
+                  //Tracev((stderr, "inflate:     stored block%s\n",
+                  //        state.last ? " (last)" : ""));
+                  state.mode = STORED;
+                  break;
+                case 1:
+                  /* fixed block */
+                  fixedtables(state);
+                  //Tracev((stderr, "inflate:     fixed codes block%s\n",
+                  //        state.last ? " (last)" : ""));
+                  state.mode = LEN_; /* decode codes */
+                  if (flush === Z_TREES) {
+                    //--- DROPBITS(2) ---//
+                    hold >>>= 2;
+                    bits -= 2;
+                    //---//
+                    break inf_leave;
+                  }
+                  break;
+                case 2:
+                  /* dynamic block */
+                  //Tracev((stderr, "inflate:     dynamic codes block%s\n",
+                  //        state.last ? " (last)" : ""));
+                  state.mode = TABLE;
+                  break;
+                case 3:
+                  strm.msg = 'invalid block type';
+                  state.mode = BAD;
+              }
+              //--- DROPBITS(2) ---//
+              hold >>>= 2;
+              bits -= 2;
+              //---//
+              break;
+            case STORED:
+              //--- BYTEBITS() ---// /* go to byte boundary */
+              hold >>>= bits & 7;
+              bits -= bits & 7;
+              //---//
+              //=== NEEDBITS(32); */
+              while (bits < 32) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+              }
+              //===//
+              if ((hold & 0xffff) !== (hold >>> 16 ^ 0xffff)) {
+                strm.msg = 'invalid stored block lengths';
+                state.mode = BAD;
+                break;
+              }
+              state.length = hold & 0xffff;
+              //Tracev((stderr, "inflate:       stored length %u\n",
+              //        state.length));
+              //=== INITBITS();
+              hold = 0;
+              bits = 0;
+              //===//
+              state.mode = COPY_;
+              if (flush === Z_TREES) {
+                break inf_leave;
+              }
+            /* falls through */
+            case COPY_:
+              state.mode = COPY;
+            /* falls through */
+            case COPY:
+              copy = state.length;
+              if (copy) {
+                if (copy > have) {
+                  copy = have;
+                }
+                if (copy > left) {
+                  copy = left;
+                }
+                if (copy === 0) {
+                  break inf_leave;
+                }
+                //--- zmemcpy(put, next, copy); ---
+                utils.arraySet(output, input, next, copy, put);
+                //---//
+                have -= copy;
+                next += copy;
+                left -= copy;
+                put += copy;
+                state.length -= copy;
+                break;
+              }
+              //Tracev((stderr, "inflate:       stored end\n"));
+              state.mode = TYPE;
+              break;
+            case TABLE:
+              //=== NEEDBITS(14); */
+              while (bits < 14) {
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+              }
+              //===//
+              state.nlen = (hold & 0x1f /*BITS(5)*/) + 257;
+              //--- DROPBITS(5) ---//
+              hold >>>= 5;
+              bits -= 5;
+              //---//
+              state.ndist = (hold & 0x1f /*BITS(5)*/) + 1;
+              //--- DROPBITS(5) ---//
+              hold >>>= 5;
+              bits -= 5;
+              //---//
+              state.ncode = (hold & 0x0f /*BITS(4)*/) + 4;
+              //--- DROPBITS(4) ---//
+              hold >>>= 4;
+              bits -= 4;
+              //---//
+              //#ifndef PKZIP_BUG_WORKAROUND
+              if (state.nlen > 286 || state.ndist > 30) {
+                strm.msg = 'too many length or distance symbols';
+                state.mode = BAD;
+                break;
+              }
+              //#endif
+              //Tracev((stderr, "inflate:       table sizes ok\n"));
+              state.have = 0;
+              state.mode = LENLENS;
+            /* falls through */
+            case LENLENS:
+              while (state.have < state.ncode) {
+                //=== NEEDBITS(3);
+                while (bits < 3) {
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  hold += input[next++] << bits;
+                  bits += 8;
+                }
+                //===//
+                state.lens[order[state.have++]] = hold & 0x07; //BITS(3);
+                //--- DROPBITS(3) ---//
+                hold >>>= 3;
+                bits -= 3;
+                //---//
+              }
+              while (state.have < 19) {
+                state.lens[order[state.have++]] = 0;
+              }
+              // We have separate tables & no pointers. 2 commented lines below not needed.
+              //state.next = state.codes;
+              //state.lencode = state.next;
+              // Switch to use dynamic table
+              state.lencode = state.lendyn;
+              state.lenbits = 7;
+              opts = {
+                bits: state.lenbits
+              };
+              ret = inflate_table(CODES, state.lens, 0, 19, state.lencode, 0, state.work, opts);
+              state.lenbits = opts.bits;
+              if (ret) {
+                strm.msg = 'invalid code lengths set';
+                state.mode = BAD;
+                break;
+              }
+              //Tracev((stderr, "inflate:       code lengths ok\n"));
+              state.have = 0;
+              state.mode = CODELENS;
+            /* falls through */
+            case CODELENS:
+              while (state.have < state.nlen + state.ndist) {
+                for (;;) {
+                  here = state.lencode[hold & (1 << state.lenbits) - 1]; /*BITS(state.lenbits)*/
+                  here_bits = here >>> 24;
+                  here_op = here >>> 16 & 0xff;
+                  here_val = here & 0xffff;
+                  if (here_bits <= bits) {
+                    break;
+                  }
+                  //--- PULLBYTE() ---//
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  hold += input[next++] << bits;
+                  bits += 8;
+                  //---//
+                }
+                if (here_val < 16) {
+                  //--- DROPBITS(here.bits) ---//
+                  hold >>>= here_bits;
+                  bits -= here_bits;
+                  //---//
+                  state.lens[state.have++] = here_val;
+                } else {
+                  if (here_val === 16) {
+                    //=== NEEDBITS(here.bits + 2);
+                    n = here_bits + 2;
+                    while (bits < n) {
+                      if (have === 0) {
+                        break inf_leave;
+                      }
+                      have--;
+                      hold += input[next++] << bits;
+                      bits += 8;
+                    }
+                    //===//
+                    //--- DROPBITS(here.bits) ---//
+                    hold >>>= here_bits;
+                    bits -= here_bits;
+                    //---//
+                    if (state.have === 0) {
+                      strm.msg = 'invalid bit length repeat';
+                      state.mode = BAD;
+                      break;
+                    }
+                    len = state.lens[state.have - 1];
+                    copy = 3 + (hold & 0x03); //BITS(2);
+                    //--- DROPBITS(2) ---//
+                    hold >>>= 2;
+                    bits -= 2;
+                    //---//
+                  } else if (here_val === 17) {
+                    //=== NEEDBITS(here.bits + 3);
+                    n = here_bits + 3;
+                    while (bits < n) {
+                      if (have === 0) {
+                        break inf_leave;
+                      }
+                      have--;
+                      hold += input[next++] << bits;
+                      bits += 8;
+                    }
+                    //===//
+                    //--- DROPBITS(here.bits) ---//
+                    hold >>>= here_bits;
+                    bits -= here_bits;
+                    //---//
+                    len = 0;
+                    copy = 3 + (hold & 0x07); //BITS(3);
+                    //--- DROPBITS(3) ---//
+                    hold >>>= 3;
+                    bits -= 3;
+                    //---//
+                  } else {
+                    //=== NEEDBITS(here.bits + 7);
+                    n = here_bits + 7;
+                    while (bits < n) {
+                      if (have === 0) {
+                        break inf_leave;
+                      }
+                      have--;
+                      hold += input[next++] << bits;
+                      bits += 8;
+                    }
+                    //===//
+                    //--- DROPBITS(here.bits) ---//
+                    hold >>>= here_bits;
+                    bits -= here_bits;
+                    //---//
+                    len = 0;
+                    copy = 11 + (hold & 0x7f); //BITS(7);
+                    //--- DROPBITS(7) ---//
+                    hold >>>= 7;
+                    bits -= 7;
+                    //---//
+                  }
+                  if (state.have + copy > state.nlen + state.ndist) {
+                    strm.msg = 'invalid bit length repeat';
+                    state.mode = BAD;
+                    break;
+                  }
+                  while (copy--) {
+                    state.lens[state.have++] = len;
+                  }
+                }
+              }
+
+              /* handle error breaks in while */
+              if (state.mode === BAD) {
+                break;
+              }
+
+              /* check for end-of-block code (better have one) */
+              if (state.lens[256] === 0) {
+                strm.msg = 'invalid code -- missing end-of-block';
+                state.mode = BAD;
+                break;
+              }
+
+              /* build code tables -- note: do not change the lenbits or distbits
+                 values here (9 and 6) without reading the comments in inftrees.h
+                 concerning the ENOUGH constants, which depend on those values */
+              state.lenbits = 9;
+              opts = {
+                bits: state.lenbits
+              };
+              ret = inflate_table(LENS, state.lens, 0, state.nlen, state.lencode, 0, state.work, opts);
+              // We have separate tables & no pointers. 2 commented lines below not needed.
+              // state.next_index = opts.table_index;
+              state.lenbits = opts.bits;
+              // state.lencode = state.next;
+
+              if (ret) {
+                strm.msg = 'invalid literal/lengths set';
+                state.mode = BAD;
+                break;
+              }
+              state.distbits = 6;
+              //state.distcode.copy(state.codes);
+              // Switch to use dynamic table
+              state.distcode = state.distdyn;
+              opts = {
+                bits: state.distbits
+              };
+              ret = inflate_table(DISTS, state.lens, state.nlen, state.ndist, state.distcode, 0, state.work, opts);
+              // We have separate tables & no pointers. 2 commented lines below not needed.
+              // state.next_index = opts.table_index;
+              state.distbits = opts.bits;
+              // state.distcode = state.next;
+
+              if (ret) {
+                strm.msg = 'invalid distances set';
+                state.mode = BAD;
+                break;
+              }
+              //Tracev((stderr, 'inflate:       codes ok\n'));
+              state.mode = LEN_;
+              if (flush === Z_TREES) {
+                break inf_leave;
+              }
+            /* falls through */
+            case LEN_:
+              state.mode = LEN;
+            /* falls through */
+            case LEN:
+              if (have >= 6 && left >= 258) {
+                //--- RESTORE() ---
+                strm.next_out = put;
+                strm.avail_out = left;
+                strm.next_in = next;
+                strm.avail_in = have;
+                state.hold = hold;
+                state.bits = bits;
+                //---
+                inflate_fast(strm, _out);
+                //--- LOAD() ---
+                put = strm.next_out;
+                output = strm.output;
+                left = strm.avail_out;
+                next = strm.next_in;
+                input = strm.input;
+                have = strm.avail_in;
+                hold = state.hold;
+                bits = state.bits;
+                //---
+
+                if (state.mode === TYPE) {
+                  state.back = -1;
+                }
+                break;
+              }
+              state.back = 0;
+              for (;;) {
+                here = state.lencode[hold & (1 << state.lenbits) - 1]; /*BITS(state.lenbits)*/
+                here_bits = here >>> 24;
+                here_op = here >>> 16 & 0xff;
+                here_val = here & 0xffff;
+                if (here_bits <= bits) {
+                  break;
+                }
+                //--- PULLBYTE() ---//
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+                //---//
+              }
+              if (here_op && (here_op & 0xf0) === 0) {
+                last_bits = here_bits;
+                last_op = here_op;
+                last_val = here_val;
+                for (;;) {
+                  here = state.lencode[last_val + ((hold & (1 << last_bits + last_op) - 1 /*BITS(last.bits + last.op)*/) >> last_bits)];
+                  here_bits = here >>> 24;
+                  here_op = here >>> 16 & 0xff;
+                  here_val = here & 0xffff;
+                  if (last_bits + here_bits <= bits) {
+                    break;
+                  }
+                  //--- PULLBYTE() ---//
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  hold += input[next++] << bits;
+                  bits += 8;
+                  //---//
+                }
+                //--- DROPBITS(last.bits) ---//
+                hold >>>= last_bits;
+                bits -= last_bits;
+                //---//
+                state.back += last_bits;
+              }
+              //--- DROPBITS(here.bits) ---//
+              hold >>>= here_bits;
+              bits -= here_bits;
+              //---//
+              state.back += here_bits;
+              state.length = here_val;
+              if (here_op === 0) {
+                //Tracevv((stderr, here.val >= 0x20 && here.val < 0x7f ?
+                //        "inflate:         literal '%c'\n" :
+                //        "inflate:         literal 0x%02x\n", here.val));
+                state.mode = LIT;
+                break;
+              }
+              if (here_op & 32) {
+                //Tracevv((stderr, "inflate:         end of block\n"));
+                state.back = -1;
+                state.mode = TYPE;
+                break;
+              }
+              if (here_op & 64) {
+                strm.msg = 'invalid literal/length code';
+                state.mode = BAD;
+                break;
+              }
+              state.extra = here_op & 15;
+              state.mode = LENEXT;
+            /* falls through */
+            case LENEXT:
+              if (state.extra) {
+                //=== NEEDBITS(state.extra);
+                n = state.extra;
+                while (bits < n) {
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  hold += input[next++] << bits;
+                  bits += 8;
+                }
+                //===//
+                state.length += hold & (1 << state.extra) - 1 /*BITS(state.extra)*/;
+                //--- DROPBITS(state.extra) ---//
+                hold >>>= state.extra;
+                bits -= state.extra;
+                //---//
+                state.back += state.extra;
+              }
+              //Tracevv((stderr, "inflate:         length %u\n", state.length));
+              state.was = state.length;
+              state.mode = DIST;
+            /* falls through */
+            case DIST:
+              for (;;) {
+                here = state.distcode[hold & (1 << state.distbits) - 1]; /*BITS(state.distbits)*/
+                here_bits = here >>> 24;
+                here_op = here >>> 16 & 0xff;
+                here_val = here & 0xffff;
+                if (here_bits <= bits) {
+                  break;
+                }
+                //--- PULLBYTE() ---//
+                if (have === 0) {
+                  break inf_leave;
+                }
+                have--;
+                hold += input[next++] << bits;
+                bits += 8;
+                //---//
+              }
+              if ((here_op & 0xf0) === 0) {
+                last_bits = here_bits;
+                last_op = here_op;
+                last_val = here_val;
+                for (;;) {
+                  here = state.distcode[last_val + ((hold & (1 << last_bits + last_op) - 1 /*BITS(last.bits + last.op)*/) >> last_bits)];
+                  here_bits = here >>> 24;
+                  here_op = here >>> 16 & 0xff;
+                  here_val = here & 0xffff;
+                  if (last_bits + here_bits <= bits) {
+                    break;
+                  }
+                  //--- PULLBYTE() ---//
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  hold += input[next++] << bits;
+                  bits += 8;
+                  //---//
+                }
+                //--- DROPBITS(last.bits) ---//
+                hold >>>= last_bits;
+                bits -= last_bits;
+                //---//
+                state.back += last_bits;
+              }
+              //--- DROPBITS(here.bits) ---//
+              hold >>>= here_bits;
+              bits -= here_bits;
+              //---//
+              state.back += here_bits;
+              if (here_op & 64) {
+                strm.msg = 'invalid distance code';
+                state.mode = BAD;
+                break;
+              }
+              state.offset = here_val;
+              state.extra = here_op & 15;
+              state.mode = DISTEXT;
+            /* falls through */
+            case DISTEXT:
+              if (state.extra) {
+                //=== NEEDBITS(state.extra);
+                n = state.extra;
+                while (bits < n) {
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  hold += input[next++] << bits;
+                  bits += 8;
+                }
+                //===//
+                state.offset += hold & (1 << state.extra) - 1 /*BITS(state.extra)*/;
+                //--- DROPBITS(state.extra) ---//
+                hold >>>= state.extra;
+                bits -= state.extra;
+                //---//
+                state.back += state.extra;
+              }
+              //#ifdef INFLATE_STRICT
+              if (state.offset > state.dmax) {
+                strm.msg = 'invalid distance too far back';
+                state.mode = BAD;
+                break;
+              }
+              //#endif
+              //Tracevv((stderr, "inflate:         distance %u\n", state.offset));
+              state.mode = MATCH;
+            /* falls through */
+            case MATCH:
+              if (left === 0) {
+                break inf_leave;
+              }
+              copy = _out - left;
+              if (state.offset > copy) {
+                /* copy from window */
+                copy = state.offset - copy;
+                if (copy > state.whave) {
+                  if (state.sane) {
+                    strm.msg = 'invalid distance too far back';
+                    state.mode = BAD;
+                    break;
+                  }
+                  // (!) This block is disabled in zlib defaults,
+                  // don't enable it for binary compatibility
+                  //#ifdef INFLATE_ALLOW_INVALID_DISTANCE_TOOFAR_ARRR
+                  //          Trace((stderr, "inflate.c too far\n"));
+                  //          copy -= state.whave;
+                  //          if (copy > state.length) { copy = state.length; }
+                  //          if (copy > left) { copy = left; }
+                  //          left -= copy;
+                  //          state.length -= copy;
+                  //          do {
+                  //            output[put++] = 0;
+                  //          } while (--copy);
+                  //          if (state.length === 0) { state.mode = LEN; }
+                  //          break;
+                  //#endif
+                }
+                if (copy > state.wnext) {
+                  copy -= state.wnext;
+                  from = state.wsize - copy;
+                } else {
+                  from = state.wnext - copy;
+                }
+                if (copy > state.length) {
+                  copy = state.length;
+                }
+                from_source = state.window;
+              } else {
+                /* copy from output */
+                from_source = output;
+                from = put - state.offset;
+                copy = state.length;
+              }
+              if (copy > left) {
+                copy = left;
+              }
+              left -= copy;
+              state.length -= copy;
+              do {
+                output[put++] = from_source[from++];
+              } while (--copy);
+              if (state.length === 0) {
+                state.mode = LEN;
+              }
+              break;
+            case LIT:
+              if (left === 0) {
+                break inf_leave;
+              }
+              output[put++] = state.length;
+              left--;
+              state.mode = LEN;
+              break;
+            case CHECK:
+              if (state.wrap) {
+                //=== NEEDBITS(32);
+                while (bits < 32) {
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  // Use '|' instead of '+' to make sure that result is signed
+                  hold |= input[next++] << bits;
+                  bits += 8;
+                }
+                //===//
+                _out -= left;
+                strm.total_out += _out;
+                state.total += _out;
+                if (_out) {
+                  strm.adler = state.check = /*UPDATE(state.check, put - _out, _out);*/
+                  state.flags ? crc32(state.check, output, _out, put - _out) : adler32(state.check, output, _out, put - _out);
+                }
+                _out = left;
+                // NB: crc32 stored as signed 32-bit int, zswap32 returns signed too
+                if ((state.flags ? hold : zswap32(hold)) !== state.check) {
+                  strm.msg = 'incorrect data check';
+                  state.mode = BAD;
+                  break;
+                }
+                //=== INITBITS();
+                hold = 0;
+                bits = 0;
+                //===//
+                //Tracev((stderr, "inflate:   check matches trailer\n"));
+              }
+              state.mode = LENGTH;
+            /* falls through */
+            case LENGTH:
+              if (state.wrap && state.flags) {
+                //=== NEEDBITS(32);
+                while (bits < 32) {
+                  if (have === 0) {
+                    break inf_leave;
+                  }
+                  have--;
+                  hold += input[next++] << bits;
+                  bits += 8;
+                }
+                //===//
+                if (hold !== (state.total & 0xffffffff)) {
+                  strm.msg = 'incorrect length check';
+                  state.mode = BAD;
+                  break;
+                }
+                //=== INITBITS();
+                hold = 0;
+                bits = 0;
+                //===//
+                //Tracev((stderr, "inflate:   length matches trailer\n"));
+              }
+              state.mode = DONE;
+            /* falls through */
+            case DONE:
+              ret = Z_STREAM_END;
+              break inf_leave;
+            case BAD:
+              ret = Z_DATA_ERROR;
+              break inf_leave;
+            case MEM:
+              return Z_MEM_ERROR;
+            case SYNC:
+            /* falls through */
+            default:
+              return Z_STREAM_ERROR;
+          }
+        }
+
+        // inf_leave <- here is real place for "goto inf_leave", emulated via "break inf_leave"
+
+        /*
+           Return from inflate(), updating the total counts and the check value.
+           If there was no progress during the inflate() call, return a buffer
+           error.  Call updatewindow() to create and/or update the window state.
+           Note: a memory error from inflate() is non-recoverable.
+         */
+
+        //--- RESTORE() ---
+        strm.next_out = put;
+        strm.avail_out = left;
+        strm.next_in = next;
+        strm.avail_in = have;
+        state.hold = hold;
+        state.bits = bits;
+        //---
+
+        if (state.wsize || _out !== strm.avail_out && state.mode < BAD && (state.mode < CHECK || flush !== Z_FINISH)) {
+          if (updatewindow(strm, strm.output, strm.next_out, _out - strm.avail_out)) {
+            state.mode = MEM;
+            return Z_MEM_ERROR;
+          }
+        }
+        _in -= strm.avail_in;
+        _out -= strm.avail_out;
+        strm.total_in += _in;
+        strm.total_out += _out;
+        state.total += _out;
+        if (state.wrap && _out) {
+          strm.adler = state.check = /*UPDATE(state.check, strm.next_out - _out, _out);*/
+          state.flags ? crc32(state.check, output, _out, strm.next_out - _out) : adler32(state.check, output, _out, strm.next_out - _out);
+        }
+        strm.data_type = state.bits + (state.last ? 64 : 0) + (state.mode === TYPE ? 128 : 0) + (state.mode === LEN_ || state.mode === COPY_ ? 256 : 0);
+        if ((_in === 0 && _out === 0 || flush === Z_FINISH) && ret === Z_OK) {
+          ret = Z_BUF_ERROR;
+        }
+        return ret;
+      }
+      function inflateEnd(strm) {
+        if (!strm || !strm.state /*|| strm->zfree == (free_func)0*/) {
+          return Z_STREAM_ERROR;
+        }
+        var state = strm.state;
+        if (state.window) {
+          state.window = null;
+        }
+        strm.state = null;
+        return Z_OK;
+      }
+      function inflateGetHeader(strm, head) {
+        var state;
+
+        /* check state */
+        if (!strm || !strm.state) {
+          return Z_STREAM_ERROR;
+        }
+        state = strm.state;
+        if ((state.wrap & 2) === 0) {
+          return Z_STREAM_ERROR;
+        }
+
+        /* save header structure */
+        state.head = head;
+        head.done = false;
+        return Z_OK;
+      }
+      function inflateSetDictionary(strm, dictionary) {
+        var dictLength = dictionary.length;
+        var state;
+        var dictid;
+        var ret;
+
+        /* check state */
+        if (!strm /* == Z_NULL */ || !strm.state /* == Z_NULL */) {
+          return Z_STREAM_ERROR;
+        }
+        state = strm.state;
+        if (state.wrap !== 0 && state.mode !== DICT) {
+          return Z_STREAM_ERROR;
+        }
+
+        /* check for correct dictionary identifier */
+        if (state.mode === DICT) {
+          dictid = 1; /* adler32(0, null, 0)*/
+          /* dictid = adler32(dictid, dictionary, dictLength); */
+          dictid = adler32(dictid, dictionary, dictLength, 0);
+          if (dictid !== state.check) {
+            return Z_DATA_ERROR;
+          }
+        }
+        /* copy dictionary to window using updatewindow(), which will amend the
+         existing dictionary if appropriate */
+        ret = updatewindow(strm, dictionary, dictLength, dictLength);
+        if (ret) {
+          state.mode = MEM;
+          return Z_MEM_ERROR;
+        }
+        state.havedict = 1;
+        // Tracev((stderr, "inflate:   dictionary set\n"));
+        return Z_OK;
+      }
+      exports.inflateReset = inflateReset;
+      exports.inflateReset2 = inflateReset2;
+      exports.inflateResetKeep = inflateResetKeep;
+      exports.inflateInit = inflateInit;
+      exports.inflateInit2 = inflateInit2;
+      exports.inflate = inflate;
+      exports.inflateEnd = inflateEnd;
+      exports.inflateGetHeader = inflateGetHeader;
+      exports.inflateSetDictionary = inflateSetDictionary;
+      exports.inflateInfo = 'pako inflate (from Nodeca project)';
+
+      /* Not implemented
+      exports.inflateCopy = inflateCopy;
+      exports.inflateGetDictionary = inflateGetDictionary;
+      exports.inflateMark = inflateMark;
+      exports.inflatePrime = inflatePrime;
+      exports.inflateSync = inflateSync;
+      exports.inflateSyncPoint = inflateSyncPoint;
+      exports.inflateUndermine = inflateUndermine;
+      */
+    }, {
+      "../utils/common": 1,
+      "./adler32": 3,
+      "./crc32": 5,
+      "./inffast": 7,
+      "./inftrees": 9
+    }],
+    9: [function (require, module, exports) {
+      'use strict';
+
+      // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+      // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+      //
+      // This software is provided 'as-is', without any express or implied
+      // warranty. In no event will the authors be held liable for any damages
+      // arising from the use of this software.
+      //
+      // Permission is granted to anyone to use this software for any purpose,
+      // including commercial applications, and to alter it and redistribute it
+      // freely, subject to the following restrictions:
+      //
+      // 1. The origin of this software must not be misrepresented; you must not
+      //   claim that you wrote the original software. If you use this software
+      //   in a product, an acknowledgment in the product documentation would be
+      //   appreciated but is not required.
+      // 2. Altered source versions must be plainly marked as such, and must not be
+      //   misrepresented as being the original software.
+      // 3. This notice may not be removed or altered from any source distribution.
+      var utils = require('../utils/common');
+      var MAXBITS = 15;
+      var ENOUGH_LENS = 852;
+      var ENOUGH_DISTS = 592;
+      //var ENOUGH = (ENOUGH_LENS+ENOUGH_DISTS);
+
+      var CODES = 0;
+      var LENS = 1;
+      var DISTS = 2;
+      var lbase = [/* Length codes 257..285 base */
+      3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0];
+      var lext = [/* Length codes 257..285 extra */
+      16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 72, 78];
+      var dbase = [/* Distance codes 0..29 base */
+      1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577, 0, 0];
+      var dext = [/* Distance codes 0..29 extra */
+      16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 64, 64];
+      module.exports = function inflate_table(type, lens, lens_index, codes, table, table_index, work, opts) {
+        var bits = opts.bits;
+        //here = opts.here; /* table entry for duplication */
+
+        var len = 0; /* a code's length in bits */
+        var sym = 0; /* index of code symbols */
+        var min = 0,
+          max = 0; /* minimum and maximum code lengths */
+        var root = 0; /* number of index bits for root table */
+        var curr = 0; /* number of index bits for current table */
+        var drop = 0; /* code bits to drop for sub-table */
+        var left = 0; /* number of prefix codes available */
+        var used = 0; /* code entries in table used */
+        var huff = 0; /* Huffman code */
+        var incr; /* for incrementing code, index */
+        var fill; /* index for replicating entries */
+        var low; /* low bits for current root entry */
+        var mask; /* mask for low root bits */
+        var next; /* next available space in table */
+        var base = null; /* base value table to use */
+        var base_index = 0;
+        //  var shoextra;    /* extra bits table to use */
+        var end; /* use base and extra for symbol > end */
+        var count = new utils.Buf16(MAXBITS + 1); //[MAXBITS+1];    /* number of codes of each length */
+        var offs = new utils.Buf16(MAXBITS + 1); //[MAXBITS+1];     /* offsets in table for each length */
+        var extra = null;
+        var extra_index = 0;
+        var here_bits, here_op, here_val;
+
+        /*
+         Process a set of code lengths to create a canonical Huffman code.  The
+         code lengths are lens[0..codes-1].  Each length corresponds to the
+         symbols 0..codes-1.  The Huffman code is generated by first sorting the
+         symbols by length from short to long, and retaining the symbol order
+         for codes with equal lengths.  Then the code starts with all zero bits
+         for the first code of the shortest length, and the codes are integer
+         increments for the same length, and zeros are appended as the length
+         increases.  For the deflate format, these bits are stored backwards
+         from their more natural integer increment ordering, and so when the
+         decoding tables are built in the large loop below, the integer codes
+         are incremented backwards.
+          This routine assumes, but does not check, that all of the entries in
+         lens[] are in the range 0..MAXBITS.  The caller must assure this.
+         1..MAXBITS is interpreted as that code length.  zero means that that
+         symbol does not occur in this code.
+          The codes are sorted by computing a count of codes for each length,
+         creating from that a table of starting indices for each length in the
+         sorted table, and then entering the symbols in order in the sorted
+         table.  The sorted table is work[], with that space being provided by
+         the caller.
+          The length counts are used for other purposes as well, i.e. finding
+         the minimum and maximum length codes, determining if there are any
+         codes at all, checking for a valid set of lengths, and looking ahead
+         at length counts to determine sub-table sizes when building the
+         decoding tables.
+         */
+
+        /* accumulate lengths for codes (assumes lens[] all in 0..MAXBITS) */
+        for (len = 0; len <= MAXBITS; len++) {
+          count[len] = 0;
+        }
+        for (sym = 0; sym < codes; sym++) {
+          count[lens[lens_index + sym]]++;
+        }
+
+        /* bound code lengths, force root to be within code lengths */
+        root = bits;
+        for (max = MAXBITS; max >= 1; max--) {
+          if (count[max] !== 0) {
+            break;
+          }
+        }
+        if (root > max) {
+          root = max;
+        }
+        if (max === 0) {
+          /* no symbols to code at all */
+          //table.op[opts.table_index] = 64;  //here.op = (var char)64;    /* invalid code marker */
+          //table.bits[opts.table_index] = 1;   //here.bits = (var char)1;
+          //table.val[opts.table_index++] = 0;   //here.val = (var short)0;
+          table[table_index++] = 1 << 24 | 64 << 16 | 0;
+
+          //table.op[opts.table_index] = 64;
+          //table.bits[opts.table_index] = 1;
+          //table.val[opts.table_index++] = 0;
+          table[table_index++] = 1 << 24 | 64 << 16 | 0;
+          opts.bits = 1;
+          return 0; /* no symbols, but wait for decoding to report error */
+        }
+        for (min = 1; min < max; min++) {
+          if (count[min] !== 0) {
+            break;
+          }
+        }
+        if (root < min) {
+          root = min;
+        }
+
+        /* check for an over-subscribed or incomplete set of lengths */
+        left = 1;
+        for (len = 1; len <= MAXBITS; len++) {
+          left <<= 1;
+          left -= count[len];
+          if (left < 0) {
+            return -1;
+          } /* over-subscribed */
+        }
+        if (left > 0 && (type === CODES || max !== 1)) {
+          return -1; /* incomplete set */
+        }
+
+        /* generate offsets into symbol table for each length for sorting */
+        offs[1] = 0;
+        for (len = 1; len < MAXBITS; len++) {
+          offs[len + 1] = offs[len] + count[len];
+        }
+
+        /* sort symbols by length, by symbol order within each length */
+        for (sym = 0; sym < codes; sym++) {
+          if (lens[lens_index + sym] !== 0) {
+            work[offs[lens[lens_index + sym]]++] = sym;
+          }
+        }
+
+        /*
+         Create and fill in decoding tables.  In this loop, the table being
+         filled is at next and has curr index bits.  The code being used is huff
+         with length len.  That code is converted to an index by dropping drop
+         bits off of the bottom.  For codes where len is less than drop + curr,
+         those top drop + curr - len bits are incremented through all values to
+         fill the table with replicated entries.
+          root is the number of index bits for the root table.  When len exceeds
+         root, sub-tables are created pointed to by the root entry with an index
+         of the low root bits of huff.  This is saved in low to check for when a
+         new sub-table should be started.  drop is zero when the root table is
+         being filled, and drop is root when sub-tables are being filled.
+          When a new sub-table is needed, it is necessary to look ahead in the
+         code lengths to determine what size sub-table is needed.  The length
+         counts are used for this, and so count[] is decremented as codes are
+         entered in the tables.
+          used keeps track of how many table entries have been allocated from the
+         provided *table space.  It is checked for LENS and DIST tables against
+         the constants ENOUGH_LENS and ENOUGH_DISTS to guard against changes in
+         the initial root table size constants.  See the comments in inftrees.h
+         for more information.
+          sym increments through all symbols, and the loop terminates when
+         all codes of length max, i.e. all codes, have been processed.  This
+         routine permits incomplete codes, so another loop after this one fills
+         in the rest of the decoding tables with invalid code markers.
+         */
+
+        /* set up for code type */
+        // poor man optimization - use if-else instead of switch,
+        // to avoid deopts in old v8
+        if (type === CODES) {
+          base = extra = work; /* dummy value--not used */
+          end = 19;
+        } else if (type === LENS) {
+          base = lbase;
+          base_index -= 257;
+          extra = lext;
+          extra_index -= 257;
+          end = 256;
+        } else {
+          /* DISTS */
+          base = dbase;
+          extra = dext;
+          end = -1;
+        }
+
+        /* initialize opts for loop */
+        huff = 0; /* starting code */
+        sym = 0; /* starting code symbol */
+        len = min; /* starting code length */
+        next = table_index; /* current table to fill in */
+        curr = root; /* current table index bits */
+        drop = 0; /* current bits to drop from code for index */
+        low = -1; /* trigger new sub-table when len > root */
+        used = 1 << root; /* use root table entries */
+        mask = used - 1; /* mask for comparing low */
+
+        /* check available table space */
+        if (type === LENS && used > ENOUGH_LENS || type === DISTS && used > ENOUGH_DISTS) {
+          return 1;
+        }
+
+        /* process all codes and make table entries */
+        for (;;) {
+          /* create table entry */
+          here_bits = len - drop;
+          if (work[sym] < end) {
+            here_op = 0;
+            here_val = work[sym];
+          } else if (work[sym] > end) {
+            here_op = extra[extra_index + work[sym]];
+            here_val = base[base_index + work[sym]];
+          } else {
+            here_op = 32 + 64; /* end of block */
+            here_val = 0;
+          }
+
+          /* replicate for those indices with low len bits equal to huff */
+          incr = 1 << len - drop;
+          fill = 1 << curr;
+          min = fill; /* save offset to next table */
+          do {
+            fill -= incr;
+            table[next + (huff >> drop) + fill] = here_bits << 24 | here_op << 16 | here_val | 0;
+          } while (fill !== 0);
+
+          /* backwards increment the len-bit code huff */
+          incr = 1 << len - 1;
+          while (huff & incr) {
+            incr >>= 1;
+          }
+          if (incr !== 0) {
+            huff &= incr - 1;
+            huff += incr;
+          } else {
+            huff = 0;
+          }
+
+          /* go to next symbol, update count, len */
+          sym++;
+          if (--count[len] === 0) {
+            if (len === max) {
+              break;
+            }
+            len = lens[lens_index + work[sym]];
+          }
+
+          /* create new sub-table if needed */
+          if (len > root && (huff & mask) !== low) {
+            /* if first time, transition to sub-tables */
+            if (drop === 0) {
+              drop = root;
+            }
+
+            /* increment past last table */
+            next += min; /* here min is 1 << curr */
+
+            /* determine length of next table */
+            curr = len - drop;
+            left = 1 << curr;
+            while (curr + drop < max) {
+              left -= count[curr + drop];
+              if (left <= 0) {
+                break;
+              }
+              curr++;
+              left <<= 1;
+            }
+
+            /* check for enough space */
+            used += 1 << curr;
+            if (type === LENS && used > ENOUGH_LENS || type === DISTS && used > ENOUGH_DISTS) {
+              return 1;
+            }
+
+            /* point entry in root table to sub-table */
+            low = huff & mask;
+            /*table.op[low] = curr;
+            table.bits[low] = root;
+            table.val[low] = next - opts.table_index;*/
+            table[low] = root << 24 | curr << 16 | next - table_index | 0;
+          }
+        }
+
+        /* fill in remaining table entry if code is incomplete (guaranteed to have
+         at most one remaining entry, since if the code is incomplete, the
+         maximum code length that was allowed to get this far is one bit) */
+        if (huff !== 0) {
+          //table.op[next + huff] = 64;            /* invalid code marker */
+          //table.bits[next + huff] = len - drop;
+          //table.val[next + huff] = 0;
+          table[next + huff] = len - drop << 24 | 64 << 16 | 0;
+        }
+
+        /* set return parameters */
+        //opts.table_index += used;
+        opts.bits = root;
+        return 0;
+      };
+    }, {
+      "../utils/common": 1
+    }],
+    10: [function (require, module, exports) {
+      'use strict';
+
+      // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+      // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+      //
+      // This software is provided 'as-is', without any express or implied
+      // warranty. In no event will the authors be held liable for any damages
+      // arising from the use of this software.
+      //
+      // Permission is granted to anyone to use this software for any purpose,
+      // including commercial applications, and to alter it and redistribute it
+      // freely, subject to the following restrictions:
+      //
+      // 1. The origin of this software must not be misrepresented; you must not
+      //   claim that you wrote the original software. If you use this software
+      //   in a product, an acknowledgment in the product documentation would be
+      //   appreciated but is not required.
+      // 2. Altered source versions must be plainly marked as such, and must not be
+      //   misrepresented as being the original software.
+      // 3. This notice may not be removed or altered from any source distribution.
+      module.exports = {
+        2: 'need dictionary',
+        /* Z_NEED_DICT       2  */
+        1: 'stream end',
+        /* Z_STREAM_END      1  */
+        0: '',
+        /* Z_OK              0  */
+        '-1': 'file error',
+        /* Z_ERRNO         (-1) */
+        '-2': 'stream error',
+        /* Z_STREAM_ERROR  (-2) */
+        '-3': 'data error',
+        /* Z_DATA_ERROR    (-3) */
+        '-4': 'insufficient memory',
+        /* Z_MEM_ERROR     (-4) */
+        '-5': 'buffer error',
+        /* Z_BUF_ERROR     (-5) */
+        '-6': 'incompatible version' /* Z_VERSION_ERROR (-6) */
+      };
+    }, {}],
+    11: [function (require, module, exports) {
+      'use strict';
+
+      // (C) 1995-2013 Jean-loup Gailly and Mark Adler
+      // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
+      //
+      // This software is provided 'as-is', without any express or implied
+      // warranty. In no event will the authors be held liable for any damages
+      // arising from the use of this software.
+      //
+      // Permission is granted to anyone to use this software for any purpose,
+      // including commercial applications, and to alter it and redistribute it
+      // freely, subject to the following restrictions:
+      //
+      // 1. The origin of this software must not be misrepresented; you must not
+      //   claim that you wrote the original software. If you use this software
+      //   in a product, an acknowledgment in the product documentation would be
+      //   appreciated but is not required.
+      // 2. Altered source versions must be plainly marked as such, and must not be
+      //   misrepresented as being the original software.
+      // 3. This notice may not be removed or altered from any source distribution.
+      function ZStream() {
+        /* next input byte */
+        this.input = null; // JS specific, because we have no pointers
+        this.next_in = 0;
+        /* number of bytes available at input */
+        this.avail_in = 0;
+        /* total number of input bytes read so far */
+        this.total_in = 0;
+        /* next output byte should be put there */
+        this.output = null; // JS specific, because we have no pointers
+        this.next_out = 0;
+        /* remaining free space at output */
+        this.avail_out = 0;
+        /* total number of bytes output so far */
+        this.total_out = 0;
+        /* last error message, NULL if no error */
+        this.msg = '' /*Z_NULL*/;
+        /* not visible by applications */
+        this.state = null;
+        /* best guess about the data type: binary or text */
+        this.data_type = 2 /*Z_UNKNOWN*/;
+        /* adler32 value of the uncompressed data */
+        this.adler = 0;
+      }
+      module.exports = ZStream;
+    }, {}],
+    "/lib/inflate.js": [function (require, module, exports) {
+      'use strict';
+
+      var zlib_inflate = require('./zlib/inflate');
+      var utils = require('./utils/common');
+      var strings = require('./utils/strings');
+      var c = require('./zlib/constants');
+      var msg = require('./zlib/messages');
+      var ZStream = require('./zlib/zstream');
+      var GZheader = require('./zlib/gzheader');
+      var toString = Object.prototype.toString;
+
+      /**
+       * class Inflate
+       *
+       * Generic JS-style wrapper for zlib calls. If you don't need
+       * streaming behaviour - use more simple functions: [[inflate]]
+       * and [[inflateRaw]].
+       **/
+
+      /* internal
+       * inflate.chunks -> Array
+       *
+       * Chunks of output data, if [[Inflate#onData]] not overridden.
+       **/
+
+      /**
+       * Inflate.result -> Uint8Array|Array|String
+       *
+       * Uncompressed result, generated by default [[Inflate#onData]]
+       * and [[Inflate#onEnd]] handlers. Filled after you push last chunk
+       * (call [[Inflate#push]] with `Z_FINISH` / `true` param) or if you
+       * push a chunk with explicit flush (call [[Inflate#push]] with
+       * `Z_SYNC_FLUSH` param).
+       **/
+
+      /**
+       * Inflate.err -> Number
+       *
+       * Error code after inflate finished. 0 (Z_OK) on success.
+       * Should be checked if broken data possible.
+       **/
+
+      /**
+       * Inflate.msg -> String
+       *
+       * Error message, if [[Inflate.err]] != 0
+       **/
+
+      /**
+       * new Inflate(options)
+       * - options (Object): zlib inflate options.
+       *
+       * Creates new inflator instance with specified params. Throws exception
+       * on bad params. Supported options:
+       *
+       * - `windowBits`
+       * - `dictionary`
+       *
+       * [http://zlib.net/manual.html#Advanced](http://zlib.net/manual.html#Advanced)
+       * for more information on these.
+       *
+       * Additional options, for internal needs:
+       *
+       * - `chunkSize` - size of generated data chunks (16K by default)
+       * - `raw` (Boolean) - do raw inflate
+       * - `to` (String) - if equal to 'string', then result will be converted
+       *   from utf8 to utf16 (javascript) string. When string output requested,
+       *   chunk length can differ from `chunkSize`, depending on content.
+       *
+       * By default, when no options set, autodetect deflate/gzip data format via
+       * wrapper header.
+       *
+       * ##### Example:
+       *
+       * ```javascript
+       * var pako = require('pako')
+       *   , chunk1 = Uint8Array([1,2,3,4,5,6,7,8,9])
+       *   , chunk2 = Uint8Array([10,11,12,13,14,15,16,17,18,19]);
+       *
+       * var inflate = new pako.Inflate({ level: 3});
+       *
+       * inflate.push(chunk1, false);
+       * inflate.push(chunk2, true);  // true -> last chunk
+       *
+       * if (inflate.err) { throw new Error(inflate.err); }
+       *
+       * console.log(inflate.result);
+       * ```
+       **/
+      function Inflate(options) {
+        if (!(this instanceof Inflate)) return new Inflate(options);
+        this.options = utils.assign({
+          chunkSize: 16384,
+          windowBits: 0,
+          to: ''
+        }, options || {});
+        var opt = this.options;
+
+        // Force window size for `raw` data, if not set directly,
+        // because we have no header for autodetect.
+        if (opt.raw && opt.windowBits >= 0 && opt.windowBits < 16) {
+          opt.windowBits = -opt.windowBits;
+          if (opt.windowBits === 0) {
+            opt.windowBits = -15;
+          }
+        }
+
+        // If `windowBits` not defined (and mode not raw) - set autodetect flag for gzip/deflate
+        if (opt.windowBits >= 0 && opt.windowBits < 16 && !(options && options.windowBits)) {
+          opt.windowBits += 32;
+        }
+
+        // Gzip header has no info about windows size, we can do autodetect only
+        // for deflate. So, if window size not set, force it to max when gzip possible
+        if (opt.windowBits > 15 && opt.windowBits < 48) {
+          // bit 3 (16) -> gzipped data
+          // bit 4 (32) -> autodetect gzip/deflate
+          if ((opt.windowBits & 15) === 0) {
+            opt.windowBits |= 15;
+          }
+        }
+        this.err = 0; // error code, if happens (0 = Z_OK)
+        this.msg = ''; // error message
+        this.ended = false; // used to avoid multiple onEnd() calls
+        this.chunks = []; // chunks of compressed data
+
+        this.strm = new ZStream();
+        this.strm.avail_out = 0;
+        var status = zlib_inflate.inflateInit2(this.strm, opt.windowBits);
+        if (status !== c.Z_OK) {
+          throw new Error(msg[status]);
+        }
+        this.header = new GZheader();
+        zlib_inflate.inflateGetHeader(this.strm, this.header);
+
+        // Setup dictionary
+        if (opt.dictionary) {
+          // Convert data if needed
+          if (typeof opt.dictionary === 'string') {
+            opt.dictionary = strings.string2buf(opt.dictionary);
+          } else if (toString.call(opt.dictionary) === '[object ArrayBuffer]') {
+            opt.dictionary = new Uint8Array(opt.dictionary);
+          }
+          if (opt.raw) {
+            //In raw mode we need to set the dictionary early
+            status = zlib_inflate.inflateSetDictionary(this.strm, opt.dictionary);
+            if (status !== c.Z_OK) {
+              throw new Error(msg[status]);
+            }
+          }
+        }
+      }
+
+      /**
+       * Inflate#push(data[, mode]) -> Boolean
+       * - data (Uint8Array|Array|ArrayBuffer|String): input data
+       * - mode (Number|Boolean): 0..6 for corresponding Z_NO_FLUSH..Z_TREE modes.
+       *   See constants. Skipped or `false` means Z_NO_FLUSH, `true` means Z_FINISH.
+       *
+       * Sends input data to inflate pipe, generating [[Inflate#onData]] calls with
+       * new output chunks. Returns `true` on success. The last data block must have
+       * mode Z_FINISH (or `true`). That will flush internal pending buffers and call
+       * [[Inflate#onEnd]]. For interim explicit flushes (without ending the stream) you
+       * can use mode Z_SYNC_FLUSH, keeping the decompression context.
+       *
+       * On fail call [[Inflate#onEnd]] with error code and return false.
+       *
+       * We strongly recommend to use `Uint8Array` on input for best speed (output
+       * format is detected automatically). Also, don't skip last param and always
+       * use the same type in your code (boolean or number). That will improve JS speed.
+       *
+       * For regular `Array`-s make sure all elements are [0..255].
+       *
+       * ##### Example
+       *
+       * ```javascript
+       * push(chunk, false); // push one of data chunks
+       * ...
+       * push(chunk, true);  // push last chunk
+       * ```
+       **/
+      Inflate.prototype.push = function (data, mode) {
+        var strm = this.strm;
+        var chunkSize = this.options.chunkSize;
+        var dictionary = this.options.dictionary;
+        var status, _mode;
+        var next_out_utf8, tail, utf8str;
+
+        // Flag to properly process Z_BUF_ERROR on testing inflate call
+        // when we check that all output data was flushed.
+        var allowBufError = false;
+        if (this.ended) {
+          return false;
+        }
+        _mode = mode === ~~mode ? mode : mode === true ? c.Z_FINISH : c.Z_NO_FLUSH;
+
+        // Convert data if needed
+        if (typeof data === 'string') {
+          // Only binary strings can be decompressed on practice
+          strm.input = strings.binstring2buf(data);
+        } else if (toString.call(data) === '[object ArrayBuffer]') {
+          strm.input = new Uint8Array(data);
+        } else {
+          strm.input = data;
+        }
+        strm.next_in = 0;
+        strm.avail_in = strm.input.length;
+        do {
+          if (strm.avail_out === 0) {
+            strm.output = new utils.Buf8(chunkSize);
+            strm.next_out = 0;
+            strm.avail_out = chunkSize;
+          }
+          status = zlib_inflate.inflate(strm, c.Z_NO_FLUSH); /* no bad return value */
+
+          if (status === c.Z_NEED_DICT && dictionary) {
+            status = zlib_inflate.inflateSetDictionary(this.strm, dictionary);
+          }
+          if (status === c.Z_BUF_ERROR && allowBufError === true) {
+            status = c.Z_OK;
+            allowBufError = false;
+          }
+          if (status !== c.Z_STREAM_END && status !== c.Z_OK) {
+            this.onEnd(status);
+            this.ended = true;
+            return false;
+          }
+          if (strm.next_out) {
+            if (strm.avail_out === 0 || status === c.Z_STREAM_END || strm.avail_in === 0 && (_mode === c.Z_FINISH || _mode === c.Z_SYNC_FLUSH)) {
+              if (this.options.to === 'string') {
+                next_out_utf8 = strings.utf8border(strm.output, strm.next_out);
+                tail = strm.next_out - next_out_utf8;
+                utf8str = strings.buf2string(strm.output, next_out_utf8);
+
+                // move tail
+                strm.next_out = tail;
+                strm.avail_out = chunkSize - tail;
+                if (tail) {
+                  utils.arraySet(strm.output, strm.output, next_out_utf8, tail, 0);
+                }
+                this.onData(utf8str);
+              } else {
+                this.onData(utils.shrinkBuf(strm.output, strm.next_out));
+              }
+            }
+          }
+
+          // When no more input data, we should check that internal inflate buffers
+          // are flushed. The only way to do it when avail_out = 0 - run one more
+          // inflate pass. But if output data not exists, inflate return Z_BUF_ERROR.
+          // Here we set flag to process this error properly.
+          //
+          // NOTE. Deflate does not return error in this case and does not needs such
+          // logic.
+          if (strm.avail_in === 0 && strm.avail_out === 0) {
+            allowBufError = true;
+          }
+        } while ((strm.avail_in > 0 || strm.avail_out === 0) && status !== c.Z_STREAM_END);
+        if (status === c.Z_STREAM_END) {
+          _mode = c.Z_FINISH;
+        }
+
+        // Finalize on the last chunk.
+        if (_mode === c.Z_FINISH) {
+          status = zlib_inflate.inflateEnd(this.strm);
+          this.onEnd(status);
+          this.ended = true;
+          return status === c.Z_OK;
+        }
+
+        // callback interim results if Z_SYNC_FLUSH.
+        if (_mode === c.Z_SYNC_FLUSH) {
+          this.onEnd(c.Z_OK);
+          strm.avail_out = 0;
+          return true;
+        }
+        return true;
+      };
+
+      /**
+       * Inflate#onData(chunk) -> Void
+       * - chunk (Uint8Array|Array|String): output data. Type of array depends
+       *   on js engine support. When string output requested, each chunk
+       *   will be string.
+       *
+       * By default, stores data blocks in `chunks[]` property and glue
+       * those in `onEnd`. Override this handler, if you need another behaviour.
+       **/
+      Inflate.prototype.onData = function (chunk) {
+        this.chunks.push(chunk);
+      };
+
+      /**
+       * Inflate#onEnd(status) -> Void
+       * - status (Number): inflate status. 0 (Z_OK) on success,
+       *   other if not.
+       *
+       * Called either after you tell inflate that the input stream is
+       * complete (Z_FINISH) or should be flushed (Z_SYNC_FLUSH)
+       * or if an error happened. By default - join collected chunks,
+       * free memory and fill `results` / `err` properties.
+       **/
+      Inflate.prototype.onEnd = function (status) {
+        // On success - join
+        if (status === c.Z_OK) {
+          if (this.options.to === 'string') {
+            // Glue & convert here, until we teach pako to send
+            // utf8 aligned strings to onData
+            this.result = this.chunks.join('');
+          } else {
+            this.result = utils.flattenChunks(this.chunks);
+          }
+        }
+        this.chunks = [];
+        this.err = status;
+        this.msg = this.strm.msg;
+      };
+
+      /**
+       * inflate(data[, options]) -> Uint8Array|Array|String
+       * - data (Uint8Array|Array|String): input data to decompress.
+       * - options (Object): zlib inflate options.
+       *
+       * Decompress `data` with inflate/ungzip and `options`. Autodetect
+       * format via wrapper header by default. That's why we don't provide
+       * separate `ungzip` method.
+       *
+       * Supported options are:
+       *
+       * - windowBits
+       *
+       * [http://zlib.net/manual.html#Advanced](http://zlib.net/manual.html#Advanced)
+       * for more information.
+       *
+       * Sugar (options):
+       *
+       * - `raw` (Boolean) - say that we work with raw stream, if you don't wish to specify
+       *   negative windowBits implicitly.
+       * - `to` (String) - if equal to 'string', then result will be converted
+       *   from utf8 to utf16 (javascript) string. When string output requested,
+       *   chunk length can differ from `chunkSize`, depending on content.
+       *
+       *
+       * ##### Example:
+       *
+       * ```javascript
+       * var pako = require('pako')
+       *   , input = pako.deflate([1,2,3,4,5,6,7,8,9])
+       *   , output;
+       *
+       * try {
+       *   output = pako.inflate(input);
+       * } catch (err)
+       *   console.log(err);
+       * }
+       * ```
+       **/
+      function inflate(input, options) {
+        var inflator = new Inflate(options);
+        inflator.push(input, true);
+
+        // That will never happens, if you don't cheat with options :)
+        if (inflator.err) {
+          throw inflator.msg || msg[inflator.err];
+        }
+        return inflator.result;
+      }
+
+      /**
+       * inflateRaw(data[, options]) -> Uint8Array|Array|String
+       * - data (Uint8Array|Array|String): input data to decompress.
+       * - options (Object): zlib inflate options.
+       *
+       * The same as [[inflate]], but creates raw data, without wrapper
+       * (header and adler32 crc).
+       **/
+      function inflateRaw(input, options) {
+        options = options || {};
+        options.raw = true;
+        return inflate(input, options);
+      }
+
+      /**
+       * ungzip(data[, options]) -> Uint8Array|Array|String
+       * - data (Uint8Array|Array|String): input data to decompress.
+       * - options (Object): zlib inflate options.
+       *
+       * Just shortcut to [[inflate]], because it autodetects format
+       * by header.content. Done for convenience.
+       **/
+
+      exports.Inflate = Inflate;
+      exports.inflate = inflate;
+      exports.inflateRaw = inflateRaw;
+      exports.ungzip = inflate;
+    }, {
+      "./utils/common": 1,
+      "./utils/strings": 2,
+      "./zlib/constants": 4,
+      "./zlib/gzheader": 6,
+      "./zlib/inflate": 8,
+      "./zlib/messages": 10,
+      "./zlib/zstream": 11
+    }]
+  }, {}, [])("/lib/inflate.js");
+});
+
+/***/ },
+
+/***/ "./src/admin/lib-font/lib-font.browser.js"
+/*!************************************************!*\
+  !*** ./src/admin/lib-font/lib-font.browser.js ***!
+  \************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Font: () => (/* binding */ Font)
+/* harmony export */ });
+let fetchFunction = globalThis.fetch;
+if (!fetchFunction) {
+  let backlog = [];
+  fetchFunction = globalThis.fetch = (...args) => new Promise((resolve, reject) => {
+    backlog.push({
+      args: args,
+      resolve: resolve,
+      reject: reject
+    });
+  });
+  __webpack_require__.e(/*! import() */ "_80a7").then(__webpack_require__.t.bind(__webpack_require__, /*! fs */ "?80a7", 23)).then(fs => {
+    fetchFunction = globalThis.fetch = async function (path) {
+      return new Promise((resolve, reject) => {
+        fs.readFile(path, (err, data) => {
+          if (err) return reject(err);
+          resolve({
+            ok: true,
+            arrayBuffer: () => data.buffer
+          });
+        });
+      });
+    };
+    while (backlog.length) {
+      let instruction = backlog.shift();
+      fetchFunction(...instruction.args).then(data => instruction.resolve(data)).catch(err => instruction.reject(err));
+    }
+  }).catch(err => {
+    console.error(err);
+    throw new Error(`lib-font cannot run unless either the Fetch API or Node's filesystem module is available.`);
+  });
+}
+class Event {
+  constructor(type, detail = {}, msg) {
+    this.type = type;
+    this.detail = detail;
+    this.msg = msg;
+    Object.defineProperty(this, `__mayPropagate`, {
+      enumerable: false,
+      writable: true
+    });
+    this.__mayPropagate = true;
+  }
+  preventDefault() {}
+  stopPropagation() {
+    this.__mayPropagate = false;
+  }
+  valueOf() {
+    return this;
+  }
+  toString() {
+    return this.msg ? `[${this.type} event]: ${this.msg}` : `[${this.type} event]`;
+  }
+}
+class EventManager {
+  constructor() {
+    this.listeners = {};
+  }
+  addEventListener(type, listener, useCapture) {
+    let bin = this.listeners[type] || [];
+    if (useCapture) bin.unshift(listener);else bin.push(listener);
+    this.listeners[type] = bin;
+  }
+  removeEventListener(type, listener) {
+    let bin = this.listeners[type] || [];
+    let pos = bin.findIndex(e => e === listener);
+    if (pos > -1) {
+      bin.splice(pos, 1);
+      this.listeners[type] = bin;
+    }
+  }
+  dispatch(event) {
+    let bin = this.listeners[event.type];
+    if (bin) {
+      for (let l = 0, e = bin.length; l < e; l++) {
+        if (!event.__mayPropagate) break;
+        bin[l](event);
+      }
+    }
+  }
+}
+const startDate = new Date(`1904-01-01T00:00:00+0000`).getTime();
+function asText(data) {
+  return Array.from(data).map(v => String.fromCharCode(v)).join(``);
+}
+class Parser {
+  constructor(dict, dataview, name) {
+    this.name = (name || dict.tag || ``).trim();
+    this.length = dict.length;
+    this.start = dict.offset;
+    this.offset = 0;
+    this.data = dataview;
+    [`getInt8`, `getUint8`, `getInt16`, `getUint16`, `getInt32`, `getUint32`, `getBigInt64`, `getBigUint64`].forEach(name => {
+      let fn = name.replace(/get(Big)?/, "").toLowerCase();
+      let increment = parseInt(name.replace(/[^\d]/g, "")) / 8;
+      Object.defineProperty(this, fn, {
+        get: () => this.getValue(name, increment)
+      });
+    });
+  }
+  get currentPosition() {
+    return this.start + this.offset;
+  }
+  set currentPosition(position) {
+    this.start = position;
+    this.offset = 0;
+  }
+  skip(n = 0, bits = 8) {
+    this.offset += n * bits / 8;
+  }
+  getValue(type, increment) {
+    let pos = this.start + this.offset;
+    this.offset += increment;
+    try {
+      return this.data[type](pos);
+    } catch (e) {
+      console.error(`parser`, type, increment, this);
+      console.error(`parser`, this.start, this.offset);
+      throw e;
+    }
+  }
+  flags(n) {
+    if (n === 8 || n === 16 || n === 32 || n === 64) {
+      return this[`uint${n}`].toString(2).padStart(n, 0).split(``).map(v => v === "1");
+    }
+    console.error(`Error parsing flags: flag types can only be 1, 2, 4, or 8 bytes long`);
+    console.trace();
+  }
+  get tag() {
+    const t = this.uint32;
+    return asText([t >> 24 & 255, t >> 16 & 255, t >> 8 & 255, t & 255]);
+  }
+  get fixed() {
+    let major = this.int16;
+    let minor = Math.round(1e3 * this.uint16 / 65356);
+    return major + minor / 1e3;
+  }
+  get legacyFixed() {
+    let major = this.uint16;
+    let minor = this.uint16.toString(16).padStart(4, 0);
+    return parseFloat(`${major}.${minor}`);
+  }
+  get uint24() {
+    return (this.uint8 << 16) + (this.uint8 << 8) + this.uint8;
+  }
+  get uint128() {
+    let value = 0;
+    for (let i = 0; i < 5; i++) {
+      let byte = this.uint8;
+      value = value * 128 + (byte & 127);
+      if (byte < 128) break;
+    }
+    return value;
+  }
+  get longdatetime() {
+    return new Date(startDate + 1e3 * parseInt(this.int64.toString()));
+  }
+  get fword() {
+    return this.int16;
+  }
+  get ufword() {
+    return this.uint16;
+  }
+  get Offset16() {
+    return this.uint16;
+  }
+  get Offset32() {
+    return this.uint32;
+  }
+  get F2DOT14() {
+    const bits = p.uint16;
+    const integer = [0, 1, -2, -1][bits >> 14];
+    const fraction = bits & 16383;
+    return integer + fraction / 16384;
+  }
+  verifyLength() {
+    if (this.offset != this.length) {
+      console.error(`unexpected parsed table size (${this.offset}) for "${this.name}" (expected ${this.length})`);
+    }
+  }
+  readBytes(n = 0, position = 0, bits = 8, signed = false) {
+    n = n || this.length;
+    if (n === 0) return [];
+    if (position) this.currentPosition = position;
+    const fn = `${signed ? `` : `u`}int${bits}`,
+      slice = [];
+    while (n--) slice.push(this[fn]);
+    return slice;
+  }
+}
+class ParsedData {
+  constructor(parser) {
+    const pGetter = {
+      enumerable: false,
+      get: () => parser
+    };
+    Object.defineProperty(this, `parser`, pGetter);
+    const start = parser.currentPosition;
+    const startGetter = {
+      enumerable: false,
+      get: () => start
+    };
+    Object.defineProperty(this, `start`, startGetter);
+  }
+  load(struct) {
+    Object.keys(struct).forEach(p => {
+      let props = Object.getOwnPropertyDescriptor(struct, p);
+      if (props.get) {
+        this[p] = props.get.bind(this);
+      } else if (props.value) {
+        this[p] = props.value;
+      }
+    });
+    if (this.parser.length) {
+      this.parser.verifyLength();
+    }
+  }
+}
+class SimpleTable extends ParsedData {
+  constructor(dict, dataview, name) {
+    const {
+      parser: parser,
+      start: start
+    } = super(new Parser(dict, dataview, name));
+    const pGetter = {
+      enumerable: false,
+      get: () => parser
+    };
+    Object.defineProperty(this, `p`, pGetter);
+    const startGetter = {
+      enumerable: false,
+      get: () => start
+    };
+    Object.defineProperty(this, `tableStart`, startGetter);
+  }
+}
+function lazy$1(object, property, getter) {
+  let val;
+  Object.defineProperty(object, property, {
+    get: () => {
+      if (val) return val;
+      val = getter();
+      return val;
+    }
+  });
+}
+class SFNT extends SimpleTable {
+  constructor(font, dataview, createTable) {
+    const {
+      p: p
+    } = super({
+      offset: 0,
+      length: 12
+    }, dataview, `sfnt`);
+    this.version = p.uint32;
+    this.numTables = p.uint16;
+    this.searchRange = p.uint16;
+    this.entrySelector = p.uint16;
+    this.rangeShift = p.uint16;
+    p.verifyLength();
+    this.directory = [...new Array(this.numTables)].map(_ => new TableRecord(p));
+    this.tables = {};
+    this.directory.forEach(entry => {
+      const getter = () => createTable(this.tables, {
+        tag: entry.tag,
+        offset: entry.offset,
+        length: entry.length
+      }, dataview);
+      lazy$1(this.tables, entry.tag.trim(), getter);
+    });
+  }
+}
+class TableRecord {
+  constructor(p) {
+    this.tag = p.tag;
+    this.checksum = p.uint32;
+    this.offset = p.uint32;
+    this.length = p.uint32;
+  }
+}
+const gzipDecode = globalThis.pako ? globalThis.pako.inflate : undefined;
+let nativeGzipDecode = undefined;
+if (!gzipDecode) {
+  __webpack_require__.e(/*! import() */ "_946e").then(__webpack_require__.t.bind(__webpack_require__, /*! zlib */ "?946e", 23)).then(zlib => {
+    nativeGzipDecode = buffer => zlib.unzipSync(buffer);
+  });
+}
+class WOFF$1 extends SimpleTable {
+  constructor(font, dataview, createTable) {
+    const {
+      p: p
+    } = super({
+      offset: 0,
+      length: 44
+    }, dataview, `woff`);
+    this.signature = p.tag;
+    this.flavor = p.uint32;
+    this.length = p.uint32;
+    this.numTables = p.uint16;
+    p.uint16;
+    this.totalSfntSize = p.uint32;
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.metaOffset = p.uint32;
+    this.metaLength = p.uint32;
+    this.metaOrigLength = p.uint32;
+    this.privOffset = p.uint32;
+    this.privLength = p.uint32;
+    p.verifyLength();
+    this.directory = [...new Array(this.numTables)].map(_ => new WoffTableDirectoryEntry(p));
+    buildWoffLazyLookups(this, dataview, createTable);
+  }
+}
+class WoffTableDirectoryEntry {
+  constructor(p) {
+    this.tag = p.tag;
+    this.offset = p.uint32;
+    this.compLength = p.uint32;
+    this.origLength = p.uint32;
+    this.origChecksum = p.uint32;
+  }
+}
+function buildWoffLazyLookups(woff, dataview, createTable) {
+  woff.tables = {};
+  woff.directory.forEach(entry => {
+    lazy$1(woff.tables, entry.tag.trim(), () => {
+      let offset = 0;
+      let view = dataview;
+      if (entry.compLength !== entry.origLength) {
+        const data = dataview.buffer.slice(entry.offset, entry.offset + entry.compLength);
+        let unpacked;
+        if (gzipDecode) {
+          unpacked = gzipDecode(new Uint8Array(data));
+        } else if (nativeGzipDecode) {
+          unpacked = nativeGzipDecode(new Uint8Array(data));
+        } else {
+          const msg = `no brotli decoder available to decode WOFF2 font`;
+          if (font.onerror) font.onerror(msg);
+          throw new Error(msg);
+        }
+        view = new DataView(unpacked.buffer);
+      } else {
+        offset = entry.offset;
+      }
+      return createTable(woff.tables, {
+        tag: entry.tag,
+        offset: offset,
+        length: entry.origLength
+      }, view);
+    });
+  });
+}
+const brotliDecode = globalThis.unbrotli;
+let nativeBrotliDecode = undefined;
+if (!brotliDecode) {
+  __webpack_require__.e(/*! import() */ "_946e").then(__webpack_require__.t.bind(__webpack_require__, /*! zlib */ "?946e", 23)).then(zlib => {
+    nativeBrotliDecode = buffer => zlib.brotliDecompressSync(buffer);
+  });
+}
+class WOFF2$1 extends SimpleTable {
+  constructor(font, dataview, createTable) {
+    const {
+      p: p
+    } = super({
+      offset: 0,
+      length: 48
+    }, dataview, `woff2`);
+    this.signature = p.tag;
+    this.flavor = p.uint32;
+    this.length = p.uint32;
+    this.numTables = p.uint16;
+    p.uint16;
+    this.totalSfntSize = p.uint32;
+    this.totalCompressedSize = p.uint32;
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.metaOffset = p.uint32;
+    this.metaLength = p.uint32;
+    this.metaOrigLength = p.uint32;
+    this.privOffset = p.uint32;
+    this.privLength = p.uint32;
+    p.verifyLength();
+    this.directory = [...new Array(this.numTables)].map(_ => new Woff2TableDirectoryEntry(p));
+    let dictOffset = p.currentPosition;
+    this.directory[0].offset = 0;
+    this.directory.forEach((e, i) => {
+      let next = this.directory[i + 1];
+      if (next) {
+        next.offset = e.offset + (e.transformLength !== undefined ? e.transformLength : e.origLength);
+      }
+    });
+    let decoded;
+    let buffer = dataview.buffer.slice(dictOffset);
+    if (brotliDecode) {
+      decoded = brotliDecode(new Uint8Array(buffer));
+    } else if (nativeBrotliDecode) {
+      decoded = new Uint8Array(nativeBrotliDecode(buffer));
+    } else {
+      const msg = `no brotli decoder available to decode WOFF2 font`;
+      if (font.onerror) font.onerror(msg);
+      throw new Error(msg);
+    }
+    buildWoff2LazyLookups(this, decoded, createTable);
+  }
+}
+class Woff2TableDirectoryEntry {
+  constructor(p) {
+    this.flags = p.uint8;
+    const tagNumber = this.tagNumber = this.flags & 63;
+    if (tagNumber === 63) {
+      this.tag = p.tag;
+    } else {
+      this.tag = getWOFF2Tag(tagNumber);
+    }
+    const transformVersion = this.transformVersion = (this.flags & 192) >> 6;
+    let hasTransforms = transformVersion !== 0;
+    if (this.tag === `glyf` || this.tag === `loca`) {
+      hasTransforms = this.transformVersion !== 3;
+    }
+    this.origLength = p.uint128;
+    if (hasTransforms) {
+      this.transformLength = p.uint128;
+    }
+  }
+}
+function buildWoff2LazyLookups(woff2, decoded, createTable) {
+  woff2.tables = {};
+  woff2.directory.forEach(entry => {
+    lazy$1(woff2.tables, entry.tag.trim(), () => {
+      const start = entry.offset;
+      const end = start + (entry.transformLength ? entry.transformLength : entry.origLength);
+      const data = new DataView(decoded.slice(start, end).buffer);
+      try {
+        return createTable(woff2.tables, {
+          tag: entry.tag,
+          offset: 0,
+          length: entry.origLength
+        }, data);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  });
+}
+function getWOFF2Tag(flag) {
+  return [`cmap`, `head`, `hhea`, `hmtx`, `maxp`, `name`, `OS/2`, `post`, `cvt `, `fpgm`, `glyf`, `loca`, `prep`, `CFF `, `VORG`, `EBDT`, `EBLC`, `gasp`, `hdmx`, `kern`, `LTSH`, `PCLT`, `VDMX`, `vhea`, `vmtx`, `BASE`, `GDEF`, `GPOS`, `GSUB`, `EBSC`, `JSTF`, `MATH`, `CBDT`, `CBLC`, `COLR`, `CPAL`, `SVG `, `sbix`, `acnt`, `avar`, `bdat`, `bloc`, `bsln`, `cvar`, `fdsc`, `feat`, `fmtx`, `fvar`, `gvar`, `hsty`, `just`, `lcar`, `mort`, `morx`, `opbd`, `prop`, `trak`, `Zapf`, `Silf`, `Glat`, `Gloc`, `Feat`, `Sill`][flag & 63];
+}
+const tableClasses = {};
+let tableClassesLoaded = false;
+Promise.all([Promise.resolve().then(function () {
+  return cmap$1;
+}), Promise.resolve().then(function () {
+  return head$1;
+}), Promise.resolve().then(function () {
+  return hhea$1;
+}), Promise.resolve().then(function () {
+  return hmtx$1;
+}), Promise.resolve().then(function () {
+  return maxp$1;
+}), Promise.resolve().then(function () {
+  return name$1;
+}), Promise.resolve().then(function () {
+  return OS2$1;
+}), Promise.resolve().then(function () {
+  return post$1;
+}), Promise.resolve().then(function () {
+  return BASE$1;
+}), Promise.resolve().then(function () {
+  return GDEF$1;
+}), Promise.resolve().then(function () {
+  return GSUB$1;
+}), Promise.resolve().then(function () {
+  return GPOS$1;
+}), Promise.resolve().then(function () {
+  return SVG$1;
+}), Promise.resolve().then(function () {
+  return fvar$1;
+}), Promise.resolve().then(function () {
+  return cvt$1;
+}), Promise.resolve().then(function () {
+  return fpgm$1;
+}), Promise.resolve().then(function () {
+  return gasp$1;
+}), Promise.resolve().then(function () {
+  return glyf$1;
+}), Promise.resolve().then(function () {
+  return loca$1;
+}), Promise.resolve().then(function () {
+  return prep$1;
+}), Promise.resolve().then(function () {
+  return CFF$1;
+}), Promise.resolve().then(function () {
+  return CFF2$1;
+}), Promise.resolve().then(function () {
+  return VORG$1;
+}), Promise.resolve().then(function () {
+  return EBLC$1;
+}), Promise.resolve().then(function () {
+  return EBDT$1;
+}), Promise.resolve().then(function () {
+  return EBSC$1;
+}), Promise.resolve().then(function () {
+  return CBLC$1;
+}), Promise.resolve().then(function () {
+  return CBDT$1;
+}), Promise.resolve().then(function () {
+  return sbix$1;
+}), Promise.resolve().then(function () {
+  return COLR$1;
+}), Promise.resolve().then(function () {
+  return CPAL$1;
+}), Promise.resolve().then(function () {
+  return DSIG$1;
+}), Promise.resolve().then(function () {
+  return hdmx$1;
+}), Promise.resolve().then(function () {
+  return kern$1;
+}), Promise.resolve().then(function () {
+  return LTSH$1;
+}), Promise.resolve().then(function () {
+  return MERG$1;
+}), Promise.resolve().then(function () {
+  return meta$1;
+}), Promise.resolve().then(function () {
+  return PCLT$1;
+}), Promise.resolve().then(function () {
+  return VDMX$1;
+}), Promise.resolve().then(function () {
+  return vhea$1;
+}), Promise.resolve().then(function () {
+  return vmtx$1;
+})]).then(data => {
+  data.forEach(e => {
+    let name = Object.keys(e)[0];
+    tableClasses[name] = e[name];
+  });
+  tableClassesLoaded = true;
+});
+function createTable(tables, dict, dataview) {
+  let name = dict.tag.replace(/[^\w\d]/g, ``);
+  let Type = tableClasses[name];
+  if (Type) return new Type(dict, dataview, tables);
+  console.warn(`lib-font has no definition for ${name}. The table was skipped.`);
+  return {};
+}
+function loadTableClasses() {
+  let count = 0;
+  function checkLoaded(resolve, reject) {
+    if (!tableClassesLoaded) {
+      if (count > 10) {
+        return reject(new Error(`loading took too long`));
+      }
+      count++;
+      return setTimeout(() => checkLoaded(resolve), 250);
+    }
+    resolve(createTable);
+  }
+  return new Promise((resolve, reject) => checkLoaded(resolve));
+}
+function getFontCSSFormat(path, errorOnStyle) {
+  let pos = path.lastIndexOf(`.`);
+  let ext = (path.substring(pos + 1) || ``).toLowerCase();
+  let format = {
+    ttf: `truetype`,
+    otf: `opentype`,
+    woff: `woff`,
+    woff2: `woff2`
+  }[ext];
+  if (format) return format;
+  let msg = {
+    eot: `The .eot format is not supported: it died in January 12, 2016, when Microsoft retired all versions of IE that didn't already support WOFF.`,
+    svg: `The .svg format is not supported: SVG fonts (not to be confused with OpenType with embedded SVG) were so bad we took the entire fonts chapter out of the SVG specification again.`,
+    fon: `The .fon format is not supported: this is an ancient Windows bitmap font format.`,
+    ttc: `Based on the current CSS specification, font collections are not (yet?) supported.`
+  }[ext];
+  if (!msg) msg = `${path} is not a known webfont format.`;
+  if (errorOnStyle) {
+    throw new Error(msg);
+  } else {
+    console.warn(`Could not load font: ${msg}`);
+  }
+}
+async function setupFontFace(name, url, options = {}) {
+  if (!globalThis.document) return;
+  let format = getFontCSSFormat(url, options.errorOnStyle);
+  if (!format) return;
+  let style = document.createElement(`style`);
+  style.className = `injected-by-Font-js`;
+  let rules = [];
+  if (options.styleRules) {
+    rules = Object.entries(options.styleRules).map(([key, value]) => `${key}: ${value};`);
+  }
+  style.textContent = `\n@font-face {\n    font-family: "${name}";\n    ${rules.join(`\n\t`)}\n    src: url("${url}") format("${format}");\n}`;
+  globalThis.document.head.appendChild(style);
+  return style;
+}
+const TTF = [0, 1, 0, 0];
+const OTF = [79, 84, 84, 79];
+const WOFF = [119, 79, 70, 70];
+const WOFF2 = [119, 79, 70, 50];
+function match(ar1, ar2) {
+  if (ar1.length !== ar2.length) return;
+  for (let i = 0; i < ar1.length; i++) {
+    if (ar1[i] !== ar2[i]) return;
+  }
+  return true;
+}
+function validFontFormat(dataview) {
+  const LEAD_BYTES = [dataview.getUint8(0), dataview.getUint8(1), dataview.getUint8(2), dataview.getUint8(3)];
+  if (match(LEAD_BYTES, TTF) || match(LEAD_BYTES, OTF)) return `SFNT`;
+  if (match(LEAD_BYTES, WOFF)) return `WOFF`;
+  if (match(LEAD_BYTES, WOFF2)) return `WOFF2`;
+}
+function checkFetchResponseStatus(response) {
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} - ${response.statusText}`);
+  }
+  return response;
+}
+class Font extends EventManager {
+  constructor(name, options = {}) {
+    super();
+    this.name = name;
+    this.options = options;
+    this.metrics = false;
+  }
+  get src() {
+    return this.__src;
+  }
+  set src(src) {
+    this.__src = src;
+    (async () => {
+      if (globalThis.document && !this.options.skipStyleSheet) {
+        await setupFontFace(this.name, src, this.options);
+      }
+      this.loadFont(src);
+    })();
+  }
+  async loadFont(url, filename) {
+    fetch(url).then(response => checkFetchResponseStatus(response) && response.arrayBuffer()).then(buffer => this.fromDataBuffer(buffer, filename || url)).catch(err => {
+      const evt = new Event(`error`, err, `Failed to load font at ${filename || url}`);
+      this.dispatch(evt);
+      if (this.onerror) this.onerror(evt);
+    });
+  }
+  async fromDataBuffer(buffer, filenameOrUrL) {
+    this.fontData = new DataView(buffer);
+    let type = validFontFormat(this.fontData);
+    if (!type) {
+      throw new Error(`${filenameOrUrL} is either an unsupported font format, or not a font at all.`);
+    }
+    await this.parseBasicData(type);
+    const evt = new Event("load", {
+      font: this
+    });
+    this.dispatch(evt);
+    if (this.onload) this.onload(evt);
+  }
+  async parseBasicData(type) {
+    return loadTableClasses().then(createTable => {
+      if (type === `SFNT`) {
+        this.opentype = new SFNT(this, this.fontData, createTable);
+      }
+      if (type === `WOFF`) {
+        this.opentype = new WOFF$1(this, this.fontData, createTable);
+      }
+      if (type === `WOFF2`) {
+        this.opentype = new WOFF2$1(this, this.fontData, createTable);
+      }
+      return this.opentype;
+    });
+  }
+  getGlyphId(char) {
+    return this.opentype.tables.cmap.getGlyphId(char);
+  }
+  reverse(glyphid) {
+    return this.opentype.tables.cmap.reverse(glyphid);
+  }
+  supports(char) {
+    return this.getGlyphId(char) !== 0;
+  }
+  supportsVariation(variation) {
+    return this.opentype.tables.cmap.supportsVariation(variation) !== false;
+  }
+  measureText(text, size = 16) {
+    if (this.__unloaded) throw new Error("Cannot measure text: font was unloaded. Please reload before calling measureText()");
+    let d = document.createElement("div");
+    d.textContent = text;
+    d.style.fontFamily = this.name;
+    d.style.fontSize = `${size}px`;
+    d.style.color = `transparent`;
+    d.style.background = `transparent`;
+    d.style.top = `0`;
+    d.style.left = `0`;
+    d.style.position = `absolute`;
+    document.body.appendChild(d);
+    let bbox = d.getBoundingClientRect();
+    document.body.removeChild(d);
+    const OS2 = this.opentype.tables["OS/2"];
+    bbox.fontSize = size;
+    bbox.ascender = OS2.sTypoAscender;
+    bbox.descender = OS2.sTypoDescender;
+    return bbox;
+  }
+  unload() {
+    if (this.styleElement.parentNode) {
+      this.styleElement.parentNode.removeElement(this.styleElement);
+      const evt = new Event("unload", {
+        font: this
+      });
+      this.dispatch(evt);
+      if (this.onunload) this.onunload(evt);
+    }
+    this._unloaded = true;
+  }
+  load() {
+    if (this.__unloaded) {
+      delete this.__unloaded;
+      document.head.appendChild(this.styleElement);
+      const evt = new Event("load", {
+        font: this
+      });
+      this.dispatch(evt);
+      if (this.onload) this.onload(evt);
+    }
+  }
+}
+globalThis.Font = Font;
+class Subtable extends ParsedData {
+  constructor(p, plaformID, encodingID) {
+    super(p);
+    this.plaformID = plaformID;
+    this.encodingID = encodingID;
+  }
+}
+class Format0 extends Subtable {
+  constructor(p, platformID, encodingID) {
+    super(p, platformID, encodingID);
+    this.format = 0;
+    this.length = p.uint16;
+    this.language = p.uint16;
+    this.glyphIdArray = [...new Array(256)].map(_ => p.uint8);
+  }
+  supports(charCode) {
+    if (charCode.charCodeAt) {
+      charCode = -1;
+      console.warn(`supports(character) not implemented for cmap subtable format 0. only supports(id) is implemented.`);
+    }
+    return 0 <= charCode && charCode <= 255;
+  }
+  reverse(glyphID) {
+    console.warn(`reverse not implemented for cmap subtable format 0`);
+    return {};
+  }
+  getSupportedCharCodes() {
+    return [{
+      start: 1,
+      end: 256
+    }];
+  }
+}
+class Format2 extends Subtable {
+  constructor(p, platformID, encodingID) {
+    super(p, platformID, encodingID);
+    this.format = 2;
+    this.length = p.uint16;
+    this.language = p.uint16;
+    this.subHeaderKeys = [...new Array(256)].map(_ => p.uint16);
+    const subHeaderCount = Math.max(...this.subHeaderKeys);
+    const subHeaderOffset = p.currentPosition;
+    lazy$1(this, `subHeaders`, () => {
+      p.currentPosition = subHeaderOffset;
+      return [...new Array(subHeaderCount)].map(_ => new SubHeader(p));
+    });
+    const glyphIndexOffset = subHeaderOffset + subHeaderCount * 8;
+    lazy$1(this, `glyphIndexArray`, () => {
+      p.currentPosition = glyphIndexOffset;
+      return [...new Array(subHeaderCount)].map(_ => p.uint16);
+    });
+  }
+  supports(charCode) {
+    if (charCode.charCodeAt) {
+      charCode = -1;
+      console.warn(`supports(character) not implemented for cmap subtable format 2. only supports(id) is implemented.`);
+    }
+    const low = charCode && 255;
+    const high = charCode && 65280;
+    const subHeaderKey = this.subHeaders[high];
+    const subheader = this.subHeaders[subHeaderKey];
+    const first = subheader.firstCode;
+    const last = first + subheader.entryCount;
+    return first <= low && low <= last;
+  }
+  reverse(glyphID) {
+    console.warn(`reverse not implemented for cmap subtable format 2`);
+    return {};
+  }
+  getSupportedCharCodes(preservePropNames = false) {
+    if (preservePropNames) {
+      return this.subHeaders.map(h => ({
+        firstCode: h.firstCode,
+        lastCode: h.lastCode
+      }));
+    }
+    return this.subHeaders.map(h => ({
+      start: h.firstCode,
+      end: h.lastCode
+    }));
+  }
+}
+class SubHeader {
+  constructor(p) {
+    this.firstCode = p.uint16;
+    this.entryCount = p.uint16;
+    this.lastCode = this.first + this.entryCount;
+    this.idDelta = p.int16;
+    this.idRangeOffset = p.uint16;
+  }
+}
+class Format4 extends Subtable {
+  constructor(p, platformID, encodingID) {
+    super(p, platformID, encodingID);
+    this.format = 4;
+    this.length = p.uint16;
+    this.language = p.uint16;
+    this.segCountX2 = p.uint16;
+    this.segCount = this.segCountX2 / 2;
+    this.searchRange = p.uint16;
+    this.entrySelector = p.uint16;
+    this.rangeShift = p.uint16;
+    const endCodePosition = p.currentPosition;
+    lazy$1(this, `endCode`, () => p.readBytes(this.segCount, endCodePosition, 16));
+    const startCodePosition = endCodePosition + 2 + this.segCountX2;
+    lazy$1(this, `startCode`, () => p.readBytes(this.segCount, startCodePosition, 16));
+    const idDeltaPosition = startCodePosition + this.segCountX2;
+    lazy$1(this, `idDelta`, () => p.readBytes(this.segCount, idDeltaPosition, 16, true));
+    const idRangePosition = idDeltaPosition + this.segCountX2;
+    lazy$1(this, `idRangeOffset`, () => p.readBytes(this.segCount, idRangePosition, 16));
+    const glyphIdArrayPosition = idRangePosition + this.segCountX2;
+    const glyphIdArrayLength = this.length - (glyphIdArrayPosition - this.tableStart);
+    lazy$1(this, `glyphIdArray`, () => p.readBytes(glyphIdArrayLength, glyphIdArrayPosition, 16));
+    lazy$1(this, `segments`, () => this.buildSegments(idRangePosition, glyphIdArrayPosition, p));
+  }
+  buildSegments(idRangePosition, glyphIdArrayPosition, p) {
+    const build = (_, i) => {
+      let startCode = this.startCode[i],
+        endCode = this.endCode[i],
+        idDelta = this.idDelta[i],
+        idRangeOffset = this.idRangeOffset[i],
+        idRangeOffsetPointer = idRangePosition + 2 * i,
+        glyphIDs = [];
+      if (idRangeOffset === 0) {
+        for (let i = startCode + idDelta, e = endCode + idDelta; i <= e; i++) {
+          glyphIDs.push(i);
+        }
+      } else {
+        for (let i = 0, e = endCode - startCode; i <= e; i++) {
+          p.currentPosition = idRangeOffsetPointer + idRangeOffset + i * 2;
+          glyphIDs.push(p.uint16);
+        }
+      }
+      return {
+        startCode: startCode,
+        endCode: endCode,
+        idDelta: idDelta,
+        idRangeOffset: idRangeOffset,
+        glyphIDs: glyphIDs
+      };
+    };
+    return [...new Array(this.segCount)].map(build);
+  }
+  reverse(glyphID) {
+    let s = this.segments.find(v => v.glyphIDs.includes(glyphID));
+    if (!s) return {};
+    const code = s.startCode + s.glyphIDs.indexOf(glyphID);
+    return {
+      code: code,
+      unicode: String.fromCodePoint(code)
+    };
+  }
+  getGlyphId(charCode) {
+    if (charCode.charCodeAt) charCode = charCode.charCodeAt(0);
+    if (55296 <= charCode && charCode <= 57343) return 0;
+    if ((charCode & 65534) === 65534 || (charCode & 65535) === 65535) return 0;
+    let segment = this.segments.find(s => s.startCode <= charCode && charCode <= s.endCode);
+    if (!segment) return 0;
+    return segment.glyphIDs[charCode - segment.startCode];
+  }
+  supports(charCode) {
+    return this.getGlyphId(charCode) !== 0;
+  }
+  getSupportedCharCodes(preservePropNames = false) {
+    if (preservePropNames) return this.segments;
+    return this.segments.map(v => ({
+      start: v.startCode,
+      end: v.endCode
+    }));
+  }
+}
+class Format6 extends Subtable {
+  constructor(p, platformID, encodingID) {
+    super(p, platformID, encodingID);
+    this.format = 6;
+    this.length = p.uint16;
+    this.language = p.uint16;
+    this.firstCode = p.uint16;
+    this.entryCount = p.uint16;
+    this.lastCode = this.firstCode + this.entryCount - 1;
+    const getter = () => [...new Array(this.entryCount)].map(_ => p.uint16);
+    lazy$1(this, `glyphIdArray`, getter);
+  }
+  supports(charCode) {
+    if (charCode.charCodeAt) {
+      charCode = -1;
+      console.warn(`supports(character) not implemented for cmap subtable format 6. only supports(id) is implemented.`);
+    }
+    if (charCode < this.firstCode) return {};
+    if (charCode > this.firstCode + this.entryCount) return {};
+    const code = charCode - this.firstCode;
+    return {
+      code: code,
+      unicode: String.fromCodePoint(code)
+    };
+  }
+  reverse(glyphID) {
+    let pos = this.glyphIdArray.indexOf(glyphID);
+    if (pos > -1) return this.firstCode + pos;
+  }
+  getSupportedCharCodes(preservePropNames = false) {
+    if (preservePropNames) {
+      return [{
+        firstCode: this.firstCode,
+        lastCode: this.lastCode
+      }];
+    }
+    return [{
+      start: this.firstCode,
+      end: this.lastCode
+    }];
+  }
+}
+class Format8 extends Subtable {
+  constructor(p, platformID, encodingID) {
+    super(p, platformID, encodingID);
+    this.format = 8;
+    p.uint16;
+    this.length = p.uint32;
+    this.language = p.uint32;
+    this.is32 = [...new Array(8192)].map(_ => p.uint8);
+    this.numGroups = p.uint32;
+    const getter = () => [...new Array(this.numGroups)].map(_ => new SequentialMapGroup$1(p));
+    lazy$1(this, `groups`, getter);
+  }
+  supports(charCode) {
+    if (charCode.charCodeAt) {
+      charCode = -1;
+      console.warn(`supports(character) not implemented for cmap subtable format 8. only supports(id) is implemented.`);
+    }
+    return this.groups.findIndex(s => s.startcharCode <= charCode && charCode <= s.endcharCode) !== -1;
+  }
+  reverse(glyphID) {
+    console.warn(`reverse not implemented for cmap subtable format 8`);
+    return {};
+  }
+  getSupportedCharCodes(preservePropNames = false) {
+    if (preservePropNames) return this.groups;
+    return this.groups.map(v => ({
+      start: v.startcharCode,
+      end: v.endcharCode
+    }));
+  }
+}
+class SequentialMapGroup$1 {
+  constructor(p) {
+    this.startcharCode = p.uint32;
+    this.endcharCode = p.uint32;
+    this.startGlyphID = p.uint32;
+  }
+}
+class Format10 extends Subtable {
+  constructor(p, platformID, encodingID) {
+    super(p, platformID, encodingID);
+    this.format = 10;
+    p.uint16;
+    this.length = p.uint32;
+    this.language = p.uint32;
+    this.startCharCode = p.uint32;
+    this.numChars = p.uint32;
+    this.endCharCode = this.startCharCode + this.numChars;
+    const getter = () => [...new Array(this.numChars)].map(_ => p.uint16);
+    lazy$1(this, `glyphs`, getter);
+  }
+  supports(charCode) {
+    if (charCode.charCodeAt) {
+      charCode = -1;
+      console.warn(`supports(character) not implemented for cmap subtable format 10. only supports(id) is implemented.`);
+    }
+    if (charCode < this.startCharCode) return false;
+    if (charCode > this.startCharCode + this.numChars) return false;
+    return charCode - this.startCharCode;
+  }
+  reverse(glyphID) {
+    console.warn(`reverse not implemented for cmap subtable format 10`);
+    return {};
+  }
+  getSupportedCharCodes(preservePropNames = false) {
+    if (preservePropNames) {
+      return [{
+        startCharCode: this.startCharCode,
+        endCharCode: this.endCharCode
+      }];
+    }
+    return [{
+      start: this.startCharCode,
+      end: this.endCharCode
+    }];
+  }
+}
+class Format12 extends Subtable {
+  constructor(p, platformID, encodingID) {
+    super(p, platformID, encodingID);
+    this.format = 12;
+    p.uint16;
+    this.length = p.uint32;
+    this.language = p.uint32;
+    this.numGroups = p.uint32;
+    const getter = () => [...new Array(this.numGroups)].map(_ => new SequentialMapGroup(p));
+    lazy$1(this, `groups`, getter);
+  }
+  supports(charCode) {
+    if (charCode.charCodeAt) charCode = charCode.charCodeAt(0);
+    if (55296 <= charCode && charCode <= 57343) return 0;
+    if ((charCode & 65534) === 65534 || (charCode & 65535) === 65535) return 0;
+    return this.groups.findIndex(s => s.startCharCode <= charCode && charCode <= s.endCharCode) !== -1;
+  }
+  reverse(glyphID) {
+    for (let group of this.groups) {
+      let start = group.startGlyphID;
+      if (start > glyphID) continue;
+      if (start === glyphID) return group.startCharCode;
+      let end = start + (group.endCharCode - group.startCharCode);
+      if (end < glyphID) continue;
+      const code = group.startCharCode + (glyphID - start);
+      return {
+        code: code,
+        unicode: String.fromCodePoint(code)
+      };
+    }
+    return {};
+  }
+  getSupportedCharCodes(preservePropNames = false) {
+    if (preservePropNames) return this.groups;
+    return this.groups.map(v => ({
+      start: v.startCharCode,
+      end: v.endCharCode
+    }));
+  }
+}
+class SequentialMapGroup {
+  constructor(p) {
+    this.startCharCode = p.uint32;
+    this.endCharCode = p.uint32;
+    this.startGlyphID = p.uint32;
+  }
+}
+class Format13 extends Subtable {
+  constructor(p, platformID, encodingID) {
+    super(p, platformID, encodingID);
+    this.format = 13;
+    p.uint16;
+    this.length = p.uint32;
+    this.language = p.uint32;
+    this.numGroups = p.uint32;
+    const getter = [...new Array(this.numGroups)].map(_ => new ConstantMapGroup(p));
+    lazy$1(this, `groups`, getter);
+  }
+  supports(charCode) {
+    if (charCode.charCodeAt) charCode = charCode.charCodeAt(0);
+    return this.groups.findIndex(s => s.startCharCode <= charCode && charCode <= s.endCharCode) !== -1;
+  }
+  reverse(glyphID) {
+    console.warn(`reverse not implemented for cmap subtable format 13`);
+    return {};
+  }
+  getSupportedCharCodes(preservePropNames = false) {
+    if (preservePropNames) return this.groups;
+    return this.groups.map(v => ({
+      start: v.startCharCode,
+      end: v.endCharCode
+    }));
+  }
+}
+class ConstantMapGroup {
+  constructor(p) {
+    this.startCharCode = p.uint32;
+    this.endCharCode = p.uint32;
+    this.glyphID = p.uint32;
+  }
+}
+class Format14 extends Subtable {
+  constructor(p, platformID, encodingID) {
+    super(p, platformID, encodingID);
+    this.subTableStart = p.currentPosition;
+    this.format = 14;
+    this.length = p.uint32;
+    this.numVarSelectorRecords = p.uint32;
+    lazy$1(this, `varSelectors`, () => [...new Array(this.numVarSelectorRecords)].map(_ => new VariationSelector(p)));
+  }
+  supports() {
+    console.warn(`supports not implemented for cmap subtable format 14`);
+    return 0;
+  }
+  getSupportedCharCodes() {
+    console.warn(`getSupportedCharCodes not implemented for cmap subtable format 14`);
+    return [];
+  }
+  reverse(glyphID) {
+    console.warn(`reverse not implemented for cmap subtable format 14`);
+    return {};
+  }
+  supportsVariation(variation) {
+    let v = this.varSelector.find(uvs => uvs.varSelector === variation);
+    return v ? v : false;
+  }
+  getSupportedVariations() {
+    return this.varSelectors.map(v => v.varSelector);
+  }
+}
+class VariationSelector {
+  constructor(p) {
+    this.varSelector = p.uint24;
+    this.defaultUVSOffset = p.Offset32;
+    this.nonDefaultUVSOffset = p.Offset32;
+  }
+}
+function createSubTable(parser, platformID, encodingID) {
+  const format = parser.uint16;
+  if (format === 0) return new Format0(parser, platformID, encodingID);
+  if (format === 2) return new Format2(parser, platformID, encodingID);
+  if (format === 4) return new Format4(parser, platformID, encodingID);
+  if (format === 6) return new Format6(parser, platformID, encodingID);
+  if (format === 8) return new Format8(parser, platformID, encodingID);
+  if (format === 10) return new Format10(parser, platformID, encodingID);
+  if (format === 12) return new Format12(parser, platformID, encodingID);
+  if (format === 13) return new Format13(parser, platformID, encodingID);
+  if (format === 14) return new Format14(parser, platformID, encodingID);
+  return {};
+}
+class cmap extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.numTables = p.uint16;
+    this.encodingRecords = [...new Array(this.numTables)].map(_ => new EncodingRecord(p, this.tableStart));
+  }
+  getSubTable(tableID) {
+    return this.encodingRecords[tableID].table;
+  }
+  getSupportedEncodings() {
+    return this.encodingRecords.map(r => ({
+      platformID: r.platformID,
+      encodingId: r.encodingID
+    }));
+  }
+  getSupportedCharCodes(platformID, encodingID) {
+    const recordID = this.encodingRecords.findIndex(r => r.platformID === platformID && r.encodingID === encodingID);
+    if (recordID === -1) return false;
+    const subtable = this.getSubTable(recordID);
+    return subtable.getSupportedCharCodes();
+  }
+  reverse(glyphid) {
+    for (let i = 0; i < this.numTables; i++) {
+      let code = this.getSubTable(i).reverse(glyphid);
+      if (code) return code;
+    }
+  }
+  getGlyphId(char) {
+    let last = 0;
+    this.encodingRecords.some((_, tableID) => {
+      let t = this.getSubTable(tableID);
+      if (!t.getGlyphId) return false;
+      last = t.getGlyphId(char);
+      return last !== 0;
+    });
+    return last;
+  }
+  supports(char) {
+    return this.encodingRecords.some((_, tableID) => {
+      const t = this.getSubTable(tableID);
+      return t.supports && t.supports(char) !== false;
+    });
+  }
+  supportsVariation(variation) {
+    return this.encodingRecords.some((_, tableID) => {
+      const t = this.getSubTable(tableID);
+      return t.supportsVariation && t.supportsVariation(variation) !== false;
+    });
+  }
+}
+class EncodingRecord {
+  constructor(p, tableStart) {
+    const platformID = this.platformID = p.uint16;
+    const encodingID = this.encodingID = p.uint16;
+    const offset = this.offset = p.Offset32;
+    lazy$1(this, `table`, () => {
+      p.currentPosition = tableStart + offset;
+      return createSubTable(p, platformID, encodingID);
+    });
+  }
+}
+var cmap$1 = Object.freeze({
+  __proto__: null,
+  cmap: cmap
+});
+class head extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.load({
+      majorVersion: p.uint16,
+      minorVersion: p.uint16,
+      fontRevision: p.fixed,
+      checkSumAdjustment: p.uint32,
+      magicNumber: p.uint32,
+      flags: p.flags(16),
+      unitsPerEm: p.uint16,
+      created: p.longdatetime,
+      modified: p.longdatetime,
+      xMin: p.int16,
+      yMin: p.int16,
+      xMax: p.int16,
+      yMax: p.int16,
+      macStyle: p.flags(16),
+      lowestRecPPEM: p.uint16,
+      fontDirectionHint: p.uint16,
+      indexToLocFormat: p.uint16,
+      glyphDataFormat: p.uint16
+    });
+  }
+}
+var head$1 = Object.freeze({
+  __proto__: null,
+  head: head
+});
+class hhea extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.ascender = p.fword;
+    this.descender = p.fword;
+    this.lineGap = p.fword;
+    this.advanceWidthMax = p.ufword;
+    this.minLeftSideBearing = p.fword;
+    this.minRightSideBearing = p.fword;
+    this.xMaxExtent = p.fword;
+    this.caretSlopeRise = p.int16;
+    this.caretSlopeRun = p.int16;
+    this.caretOffset = p.int16;
+    p.int16;
+    p.int16;
+    p.int16;
+    p.int16;
+    this.metricDataFormat = p.int16;
+    this.numberOfHMetrics = p.uint16;
+    p.verifyLength();
+  }
+}
+var hhea$1 = Object.freeze({
+  __proto__: null,
+  hhea: hhea
+});
+class hmtx extends SimpleTable {
+  constructor(dict, dataview, tables) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    const numberOfHMetrics = tables.hhea.numberOfHMetrics;
+    const numGlyphs = tables.maxp.numGlyphs;
+    const metricsStart = p.currentPosition;
+    lazy$1(this, `hMetrics`, () => {
+      p.currentPosition = metricsStart;
+      return [...new Array(numberOfHMetrics)].map(_ => new LongHorMetric(p.uint16, p.int16));
+    });
+    if (numberOfHMetrics < numGlyphs) {
+      const lsbStart = metricsStart + numberOfHMetrics * 4;
+      lazy$1(this, `leftSideBearings`, () => {
+        p.currentPosition = lsbStart;
+        return [...new Array(numGlyphs - numberOfHMetrics)].map(_ => p.int16);
+      });
+    }
+  }
+}
+class LongHorMetric {
+  constructor(w, b) {
+    this.advanceWidth = w;
+    this.lsb = b;
+  }
+}
+var hmtx$1 = Object.freeze({
+  __proto__: null,
+  hmtx: hmtx
+});
+class maxp extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.legacyFixed;
+    this.numGlyphs = p.uint16;
+    if (this.version === 1) {
+      this.maxPoints = p.uint16;
+      this.maxContours = p.uint16;
+      this.maxCompositePoints = p.uint16;
+      this.maxCompositeContours = p.uint16;
+      this.maxZones = p.uint16;
+      this.maxTwilightPoints = p.uint16;
+      this.maxStorage = p.uint16;
+      this.maxFunctionDefs = p.uint16;
+      this.maxInstructionDefs = p.uint16;
+      this.maxStackElements = p.uint16;
+      this.maxSizeOfInstructions = p.uint16;
+      this.maxComponentElements = p.uint16;
+      this.maxComponentDepth = p.uint16;
+    }
+    p.verifyLength();
+  }
+}
+var maxp$1 = Object.freeze({
+  __proto__: null,
+  maxp: maxp
+});
+class name extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.format = p.uint16;
+    this.count = p.uint16;
+    this.stringOffset = p.Offset16;
+    this.nameRecords = [...new Array(this.count)].map(_ => new NameRecord(p, this));
+    if (this.format === 1) {
+      this.langTagCount = p.uint16;
+      this.langTagRecords = [...new Array(this.langTagCount)].map(_ => new LangTagRecord(p.uint16, p.Offset16));
+    }
+    this.stringStart = this.tableStart + this.stringOffset;
+  }
+  get(nameID) {
+    let record = this.nameRecords.find(record => record.nameID === nameID);
+    if (record) return record.string;
+  }
+}
+class LangTagRecord {
+  constructor(length, offset) {
+    this.length = length;
+    this.offset = offset;
+  }
+}
+class NameRecord {
+  constructor(p, nameTable) {
+    this.platformID = p.uint16;
+    this.encodingID = p.uint16;
+    this.languageID = p.uint16;
+    this.nameID = p.uint16;
+    this.length = p.uint16;
+    this.offset = p.Offset16;
+    lazy$1(this, `string`, () => {
+      p.currentPosition = nameTable.stringStart + this.offset;
+      return decodeString(p, this);
+    });
+  }
+}
+function decodeString(p, record) {
+  const {
+    platformID: platformID,
+    length: length
+  } = record;
+  if (length === 0) return ``;
+  if (platformID === 0 || platformID === 3) {
+    const str = [];
+    for (let i = 0, e = length / 2; i < e; i++) str[i] = String.fromCharCode(p.uint16);
+    return str.join(``);
+  }
+  const bytes = p.readBytes(length);
+  const str = [];
+  bytes.forEach(function (b, i) {
+    str[i] = String.fromCharCode(b);
+  });
+  return str.join(``);
+}
+var name$1 = Object.freeze({
+  __proto__: null,
+  name: name
+});
+class OS2 extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.xAvgCharWidth = p.int16;
+    this.usWeightClass = p.uint16;
+    this.usWidthClass = p.uint16;
+    this.fsType = p.uint16;
+    this.ySubscriptXSize = p.int16;
+    this.ySubscriptYSize = p.int16;
+    this.ySubscriptXOffset = p.int16;
+    this.ySubscriptYOffset = p.int16;
+    this.ySuperscriptXSize = p.int16;
+    this.ySuperscriptYSize = p.int16;
+    this.ySuperscriptXOffset = p.int16;
+    this.ySuperscriptYOffset = p.int16;
+    this.yStrikeoutSize = p.int16;
+    this.yStrikeoutPosition = p.int16;
+    this.sFamilyClass = p.int16;
+    this.panose = [...new Array(10)].map(_ => p.uint8);
+    this.ulUnicodeRange1 = p.flags(32);
+    this.ulUnicodeRange2 = p.flags(32);
+    this.ulUnicodeRange3 = p.flags(32);
+    this.ulUnicodeRange4 = p.flags(32);
+    this.achVendID = p.tag;
+    this.fsSelection = p.uint16;
+    this.usFirstCharIndex = p.uint16;
+    this.usLastCharIndex = p.uint16;
+    this.sTypoAscender = p.int16;
+    this.sTypoDescender = p.int16;
+    this.sTypoLineGap = p.int16;
+    this.usWinAscent = p.uint16;
+    this.usWinDescent = p.uint16;
+    if (this.version === 0) return p.verifyLength();
+    this.ulCodePageRange1 = p.flags(32);
+    this.ulCodePageRange2 = p.flags(32);
+    if (this.version === 1) return p.verifyLength();
+    this.sxHeight = p.int16;
+    this.sCapHeight = p.int16;
+    this.usDefaultChar = p.uint16;
+    this.usBreakChar = p.uint16;
+    this.usMaxContext = p.uint16;
+    if (this.version <= 4) return p.verifyLength();
+    this.usLowerOpticalPointSize = p.uint16;
+    this.usUpperOpticalPointSize = p.uint16;
+    if (this.version === 5) return p.verifyLength();
+  }
+}
+var OS2$1 = Object.freeze({
+  __proto__: null,
+  OS2: OS2
+});
+class post extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.legacyFixed;
+    this.italicAngle = p.fixed;
+    this.underlinePosition = p.fword;
+    this.underlineThickness = p.fword;
+    this.isFixedPitch = p.uint32;
+    this.minMemType42 = p.uint32;
+    this.maxMemType42 = p.uint32;
+    this.minMemType1 = p.uint32;
+    this.maxMemType1 = p.uint32;
+    if (this.version === 1 || this.version === 3) return p.verifyLength();
+    this.numGlyphs = p.uint16;
+    if (this.version === 2) {
+      this.glyphNameIndex = [...new Array(this.numGlyphs)].map(_ => p.uint16);
+      this.namesOffset = p.currentPosition;
+      this.glyphNameOffsets = [1];
+      for (let i = 0; i < this.numGlyphs; i++) {
+        let index = this.glyphNameIndex[i];
+        if (index < macStrings.length) {
+          this.glyphNameOffsets.push(this.glyphNameOffsets[i]);
+          continue;
+        }
+        let bytelength = p.int8;
+        p.skip(bytelength);
+        this.glyphNameOffsets.push(this.glyphNameOffsets[i] + bytelength + 1);
+      }
+    }
+    if (this.version === 2.5) {
+      this.offset = [...new Array(this.numGlyphs)].map(_ => p.int8);
+    }
+  }
+  getGlyphName(glyphid) {
+    if (this.version !== 2) {
+      console.warn(`post table version ${this.version} does not support glyph name lookups`);
+      return ``;
+    }
+    let index = this.glyphNameIndex[glyphid];
+    if (index < 258) return macStrings[index];
+    let offset = this.glyphNameOffsets[glyphid];
+    let next = this.glyphNameOffsets[glyphid + 1];
+    let len = next - offset - 1;
+    if (len === 0) return `.notdef.`;
+    this.parser.currentPosition = this.namesOffset + offset;
+    const data = this.parser.readBytes(len, this.namesOffset + offset, 8, true);
+    return data.map(b => String.fromCharCode(b)).join(``);
+  }
+}
+const macStrings = [`.notdef`, `.null`, `nonmarkingreturn`, `space`, `exclam`, `quotedbl`, `numbersign`, `dollar`, `percent`, `ampersand`, `quotesingle`, `parenleft`, `parenright`, `asterisk`, `plus`, `comma`, `hyphen`, `period`, `slash`, `zero`, `one`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `colon`, `semicolon`, `less`, `equal`, `greater`, `question`, `at`, `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L`, `M`, `N`, `O`, `P`, `Q`, `R`, `S`, `T`, `U`, `V`, `W`, `X`, `Y`, `Z`, `bracketleft`, `backslash`, `bracketright`, `asciicircum`, `underscore`, `grave`, `a`, `b`, `c`, `d`, `e`, `f`, `g`, `h`, `i`, `j`, `k`, `l`, `m`, `n`, `o`, `p`, `q`, `r`, `s`, `t`, `u`, `v`, `w`, `x`, `y`, `z`, `braceleft`, `bar`, `braceright`, `asciitilde`, `Adieresis`, `Aring`, `Ccedilla`, `Eacute`, `Ntilde`, `Odieresis`, `Udieresis`, `aacute`, `agrave`, `acircumflex`, `adieresis`, `atilde`, `aring`, `ccedilla`, `eacute`, `egrave`, `ecircumflex`, `edieresis`, `iacute`, `igrave`, `icircumflex`, `idieresis`, `ntilde`, `oacute`, `ograve`, `ocircumflex`, `odieresis`, `otilde`, `uacute`, `ugrave`, `ucircumflex`, `udieresis`, `dagger`, `degree`, `cent`, `sterling`, `section`, `bullet`, `paragraph`, `germandbls`, `registered`, `copyright`, `trademark`, `acute`, `dieresis`, `notequal`, `AE`, `Oslash`, `infinity`, `plusminus`, `lessequal`, `greaterequal`, `yen`, `mu`, `partialdiff`, `summation`, `product`, `pi`, `integral`, `ordfeminine`, `ordmasculine`, `Omega`, `ae`, `oslash`, `questiondown`, `exclamdown`, `logicalnot`, `radical`, `florin`, `approxequal`, `Delta`, `guillemotleft`, `guillemotright`, `ellipsis`, `nonbreakingspace`, `Agrave`, `Atilde`, `Otilde`, `OE`, `oe`, `endash`, `emdash`, `quotedblleft`, `quotedblright`, `quoteleft`, `quoteright`, `divide`, `lozenge`, `ydieresis`, `Ydieresis`, `fraction`, `currency`, `guilsinglleft`, `guilsinglright`, `fi`, `fl`, `daggerdbl`, `periodcentered`, `quotesinglbase`, `quotedblbase`, `perthousand`, `Acircumflex`, `Ecircumflex`, `Aacute`, `Edieresis`, `Egrave`, `Iacute`, `Icircumflex`, `Idieresis`, `Igrave`, `Oacute`, `Ocircumflex`, `apple`, `Ograve`, `Uacute`, `Ucircumflex`, `Ugrave`, `dotlessi`, `circumflex`, `tilde`, `macron`, `breve`, `dotaccent`, `ring`, `cedilla`, `hungarumlaut`, `ogonek`, `caron`, `Lslash`, `lslash`, `Scaron`, `scaron`, `Zcaron`, `zcaron`, `brokenbar`, `Eth`, `eth`, `Yacute`, `yacute`, `Thorn`, `thorn`, `minus`, `multiply`, `onesuperior`, `twosuperior`, `threesuperior`, `onehalf`, `onequarter`, `threequarters`, `franc`, `Gbreve`, `gbreve`, `Idotaccent`, `Scedilla`, `scedilla`, `Cacute`, `cacute`, `Ccaron`, `ccaron`, `dcroat`];
+var post$1 = Object.freeze({
+  __proto__: null,
+  post: post
+});
+class BASE extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.horizAxisOffset = p.Offset16;
+    this.vertAxisOffset = p.Offset16;
+    lazy$1(this, `horizAxis`, () => new AxisTable({
+      offset: dict.offset + this.horizAxisOffset
+    }, dataview));
+    lazy$1(this, `vertAxis`, () => new AxisTable({
+      offset: dict.offset + this.vertAxisOffset
+    }, dataview));
+    if (this.majorVersion === 1 && this.minorVersion === 1) {
+      this.itemVarStoreOffset = p.Offset32;
+      lazy$1(this, `itemVarStore`, () => new AxisTable({
+        offset: dict.offset + this.itemVarStoreOffset
+      }, dataview));
+    }
+  }
+}
+class AxisTable extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview, `AxisTable`);
+    this.baseTagListOffset = p.Offset16;
+    this.baseScriptListOffset = p.Offset16;
+    lazy$1(this, `baseTagList`, () => new BaseTagListTable({
+      offset: dict.offset + this.baseTagListOffset
+    }, dataview));
+    lazy$1(this, `baseScriptList`, () => new BaseScriptListTable({
+      offset: dict.offset + this.baseScriptListOffset
+    }, dataview));
+  }
+}
+class BaseTagListTable extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview, `BaseTagListTable`);
+    this.baseTagCount = p.uint16;
+    this.baselineTags = [...new Array(this.baseTagCount)].map(_ => p.tag);
+  }
+}
+class BaseScriptListTable extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview, `BaseScriptListTable`);
+    this.baseScriptCount = p.uint16;
+    const recordStart = p.currentPosition;
+    lazy$1(this, `baseScriptRecords`, () => {
+      p.currentPosition = recordStart;
+      return [...new Array(this.baseScriptCount)].map(_ => new BaseScriptRecord(this.start, p));
+    });
+  }
+}
+class BaseScriptRecord {
+  constructor(baseScriptListTableStart, p) {
+    this.baseScriptTag = p.tag;
+    this.baseScriptOffset = p.Offset16;
+    lazy$1(this, `baseScriptTable`, () => {
+      p.currentPosition = baseScriptListTableStart + this.baseScriptOffset;
+      return new BaseScriptTable(p);
+    });
+  }
+}
+class BaseScriptTable {
+  constructor(p) {
+    this.start = p.currentPosition;
+    this.baseValuesOffset = p.Offset16;
+    this.defaultMinMaxOffset = p.Offset16;
+    this.baseLangSysCount = p.uint16;
+    this.baseLangSysRecords = [...new Array(this.baseLangSysCount)].map(_ => new BaseLangSysRecord(this.start, p));
+    lazy$1(this, `baseValues`, () => {
+      p.currentPosition = this.start + this.baseValuesOffset;
+      return new BaseValuesTable(p);
+    });
+    lazy$1(this, `defaultMinMax`, () => {
+      p.currentPosition = this.start + this.defaultMinMaxOffset;
+      return new MinMaxTable(p);
+    });
+  }
+}
+class BaseLangSysRecord {
+  constructor(baseScriptTableStart, p) {
+    this.baseLangSysTag = p.tag;
+    this.minMaxOffset = p.Offset16;
+    lazy$1(this, `minMax`, () => {
+      p.currentPosition = baseScriptTableStart + this.minMaxOffset;
+      return new MinMaxTable(p);
+    });
+  }
+}
+class BaseValuesTable {
+  constructor(p) {
+    this.parser = p;
+    this.start = p.currentPosition;
+    this.defaultBaselineIndex = p.uint16;
+    this.baseCoordCount = p.uint16;
+    this.baseCoords = [...new Array(this.baseCoordCount)].map(_ => p.Offset16);
+  }
+  getTable(id) {
+    this.parser.currentPosition = this.start + this.baseCoords[id];
+    return new BaseCoordTable(this.parser);
+  }
+}
+class MinMaxTable {
+  constructor(p) {
+    this.minCoord = p.Offset16;
+    this.maxCoord = p.Offset16;
+    this.featMinMaxCount = p.uint16;
+    const recordStart = p.currentPosition;
+    lazy$1(this, `featMinMaxRecords`, () => {
+      p.currentPosition = recordStart;
+      return [...new Array(this.featMinMaxCount)].map(_ => new FeatMinMaxRecord(p));
+    });
+  }
+}
+class FeatMinMaxRecord {
+  constructor(p) {
+    this.featureTableTag = p.tag;
+    this.minCoord = p.Offset16;
+    this.maxCoord = p.Offset16;
+  }
+}
+class BaseCoordTable {
+  constructor(p) {
+    this.baseCoordFormat = p.uint16;
+    this.coordinate = p.int16;
+    if (this.baseCoordFormat === 2) {
+      this.referenceGlyph = p.uint16;
+      this.baseCoordPoint = p.uint16;
+    }
+    if (this.baseCoordFormat === 3) {
+      this.deviceTable = p.Offset16;
+    }
+  }
+}
+var BASE$1 = Object.freeze({
+  __proto__: null,
+  BASE: BASE
+});
+class ClassDefinition {
+  constructor(p) {
+    this.classFormat = p.uint16;
+    if (this.classFormat === 1) {
+      this.startGlyphID = p.uint16;
+      this.glyphCount = p.uint16;
+      this.classValueArray = [...new Array(this.glyphCount)].map(_ => p.uint16);
+    }
+    if (this.classFormat === 2) {
+      this.classRangeCount = p.uint16;
+      this.classRangeRecords = [...new Array(this.classRangeCount)].map(_ => new ClassRangeRecord(p));
+    }
+  }
+}
+class ClassRangeRecord {
+  constructor(p) {
+    this.startGlyphID = p.uint16;
+    this.endGlyphID = p.uint16;
+    this.class = p.uint16;
+  }
+}
+class CoverageTable extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.coverageFormat = p.uint16;
+    if (this.coverageFormat === 1) {
+      this.glyphCount = p.uint16;
+      this.glyphArray = [...new Array(this.glyphCount)].map(_ => p.uint16);
+    }
+    if (this.coverageFormat === 2) {
+      this.rangeCount = p.uint16;
+      this.rangeRecords = [...new Array(this.rangeCount)].map(_ => new CoverageRangeRecord(p));
+    }
+  }
+}
+class CoverageRangeRecord {
+  constructor(p) {
+    this.startGlyphID = p.uint16;
+    this.endGlyphID = p.uint16;
+    this.startCoverageIndex = p.uint16;
+  }
+}
+class ItemVariationStoreTable {
+  constructor(table, p) {
+    this.table = table;
+    this.parser = p;
+    this.start = p.currentPosition;
+    this.format = p.uint16;
+    this.variationRegionListOffset = p.Offset32;
+    this.itemVariationDataCount = p.uint16;
+    this.itemVariationDataOffsets = [...new Array(this.itemVariationDataCount)].map(_ => p.Offset32);
+  }
+}
+class GDEF extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.glyphClassDefOffset = p.Offset16;
+    lazy$1(this, `glyphClassDefs`, () => {
+      if (this.glyphClassDefOffset === 0) return undefined;
+      p.currentPosition = this.tableStart + this.glyphClassDefOffset;
+      return new ClassDefinition(p);
+    });
+    this.attachListOffset = p.Offset16;
+    lazy$1(this, `attachList`, () => {
+      if (this.attachListOffset === 0) return undefined;
+      p.currentPosition = this.tableStart + this.attachListOffset;
+      return new AttachList(p);
+    });
+    this.ligCaretListOffset = p.Offset16;
+    lazy$1(this, `ligCaretList`, () => {
+      if (this.ligCaretListOffset === 0) return undefined;
+      p.currentPosition = this.tableStart + this.ligCaretListOffset;
+      return new LigCaretList(p);
+    });
+    this.markAttachClassDefOffset = p.Offset16;
+    lazy$1(this, `markAttachClassDef`, () => {
+      if (this.markAttachClassDefOffset === 0) return undefined;
+      p.currentPosition = this.tableStart + this.markAttachClassDefOffset;
+      return new ClassDefinition(p);
+    });
+    if (this.minorVersion >= 2) {
+      this.markGlyphSetsDefOffset = p.Offset16;
+      lazy$1(this, `markGlyphSetsDef`, () => {
+        if (this.markGlyphSetsDefOffset === 0) return undefined;
+        p.currentPosition = this.tableStart + this.markGlyphSetsDefOffset;
+        return new MarkGlyphSetsTable(p);
+      });
+    }
+    if (this.minorVersion === 3) {
+      this.itemVarStoreOffset = p.Offset32;
+      lazy$1(this, `itemVarStore`, () => {
+        if (this.itemVarStoreOffset === 0) return undefined;
+        p.currentPosition = this.tableStart + this.itemVarStoreOffset;
+        return new ItemVariationStoreTable(p);
+      });
+    }
+  }
+}
+class AttachList extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.coverageOffset = p.Offset16;
+    this.glyphCount = p.uint16;
+    this.attachPointOffsets = [...new Array(this.glyphCount)].map(_ => p.Offset16);
+  }
+  getPoint(pointID) {
+    this.parser.currentPosition = this.start + this.attachPointOffsets[pointID];
+    return new AttachPoint(this.parser);
+  }
+}
+class AttachPoint {
+  constructor(p) {
+    this.pointCount = p.uint16;
+    this.pointIndices = [...new Array(this.pointCount)].map(_ => p.uint16);
+  }
+}
+class LigCaretList extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.coverageOffset = p.Offset16;
+    lazy$1(this, `coverage`, () => {
+      p.currentPosition = this.start + this.coverageOffset;
+      return new CoverageTable(p);
+    });
+    this.ligGlyphCount = p.uint16;
+    this.ligGlyphOffsets = [...new Array(this.ligGlyphCount)].map(_ => p.Offset16);
+  }
+  getLigGlyph(ligGlyphID) {
+    this.parser.currentPosition = this.start + this.ligGlyphOffsets[ligGlyphID];
+    return new LigGlyph(this.parser);
+  }
+}
+class LigGlyph extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.caretCount = p.uint16;
+    this.caretValueOffsets = [...new Array(this.caretCount)].map(_ => p.Offset16);
+  }
+  getCaretValue(caretID) {
+    this.parser.currentPosition = this.start + this.caretValueOffsets[caretID];
+    return new CaretValue(this.parser);
+  }
+}
+class CaretValue {
+  constructor(p) {
+    this.caretValueFormat = p.uint16;
+    if (this.caretValueFormat === 1) {
+      this.coordinate = p.int16;
+    }
+    if (this.caretValueFormat === 2) {
+      this.caretValuePointIndex = p.uint16;
+    }
+    if (this.caretValueFormat === 3) {
+      this.coordinate = p.int16;
+      this.deviceOffset = p.Offset16;
+    }
+  }
+}
+class MarkGlyphSetsTable extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.markGlyphSetTableFormat = p.uint16;
+    this.markGlyphSetCount = p.uint16;
+    this.coverageOffsets = [...new Array(this.markGlyphSetCount)].map(_ => p.Offset32);
+  }
+  getMarkGlyphSet(markGlyphSetID) {
+    this.parser.currentPosition = this.start + this.coverageOffsets[markGlyphSetID];
+    return new CoverageTable(this.parser);
+  }
+}
+var GDEF$1 = Object.freeze({
+  __proto__: null,
+  GDEF: GDEF
+});
+class ScriptList extends ParsedData {
+  static EMPTY = {
+    scriptCount: 0,
+    scriptRecords: []
+  };
+  constructor(p) {
+    super(p);
+    this.scriptCount = p.uint16;
+    this.scriptRecords = [...new Array(this.scriptCount)].map(_ => new ScriptRecord(p));
+  }
+}
+class ScriptRecord {
+  constructor(p) {
+    this.scriptTag = p.tag;
+    this.scriptOffset = p.Offset16;
+  }
+}
+class ScriptTable extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.defaultLangSys = p.Offset16;
+    this.langSysCount = p.uint16;
+    this.langSysRecords = [...new Array(this.langSysCount)].map(_ => new LangSysRecord(p));
+  }
+}
+class LangSysRecord {
+  constructor(p) {
+    this.langSysTag = p.tag;
+    this.langSysOffset = p.Offset16;
+  }
+}
+class LangSysTable {
+  constructor(p) {
+    this.lookupOrder = p.Offset16;
+    this.requiredFeatureIndex = p.uint16;
+    this.featureIndexCount = p.uint16;
+    this.featureIndices = [...new Array(this.featureIndexCount)].map(_ => p.uint16);
+  }
+}
+class FeatureList extends ParsedData {
+  static EMPTY = {
+    featureCount: 0,
+    featureRecords: []
+  };
+  constructor(p) {
+    super(p);
+    this.featureCount = p.uint16;
+    this.featureRecords = [...new Array(this.featureCount)].map(_ => new FeatureRecord(p));
+  }
+}
+class FeatureRecord {
+  constructor(p) {
+    this.featureTag = p.tag;
+    this.featureOffset = p.Offset16;
+  }
+}
+class FeatureTable extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.featureParams = p.Offset16;
+    this.lookupIndexCount = p.uint16;
+    this.lookupListIndices = [...new Array(this.lookupIndexCount)].map(_ => p.uint16);
+  }
+  getFeatureParams() {
+    if (this.featureParams > 0) {
+      const p = this.parser;
+      p.currentPosition = this.start + this.featureParams;
+      const tag = this.featureTag;
+      if (tag === `size`) return new Size(p);
+      if (tag.startsWith(`cc`)) return new CharacterVariant(p);
+      if (tag.startsWith(`ss`)) return new StylisticSet(p);
+    }
+  }
+}
+class CharacterVariant {
+  constructor(p) {
+    this.format = p.uint16;
+    this.featUiLabelNameId = p.uint16;
+    this.featUiTooltipTextNameId = p.uint16;
+    this.sampleTextNameId = p.uint16;
+    this.numNamedParameters = p.uint16;
+    this.firstParamUiLabelNameId = p.uint16;
+    this.charCount = p.uint16;
+    this.character = [...new Array(this.charCount)].map(_ => p.uint24);
+  }
+}
+class Size {
+  constructor(p) {
+    this.designSize = p.uint16;
+    this.subfamilyIdentifier = p.uint16;
+    this.subfamilyNameID = p.uint16;
+    this.smallEnd = p.uint16;
+    this.largeEnd = p.uint16;
+  }
+}
+class StylisticSet {
+  constructor(p) {
+    this.version = p.uint16;
+    this.UINameID = p.uint16;
+  }
+}
+class LookupType extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.substFormat = p.uint16;
+    this.coverageOffset = p.Offset16;
+  }
+  getCoverageTable() {
+    let p = this.parser;
+    p.currentPosition = this.start + this.coverageOffset;
+    return new CoverageTable(p);
+  }
+}
+function undoCoverageOffsetParsing(instance) {
+  instance.parser.currentPosition -= 2;
+  delete instance.coverageOffset;
+  delete instance.getCoverageTable;
+}
+class LookupType1$1 extends LookupType {
+  constructor(p) {
+    super(p);
+    this.deltaGlyphID = p.int16;
+  }
+}
+class LookupType2$1 extends LookupType {
+  constructor(p) {
+    super(p);
+    this.sequenceCount = p.uint16;
+    this.sequenceOffsets = [...new Array(this.sequenceCount)].map(_ => p.Offset16);
+  }
+  getSequence(index) {
+    let p = this.parser;
+    p.currentPosition = this.start + this.sequenceOffsets[index];
+    return new SequenceTable(p);
+  }
+}
+class SequenceTable {
+  constructor(p) {
+    this.glyphCount = p.uint16;
+    this.substituteGlyphIDs = [...new Array(this.glyphCount)].map(_ => p.uint16);
+  }
+}
+class LookupType3$1 extends LookupType {
+  constructor(p) {
+    super(p);
+    this.alternateSetCount = p.uint16;
+    this.alternateSetOffsets = [...new Array(this.alternateSetCount)].map(_ => p.Offset16);
+  }
+  getAlternateSet(index) {
+    let p = this.parser;
+    p.currentPosition = this.start + this.alternateSetOffsets[index];
+    return new AlternateSetTable(p);
+  }
+}
+class AlternateSetTable {
+  constructor(p) {
+    this.glyphCount = p.uint16;
+    this.alternateGlyphIDs = [...new Array(this.glyphCount)].map(_ => p.uint16);
+  }
+}
+class LookupType4$1 extends LookupType {
+  constructor(p) {
+    super(p);
+    this.ligatureSetCount = p.uint16;
+    this.ligatureSetOffsets = [...new Array(this.ligatureSetCount)].map(_ => p.Offset16);
+  }
+  getLigatureSet(index) {
+    let p = this.parser;
+    p.currentPosition = this.start + this.ligatureSetOffsets[index];
+    return new LigatureSetTable(p);
+  }
+}
+class LigatureSetTable extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.ligatureCount = p.uint16;
+    this.ligatureOffsets = [...new Array(this.ligatureCount)].map(_ => p.Offset16);
+  }
+  getLigature(index) {
+    let p = this.parser;
+    p.currentPosition = this.start + this.ligatureOffsets[index];
+    return new LigatureTable(p);
+  }
+}
+class LigatureTable {
+  constructor(p) {
+    this.ligatureGlyph = p.uint16;
+    this.componentCount = p.uint16;
+    this.componentGlyphIDs = [...new Array(this.componentCount - 1)].map(_ => p.uint16);
+  }
+}
+class SubstLookupRecord {
+  constructor(p) {
+    this.glyphSequenceIndex = p.uint16;
+    this.lookupListIndex = p.uint16;
+  }
+}
+class LookupType5$1 extends LookupType {
+  constructor(p) {
+    super(p);
+    if (this.substFormat === 1) {
+      this.subRuleSetCount = p.uint16;
+      this.subRuleSetOffsets = [...new Array(this.subRuleSetCount)].map(_ => p.Offset16);
+    }
+    if (this.substFormat === 2) {
+      this.classDefOffset = p.Offset16;
+      this.subClassSetCount = p.uint16;
+      this.subClassSetOffsets = [...new Array(this.subClassSetCount)].map(_ => p.Offset16);
+    }
+    if (this.substFormat === 3) {
+      undoCoverageOffsetParsing(this);
+      this.glyphCount = p.uint16;
+      this.substitutionCount = p.uint16;
+      this.coverageOffsets = [...new Array(this.glyphCount)].map(_ => p.Offset16);
+      this.substLookupRecords = [...new Array(this.substitutionCount)].map(_ => new SubstLookupRecord(p));
+    }
+  }
+  getSubRuleSet(index) {
+    if (this.substFormat !== 1) throw new Error(`lookup type 5.${this.substFormat} has no subrule sets.`);
+    let p = this.parser;
+    p.currentPosition = this.start + this.subRuleSetOffsets[index];
+    return new SubRuleSetTable(p);
+  }
+  getSubClassSet(index) {
+    if (this.substFormat !== 2) throw new Error(`lookup type 5.${this.substFormat} has no subclass sets.`);
+    let p = this.parser;
+    p.currentPosition = this.start + this.subClassSetOffsets[index];
+    return new SubClassSetTable(p);
+  }
+  getCoverageTable(index) {
+    if (this.substFormat !== 3 && !index) return super.getCoverageTable();
+    if (!index) throw new Error(`lookup type 5.${this.substFormat} requires an coverage table index.`);
+    let p = this.parser;
+    p.currentPosition = this.start + this.coverageOffsets[index];
+    return new CoverageTable(p);
+  }
+}
+class SubRuleSetTable extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.subRuleCount = p.uint16;
+    this.subRuleOffsets = [...new Array(this.subRuleCount)].map(_ => p.Offset16);
+  }
+  getSubRule(index) {
+    let p = this.parser;
+    p.currentPosition = this.start + this.subRuleOffsets[index];
+    return new SubRuleTable(p);
+  }
+}
+class SubRuleTable {
+  constructor(p) {
+    this.glyphCount = p.uint16;
+    this.substitutionCount = p.uint16;
+    this.inputSequence = [...new Array(this.glyphCount - 1)].map(_ => p.uint16);
+    this.substLookupRecords = [...new Array(this.substitutionCount)].map(_ => new SubstLookupRecord(p));
+  }
+}
+class SubClassSetTable extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.subClassRuleCount = p.uint16;
+    this.subClassRuleOffsets = [...new Array(this.subClassRuleCount)].map(_ => p.Offset16);
+  }
+  getSubClass(index) {
+    let p = this.parser;
+    p.currentPosition = this.start + this.subClassRuleOffsets[index];
+    return new SubClassRuleTable(p);
+  }
+}
+class SubClassRuleTable extends SubRuleTable {
+  constructor(p) {
+    super(p);
+  }
+}
+class LookupType6$1 extends LookupType {
+  constructor(p) {
+    super(p);
+    if (this.substFormat === 1) {
+      this.chainSubRuleSetCount = p.uint16;
+      this.chainSubRuleSetOffsets = [...new Array(this.chainSubRuleSetCount)].map(_ => p.Offset16);
+    }
+    if (this.substFormat === 2) {
+      this.coverageOffset = p.Offset16;
+      this.backtrackClassDefOffset = p.Offset16;
+      this.inputClassDefOffset = p.Offset16;
+      this.lookaheadClassDefOffset = p.Offset16;
+      this.chainSubClassSetCount = p.uint16;
+      this.chainSubClassSetOffsets = [...new Array(this.chainSubClassSetCount)].map(_ => p.Offset16);
+    }
+    if (this.substFormat === 3) {
+      undoCoverageOffsetParsing(this);
+      this.backtrackGlyphCount = p.uint16;
+      this.backtrackCoverageOffsets = [...new Array(this.backtrackGlyphCount)].map(_ => p.Offset16);
+      this.inputGlyphCount = p.uint16;
+      this.inputCoverageOffsets = [...new Array(this.inputGlyphCount)].map(_ => p.Offset16);
+      this.lookaheadGlyphCount = p.uint16;
+      this.lookaheadCoverageOffsets = [...new Array(this.lookaheadGlyphCount)].map(_ => p.Offset16);
+      this.seqLookupCount = p.uint16;
+      this.seqLookupRecords = [...new Array(this.substitutionCount)].map(_ => new SequenceLookupRecord(p));
+    }
+  }
+  getChainSubRuleSet(index) {
+    if (this.substFormat !== 1) throw new Error(`lookup type 6.${this.substFormat} has no chainsubrule sets.`);
+    let p = this.parser;
+    p.currentPosition = this.start + this.chainSubRuleSetOffsets[index];
+    return new ChainSubRuleSetTable(p);
+  }
+  getChainSubClassSet(index) {
+    if (this.substFormat !== 2) throw new Error(`lookup type 6.${this.substFormat} has no chainsubclass sets.`);
+    let p = this.parser;
+    p.currentPosition = this.start + this.chainSubClassSetOffsets[index];
+    return new ChainSubClassSetTable(p);
+  }
+  getCoverageFromOffset(offset) {
+    if (this.substFormat !== 3) throw new Error(`lookup type 6.${this.substFormat} does not use contextual coverage offsets.`);
+    let p = this.parser;
+    p.currentPosition = this.start + offset;
+    return new CoverageTable(p);
+  }
+}
+class ChainSubRuleSetTable extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.chainSubRuleCount = p.uint16;
+    this.chainSubRuleOffsets = [...new Array(this.chainSubRuleCount)].map(_ => p.Offset16);
+  }
+  getSubRule(index) {
+    let p = this.parser;
+    p.currentPosition = this.start + this.chainSubRuleOffsets[index];
+    return new ChainSubRuleTable(p);
+  }
+}
+class ChainSubRuleTable {
+  constructor(p) {
+    this.backtrackGlyphCount = p.uint16;
+    this.backtrackSequence = [...new Array(this.backtrackGlyphCount)].map(_ => p.uint16);
+    this.inputGlyphCount = p.uint16;
+    this.inputSequence = [...new Array(this.inputGlyphCount - 1)].map(_ => p.uint16);
+    this.lookaheadGlyphCount = p.uint16;
+    this.lookAheadSequence = [...new Array(this.lookAheadGlyphCount)].map(_ => p.uint16);
+    this.substitutionCount = p.uint16;
+    this.substLookupRecords = [...new Array(this.SubstCount)].map(_ => new SubstLookupRecord(p));
+  }
+}
+class ChainSubClassSetTable extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.chainSubClassRuleCount = p.uint16;
+    this.chainSubClassRuleOffsets = [...new Array(this.chainSubClassRuleCount)].map(_ => p.Offset16);
+  }
+  getSubClass(index) {
+    let p = this.parser;
+    p.currentPosition = this.start + this.chainSubRuleOffsets[index];
+    return new ChainSubClassRuleTable(p);
+  }
+}
+class ChainSubClassRuleTable {
+  constructor(p) {
+    this.backtrackGlyphCount = p.uint16;
+    this.backtrackSequence = [...new Array(this.backtrackGlyphCount)].map(_ => p.uint16);
+    this.inputGlyphCount = p.uint16;
+    this.inputSequence = [...new Array(this.inputGlyphCount - 1)].map(_ => p.uint16);
+    this.lookaheadGlyphCount = p.uint16;
+    this.lookAheadSequence = [...new Array(this.lookAheadGlyphCount)].map(_ => p.uint16);
+    this.substitutionCount = p.uint16;
+    this.substLookupRecords = [...new Array(this.substitutionCount)].map(_ => new SequenceLookupRecord(p));
+  }
+}
+class SequenceLookupRecord extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.sequenceIndex = p.uint16;
+    this.lookupListIndex = p.uint16;
+  }
+}
+class LookupType7$1 extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.substFormat = p.uint16;
+    this.extensionLookupType = p.uint16;
+    this.extensionOffset = p.Offset32;
+  }
+}
+class LookupType8$1 extends LookupType {
+  constructor(p) {
+    super(p);
+    this.backtrackGlyphCount = p.uint16;
+    this.backtrackCoverageOffsets = [...new Array(this.backtrackGlyphCount)].map(_ => p.Offset16);
+    this.lookaheadGlyphCount = p.uint16;
+    this.lookaheadCoverageOffsets = [new Array(this.lookaheadGlyphCount)].map(_ => p.Offset16);
+    this.glyphCount = p.uint16;
+    this.substituteGlyphIDs = [...new Array(this.glyphCount)].map(_ => p.uint16);
+  }
+}
+var GSUBtables = {
+  buildSubtable: function (type, p) {
+    switch (type) {
+      case 1:
+        return new LookupType1$1(p);
+      case 2:
+        return new LookupType2$1(p);
+      case 3:
+        return new LookupType3$1(p);
+      case 4:
+        return new LookupType4$1(p);
+      case 5:
+        return new LookupType5$1(p);
+      case 6:
+        return new LookupType6$1(p);
+      case 7:
+        return new LookupType7$1(p);
+      case 8:
+        return new LookupType8$1(p);
+    }
+  }
+};
+class LookupType1 {
+  constructor(p) {
+    console.log(`lookup type 1`);
+  }
+}
+class LookupType2 {
+  constructor(p) {
+    console.log(`lookup type 2`);
+  }
+}
+class LookupType3 {
+  constructor(p) {
+    console.log(`lookup type 3`);
+  }
+}
+class LookupType4 {
+  constructor(p) {
+    console.log(`lookup type 4`);
+  }
+}
+class LookupType5 {
+  constructor(p) {
+    console.log(`lookup type 5`);
+  }
+}
+class LookupType6 {
+  constructor(p) {
+    console.log(`lookup type 6`);
+  }
+}
+class LookupType7 {
+  constructor(p) {
+    console.log(`lookup type 7`);
+  }
+}
+class LookupType8 {
+  constructor(p) {
+    console.log(`lookup type 8`);
+  }
+}
+class LookupType9 {
+  constructor(p) {
+    console.log(`lookup type 9`);
+  }
+}
+var GPOStables = {
+  buildSubtable: function (type, p) {
+    switch (type) {
+      case 1:
+        return new LookupType1(p);
+      case 2:
+        return new LookupType2(p);
+      case 3:
+        return new LookupType3(p);
+      case 4:
+        return new LookupType4(p);
+      case 5:
+        return new LookupType5(p);
+      case 6:
+        return new LookupType6(p);
+      case 7:
+        return new LookupType7(p);
+      case 8:
+        return new LookupType8(p);
+      case 9:
+        return new LookupType9(p);
+    }
+  }
+};
+class LookupList extends ParsedData {
+  static EMPTY = {
+    lookupCount: 0,
+    lookups: []
+  };
+  constructor(p) {
+    super(p);
+    this.lookupCount = p.uint16;
+    this.lookups = [...new Array(this.lookupCount)].map(_ => p.Offset16);
+  }
+}
+class LookupTable extends ParsedData {
+  constructor(p, type) {
+    super(p);
+    this.ctType = type;
+    this.lookupType = p.uint16;
+    this.lookupFlag = p.uint16;
+    this.subTableCount = p.uint16;
+    this.subtableOffsets = [...new Array(this.subTableCount)].map(_ => p.Offset16);
+    this.markFilteringSet = p.uint16;
+  }
+  get rightToLeft() {
+    return this.lookupFlag & 1 === 1;
+  }
+  get ignoreBaseGlyphs() {
+    return this.lookupFlag & 2 === 2;
+  }
+  get ignoreLigatures() {
+    return this.lookupFlag & 4 === 4;
+  }
+  get ignoreMarks() {
+    return this.lookupFlag & 8 === 8;
+  }
+  get useMarkFilteringSet() {
+    return this.lookupFlag & 16 === 16;
+  }
+  get markAttachmentType() {
+    return this.lookupFlag & 65280 === 65280;
+  }
+  getSubTable(index) {
+    const builder = this.ctType === `GSUB` ? GSUBtables : GPOStables;
+    this.parser.currentPosition = this.start + this.subtableOffsets[index];
+    return builder.buildSubtable(this.lookupType, this.parser);
+  }
+}
+class CommonLayoutTable extends SimpleTable {
+  constructor(dict, dataview, name) {
+    const {
+      p: p,
+      tableStart: tableStart
+    } = super(dict, dataview, name);
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.scriptListOffset = p.Offset16;
+    this.featureListOffset = p.Offset16;
+    this.lookupListOffset = p.Offset16;
+    if (this.majorVersion === 1 && this.minorVersion === 1) {
+      this.featureVariationsOffset = p.Offset32;
+    }
+    const no_content = !(this.scriptListOffset || this.featureListOffset || this.lookupListOffset);
+    lazy$1(this, `scriptList`, () => {
+      if (no_content) return ScriptList.EMPTY;
+      p.currentPosition = tableStart + this.scriptListOffset;
+      return new ScriptList(p);
+    });
+    lazy$1(this, `featureList`, () => {
+      if (no_content) return FeatureList.EMPTY;
+      p.currentPosition = tableStart + this.featureListOffset;
+      return new FeatureList(p);
+    });
+    lazy$1(this, `lookupList`, () => {
+      if (no_content) return LookupList.EMPTY;
+      p.currentPosition = tableStart + this.lookupListOffset;
+      return new LookupList(p);
+    });
+    if (this.featureVariationsOffset) {
+      lazy$1(this, `featureVariations`, () => {
+        if (no_content) return FeatureVariations.EMPTY;
+        p.currentPosition = tableStart + this.featureVariationsOffset;
+        return new FeatureVariations(p);
+      });
+    }
+  }
+  getSupportedScripts() {
+    return this.scriptList.scriptRecords.map(r => r.scriptTag);
+  }
+  getScriptTable(scriptTag) {
+    let record = this.scriptList.scriptRecords.find(r => r.scriptTag === scriptTag);
+    this.parser.currentPosition = this.scriptList.start + record.scriptOffset;
+    let table = new ScriptTable(this.parser);
+    table.scriptTag = scriptTag;
+    return table;
+  }
+  ensureScriptTable(arg) {
+    if (typeof arg === "string") {
+      return this.getScriptTable(arg);
+    }
+    return arg;
+  }
+  getSupportedLangSys(scriptTable) {
+    scriptTable = this.ensureScriptTable(scriptTable);
+    const hasDefault = scriptTable.defaultLangSys !== 0;
+    const supported = scriptTable.langSysRecords.map(l => l.langSysTag);
+    if (hasDefault) supported.unshift(`dflt`);
+    return supported;
+  }
+  getDefaultLangSysTable(scriptTable) {
+    scriptTable = this.ensureScriptTable(scriptTable);
+    let offset = scriptTable.defaultLangSys;
+    if (offset !== 0) {
+      this.parser.currentPosition = scriptTable.start + offset;
+      let table = new LangSysTable(this.parser);
+      table.langSysTag = ``;
+      table.defaultForScript = scriptTable.scriptTag;
+      return table;
+    }
+  }
+  getLangSysTable(scriptTable, langSysTag = `dflt`) {
+    if (langSysTag === `dflt`) return this.getDefaultLangSysTable(scriptTable);
+    scriptTable = this.ensureScriptTable(scriptTable);
+    let record = scriptTable.langSysRecords.find(l => l.langSysTag === langSysTag);
+    this.parser.currentPosition = scriptTable.start + record.langSysOffset;
+    let table = new LangSysTable(this.parser);
+    table.langSysTag = langSysTag;
+    return table;
+  }
+  getFeatures(langSysTable) {
+    return langSysTable.featureIndices.map(index => this.getFeature(index));
+  }
+  getFeature(indexOrTag) {
+    let record;
+    if (parseInt(indexOrTag) == indexOrTag) {
+      record = this.featureList.featureRecords[indexOrTag];
+    } else {
+      record = this.featureList.featureRecords.find(f => f.featureTag === indexOrTag);
+    }
+    if (!record) return;
+    this.parser.currentPosition = this.featureList.start + record.featureOffset;
+    let table = new FeatureTable(this.parser);
+    table.featureTag = record.featureTag;
+    return table;
+  }
+  getLookups(featureTable) {
+    return featureTable.lookupListIndices.map(index => this.getLookup(index));
+  }
+  getLookup(lookupIndex, type) {
+    let lookupOffset = this.lookupList.lookups[lookupIndex];
+    this.parser.currentPosition = this.lookupList.start + lookupOffset;
+    return new LookupTable(this.parser, type);
+  }
+}
+class GSUB extends CommonLayoutTable {
+  constructor(dict, dataview) {
+    super(dict, dataview, `GSUB`);
+  }
+  getLookup(lookupIndex) {
+    return super.getLookup(lookupIndex, `GSUB`);
+  }
+}
+var GSUB$1 = Object.freeze({
+  __proto__: null,
+  GSUB: GSUB
+});
+class GPOS extends CommonLayoutTable {
+  constructor(dict, dataview) {
+    super(dict, dataview, `GPOS`);
+  }
+  getLookup(lookupIndex) {
+    return super.getLookup(lookupIndex, `GPOS`);
+  }
+}
+var GPOS$1 = Object.freeze({
+  __proto__: null,
+  GPOS: GPOS
+});
+class SVG extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = uint16;
+    this.offsetToSVGDocumentList = p.Offset32;
+    p.currentPosition = this.tableStart + this.offsetToSVGDocumentList;
+    this.documentList = new SVGDocumentList(p);
+  }
+}
+class SVGDocumentList extends ParsedData {
+  constructor(p) {
+    super(p);
+    this.numEntries = p.uint16;
+    this.documentRecords = [...new Array(this.numEntries)].map(_ => new SVGDocumentRecord(p));
+  }
+  getDocument(documentID) {
+    let record = this.documentRecords[documentID];
+    if (!record) return "";
+    let offset = this.start + record.svgDocOffset;
+    this.parser.currentPosition = offset;
+    return this.parser.readBytes(record.svgDocLength);
+  }
+  getDocumentForGlyph(glyphID) {
+    let id = this.documentRecords.findIndex(d => d.startGlyphID <= glyphID && glyphID <= d.endGlyphID);
+    if (id === -1) return "";
+    return this.getDocument(id);
+  }
+}
+class SVGDocumentRecord {
+  constructor(p) {
+    this.startGlyphID = p.uint16;
+    this.endGlyphID = p.uint16;
+    this.svgDocOffset = p.Offset32;
+    this.svgDocLength = p.uint32;
+  }
+}
+var SVG$1 = Object.freeze({
+  __proto__: null,
+  SVG: SVG
+});
+class fvar extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.axesArrayOffset = p.Offset16;
+    p.uint16;
+    this.axisCount = p.uint16;
+    this.axisSize = p.uint16;
+    this.instanceCount = p.uint16;
+    this.instanceSize = p.uint16;
+    const axisStart = this.tableStart + this.axesArrayOffset;
+    lazy$1(this, `axes`, () => {
+      p.currentPosition = axisStart;
+      return [...new Array(this.axisCount)].map(_ => new VariationAxisRecord(p));
+    });
+    const instanceStart = axisStart + this.axisCount * this.axisSize;
+    lazy$1(this, `instances`, () => {
+      let instances = [];
+      for (let i = 0; i < this.instanceCount; i++) {
+        p.currentPosition = instanceStart + i * this.instanceSize;
+        instances.push(new InstanceRecord(p, this.axisCount, this.instanceSize));
+      }
+      return instances;
+    });
+  }
+  getSupportedAxes() {
+    return this.axes.map(a => a.tag);
+  }
+  getAxis(name) {
+    return this.axes.find(a => a.tag === name);
+  }
+}
+class VariationAxisRecord {
+  constructor(p) {
+    this.tag = p.tag;
+    this.minValue = p.fixed;
+    this.defaultValue = p.fixed;
+    this.maxValue = p.fixed;
+    this.flags = p.flags(16);
+    this.axisNameID = p.uint16;
+  }
+}
+class InstanceRecord {
+  constructor(p, axisCount, size) {
+    let start = p.currentPosition;
+    this.subfamilyNameID = p.uint16;
+    p.uint16;
+    this.coordinates = [...new Array(axisCount)].map(_ => p.fixed);
+    if (p.currentPosition - start < size) {
+      this.postScriptNameID = p.uint16;
+    }
+  }
+}
+var fvar$1 = Object.freeze({
+  __proto__: null,
+  fvar: fvar
+});
+class cvt extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    const n = dict.length / 2;
+    lazy$1(this, `items`, () => [...new Array(n)].map(_ => p.fword));
+  }
+}
+var cvt$1 = Object.freeze({
+  __proto__: null,
+  cvt: cvt
+});
+class fpgm extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    lazy$1(this, `instructions`, () => [...new Array(dict.length)].map(_ => p.uint8));
+  }
+}
+var fpgm$1 = Object.freeze({
+  __proto__: null,
+  fpgm: fpgm
+});
+class gasp extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.numRanges = p.uint16;
+    const getter = () => [...new Array(this.numRanges)].map(_ => new GASPRange(p));
+    lazy$1(this, `gaspRanges`, getter);
+  }
+}
+class GASPRange {
+  constructor(p) {
+    this.rangeMaxPPEM = p.uint16;
+    this.rangeGaspBehavior = p.uint16;
+  }
+}
+var gasp$1 = Object.freeze({
+  __proto__: null,
+  gasp: gasp
+});
+class glyf extends SimpleTable {
+  constructor(dict, dataview) {
+    super(dict, dataview);
+  }
+  getGlyphData(offset, length) {
+    this.parser.currentPosition = this.tableStart + offset;
+    return this.parser.readBytes(length);
+  }
+}
+var glyf$1 = Object.freeze({
+  __proto__: null,
+  glyf: glyf
+});
+class loca extends SimpleTable {
+  constructor(dict, dataview, tables) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    const n = tables.maxp.numGlyphs + 1;
+    if (tables.hmtx.indexToLocFormat === 0) {
+      this.x2 = true;
+      lazy$1(this, `offsets`, () => [...new Array(n)].map(_ => p.Offset16));
+    } else {
+      lazy$1(this, `offsets`, () => [...new Array(n)].map(_ => p.Offset32));
+    }
+  }
+  getGlyphDataOffsetAndLength(glyphID) {
+    let offset = this.offsets[glyphID] * this.x2 ? 2 : 1;
+    let nextOffset = this.offsets[glyphID + 1] * this.x2 ? 2 : 1;
+    return {
+      offset: offset,
+      length: nextOffset - offset
+    };
+  }
+}
+var loca$1 = Object.freeze({
+  __proto__: null,
+  loca: loca
+});
+class prep extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    lazy$1(this, `instructions`, () => [...new Array(dict.length)].map(_ => p.uint8));
+  }
+}
+var prep$1 = Object.freeze({
+  __proto__: null,
+  prep: prep
+});
+class CFF extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    lazy$1(this, `data`, () => p.readBytes());
+  }
+}
+var CFF$1 = Object.freeze({
+  __proto__: null,
+  CFF: CFF
+});
+class CFF2 extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    lazy$1(this, `data`, () => p.readBytes());
+  }
+}
+var CFF2$1 = Object.freeze({
+  __proto__: null,
+  CFF2: CFF2
+});
+class VORG extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.defaultVertOriginY = p.int16;
+    this.numVertOriginYMetrics = p.uint16;
+    lazy$1(this, `vertORiginYMetrics`, () => [...new Array(this.numVertOriginYMetrics)].map(_ => new VertOriginYMetric(p)));
+  }
+}
+class VertOriginYMetric {
+  constructor(p) {
+    this.glyphIndex = p.uint16;
+    this.vertOriginY = p.int16;
+  }
+}
+var VORG$1 = Object.freeze({
+  __proto__: null,
+  VORG: VORG
+});
+class BitmapSize {
+  constructor(p) {
+    this.indexSubTableArrayOffset = p.Offset32;
+    this.indexTablesSize = p.uint32;
+    this.numberofIndexSubTables = p.uint32;
+    this.colorRef = p.uint32;
+    this.hori = new SbitLineMetrics(p);
+    this.vert = new SbitLineMetrics(p);
+    this.startGlyphIndex = p.uint16;
+    this.endGlyphIndex = p.uint16;
+    this.ppemX = p.uint8;
+    this.ppemY = p.uint8;
+    this.bitDepth = p.uint8;
+    this.flags = p.int8;
+  }
+}
+class BitmapScale {
+  constructor(p) {
+    this.hori = new SbitLineMetrics(p);
+    this.vert = new SbitLineMetrics(p);
+    this.ppemX = p.uint8;
+    this.ppemY = p.uint8;
+    this.substitutePpemX = p.uint8;
+    this.substitutePpemY = p.uint8;
+  }
+}
+class SbitLineMetrics {
+  constructor(p) {
+    this.ascender = p.int8;
+    this.descender = p.int8;
+    this.widthMax = p.uint8;
+    this.caretSlopeNumerator = p.int8;
+    this.caretSlopeDenominator = p.int8;
+    this.caretOffset = p.int8;
+    this.minOriginSB = p.int8;
+    this.minAdvanceSB = p.int8;
+    this.maxBeforeBL = p.int8;
+    this.minAfterBL = p.int8;
+    this.pad1 = p.int8;
+    this.pad2 = p.int8;
+  }
+}
+class EBLC extends SimpleTable {
+  constructor(dict, dataview, name) {
+    const {
+      p: p
+    } = super(dict, dataview, name);
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.numSizes = p.uint32;
+    lazy$1(this, `bitMapSizes`, () => [...new Array(this.numSizes)].map(_ => new BitmapSize(p)));
+  }
+}
+var EBLC$1 = Object.freeze({
+  __proto__: null,
+  EBLC: EBLC
+});
+class EBDT extends SimpleTable {
+  constructor(dict, dataview, name) {
+    const {
+      p: p
+    } = super(dict, dataview, name);
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+  }
+}
+var EBDT$1 = Object.freeze({
+  __proto__: null,
+  EBDT: EBDT
+});
+class EBSC extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.majorVersion = p.uint16;
+    this.minorVersion = p.uint16;
+    this.numSizes = p.uint32;
+    lazy$1(this, `bitmapScales`, () => [...new Array(this.numSizes)].map(_ => new BitmapScale(p)));
+  }
+}
+var EBSC$1 = Object.freeze({
+  __proto__: null,
+  EBSC: EBSC
+});
+class CBLC extends EBLC {
+  constructor(dict, dataview) {
+    super(dict, dataview, `CBLC`);
+  }
+}
+var CBLC$1 = Object.freeze({
+  __proto__: null,
+  CBLC: CBLC
+});
+class CBDT extends EBDT {
+  constructor(dict, dataview) {
+    super(dict, dataview, `CBDT`);
+  }
+}
+var CBDT$1 = Object.freeze({
+  __proto__: null,
+  CBDT: CBDT
+});
+class sbix extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.flags = p.flags(16);
+    this.numStrikes = p.uint32;
+    lazy$1(this, `strikeOffsets`, () => [...new Array(this.numStrikes)].map(_ => p.Offset32));
+  }
+}
+var sbix$1 = Object.freeze({
+  __proto__: null,
+  sbix: sbix
+});
+class COLR extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.numBaseGlyphRecords = p.uint16;
+    this.baseGlyphRecordsOffset = p.Offset32;
+    this.layerRecordsOffset = p.Offset32;
+    this.numLayerRecords = p.uint16;
+  }
+  getBaseGlyphRecord(glyphID) {
+    let start = this.tableStart + this.baseGlyphRecordsOffset;
+    this.parser.currentPosition = start;
+    let first = new BaseGlyphRecord(this.parser);
+    let firstID = first.gID;
+    let end = this.tableStart + this.layerRecordsOffset - 6;
+    this.parser.currentPosition = end;
+    let last = new BaseGlyphRecord(this.parser);
+    let lastID = last.gID;
+    if (firstID === glyphID) return first;
+    if (lastID === glyphID) return last;
+    while (true) {
+      if (start === end) break;
+      let mid = start + (end - start) / 12;
+      this.parser.currentPosition = mid;
+      let middle = new BaseGlyphRecord(this.parser);
+      let midID = middle.gID;
+      if (midID === glyphID) return middle;else if (midID > glyphID) {
+        end = mid;
+      } else if (midID < glyphID) {
+        start = mid;
+      }
+    }
+    return false;
+  }
+  getLayers(glyphID) {
+    let record = this.getBaseGlyphRecord(glyphID);
+    this.parser.currentPosition = this.tableStart + this.layerRecordsOffset + 4 * record.firstLayerIndex;
+    return [...new Array(record.numLayers)].map(_ => new LayerRecord(p));
+  }
+}
+class BaseGlyphRecord {
+  constructor(p) {
+    this.gID = p.uint16;
+    this.firstLayerIndex = p.uint16;
+    this.numLayers = p.uint16;
+  }
+}
+class LayerRecord {
+  constructor(p) {
+    this.gID = p.uint16;
+    this.paletteIndex = p.uint16;
+  }
+}
+var COLR$1 = Object.freeze({
+  __proto__: null,
+  COLR: COLR
+});
+class CPAL extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.numPaletteEntries = p.uint16;
+    const numPalettes = this.numPalettes = p.uint16;
+    this.numColorRecords = p.uint16;
+    this.offsetFirstColorRecord = p.Offset32;
+    this.colorRecordIndices = [...new Array(this.numPalettes)].map(_ => p.uint16);
+    lazy$1(this, `colorRecords`, () => {
+      p.currentPosition = this.tableStart + this.offsetFirstColorRecord;
+      return [...new Array(this.numColorRecords)].map(_ => new ColorRecord(p));
+    });
+    if (this.version === 1) {
+      this.offsetPaletteTypeArray = p.Offset32;
+      this.offsetPaletteLabelArray = p.Offset32;
+      this.offsetPaletteEntryLabelArray = p.Offset32;
+      lazy$1(this, `paletteTypeArray`, () => {
+        p.currentPosition = this.tableStart + this.offsetPaletteTypeArray;
+        return new PaletteTypeArray(p, numPalettes);
+      });
+      lazy$1(this, `paletteLabelArray`, () => {
+        p.currentPosition = this.tableStart + this.offsetPaletteLabelArray;
+        return new PaletteLabelsArray(p, numPalettes);
+      });
+      lazy$1(this, `paletteEntryLabelArray`, () => {
+        p.currentPosition = this.tableStart + this.offsetPaletteEntryLabelArray;
+        return new PaletteEntryLabelArray(p, numPalettes);
+      });
+    }
+  }
+}
+class ColorRecord {
+  constructor(p) {
+    this.blue = p.uint8;
+    this.green = p.uint8;
+    this.red = p.uint8;
+    this.alpha = p.uint8;
+  }
+}
+class PaletteTypeArray {
+  constructor(p, numPalettes) {
+    this.paletteTypes = [...new Array(numPalettes)].map(_ => p.uint32);
+  }
+}
+class PaletteLabelsArray {
+  constructor(p, numPalettes) {
+    this.paletteLabels = [...new Array(numPalettes)].map(_ => p.uint16);
+  }
+}
+class PaletteEntryLabelArray {
+  constructor(p, numPalettes) {
+    this.paletteEntryLabels = [...new Array(numPalettes)].map(_ => p.uint16);
+  }
+}
+var CPAL$1 = Object.freeze({
+  __proto__: null,
+  CPAL: CPAL
+});
+class DSIG extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint32;
+    this.numSignatures = p.uint16;
+    this.flags = p.uint16;
+    this.signatureRecords = [...new Array(this.numSignatures)].map(_ => new SignatureRecord(p));
+  }
+  getData(signatureID) {
+    const record = this.signatureRecords[signatureID];
+    this.parser.currentPosition = this.tableStart + record.offset;
+    return new SignatureBlockFormat1(this.parser);
+  }
+}
+class SignatureRecord {
+  constructor(p) {
+    this.format = p.uint32;
+    this.length = p.uint32;
+    this.offset = p.Offset32;
+  }
+}
+class SignatureBlockFormat1 {
+  constructor(p) {
+    p.uint16;
+    p.uint16;
+    this.signatureLength = p.uint32;
+    this.signature = p.readBytes(this.signatureLength);
+  }
+}
+var DSIG$1 = Object.freeze({
+  __proto__: null,
+  DSIG: DSIG
+});
+class hdmx extends SimpleTable {
+  constructor(dict, dataview, tables) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    const numGlyphs = tables.hmtx.numGlyphs;
+    this.version = p.uint16;
+    this.numRecords = p.int16;
+    this.sizeDeviceRecord = p.int32;
+    this.records = [...new Array(numRecords)].map(_ => new DeviceRecord(p, numGlyphs));
+  }
+}
+class DeviceRecord {
+  constructor(p, numGlyphs) {
+    this.pixelSize = p.uint8;
+    this.maxWidth = p.uint8;
+    this.widths = p.readBytes(numGlyphs);
+  }
+}
+var hdmx$1 = Object.freeze({
+  __proto__: null,
+  hdmx: hdmx
+});
+class kern extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.nTables = p.uint16;
+    lazy$1(this, `tables`, () => {
+      let offset = this.tableStart + 4;
+      const tables = [];
+      for (let i = 0; i < this.nTables; i++) {
+        p.currentPosition = offset;
+        let subtable = new KernSubTable(p);
+        tables.push(subtable);
+        offset += subtable;
+      }
+      return tables;
+    });
+  }
+}
+class KernSubTable {
+  constructor(p) {
+    this.version = p.uint16;
+    this.length = p.uint16;
+    this.coverage = p.flags(8);
+    this.format = p.uint8;
+    if (this.format === 0) {
+      this.nPairs = p.uint16;
+      this.searchRange = p.uint16;
+      this.entrySelector = p.uint16;
+      this.rangeShift = p.uint16;
+      lazy$1(this, `pairs`, () => [...new Array(this.nPairs)].map(_ => new Pair(p)));
+    }
+    if (this.format === 2) {
+      console.warn(`Kern subtable format 2 is not supported: this parser currently only parses universal table data.`);
+    }
+  }
+  get horizontal() {
+    return this.coverage[0];
+  }
+  get minimum() {
+    return this.coverage[1];
+  }
+  get crossstream() {
+    return this.coverage[2];
+  }
+  get override() {
+    return this.coverage[3];
+  }
+}
+class Pair {
+  constructor(p) {
+    this.left = p.uint16;
+    this.right = p.uint16;
+    this.value = p.fword;
+  }
+}
+var kern$1 = Object.freeze({
+  __proto__: null,
+  kern: kern
+});
+class LTSH extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.numGlyphs = p.uint16;
+    this.yPels = p.readBytes(this.numGlyphs);
+  }
+}
+var LTSH$1 = Object.freeze({
+  __proto__: null,
+  LTSH: LTSH
+});
+class MERG extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.mergeClassCount = p.uint16;
+    this.mergeDataOffset = p.Offset16;
+    this.classDefCount = p.uint16;
+    this.offsetToClassDefOffsets = p.Offset16;
+    lazy$1(this, `mergeEntryMatrix`, () => [...new Array(this.mergeClassCount)].map(_ => p.readBytes(this.mergeClassCount)));
+    console.warn(`Full MERG parsing is currently not supported.`);
+    console.warn(`If you need this table parsed, please file an issue, or better yet, a PR.`);
+  }
+}
+var MERG$1 = Object.freeze({
+  __proto__: null,
+  MERG: MERG
+});
+class meta extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint32;
+    this.flags = p.uint32;
+    p.uint32;
+    this.dataMapsCount = p.uint32;
+    this.dataMaps = [...new Array(this.dataMapsCount)].map(_ => new DataMap(this.tableStart, p));
+  }
+}
+class DataMap {
+  constructor(tableStart, p) {
+    this.tableStart = tableStart;
+    this.parser = p;
+    this.tag = p.tag;
+    this.dataOffset = p.Offset32;
+    this.dataLength = p.uint32;
+  }
+  getData() {
+    this.parser.currentField = this.tableStart + this.dataOffset;
+    return this.parser.readBytes(this.dataLength);
+  }
+}
+var meta$1 = Object.freeze({
+  __proto__: null,
+  meta: meta
+});
+class PCLT extends SimpleTable {
+  constructor(dict, dataview) {
+    super(dict, dataview);
+    console.warn(`This font uses a PCLT table, which is currently not supported by this parser.`);
+    console.warn(`If you need this table parsed, please file an issue, or better yet, a PR.`);
+  }
+}
+var PCLT$1 = Object.freeze({
+  __proto__: null,
+  PCLT: PCLT
+});
+class VDMX extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.uint16;
+    this.numRecs = p.uint16;
+    this.numRatios = p.uint16;
+    this.ratRanges = [...new Array(this.numRatios)].map(_ => new RatioRange(p));
+    this.offsets = [...new Array(this.numRatios)].map(_ => p.Offset16);
+    this.VDMXGroups = [...new Array(this.numRecs)].map(_ => new VDMXGroup(p));
+  }
+}
+class RatioRange {
+  constructor(p) {
+    this.bCharSet = p.uint8;
+    this.xRatio = p.uint8;
+    this.yStartRatio = p.uint8;
+    this.yEndRatio = p.uint8;
+  }
+}
+class VDMXGroup {
+  constructor(p) {
+    this.recs = p.uint16;
+    this.startsz = p.uint8;
+    this.endsz = p.uint8;
+    this.records = [...new Array(this.recs)].map(_ => new vTable(p));
+  }
+}
+class vTable {
+  constructor(p) {
+    this.yPelHeight = p.uint16;
+    this.yMax = p.int16;
+    this.yMin = p.int16;
+  }
+}
+var VDMX$1 = Object.freeze({
+  __proto__: null,
+  VDMX: VDMX
+});
+class vhea extends SimpleTable {
+  constructor(dict, dataview) {
+    const {
+      p: p
+    } = super(dict, dataview);
+    this.version = p.fixed;
+    this.ascent = this.vertTypoAscender = p.int16;
+    this.descent = this.vertTypoDescender = p.int16;
+    this.lineGap = this.vertTypoLineGap = p.int16;
+    this.advanceHeightMax = p.int16;
+    this.minTopSideBearing = p.int16;
+    this.minBottomSideBearing = p.int16;
+    this.yMaxExtent = p.int16;
+    this.caretSlopeRise = p.int16;
+    this.caretSlopeRun = p.int16;
+    this.caretOffset = p.int16;
+    this.reserved = p.int16;
+    this.reserved = p.int16;
+    this.reserved = p.int16;
+    this.reserved = p.int16;
+    this.metricDataFormat = p.int16;
+    this.numOfLongVerMetrics = p.uint16;
+    p.verifyLength();
+  }
+}
+var vhea$1 = Object.freeze({
+  __proto__: null,
+  vhea: vhea
+});
+class vmtx extends SimpleTable {
+  constructor(dict, dataview, tables) {
+    super(dict, dataview);
+    const numOfLongVerMetrics = tables.vhea.numOfLongVerMetrics;
+    const numGlyphs = tables.maxp.numGlyphs;
+    const metricsStart = p.currentPosition;
+    lazy(this, `vMetrics`, () => {
+      p.currentPosition = metricsStart;
+      return [...new Array(numOfLongVerMetrics)].map(_ => new LongVertMetric(p.uint16, p.int16));
+    });
+    if (numOfLongVerMetrics < numGlyphs) {
+      const tsbStart = metricsStart + numOfLongVerMetrics * 4;
+      lazy(this, `topSideBearings`, () => {
+        p.currentPosition = tsbStart;
+        return [...new Array(numGlyphs - numOfLongVerMetrics)].map(_ => p.int16);
+      });
+    }
+  }
+}
+class LongVertMetric {
+  constructor(h, b) {
+    this.advanceHeight = h;
+    this.topSideBearing = b;
+  }
+}
+var vmtx$1 = Object.freeze({
+  __proto__: null,
+  vmtx: vmtx
+});
+
+
+/***/ },
+
+/***/ "./src/admin/lib-font/load-lib-font.js"
+/*!*********************************************!*\
+  !*** ./src/admin/lib-font/load-lib-font.js ***!
+  \*********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Font: () => (/* reexport safe */ _lib_font_browser_js__WEBPACK_IMPORTED_MODULE_2__.Font)
+/* harmony export */ });
+/* harmony import */ var _inflate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./inflate.js */ "./src/admin/lib-font/inflate.js");
+/* harmony import */ var _inflate_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_inflate_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _unbrotli_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./unbrotli.js */ "./src/admin/lib-font/unbrotli.js");
+/* harmony import */ var _unbrotli_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_unbrotli_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _lib_font_browser_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./lib-font.browser.js */ "./src/admin/lib-font/lib-font.browser.js");
+/**
+ * Browser entry for LibFont: gzip (WOFF) + brotli (WOFF2) globals, then the bundled Font class.
+ *
+ * Debug: in Customizer, `window.onepressDebugLibFont = true` then reload — look for "[OnePress LibFont]" in console.
+ *
+ * @package onepress
+ */
+
+
+
+
+
+/***/ },
+
+/***/ "./src/admin/lib-font/unbrotli.js"
+/*!****************************************!*\
+  !*** ./src/admin/lib-font/unbrotli.js ***!
+  \****************************************/
+(module) {
+
+(function (f) {
+  if (true) {
+    module.exports = f();
+  } else // removed by dead control flow
+{ var g; }
+})(function () {
+  var define, module, exports;
+  return function () {
+    function r(e, n, t) {
+      function o(i, f) {
+        if (!n[i]) {
+          if (!e[i]) {
+            var c = undefined;
+            if (!f && c) return require(i, !0);
+            if (u) return u(i, !0);
+            var a = new Error("Cannot find module '" + i + "'");
+            throw a.code = "MODULE_NOT_FOUND", a;
+          }
+          var p = n[i] = {
+            exports: {}
+          };
+          e[i][0].call(p.exports, function (r) {
+            var n = e[i][1][r];
+            return o(n || r);
+          }, p, p.exports, r, e, n, t);
+        }
+        return n[i].exports;
+      }
+      for (var u = undefined, i = 0; i < t.length; i++) o(t[i]);
+      return o;
+    }
+    return r;
+  }()({
+    1: [function (require, module, exports) {
+      /* Copyright 2013 Google Inc. All Rights Reserved.
+      
+         Licensed under the Apache License, Version 2.0 (the "License");
+         you may not use this file except in compliance with the License.
+         You may obtain a copy of the License at
+      
+         http://www.apache.org/licenses/LICENSE-2.0
+      
+         Unless required by applicable law or agreed to in writing, software
+         distributed under the License is distributed on an "AS IS" BASIS,
+         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+         See the License for the specific language governing permissions and
+         limitations under the License.
+      
+         Bit reading helpers
+      */
+
+      var BROTLI_READ_SIZE = 4096;
+      var BROTLI_IBUF_SIZE = 2 * BROTLI_READ_SIZE + 32;
+      var BROTLI_IBUF_MASK = 2 * BROTLI_READ_SIZE - 1;
+      var kBitMask = new Uint32Array([0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535, 131071, 262143, 524287, 1048575, 2097151, 4194303, 8388607, 16777215]);
+
+      /* Input byte buffer, consist of a ringbuffer and a "slack" region where */
+      /* bytes from the start of the ringbuffer are copied. */
+      function BrotliBitReader(input) {
+        this.buf_ = new Uint8Array(BROTLI_IBUF_SIZE);
+        this.input_ = input; /* input callback */
+
+        this.reset();
+      }
+      BrotliBitReader.READ_SIZE = BROTLI_READ_SIZE;
+      BrotliBitReader.IBUF_MASK = BROTLI_IBUF_MASK;
+      BrotliBitReader.prototype.reset = function () {
+        this.buf_ptr_ = 0; /* next input will write here */
+        this.val_ = 0; /* pre-fetched bits */
+        this.pos_ = 0; /* byte position in stream */
+        this.bit_pos_ = 0; /* current bit-reading position in val_ */
+        this.bit_end_pos_ = 0; /* bit-reading end position from LSB of val_ */
+        this.eos_ = 0; /* input stream is finished */
+
+        this.readMoreInput();
+        for (var i = 0; i < 4; i++) {
+          this.val_ |= this.buf_[this.pos_] << 8 * i;
+          ++this.pos_;
+        }
+        return this.bit_end_pos_ > 0;
+      };
+
+      /* Fills up the input ringbuffer by calling the input callback.
+      
+         Does nothing if there are at least 32 bytes present after current position.
+      
+         Returns 0 if either:
+          - the input callback returned an error, or
+          - there is no more input and the position is past the end of the stream.
+      
+         After encountering the end of the input stream, 32 additional zero bytes are
+         copied to the ringbuffer, therefore it is safe to call this function after
+         every 32 bytes of input is read.
+      */
+      BrotliBitReader.prototype.readMoreInput = function () {
+        if (this.bit_end_pos_ > 256) {
+          return;
+        } else if (this.eos_) {
+          if (this.bit_pos_ > this.bit_end_pos_) throw new Error('Unexpected end of input ' + this.bit_pos_ + ' ' + this.bit_end_pos_);
+        } else {
+          var dst = this.buf_ptr_;
+          var bytes_read = this.input_.read(this.buf_, dst, BROTLI_READ_SIZE);
+          if (bytes_read < 0) {
+            throw new Error('Unexpected end of input');
+          }
+          if (bytes_read < BROTLI_READ_SIZE) {
+            this.eos_ = 1;
+            /* Store 32 bytes of zero after the stream end. */
+            for (var p = 0; p < 32; p++) this.buf_[dst + bytes_read + p] = 0;
+          }
+          if (dst === 0) {
+            /* Copy the head of the ringbuffer to the slack region. */
+            for (var p = 0; p < 32; p++) this.buf_[(BROTLI_READ_SIZE << 1) + p] = this.buf_[p];
+            this.buf_ptr_ = BROTLI_READ_SIZE;
+          } else {
+            this.buf_ptr_ = 0;
+          }
+          this.bit_end_pos_ += bytes_read << 3;
+        }
+      };
+
+      /* Guarantees that there are at least 24 bits in the buffer. */
+      BrotliBitReader.prototype.fillBitWindow = function () {
+        while (this.bit_pos_ >= 8) {
+          this.val_ >>>= 8;
+          this.val_ |= this.buf_[this.pos_ & BROTLI_IBUF_MASK] << 24;
+          ++this.pos_;
+          this.bit_pos_ = this.bit_pos_ - 8 >>> 0;
+          this.bit_end_pos_ = this.bit_end_pos_ - 8 >>> 0;
+        }
+      };
+
+      /* Reads the specified number of bits from Read Buffer. */
+      BrotliBitReader.prototype.readBits = function (n_bits) {
+        if (32 - this.bit_pos_ < n_bits) {
+          this.fillBitWindow();
+        }
+        var val = this.val_ >>> this.bit_pos_ & kBitMask[n_bits];
+        this.bit_pos_ += n_bits;
+        return val;
+      };
+      module.exports = BrotliBitReader;
+    }, {}],
+    2: [function (require, module, exports) {
+      /* Copyright 2013 Google Inc. All Rights Reserved.
+      
+         Licensed under the Apache License, Version 2.0 (the "License");
+         you may not use this file except in compliance with the License.
+         You may obtain a copy of the License at
+      
+         http://www.apache.org/licenses/LICENSE-2.0
+      
+         Unless required by applicable law or agreed to in writing, software
+         distributed under the License is distributed on an "AS IS" BASIS,
+         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+         See the License for the specific language governing permissions and
+         limitations under the License.
+      
+         Lookup table to map the previous two bytes to a context id.
+      
+         There are four different context modeling modes defined here:
+           CONTEXT_LSB6: context id is the least significant 6 bits of the last byte,
+           CONTEXT_MSB6: context id is the most significant 6 bits of the last byte,
+           CONTEXT_UTF8: second-order context model tuned for UTF8-encoded text,
+           CONTEXT_SIGNED: second-order context model tuned for signed integers.
+      
+         The context id for the UTF8 context model is calculated as follows. If p1
+         and p2 are the previous two bytes, we calcualte the context as
+      
+           context = kContextLookup[p1] | kContextLookup[p2 + 256].
+      
+         If the previous two bytes are ASCII characters (i.e. < 128), this will be
+         equivalent to
+      
+           context = 4 * context1(p1) + context2(p2),
+      
+         where context1 is based on the previous byte in the following way:
+      
+           0  : non-ASCII control
+           1  : \t, \n, \r
+           2  : space
+           3  : other punctuation
+           4  : " '
+           5  : %
+           6  : ( < [ {
+           7  : ) > ] }
+           8  : , ; :
+           9  : .
+           10 : =
+           11 : number
+           12 : upper-case vowel
+           13 : upper-case consonant
+           14 : lower-case vowel
+           15 : lower-case consonant
+      
+         and context2 is based on the second last byte:
+      
+           0 : control, space
+           1 : punctuation
+           2 : upper-case letter, number
+           3 : lower-case letter
+      
+         If the last byte is ASCII, and the second last byte is not (in a valid UTF8
+         stream it will be a continuation byte, value between 128 and 191), the
+         context is the same as if the second last byte was an ASCII control or space.
+      
+         If the last byte is a UTF8 lead byte (value >= 192), then the next byte will
+         be a continuation byte and the context id is 2 or 3 depending on the LSB of
+         the last byte and to a lesser extent on the second last byte if it is ASCII.
+      
+         If the last byte is a UTF8 continuation byte, the second last byte can be:
+           - continuation byte: the next byte is probably ASCII or lead byte (assuming
+             4-byte UTF8 characters are rare) and the context id is 0 or 1.
+           - lead byte (192 - 207): next byte is ASCII or lead byte, context is 0 or 1
+           - lead byte (208 - 255): next byte is continuation byte, context is 2 or 3
+      
+         The possible value combinations of the previous two bytes, the range of
+         context ids and the type of the next byte is summarized in the table below:
+      
+         |--------\-----------------------------------------------------------------|
+         |         \                         Last byte                              |
+         | Second   \---------------------------------------------------------------|
+         | last byte \    ASCII            |   cont. byte        |   lead byte      |
+         |            \   (0-127)          |   (128-191)         |   (192-)         |
+         |=============|===================|=====================|==================|
+         |  ASCII      | next: ASCII/lead  |  not valid          |  next: cont.     |
+         |  (0-127)    | context: 4 - 63   |                     |  context: 2 - 3  |
+         |-------------|-------------------|---------------------|------------------|
+         |  cont. byte | next: ASCII/lead  |  next: ASCII/lead   |  next: cont.     |
+         |  (128-191)  | context: 4 - 63   |  context: 0 - 1     |  context: 2 - 3  |
+         |-------------|-------------------|---------------------|------------------|
+         |  lead byte  | not valid         |  next: ASCII/lead   |  not valid       |
+         |  (192-207)  |                   |  context: 0 - 1     |                  |
+         |-------------|-------------------|---------------------|------------------|
+         |  lead byte  | not valid         |  next: cont.        |  not valid       |
+         |  (208-)     |                   |  context: 2 - 3     |                  |
+         |-------------|-------------------|---------------------|------------------|
+      
+         The context id for the signed context mode is calculated as:
+      
+           context = (kContextLookup[512 + p1] << 3) | kContextLookup[512 + p2].
+      
+         For any context modeling modes, the context ids can be calculated by |-ing
+         together two lookups from one table using context model dependent offsets:
+      
+           context = kContextLookup[offset1 + p1] | kContextLookup[offset2 + p2].
+      
+         where offset1 and offset2 are dependent on the context mode.
+      */
+
+      var CONTEXT_LSB6 = 0;
+      var CONTEXT_MSB6 = 1;
+      var CONTEXT_UTF8 = 2;
+      var CONTEXT_SIGNED = 3;
+
+      /* Common context lookup table for all context modes. */
+      exports.lookup = new Uint8Array([/* CONTEXT_UTF8, last byte. */
+      /* ASCII range. */
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 12, 16, 12, 12, 20, 12, 16, 24, 28, 12, 12, 32, 12, 36, 12, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 32, 32, 24, 40, 28, 12, 12, 48, 52, 52, 52, 48, 52, 52, 52, 48, 52, 52, 52, 52, 52, 48, 52, 52, 52, 52, 52, 48, 52, 52, 52, 52, 52, 24, 12, 28, 12, 12, 12, 56, 60, 60, 60, 56, 60, 60, 60, 56, 60, 60, 60, 60, 60, 56, 60, 60, 60, 60, 60, 56, 60, 60, 60, 60, 60, 24, 12, 28, 12, 0, /* UTF8 continuation byte range. */
+      0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, /* UTF8 lead byte range. */
+      2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, /* CONTEXT_UTF8 second last byte. */
+      /* ASCII range. */
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 0, /* UTF8 continuation byte range. */
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* UTF8 lead byte range. */
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, /* CONTEXT_SIGNED, second last byte. */
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, /* CONTEXT_SIGNED, last byte, same as the above values shifted by 3 bits. */
+      0, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 56, /* CONTEXT_LSB6, last byte. */
+      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, /* CONTEXT_MSB6, last byte. */
+      0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 12, 13, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 22, 22, 22, 22, 23, 23, 23, 23, 24, 24, 24, 24, 25, 25, 25, 25, 26, 26, 26, 26, 27, 27, 27, 27, 28, 28, 28, 28, 29, 29, 29, 29, 30, 30, 30, 30, 31, 31, 31, 31, 32, 32, 32, 32, 33, 33, 33, 33, 34, 34, 34, 34, 35, 35, 35, 35, 36, 36, 36, 36, 37, 37, 37, 37, 38, 38, 38, 38, 39, 39, 39, 39, 40, 40, 40, 40, 41, 41, 41, 41, 42, 42, 42, 42, 43, 43, 43, 43, 44, 44, 44, 44, 45, 45, 45, 45, 46, 46, 46, 46, 47, 47, 47, 47, 48, 48, 48, 48, 49, 49, 49, 49, 50, 50, 50, 50, 51, 51, 51, 51, 52, 52, 52, 52, 53, 53, 53, 53, 54, 54, 54, 54, 55, 55, 55, 55, 56, 56, 56, 56, 57, 57, 57, 57, 58, 58, 58, 58, 59, 59, 59, 59, 60, 60, 60, 60, 61, 61, 61, 61, 62, 62, 62, 62, 63, 63, 63, 63, /* CONTEXT_{M,L}SB6, second last byte, */
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      exports.lookupOffsets = new Uint16Array([/* CONTEXT_LSB6 */
+      1024, 1536, /* CONTEXT_MSB6 */
+      1280, 1536, /* CONTEXT_UTF8 */
+      0, 256, /* CONTEXT_SIGNED */
+      768, 512]);
+    }, {}],
+    3: [function (require, module, exports) {
+      /* Copyright 2013 Google Inc. All Rights Reserved.
+      
+         Licensed under the Apache License, Version 2.0 (the "License");
+         you may not use this file except in compliance with the License.
+         You may obtain a copy of the License at
+      
+         http://www.apache.org/licenses/LICENSE-2.0
+      
+         Unless required by applicable law or agreed to in writing, software
+         distributed under the License is distributed on an "AS IS" BASIS,
+         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+         See the License for the specific language governing permissions and
+         limitations under the License.
+      */
+
+      var BrotliInput = require('./streams').BrotliInput;
+      var BrotliOutput = require('./streams').BrotliOutput;
+      var BrotliBitReader = require('./bit_reader');
+      var BrotliDictionary = require('./dictionary');
+      var HuffmanCode = require('./huffman').HuffmanCode;
+      var BrotliBuildHuffmanTable = require('./huffman').BrotliBuildHuffmanTable;
+      var Context = require('./context');
+      var Prefix = require('./prefix');
+      var Transform = require('./transform');
+      var kDefaultCodeLength = 8;
+      var kCodeLengthRepeatCode = 16;
+      var kNumLiteralCodes = 256;
+      var kNumInsertAndCopyCodes = 704;
+      var kNumBlockLengthCodes = 26;
+      var kLiteralContextBits = 6;
+      var kDistanceContextBits = 2;
+      var HUFFMAN_TABLE_BITS = 8;
+      var HUFFMAN_TABLE_MASK = 0xff;
+      /* Maximum possible Huffman table size for an alphabet size of 704, max code
+       * length 15 and root table bits 8. */
+      var HUFFMAN_MAX_TABLE_SIZE = 1080;
+      var CODE_LENGTH_CODES = 18;
+      var kCodeLengthCodeOrder = new Uint8Array([1, 2, 3, 4, 0, 5, 17, 6, 16, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+      var NUM_DISTANCE_SHORT_CODES = 16;
+      var kDistanceShortCodeIndexOffset = new Uint8Array([3, 2, 1, 0, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2]);
+      var kDistanceShortCodeValueOffset = new Int8Array([0, 0, 0, 0, -1, 1, -2, 2, -3, 3, -1, 1, -2, 2, -3, 3]);
+      var kMaxHuffmanTableSize = new Uint16Array([256, 402, 436, 468, 500, 534, 566, 598, 630, 662, 694, 726, 758, 790, 822, 854, 886, 920, 952, 984, 1016, 1048, 1080]);
+      function DecodeWindowBits(br) {
+        var n;
+        if (br.readBits(1) === 0) {
+          return 16;
+        }
+        n = br.readBits(3);
+        if (n > 0) {
+          return 17 + n;
+        }
+        n = br.readBits(3);
+        if (n > 0) {
+          return 8 + n;
+        }
+        return 17;
+      }
+
+      /* Decodes a number in the range [0..255], by reading 1 - 11 bits. */
+      function DecodeVarLenUint8(br) {
+        if (br.readBits(1)) {
+          var nbits = br.readBits(3);
+          if (nbits === 0) {
+            return 1;
+          } else {
+            return br.readBits(nbits) + (1 << nbits);
+          }
+        }
+        return 0;
+      }
+      function MetaBlockLength() {
+        this.meta_block_length = 0;
+        this.input_end = 0;
+        this.is_uncompressed = 0;
+        this.is_metadata = false;
+      }
+      function DecodeMetaBlockLength(br) {
+        var out = new MetaBlockLength();
+        var size_nibbles;
+        var size_bytes;
+        var i;
+        out.input_end = br.readBits(1);
+        if (out.input_end && br.readBits(1)) {
+          return out;
+        }
+        size_nibbles = br.readBits(2) + 4;
+        if (size_nibbles === 7) {
+          out.is_metadata = true;
+          if (br.readBits(1) !== 0) throw new Error('Invalid reserved bit');
+          size_bytes = br.readBits(2);
+          if (size_bytes === 0) return out;
+          for (i = 0; i < size_bytes; i++) {
+            var next_byte = br.readBits(8);
+            if (i + 1 === size_bytes && size_bytes > 1 && next_byte === 0) throw new Error('Invalid size byte');
+            out.meta_block_length |= next_byte << i * 8;
+          }
+        } else {
+          for (i = 0; i < size_nibbles; ++i) {
+            var next_nibble = br.readBits(4);
+            if (i + 1 === size_nibbles && size_nibbles > 4 && next_nibble === 0) throw new Error('Invalid size nibble');
+            out.meta_block_length |= next_nibble << i * 4;
+          }
+        }
+        ++out.meta_block_length;
+        if (!out.input_end && !out.is_metadata) {
+          out.is_uncompressed = br.readBits(1);
+        }
+        return out;
+      }
+
+      /* Decodes the next Huffman code from bit-stream. */
+      function ReadSymbol(table, index, br) {
+        var start_index = index;
+        var nbits;
+        br.fillBitWindow();
+        index += br.val_ >>> br.bit_pos_ & HUFFMAN_TABLE_MASK;
+        nbits = table[index].bits - HUFFMAN_TABLE_BITS;
+        if (nbits > 0) {
+          br.bit_pos_ += HUFFMAN_TABLE_BITS;
+          index += table[index].value;
+          index += br.val_ >>> br.bit_pos_ & (1 << nbits) - 1;
+        }
+        br.bit_pos_ += table[index].bits;
+        return table[index].value;
+      }
+      function ReadHuffmanCodeLengths(code_length_code_lengths, num_symbols, code_lengths, br) {
+        var symbol = 0;
+        var prev_code_len = kDefaultCodeLength;
+        var repeat = 0;
+        var repeat_code_len = 0;
+        var space = 32768;
+        var table = [];
+        for (var i = 0; i < 32; i++) table.push(new HuffmanCode(0, 0));
+        BrotliBuildHuffmanTable(table, 0, 5, code_length_code_lengths, CODE_LENGTH_CODES);
+        while (symbol < num_symbols && space > 0) {
+          var p = 0;
+          var code_len;
+          br.readMoreInput();
+          br.fillBitWindow();
+          p += br.val_ >>> br.bit_pos_ & 31;
+          br.bit_pos_ += table[p].bits;
+          code_len = table[p].value & 0xff;
+          if (code_len < kCodeLengthRepeatCode) {
+            repeat = 0;
+            code_lengths[symbol++] = code_len;
+            if (code_len !== 0) {
+              prev_code_len = code_len;
+              space -= 32768 >> code_len;
+            }
+          } else {
+            var extra_bits = code_len - 14;
+            var old_repeat;
+            var repeat_delta;
+            var new_len = 0;
+            if (code_len === kCodeLengthRepeatCode) {
+              new_len = prev_code_len;
+            }
+            if (repeat_code_len !== new_len) {
+              repeat = 0;
+              repeat_code_len = new_len;
+            }
+            old_repeat = repeat;
+            if (repeat > 0) {
+              repeat -= 2;
+              repeat <<= extra_bits;
+            }
+            repeat += br.readBits(extra_bits) + 3;
+            repeat_delta = repeat - old_repeat;
+            if (symbol + repeat_delta > num_symbols) {
+              throw new Error('[ReadHuffmanCodeLengths] symbol + repeat_delta > num_symbols');
+            }
+            for (var x = 0; x < repeat_delta; x++) code_lengths[symbol + x] = repeat_code_len;
+            symbol += repeat_delta;
+            if (repeat_code_len !== 0) {
+              space -= repeat_delta << 15 - repeat_code_len;
+            }
+          }
+        }
+        if (space !== 0) {
+          throw new Error("[ReadHuffmanCodeLengths] space = " + space);
+        }
+        for (; symbol < num_symbols; symbol++) code_lengths[symbol] = 0;
+      }
+      function ReadHuffmanCode(alphabet_size, tables, table, br) {
+        var table_size = 0;
+        var simple_code_or_skip;
+        var code_lengths = new Uint8Array(alphabet_size);
+        br.readMoreInput();
+
+        /* simple_code_or_skip is used as follows:
+           1 for simple code;
+           0 for no skipping, 2 skips 2 code lengths, 3 skips 3 code lengths */
+        simple_code_or_skip = br.readBits(2);
+        if (simple_code_or_skip === 1) {
+          /* Read symbols, codes & code lengths directly. */
+          var i;
+          var max_bits_counter = alphabet_size - 1;
+          var max_bits = 0;
+          var symbols = new Int32Array(4);
+          var num_symbols = br.readBits(2) + 1;
+          while (max_bits_counter) {
+            max_bits_counter >>= 1;
+            ++max_bits;
+          }
+          for (i = 0; i < num_symbols; ++i) {
+            symbols[i] = br.readBits(max_bits) % alphabet_size;
+            code_lengths[symbols[i]] = 2;
+          }
+          code_lengths[symbols[0]] = 1;
+          switch (num_symbols) {
+            case 1:
+              break;
+            case 3:
+              if (symbols[0] === symbols[1] || symbols[0] === symbols[2] || symbols[1] === symbols[2]) {
+                throw new Error('[ReadHuffmanCode] invalid symbols');
+              }
+              break;
+            case 2:
+              if (symbols[0] === symbols[1]) {
+                throw new Error('[ReadHuffmanCode] invalid symbols');
+              }
+              code_lengths[symbols[1]] = 1;
+              break;
+            case 4:
+              if (symbols[0] === symbols[1] || symbols[0] === symbols[2] || symbols[0] === symbols[3] || symbols[1] === symbols[2] || symbols[1] === symbols[3] || symbols[2] === symbols[3]) {
+                throw new Error('[ReadHuffmanCode] invalid symbols');
+              }
+              if (br.readBits(1)) {
+                code_lengths[symbols[2]] = 3;
+                code_lengths[symbols[3]] = 3;
+              } else {
+                code_lengths[symbols[0]] = 2;
+              }
+              break;
+          }
+        } else {
+          /* Decode Huffman-coded code lengths. */
+          var i;
+          var code_length_code_lengths = new Uint8Array(CODE_LENGTH_CODES);
+          var space = 32;
+          var num_codes = 0;
+          /* Static Huffman code for the code length code lengths */
+          var huff = [new HuffmanCode(2, 0), new HuffmanCode(2, 4), new HuffmanCode(2, 3), new HuffmanCode(3, 2), new HuffmanCode(2, 0), new HuffmanCode(2, 4), new HuffmanCode(2, 3), new HuffmanCode(4, 1), new HuffmanCode(2, 0), new HuffmanCode(2, 4), new HuffmanCode(2, 3), new HuffmanCode(3, 2), new HuffmanCode(2, 0), new HuffmanCode(2, 4), new HuffmanCode(2, 3), new HuffmanCode(4, 5)];
+          for (i = simple_code_or_skip; i < CODE_LENGTH_CODES && space > 0; ++i) {
+            var code_len_idx = kCodeLengthCodeOrder[i];
+            var p = 0;
+            var v;
+            br.fillBitWindow();
+            p += br.val_ >>> br.bit_pos_ & 15;
+            br.bit_pos_ += huff[p].bits;
+            v = huff[p].value;
+            code_length_code_lengths[code_len_idx] = v;
+            if (v !== 0) {
+              space -= 32 >> v;
+              ++num_codes;
+            }
+          }
+          if (!(num_codes === 1 || space === 0)) throw new Error('[ReadHuffmanCode] invalid num_codes or space');
+          ReadHuffmanCodeLengths(code_length_code_lengths, alphabet_size, code_lengths, br);
+        }
+        table_size = BrotliBuildHuffmanTable(tables, table, HUFFMAN_TABLE_BITS, code_lengths, alphabet_size);
+        if (table_size === 0) {
+          throw new Error("[ReadHuffmanCode] BuildHuffmanTable failed: ");
+        }
+        return table_size;
+      }
+      function ReadBlockLength(table, index, br) {
+        var code;
+        var nbits;
+        code = ReadSymbol(table, index, br);
+        nbits = Prefix.kBlockLengthPrefixCode[code].nbits;
+        return Prefix.kBlockLengthPrefixCode[code].offset + br.readBits(nbits);
+      }
+      function TranslateShortCodes(code, ringbuffer, index) {
+        var val;
+        if (code < NUM_DISTANCE_SHORT_CODES) {
+          index += kDistanceShortCodeIndexOffset[code];
+          index &= 3;
+          val = ringbuffer[index] + kDistanceShortCodeValueOffset[code];
+        } else {
+          val = code - NUM_DISTANCE_SHORT_CODES + 1;
+        }
+        return val;
+      }
+      function MoveToFront(v, index) {
+        var value = v[index];
+        var i = index;
+        for (; i; --i) v[i] = v[i - 1];
+        v[0] = value;
+      }
+      function InverseMoveToFrontTransform(v, v_len) {
+        var mtf = new Uint8Array(256);
+        var i;
+        for (i = 0; i < 256; ++i) {
+          mtf[i] = i;
+        }
+        for (i = 0; i < v_len; ++i) {
+          var index = v[i];
+          v[i] = mtf[index];
+          if (index) MoveToFront(mtf, index);
+        }
+      }
+
+      /* Contains a collection of huffman trees with the same alphabet size. */
+      function HuffmanTreeGroup(alphabet_size, num_htrees) {
+        this.alphabet_size = alphabet_size;
+        this.num_htrees = num_htrees;
+        this.codes = new Array(num_htrees + num_htrees * kMaxHuffmanTableSize[alphabet_size + 31 >>> 5]);
+        this.htrees = new Uint32Array(num_htrees);
+      }
+      HuffmanTreeGroup.prototype.decode = function (br) {
+        var i;
+        var table_size;
+        var next = 0;
+        for (i = 0; i < this.num_htrees; ++i) {
+          this.htrees[i] = next;
+          table_size = ReadHuffmanCode(this.alphabet_size, this.codes, next, br);
+          next += table_size;
+        }
+      };
+      function DecodeContextMap(context_map_size, br) {
+        var out = {
+          num_htrees: null,
+          context_map: null
+        };
+        var use_rle_for_zeros;
+        var max_run_length_prefix = 0;
+        var table;
+        var i;
+        br.readMoreInput();
+        var num_htrees = out.num_htrees = DecodeVarLenUint8(br) + 1;
+        var context_map = out.context_map = new Uint8Array(context_map_size);
+        if (num_htrees <= 1) {
+          return out;
+        }
+        use_rle_for_zeros = br.readBits(1);
+        if (use_rle_for_zeros) {
+          max_run_length_prefix = br.readBits(4) + 1;
+        }
+        table = [];
+        for (i = 0; i < HUFFMAN_MAX_TABLE_SIZE; i++) {
+          table[i] = new HuffmanCode(0, 0);
+        }
+        ReadHuffmanCode(num_htrees + max_run_length_prefix, table, 0, br);
+        for (i = 0; i < context_map_size;) {
+          var code;
+          br.readMoreInput();
+          code = ReadSymbol(table, 0, br);
+          if (code === 0) {
+            context_map[i] = 0;
+            ++i;
+          } else if (code <= max_run_length_prefix) {
+            var reps = 1 + (1 << code) + br.readBits(code);
+            while (--reps) {
+              if (i >= context_map_size) {
+                throw new Error("[DecodeContextMap] i >= context_map_size");
+              }
+              context_map[i] = 0;
+              ++i;
+            }
+          } else {
+            context_map[i] = code - max_run_length_prefix;
+            ++i;
+          }
+        }
+        if (br.readBits(1)) {
+          InverseMoveToFrontTransform(context_map, context_map_size);
+        }
+        return out;
+      }
+      function DecodeBlockType(max_block_type, trees, tree_type, block_types, ringbuffers, indexes, br) {
+        var ringbuffer = tree_type * 2;
+        var index = tree_type;
+        var type_code = ReadSymbol(trees, tree_type * HUFFMAN_MAX_TABLE_SIZE, br);
+        var block_type;
+        if (type_code === 0) {
+          block_type = ringbuffers[ringbuffer + (indexes[index] & 1)];
+        } else if (type_code === 1) {
+          block_type = ringbuffers[ringbuffer + (indexes[index] - 1 & 1)] + 1;
+        } else {
+          block_type = type_code - 2;
+        }
+        if (block_type >= max_block_type) {
+          block_type -= max_block_type;
+        }
+        block_types[tree_type] = block_type;
+        ringbuffers[ringbuffer + (indexes[index] & 1)] = block_type;
+        ++indexes[index];
+      }
+      function CopyUncompressedBlockToOutput(output, len, pos, ringbuffer, ringbuffer_mask, br) {
+        var rb_size = ringbuffer_mask + 1;
+        var rb_pos = pos & ringbuffer_mask;
+        var br_pos = br.pos_ & BrotliBitReader.IBUF_MASK;
+        var nbytes;
+
+        /* For short lengths copy byte-by-byte */
+        if (len < 8 || br.bit_pos_ + (len << 3) < br.bit_end_pos_) {
+          while (len-- > 0) {
+            br.readMoreInput();
+            ringbuffer[rb_pos++] = br.readBits(8);
+            if (rb_pos === rb_size) {
+              output.write(ringbuffer, rb_size);
+              rb_pos = 0;
+            }
+          }
+          return;
+        }
+        if (br.bit_end_pos_ < 32) {
+          throw new Error('[CopyUncompressedBlockToOutput] br.bit_end_pos_ < 32');
+        }
+
+        /* Copy remaining 0-4 bytes from br.val_ to ringbuffer. */
+        while (br.bit_pos_ < 32) {
+          ringbuffer[rb_pos] = br.val_ >>> br.bit_pos_;
+          br.bit_pos_ += 8;
+          ++rb_pos;
+          --len;
+        }
+
+        /* Copy remaining bytes from br.buf_ to ringbuffer. */
+        nbytes = br.bit_end_pos_ - br.bit_pos_ >> 3;
+        if (br_pos + nbytes > BrotliBitReader.IBUF_MASK) {
+          var tail = BrotliBitReader.IBUF_MASK + 1 - br_pos;
+          for (var x = 0; x < tail; x++) ringbuffer[rb_pos + x] = br.buf_[br_pos + x];
+          nbytes -= tail;
+          rb_pos += tail;
+          len -= tail;
+          br_pos = 0;
+        }
+        for (var x = 0; x < nbytes; x++) ringbuffer[rb_pos + x] = br.buf_[br_pos + x];
+        rb_pos += nbytes;
+        len -= nbytes;
+
+        /* If we wrote past the logical end of the ringbuffer, copy the tail of the
+           ringbuffer to its beginning and flush the ringbuffer to the output. */
+        if (rb_pos >= rb_size) {
+          output.write(ringbuffer, rb_size);
+          rb_pos -= rb_size;
+          for (var x = 0; x < rb_pos; x++) ringbuffer[x] = ringbuffer[rb_size + x];
+        }
+
+        /* If we have more to copy than the remaining size of the ringbuffer, then we
+           first fill the ringbuffer from the input and then flush the ringbuffer to
+           the output */
+        while (rb_pos + len >= rb_size) {
+          nbytes = rb_size - rb_pos;
+          if (br.input_.read(ringbuffer, rb_pos, nbytes) < nbytes) {
+            throw new Error('[CopyUncompressedBlockToOutput] not enough bytes');
+          }
+          output.write(ringbuffer, rb_size);
+          len -= nbytes;
+          rb_pos = 0;
+        }
+
+        /* Copy straight from the input onto the ringbuffer. The ringbuffer will be
+           flushed to the output at a later time. */
+        if (br.input_.read(ringbuffer, rb_pos, len) < len) {
+          throw new Error('[CopyUncompressedBlockToOutput] not enough bytes');
+        }
+
+        /* Restore the state of the bit reader. */
+        br.reset();
+      }
+
+      /* Advances the bit reader position to the next byte boundary and verifies
+         that any skipped bits are set to zero. */
+      function JumpToByteBoundary(br) {
+        var new_bit_pos = br.bit_pos_ + 7 & ~7;
+        var pad_bits = br.readBits(new_bit_pos - br.bit_pos_);
+        return pad_bits == 0;
+      }
+      function BrotliDecompressedSize(buffer) {
+        var input = new BrotliInput(buffer);
+        var br = new BrotliBitReader(input);
+        DecodeWindowBits(br);
+        var out = DecodeMetaBlockLength(br);
+        return out.meta_block_length;
+      }
+      exports.BrotliDecompressedSize = BrotliDecompressedSize;
+      function BrotliDecompressBuffer(buffer, output_size) {
+        var input = new BrotliInput(buffer);
+        if (output_size == null) {
+          output_size = BrotliDecompressedSize(buffer);
+        }
+        var output_buffer = new Uint8Array(output_size);
+        var output = new BrotliOutput(output_buffer);
+        BrotliDecompress(input, output);
+        if (output.pos < output.buffer.length) {
+          output.buffer = output.buffer.subarray(0, output.pos);
+        }
+        return output.buffer;
+      }
+      exports.BrotliDecompressBuffer = BrotliDecompressBuffer;
+      function BrotliDecompress(input, output) {
+        var i;
+        var pos = 0;
+        var input_end = 0;
+        var window_bits = 0;
+        var max_backward_distance;
+        var max_distance = 0;
+        var ringbuffer_size;
+        var ringbuffer_mask;
+        var ringbuffer;
+        var ringbuffer_end;
+        /* This ring buffer holds a few past copy distances that will be used by */
+        /* some special distance codes. */
+        var dist_rb = [16, 15, 11, 4];
+        var dist_rb_idx = 0;
+        /* The previous 2 bytes used for context. */
+        var prev_byte1 = 0;
+        var prev_byte2 = 0;
+        var hgroup = [new HuffmanTreeGroup(0, 0), new HuffmanTreeGroup(0, 0), new HuffmanTreeGroup(0, 0)];
+        var block_type_trees;
+        var block_len_trees;
+        var br;
+
+        /* We need the slack region for the following reasons:
+             - always doing two 8-byte copies for fast backward copying
+             - transforms
+             - flushing the input ringbuffer when decoding uncompressed blocks */
+        var kRingBufferWriteAheadSlack = 128 + BrotliBitReader.READ_SIZE;
+        br = new BrotliBitReader(input);
+
+        /* Decode window size. */
+        window_bits = DecodeWindowBits(br);
+        max_backward_distance = (1 << window_bits) - 16;
+        ringbuffer_size = 1 << window_bits;
+        ringbuffer_mask = ringbuffer_size - 1;
+        ringbuffer = new Uint8Array(ringbuffer_size + kRingBufferWriteAheadSlack + BrotliDictionary.maxDictionaryWordLength);
+        ringbuffer_end = ringbuffer_size;
+        block_type_trees = [];
+        block_len_trees = [];
+        for (var x = 0; x < 3 * HUFFMAN_MAX_TABLE_SIZE; x++) {
+          block_type_trees[x] = new HuffmanCode(0, 0);
+          block_len_trees[x] = new HuffmanCode(0, 0);
+        }
+        while (!input_end) {
+          var meta_block_remaining_len = 0;
+          var is_uncompressed;
+          var block_length = [1 << 28, 1 << 28, 1 << 28];
+          var block_type = [0];
+          var num_block_types = [1, 1, 1];
+          var block_type_rb = [0, 1, 0, 1, 0, 1];
+          var block_type_rb_index = [0];
+          var distance_postfix_bits;
+          var num_direct_distance_codes;
+          var distance_postfix_mask;
+          var num_distance_codes;
+          var context_map = null;
+          var context_modes = null;
+          var num_literal_htrees;
+          var dist_context_map = null;
+          var num_dist_htrees;
+          var context_offset = 0;
+          var context_map_slice = null;
+          var literal_htree_index = 0;
+          var dist_context_offset = 0;
+          var dist_context_map_slice = null;
+          var dist_htree_index = 0;
+          var context_lookup_offset1 = 0;
+          var context_lookup_offset2 = 0;
+          var context_mode;
+          var htree_command;
+          for (i = 0; i < 3; ++i) {
+            hgroup[i].codes = null;
+            hgroup[i].htrees = null;
+          }
+          br.readMoreInput();
+          var _out = DecodeMetaBlockLength(br);
+          meta_block_remaining_len = _out.meta_block_length;
+          if (pos + meta_block_remaining_len > output.buffer.length) {
+            /* We need to grow the output buffer to fit the additional data. */
+            var tmp = new Uint8Array(pos + meta_block_remaining_len);
+            tmp.set(output.buffer);
+            output.buffer = tmp;
+          }
+          input_end = _out.input_end;
+          is_uncompressed = _out.is_uncompressed;
+          if (_out.is_metadata) {
+            JumpToByteBoundary(br);
+            for (; meta_block_remaining_len > 0; --meta_block_remaining_len) {
+              br.readMoreInput();
+              /* Read one byte and ignore it. */
+              br.readBits(8);
+            }
+            continue;
+          }
+          if (meta_block_remaining_len === 0) {
+            continue;
+          }
+          if (is_uncompressed) {
+            br.bit_pos_ = br.bit_pos_ + 7 & ~7;
+            CopyUncompressedBlockToOutput(output, meta_block_remaining_len, pos, ringbuffer, ringbuffer_mask, br);
+            pos += meta_block_remaining_len;
+            continue;
+          }
+          for (i = 0; i < 3; ++i) {
+            num_block_types[i] = DecodeVarLenUint8(br) + 1;
+            if (num_block_types[i] >= 2) {
+              ReadHuffmanCode(num_block_types[i] + 2, block_type_trees, i * HUFFMAN_MAX_TABLE_SIZE, br);
+              ReadHuffmanCode(kNumBlockLengthCodes, block_len_trees, i * HUFFMAN_MAX_TABLE_SIZE, br);
+              block_length[i] = ReadBlockLength(block_len_trees, i * HUFFMAN_MAX_TABLE_SIZE, br);
+              block_type_rb_index[i] = 1;
+            }
+          }
+          br.readMoreInput();
+          distance_postfix_bits = br.readBits(2);
+          num_direct_distance_codes = NUM_DISTANCE_SHORT_CODES + (br.readBits(4) << distance_postfix_bits);
+          distance_postfix_mask = (1 << distance_postfix_bits) - 1;
+          num_distance_codes = num_direct_distance_codes + (48 << distance_postfix_bits);
+          context_modes = new Uint8Array(num_block_types[0]);
+          for (i = 0; i < num_block_types[0]; ++i) {
+            br.readMoreInput();
+            context_modes[i] = br.readBits(2) << 1;
+          }
+          var _o1 = DecodeContextMap(num_block_types[0] << kLiteralContextBits, br);
+          num_literal_htrees = _o1.num_htrees;
+          context_map = _o1.context_map;
+          var _o2 = DecodeContextMap(num_block_types[2] << kDistanceContextBits, br);
+          num_dist_htrees = _o2.num_htrees;
+          dist_context_map = _o2.context_map;
+          hgroup[0] = new HuffmanTreeGroup(kNumLiteralCodes, num_literal_htrees);
+          hgroup[1] = new HuffmanTreeGroup(kNumInsertAndCopyCodes, num_block_types[1]);
+          hgroup[2] = new HuffmanTreeGroup(num_distance_codes, num_dist_htrees);
+          for (i = 0; i < 3; ++i) {
+            hgroup[i].decode(br);
+          }
+          context_map_slice = 0;
+          dist_context_map_slice = 0;
+          context_mode = context_modes[block_type[0]];
+          context_lookup_offset1 = Context.lookupOffsets[context_mode];
+          context_lookup_offset2 = Context.lookupOffsets[context_mode + 1];
+          htree_command = hgroup[1].htrees[0];
+          while (meta_block_remaining_len > 0) {
+            var cmd_code;
+            var range_idx;
+            var insert_code;
+            var copy_code;
+            var insert_length;
+            var copy_length;
+            var distance_code;
+            var distance;
+            var context;
+            var j;
+            var copy_dst;
+            br.readMoreInput();
+            if (block_length[1] === 0) {
+              DecodeBlockType(num_block_types[1], block_type_trees, 1, block_type, block_type_rb, block_type_rb_index, br);
+              block_length[1] = ReadBlockLength(block_len_trees, HUFFMAN_MAX_TABLE_SIZE, br);
+              htree_command = hgroup[1].htrees[block_type[1]];
+            }
+            --block_length[1];
+            cmd_code = ReadSymbol(hgroup[1].codes, htree_command, br);
+            range_idx = cmd_code >> 6;
+            if (range_idx >= 2) {
+              range_idx -= 2;
+              distance_code = -1;
+            } else {
+              distance_code = 0;
+            }
+            insert_code = Prefix.kInsertRangeLut[range_idx] + (cmd_code >> 3 & 7);
+            copy_code = Prefix.kCopyRangeLut[range_idx] + (cmd_code & 7);
+            insert_length = Prefix.kInsertLengthPrefixCode[insert_code].offset + br.readBits(Prefix.kInsertLengthPrefixCode[insert_code].nbits);
+            copy_length = Prefix.kCopyLengthPrefixCode[copy_code].offset + br.readBits(Prefix.kCopyLengthPrefixCode[copy_code].nbits);
+            prev_byte1 = ringbuffer[pos - 1 & ringbuffer_mask];
+            prev_byte2 = ringbuffer[pos - 2 & ringbuffer_mask];
+            for (j = 0; j < insert_length; ++j) {
+              br.readMoreInput();
+              if (block_length[0] === 0) {
+                DecodeBlockType(num_block_types[0], block_type_trees, 0, block_type, block_type_rb, block_type_rb_index, br);
+                block_length[0] = ReadBlockLength(block_len_trees, 0, br);
+                context_offset = block_type[0] << kLiteralContextBits;
+                context_map_slice = context_offset;
+                context_mode = context_modes[block_type[0]];
+                context_lookup_offset1 = Context.lookupOffsets[context_mode];
+                context_lookup_offset2 = Context.lookupOffsets[context_mode + 1];
+              }
+              context = Context.lookup[context_lookup_offset1 + prev_byte1] | Context.lookup[context_lookup_offset2 + prev_byte2];
+              literal_htree_index = context_map[context_map_slice + context];
+              --block_length[0];
+              prev_byte2 = prev_byte1;
+              prev_byte1 = ReadSymbol(hgroup[0].codes, hgroup[0].htrees[literal_htree_index], br);
+              ringbuffer[pos & ringbuffer_mask] = prev_byte1;
+              if ((pos & ringbuffer_mask) === ringbuffer_mask) {
+                output.write(ringbuffer, ringbuffer_size);
+              }
+              ++pos;
+            }
+            meta_block_remaining_len -= insert_length;
+            if (meta_block_remaining_len <= 0) break;
+            if (distance_code < 0) {
+              var context;
+              br.readMoreInput();
+              if (block_length[2] === 0) {
+                DecodeBlockType(num_block_types[2], block_type_trees, 2, block_type, block_type_rb, block_type_rb_index, br);
+                block_length[2] = ReadBlockLength(block_len_trees, 2 * HUFFMAN_MAX_TABLE_SIZE, br);
+                dist_context_offset = block_type[2] << kDistanceContextBits;
+                dist_context_map_slice = dist_context_offset;
+              }
+              --block_length[2];
+              context = (copy_length > 4 ? 3 : copy_length - 2) & 0xff;
+              dist_htree_index = dist_context_map[dist_context_map_slice + context];
+              distance_code = ReadSymbol(hgroup[2].codes, hgroup[2].htrees[dist_htree_index], br);
+              if (distance_code >= num_direct_distance_codes) {
+                var nbits;
+                var postfix;
+                var offset;
+                distance_code -= num_direct_distance_codes;
+                postfix = distance_code & distance_postfix_mask;
+                distance_code >>= distance_postfix_bits;
+                nbits = (distance_code >> 1) + 1;
+                offset = (2 + (distance_code & 1) << nbits) - 4;
+                distance_code = num_direct_distance_codes + (offset + br.readBits(nbits) << distance_postfix_bits) + postfix;
+              }
+            }
+
+            /* Convert the distance code to the actual distance by possibly looking */
+            /* up past distnaces from the ringbuffer. */
+            distance = TranslateShortCodes(distance_code, dist_rb, dist_rb_idx);
+            if (distance < 0) {
+              throw new Error('[BrotliDecompress] invalid distance');
+            }
+            if (pos < max_backward_distance && max_distance !== max_backward_distance) {
+              max_distance = pos;
+            } else {
+              max_distance = max_backward_distance;
+            }
+            copy_dst = pos & ringbuffer_mask;
+            if (distance > max_distance) {
+              if (copy_length >= BrotliDictionary.minDictionaryWordLength && copy_length <= BrotliDictionary.maxDictionaryWordLength) {
+                var offset = BrotliDictionary.offsetsByLength[copy_length];
+                var word_id = distance - max_distance - 1;
+                var shift = BrotliDictionary.sizeBitsByLength[copy_length];
+                var mask = (1 << shift) - 1;
+                var word_idx = word_id & mask;
+                var transform_idx = word_id >> shift;
+                offset += word_idx * copy_length;
+                if (transform_idx < Transform.kNumTransforms) {
+                  var len = Transform.transformDictionaryWord(ringbuffer, copy_dst, offset, copy_length, transform_idx);
+                  copy_dst += len;
+                  pos += len;
+                  meta_block_remaining_len -= len;
+                  if (copy_dst >= ringbuffer_end) {
+                    output.write(ringbuffer, ringbuffer_size);
+                    for (var _x = 0; _x < copy_dst - ringbuffer_end; _x++) ringbuffer[_x] = ringbuffer[ringbuffer_end + _x];
+                  }
+                } else {
+                  throw new Error("Invalid backward reference. pos: " + pos + " distance: " + distance + " len: " + copy_length + " bytes left: " + meta_block_remaining_len);
+                }
+              } else {
+                throw new Error("Invalid backward reference. pos: " + pos + " distance: " + distance + " len: " + copy_length + " bytes left: " + meta_block_remaining_len);
+              }
+            } else {
+              if (distance_code > 0) {
+                dist_rb[dist_rb_idx & 3] = distance;
+                ++dist_rb_idx;
+              }
+              if (copy_length > meta_block_remaining_len) {
+                throw new Error("Invalid backward reference. pos: " + pos + " distance: " + distance + " len: " + copy_length + " bytes left: " + meta_block_remaining_len);
+              }
+              for (j = 0; j < copy_length; ++j) {
+                ringbuffer[pos & ringbuffer_mask] = ringbuffer[pos - distance & ringbuffer_mask];
+                if ((pos & ringbuffer_mask) === ringbuffer_mask) {
+                  output.write(ringbuffer, ringbuffer_size);
+                }
+                ++pos;
+                --meta_block_remaining_len;
+              }
+            }
+
+            /* When we get here, we must have inserted at least one literal and */
+            /* made a copy of at least length two, therefore accessing the last 2 */
+            /* bytes is valid. */
+            prev_byte1 = ringbuffer[pos - 1 & ringbuffer_mask];
+            prev_byte2 = ringbuffer[pos - 2 & ringbuffer_mask];
+          }
+
+          /* Protect pos from overflow, wrap it around at every GB of input data */
+          pos &= 0x3fffffff;
+        }
+        output.write(ringbuffer, pos & ringbuffer_mask);
+      }
+      exports.BrotliDecompress = BrotliDecompress;
+      BrotliDictionary.init();
+    }, {
+      "./bit_reader": 1,
+      "./context": 2,
+      "./dictionary": 6,
+      "./huffman": 7,
+      "./prefix": 9,
+      "./streams": 10,
+      "./transform": 11
+    }],
+    4: [function (require, module, exports) {
+      var base64 = require('base64-js');
+      //var fs = require('fs');
+
+      /**
+       * The normal dictionary-data.js is quite large, which makes it
+       * unsuitable for browser usage. In order to make it smaller,
+       * we read dictionary.bin, which is a compressed version of
+       * the dictionary, and on initial load, Brotli decompresses
+       * it's own dictionary. 😜
+       */
+      exports.init = function () {
+        var BrotliDecompressBuffer = require('./decode').BrotliDecompressBuffer;
+        var compressed = base64.toByteArray(require('./dictionary.bin.js'));
+        return BrotliDecompressBuffer(compressed);
+      };
+    }, {
+      "./decode": 3,
+      "./dictionary.bin.js": 5,
+      "base64-js": 8
+    }],
+    5: [function (require, module, exports) {
+      module.exports = "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";
+    }, {}],
+    6: [function (require, module, exports) {
+      /* Copyright 2013 Google Inc. All Rights Reserved.
+      
+         Licensed under the Apache License, Version 2.0 (the "License");
+         you may not use this file except in compliance with the License.
+         You may obtain a copy of the License at
+      
+         http://www.apache.org/licenses/LICENSE-2.0
+      
+         Unless required by applicable law or agreed to in writing, software
+         distributed under the License is distributed on an "AS IS" BASIS,
+         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+         See the License for the specific language governing permissions and
+         limitations under the License.
+      
+         Collection of static dictionary words.
+      */
+
+      var data = require('./dictionary-browser');
+      exports.init = function () {
+        exports.dictionary = data.init();
+      };
+      exports.offsetsByLength = new Uint32Array([0, 0, 0, 0, 0, 4096, 9216, 21504, 35840, 44032, 53248, 63488, 74752, 87040, 93696, 100864, 104704, 106752, 108928, 113536, 115968, 118528, 119872, 121280, 122016]);
+      exports.sizeBitsByLength = new Uint8Array([0, 0, 0, 0, 10, 10, 11, 11, 10, 10, 10, 10, 10, 9, 9, 8, 7, 7, 8, 7, 7, 6, 6, 5, 5]);
+      exports.minDictionaryWordLength = 4;
+      exports.maxDictionaryWordLength = 24;
+    }, {
+      "./dictionary-browser": 4
+    }],
+    7: [function (require, module, exports) {
+      function HuffmanCode(bits, value) {
+        this.bits = bits; /* number of bits used for this symbol */
+        this.value = value; /* symbol value or table offset */
+      }
+      exports.HuffmanCode = HuffmanCode;
+      var MAX_LENGTH = 15;
+
+      /* Returns reverse(reverse(key, len) + 1, len), where reverse(key, len) is the
+         bit-wise reversal of the len least significant bits of key. */
+      function GetNextKey(key, len) {
+        var step = 1 << len - 1;
+        while (key & step) {
+          step >>= 1;
+        }
+        return (key & step - 1) + step;
+      }
+
+      /* Stores code in table[0], table[step], table[2*step], ..., table[end] */
+      /* Assumes that end is an integer multiple of step */
+      function ReplicateValue(table, i, step, end, code) {
+        do {
+          end -= step;
+          table[i + end] = new HuffmanCode(code.bits, code.value);
+        } while (end > 0);
+      }
+
+      /* Returns the table width of the next 2nd level table. count is the histogram
+         of bit lengths for the remaining symbols, len is the code length of the next
+         processed symbol */
+      function NextTableBitSize(count, len, root_bits) {
+        var left = 1 << len - root_bits;
+        while (len < MAX_LENGTH) {
+          left -= count[len];
+          if (left <= 0) break;
+          ++len;
+          left <<= 1;
+        }
+        return len - root_bits;
+      }
+      exports.BrotliBuildHuffmanTable = function (root_table, table, root_bits, code_lengths, code_lengths_size) {
+        var start_table = table;
+        var code; /* current table entry */
+        var len; /* current code length */
+        var symbol; /* symbol index in original or sorted table */
+        var key; /* reversed prefix code */
+        var step; /* step size to replicate values in current table */
+        var low; /* low bits for current root entry */
+        var mask; /* mask for low bits */
+        var table_bits; /* key length of current table */
+        var table_size; /* size of current table */
+        var total_size; /* sum of root table size and 2nd level table sizes */
+        var sorted; /* symbols sorted by code length */
+        var count = new Int32Array(MAX_LENGTH + 1); /* number of codes of each length */
+        var offset = new Int32Array(MAX_LENGTH + 1); /* offsets in sorted table for each length */
+
+        sorted = new Int32Array(code_lengths_size);
+
+        /* build histogram of code lengths */
+        for (symbol = 0; symbol < code_lengths_size; symbol++) {
+          count[code_lengths[symbol]]++;
+        }
+
+        /* generate offsets into sorted symbol table by code length */
+        offset[1] = 0;
+        for (len = 1; len < MAX_LENGTH; len++) {
+          offset[len + 1] = offset[len] + count[len];
+        }
+
+        /* sort symbols by length, by symbol order within each length */
+        for (symbol = 0; symbol < code_lengths_size; symbol++) {
+          if (code_lengths[symbol] !== 0) {
+            sorted[offset[code_lengths[symbol]]++] = symbol;
+          }
+        }
+        table_bits = root_bits;
+        table_size = 1 << table_bits;
+        total_size = table_size;
+
+        /* special case code with only one value */
+        if (offset[MAX_LENGTH] === 1) {
+          for (key = 0; key < total_size; ++key) {
+            root_table[table + key] = new HuffmanCode(0, sorted[0] & 0xffff);
+          }
+          return total_size;
+        }
+
+        /* fill in root table */
+        key = 0;
+        symbol = 0;
+        for (len = 1, step = 2; len <= root_bits; ++len, step <<= 1) {
+          for (; count[len] > 0; --count[len]) {
+            code = new HuffmanCode(len & 0xff, sorted[symbol++] & 0xffff);
+            ReplicateValue(root_table, table + key, step, table_size, code);
+            key = GetNextKey(key, len);
+          }
+        }
+
+        /* fill in 2nd level tables and add pointers to root table */
+        mask = total_size - 1;
+        low = -1;
+        for (len = root_bits + 1, step = 2; len <= MAX_LENGTH; ++len, step <<= 1) {
+          for (; count[len] > 0; --count[len]) {
+            if ((key & mask) !== low) {
+              table += table_size;
+              table_bits = NextTableBitSize(count, len, root_bits);
+              table_size = 1 << table_bits;
+              total_size += table_size;
+              low = key & mask;
+              root_table[start_table + low] = new HuffmanCode(table_bits + root_bits & 0xff, table - start_table - low & 0xffff);
+            }
+            code = new HuffmanCode(len - root_bits & 0xff, sorted[symbol++] & 0xffff);
+            ReplicateValue(root_table, table + (key >> root_bits), step, table_size, code);
+            key = GetNextKey(key, len);
+          }
+        }
+        return total_size;
+      };
+    }, {}],
+    8: [function (require, module, exports) {
+      'use strict';
+
+      exports.byteLength = byteLength;
+      exports.toByteArray = toByteArray;
+      exports.fromByteArray = fromByteArray;
+      var lookup = [];
+      var revLookup = [];
+      var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
+      var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+      for (var i = 0, len = code.length; i < len; ++i) {
+        lookup[i] = code[i];
+        revLookup[code.charCodeAt(i)] = i;
+      }
+
+      // Support decoding URL-safe base64 strings, as Node.js does.
+      // See: https://en.wikipedia.org/wiki/Base64#URL_applications
+      revLookup['-'.charCodeAt(0)] = 62;
+      revLookup['_'.charCodeAt(0)] = 63;
+      function getLens(b64) {
+        var len = b64.length;
+        if (len % 4 > 0) {
+          throw new Error('Invalid string. Length must be a multiple of 4');
+        }
+
+        // Trim off extra bytes after placeholder bytes are found
+        // See: https://github.com/beatgammit/base64-js/issues/42
+        var validLen = b64.indexOf('=');
+        if (validLen === -1) validLen = len;
+        var placeHoldersLen = validLen === len ? 0 : 4 - validLen % 4;
+        return [validLen, placeHoldersLen];
+      }
+
+      // base64 is 4/3 + up to two characters of the original data
+      function byteLength(b64) {
+        var lens = getLens(b64);
+        var validLen = lens[0];
+        var placeHoldersLen = lens[1];
+        return (validLen + placeHoldersLen) * 3 / 4 - placeHoldersLen;
+      }
+      function _byteLength(b64, validLen, placeHoldersLen) {
+        return (validLen + placeHoldersLen) * 3 / 4 - placeHoldersLen;
+      }
+      function toByteArray(b64) {
+        var tmp;
+        var lens = getLens(b64);
+        var validLen = lens[0];
+        var placeHoldersLen = lens[1];
+        var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen));
+        var curByte = 0;
+
+        // if there are placeholders, only get up to the last complete 4 chars
+        var len = placeHoldersLen > 0 ? validLen - 4 : validLen;
+        for (var i = 0; i < len; i += 4) {
+          tmp = revLookup[b64.charCodeAt(i)] << 18 | revLookup[b64.charCodeAt(i + 1)] << 12 | revLookup[b64.charCodeAt(i + 2)] << 6 | revLookup[b64.charCodeAt(i + 3)];
+          arr[curByte++] = tmp >> 16 & 0xFF;
+          arr[curByte++] = tmp >> 8 & 0xFF;
+          arr[curByte++] = tmp & 0xFF;
+        }
+        if (placeHoldersLen === 2) {
+          tmp = revLookup[b64.charCodeAt(i)] << 2 | revLookup[b64.charCodeAt(i + 1)] >> 4;
+          arr[curByte++] = tmp & 0xFF;
+        }
+        if (placeHoldersLen === 1) {
+          tmp = revLookup[b64.charCodeAt(i)] << 10 | revLookup[b64.charCodeAt(i + 1)] << 4 | revLookup[b64.charCodeAt(i + 2)] >> 2;
+          arr[curByte++] = tmp >> 8 & 0xFF;
+          arr[curByte++] = tmp & 0xFF;
+        }
+        return arr;
+      }
+      function tripletToBase64(num) {
+        return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F];
+      }
+      function encodeChunk(uint8, start, end) {
+        var tmp;
+        var output = [];
+        for (var i = start; i < end; i += 3) {
+          tmp = (uint8[i] << 16 & 0xFF0000) + (uint8[i + 1] << 8 & 0xFF00) + (uint8[i + 2] & 0xFF);
+          output.push(tripletToBase64(tmp));
+        }
+        return output.join('');
+      }
+      function fromByteArray(uint8) {
+        var tmp;
+        var len = uint8.length;
+        var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
+        var parts = [];
+        var maxChunkLength = 16383; // must be multiple of 3
+
+        // go through the array every three bytes, we'll deal with trailing stuff later
+        for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+          parts.push(encodeChunk(uint8, i, i + maxChunkLength > len2 ? len2 : i + maxChunkLength));
+        }
+
+        // pad the end with zeros, but make sure to not forget the extra bytes
+        if (extraBytes === 1) {
+          tmp = uint8[len - 1];
+          parts.push(lookup[tmp >> 2] + lookup[tmp << 4 & 0x3F] + '==');
+        } else if (extraBytes === 2) {
+          tmp = (uint8[len - 2] << 8) + uint8[len - 1];
+          parts.push(lookup[tmp >> 10] + lookup[tmp >> 4 & 0x3F] + lookup[tmp << 2 & 0x3F] + '=');
+        }
+        return parts.join('');
+      }
+    }, {}],
+    9: [function (require, module, exports) {
+      /* Copyright 2013 Google Inc. All Rights Reserved.
+      
+         Licensed under the Apache License, Version 2.0 (the "License");
+         you may not use this file except in compliance with the License.
+         You may obtain a copy of the License at
+      
+         http://www.apache.org/licenses/LICENSE-2.0
+      
+         Unless required by applicable law or agreed to in writing, software
+         distributed under the License is distributed on an "AS IS" BASIS,
+         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+         See the License for the specific language governing permissions and
+         limitations under the License.
+      
+         Lookup tables to map prefix codes to value ranges. This is used during
+         decoding of the block lengths, literal insertion lengths and copy lengths.
+      */
+
+      /* Represents the range of values belonging to a prefix code: */
+      /* [offset, offset + 2^nbits) */
+      function PrefixCodeRange(offset, nbits) {
+        this.offset = offset;
+        this.nbits = nbits;
+      }
+      exports.kBlockLengthPrefixCode = [new PrefixCodeRange(1, 2), new PrefixCodeRange(5, 2), new PrefixCodeRange(9, 2), new PrefixCodeRange(13, 2), new PrefixCodeRange(17, 3), new PrefixCodeRange(25, 3), new PrefixCodeRange(33, 3), new PrefixCodeRange(41, 3), new PrefixCodeRange(49, 4), new PrefixCodeRange(65, 4), new PrefixCodeRange(81, 4), new PrefixCodeRange(97, 4), new PrefixCodeRange(113, 5), new PrefixCodeRange(145, 5), new PrefixCodeRange(177, 5), new PrefixCodeRange(209, 5), new PrefixCodeRange(241, 6), new PrefixCodeRange(305, 6), new PrefixCodeRange(369, 7), new PrefixCodeRange(497, 8), new PrefixCodeRange(753, 9), new PrefixCodeRange(1265, 10), new PrefixCodeRange(2289, 11), new PrefixCodeRange(4337, 12), new PrefixCodeRange(8433, 13), new PrefixCodeRange(16625, 24)];
+      exports.kInsertLengthPrefixCode = [new PrefixCodeRange(0, 0), new PrefixCodeRange(1, 0), new PrefixCodeRange(2, 0), new PrefixCodeRange(3, 0), new PrefixCodeRange(4, 0), new PrefixCodeRange(5, 0), new PrefixCodeRange(6, 1), new PrefixCodeRange(8, 1), new PrefixCodeRange(10, 2), new PrefixCodeRange(14, 2), new PrefixCodeRange(18, 3), new PrefixCodeRange(26, 3), new PrefixCodeRange(34, 4), new PrefixCodeRange(50, 4), new PrefixCodeRange(66, 5), new PrefixCodeRange(98, 5), new PrefixCodeRange(130, 6), new PrefixCodeRange(194, 7), new PrefixCodeRange(322, 8), new PrefixCodeRange(578, 9), new PrefixCodeRange(1090, 10), new PrefixCodeRange(2114, 12), new PrefixCodeRange(6210, 14), new PrefixCodeRange(22594, 24)];
+      exports.kCopyLengthPrefixCode = [new PrefixCodeRange(2, 0), new PrefixCodeRange(3, 0), new PrefixCodeRange(4, 0), new PrefixCodeRange(5, 0), new PrefixCodeRange(6, 0), new PrefixCodeRange(7, 0), new PrefixCodeRange(8, 0), new PrefixCodeRange(9, 0), new PrefixCodeRange(10, 1), new PrefixCodeRange(12, 1), new PrefixCodeRange(14, 2), new PrefixCodeRange(18, 2), new PrefixCodeRange(22, 3), new PrefixCodeRange(30, 3), new PrefixCodeRange(38, 4), new PrefixCodeRange(54, 4), new PrefixCodeRange(70, 5), new PrefixCodeRange(102, 5), new PrefixCodeRange(134, 6), new PrefixCodeRange(198, 7), new PrefixCodeRange(326, 8), new PrefixCodeRange(582, 9), new PrefixCodeRange(1094, 10), new PrefixCodeRange(2118, 24)];
+      exports.kInsertRangeLut = [0, 0, 8, 8, 0, 16, 8, 16, 16];
+      exports.kCopyRangeLut = [0, 8, 0, 8, 16, 0, 16, 8, 16];
+    }, {}],
+    10: [function (require, module, exports) {
+      function BrotliInput(buffer) {
+        this.buffer = buffer;
+        this.pos = 0;
+      }
+      BrotliInput.prototype.read = function (buf, i, count) {
+        if (this.pos + count > this.buffer.length) {
+          count = this.buffer.length - this.pos;
+        }
+        for (var p = 0; p < count; p++) buf[i + p] = this.buffer[this.pos + p];
+        this.pos += count;
+        return count;
+      };
+      exports.BrotliInput = BrotliInput;
+      function BrotliOutput(buf) {
+        this.buffer = buf;
+        this.pos = 0;
+      }
+      BrotliOutput.prototype.write = function (buf, count) {
+        if (this.pos + count > this.buffer.length) throw new Error('Output buffer is not large enough');
+        this.buffer.set(buf.subarray(0, count), this.pos);
+        this.pos += count;
+        return count;
+      };
+      exports.BrotliOutput = BrotliOutput;
+    }, {}],
+    11: [function (require, module, exports) {
+      /* Copyright 2013 Google Inc. All Rights Reserved.
+      
+         Licensed under the Apache License, Version 2.0 (the "License");
+         you may not use this file except in compliance with the License.
+         You may obtain a copy of the License at
+      
+         http://www.apache.org/licenses/LICENSE-2.0
+      
+         Unless required by applicable law or agreed to in writing, software
+         distributed under the License is distributed on an "AS IS" BASIS,
+         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+         See the License for the specific language governing permissions and
+         limitations under the License.
+      
+         Transformations on dictionary words.
+      */
+
+      var BrotliDictionary = require('./dictionary');
+      var kIdentity = 0;
+      var kOmitLast1 = 1;
+      var kOmitLast2 = 2;
+      var kOmitLast3 = 3;
+      var kOmitLast4 = 4;
+      var kOmitLast5 = 5;
+      var kOmitLast6 = 6;
+      var kOmitLast7 = 7;
+      var kOmitLast8 = 8;
+      var kOmitLast9 = 9;
+      var kUppercaseFirst = 10;
+      var kUppercaseAll = 11;
+      var kOmitFirst1 = 12;
+      var kOmitFirst2 = 13;
+      var kOmitFirst3 = 14;
+      var kOmitFirst4 = 15;
+      var kOmitFirst5 = 16;
+      var kOmitFirst6 = 17;
+      var kOmitFirst7 = 18;
+      var kOmitFirst8 = 19;
+      var kOmitFirst9 = 20;
+      function Transform(prefix, transform, suffix) {
+        this.prefix = new Uint8Array(prefix.length);
+        this.transform = transform;
+        this.suffix = new Uint8Array(suffix.length);
+        for (var i = 0; i < prefix.length; i++) this.prefix[i] = prefix.charCodeAt(i);
+        for (var i = 0; i < suffix.length; i++) this.suffix[i] = suffix.charCodeAt(i);
+      }
+      var kTransforms = [new Transform("", kIdentity, ""), new Transform("", kIdentity, " "), new Transform(" ", kIdentity, " "), new Transform("", kOmitFirst1, ""), new Transform("", kUppercaseFirst, " "), new Transform("", kIdentity, " the "), new Transform(" ", kIdentity, ""), new Transform("s ", kIdentity, " "), new Transform("", kIdentity, " of "), new Transform("", kUppercaseFirst, ""), new Transform("", kIdentity, " and "), new Transform("", kOmitFirst2, ""), new Transform("", kOmitLast1, ""), new Transform(", ", kIdentity, " "), new Transform("", kIdentity, ", "), new Transform(" ", kUppercaseFirst, " "), new Transform("", kIdentity, " in "), new Transform("", kIdentity, " to "), new Transform("e ", kIdentity, " "), new Transform("", kIdentity, "\""), new Transform("", kIdentity, "."), new Transform("", kIdentity, "\">"), new Transform("", kIdentity, "\n"), new Transform("", kOmitLast3, ""), new Transform("", kIdentity, "]"), new Transform("", kIdentity, " for "), new Transform("", kOmitFirst3, ""), new Transform("", kOmitLast2, ""), new Transform("", kIdentity, " a "), new Transform("", kIdentity, " that "), new Transform(" ", kUppercaseFirst, ""), new Transform("", kIdentity, ". "), new Transform(".", kIdentity, ""), new Transform(" ", kIdentity, ", "), new Transform("", kOmitFirst4, ""), new Transform("", kIdentity, " with "), new Transform("", kIdentity, "'"), new Transform("", kIdentity, " from "), new Transform("", kIdentity, " by "), new Transform("", kOmitFirst5, ""), new Transform("", kOmitFirst6, ""), new Transform(" the ", kIdentity, ""), new Transform("", kOmitLast4, ""), new Transform("", kIdentity, ". The "), new Transform("", kUppercaseAll, ""), new Transform("", kIdentity, " on "), new Transform("", kIdentity, " as "), new Transform("", kIdentity, " is "), new Transform("", kOmitLast7, ""), new Transform("", kOmitLast1, "ing "), new Transform("", kIdentity, "\n\t"), new Transform("", kIdentity, ":"), new Transform(" ", kIdentity, ". "), new Transform("", kIdentity, "ed "), new Transform("", kOmitFirst9, ""), new Transform("", kOmitFirst7, ""), new Transform("", kOmitLast6, ""), new Transform("", kIdentity, "("), new Transform("", kUppercaseFirst, ", "), new Transform("", kOmitLast8, ""), new Transform("", kIdentity, " at "), new Transform("", kIdentity, "ly "), new Transform(" the ", kIdentity, " of "), new Transform("", kOmitLast5, ""), new Transform("", kOmitLast9, ""), new Transform(" ", kUppercaseFirst, ", "), new Transform("", kUppercaseFirst, "\""), new Transform(".", kIdentity, "("), new Transform("", kUppercaseAll, " "), new Transform("", kUppercaseFirst, "\">"), new Transform("", kIdentity, "=\""), new Transform(" ", kIdentity, "."), new Transform(".com/", kIdentity, ""), new Transform(" the ", kIdentity, " of the "), new Transform("", kUppercaseFirst, "'"), new Transform("", kIdentity, ". This "), new Transform("", kIdentity, ","), new Transform(".", kIdentity, " "), new Transform("", kUppercaseFirst, "("), new Transform("", kUppercaseFirst, "."), new Transform("", kIdentity, " not "), new Transform(" ", kIdentity, "=\""), new Transform("", kIdentity, "er "), new Transform(" ", kUppercaseAll, " "), new Transform("", kIdentity, "al "), new Transform(" ", kUppercaseAll, ""), new Transform("", kIdentity, "='"), new Transform("", kUppercaseAll, "\""), new Transform("", kUppercaseFirst, ". "), new Transform(" ", kIdentity, "("), new Transform("", kIdentity, "ful "), new Transform(" ", kUppercaseFirst, ". "), new Transform("", kIdentity, "ive "), new Transform("", kIdentity, "less "), new Transform("", kUppercaseAll, "'"), new Transform("", kIdentity, "est "), new Transform(" ", kUppercaseFirst, "."), new Transform("", kUppercaseAll, "\">"), new Transform(" ", kIdentity, "='"), new Transform("", kUppercaseFirst, ","), new Transform("", kIdentity, "ize "), new Transform("", kUppercaseAll, "."), new Transform("\xc2\xa0", kIdentity, ""), new Transform(" ", kIdentity, ","), new Transform("", kUppercaseFirst, "=\""), new Transform("", kUppercaseAll, "=\""), new Transform("", kIdentity, "ous "), new Transform("", kUppercaseAll, ", "), new Transform("", kUppercaseFirst, "='"), new Transform(" ", kUppercaseFirst, ","), new Transform(" ", kUppercaseAll, "=\""), new Transform(" ", kUppercaseAll, ", "), new Transform("", kUppercaseAll, ","), new Transform("", kUppercaseAll, "("), new Transform("", kUppercaseAll, ". "), new Transform(" ", kUppercaseAll, "."), new Transform("", kUppercaseAll, "='"), new Transform(" ", kUppercaseAll, ". "), new Transform(" ", kUppercaseFirst, "=\""), new Transform(" ", kUppercaseAll, "='"), new Transform(" ", kUppercaseFirst, "='")];
+      exports.kTransforms = kTransforms;
+      exports.kNumTransforms = kTransforms.length;
+      function ToUpperCase(p, i) {
+        if (p[i] < 0xc0) {
+          if (p[i] >= 97 && p[i] <= 122) {
+            p[i] ^= 32;
+          }
+          return 1;
+        }
+
+        /* An overly simplified uppercasing model for utf-8. */
+        if (p[i] < 0xe0) {
+          p[i + 1] ^= 32;
+          return 2;
+        }
+
+        /* An arbitrary transform for three byte characters. */
+        p[i + 2] ^= 5;
+        return 3;
+      }
+      exports.transformDictionaryWord = function (dst, idx, word, len, transform) {
+        var prefix = kTransforms[transform].prefix;
+        var suffix = kTransforms[transform].suffix;
+        var t = kTransforms[transform].transform;
+        var skip = t < kOmitFirst1 ? 0 : t - (kOmitFirst1 - 1);
+        var i = 0;
+        var start_idx = idx;
+        var uppercase;
+        if (skip > len) {
+          skip = len;
+        }
+        var prefix_pos = 0;
+        while (prefix_pos < prefix.length) {
+          dst[idx++] = prefix[prefix_pos++];
+        }
+        word += skip;
+        len -= skip;
+        if (t <= kOmitLast9) {
+          len -= t;
+        }
+        for (i = 0; i < len; i++) {
+          dst[idx++] = BrotliDictionary.dictionary[word + i];
+        }
+        uppercase = idx - len;
+        if (t === kUppercaseFirst) {
+          ToUpperCase(dst, uppercase);
+        } else if (t === kUppercaseAll) {
+          while (len > 0) {
+            var step = ToUpperCase(dst, uppercase);
+            uppercase += step;
+            len -= step;
+          }
+        }
+        var suffix_pos = 0;
+        while (suffix_pos < suffix.length) {
+          dst[idx++] = suffix[suffix_pos++];
+        }
+        return idx - start_idx;
+      };
+    }, {
+      "./dictionary": 6
+    }],
+    12: [function (require, module, exports) {
+      module.exports = require('./dec/decode').BrotliDecompressBuffer;
+    }, {
+      "./dec/decode": 3
+    }]
+  }, {}, [12])(12);
+});
 
 /***/ },
 
@@ -14229,6 +22580,36 @@ function arrayMoveImmutable(array, fromIndex, toIndex) {
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/create fake namespace object */
+/******/ 	(() => {
+/******/ 		var getProto = Object.getPrototypeOf ? (obj) => (Object.getPrototypeOf(obj)) : (obj) => (obj.__proto__);
+/******/ 		var leafPrototypes;
+/******/ 		// create a fake namespace object
+/******/ 		// mode & 1: value is a module id, require it
+/******/ 		// mode & 2: merge all properties of value into the ns
+/******/ 		// mode & 4: return value when already ns object
+/******/ 		// mode & 16: return value when it's Promise-like
+/******/ 		// mode & 8|1: behave like require
+/******/ 		__webpack_require__.t = function(value, mode) {
+/******/ 			if(mode & 1) value = this(value);
+/******/ 			if(mode & 8) return value;
+/******/ 			if(typeof value === 'object' && value) {
+/******/ 				if((mode & 4) && value.__esModule) return value;
+/******/ 				if((mode & 16) && typeof value.then === 'function') return value;
+/******/ 			}
+/******/ 			var ns = Object.create(null);
+/******/ 			__webpack_require__.r(ns);
+/******/ 			var def = {};
+/******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
+/******/ 			for(var current = mode & 2 && value; (typeof current == 'object' || typeof current == 'function') && !~leafPrototypes.indexOf(current); current = getProto(current)) {
+/******/ 				Object.getOwnPropertyNames(current).forEach((key) => (def[key] = () => (value[key])));
+/******/ 			}
+/******/ 			def['default'] = () => (value);
+/******/ 			__webpack_require__.d(ns, def);
+/******/ 			return ns;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -14259,7 +22640,7 @@ function arrayMoveImmutable(array, fromIndex, toIndex) {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "" + chunkId + ".js?ver=" + {"vendors-node_modules_opentype_js_dist_opentype_module_js":"7028084b451f5e94afd1","_4db5":"62bd380bb404b5740477"}[chunkId] + "";
+/******/ 			return "" + chunkId + ".js?ver=" + {"_80a7":"54c3b891c2b6116ae2d7","_946e":"2f87dfdf370961f5c9a1"}[chunkId] + "";
 /******/ 		};
 /******/ 	})();
 /******/ 	
