@@ -842,10 +842,10 @@ body.wp-customizer .media-modal-backdrop {
   }
 }
 
-/* Do not hide `.popover-header` here: state tabs live inside it and must stay visible
-   when `styling_hide_popover_heading` is used with multi-state controls (e.g. menu hover). */
+/* Do not hide `.popover-header` or `.onepress-styling-editor-popover__title` here: state tabs and
+   the popover title row are controlled in JS (`styling_hide_popover_heading`). Single-group controls
+   still get compact accordion rules below. */
 .group-count-1 {
-  .onepress-styling-editor-popover__title,
   .onepress-styling-editor-popover__header {
     display: none;
   }

@@ -3,112 +3,115 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1019
+#: src/admin/customizer/styling/StylingControlApp.jsx:1002
+msgid "Reset all items to default"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1003
+msgid "Reset to default"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1039
 msgid "Item %d"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1028
+#: src/admin/customizer/styling/StylingControlApp.jsx:1048
 msgid "Reset this item to default"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1040
+#: src/admin/customizer/styling/StylingControlApp.jsx:1059
+msgid "Remove this item from the list"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1072
 msgid "Edit styling"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1053
+#: src/admin/customizer/styling/StylingControlApp.jsx:1085
 msgid "Add item"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1092
-msgid "Manage states"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1093
-msgid "State settings"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1111
-msgid "Cancel picking from preview"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1112
-msgid "Pick a selector from the site preview"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1137
+#: src/admin/customizer/styling/StylingControlApp.jsx:1217
 msgid "Style states"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1214
-msgid "Item name"
+#: src/admin/customizer/styling/StylingControlApp.jsx:1267
+msgid "Manage states"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1215
-msgid "Label shown in the list for this target."
+#: src/admin/customizer/styling/StylingControlApp.jsx:1268
+msgid "State settings"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1227
-msgid "Base CSS selector"
+#: src/admin/customizer/styling/StylingControlApp.jsx:1269
+msgid "Settings"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1230
-msgid ""
-"Rules apply to this target. Each state can add a suffix (e.g. :hover) in "
-"its settings or below when that tab is active."
+#: src/admin/customizer/styling/StylingControlApp.jsx:1284
+msgid "Cancel picking from preview"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1234
-msgid "The base selector is fixed for this control and cannot be changed here."
+#: src/admin/customizer/styling/StylingControlApp.jsx:1285
+msgid "Pick a selector from the site preview"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1276
+#: src/admin/customizer/styling/StylingControlApp.jsx:1359
 msgid "Reset"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1277
-msgid "Cancel"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1282
+#: src/admin/customizer/styling/StylingControlApp.jsx:1365
 msgid ""
 "Reset all targets to their default styling? Every item in this list will be "
 "restored and unsaved changes will be lost."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1286
+#: src/admin/customizer/styling/StylingControlApp.jsx:1369
 msgid ""
 "Reset this styling block to its default? Current declarations will be "
 "replaced."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1296
+#: src/admin/customizer/styling/StylingControlApp.jsx:1379
 #. %s: item label
 msgid ""
 "Reset \"%s\" to its default styling? This target's declarations will be "
 "replaced."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1303
+#: src/admin/customizer/styling/StylingControlApp.jsx:1403
+msgid "Delete"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1404
+msgid "Cancel"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1410
+#. %s: item label
+msgid "Remove \"%s\" from this list? This target and its styling will be deleted."
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1417
 msgid "this item"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:182
+#: src/admin/customizer/styling/StylingControlApp.jsx:181
 msgid "Desktop"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:183
+#: src/admin/customizer/styling/StylingControlApp.jsx:182
 msgid "Tablet"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:184
+#: src/admin/customizer/styling/StylingControlApp.jsx:183
 msgid "Mobile"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:191
+#: src/admin/customizer/styling/StylingControlApp.jsx:190
 msgid "Element styling"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:198
+#: src/admin/customizer/styling/StylingControlApp.jsx:197
 msgid ""
 "Per state and breakpoint, enter CSS declarations only (no selectors or "
 "curly braces). Example: color: #2271b1; padding: 8px 12px;"
@@ -127,27 +130,15 @@ msgstr ""
 msgid "CSS selector applied: %s"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:857
+#: src/admin/customizer/styling/StylingControlApp.jsx:874
 msgid "New item"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:937
+#: src/admin/customizer/styling/StylingControlApp.jsx:954
 msgid "Invalid styling configuration (no states). Save to reset defaults."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:962
+#: src/admin/customizer/styling/StylingControlApp.jsx:982
 #. %s: item label
 msgid "Edit styling: %s"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:982
-msgid "Reset all items to default"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:983
-msgid "Reset to default"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingStatesPolicy.js:53
-msgid "Normal"
 msgstr ""

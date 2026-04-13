@@ -7,10 +7,9 @@ import {
 	Icon,
 	Popover,
 	SnackbarList,
-	TextControl,
 	Tabs,
 } from '@wordpress/components';
-import { pencil, rotateLeft, settings, close } from '@wordpress/icons';
+import { pencil, rotateLeft, settings, close, trash } from '@wordpress/icons';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import {
@@ -242,6 +241,7 @@ export function StylingControlApp({ control, $ }) {
 	const [resetConfirm, setResetConfirm] = useState(
 		/** @type {{ kind: 'all' } | { kind: 'item', index: number } | null} */(null)
 	);
+	const [deleteItemIndex, setDeleteItemIndex] = useState(/** @type {number | null} */(null));
 	const [deviceId, setDeviceId] = useState(() => {
 		const fromPreview = getCustomizerPreviewDevice();
 		if (fromPreview && previewDeviceIds.includes(fromPreview)) {
@@ -842,6 +842,23 @@ export function StylingControlApp({ control, $ }) {
 		[editingItemIndex, closeEditorPopover]
 	);
 
+	const removeItemAt = useCallback(
+		(index) => {
+			if (!multiple || !Array.isArray(value.items) || value.items.length <= 1) {
+				return;
+			}
+			const nextRoot = cloneValue(value);
+			nextRoot.items = value.items.filter((_, i) => i !== index);
+			commitRoot(nextRoot);
+			if (editorPopoverOpen && editingItemIndex === index) {
+				closeEditorPopover();
+			} else if (editorPopoverOpen && editingItemIndex != null && editingItemIndex > index) {
+				setEditingItemIndex(editingItemIndex - 1);
+			}
+		},
+		[multiple, value, commitRoot, editorPopoverOpen, editingItemIndex, closeEditorPopover]
+	);
+
 	const addItem = useCallback(() => {
 		if (!multiple || !defaultStylingPayload) {
 			return;
@@ -944,6 +961,9 @@ export function StylingControlApp({ control, $ }) {
 	const stateTabCount = structuralStates.length;
 
 	const showStatesPopoverButton = statesStructureMode === 'all' || statesStructureMode === 'fixed';
+	/** Gear opens settings popover: full state UI, or target-only (item name / base selector) when states UI is off. */
+	const showEditorSettingsButton =
+		showStatesPopoverButton || multiple || !lockedBaseSelector;
 	const allowAddRemoveInStatesPopover = statesStructureMode === 'all';
 	const showStateTabButtons = stateTabCount > 1;
 	const showStatesToolbar = showStateTabButtons || showStatesPopoverButton;
@@ -1032,6 +1052,18 @@ export function StylingControlApp({ control, $ }) {
 													<Icon icon={rotateLeft} size={18} />
 												</Button>
 												<Button
+													variant="minimal"
+													onClick={() => setDeleteItemIndex(index)}
+													size="small"
+													disabled={itemsList.length <= 1}
+													label={__('Remove this item from the list', 'onepress')}
+													showTooltip
+													className="icon-btn"
+													isDestructive
+												>
+													<Icon icon={trash} size={18} />
+												</Button>
+												<Button
 													variant="secondary"
 													onClick={(e) => toggleEditorForItem(index, e.currentTarget)}
 													isPressed={editorPopoverOpen && editingItemIndex === index}
@@ -1078,7 +1110,7 @@ export function StylingControlApp({ control, $ }) {
 										<div className='flex items-center gap-2 w-full justify-between'>
 											<div className="grow onepress-styling-editor-popover__title ">{popoverTitle}</div>
 											<div className='flex items-center gap-2'>
-												{showStatesPopoverButton ? (
+												{showEditorSettingsButton ? (
 													<Button
 														ref={manageStatesButtonRef}
 														className="onepress-styling-manage-states icon-btn"
@@ -1088,9 +1120,11 @@ export function StylingControlApp({ control, $ }) {
 														aria-haspopup="dialog"
 														size="small"
 														label={
-															allowAddRemoveInStatesPopover
-																? __('Manage states', 'onepress')
-																: __('State settings', 'onepress')
+															showStatesPopoverButton
+																? allowAddRemoveInStatesPopover
+																	? __('Manage states', 'onepress')
+																	: __('State settings', 'onepress')
+																: __('Settings', 'onepress')
 														}
 														showTooltip
 
@@ -1122,6 +1156,52 @@ export function StylingControlApp({ control, $ }) {
 												</>) : null}
 
 											</div>
+										</div>
+									) : null}
+
+									{!showHeadingRow && showEditorSettingsButton ? (
+										<div className="flex items-center gap-2 w-full justify-end onepress-styling-editor-popover__header-tools">
+											<Button
+												ref={manageStatesButtonRef}
+												className="onepress-styling-manage-states icon-btn"
+												variant="secondary"
+												onClick={toggleStatesPopover}
+												aria-expanded={statesPopoverOpen}
+												aria-haspopup="dialog"
+												size="small"
+												label={
+													showStatesPopoverButton
+														? allowAddRemoveInStatesPopover
+															? __('Manage states', 'onepress')
+															: __('State settings', 'onepress')
+														: __('Settings', 'onepress')
+												}
+												showTooltip
+											>
+												<Icon icon={settings} size={20} />
+											</Button>
+											{!lockedBaseSelector ? (
+												<Button
+													variant="secondary"
+													onClick={togglePreviewPicker}
+													isPressed={previewPickerActive}
+													disabled={!editableBaseSelector}
+													size="small"
+													label={
+														previewPickerActive
+															? __('Cancel picking from preview', 'onepress')
+															: __('Pick a selector from the site preview', 'onepress')
+													}
+													showTooltip
+													className="icon-btn"
+												>
+													{previewPickerActive ? (
+														<Icon icon={close} size={18} />
+													) : (
+														<IconTarget size={18} />
+													)}
+												</Button>
+											) : null}
 										</div>
 									) : null}
 
@@ -1171,7 +1251,53 @@ export function StylingControlApp({ control, $ }) {
 								aria-labelledby={tablistVisibleForA11y ? getStateTabId(stateIndex) : undefined}
 							>
 
-								{showStatesPopoverButton ? (
+								{!showPopoverHeader && showEditorSettingsButton ? (
+									<div className="flex items-center gap-2 w-full justify-end pb-2 mb-2 onepress-styling-editor-popover__header-tools">
+										<Button
+											ref={manageStatesButtonRef}
+											className="onepress-styling-manage-states icon-btn"
+											variant="secondary"
+											onClick={toggleStatesPopover}
+											aria-expanded={statesPopoverOpen}
+											aria-haspopup="dialog"
+											size="small"
+											label={
+												showStatesPopoverButton
+													? allowAddRemoveInStatesPopover
+														? __('Manage states', 'onepress')
+														: __('State settings', 'onepress')
+													: __('Settings', 'onepress')
+											}
+											showTooltip
+										>
+											<Icon icon={settings} size={20} />
+										</Button>
+										{!lockedBaseSelector ? (
+											<Button
+												variant="secondary"
+												onClick={togglePreviewPicker}
+												isPressed={previewPickerActive}
+												disabled={!editableBaseSelector}
+												size="small"
+												label={
+													previewPickerActive
+														? __('Cancel picking from preview', 'onepress')
+														: __('Pick a selector from the site preview', 'onepress')
+												}
+												showTooltip
+												className="icon-btn"
+											>
+												{previewPickerActive ? (
+													<Icon icon={close} size={18} />
+												) : (
+													<IconTarget size={18} />
+												)}
+											</Button>
+										) : null}
+									</div>
+								) : null}
+
+								{showEditorSettingsButton ? (
 									<StylingSettingsPopover
 										anchor={statesPopoverAnchor}
 										isOpen={statesPopoverOpen}
@@ -1188,6 +1314,7 @@ export function StylingControlApp({ control, $ }) {
 										metaBaseSelector={metaBaseSelector}
 										onBaseSelectorChange={onBaseSelectorChange}
 										onItemTitleChange={onItemTitleChange}
+										showStatesSection={showStatesPopoverButton}
 									/>
 								) : null}
 
@@ -1204,50 +1331,6 @@ export function StylingControlApp({ control, $ }) {
 									stylingGroups={control.params.styling_groups}
 									disabledFieldSet={disabledFieldSet}
 								/>
-
-								{!showStatesPopoverButton ? (
-									<>
-										{multiple ? (
-											<TextControl
-												__nextHasNoMarginBottom
-												className="styling-item-name-field"
-												label={__('Item name', 'onepress')}
-												help={__('Label shown in the list for this target.', 'onepress')}
-												value={String(editorPayload.title ?? '')}
-												onChange={onItemTitleChange}
-												autoComplete="off"
-												spellCheck={false}
-											/>
-										) : null}
-										{!lockedBaseSelector ? (
-											<div className="field-base-selector">
-												<TextControl
-													__nextHasNoMarginBottom
-													className="styling-selector-field"
-													label={__('Base CSS selector', 'onepress')}
-													help={
-														editableBaseSelector
-															? __(
-																'Rules apply to this target. Each state can add a suffix (e.g. :hover) in its settings or below when that tab is active.',
-																'onepress'
-															)
-															: __(
-																'The base selector is fixed for this control and cannot be changed here.',
-																'onepress'
-															)
-													}
-													value={metaBaseSelector}
-													onChange={onBaseSelectorChange}
-													disabled={!editableBaseSelector}
-													autoComplete="off"
-													spellCheck={false}
-												/>
-											</div>
-										) : null}
-									</>
-								) : null}
-
-
 
 							</div>
 						</Popover>
@@ -1301,6 +1384,37 @@ export function StylingControlApp({ control, $ }) {
 									(Array.isArray(value.items) && value.items[resetConfirm.index]
 										? value.items[resetConfirm.index].title || value.items[resetConfirm.index].id
 										: '') || __('this item', 'onepress')
+								)
+							)}
+						</p>
+					) : null}
+				</ConfirmDialog>
+
+				<ConfirmDialog
+					isOpen={deleteItemIndex !== null}
+					onConfirm={() => {
+						if (deleteItemIndex === null) {
+							return;
+						}
+						removeItemAt(deleteItemIndex);
+						setDeleteItemIndex(null);
+					}}
+					onCancel={() => setDeleteItemIndex(null)}
+					confirmButtonText={__('Delete', 'onepress')}
+					cancelButtonText={__('Cancel', 'onepress')}
+				>
+					{deleteItemIndex !== null ? (
+						<p>
+							{sprintf(
+								/* translators: %s: item label */
+								__(
+									'Remove "%s" from this list? This target and its styling will be deleted.',
+									'onepress'
+								),
+								String(
+									value.items?.[deleteItemIndex]
+										? value.items[deleteItemIndex].title || value.items[deleteItemIndex].id
+										: __('this item', 'onepress')
 								)
 							)}
 						</p>

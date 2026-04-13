@@ -17,6 +17,7 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 	 * - `control` (array) — passed as second arg to `Onepress_Customize_Styling_Control` (must not include control id key).
 	 *   Optional: `styling_hide_popover_heading`, `styling_hide_state_tablist` (bool) — simplify the editor popover chrome.
 	 *   In `styling_states` template rows, optional `force_selector` (string) — full CSS selector override; if omitted, theme resolves `force_selector` as `base_selector` + that row’s `selector` for the matching theme_mod id (front + preview).
+	 *   When `styling_multiple` => true on the control, use setting default `onepress_styling_get_default_json_multiple()` and sanitize `onepress_sanitize_styling_value_multi` (not the single-target helpers).
 	 *
 	 * @return array<int, array{id: string, setting: array<string, mixed>, control: array<string, mixed>}>
 	 */
@@ -27,6 +28,12 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 		$setting_defaults = array(
 			'default'           => onepress_styling_get_default_json(),
 			'sanitize_callback' => 'onepress_sanitize_styling_value',
+			'transport'         => 'postMessage',
+		);
+
+		$setting_defaults_multiple = array(
+			'default'           => onepress_styling_get_default_json_multiple(),
+			'sanitize_callback' => 'onepress_sanitize_styling_value_multi',
 			'transport'         => 'postMessage',
 		);
 
@@ -122,6 +129,28 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 					'label'         => esc_html__('Tagline Typography', 'onepress'),
 					'priority'      => 22,
 					'base_selector' => 'body #page .site-branding .site-description',
+				)
+			),
+		);
+
+
+		$rows[] = array(
+			'id'      => 'onepress_styling_customs',
+			'setting' => $setting_defaults_multiple,
+			'control' => array_merge(
+				$control_defaults,
+				array(
+					'label'         => esc_html__('Custom typography targets', 'onepress'),
+					'description'   => esc_html__(
+						'Add selectors as separate items; each has its own text styles. Normal state only — use Add item for more targets.',
+						'onepress'
+					),
+					'priority'      => 23,
+					'styling_multiple' => true,
+					'styling_states'   => false,
+					'styling_groups'   => array( 'text' ),
+					'styling_hide_state_tablist'   => true,
+					'styling_hide_popover_heading' => false,
 				)
 			),
 		);

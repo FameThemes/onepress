@@ -87,6 +87,7 @@ const RESERVED_STATE_KEYS = new Set(['_meta', '_onepressstyling']);
  * @param {string} [props.metaBaseSelector]
  * @param {(v: string) => void} [props.onBaseSelectorChange]
  * @param {(v: string) => void} [props.onItemTitleChange]
+ * @param {boolean} [props.showStatesSection] When false, hide states list and add-state UI (target settings only).
  */
 export function StylingSettingsPopover({
 	anchor,
@@ -104,6 +105,7 @@ export function StylingSettingsPopover({
 	metaBaseSelector = '',
 	onBaseSelectorChange = () => {},
 	onItemTitleChange = () => {},
+	showStatesSection = true,
 }) {
 	const [draggedRestIndex, setDraggedRestIndex] = useState(null);
 	const [customKeyDraft, setCustomKeyDraft] = useState('');
@@ -425,31 +427,45 @@ export function StylingSettingsPopover({
 							/>
 						) : null}
 						{!lockedBaseSelector ? (
-							<TextControl
-								__nextHasNoMarginBottom
-								className="styling-selector-field"
-								label={__('Base CSS selector', 'onepress')}
-								help={
-									editableBaseSelector
-										? __(
-												'Rules apply to this target. Each state can add a suffix (e.g. :hover) in its settings or below when that tab is active.',
-												'onepress'
-											)
-										: __(
-												'The base selector is fixed for this control and cannot be changed here.',
-												'onepress'
-											)
-								}
-								value={metaBaseSelector}
-								onChange={onBaseSelectorChange}
-								disabled={!editableBaseSelector}
-								autoComplete="off"
-								spellCheck={false}
-							/>
+							<div className="field-base-selector">
+								<TextControl
+									__nextHasNoMarginBottom
+									className="styling-selector-field"
+									label={__('Base CSS selector', 'onepress')}
+									help={
+										showStatesSection
+											? editableBaseSelector
+												? __(
+														'Rules apply to this target. Each state can add a suffix (e.g. :hover) in its settings or below when that tab is active.',
+														'onepress'
+													)
+												: __(
+														'The base selector is fixed for this control and cannot be changed here.',
+														'onepress'
+													)
+											: editableBaseSelector
+												? __(
+														'Rules apply to this target. Enter the CSS selector for this item.',
+														'onepress'
+													)
+												: __(
+														'The base selector is fixed for this control and cannot be changed here.',
+														'onepress'
+													)
+									}
+									value={metaBaseSelector}
+									onChange={onBaseSelectorChange}
+									disabled={!editableBaseSelector}
+									autoComplete="off"
+									spellCheck={false}
+								/>
+							</div>
 						) : null}
 					</div>
 				) : null}
 
+				{showStatesSection ? (
+					<>
 				<p className="onepress-styling-settings-popover__subtitle">{__('States', 'onepress')}</p>
 
 				<div className="onepress-styling-settings-popover__list flex flex-col gap-1" role="list">
@@ -630,6 +646,8 @@ export function StylingSettingsPopover({
 							</Button>
 						</div>
 					</div>
+				) : null}
+					</>
 				) : null}
 			</div>
 		</Popover>
