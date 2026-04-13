@@ -1,9 +1,9 @@
 /**
- * Six accordion groups from plan: Text, Background, Spacing, Border, Shadow, Display.
+ * Accordion groups: Text, Background, Spacing, Border, Shadow, Display, Custom (raw).
  */
 import { Panel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useCallback, useState } from '@wordpress/element';
+import { useCallback, useEffect, useMemo, useState } from '@wordpress/element';
 import {
 	BackgroundFields,
 	BorderOutlineFields,
@@ -16,8 +16,32 @@ import {
 	TextStyleFields,
 } from './components';
 
+/** Canonical order when showing “all” groups. */
+export const STYLING_PANEL_GROUP_IDS = [
+	'text',
+	'background',
+	'spacing',
+	'border',
+	'shadow',
+	'display',
+	'raw',
+];
+
 /** @typedef {'text'|'background'|'spacing'|'border'|'shadow'|'display'|'raw'} StylingAccordionSectionId */
 /** @typedef {StylingAccordionSectionId | null} StylingAccordionSection */
+
+/**
+ * @param {unknown} stylingGroups — from `control.params.styling_groups`; null/undefined = all
+ * @returns {StylingAccordionSectionId[]}
+ */
+export function resolveAllowedGroupIds(stylingGroups) {
+	if (!Array.isArray(stylingGroups) || stylingGroups.length === 0) {
+		return [...STYLING_PANEL_GROUP_IDS];
+	}
+	const want = stylingGroups.map(String);
+	const filtered = want.filter((id) => STYLING_PANEL_GROUP_IDS.includes(id));
+	return filtered.length ? filtered : [...STYLING_PANEL_GROUP_IDS];
+}
 
 /**
  * @param {object} props
@@ -30,6 +54,7 @@ import {
  * @param {import('./googleFontCollection').PickerFontFamily[] | undefined} [props.families]
  * @param {boolean | undefined} [props.fontsLoading]
  * @param {Error | null | undefined} [props.fontsError]
+ * @param {string[] | null | undefined} [props.stylingGroups] — whitelist + order; omit/null = all
  */
 export function StylingAccordionPanels({
 	model,
@@ -41,16 +66,49 @@ export function StylingAccordionPanels({
 	families,
 	fontsLoading,
 	fontsError,
+	stylingGroups,
 }) {
-	const [openSection, setOpenSection] = useState(/** @type {StylingAccordionSection} */ (null));
+	const [openSection, setOpenSection] = useState(/** @type {StylingAccordionSection} */(null));
+
+	const allowedIds = useMemo(() => resolveAllowedGroupIds(stylingGroups), [stylingGroups]);
+
+	const singleGroupLocked = allowedIds.length === 1;
+
+	const groupTitles = useMemo(
+		() => ({
+			text: __('Text', 'onepress'),
+			background: __('Background', 'onepress'),
+			spacing: __('Spacing', 'onepress'),
+			border: __('Border & radius', 'onepress'),
+			shadow: __('Shadow', 'onepress'),
+			display: __('Display & layout', 'onepress'),
+			raw: __('Custom declarations', 'onepress'),
+		}),
+		[]
+	);
+
+	useEffect(() => {
+		if (openSection && !allowedIds.includes(openSection)) {
+			setOpenSection(null);
+		}
+	}, [allowedIds, openSection]);
 
 	/**
-	 * List mode: every section row visible (collapsed). Focus mode: only the active section (expanded).
 	 * @param {StylingAccordionSectionId} sectionId
-	 * @returns {{ opened: boolean, onToggle: (next: boolean) => void } | null}
+	 * @returns {{ opened: boolean, onToggle: (next: boolean) => void, lockOpen: boolean } | null}
 	 */
 	const sectionPanelProps = useCallback(
 		(sectionId) => {
+			if (!allowedIds.includes(sectionId)) {
+				return null;
+			}
+			if (singleGroupLocked) {
+				return {
+					opened: true,
+					onToggle: () => { },
+					lockOpen: true,
+				};
+			}
 			if (openSection !== null && openSection !== sectionId) {
 				return null;
 			}
@@ -62,6 +120,7 @@ export function StylingAccordionPanels({
 							setOpenSection(sectionId);
 						}
 					},
+					lockOpen: false,
 				};
 			}
 			return {
@@ -71,26 +130,17 @@ export function StylingAccordionPanels({
 						setOpenSection(null);
 					}
 				},
+				lockOpen: false,
 			};
 		},
-		[openSection]
+		[allowedIds, openSection, singleGroupLocked]
 	);
 
-	const textP = sectionPanelProps('text');
-	const backgroundP = sectionPanelProps('background');
-	const spacingP = sectionPanelProps('spacing');
-	const borderP = sectionPanelProps('border');
-	const shadowP = sectionPanelProps('shadow');
-	const displayP = sectionPanelProps('display');
-	const rawP = sectionPanelProps('raw');
-
-	return (
-		<div className="panels">
-			<PreservedPropertiesNotice count={unknownCount} />
-
-			<Panel className={`acc-panel${openSection ? ' acc-panel--focus-section' : ''}`}>
-				{textP ? (
-					<StylingGroupPanel title={__('Text', 'onepress')} opened={textP.opened} onToggle={textP.onToggle}>
+	const renderGroupBody = useCallback(
+		(/** @type {StylingAccordionSectionId} */ sectionId) => {
+			switch (sectionId) {
+				case 'text':
+					return (
 						<TextStyleFields
 							model={model}
 							onPatch={onPatch}
@@ -98,44 +148,51 @@ export function StylingAccordionPanels({
 							fontsLoading={fontsLoading}
 							fontsError={fontsError}
 						/>
-					</StylingGroupPanel>
-				) : null}
+					);
+				case 'background':
+					return <BackgroundFields sliceKey={sliceKey} model={model} onPatch={onPatch} />;
+				case 'spacing':
+					return <SpacingFields sliceKey={sliceKey} model={model} onPatch={onPatch} />;
+				case 'border':
+					return <BorderOutlineFields sliceKey={sliceKey} model={model} onPatch={onPatch} />;
+				case 'shadow':
+					return <ShadowFields model={model} onPatch={onPatch} />;
+				case 'display':
+					return <DisplayLayoutFields model={model} onPatch={onPatch} />;
+				case 'raw':
+					return <RawDeclarationsField value={rawCss} onChange={onRawChange} />;
+				default:
+					return null;
+			}
+		},
+		[model, onPatch, sliceKey, rawCss, onRawChange, families, fontsLoading, fontsError]
+	);
 
-				{backgroundP ? (
-					<StylingGroupPanel title={__('Background', 'onepress')} opened={backgroundP.opened} onToggle={backgroundP.onToggle}>
-						<BackgroundFields sliceKey={sliceKey} model={model} onPatch={onPatch} />
-					</StylingGroupPanel>
-				) : null}
+	return (
+		<div className="panels">
+			<PreservedPropertiesNotice count={unknownCount} />
 
-				{spacingP ? (
-					<StylingGroupPanel title={__('Spacing', 'onepress')} opened={spacingP.opened} onToggle={spacingP.onToggle}>
-						<SpacingFields sliceKey={sliceKey} model={model} onPatch={onPatch} />
-					</StylingGroupPanel>
-				) : null}
-
-				{borderP ? (
-					<StylingGroupPanel title={__('Border & radius', 'onepress')} opened={borderP.opened} onToggle={borderP.onToggle}>
-						<BorderOutlineFields sliceKey={sliceKey} model={model} onPatch={onPatch} />
-					</StylingGroupPanel>
-				) : null}
-
-				{shadowP ? (
-					<StylingGroupPanel title={__('Shadow', 'onepress')} opened={shadowP.opened} onToggle={shadowP.onToggle}>
-						<ShadowFields model={model} onPatch={onPatch} />
-					</StylingGroupPanel>
-				) : null}
-
-				{displayP ? (
-					<StylingGroupPanel title={__('Display & layout', 'onepress')} opened={displayP.opened} onToggle={displayP.onToggle}>
-						<DisplayLayoutFields model={model} onPatch={onPatch} />
-					</StylingGroupPanel>
-				) : null}
-
-				{rawP ? (
-					<StylingGroupPanel title={__('Custom declarations', 'onepress')} opened={rawP.opened} onToggle={rawP.onToggle}>
-						<RawDeclarationsField value={rawCss} onChange={onRawChange} />
-					</StylingGroupPanel>
-				) : null}
+			<Panel className={`acc-panel${openSection && !singleGroupLocked ? ' acc-panel--focus-section' : ''}`}>
+				{allowedIds.map((sectionId) => {
+					const p = sectionPanelProps(sectionId);
+					if (!p) {
+						return null;
+					}
+					const title = groupTitles[sectionId];
+					return (
+						<StylingGroupPanel
+							key={sectionId}
+							title={title}
+							opened={p.opened}
+							onToggle={p.onToggle}
+							lockOpen={p.lockOpen}
+						>
+							<div className='fields list-fields flex flex-col gap-3'>
+								{renderGroupBody(sectionId)}
+							</div>
+						</StylingGroupPanel>
+					);
+				})}
 			</Panel>
 		</div>
 	);

@@ -67,7 +67,16 @@ export function googleAxisPairFromSlice(declarations, sliceMeta) {
  * @param {import('./googleFontCollection').PickerFontFamily[] | null | undefined} families
  */
 export function rebuildFontSlicesInValue(value, families) {
-	if (!value || typeof value !== 'object' || !value._meta || !Array.isArray(value._meta.states)) {
+	if (!value || typeof value !== 'object') {
+		return;
+	}
+	if (Array.isArray(value.items) && value.items.length) {
+		for (const item of value.items) {
+			rebuildFontSlicesInValue(item, families);
+		}
+		return;
+	}
+	if (!value._meta || !Array.isArray(value._meta.states)) {
 		return;
 	}
 	/** @type {Record<string, Record<string, FontSliceMeta>>} */
@@ -135,7 +144,16 @@ export function rebuildFontSlicesInValue(value, families) {
  * @param {Record<string, unknown> | null | undefined} value
  */
 export function mergeGoogleFontAxesInto(acc, value) {
-	if (!value || typeof value !== 'object' || !value._meta || !Array.isArray(value._meta.states)) {
+	if (!value || typeof value !== 'object') {
+		return;
+	}
+	if (Array.isArray(value.items) && value.items.length) {
+		for (const item of value.items) {
+			mergeGoogleFontAxesInto(acc, item);
+		}
+		return;
+	}
+	if (!value._meta || !Array.isArray(value._meta.states)) {
 		return;
 	}
 	const fontSlices = value._meta.fontSlices;

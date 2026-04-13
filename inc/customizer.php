@@ -170,7 +170,14 @@ function onepress_customize_preview_js()
 	$handle = onepress_load_build_script('customizer-liveview', ['customize-preview', 'customize-selective-refresh'], true);
 	if ($handle) {
 		wp_enqueue_script($handle);
-		$styling_ids = apply_filters('onepress_styling_theme_mod_setting_ids', array( 'onepress_element_styling' ));
+		$styling_ids = apply_filters(
+			'onepress_styling_theme_mod_setting_ids',
+			array(
+				'onepress_element_styling',
+				'onepress_element_styling_single',
+				'onepress_element_styling_fixed_states',
+			)
+		);
 		$styling_ids = array_values(array_filter(array_map('sanitize_key', (array) $styling_ids)));
 		wp_localize_script(
 			$handle,

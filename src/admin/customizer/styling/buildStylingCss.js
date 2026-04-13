@@ -77,7 +77,17 @@ export function composeStylingFullSelector(baseRaw, suffixRaw) {
  * @param {typeof DEFAULT_BPS} breakpoints
  */
 export function buildStylingCss(value, breakpoints = DEFAULT_BPS) {
-	if (!value || typeof value !== 'object' || !value._meta || !Array.isArray(value._meta.states)) {
+	if (!value || typeof value !== 'object') {
+		return '';
+	}
+	if (Array.isArray(value.items) && value.items.length) {
+		return value.items
+			.map((item) => buildStylingCss(item, breakpoints))
+			.filter(Boolean)
+			.join('\n')
+			.trim();
+	}
+	if (!value._meta || !Array.isArray(value._meta.states)) {
 		return '';
 	}
 	const baseMeta =

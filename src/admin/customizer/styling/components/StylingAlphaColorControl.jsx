@@ -132,13 +132,8 @@ export function StylingAlphaColorControl({
 							value={value || ''}
 							onChange={onInputChange}
 							hideLabelFromVision
-							label={sprintf(
-								/* translators: %s: field label */
-								__('CSS color value (%s)', 'onepress'),
-								label
-							)}
 							placeholder={__(
-								'#000, rgb(), hsl(), var(--color)…',
+								'#000000',
 								'onepress'
 							)}
 							autoComplete="off"

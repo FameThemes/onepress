@@ -9,7 +9,6 @@ import {
 	fontStylesForWeight,
 	uniqueFontWeights,
 } from '../googleFontCollection';
-import { CssEnumButtonGroup } from './CssEnumButtonGroup';
 
 /** @typedef {import('../googleFontCollection').PickerFontFamily} PickerFontFamily */
 
@@ -61,6 +60,28 @@ export function StylingFontFaceSelectControls({ model, onPatch, families }) {
 
 	const systemWeightOptions = useMemo(() => getSystemFontWeightOptions(), []);
 	const systemStyleOptions = useMemo(() => getSystemFontStyleOptions(), []);
+
+	const compactWeightOptions = useMemo(
+		() => [
+			{ value: '', label: __('Default', 'onepress') },
+			{ value: '400', label: '400' },
+			{ value: '500', label: '500' },
+			{ value: '600', label: '600' },
+			{ value: '700', label: '700' },
+			{ value: 'normal', label: __('Normal', 'onepress') },
+			{ value: 'bold', label: __('Bold', 'onepress') },
+		],
+		[]
+	);
+	const compactStyleOptions = useMemo(
+		() => [
+			{ value: '', label: __('Default', 'onepress') },
+			{ value: 'normal', label: __('Normal', 'onepress') },
+			{ value: 'italic', label: __('Italic', 'onepress') },
+			{ value: 'oblique', label: __('Oblique', 'onepress') },
+		],
+		[]
+	);
 
 	const faces =
 		matched && !matched.isSystem && matched.fontFace?.length ? matched.fontFace : null;
@@ -133,6 +154,7 @@ export function StylingFontFaceSelectControls({ model, onPatch, families }) {
 					onChange={(v) => onPatch({ fontWeight: v })}
 				/>
 				<SelectControl
+					__nextHasNoMarginBottom
 					label={__('Font style', 'onepress')}
 					value={model.fontStyle ?? ''}
 					options={selectStyleOptions}
@@ -144,30 +166,19 @@ export function StylingFontFaceSelectControls({ model, onPatch, families }) {
 
 	return (
 		<>
-			<CssEnumButtonGroup
+			<SelectControl
+				__nextHasNoMarginBottom
 				label={__('Font weight', 'onepress')}
-				value={model.fontWeight || ''}
+				value={model.fontWeight ?? ''}
+				options={compactWeightOptions}
 				onChange={(v) => onPatch({ fontWeight: v })}
-				options={[
-					{ value: '', label: __('Default', 'onepress') },
-					{ value: '400', label: '400' },
-					{ value: '500', label: '500' },
-					{ value: '600', label: '600' },
-					{ value: '700', label: '700' },
-					{ value: 'normal', label: __('Normal', 'onepress') },
-					{ value: 'bold', label: __('Bold', 'onepress') },
-				]}
 			/>
-			<CssEnumButtonGroup
+			<SelectControl
+				__nextHasNoMarginBottom
 				label={__('Font style', 'onepress')}
-				value={model.fontStyle || ''}
+				value={model.fontStyle ?? ''}
+				options={compactStyleOptions}
 				onChange={(v) => onPatch({ fontStyle: v })}
-				options={[
-					{ value: '', label: __('Default', 'onepress') },
-					{ value: 'normal', label: __('Normal', 'onepress') },
-					{ value: 'italic', label: __('Italic', 'onepress') },
-					{ value: 'oblique', label: __('Oblique', 'onepress') },
-				]}
 			/>
 		</>
 	);

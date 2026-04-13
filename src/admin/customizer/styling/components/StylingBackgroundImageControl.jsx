@@ -87,7 +87,7 @@ export function StylingBackgroundImageControl({
 			{hasMedia ? (
 				<FocalPointPicker
 					__nextHasNoMarginBottom
-					label={__('Focal point', 'onepress')}
+					// label={__('Focal point', 'onepress')}
 					url={imageUrl}
 					value={focalValue}
 					onChange={onFocalChange}

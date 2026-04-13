@@ -55,6 +55,155 @@ function onepress_styling_get_default_json()
 }
 
 /**
+ * Default single-target payload with only the `normal` state (for `styling_states` => false).
+ *
+ * @return array<string, mixed>
+ */
+function onepress_styling_get_default_value_normal_only()
+{
+	return array(
+		'_onepressStyling' => true,
+		'_meta'             => array(
+			'baseSelector' => '#hero .container .btn',
+			'states'       => array(
+				array(
+					'normal' => array(
+						'label'    => __( 'Normal', 'onepress' ),
+						'selector' => '',
+					),
+				),
+			),
+		),
+		'normal'            => array(
+			'desktop' => '',
+			'tablet'  => '',
+			'mobile'  => '',
+		),
+	);
+}
+
+/**
+ * @return string
+ */
+function onepress_styling_get_default_json_normal_only()
+{
+	return wp_json_encode(onepress_styling_get_default_value_normal_only());
+}
+
+/**
+ * Build default single-target value from a fixed states template (same shape as `_meta.states` rows).
+ *
+ * @param array<int, array<string, array{label?:string, selector?:string}>> $template State entries.
+ * @return array<string, mixed>
+ */
+function onepress_styling_get_default_value_from_states_template($template)
+{
+	if (! is_array($template) || $template === array()) {
+		return onepress_styling_get_default_value();
+	}
+	$allowed_devices = onepress_styling_allowed_device_ids();
+	$out             = array(
+		'_onepressStyling' => true,
+		'_meta'            => array(
+			'baseSelector' => '#hero .container .btn',
+			'states'       => array(),
+		),
+	);
+	foreach ($template as $entry) {
+		if (! is_array($entry) || count($entry) !== 1) {
+			continue;
+		}
+		$state_key = key($entry);
+		$row       = current($entry);
+		$sk        = sanitize_key((string) $state_key);
+		if ($sk === '' || $sk[0] === '_') {
+			continue;
+		}
+		if (! is_array($row)) {
+			continue;
+		}
+		$label    = isset($row['label']) ? sanitize_text_field((string) $row['label']) : $sk;
+		$selector = isset($row['selector']) ? onepress_styling_sanitize_selector((string) $row['selector']) : '';
+		$out['_meta']['states'][] = array(
+			$sk => array(
+				'label'    => $label,
+				'selector' => $selector,
+			),
+		);
+		$out[ $sk ] = array();
+		foreach ($allowed_devices as $dev => $_) {
+			$out[ $sk ][ $dev ] = '';
+		}
+	}
+	if (empty($out['_meta']['states'])) {
+		return onepress_styling_get_default_value();
+	}
+	return $out;
+}
+
+/**
+ * @param array<int, array<string, array{label?:string, selector?:string}>> $template State entries.
+ * @return string
+ */
+function onepress_styling_get_default_json_from_states_template($template)
+{
+	return wp_json_encode(onepress_styling_get_default_value_from_states_template($template));
+}
+
+/**
+ * Default styling payload for one control with multiple targets (`items` array).
+ *
+ * @return array<string, mixed>
+ */
+function onepress_styling_get_default_value_multiple()
+{
+	$one                = onepress_styling_get_default_value();
+	$one['id']          = 'item-1';
+	$one['title']       = __( 'Item 1', 'onepress' );
+	$one['selector']    = isset( $one['_meta']['baseSelector'] ) ? (string) $one['_meta']['baseSelector'] : '';
+	$one['_meta']['baseSelector'] = $one['selector'];
+	return array(
+		'_onepressStyling' => true,
+		'items'            => array( $one ),
+	);
+}
+
+/**
+ * JSON default for theme_mod when the control uses `styling_multiple`.
+ *
+ * @return string
+ */
+function onepress_styling_get_default_json_multiple()
+{
+	return wp_json_encode( onepress_styling_get_default_value_multiple() );
+}
+
+/**
+ * Wrap a single-target payload as the first `items[]` row (id/title/selector).
+ *
+ * @param array<string, mixed> $single Sanitized or raw single styling object.
+ * @return array<string, mixed>
+ */
+function onepress_styling_item_from_single_payload( $single )
+{
+	if ( ! is_array( $single ) ) {
+		$single = onepress_styling_get_default_value();
+	}
+	$base = '';
+	if ( isset( $single['_meta']['baseSelector'] ) ) {
+		$base = (string) $single['_meta']['baseSelector'];
+	}
+	return array_merge(
+		array(
+			'id'       => 'item-1',
+			'title'    => __( 'Item 1', 'onepress' ),
+			'selector' => $base,
+		),
+		$single
+	);
+}
+
+/**
  * Device ids that map to `wp.customize.previewedDevice` (footer preview: desktop / tablet / mobile).
  * Keep order and keys aligned with core Customizer responsive preview.
  *
@@ -403,6 +552,14 @@ function onepress_styling_google_axis_pair_from_slice($declarations, $meta_slice
  */
 function onepress_styling_merge_google_axes_from_value_into(&$acc, $value)
 {
+	if (is_array($value) && isset($value['items']) && is_array($value['items'])) {
+		foreach ($value['items'] as $item) {
+			if (is_array($item)) {
+				onepress_styling_merge_google_axes_from_value_into($acc, $item);
+			}
+		}
+		return;
+	}
 	if (! is_array($value) || empty($value['_meta']['states']) || ! is_array($value['_meta']['states'])) {
 		return;
 	}
@@ -474,7 +631,14 @@ function onepress_styling_enqueue_merged_google_fonts()
 	if (is_customize_preview()) {
 		return;
 	}
-	$ids = apply_filters('onepress_styling_theme_mod_setting_ids', array( 'onepress_element_styling' ));
+	$ids = apply_filters(
+		'onepress_styling_theme_mod_setting_ids',
+		array(
+			'onepress_element_styling',
+			'onepress_element_styling_single',
+			'onepress_element_styling_fixed_states',
+		)
+	);
 	if (! is_array($ids) || empty($ids)) {
 		return;
 	}
@@ -504,28 +668,13 @@ function onepress_styling_enqueue_merged_google_fonts()
 add_action('wp_enqueue_scripts', 'onepress_styling_enqueue_merged_google_fonts', 19);
 
 /**
- * Sanitize full styling JSON value; returns JSON string for theme_mod.
+ * Sanitize one single-target styling object (no `items` wrapper).
  *
- * @param mixed $raw Raw from Customizer or DB.
- * @return string JSON.
+ * @param array<string, mixed> $decoded Raw decoded JSON (may include id/title/selector — ignored).
+ * @return array<string, mixed>
  */
-function onepress_sanitize_styling_value($raw)
+function onepress_styling_sanitize_single_styling_object($decoded)
 {
-	$default = onepress_styling_get_default_value();
-	if ($raw === null || $raw === '') {
-		return wp_json_encode($default);
-	}
-	if (is_string($raw)) {
-		$decoded = json_decode($raw, true);
-	} elseif (is_array($raw)) {
-		$decoded = $raw;
-	} else {
-		return wp_json_encode($default);
-	}
-	if (! is_array($decoded)) {
-		return wp_json_encode($default);
-	}
-
 	$out = array(
 		'_onepressStyling' => true,
 		'_meta'            => onepress_styling_sanitize_meta(isset($decoded['_meta']) ? $decoded['_meta'] : array()),
@@ -554,7 +703,118 @@ function onepress_sanitize_styling_value($raw)
 		$out['_meta']['fontSlices'] = $font_slices;
 	}
 
-	return wp_json_encode($out);
+	return $out;
+}
+
+/**
+ * Sanitize one `items[]` row: id, title, selector + single-target payload.
+ *
+ * @param array<string, mixed> $item_raw Raw item.
+ * @return array<string, mixed>|null
+ */
+function onepress_styling_sanitize_styling_item($item_raw)
+{
+	if (! is_array($item_raw)) {
+		return null;
+	}
+	$id = isset($item_raw['id']) ? sanitize_key((string) $item_raw['id']) : '';
+	if ($id === '') {
+		$id = 'item-' . strtolower( wp_generate_password( 8, false, false ) );
+	}
+	$title = isset( $item_raw['title'] ) ? sanitize_text_field( (string) $item_raw['title'] ) : $id;
+	$selector = isset( $item_raw['selector'] ) ? onepress_styling_sanitize_selector( (string) $item_raw['selector'] ) : '';
+
+	$inner = $item_raw;
+	unset( $inner['id'], $inner['title'], $inner['selector'], $inner['items'] );
+
+	$out = onepress_styling_sanitize_single_styling_object( $inner );
+	if ( $selector !== '' ) {
+		$out['_meta']['baseSelector'] = $selector;
+	}
+	$out['id']       = $id;
+	$out['title']    = $title;
+	$out['selector'] = isset( $out['_meta']['baseSelector'] ) ? (string) $out['_meta']['baseSelector'] : '';
+
+	return $out;
+}
+
+/**
+ * Sanitize full styling JSON value; returns JSON string for theme_mod (single target).
+ *
+ * @param mixed $raw Raw from Customizer or DB.
+ * @return string JSON.
+ */
+function onepress_sanitize_styling_value($raw)
+{
+	$default = onepress_styling_get_default_value();
+	if ($raw === null || $raw === '') {
+		return wp_json_encode($default);
+	}
+	if (is_string($raw)) {
+		$decoded = json_decode($raw, true);
+	} elseif (is_array($raw)) {
+		$decoded = $raw;
+	} else {
+		return wp_json_encode($default);
+	}
+	if (! is_array($decoded)) {
+		return wp_json_encode($default);
+	}
+	if (isset($decoded['items'])) {
+		return wp_json_encode($default);
+	}
+
+	return wp_json_encode(onepress_styling_sanitize_single_styling_object($decoded));
+}
+
+/**
+ * Sanitize styling JSON for controls with `styling_multiple` (always `items[]` on disk).
+ *
+ * @param mixed $raw Raw from Customizer or DB.
+ * @return string JSON.
+ */
+function onepress_sanitize_styling_value_multi($raw)
+{
+	$default = onepress_styling_get_default_value_multiple();
+	if ($raw === null || $raw === '') {
+		return wp_json_encode($default);
+	}
+	if (is_string($raw)) {
+		$decoded = json_decode($raw, true);
+	} elseif (is_array($raw)) {
+		$decoded = $raw;
+	} else {
+		return wp_json_encode($default);
+	}
+	if (! is_array($decoded)) {
+		return wp_json_encode($default);
+	}
+	if (! isset($decoded['items']) || ! is_array($decoded['items'])) {
+		if (isset($decoded['_meta']) && is_array($decoded['_meta'])) {
+			$decoded = array(
+				'_onepressStyling' => true,
+				'items'            => array(onepress_styling_item_from_single_payload($decoded)),
+			);
+		} else {
+			return wp_json_encode($default);
+		}
+	}
+	$items_out = array();
+	foreach ($decoded['items'] as $item) {
+		$san = onepress_styling_sanitize_styling_item($item);
+		if ($san) {
+			$items_out[] = $san;
+		}
+	}
+	if (empty($items_out)) {
+		$items_out[] = onepress_styling_sanitize_styling_item(onepress_styling_get_default_value());
+	}
+	return wp_json_encode(
+		array(
+			'_onepressStyling' => true,
+			'items'            => $items_out,
+		)
+	);
 }
 
 /**
@@ -566,7 +826,19 @@ function onepress_sanitize_styling_value($raw)
  */
 function onepress_styling_build_css_from_value($value, $breakpoints = null)
 {
-	if (! is_array($value) || empty($value['_meta']['states']) || ! is_array($value['_meta']['states'])) {
+	if (! is_array($value)) {
+		return '';
+	}
+	if (isset($value['items']) && is_array($value['items'])) {
+		$parts = array();
+		foreach ($value['items'] as $item) {
+			if (is_array($item)) {
+				$parts[] = onepress_styling_build_css_from_value($item, $breakpoints);
+			}
+		}
+		return trim(implode("\n", array_filter($parts)));
+	}
+	if (empty($value['_meta']['states']) || ! is_array($value['_meta']['states'])) {
 		return '';
 	}
 	$bps = $breakpoints ? $breakpoints : onepress_styling_default_breakpoints();
@@ -619,7 +891,14 @@ function onepress_styling_build_css_from_value($value, $breakpoints = null)
  */
 function onepress_styling_print_theme_css()
 {
-	$ids = apply_filters('onepress_styling_theme_mod_setting_ids', array( 'onepress_element_styling' ));
+	$ids = apply_filters(
+		'onepress_styling_theme_mod_setting_ids',
+		array(
+			'onepress_element_styling',
+			'onepress_element_styling_single',
+			'onepress_element_styling_fixed_states',
+		)
+	);
 	if (! is_array($ids) || empty($ids)) {
 		return;
 	}

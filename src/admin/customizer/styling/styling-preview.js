@@ -3,8 +3,13 @@
  */
 import { buildStylingCss } from './buildStylingCss';
 import { buildGoogleFontsCss2Href, collectMergedGoogleFontAxes } from './stylingGoogleFonts';
+import { bindStylingSelectorPickPreview } from './stylingSelectorPickPreview';
 
-const DEFAULT_SETTING_IDS = ['onepress_element_styling'];
+const DEFAULT_SETTING_IDS = [
+	'onepress_element_styling',
+	'onepress_element_styling_single',
+	'onepress_element_styling_fixed_states',
+];
 const GOOGLE_LINK_ID = 'onepress-styling-google-fonts-preview';
 
 /** Avoid duplicate value.bind when preview-ready runs more than once (iframe refresh). */
@@ -94,4 +99,5 @@ export function bindOnepressStylingPreview($, api, settingIds = DEFAULT_SETTING_
 		}
 	}
 	paintAll();
+	bindStylingSelectorPickPreview(api);
 }

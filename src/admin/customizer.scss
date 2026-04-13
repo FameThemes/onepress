@@ -113,6 +113,29 @@
   text-decoration: underline;
 }
 
+.block {
+  display: block;
+}
+.mt-1 {
+  margin-top: 4px;
+}
+.mt-2 {
+  margin-top: 8px;
+}
+.mt-3 {
+  margin-top: 12px;
+}
+.mt-4 {
+  margin-top: 16px;
+}
+.mt-5 {
+  margin-top: 20px;
+}
+
+:root {
+  --opc-panel-spacing: 8px;
+}
+
 li#accordion-panel-onepress_options > .accordion-section-title,
 li#accordion-panel-onepress_typo > .accordion-section-title {
   /* padding-left: 14px; */
@@ -794,15 +817,52 @@ body .wp-full-overlay {
 
 /* Control: styling — one root .onepress-styling; descendants: short names (see .cursor/rules/onepress-ui-classes.mdc) */
 
-.styling-root .components-input-control__container {
-  .components-input-control__input {
-    min-height: 32px !important;
-    height: 32px !important;
+body.wp-customizer .media-modal {
+  z-index: 9000000;
+}
+body.wp-customizer .media-modal-backdrop {
+  z-index: 8000000;
+}
+ 
+.styling-root {
+  .components-input-control__container {
+    .components-input-control__input:not(.is-small) {
+      min-height: 32px !important;
+      height: 32px !important;
+    }
+  }
+
+  .components-button:not(.is-small, .components-custom-gradient-picker__control-point-button, [class^="components-custom-gradient-"] ) {
+    height: 32px;
   }
 }
+
+.group-count-1 {
+  .popover-header,
+  .onepress-styling-editor-popover__title,
+  .onepress-styling-editor-popover__header {
+    display: none;
+  }
+  .components-panel {
+    border: 0px none;
+  }
+  .acc-panel .components-panel__body {
+    margin-top: 0;
+    padding: 0;
+    border: 0px none;
+    > .components-panel__body-title {
+      display: none;
+    }
+  }
+
+  .components-panel__body-toggle {
+    display: none;
+  }
+}
+
 .onepress-styling {
   .states {
-    margin: 10px 0;
+    margin: 10px 0 0px;
   }
 
   .states-toolbar {
@@ -816,7 +876,13 @@ body .wp-full-overlay {
     flex-wrap: wrap;
   }
 
-  .states-toolbar .components-button.onepress-styling-manage-states {
+  .components-base-control {
+    .components-base-control__field {
+      margin-bottom: 0px;
+    }
+  }
+
+  .states-toolbar .components-button.onepress-styling-manage-states:not(.is-small) {
     min-width: 32px;
     width: 32px;
     height: 32px;
@@ -826,18 +892,10 @@ body .wp-full-overlay {
     justify-content: center;
   }
 
-  .styling-selector-field {
-    margin: 8px 0 10px;
-  }
-
   .device-hint {
     margin: 4px 0 10px;
     font-size: 12px;
     line-height: 1.45;
-  }
-
-  .rfield {
-    margin-bottom: 12px;
   }
 
   .rfield-h {
@@ -849,12 +907,11 @@ body .wp-full-overlay {
   }
 
   .rfield-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #1e1e1e;
     flex: 1;
     min-width: 0;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
   }
 
   .rfield-body {
@@ -871,9 +928,9 @@ body .wp-full-overlay {
     flex-shrink: 0;
 
     &.components-button {
-      min-width: 28px;
-      width: 28px;
-      height: 28px;
+      min-width: 22px;
+      width: 22px;
+      height: 22px;
       padding: 0;
       display: inline-flex;
       align-items: center;
@@ -882,13 +939,14 @@ body .wp-full-overlay {
   }
 
   .device-dashicon {
-    width: 20px;
-    height: 20px;
-    font-size: 20px;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
     line-height: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    color: #888888;
   }
 
   .device-popover.components-popover {
@@ -1001,6 +1059,7 @@ body .wp-full-overlay {
       width: 60px;
       flex-shrink: 0;
       margin: 0 !important;
+      height: 26px;
 
       &.is-full {
         width: 100%;
@@ -1012,21 +1071,59 @@ body .wp-full-overlay {
     margin-top: 8px;
   }
 
-  .acc-panel .components-panel__body {
-    margin-top: 0;
+  .components-panel__body-toggle.components-button {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0px;
+    padding: calc(var(--opc-panel-spacing) * 2);
   }
 
-  .enum-group {
-    margin: 10px 0;
+  .acc-panel {
+    border-width: 1px 0px 0px 0px;
+    .fields {
+      padding: var(--opc-panel-spacing);
+      .components-flex:not(.list-fields) {
+        gap: 4px;
+      }
+    }
+    .components-panel__body {
+      margin-top: 0;
+      padding: 0px;
+      border-style: solid;
+      border-width: 0px 0px 1px 0px;
+      border-color: #e0e0e0;
+      &:last-child {
+        border-width: 0px;
+      }
+      &.is-opened {
+        padding: var(--opc-panel-spacing);
+        // .components-panel__body-title {
+        //   margin: 0px -8px;
+        // }
+        > .components-panel__body-title {
+          margin: calc(var(--opc-panel-spacing) * -1)
+            calc(var(--opc-panel-spacing) * -1)
+            0;
+          padding: calc(var(--opc-panel-spacing) * -2);
+          border-bottom: 1px solid #e0e0e0;
+          background: #f0f0f0;
+        }
+      }
+    }
+  }
+  .components-panel__body > .components-panel__body-title {
+    margin: 0px;
+    padding: 0px;
   }
 
   .enum-label {
     display: block;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
     margin-bottom: 4px;
-    color: #1e1e1e;
   }
 
   .enum-buttons {
@@ -1139,14 +1236,34 @@ body .wp-full-overlay {
 }
 
 /* Main styling editor popover (Edit) — portaled outside .onepress-styling */
-.onepress-styling-editor-popover .components-popover__content {
-  width: min(100vw - 24px, 480px);
-  max-width: 480px;
+//
+.onepress-styling-editor-popover {
+  width: min(100vw - 24px, 300px);
+  max-width: 300px;
   box-sizing: border-box;
-  padding: 12px 14px;
   max-height: min(88vh, 720px);
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: none;
+  padding: 0px;
+  .components-popover__content {
+    width: 100%;
+    display: flex;
+    padding: 0px;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .popover-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fff;
+    padding: var(--opc-panel-spacing);
+  }
+  .popover-body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 }
 
 .onepress-styling-editor-popover__inner {
@@ -1154,13 +1271,12 @@ body .wp-full-overlay {
 }
 
 .onepress-styling-editor-popover__title {
-  margin: 0 0 10px;
   font-size: 13px;
   font-weight: 600;
 }
 
-/* States popover is portaled outside .onepress-styling */
-.onepress-styling-states-popover .components-popover__content {
+/* Settings popover is portaled outside .onepress-styling */
+.onepress-styling-settings-popover .components-popover__content {
   width: min(100vw - 24px, 400px);
   max-width: 400px;
   box-sizing: border-box;
@@ -1170,23 +1286,29 @@ body .wp-full-overlay {
   overflow-y: auto;
 }
 
-.onepress-styling-states-popover__inner {
+.onepress-styling-settings-popover__inner {
   min-width: 0;
 }
 
-.onepress-styling-states-popover__title {
+.onepress-styling-settings-popover__title {
   margin: 0 0 4px;
   font-size: 13px;
   font-weight: 600;
 }
 
-.onepress-styling-states-popover__hint {
+.onepress-styling-settings-popover__target-settings {
+  margin: 0 0 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dcdcde;
+}
+
+.onepress-styling-settings-popover__hint {
   margin: 0 0 10px;
   font-size: 12px;
   line-height: 1.45;
 }
 
-.onepress-styling-states-popover__subtitle {
+.onepress-styling-settings-popover__subtitle {
   margin: 12px 0 6px;
   font-size: 11px;
   font-weight: 600;
@@ -1194,7 +1316,7 @@ body .wp-full-overlay {
   color: #1e1e1e;
 }
 
-.onepress-styling-states-popover__row {
+.onepress-styling-settings-popover__row {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -1213,17 +1335,17 @@ body .wp-full-overlay {
   }
 }
 
-.onepress-styling-states-popover__row-settings {
+.onepress-styling-settings-popover__row-settings {
   border-top: 1px solid #ccc;
   padding: 10px;
 }
 
-.onepress-styling-states-popover__row--locked {
+.onepress-styling-settings-popover__row--locked {
   opacity: 0.92;
 }
 
-.onepress-styling-states-popover__drag-spacer,
-.onepress-styling-states-popover__drag {
+.onepress-styling-settings-popover__drag-spacer,
+.onepress-styling-settings-popover__drag {
   flex: 0 0 28px;
   width: 28px;
   height: 28px;
@@ -1233,7 +1355,7 @@ body .wp-full-overlay {
   color: #757575;
 }
 
-.onepress-styling-states-popover__drag {
+.onepress-styling-settings-popover__drag {
   cursor: grab;
   touch-action: none;
 
@@ -1242,28 +1364,28 @@ body .wp-full-overlay {
   }
 }
 
-.onepress-styling-states-popover__drag-spacer {
+.onepress-styling-settings-popover__drag-spacer {
   visibility: hidden;
 }
 
-.onepress-styling-states-popover__row-main {
+.onepress-styling-settings-popover__row-main {
   flex: 1;
   min-width: 0;
 }
 
-.onepress-styling-states-popover__selector-preview {
+.onepress-styling-settings-popover__selector-preview {
   display: block;
   margin-top: 2px;
   font-size: 11px;
   word-break: break-all;
 }
 
-.onepress-styling-states-popover__settings-toggle.components-button,
-.onepress-styling-states-popover__remove.components-button {
+.onepress-styling-settings-popover__settings-toggle.components-button,
+.onepress-styling-settings-popover__remove.components-button {
   flex-shrink: 0;
 }
 
-.onepress-styling-states-popover__preset-buttons {
+.onepress-styling-settings-popover__preset-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -1301,12 +1423,12 @@ body .wp-full-overlay {
 
 /* Fake input: label comes from wrapping BaseControl (TextStyleFields) */
 .onepress-styling
-  .styling-font-family-trigger.styling-font-family-trigger--input-like {
+  .styling-font-family-trigger.styling-font-family-trigger--input-like:not(.is-small) {
   display: flex;
   align-items: center;
   width: 100%;
   margin: 0;
-  min-height: 40px;
+  min-height: 32px;
   padding: 6px 32px 6px 12px;
   border: 1px solid #949494;
   border-radius: 2px;
@@ -1489,4 +1611,16 @@ body .wp-full-overlay {
 .styling-font-picker__footer {
   flex-shrink: 0;
   padding-top: 4px;
+}
+
+.styling-list-item {
+  border: 1px solid #c3c4c7;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+
+  font-size: 13px;
+  font-weight: 600;
+  background: #f6f7f7;
+  color: #1d2327;
+  padding: 10px;
+  border-radius: 4px;
 }

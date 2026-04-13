@@ -1,12 +1,12 @@
 /**
- * Popover: reorder states (drag), rename labels, remove; Normal locked at top.
+ * Popover: target (item name, base selector) + states (reorder, labels, suffixes).
  * Built-in pseudo states store per-state suffixes (e.g. :hover) combined with _meta.baseSelector when building CSS.
  */
 import { Button, Icon, Popover, TextControl } from '@wordpress/components';
+import { shouldIgnoreStylingPopoverFocusOutside } from '../stylingPopoverFocusOutside';
 import { dragHandle, settings, trash } from '@wordpress/icons';
 import { __, sprintf } from '@wordpress/i18n';
 import { useCallback, useEffect, useMemo, useState } from '@wordpress/element';
-import { composeStylingFullSelector } from '../buildStylingCss';
 
 function cloneValue(v) {
 	return JSON.parse(JSON.stringify(v));
@@ -79,8 +79,15 @@ const RESERVED_STATE_KEYS = new Set(['_meta', '_onepressstyling']);
  * @param {string[]} props.previewDeviceIds
  * @param {string} props.activeStateKey
  * @param {(i: number) => void} props.setStateIndex
+ * @param {boolean} [props.allowAddRemoveStates] When false, fixed state list: no presets/custom add, no remove.
+ * @param {boolean} [props.multiple] Multi-target control: show item name field.
+ * @param {string} [props.lockedBaseSelector] Non-empty when base selector is fixed in PHP (hide field).
+ * @param {boolean} [props.editableBaseSelector]
+ * @param {string} [props.metaBaseSelector]
+ * @param {(v: string) => void} [props.onBaseSelectorChange]
+ * @param {(v: string) => void} [props.onItemTitleChange]
  */
-export function StylingStatesPopover({
+export function StylingSettingsPopover({
 	anchor,
 	isOpen,
 	onClose,
@@ -89,6 +96,13 @@ export function StylingStatesPopover({
 	previewDeviceIds,
 	activeStateKey,
 	setStateIndex,
+	allowAddRemoveStates = true,
+	multiple = false,
+	lockedBaseSelector = '',
+	editableBaseSelector = true,
+	metaBaseSelector = '',
+	onBaseSelectorChange = () => {},
+	onItemTitleChange = () => {},
 }) {
 	const [draggedRestIndex, setDraggedRestIndex] = useState(null);
 	const [customKeyDraft, setCustomKeyDraft] = useState('');
@@ -190,11 +204,11 @@ export function StylingStatesPopover({
 			const updated = states.map((e, i) =>
 				i === globalIndex
 					? {
-						[stateKey]: {
-							...row,
-							label: newLabel,
-						},
-					}
+							[stateKey]: {
+								...row,
+								label: newLabel,
+							},
+						}
 					: e
 			);
 			next._meta.states = updated;
@@ -222,11 +236,11 @@ export function StylingStatesPopover({
 				const updated = states.map((e, i) =>
 					i === globalIndex
 						? {
-							[stateKey]: {
-								...row,
-								selector: '',
-							},
-						}
+								[stateKey]: {
+									...row,
+									selector: '',
+								},
+							}
 						: e
 				);
 				next._meta.states = updated;
@@ -235,11 +249,11 @@ export function StylingStatesPopover({
 				const updated = states.map((e, i) =>
 					i === globalIndex
 						? {
-							[stateKey]: {
-								...row,
-								selector: sel,
-							},
-						}
+								[stateKey]: {
+									...row,
+									selector: sel,
+								},
+							}
 						: e
 				);
 				next._meta.states = updated;
@@ -374,37 +388,78 @@ export function StylingStatesPopover({
 	}
 
 	const normalRow = normalEntry?.normal;
+	const showTargetSettings = multiple || !lockedBaseSelector;
 
 	return (
 		<Popover
 			anchor={anchor}
 			onClose={onClose}
-			placement="bottom-start"
+			onFocusOutside={(e) => {
+				if (shouldIgnoreStylingPopoverFocusOutside(e)) {
+					return;
+				}
+				onClose();
+			}}
+			placement="bottom"
 			offset={8}
-			className="onepress-styling-states-popover"
-			focusOnMount="firstElement"
+			className="onepress-styling-settings-popover"
 			shift
+			noArrow={false}
 		>
-			<div className="onepress-styling-states-popover__inner">
-				<p className="onepress-styling-states-popover__title">
-					{__('States', 'onepress')}
-				</p>
-				<p className="description onepress-styling-states-popover__hint">
-					{__(
-						'Drag to reorder (Normal stays first). The printed selector is the base target plus each state’s suffix (e.g. :hover).',
-						'onepress'
-					)}
-				</p>
+			<div className="onepress-styling-settings-popover__inner">
+				<p className="onepress-styling-settings-popover__title">{__('Settings', 'onepress')}</p>
 
-				<div className="onepress-styling-states-popover__list flex flex-col gap-1" role="list">
+				{showTargetSettings ? (
+					<div className="onepress-styling-settings-popover__target-settings flex flex-col gap-3">
+						{multiple ? (
+							<TextControl
+								__nextHasNoMarginBottom
+								className="styling-item-name-field"
+								label={__('Item name', 'onepress')}
+								help={__('Label shown in the list for this target.', 'onepress')}
+								value={String(value?.title ?? '')}
+								onChange={onItemTitleChange}
+								autoComplete="off"
+								spellCheck={false}
+							/>
+						) : null}
+						{!lockedBaseSelector ? (
+							<TextControl
+								__nextHasNoMarginBottom
+								className="styling-selector-field"
+								label={__('Base CSS selector', 'onepress')}
+								help={
+									editableBaseSelector
+										? __(
+												'Rules apply to this target. Each state can add a suffix (e.g. :hover) in its settings or below when that tab is active.',
+												'onepress'
+											)
+										: __(
+												'The base selector is fixed for this control and cannot be changed here.',
+												'onepress'
+											)
+								}
+								value={metaBaseSelector}
+								onChange={onBaseSelectorChange}
+								disabled={!editableBaseSelector}
+								autoComplete="off"
+								spellCheck={false}
+							/>
+						) : null}
+					</div>
+				) : null}
+
+				<p className="onepress-styling-settings-popover__subtitle">{__('States', 'onepress')}</p>
+
+				<div className="onepress-styling-settings-popover__list flex flex-col gap-1" role="list">
 					{normalEntry ? (
 						<div
 							key="normal"
-							className="onepress-styling-states-popover__row onepress-styling-states-popover__row--locked"
+							className="onepress-styling-settings-popover__row onepress-styling-settings-popover__row--locked"
 						>
 							<div className="w-full flex justify-between items-center">
-								<span className="onepress-styling-states-popover__drag-spacer" aria-hidden />
-								<div className="onepress-styling-states-popover__row-main font-bold">
+								<span className="onepress-styling-settings-popover__drag-spacer" aria-hidden />
+								<div className="onepress-styling-settings-popover__row-main font-bold">
 									<span>{normalRow?.label}</span>
 								</div>
 							</div>
@@ -419,7 +474,7 @@ export function StylingStatesPopover({
 						return (
 							<div
 								key={stateKey}
-								className="onepress-styling-states-popover__row"
+								className="onepress-styling-settings-popover__row"
 								onDragOver={(e) => {
 									e.preventDefault();
 									e.dataTransfer.dropEffect = 'move';
@@ -435,7 +490,7 @@ export function StylingStatesPopover({
 							>
 								<div className="w-full flex justify-between items-center">
 									<span
-										className="onepress-styling-states-popover__drag"
+										className="onepress-styling-settings-popover__drag"
 										draggable
 										aria-label={__('Drag to reorder', 'onepress')}
 										role="img"
@@ -448,12 +503,12 @@ export function StylingStatesPopover({
 									>
 										<Icon icon={dragHandle} size={20} />
 									</span>
-									<div className="grow onepress-styling-states-popover__row-main font-bold">
+									<div className="grow onepress-styling-settings-popover__row-main font-bold">
 										<span>{label}</span>
 									</div>
-									<div className="onepress-styling-states-popover__row-actions">
+									<div className="onepress-styling-settings-popover__row-actions">
 										<Button
-											className="onepress-styling-states-popover__settings-toggle"
+											className="onepress-styling-settings-popover__settings-toggle"
 											icon={settings}
 											variant="tertiary"
 											size="small"
@@ -462,23 +517,25 @@ export function StylingStatesPopover({
 											label={__('State settings', 'onepress')}
 											onClick={() => toggleRowSettings(stateKey)}
 										/>
-										<Button
-											className="onepress-styling-states-popover__remove"
-											icon={trash}
-											label={sprintf(
-												/* translators: %s: state key */
-												__('Remove state %s', 'onepress'),
-												stateKey
-											)}
-											onClick={() => onRemoveAt(gIdx)}
-											variant="tertiary"
-											size="small"
-											isDestructive
-										/>
+										{allowAddRemoveStates ? (
+											<Button
+												className="onepress-styling-settings-popover__remove"
+												icon={trash}
+												label={sprintf(
+													/* translators: %s: state key */
+													__('Remove state %s', 'onepress'),
+													stateKey
+												)}
+												onClick={() => onRemoveAt(gIdx)}
+												variant="tertiary"
+												size="small"
+												isDestructive
+											/>
+										) : null}
 									</div>
 								</div>
 								{settingsOpen ? (
-									<div className="flex flex-col gap-3 onepress-styling-states-popover__row-settings">
+									<div className="flex flex-col gap-3 onepress-styling-settings-popover__row-settings">
 										<TextControl
 											__nextHasNoMarginBottom
 											label={__('Tab label', 'onepress')}
@@ -505,55 +562,57 @@ export function StylingStatesPopover({
 					})}
 				</div>
 
-				<div className="onepress-styling-states-popover__presets">
-					<p className="onepress-styling-states-popover__subtitle">
-						{__('Add pseudo-state', 'onepress')}
-					</p>
-					<div className="onepress-styling-states-popover__preset-buttons">
-						{BUILTIN_PRESETS.map((p) => (
-							<Button
-								key={p.key}
-								variant="secondary"
-								size="small"
-								disabled={takenKeys.has(p.key)}
-								onClick={() => onAddPreset(p)}
-							>
-								{p.label}
-							</Button>
-						))}
-					</div>
-				</div>
-
-				<div className="onepress-styling-states-popover__custom">
-					<p className="onepress-styling-states-popover__subtitle">
-						{__('Custom state', 'onepress')}
-					</p>
-					{customError ? (
-						<p className="description" role="alert">
-							{customError}
+				{allowAddRemoveStates ? (
+					<div className="onepress-styling-settings-popover__presets">
+						<p className="onepress-styling-settings-popover__subtitle">
+							{__('Add pseudo-state', 'onepress')}
 						</p>
-					) : null}
-					<div className="flex gap-2 justify-between items-center">
-						<div className='grow'>
-							<TextControl
-								__nextHasNoMarginBottom
-
-								value={customKeyDraft}
-								onChange={(v) => {
-									setCustomError('');
-									setCustomKeyDraft(v);
-								}}
-								placeholder={__('e.g. my-state', 'onepress')}
-								autoComplete="off"
-								spellCheck={false}
-							/>
+						<div className="onepress-styling-settings-popover__preset-buttons">
+							{BUILTIN_PRESETS.map((p) => (
+								<Button
+									key={p.key}
+									variant="secondary"
+									size="small"
+									disabled={takenKeys.has(p.key)}
+									onClick={() => onAddPreset(p)}
+								>
+									{p.label}
+								</Button>
+							))}
 						</div>
-						<Button variant="primary" onClick={onAddCustom}>
-							{__('Add', 'onepress')}
-						</Button>
 					</div>
+				) : null}
 
-				</div>
+				{allowAddRemoveStates ? (
+					<div className="onepress-styling-settings-popover__custom">
+						<p className="onepress-styling-settings-popover__subtitle">
+							{__('Custom state', 'onepress')}
+						</p>
+						{customError ? (
+							<p className="description" role="alert">
+								{customError}
+							</p>
+						) : null}
+						<div className="flex gap-2 justify-between items-center">
+							<div className="grow">
+								<TextControl
+									__nextHasNoMarginBottom
+									value={customKeyDraft}
+									onChange={(v) => {
+										setCustomError('');
+										setCustomKeyDraft(v);
+									}}
+									placeholder={__('e.g. my-state', 'onepress')}
+									autoComplete="off"
+									spellCheck={false}
+								/>
+							</div>
+							<Button variant="primary" onClick={onAddCustom}>
+								{__('Add', 'onepress')}
+							</Button>
+						</div>
+					</div>
+				) : null}
 			</div>
 		</Popover>
 	);

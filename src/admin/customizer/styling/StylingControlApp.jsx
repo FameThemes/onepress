@@ -1,10 +1,17 @@
 /**
  * Customizer control `styling`: state tabs + accordion groups; device via icons on responsive fields.
  */
-import { Button, ButtonGroup, Icon, Popover, TextControl } from '@wordpress/components';
-import { settings, pencil, rotateLeft } from '@wordpress/icons';
+import {
+	Button,
+	ButtonGroup,
+	__experimentalConfirmDialog as ConfirmDialog,
+	Icon,
+	Popover,
+	TextControl,
+} from '@wordpress/components';
+import { pencil, rotateLeft, settings } from '@wordpress/icons';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	bindCustomizerPreviewDevice,
 	getCustomizerPreviewDevice,
@@ -12,10 +19,28 @@ import {
 } from './customizerPreviewDeviceSync';
 import { parseDeclarationForm, patchDeclarationForm } from './declarationForm';
 import { StylingDeviceProvider } from './components';
-import { StylingAccordionPanels } from './StylingAccordionPanels';
+import { resolveAllowedGroupIds, StylingAccordionPanels } from './StylingAccordionPanels';
 import { rebuildFontSlicesInValue } from './stylingGoogleFonts';
 import { useGoogleFontFamilies } from './useGoogleFontFamilies';
-import { StylingStatesPopover } from './components/StylingStatesPopover';
+import { StylingSettingsPopover } from './components/StylingSettingsPopover';
+import { shouldIgnoreStylingPopoverFocusOutside } from './stylingPopoverFocusOutside';
+import {
+	getFixedStatesTemplate,
+	getStatesStructureMode,
+	normalizeStylingRootForStatesPolicy,
+} from './stylingStatesPolicy';
+
+const IconTarget = ({ size = 24 }) => {
+	return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-focus-2">
+		<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+		<path d="M11.5 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" />
+		<path d="M5 12a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+		<path d="M12 3l0 2" />
+		<path d="M3 12l2 0" />
+		<path d="M12 19l0 2" />
+		<path d="M19 12l2 0" />
+	</svg>;
+}
 
 /**
  * @param {JQueryStatic} $ jQuery
@@ -55,11 +80,52 @@ function cloneValue(v) {
 }
 
 /**
+ * @param {Record<string, unknown>} singleClone
+ * @param {string} itemTitle
+ * @returns {Record<string, unknown>}
+ */
+function wrapSingleAsMulti(singleClone, itemTitle) {
+	const { items: _drop, ...rest } = singleClone;
+	const base = typeof singleClone._meta?.baseSelector === 'string' ? singleClone._meta.baseSelector : '';
+	return {
+		_onepressStyling: true,
+		items: [
+			{
+				id: 'item-1',
+				title: itemTitle,
+				selector: base,
+				...rest,
+			},
+		],
+	};
+}
+
+/**
+ * @param {Record<string, unknown>} v
+ * @param {Record<string, unknown> | null} defaultMulti
+ * @param {string} migrateTitle
+ */
+function ensureMultiShape(v, defaultMulti, migrateTitle) {
+	if (v && Array.isArray(v.items) && v.items.length) {
+		return cloneValue(v);
+	}
+	if (v && v._meta && !v.items) {
+		return wrapSingleAsMulti(cloneValue(v), migrateTitle);
+	}
+	if (defaultMulti && typeof defaultMulti === 'object' && Array.isArray(defaultMulti.items) && defaultMulti.items.length) {
+		return cloneValue(defaultMulti);
+	}
+	return { _onepressStyling: true, items: [] };
+}
+
+/**
  * @param {object} props
  * @param {import('@wordpress/customize').Control} props.control
  * @param {JQueryStatic} props.$
  */
 export function StylingControlApp({ control, $ }) {
+	const multiple = Boolean(control.params.styling_multiple);
+
 	const previewDeviceIds = useMemo(() => {
 		const fromPhp = control.params.preview_device_ids;
 		if (Array.isArray(fromPhp) && fromPhp.length) {
@@ -67,6 +133,44 @@ export function StylingControlApp({ control, $ }) {
 		}
 		return ['desktop', 'tablet', 'mobile'];
 	}, [control.params.preview_device_ids]);
+
+	const stylingStatesParam = control.params.styling_states;
+	const statesStructureMode = useMemo(
+		() => getStatesStructureMode(stylingStatesParam !== undefined ? stylingStatesParam : 'all'),
+		[stylingStatesParam]
+	);
+	const fixedStatesTemplate = useMemo(
+		() => getFixedStatesTemplate(stylingStatesParam),
+		[stylingStatesParam]
+	);
+
+	const editableBaseSelector = control.params.editable_base_selector !== false;
+
+	/** Single-target only: non-empty `base_selector` from PHP locks selector and hides the field. */
+	const lockedBaseSelector = useMemo(() => {
+		if (multiple) {
+			return '';
+		}
+		const s = control.params.base_selector;
+		return typeof s === 'string' && s.trim() !== '' ? s.trim() : '';
+	}, [multiple, control.params.base_selector]);
+
+	const visibleStylingGroupIds = useMemo(
+		() => resolveAllowedGroupIds(control.params.styling_groups),
+		[control.params.styling_groups]
+	);
+
+	const editorRootClassName = useMemo(() => {
+		const parts = [
+			'editor',
+			'onepress-styling-editor',
+			`onepress-styling-editor--group-count-${String(visibleStylingGroupIds.length)}`,
+		];
+		for (const id of visibleStylingGroupIds) {
+			parts.push(`onepress-styling-editor--group-${id}`);
+		}
+		return parts.join(' ');
+	}, [visibleStylingGroupIds]);
 
 	const breakpoints = useMemo(
 		() =>
@@ -118,9 +222,16 @@ export function StylingControlApp({ control, $ }) {
 	const [editorPopoverOpen, setEditorPopoverOpen] = useState(false);
 	const [editorPopoverAnchor, setEditorPopoverAnchor] = useState(null);
 	const editButtonRef = useRef(null);
+	const [editingItemIndex, setEditingItemIndex] = useState(null);
+	const editingItemIndexRef = useRef(null);
+	const [previewPickerActive, setPreviewPickerActive] = useState(false);
+	const previewPickerActiveRef = useRef(false);
 	const [statesPopoverOpen, setStatesPopoverOpen] = useState(false);
 	const [statesPopoverAnchor, setStatesPopoverAnchor] = useState(null);
 	const manageStatesButtonRef = useRef(null);
+	const [resetConfirm, setResetConfirm] = useState(
+		/** @type {{ kind: 'all' } | { kind: 'item', index: number } | null} */(null)
+	);
 	const [deviceId, setDeviceId] = useState(() => {
 		const fromPreview = getCustomizerPreviewDevice();
 		if (fromPreview && previewDeviceIds.includes(fromPreview)) {
@@ -135,11 +246,80 @@ export function StylingControlApp({ control, $ }) {
 		}
 		return 'desktop';
 	});
-	const [value, setValue] = useState(() => cloneValue(control.params.value || {}));
+
+	const [value, setValue] = useState(() => {
+		let v = cloneValue(control.params.value || {});
+		if (multiple) {
+			v = ensureMultiShape(v, control.params.default_value || null, __('Item 1', 'onepress'));
+		}
+		const mode = getStatesStructureMode(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
+		const tpl = getFixedStatesTemplate(stylingStatesParam);
+		return normalizeStylingRootForStatesPolicy(v, mode, tpl, previewDeviceIds, multiple);
+	});
+
 	const { families, loading: fontsLoading, error: fontsError } = useGoogleFontFamilies();
 
+	useEffect(() => {
+		const setting = control.setting;
+		if (!setting || typeof setting.bind !== 'function') {
+			return undefined;
+		}
+		const onChange = (val) => {
+			try {
+				const parsed = typeof val === 'string' && val ? JSON.parse(val) : val;
+				if (!parsed || typeof parsed !== 'object') {
+					return;
+				}
+				let next = cloneValue(parsed);
+				if (multiple) {
+					next = ensureMultiShape(next, control.params.default_value || null, __('Item 1', 'onepress'));
+				}
+				const mode = getStatesStructureMode(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
+				const tpl = getFixedStatesTemplate(stylingStatesParam);
+				next = normalizeStylingRootForStatesPolicy(next, mode, tpl, previewDeviceIds, multiple);
+				setValue(next);
+			} catch {
+				// ignore
+			}
+		};
+		setting.bind(onChange);
+		return () => {
+			if (typeof setting.unbind === 'function') {
+				setting.unbind(onChange);
+			}
+		};
+	}, [
+		control.setting,
+		control.params.default_value,
+		multiple,
+		previewDeviceIds,
+		stylingStatesParam,
+	]);
+
+	const structuralPayload = useMemo(() => {
+		if (multiple && Array.isArray(value.items) && value.items[0]) {
+			return value.items[0];
+		}
+		return value;
+	}, [multiple, value]);
+
+	const editorPayload = useMemo(() => {
+		if (!multiple) {
+			return value;
+		}
+		if (
+			!editorPopoverOpen ||
+			editingItemIndex == null ||
+			!Array.isArray(value.items) ||
+			value.items[editingItemIndex] == null
+		) {
+			return null;
+		}
+		return value.items[editingItemIndex];
+	}, [multiple, value, editorPopoverOpen, editingItemIndex]);
+
 	const statesList = useMemo(() => {
-		const meta = value && value._meta;
+		const meta = editorPayload && editorPayload._meta;
 		if (!meta || !Array.isArray(meta.states)) {
 			return [];
 		}
@@ -152,7 +332,7 @@ export function StylingControlApp({ control, $ }) {
 				selector: (row && row.selector) || '',
 			};
 		});
-	}, [value]);
+	}, [editorPayload]);
 
 	const setDeviceIdSynced = useCallback(
 		(id) => {
@@ -174,7 +354,10 @@ export function StylingControlApp({ control, $ }) {
 	const activeKey = activeState ? activeState.key : '';
 
 	const metaBaseSelector = useMemo(() => {
-		const meta = value?._meta;
+		if (lockedBaseSelector) {
+			return lockedBaseSelector;
+		}
+		const meta = editorPayload?._meta;
 		const b = meta?.baseSelector;
 		if (typeof b === 'string' && b.trim() !== '') {
 			return b;
@@ -195,15 +378,36 @@ export function StylingControlApp({ control, $ }) {
 			}
 		}
 		return '';
-	}, [value]);
+	}, [editorPayload, lockedBaseSelector]);
 
-	const commit = useCallback(
-		(next) => {
-			rebuildFontSlicesInValue(next, families);
-			setValue(next);
-			pushStylingPayloadToCustomizer($, control, next);
+	const commitRoot = useCallback(
+		(nextRoot) => {
+			rebuildFontSlicesInValue(nextRoot, families);
+			setValue(nextRoot);
+			pushStylingPayloadToCustomizer($, control, nextRoot);
 		},
 		[$, control, families]
+	);
+
+	const commitActiveItem = useCallback(
+		(nextItem) => {
+			rebuildFontSlicesInValue(nextItem, families);
+			if (multiple) {
+				const i = editingItemIndex;
+				if (i == null || !Array.isArray(value.items)) {
+					return;
+				}
+				const nextRoot = cloneValue(value);
+				nextRoot.items = [...nextRoot.items];
+				nextRoot.items[i] = nextItem;
+				setValue(nextRoot);
+				pushStylingPayloadToCustomizer($, control, nextRoot);
+			} else {
+				setValue(nextItem);
+				pushStylingPayloadToCustomizer($, control, nextItem);
+			}
+		},
+		[multiple, editingItemIndex, value, families, $, control]
 	);
 
 	useEffect(() => {
@@ -212,10 +416,13 @@ export function StylingControlApp({ control, $ }) {
 		}
 		setValue((prev) => {
 			const next = cloneValue(prev);
+			let changed = false;
+			const beforeJson = JSON.stringify(prev);
 			rebuildFontSlicesInValue(next, families);
-			const a = JSON.stringify(prev._meta?.fontSlices ?? null);
-			const b = JSON.stringify(next._meta?.fontSlices ?? null);
-			if (a === b) {
+			if (JSON.stringify(next) !== beforeJson) {
+				changed = true;
+			}
+			if (!changed) {
 				return prev;
 			}
 			pushStylingPayloadToCustomizer($, control, next);
@@ -225,27 +432,28 @@ export function StylingControlApp({ control, $ }) {
 
 	const currentText =
 		activeKey &&
-			value[activeKey] &&
-			typeof value[activeKey] === 'object' &&
-			value[activeKey][deviceId] != null
-			? String(value[activeKey][deviceId])
+			editorPayload &&
+			editorPayload[activeKey] &&
+			typeof editorPayload[activeKey] === 'object' &&
+			editorPayload[activeKey][deviceId] != null
+			? String(editorPayload[activeKey][deviceId])
 			: '';
 
 	const sliceParsed = useMemo(() => parseDeclarationForm(currentText), [currentText]);
 
 	const onChangeText = useCallback(
 		(text) => {
-			if (!activeKey) {
+			if (!activeKey || !editorPayload) {
 				return;
 			}
-			const next = cloneValue(value);
+			const next = cloneValue(editorPayload);
 			if (!next[activeKey] || typeof next[activeKey] !== 'object') {
 				next[activeKey] = {};
 			}
 			next[activeKey][deviceId] = text;
-			commit(next);
+			commitActiveItem(next);
 		},
-		[value, activeKey, deviceId, commit]
+		[editorPayload, activeKey, deviceId, commitActiveItem]
 	);
 
 	const onPatch = useCallback(
@@ -258,12 +466,16 @@ export function StylingControlApp({ control, $ }) {
 
 	const onBaseSelectorChange = useCallback(
 		(nextBase) => {
-			const next = cloneValue(value);
+			if (lockedBaseSelector || !editorPayload) {
+				return;
+			}
+			const next = cloneValue(editorPayload);
 			if (!next._meta) {
 				next._meta = {};
 			}
 			const trimmed = String(nextBase ?? '').trim();
 			next._meta.baseSelector = trimmed === '' ? '.' : trimmed;
+			next.selector = next._meta.baseSelector;
 			if (Array.isArray(next._meta.states)) {
 				next._meta.states = next._meta.states.map((entry) => {
 					if (!entry || typeof entry !== 'object') {
@@ -282,9 +494,131 @@ export function StylingControlApp({ control, $ }) {
 					};
 				});
 			}
-			commit(next);
+			commitActiveItem(next);
 		},
-		[value, commit]
+		[editorPayload, commitActiveItem, lockedBaseSelector]
+	);
+
+	useLayoutEffect(() => {
+		editingItemIndexRef.current = editingItemIndex;
+	}, [editingItemIndex]);
+
+	const cancelPreviewPicker = useCallback(() => {
+		if (!previewPickerActiveRef.current) {
+			return;
+		}
+		previewPickerActiveRef.current = false;
+		setPreviewPickerActive(false);
+		const previewer = typeof window !== 'undefined' ? window.wp?.customize?.previewer : null;
+		if (typeof previewer?.send === 'function') {
+			previewer.send('onepress-styling-cancel-pick');
+		}
+	}, []);
+
+	useEffect(() => {
+		const customize = typeof window !== 'undefined' ? window.wp?.customize : null;
+		const previewer = customize?.previewer;
+		if (typeof previewer?.bind !== 'function') {
+			return undefined;
+		}
+		const onPicked = (payload) => {
+			if (!payload || payload.controlId !== control.id) {
+				return;
+			}
+			if (multiple) {
+				const want = Number(payload.itemIndex);
+				if (want !== editingItemIndexRef.current) {
+					return;
+				}
+			}
+			previewPickerActiveRef.current = false;
+			setPreviewPickerActive(false);
+			onBaseSelectorChange(String(payload.selector || ''));
+		};
+		const onEnded = (payload) => {
+			if (!payload || payload.controlId !== control.id) {
+				return;
+			}
+			previewPickerActiveRef.current = false;
+			setPreviewPickerActive(false);
+		};
+		previewer.bind('onepress-styling-picked', onPicked);
+		previewer.bind('onepress-styling-pick-ended', onEnded);
+		return () => {
+			if (typeof previewer.unbind === 'function') {
+				previewer.unbind('onepress-styling-picked', onPicked);
+				previewer.unbind('onepress-styling-pick-ended', onEnded);
+			}
+		};
+	}, [control.id, multiple, onBaseSelectorChange]);
+
+	useEffect(() => {
+		const onKeyDown = (e) => {
+			if (!previewPickerActiveRef.current) {
+				return;
+			}
+			if (e.key !== 'Escape' && e.keyCode !== 27) {
+				return;
+			}
+			e.preventDefault();
+			e.stopPropagation();
+			if (typeof e.stopImmediatePropagation === 'function') {
+				e.stopImmediatePropagation();
+			}
+			cancelPreviewPicker();
+		};
+		document.addEventListener('keydown', onKeyDown, true);
+		return () => document.removeEventListener('keydown', onKeyDown, true);
+	}, [cancelPreviewPicker]);
+
+	useEffect(() => {
+		if (multiple || !lockedBaseSelector) {
+			return;
+		}
+		setValue((prev) => {
+			const prevBase = String(prev?._meta?.baseSelector ?? prev?.selector ?? '').trim();
+			if (prevBase === lockedBaseSelector) {
+				return prev;
+			}
+			const next = cloneValue(prev);
+			if (!next._meta) {
+				next._meta = {};
+			}
+			next._meta.baseSelector = lockedBaseSelector;
+			next.selector = lockedBaseSelector;
+			if (Array.isArray(next._meta.states)) {
+				next._meta.states = next._meta.states.map((entry) => {
+					if (!entry || typeof entry !== 'object') {
+						return entry;
+					}
+					const k = Object.keys(entry)[0];
+					if (k !== 'normal') {
+						return entry;
+					}
+					const row = entry[k];
+					return {
+						normal: {
+							...(row && typeof row === 'object' ? row : {}),
+							selector: '',
+						},
+					};
+				});
+			}
+			pushStylingPayloadToCustomizer($, control, next);
+			return next;
+		});
+	}, [multiple, lockedBaseSelector, value, $, control]);
+
+	const onItemTitleChange = useCallback(
+		(nextTitle) => {
+			if (!multiple || !editorPayload) {
+				return;
+			}
+			const next = cloneValue(editorPayload);
+			next.title = String(nextTitle ?? '');
+			commitActiveItem(next);
+		},
+		[multiple, editorPayload, commitActiveItem]
 	);
 
 	const unknownCount = Object.keys(sliceParsed.unknown).length;
@@ -292,13 +626,17 @@ export function StylingControlApp({ control, $ }) {
 
 	useLayoutEffect(() => {
 		if (!editorPopoverOpen) {
-			setEditorPopoverAnchor(null);
+			if (!multiple) {
+				setEditorPopoverAnchor(null);
+			}
 			setStatesPopoverOpen(false);
 			setStatesPopoverAnchor(null);
 			return;
 		}
-		setEditorPopoverAnchor(editButtonRef.current);
-	}, [editorPopoverOpen]);
+		if (!multiple) {
+			setEditorPopoverAnchor(editButtonRef.current);
+		}
+	}, [editorPopoverOpen, multiple]);
 
 	useLayoutEffect(() => {
 		if (!statesPopoverOpen) {
@@ -316,15 +654,94 @@ export function StylingControlApp({ control, $ }) {
 		setStatesPopoverOpen(false);
 	}, []);
 
-	const toggleEditorPopover = useCallback(() => {
-		setEditorPopoverOpen((o) => !o);
-	}, []);
-
 	const closeEditorPopover = useCallback(() => {
+		cancelPreviewPicker();
 		setEditorPopoverOpen(false);
 		setStatesPopoverOpen(false);
 		setStatesPopoverAnchor(null);
-	}, []);
+		if (multiple) {
+			setEditingItemIndex(null);
+			setEditorPopoverAnchor(null);
+		}
+	}, [multiple, cancelPreviewPicker]);
+
+	const togglePreviewPicker = useCallback(() => {
+		const previewer = typeof window !== 'undefined' ? window.wp?.customize?.previewer : null;
+		if (typeof previewer?.send !== 'function') {
+			return;
+		}
+		if (previewPickerActiveRef.current) {
+			cancelPreviewPicker();
+			return;
+		}
+		previewPickerActiveRef.current = true;
+		setPreviewPickerActive(true);
+		previewer.send('onepress-styling-start-pick', {
+			controlId: control.id,
+			itemIndex: multiple ? editingItemIndex : null,
+		});
+	}, [control.id, multiple, editingItemIndex, cancelPreviewPicker]);
+
+	const handlePopoverFocusOutside = useCallback(
+		(event) => {
+			if (previewPickerActiveRef.current) {
+				return;
+			}
+			if (shouldIgnoreStylingPopoverFocusOutside(event)) {
+				return;
+			}
+			closeEditorPopover();
+		},
+		[closeEditorPopover]
+	);
+
+	const toggleEditorPopover = useCallback(() => {
+		if (multiple) {
+			return;
+		}
+		if (editorPopoverOpen) {
+			closeEditorPopover();
+			return;
+		}
+		setEditorPopoverOpen(true);
+	}, [multiple, editorPopoverOpen, closeEditorPopover]);
+
+	const toggleEditorForItem = useCallback(
+		(index, anchorEl) => {
+			if (editorPopoverOpen && editingItemIndex === index) {
+				closeEditorPopover();
+				return;
+			}
+			setEditorPopoverAnchor(anchorEl);
+			setEditingItemIndex(index);
+			setStateIndex(0);
+			setEditorPopoverOpen(true);
+		},
+		[editorPopoverOpen, editingItemIndex, closeEditorPopover]
+	);
+
+	const addItem = useCallback(() => {
+		if (!multiple || !defaultStylingPayload) {
+			return;
+		}
+		const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
+		const template = items && items[0] ? cloneValue(items[0]) : null;
+		if (!template || !Array.isArray(value.items)) {
+			return;
+		}
+		const id = `item-${Date.now().toString(36)}`;
+		const newItem = cloneValue(template);
+		newItem.id = id;
+		newItem.title = __('New item', 'onepress');
+		newItem.selector = '.new-target';
+		if (!newItem._meta || typeof newItem._meta !== 'object') {
+			newItem._meta = {};
+		}
+		newItem._meta.baseSelector = '.new-target';
+		const nextRoot = cloneValue(value);
+		nextRoot.items = [...nextRoot.items, newItem];
+		commitRoot(nextRoot);
+	}, [multiple, defaultStylingPayload, value, commitRoot]);
 
 	const onResetToDefault = useCallback(() => {
 		if (!defaultStylingPayload) {
@@ -334,11 +751,63 @@ export function StylingControlApp({ control, $ }) {
 		setStatesPopoverAnchor(null);
 		setEditorPopoverOpen(false);
 		setEditorPopoverAnchor(null);
+		setEditingItemIndex(null);
 		setStateIndex(0);
-		commit(cloneValue(defaultStylingPayload));
-	}, [defaultStylingPayload, commit]);
+		commitRoot(cloneValue(defaultStylingPayload));
+	}, [defaultStylingPayload, commitRoot]);
 
-	if (!activeState || !activeKey) {
+	const onResetItemToDefault = useCallback(
+		(itemIndex) => {
+			if (!multiple || !defaultStylingPayload || !Array.isArray(value.items)) {
+				return;
+			}
+			const defItems = defaultStylingPayload.items;
+			if (!Array.isArray(defItems) || defItems.length === 0) {
+				return;
+			}
+			const current = value.items[itemIndex];
+			if (!current) {
+				return;
+			}
+			const templateIndex = Math.min(itemIndex, defItems.length - 1);
+			const template = cloneValue(defItems[templateIndex]);
+			template.id = current.id;
+			template.title = current.title;
+			const nextRoot = cloneValue(value);
+			nextRoot.items = [...nextRoot.items];
+			nextRoot.items[itemIndex] = template;
+			commitRoot(nextRoot);
+			if (editorPopoverOpen && editingItemIndex === itemIndex) {
+				setStatesPopoverOpen(false);
+				setStatesPopoverAnchor(null);
+				setStateIndex(0);
+			}
+		},
+		[multiple, defaultStylingPayload, value, commitRoot, editorPopoverOpen, editingItemIndex]
+	);
+
+	const structuralStates = useMemo(() => {
+		const meta = structuralPayload && structuralPayload._meta;
+		if (!meta || !Array.isArray(meta.states)) {
+			return [];
+		}
+		return meta.states;
+	}, [structuralPayload]);
+
+	useEffect(() => {
+		const n = structuralStates.length;
+		if (n === 0) {
+			return;
+		}
+		setStateIndex((i) => (i >= n ? 0 : i));
+	}, [structuralStates.length]);
+
+	if (
+		!structuralStates.length ||
+		!structuralStates[0] ||
+		typeof structuralStates[0] !== 'object' ||
+		Object.keys(structuralStates[0]).length !== 1
+	) {
 		return (
 			<p className="description">
 				{__('Invalid styling configuration (no states). Save to reset defaults.', 'onepress')}
@@ -346,122 +815,331 @@ export function StylingControlApp({ control, $ }) {
 		);
 	}
 
+	const itemsList = multiple && Array.isArray(value.items) ? value.items : [];
+
+	const stateTabCount = structuralStates.length;
+
+	const showStatesPopoverButton = statesStructureMode === 'all' || statesStructureMode === 'fixed';
+	const allowAddRemoveInStatesPopover = statesStructureMode === 'all';
+	const showStateTabButtons = stateTabCount > 1;
+	const showStatesToolbar = showStateTabButtons || showStatesPopoverButton;
+
+	const popoverTitle = multiple
+		? editorPayload
+			? sprintf(
+				/* translators: %s: item label */
+				__('Edit styling: %s', 'onepress'),
+				String(editorPayload.title || editorPayload.id || '')
+			)
+			: __('Edit styling', 'onepress')
+		: __('Edit styling', 'onepress');
+
 	return (
 		<StylingDeviceProvider deviceId={deviceId} setDeviceId={setDeviceIdSynced} breakpoints={breakpoints}>
-			<div className="editor">
-				<div className="onepress-styling-control-intro">
-					<div className='w-full flex justify-between items-center'>
-						<span className="grow customize-control-title">{controlLabel}</span>
-						<div className='flex gap-2'>
-							<Button
-								variant="secondary"
-								onClick={onResetToDefault}
-								disabled={!defaultStylingPayload}
-								label={__('Reset to default', 'onepress')}
-								showTooltip
-							>
-								<Icon icon={rotateLeft} size={20} />
-							</Button>
-							<Button
-								ref={editButtonRef}
-								variant="secondary"
-								onClick={toggleEditorPopover}
-								isPressed={editorPopoverOpen}
-								aria-expanded={editorPopoverOpen}
-								aria-haspopup="dialog"
-								label={__('Edit styling', 'onepress')}
-								showTooltip
-							>
-								<Icon icon={pencil} size={20} />
-							</Button>
-						</div>
-					</div>
-
-					<p className="description customize-control-description">{controlDescription}</p>
-				</div>
-
-				{editorPopoverOpen && editorPopoverAnchor ? (
-					<Popover
-						anchor={editorPopoverAnchor}
-						onClose={closeEditorPopover}
-						placement="bottom-end"
-						offset={8}
-						className="onepress-styling-editor-popover"
-						focusOnMount="firstElement"
-						shift
-					>
-						<div className="onepress-styling-editor-popover__inner">
-							<p className="onepress-styling-editor-popover__title">{__('Edit styling', 'onepress')}</p>
-							<div className="onepress-styling styling-root">
-								<div className="states">
-									<div className="states-toolbar flex flex gap-2 justify-between items-center">
-										<ButtonGroup>
-											{statesList.map((s, i) => (
-												<Button
-													key={s.key}
-													variant={i === stateIndex ? 'primary' : 'secondary'}
-													onClick={() => setStateIndex(i)}
-												>
-													{s.label}
-												</Button>
-											))}
-										</ButtonGroup>
-										<Button
-											ref={manageStatesButtonRef}
-											className="onepress-styling-manage-states"
-											variant="secondary"
-											onClick={toggleStatesPopover}
-											aria-expanded={statesPopoverOpen}
-											aria-haspopup="dialog"
-											label={__('Manage states', 'onepress')}
-											showTooltip
-										>
-											<Icon icon={settings} size={20} />
-										</Button>
-									</div>
-								</div>
-
-								<StylingStatesPopover
-									anchor={statesPopoverAnchor}
-									isOpen={statesPopoverOpen}
-									onClose={closeStatesPopover}
-									value={value}
-									commit={commit}
-									previewDeviceIds={previewDeviceIds}
-									activeStateKey={activeKey}
-									setStateIndex={setStateIndex}
-								/>
-
-								<StylingAccordionPanels
-									model={sliceParsed.model}
-									unknownCount={unknownCount}
-									onPatch={onPatch}
-									sliceKey={sliceKey}
-									rawCss={currentText}
-									onRawChange={onChangeText}
-									families={families}
-									fontsLoading={fontsLoading}
-									fontsError={fontsError}
-								/>
-
-								<TextControl
-									__nextHasNoMarginBottom
-									className="styling-selector-field"
-									label={__('Base CSS selector', 'onepress')}
-									help={__(
-										'Rules apply to this target. Each state can add a suffix (e.g. :hover) in its settings or below when that tab is active.',
-										'onepress'
-									)}
-									value={metaBaseSelector}
-									onChange={onBaseSelectorChange}
-									autoComplete="off"
-									spellCheck={false}
-								/>
+			<>
+				<div className={editorRootClassName}>
+					<div className="onepress-styling-control-intro">
+						<div className="w-full flex justify-between items-center">
+							<span className="grow customize-control-title">{controlLabel}</span>
+							<div className="flex gap-2">
+								<Button
+									variant="secondary"
+									onClick={() => setResetConfirm({ kind: 'all' })}
+									disabled={!defaultStylingPayload}
+									label={
+										multiple
+											? __('Reset all items to default', 'onepress')
+											: __('Reset to default', 'onepress')
+									}
+									showTooltip
+								>
+									<Icon icon={rotateLeft} size={20} />
+								</Button>
+								{!multiple ? (
+									<Button
+										ref={editButtonRef}
+										variant="secondary"
+										onClick={toggleEditorPopover}
+										isPressed={editorPopoverOpen}
+										aria-expanded={editorPopoverOpen}
+										aria-haspopup="dialog"
+										label={__('Edit styling', 'onepress')}
+										showTooltip
+									>
+										<Icon icon={pencil} size={20} />
+									</Button>
+								) : null}
 							</div>
 						</div>
-					</Popover>
-				) : null}
-			</div>
+
+						{multiple ? (
+							<div className="onepress-styling-items mt-3">
+								<div className="flex flex-col gap-2">
+									{itemsList.map((item, index) => (
+										<div
+											key={item.id || `idx-${String(index)}`}
+											className="styling-list-item flex justify-between items-center gap-2"
+										>
+											<span className="grow truncate text-sm">
+												{item.title || item.id || sprintf(__('Item %d', 'onepress'), index + 1)}
+											</span>
+
+											<div className="flex gap-2">
+												<Button
+													variant="secondary"
+													onClick={() => setResetConfirm({ kind: 'item', index })}
+													size="small"
+													disabled={!defaultStylingPayload}
+													label={__('Reset this item to default', 'onepress')}
+													showTooltip
+												>
+													<Icon icon={rotateLeft} size={18} />
+												</Button>
+												<Button
+													variant="secondary"
+													onClick={(e) => toggleEditorForItem(index, e.currentTarget)}
+													isPressed={editorPopoverOpen && editingItemIndex === index}
+													aria-expanded={editorPopoverOpen && editingItemIndex === index}
+													aria-haspopup="dialog"
+													label={__('Edit styling', 'onepress')}
+													showTooltip
+													size="small"
+												>
+													<Icon icon={pencil} size={18} />
+												</Button>
+											</div>
+										</div>
+									))}
+								</div>
+								<div className='block mt-2'>
+									<Button variant="secondary" className="mt-2 p-0 h-auto" onClick={addItem}>
+										{__('Add item', 'onepress')}
+									</Button>
+								</div>
+							</div>
+						) : null}
+
+					</div>
+
+
+					{editorPopoverOpen && editorPopoverAnchor && editorPayload ? (
+						<Popover
+							anchor={editorPopoverAnchor}
+							onClose={closeEditorPopover}
+							onFocusOutside={handlePopoverFocusOutside}
+							placement="bottom-end"
+							offset={8}
+							className={`onepress-styling-editor-popover group-count-${String(visibleStylingGroupIds.length)}`}
+							// focusOnMount="firstElement"
+							noArrow={false}
+							shift
+						>
+
+							<div className='popover-header'>
+								<div className='flex items-center gap-2 w-full justify-between'>
+									<div className="grow onepress-styling-editor-popover__title ">{popoverTitle}</div>
+									<div className='flex items-center gap-2'>
+										{showStatesPopoverButton ? (
+											<Button
+												ref={manageStatesButtonRef}
+												className="onepress-styling-manage-states"
+												variant="secondary"
+												onClick={toggleStatesPopover}
+												aria-expanded={statesPopoverOpen}
+												aria-haspopup="dialog"
+												size="small"
+												label={
+													allowAddRemoveInStatesPopover
+														? __('Manage states', 'onepress')
+														: __('State settings', 'onepress')
+												}
+												showTooltip
+											>
+												<Icon icon={settings} size={20} />
+											</Button>
+										) : null}
+
+										{!lockedBaseSelector ? (<>
+											<Button
+												variant="secondary"
+												onClick={togglePreviewPicker}
+												isPressed={previewPickerActive}
+												disabled={!editableBaseSelector}
+												size="small"
+												label={
+													previewPickerActive
+														? __('Cancel picking from preview', 'onepress')
+														: __('Pick a selector from the site preview', 'onepress')
+												}
+												showTooltip
+											>
+												{previewPickerActive
+													? __('Cancel pick', 'onepress')
+													: __('Find target', 'onepress')}
+											</Button>
+										</>) : null}
+
+									</div>
+								</div>
+								<div className=" onepress-styling styling-root">
+									{showStatesToolbar ? (
+										<div className="states">
+											<div className="states-toolbar flex flex gap-2 justify-between items-center">
+												{showStateTabButtons ? (
+													<ButtonGroup>
+														{statesList.map((s, i) => (
+															<Button
+																key={s.key}
+																variant={i === stateIndex ? 'primary' : 'secondary'}
+																onClick={() => setStateIndex(i)}
+															>
+																{s.label}
+
+															</Button>
+														))}
+													</ButtonGroup>
+												) : (
+													<span className="grow" aria-hidden />
+												)}
+											</div>
+										</div>
+									) : null}
+								</div>
+							</div>
+
+							<div className="popover-body grow styling-root onepress-styling onepress-styling-editor-popover__inner">
+
+									{showStatesPopoverButton ? (
+										<StylingSettingsPopover
+											anchor={statesPopoverAnchor}
+											isOpen={statesPopoverOpen}
+											onClose={closeStatesPopover}
+											value={editorPayload}
+											commit={commitActiveItem}
+											previewDeviceIds={previewDeviceIds}
+											activeStateKey={activeKey}
+											setStateIndex={setStateIndex}
+											allowAddRemoveStates={allowAddRemoveInStatesPopover}
+											multiple={multiple}
+											lockedBaseSelector={lockedBaseSelector}
+											editableBaseSelector={editableBaseSelector}
+											metaBaseSelector={metaBaseSelector}
+											onBaseSelectorChange={onBaseSelectorChange}
+											onItemTitleChange={onItemTitleChange}
+										/>
+									) : null}
+
+									<StylingAccordionPanels
+										model={sliceParsed.model}
+										unknownCount={unknownCount}
+										onPatch={onPatch}
+										sliceKey={sliceKey}
+										rawCss={currentText}
+										onRawChange={onChangeText}
+										families={families}
+										fontsLoading={fontsLoading}
+										fontsError={fontsError}
+										stylingGroups={control.params.styling_groups}
+									/>
+
+									{!showStatesPopoverButton ? (
+										<>
+											{multiple ? (
+												<TextControl
+													__nextHasNoMarginBottom
+													className="styling-item-name-field"
+													label={__('Item name', 'onepress')}
+													help={__('Label shown in the list for this target.', 'onepress')}
+													value={String(editorPayload.title ?? '')}
+													onChange={onItemTitleChange}
+													autoComplete="off"
+													spellCheck={false}
+												/>
+											) : null}
+											{!lockedBaseSelector ? (
+												<div className="field-base-selector">
+													<TextControl
+														__nextHasNoMarginBottom
+														className="styling-selector-field"
+														label={__('Base CSS selector', 'onepress')}
+														help={
+															editableBaseSelector
+																? __(
+																		'Rules apply to this target. Each state can add a suffix (e.g. :hover) in its settings or below when that tab is active.',
+																		'onepress'
+																	)
+																: __(
+																		'The base selector is fixed for this control and cannot be changed here.',
+																		'onepress'
+																	)
+														}
+														value={metaBaseSelector}
+														onChange={onBaseSelectorChange}
+														disabled={!editableBaseSelector}
+														autoComplete="off"
+														spellCheck={false}
+													/>
+												</div>
+											) : null}
+										</>
+									) : null}
+
+									
+
+							</div>
+						</Popover>
+					) : null}
+				</div>
+
+				<ConfirmDialog
+					isOpen={resetConfirm !== null}
+					onConfirm={() => {
+						const pending = resetConfirm;
+						setResetConfirm(null);
+						if (!pending) {
+							return;
+						}
+						if (pending.kind === 'all') {
+							onResetToDefault();
+						} else {
+							onResetItemToDefault(pending.index);
+						}
+					}}
+					onCancel={() => setResetConfirm(null)}
+					confirmButtonText={__('Reset', 'onepress')}
+					cancelButtonText={__('Cancel', 'onepress')}
+				>
+					{resetConfirm?.kind === 'all' ? (
+						<p>
+							{multiple
+								? __(
+									'Reset all targets to their default styling? Every item in this list will be restored and unsaved changes will be lost.',
+									'onepress'
+								)
+								: __(
+									'Reset this styling block to its default? Current declarations will be replaced.',
+									'onepress'
+								)}
+						</p>
+					) : null}
+					{resetConfirm?.kind === 'item' ? (
+						<p>
+							{sprintf(
+								/* translators: %s: item label */
+								__(
+									'Reset "%s" to its default styling? This target\'s declarations will be replaced.',
+									'onepress'
+								),
+								String(
+									(Array.isArray(value.items) && value.items[resetConfirm.index]
+										? value.items[resetConfirm.index].title || value.items[resetConfirm.index].id
+										: '') || __('this item', 'onepress')
+								)
+							)}
+						</p>
+					) : null}
+				</ConfirmDialog>
+			</>
 		</StylingDeviceProvider>
 	);
 }
