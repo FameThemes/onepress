@@ -1,0 +1,54 @@
+---
+description: OnePress theme — quy tắc class HTML/CSS Customizer UI và component (một root onepress-*, descendant kiểu Tailwind)
+globs: "**/*.{jsx,tsx,js,scss,css,php}"
+alwaysApply: false
+---
+
+# OnePress: class HTML, CSS và component (Customizer / admin UI)
+
+## Một prefix `onepress-` duy nhất ở root
+
+- Mỗi **vùng UI** (một control, một app mount) có **đúng một** class gốc dạng `onepress-<tên>`, ví dụ: `onepress-styling`, `onepress-background`, `onepress-typography`.
+- **Không** lặp thêm `onepress-` trên các phần tử con: con dùng tên **ngắn, phẳng**, phong cách gần **Tailwind** (một nhiệm vụ một class: layout, spacing, typography, màu).
+
+## Cấu trúc selector CSS
+
+- **Đúng:** scope bằng hậu duệ — `.onepress-styling .items`, `.onepress-styling .item`, `.onepress-styling .device-bar`, `.onepress-styling .flex`, `.onepress-styling .gap-2`.
+- **Sai:** chuỗi prefix lặp hoặc BEM “double” với `onepress-`, ví dụ `onepress-styling---items`, `onepress-styling__item`, `onepress-styling-item`, `onepress-items`.
+
+```jsx
+// ✅ GOOD — một root, con dùng tên ngắn / utility-style
+<div className="onepress-styling">
+  <ul className="items flex flex-col gap-1">
+    <li className="item px-3 py-2 rounded-md">…</li>
+  </ul>
+</div>
+```
+
+```scss
+// ✅ GOOD
+.onepress-styling {
+  .items { list-style: none; }
+  .item { cursor: pointer; }
+}
+```
+
+```html
+<!-- ❌ BAD -->
+<div class="onepress-styling---items">
+<div class="onepress-styling__item onepress-styling__label">
+```
+
+## Component React
+
+- **Container** của control: một phần tử bọc ngoài gán `className="onepress-<control>"`.
+- Component con: **không** thêm prefix `onepress-` vào `className`; truyền `className` tùy chọn cho utility hoặc tên semantic ngắn (`panel`, `row`, `label`).
+- Tránh class dài ghép nhiều tầng `onepress-`; mọi “namespace” CSS nằm ở **một** root.
+
+## Tài liệu trong `plans/` (đọc để hiểu cấu trúc)
+
+- **`plans/element-style-section-control.md`** — kiến trúc dữ liệu styling, accordion nhóm, states, items, responsive.
+- **`plans/components.md`** — map property → component; `CssEnumButtonGroup`, layout field.
+- **`plans/styling-data.json`** — ví dụ payload JSON.
+
+Rule tổng hợp: **`.cursor/rules/onepress-plans.mdc`** (`alwaysApply: true`). Quy tắc đặt tên class (một root `onepress-*`) **không** thay đổi theo plan; plan mô tả **chức năng / schema**, rule UI mô tả **className / SCSS**.

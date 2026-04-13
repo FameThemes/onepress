@@ -1,3 +1,118 @@
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-row {
+  flex-direction: row;
+}
+.flex-column {
+  flex-direction: column;
+}
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+.flex-column-reverse {
+  flex-direction: column-reverse;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+.flex-fill {
+  flex: 1 1 auto;
+}
+.flex-grow-0 {
+  flex-grow: 0;
+}
+.flex-grow {
+  flex-grow: 1;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.gap-1 {
+  gap: 4px;
+}
+.gap-2 {
+  gap: 8px;
+}
+.gap-3 {
+  gap: 12px;
+}
+.gap-4 {
+  gap: 16px;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+.justify-start {
+  justify-content: flex-start;
+}
+.align-center {
+  align-items: center;
+}
+.align-end {
+  align-items: flex-end;
+}
+.align-start {
+  align-items: flex-start;
+}
+.items-center {
+  align-items: center;
+}
+.items-end {
+  align-items: flex-end;
+}
+.items-start {
+  align-items: flex-start;
+}
+.w-full {
+  width: 100%;
+}
+.relative {
+  position: relative;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+.font-normal {
+  font-weight: normal;
+}
+.font-italic {
+  font-style: italic;
+}
+.font-underline {
+  text-decoration: underline;
+}
+
 li#accordion-panel-onepress_options > .accordion-section-title,
 li#accordion-panel-onepress_typo > .accordion-section-title {
   /* padding-left: 14px; */
@@ -675,4 +790,703 @@ body .wp-full-overlay {
   border-left: 4px solid rgb(213, 78, 33);
   display: block;
   margin-bottom: 20px;
+}
+
+/* Control: styling — one root .onepress-styling; descendants: short names (see .cursor/rules/onepress-ui-classes.mdc) */
+
+.styling-root .components-input-control__container {
+  .components-input-control__input {
+    min-height: 32px !important;
+    height: 32px !important;
+  }
+}
+.onepress-styling {
+  .states {
+    margin: 10px 0;
+  }
+
+  .states-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .states-toolbar .components-button-group {
+    flex-wrap: wrap;
+  }
+
+  .states-toolbar .components-button.onepress-styling-manage-states {
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .styling-selector-field {
+    margin: 8px 0 10px;
+  }
+
+  .device-hint {
+    margin: 4px 0 10px;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .rfield {
+    margin-bottom: 12px;
+  }
+
+  .rfield-h {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .rfield-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #1e1e1e;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .rfield-body {
+    .components-base-control__field {
+      margin-bottom: 0;
+    }
+  }
+
+  .rfield-help {
+    margin: 4px 0 0;
+  }
+
+  .device-chip {
+    flex-shrink: 0;
+
+    &.components-button {
+      min-width: 28px;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .device-dashicon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .device-popover.components-popover {
+    .components-menu-item__item {
+      min-height: 36px;
+    }
+  }
+
+  .selector-hint {
+    margin: 8px 0;
+    font-size: 12px;
+
+    code {
+      font-size: 11px;
+      word-break: break-all;
+    }
+  }
+
+  .textarea-mono textarea {
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+  }
+
+  /* Compact color row + popover (ColorPicker) */
+  .alpha-color {
+    max-width: 100%;
+  }
+
+  .alpha-color-row-inner {
+    display: block;
+    position: relative;
+  }
+
+  .alpha-color-swatch-button {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    line-height: 0;
+    color: inherit;
+    font: inherit;
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 25px;
+    height: 25px;
+
+    &:focus {
+      outline: 2px solid var(--wp-admin-theme-color, #2271b1);
+      outline-offset: 2px;
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--wp-admin-theme-color, #2271b1);
+      outline-offset: 2px;
+    }
+  }
+
+  .alpha-color-swatch {
+    display: block;
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+  }
+
+  .alpha-color-value-input {
+    input.components-input-control__input {
+      padding-left: 40px;
+    }
+  }
+
+  .styling-bg-image__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .styling-bg-image .components-focal-point-picker-control {
+    margin-top: 0;
+  }
+
+  .unit-slider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+
+    &.has-range .unit-range-field {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .unit-range-field .components-base-control__field {
+      margin-bottom: 0;
+    }
+    .unit-input {
+      width: 60px;
+      flex-shrink: 0;
+      margin: 0 !important;
+
+      &.is-full {
+        width: 100%;
+      }
+    }
+  }
+
+  .panels {
+    margin-top: 8px;
+  }
+
+  .acc-panel .components-panel__body {
+    margin-top: 0;
+  }
+
+  .enum-group {
+    margin: 10px 0;
+  }
+
+  .enum-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: #1e1e1e;
+  }
+
+  .enum-buttons {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* Margin, padding, insets, border-radius sides — one field per row (full width) */
+  .trbl {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .trbl-block {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dcdcde;
+  }
+
+  .trbl-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .shgen-block .shgen-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 8px;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+
+    .shgen-row-label {
+      flex: 0 0 108px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #1e1e1e;
+      line-height: 1.2;
+    }
+
+    &.unit-slider.has-range .unit-range-field {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .unit-range-field .components-base-control__field {
+      margin-bottom: 0;
+    }
+  }
+
+  /* Inset: [label] … [toggle] — ToggleControl defaults to toggle-first; reorder + space-between */
+  .shgen-block .shgen-inset-toggle {
+    margin-top: 8px;
+
+    .components-toggle-control {
+      margin-bottom: 0;
+    }
+
+    .components-toggle-control .components-h-stack {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 12px;
+    }
+
+    .components-toggle-control .components-form-toggle {
+      order: 2;
+      flex-shrink: 0;
+    }
+
+    .components-toggle-control .components-toggle-control__label {
+      order: 1;
+      flex: 0 0 auto;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #1e1e1e;
+    }
+  }
+
+  .shgen-block .alpha-color {
+    margin-top: 8px;
+  }
+
+  .subsection {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #f0f0f1;
+  }
+
+  .subsection-title {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .unknown-hint {
+    margin: 0 0 8px;
+  }
+}
+
+/* Main styling editor popover (Edit) — portaled outside .onepress-styling */
+.onepress-styling-editor-popover .components-popover__content {
+  width: min(100vw - 24px, 480px);
+  max-width: 480px;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  max-height: min(88vh, 720px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.onepress-styling-editor-popover__inner {
+  min-width: 0;
+}
+
+.onepress-styling-editor-popover__title {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* States popover is portaled outside .onepress-styling */
+.onepress-styling-states-popover .components-popover__content {
+  width: min(100vw - 24px, 400px);
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  max-height: min(72vh, 560px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.onepress-styling-states-popover__inner {
+  min-width: 0;
+}
+
+.onepress-styling-states-popover__title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.onepress-styling-states-popover__hint {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.onepress-styling-states-popover__subtitle {
+  margin: 12px 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #1e1e1e;
+}
+
+.onepress-styling-states-popover__row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 8px;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+
+  .components-base-control {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .components-base-control__field {
+    margin-bottom: 0;
+  }
+}
+
+.onepress-styling-states-popover__row-settings {
+  border-top: 1px solid #ccc;
+  padding: 10px;
+}
+
+.onepress-styling-states-popover__row--locked {
+  opacity: 0.92;
+}
+
+.onepress-styling-states-popover__drag-spacer,
+.onepress-styling-states-popover__drag {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #757575;
+}
+
+.onepress-styling-states-popover__drag {
+  cursor: grab;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.onepress-styling-states-popover__drag-spacer {
+  visibility: hidden;
+}
+
+.onepress-styling-states-popover__row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.onepress-styling-states-popover__selector-preview {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.onepress-styling-states-popover__settings-toggle.components-button,
+.onepress-styling-states-popover__remove.components-button {
+  flex-shrink: 0;
+}
+
+.onepress-styling-states-popover__preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/*
+ * Styling color popover is portaled outside .onepress-styling; constrain size in narrow sidebar.
+ */
+.alpha-color-popover .components-popover__content {
+  padding: 10px;
+  width: 240px;
+  max-width: 240px;
+  box-sizing: border-box;
+  max-height: min(70vh, 520px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.alpha-color-popover__body {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Font family picker (portaled) */
+.onepress-styling .styling-text-font-family .components-base-control__field {
+  margin-bottom: 0;
+}
+
+.onepress-styling .styling-font-family-control {
+  width: 100%;
+}
+
+/* Fake input: label comes from wrapping BaseControl (TextStyleFields) */
+.onepress-styling
+  .styling-font-family-trigger.styling-font-family-trigger--input-like {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  min-height: 40px;
+  padding: 6px 32px 6px 12px;
+  border: 1px solid #949494;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 0 0 transparent;
+  color: #1e1e1e;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  position: relative;
+  font-family: inherit;
+
+  &:hover {
+    border-color: #8c8f94;
+    color: #1e1e1e;
+  }
+
+  &:focus-visible {
+    border-color: var(--wp-admin-theme-color, #2271b1);
+    box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #2271b1);
+    outline: 2px solid transparent;
+  }
+}
+
+.onepress-styling .styling-font-family-trigger__value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.onepress-styling .styling-font-family-trigger__chevron {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  color: #50575e;
+  pointer-events: none;
+}
+
+.styling-font-picker-popover .components-popover__content {
+  width: min(100vw - 48px, 320px);
+  max-width: 320px;
+  box-sizing: border-box;
+  padding: 12px;
+  max-height: min(85vh, 560px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.styling-font-picker-popover__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  flex: 1;
+}
+
+.styling-font-picker__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 8px;
+  font-size: 12px;
+  color: #646970;
+}
+
+.styling-font-picker__loading-label {
+  line-height: 1.4;
+}
+
+.styling-font-picker__error {
+  margin: 0;
+  font-size: 12px;
+  color: #b32d2e;
+}
+
+.styling-font-picker__empty {
+  margin: 0;
+  font-size: 12px;
+  color: #646970;
+}
+
+.styling-font-picker__list {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 120px;
+  border: 1px solid #dcdcde;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.styling-font-picker__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 0 8px;
+  border: none;
+  border-bottom: 1px solid #f0f0f1;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  box-sizing: border-box;
+
+  &:hover,
+  &:focus-visible {
+    background: #f6f7f7;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wp-admin-theme-color, #2271b1);
+    outline-offset: -2px;
+    z-index: 1;
+  }
+
+  &.styling-font-picker__row--system {
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  &.styling-font-picker__row--google {
+    justify-content: center;
+    padding: 4px 8px;
+  }
+}
+
+.styling-font-picker__preview {
+  flex-shrink: 0;
+  width: 120px;
+  height: 28px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.styling-font-picker__preview--empty {
+  display: inline-block;
+  background: repeating-conic-gradient(#e8e8e8 0% 25%, #fff 0% 50%) 50% / 8px
+    8px;
+  border-radius: 2px;
+}
+
+.styling-font-picker__preview--google {
+  width: 100%;
+  max-width: 100%;
+  height: 30px;
+  object-fit: contain;
+}
+
+.styling-font-picker__name--live {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.styling-font-picker__name {
+  flex: 1;
+  min-width: 0;
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.styling-font-picker__footer {
+  flex-shrink: 0;
+  padding-top: 4px;
 }

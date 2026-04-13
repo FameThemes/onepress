@@ -10,6 +10,7 @@ require_once get_template_directory() . '/inc/customize-controls/control-theme-s
 require_once get_template_directory() . '/inc/customize-controls/control-editor.php';
 require_once get_template_directory() . '/inc/customize-controls/control-color-alpha.php';
 require_once get_template_directory() . '/inc/customize-controls/control-repeater.php';
+require_once get_template_directory() . '/inc/customize-controls/control-styling.php';
 require_once get_template_directory() . '/inc/customize-controls/control-category.php';
 require_once get_template_directory() . '/inc/customize-controls/control-pages.php';
 require_once get_template_directory() . '/inc/customize-controls/control-media.php';

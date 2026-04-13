@@ -657,6 +657,7 @@ require get_template_directory() . '/inc/class-config.php';
  * Load Sanitize
  */
 require get_template_directory() . '/inc/sanitize.php';
+require get_template_directory() . '/inc/styling-css.php';
 
 /**
  * Custom Metabox  for this theme.

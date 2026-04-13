@@ -36,6 +36,7 @@ module.exports = {
 				onepress_customizer_settings: 'readonly',
 				quicktags: 'readonly',
 				tinyMCE: 'readonly',
+				wpApiSettings: 'readonly',
 			},
 			rules: {
 				'@wordpress/no-unused-vars-before-return': 'off',

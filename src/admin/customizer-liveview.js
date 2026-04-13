@@ -6,8 +6,9 @@
  * Contains handlers to make Theme Customizer preview reload changes asynchronously.
  */
 
-( function( $ , api ) {
+import { bindOnepressStylingPreview } from './customizer/styling/styling-preview';
 
+( function( $ , api ) {
 
     // Site footer bg
     /*
@@ -84,9 +85,10 @@
 
     }
 
-    // When preview ready
+    // When preview ready: settings are registered; styling postMessage needs this (empty CSS after full reload).
     wp.customize.bind( 'preview-ready', function() {
         update_css();
+        bindOnepressStylingPreview( $, api );
     });
 
     $( window ).resize( function(){

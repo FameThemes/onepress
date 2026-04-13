@@ -17,3 +17,5 @@ npm-debug.log
 
 # Dist file
 *.zip
+
+/plans/

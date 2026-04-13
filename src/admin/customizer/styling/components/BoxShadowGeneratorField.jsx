@@ -1,0 +1,240 @@
+/**
+ * Single box-shadow: offsets, blur, spread, opacity, inset, color → one CSS string.
+ */
+import { RangeControl, TextareaControl, ToggleControl } from '@wordpress/components';
+import { colord } from 'colord';
+import { __ } from '@wordpress/i18n';
+import { useMemo } from '@wordpress/element';
+import {
+	parseBoxShadow,
+	patchLength,
+	serializeBoxShadow,
+} from '../boxShadowGenerator';
+import {
+	clampNumber,
+	parseCssSingleLengthValue,
+	SLIDER_PRESETS,
+} from '../cssUnitSlider';
+import { DeviceSwitcherChip } from './DeviceSwitcherChip';
+import { StylingAlphaColorControl } from './StylingAlphaColorControl';
+
+/**
+ * @param {object} props
+ * @param {Record<string, string | number | boolean>} props.parts
+ * @param {string} props.lengthKey
+ * @param {string} props.label
+ * @param {{ min: number, max: number, step: number, defaultSuffix: string }} props.preset
+ * @param {(next: Record<string, string | number | boolean>) => void} props.onPartsChange
+ */
+function ShadowLengthRow({ parts, lengthKey, label, preset, onPartsChange }) {
+	const value = parts[lengthKey];
+	const parsed = parseCssSingleLengthValue(value, preset.defaultSuffix);
+	const canSlider = parsed !== null;
+	const sliderVal =
+		canSlider && parsed
+			? clampNumber(parsed.num, preset.min, preset.max)
+			: preset.min;
+
+	const apply = (n) => {
+		if (!parsed || n === undefined || n === null || !Number.isFinite(n)) {
+			return;
+		}
+		onPartsChange(
+			patchLength(parts, lengthKey, n, preset.min, preset.max, preset.defaultSuffix)
+		);
+	};
+
+	const onText = (e) => {
+		onPartsChange({ ...parts, [lengthKey]: e.target.value });
+	};
+
+	return (
+		<div className={`shgen-row unit-slider${canSlider ? ' has-range' : ''}`}>
+			<span className="shgen-row-label">{label}</span>
+			{canSlider ? (
+				<>
+					<RangeControl
+						className="unit-range-field"
+						label={label}
+						hideLabelFromVision
+						value={sliderVal}
+						onChange={apply}
+						min={preset.min}
+						max={preset.max}
+						step={preset.step}
+						withInputField={false}
+						__nextHasNoMarginBottom
+					/>
+					<input
+						className="unit-input components-text-control__input"
+						type="text"
+						value={value}
+						onChange={onText}
+						aria-label={label}
+					/>
+				</>
+			) : (
+				<input
+					className="unit-input is-full components-text-control__input"
+					type="text"
+					value={value}
+					onChange={onText}
+					aria-label={label}
+				/>
+			)}
+		</div>
+	);
+}
+
+/**
+ * @param {object} props
+ * @param {number} props.opacity
+ * @param {(n: number) => void} props.onChange
+ */
+function ShadowOpacityRow({ opacity, onChange }) {
+	const label = __('Opacity', 'onepress');
+	const v = Math.min(1, Math.max(0, opacity));
+	return (
+		<div className="shgen-row unit-slider has-range">
+			<span className="shgen-row-label">{label}</span>
+			<RangeControl
+				className="unit-range-field"
+				label={label}
+				hideLabelFromVision
+				value={v}
+				onChange={(n) => {
+					if (n === undefined || n === null || !Number.isFinite(n)) {
+						return;
+					}
+					onChange(Math.min(1, Math.max(0, n)));
+				}}
+				min={0}
+				max={1}
+				step={0.01}
+				withInputField={false}
+				__nextHasNoMarginBottom
+			/>
+			<input
+				className="unit-input components-text-control__input"
+				type="text"
+				value={String(Math.round(v * 1000) / 1000)}
+				onChange={(e) => {
+					const x = parseFloat(e.target.value);
+					if (!Number.isFinite(x)) {
+						return;
+					}
+					onChange(Math.min(1, Math.max(0, x)));
+				}}
+				aria-label={label}
+			/>
+		</div>
+	);
+}
+
+/**
+ * @param {object} props
+ * @param {string} props.value
+ * @param {(v: string) => void} props.onChange
+ */
+export function BoxShadowGeneratorField({ value, onChange }) {
+	const parsed = useMemo(() => parseBoxShadow(value), [value]);
+
+	if (!parsed.ok) {
+		return (
+			<div className="shgen-block trbl-block">
+				<div className="trbl-head">
+					<strong>{__('Box shadow', 'onepress')}</strong>
+					<DeviceSwitcherChip />
+				</div>
+				<p className="description unknown-hint">
+					{__(
+						'This value uses multiple shadows or a color the generator cannot parse. Edit it as CSS, or use a single shadow with a hex, rgb, hsl, or keyword color.',
+						'onepress'
+					)}
+				</p>
+				<TextareaControl value={parsed.raw} onChange={onChange} rows={3} />
+			</div>
+		);
+	}
+
+	const parts = {
+		inset: parsed.inset,
+		offsetX: parsed.offsetX,
+		offsetY: parsed.offsetY,
+		blur: parsed.blur,
+		spread: parsed.spread,
+		colorHex: parsed.colorHex,
+		opacity: parsed.opacity,
+	};
+
+	const push = (nextParts) => {
+		onChange(serializeBoxShadow(nextParts));
+	};
+
+	const colorComposite = colord(parts.colorHex).alpha(parts.opacity).toRgbString();
+
+	return (
+		<div className="shgen-block trbl-block">
+			<div className="trbl-head">
+				<strong>{__('Box shadow', 'onepress')}</strong>
+				<DeviceSwitcherChip />
+			</div>
+			<ShadowLengthRow
+				label={__('Shift right', 'onepress')}
+				parts={parts}
+				lengthKey="offsetX"
+				preset={SLIDER_PRESETS.boxShadowOffset}
+				onPartsChange={push}
+			/>
+			<ShadowLengthRow
+				label={__('Shift down', 'onepress')}
+				parts={parts}
+				lengthKey="offsetY"
+				preset={SLIDER_PRESETS.boxShadowOffset}
+				onPartsChange={push}
+			/>
+			<ShadowLengthRow
+				label={__('Spread', 'onepress')}
+				parts={parts}
+				lengthKey="spread"
+				preset={SLIDER_PRESETS.boxShadowSpread}
+				onPartsChange={push}
+			/>
+			<ShadowLengthRow
+				label={__('Blur', 'onepress')}
+				parts={parts}
+				lengthKey="blur"
+				preset={SLIDER_PRESETS.boxShadowBlur}
+				onPartsChange={push}
+			/>
+			<ShadowOpacityRow
+				opacity={parts.opacity}
+				onChange={(opacity) => push({ ...parts, opacity })}
+			/>
+			<div className="shgen-inset-toggle">
+				<ToggleControl
+					label={__('Inset', 'onepress')}
+					checked={parts.inset}
+					onChange={(inset) => push({ ...parts, inset })}
+					__nextHasNoMarginBottom
+				/>
+			</div>
+			<StylingAlphaColorControl
+				label={__('Color', 'onepress')}
+				value={colorComposite}
+				enableAlpha={false}
+				onChange={(css) => {
+					const c = colord(css);
+					if (!c.isValid()) {
+						return;
+					}
+					push({
+						...parts,
+						colorHex: c.alpha(1).toHex(),
+						opacity: c.alpha(),
+					});
+				}}
+			/>
+		</div>
+	);
+}

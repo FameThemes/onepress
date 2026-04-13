@@ -5,6 +5,7 @@ import { installAlphaColorPicker } from './customizer/alpha-color-picker';
 import { registerAlphaColorControl } from './customizer/control-alpha-color';
 import { initControlBindings } from './customizer/control-bindings';
 import { registerRepeatableControl } from './customizer/control-repeatable';
+import { registerStylingControl } from './customizer/control-styling';
 import { initIconPicker } from './customizer/icon-picker';
 import { installDeparam } from './customizer/jquery-deparam';
 import { initModalEditors } from './customizer/modal-editor';
@@ -19,6 +20,7 @@ installDeparam($);
 installAlphaColorPicker($);
 registerAlphaColorControl(api, $);
 registerRepeatableControl(api, $);
+registerStylingControl(api, $);
 installWpEditor($);
 initModalEditors(api, $);
 

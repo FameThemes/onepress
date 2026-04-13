@@ -1,0 +1,24 @@
+---
+description: Đọc plans/ trước khi làm Customizer styling, schema JSON, component UI — đặc tả cấu trúc theme OnePress
+alwaysApply: true
+---
+
+# Thư mục `plans/` — nguồn đặc tả (đọc trước khi implement)
+
+Mọi thay đổi liên quan **control `onepress_styling`**, **JSON styling**, **responsive / breakpoints**, **repeater items**, **UI Customizer (React)** trong theme OnePress: **ưu tiên đọc** các file sau (cùng cấp trong `plans/`, không phụ thuộc path code cũ).
+
+| File | Nội dung |
+|------|-----------|
+| **`plans/element-style-section-control.md`** | Kiến trúc tổng: layer `state × device`, schema v2 `groups.*`, `_meta.states`, `items[]`, length gộp + `parseCssLength`, **color picker alpha + hex/rgb(a)/hsl(a)**, breakpoint global, nhóm nút enum CSS, phase triển khai, PHP/JS đồng bộ. |
+| **`plans/components.md`** | Map **property → component UI**; `CssEnumButtonGroup`; `LengthFieldRow`, `TrblLinkedBox`, background layer; chỉ tham chiếu `@wordpress/components` / `wp.customize` — không link file theme. |
+| **`plans/styling-data.json`** | Ví dụ JSON + khóa spec: `__description`, `__meta_states_shape`, `__css_length_storage`, **`__color_picker_spec`**. |
+
+## Cách dùng
+
+1. **Thiết kế / refactor** styling control: bắt đầu từ `element-style-section-control.md`, đối chiếu `styling-data.json`.
+2. **Chọn component / field UI:** dùng `components.md`.
+3. Các file plan là **độc lập**; cấu trúc thư mục `src/`, `inc/` có thể khác branch — không suy luận path từ plan.
+
+## Rule liên quan
+
+- Quy tắc class CSS/UI: `.cursor/rules/onepress-ui-classes.mdc`.

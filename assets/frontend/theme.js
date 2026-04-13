@@ -1,147 +1,11 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./node_modules/ev-emitter/ev-emitter.js":
-/*!***********************************************!*\
-  !*** ./node_modules/ev-emitter/ev-emitter.js ***!
-  \***********************************************/
-/***/ (function(module) {
-
-/**
- * EvEmitter v2.1.1
- * Lil' event emitter
- * MIT License
- */
-
-( function( global, factory ) {
-  // universal module definition
-  if (  true && module.exports ) {
-    // CommonJS - Browserify, Webpack
-    module.exports = factory();
-  } else {
-    // Browser globals
-    global.EvEmitter = factory();
-  }
-
-}( typeof window != 'undefined' ? window : this, function() {
-
-function EvEmitter() {}
-
-let proto = EvEmitter.prototype;
-
-proto.on = function( eventName, listener ) {
-  if ( !eventName || !listener ) return this;
-
-  // set events hash
-  let events = this._events = this._events || {};
-  // set listeners array
-  let listeners = events[ eventName ] = events[ eventName ] || [];
-  // only add once
-  if ( !listeners.includes( listener ) ) {
-    listeners.push( listener );
-  }
-
-  return this;
-};
-
-proto.once = function( eventName, listener ) {
-  if ( !eventName || !listener ) return this;
-
-  // add event
-  this.on( eventName, listener );
-  // set once flag
-  // set onceEvents hash
-  let onceEvents = this._onceEvents = this._onceEvents || {};
-  // set onceListeners object
-  let onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || {};
-  // set flag
-  onceListeners[ listener ] = true;
-
-  return this;
-};
-
-proto.off = function( eventName, listener ) {
-  let listeners = this._events && this._events[ eventName ];
-  if ( !listeners || !listeners.length ) return this;
-
-  let index = listeners.indexOf( listener );
-  if ( index != -1 ) {
-    listeners.splice( index, 1 );
-  }
-
-  return this;
-};
-
-proto.emitEvent = function( eventName, args ) {
-  let listeners = this._events && this._events[ eventName ];
-  if ( !listeners || !listeners.length ) return this;
-
-  // copy over to avoid interference if .off() in listener
-  listeners = listeners.slice( 0 );
-  args = args || [];
-  // once stuff
-  let onceListeners = this._onceEvents && this._onceEvents[ eventName ];
-
-  for ( let listener of listeners ) {
-    let isOnce = onceListeners && onceListeners[ listener ];
-    if ( isOnce ) {
-      // remove listener
-      // remove before trigger to prevent recursion
-      this.off( eventName, listener );
-      // unset once flag
-      delete onceListeners[ listener ];
-    }
-    // trigger listener
-    listener.apply( this, args );
-  }
-
-  return this;
-};
-
-proto.allOff = function() {
-  delete this._events;
-  delete this._onceEvents;
-  return this;
-};
-
-return EvEmitter;
-
-} ) );
-
-
-/***/ }),
-
-/***/ "./src/frontend/fontawesome-v6/css/all.css":
-/*!*************************************************!*\
-  !*** ./src/frontend/fontawesome-v6/css/all.css ***!
-  \*************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
-/***/ "./src/frontend/fontawesome-v6/css/v4-shims.css":
-/*!******************************************************!*\
-  !*** ./src/frontend/fontawesome-v6/css/v4-shims.css ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
-/***/ "./src/frontend/inc/theme.js":
+/***/ "./src/frontend/inc/theme.js"
 /*!***********************************!*\
   !*** ./src/frontend/inc/theme.js ***!
   \***********************************/
-/***/ (() => {
+() {
 
 var onepressIsMobile = {
   Android: function () {
@@ -1016,13 +880,13 @@ jQuery(function ($) {
   }
 });
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/libs/FitVids.js":
+/***/ "./src/frontend/libs/FitVids.js"
 /*!**************************************!*\
   !*** ./src/frontend/libs/FitVids.js ***!
   \**************************************/
-/***/ (() => {
+() {
 
 /*jshint browser:true */
 /*!
@@ -1098,13 +962,13 @@ jQuery(function ($) {
   // Works with either jQuery or Zepto
 })(window.jQuery || window.Zepto);
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/libs/Morphext/morphext.js":
+/***/ "./src/frontend/libs/Morphext/morphext.js"
 /*!************************************************!*\
   !*** ./src/frontend/libs/Morphext/morphext.js ***!
   \************************************************/
-/***/ (() => {
+() {
 
 /*!
  * Morphext - Text Rotating Plugin for jQuery
@@ -1176,26 +1040,13 @@ jQuery(function ($) {
   };
 })(jQuery);
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/libs/bootstrap/bootstrap.min.css":
-/*!*******************************************************!*\
-  !*** ./src/frontend/libs/bootstrap/bootstrap.min.css ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
-/***/ "./src/frontend/libs/imagesloaded.js":
+/***/ "./src/frontend/libs/imagesloaded.js"
 /*!*******************************************!*\
   !*** ./src/frontend/libs/imagesloaded.js ***!
   \*******************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+(module, __unused_webpack_exports, __webpack_require__) {
 
 /*!
  * imagesLoaded PACKAGED v5.0.0
@@ -1597,13 +1448,13 @@ __webpack_require__.r(__webpack_exports__);
   return ImagesLoaded;
 });
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/libs/jarallax.js":
+/***/ "./src/frontend/libs/jarallax.js"
 /*!***************************************!*\
   !*** ./src/frontend/libs/jarallax.js ***!
   \***************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+(module) {
 
 /*!
  * Jarallax v2.1.3 (https://github.com/nk-o/jarallax)
@@ -1637,8 +1488,8 @@ __webpack_require__.r(__webpack_exports__);
   let win;
   if (typeof window !== "undefined") {
     win = window;
-  } else if (typeof __webpack_require__.g !== "undefined") {
-    win = __webpack_require__.g;
+  } else if (typeof globalThis !== "undefined") {
+    win = globalThis;
   } else if (typeof self !== "undefined") {
     win = self;
   } else {
@@ -2380,13 +2231,13 @@ __webpack_require__.r(__webpack_exports__);
   return jarallax;
 });
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/libs/jquery.backstretch/backstretch.js":
+/***/ "./src/frontend/libs/jquery.backstretch/backstretch.js"
 /*!*************************************************************!*\
   !*** ./src/frontend/libs/jquery.backstretch/backstretch.js ***!
   \*************************************************************/
-/***/ (() => {
+() {
 
 /*! Backstretch - v2.0.4 - 2013-06-19
 * http://srobbin.com/jquery-plugins/backstretch/
@@ -2753,13 +2604,13 @@ __webpack_require__.r(__webpack_exports__);
   }();
 })(jQuery, window);
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/libs/jquery.bully.js":
+/***/ "./src/frontend/libs/jquery.bully.js"
 /*!*******************************************!*\
   !*** ./src/frontend/libs/jquery.bully.js ***!
   \*******************************************/
-/***/ (() => {
+() {
 
 /*!
  * jQuery Bully Plugin v0.1.3
@@ -2961,13 +2812,13 @@ __webpack_require__.r(__webpack_exports__);
   });
 })(jQuery, window, document);
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/libs/jquery.counterup.js":
+/***/ "./src/frontend/libs/jquery.counterup.js"
 /*!***********************************************!*\
   !*** ./src/frontend/libs/jquery.counterup.js ***!
   \***********************************************/
-/***/ (() => {
+() {
 
 /*!
  * jquery.counterup.js 2.1.0
@@ -3085,13 +2936,13 @@ __webpack_require__.r(__webpack_exports__);
   };
 })(jQuery);
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/libs/waypoints/index.js":
+/***/ "./src/frontend/libs/waypoints/index.js"
 /*!**********************************************!*\
   !*** ./src/frontend/libs/waypoints/index.js ***!
   \**********************************************/
-/***/ (() => {
+() {
 
 /*!
 Waypoints - 4.0.1
@@ -3696,13 +3547,13 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   }
 })();
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/libs/wow.js/wow.js":
+/***/ "./src/frontend/libs/wow.js/wow.js"
 /*!*****************************************!*\
   !*** ./src/frontend/libs/wow.js/wow.js ***!
   \*****************************************/
-/***/ (function(module) {
+(module) {
 
 (function () {
   var MutationObserver,
@@ -4187,33 +4038,182 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   }
 }).call(this);
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/styles/animate.scss":
+/***/ "./node_modules/ev-emitter/ev-emitter.js"
+/*!***********************************************!*\
+  !*** ./node_modules/ev-emitter/ev-emitter.js ***!
+  \***********************************************/
+(module) {
+
+/**
+ * EvEmitter v2.1.1
+ * Lil' event emitter
+ * MIT License
+ */
+
+( function( global, factory ) {
+  // universal module definition
+  if (  true && module.exports ) {
+    // CommonJS - Browserify, Webpack
+    module.exports = factory();
+  } else {
+    // Browser globals
+    global.EvEmitter = factory();
+  }
+
+}( typeof window != 'undefined' ? window : this, function() {
+
+function EvEmitter() {}
+
+let proto = EvEmitter.prototype;
+
+proto.on = function( eventName, listener ) {
+  if ( !eventName || !listener ) return this;
+
+  // set events hash
+  let events = this._events = this._events || {};
+  // set listeners array
+  let listeners = events[ eventName ] = events[ eventName ] || [];
+  // only add once
+  if ( !listeners.includes( listener ) ) {
+    listeners.push( listener );
+  }
+
+  return this;
+};
+
+proto.once = function( eventName, listener ) {
+  if ( !eventName || !listener ) return this;
+
+  // add event
+  this.on( eventName, listener );
+  // set once flag
+  // set onceEvents hash
+  let onceEvents = this._onceEvents = this._onceEvents || {};
+  // set onceListeners object
+  let onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || {};
+  // set flag
+  onceListeners[ listener ] = true;
+
+  return this;
+};
+
+proto.off = function( eventName, listener ) {
+  let listeners = this._events && this._events[ eventName ];
+  if ( !listeners || !listeners.length ) return this;
+
+  let index = listeners.indexOf( listener );
+  if ( index != -1 ) {
+    listeners.splice( index, 1 );
+  }
+
+  return this;
+};
+
+proto.emitEvent = function( eventName, args ) {
+  let listeners = this._events && this._events[ eventName ];
+  if ( !listeners || !listeners.length ) return this;
+
+  // copy over to avoid interference if .off() in listener
+  listeners = listeners.slice( 0 );
+  args = args || [];
+  // once stuff
+  let onceListeners = this._onceEvents && this._onceEvents[ eventName ];
+
+  for ( let listener of listeners ) {
+    let isOnce = onceListeners && onceListeners[ listener ];
+    if ( isOnce ) {
+      // remove listener
+      // remove before trigger to prevent recursion
+      this.off( eventName, listener );
+      // unset once flag
+      delete onceListeners[ listener ];
+    }
+    // trigger listener
+    listener.apply( this, args );
+  }
+
+  return this;
+};
+
+proto.allOff = function() {
+  delete this._events;
+  delete this._onceEvents;
+  return this;
+};
+
+return EvEmitter;
+
+} ) );
+
+
+/***/ },
+
+/***/ "./src/frontend/fontawesome-v6/css/all.css"
+/*!*************************************************!*\
+  !*** ./src/frontend/fontawesome-v6/css/all.css ***!
+  \*************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ },
+
+/***/ "./src/frontend/fontawesome-v6/css/v4-shims.css"
+/*!******************************************************!*\
+  !*** ./src/frontend/fontawesome-v6/css/v4-shims.css ***!
+  \******************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ },
+
+/***/ "./src/frontend/libs/bootstrap/bootstrap.min.css"
+/*!*******************************************************!*\
+  !*** ./src/frontend/libs/bootstrap/bootstrap.min.css ***!
+  \*******************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ },
+
+/***/ "./src/frontend/styles/animate.scss"
 /*!******************************************!*\
   !*** ./src/frontend/styles/animate.scss ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/styles/style.scss":
+/***/ "./src/frontend/styles/style.scss"
 /*!****************************************!*\
   !*** ./src/frontend/styles/style.scss ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -4235,6 +4235,12 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -4264,18 +4270,6 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/global */
-/******/ 	(() => {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
