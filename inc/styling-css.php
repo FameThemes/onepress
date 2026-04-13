@@ -268,8 +268,52 @@ function onepress_styling_sanitize_selector($selector)
 }
 
 /**
+ * Split a top-level selector list on commas (ignores commas inside `()` / `[]`).
+ *
+ * @param string $sel Sanitized selector string.
+ * @return string[]
+ */
+function onepress_styling_split_selector_list($sel)
+{
+	$sel = trim((string) $sel);
+	if ($sel === '') {
+		return array();
+	}
+	$parts   = array();
+	$depth   = 0;
+	$bracket = 0;
+	$len     = strlen($sel);
+	$start   = 0;
+	for ($i = 0; $i < $len; $i++) {
+		$c = $sel[ $i ];
+		if ('(' === $c) {
+			++$depth;
+		} elseif (')' === $c) {
+			--$depth;
+		} elseif ('[' === $c) {
+			++$bracket;
+		} elseif (']' === $c) {
+			--$bracket;
+		} elseif (',' === $c && 0 === $depth && 0 === $bracket) {
+			$chunk = trim(substr($sel, $start, $i - $start));
+			if ($chunk !== '') {
+				$parts[] = $chunk;
+			}
+			$start = $i + 1;
+		}
+	}
+	$chunk = trim(substr($sel, $start));
+	if ($chunk !== '') {
+		$parts[] = $chunk;
+	}
+	return $parts;
+}
+
+/**
  * Build the full CSS selector for one state: baseSelector + per-state suffix.
  * Legacy: when base is empty, the state's selector is treated as the full selector.
+ * When base is a comma-separated list, the suffix is applied to each branch
+ * (e.g. `.a .b, .c .d` + `:hover` → `.a .b:hover, .c .d:hover`).
  *
  * @param string $base        Sanitized _meta.baseSelector (may be empty).
  * @param string $state_suffix Sanitized per-state selector (e.g. '', ':hover').
@@ -288,7 +332,15 @@ function onepress_styling_compose_full_selector($base, $state_suffix)
 	if ($suffix === '') {
 		return $base;
 	}
-	return $base . $suffix;
+	$list = onepress_styling_split_selector_list($base);
+	if (count($list) <= 1) {
+		return $base . $suffix;
+	}
+	$composed = array();
+	foreach ($list as $part) {
+		$composed[] = $part . $suffix;
+	}
+	return implode(', ', $composed);
 }
 
 /**

@@ -109,6 +109,12 @@ function selectorTargetsOnly(sel, el) {
 /** Max descendant levels (space-separated segments) in the suggested selector. */
 const SELECTOR_MAX_DEPTH = 5;
 
+/** Min levels when enough ancestors exist — improves specificity so picked rules override theme defaults. */
+const SELECTOR_MIN_DEPTH = 3;
+
+/** Max simple selectors per segment (`#id` + `.a` = 2; `.a.b` = 2). */
+const SEGMENT_MAX_SIMPLE_SELECTORS = 2;
+
 /**
  * Bootstrap / grid utility classes omitted from path segments (still ok on `#id` targets).
  *
@@ -140,6 +146,7 @@ function semanticClasses(el) {
 
 /**
  * One path segment: never `tag.class`, never `:pseudo`. Prefer `#id.class` when id exists.
+ * At most {@link SEGMENT_MAX_SIMPLE_SELECTORS} simple selectors per segment (e.g. `#features.section-features`, not `#features.a.b.c`).
  *
  * @param {Element} el
  * @param {{ isTarget?: boolean }} [opts] — target may fall back to any meaningful class if only grid classes.
@@ -151,7 +158,9 @@ function segmentForElement(el, opts = {}) {
 	if (opts.isTarget && classes.length === 0) {
 		classes = meaningfulClasses(el);
 	}
-	const maxCls = 3;
+	const maxCls = idOk
+		? Math.max(0, SEGMENT_MAX_SIMPLE_SELECTORS - 1)
+		: SEGMENT_MAX_SIMPLE_SELECTORS;
 	const clsPart = classes.slice(0, maxCls).map(cssEscape);
 	if (idOk) {
 		const idSel = `#${cssEscape(el.id)}`;
@@ -214,11 +223,11 @@ function collectPathElements(el) {
  */
 function pruneMiddleSegments(segmentsOuterToInner, el) {
 	let segs = segmentsOuterToInner;
-	if (segs.length <= 2) {
+	if (segs.length <= SELECTOR_MIN_DEPTH) {
 		return segs;
 	}
 	let changed = true;
-	while (changed && segs.length > 2) {
+	while (changed && segs.length > SELECTOR_MIN_DEPTH) {
 		changed = false;
 		for (let i = 1; i < segs.length - 1; i++) {
 			const next = [...segs.slice(0, i), ...segs.slice(i + 1)];
@@ -234,7 +243,8 @@ function pruneMiddleSegments(segmentsOuterToInner, el) {
 }
 
 /**
- * Short descendant path: only `.class` / `#id.class`, no `>`, no `:pseudo`, ≤ {@link SELECTOR_MAX_DEPTH} levels.
+ * Short descendant path: only `.class` / `#id.class`, no `>`, no `:pseudo`,
+ * between {@link SELECTOR_MIN_DEPTH} and {@link SELECTOR_MAX_DEPTH} levels when possible.
  *
  * @param {Element} el
  * @returns {string}
@@ -258,7 +268,16 @@ function shortestUniqueSelector(el) {
 	}
 	const n = fullOuterToInner.length;
 	const maxK = Math.min(SELECTOR_MAX_DEPTH, n);
-	for (let k = 1; k <= maxK; k++) {
+	const startK = n >= SELECTOR_MIN_DEPTH ? SELECTOR_MIN_DEPTH : 1;
+
+	for (let k = startK; k <= maxK; k++) {
+		const slice = fullOuterToInner.slice(-k);
+		const cand = slice.join(' ');
+		if (selectorTargetsOnly(cand, el)) {
+			return pruneMiddleSegments(slice, el).join(' ');
+		}
+	}
+	for (let k = 1; k < startK; k++) {
 		const slice = fullOuterToInner.slice(-k);
 		const cand = slice.join(' ');
 		if (selectorTargetsOnly(cand, el)) {

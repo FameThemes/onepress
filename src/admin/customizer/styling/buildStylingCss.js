@@ -50,8 +50,50 @@ function validMaxToken(token) {
 }
 
 /**
+ * Split top-level selector list on commas (skip commas inside `()` / `[]`).
+ *
+ * @param {string} sel
+ * @returns {string[]}
+ */
+function splitSelectorList(sel) {
+	const s = typeof sel === 'string' ? sel.trim() : '';
+	if (!s) {
+		return [];
+	}
+	const parts = [];
+	let depth = 0;
+	let bracket = 0;
+	let start = 0;
+	for (let i = 0; i < s.length; i++) {
+		const c = s[i];
+		if (c === '(') {
+			depth++;
+		} else if (c === ')') {
+			depth--;
+		} else if (c === '[') {
+			bracket++;
+		} else if (c === ']') {
+			bracket--;
+		} else if (c === ',' && depth === 0 && bracket === 0) {
+			const chunk = s.slice(start, i).trim();
+			if (chunk) {
+				parts.push(chunk);
+			}
+			start = i + 1;
+		}
+	}
+	const chunk = s.slice(start).trim();
+	if (chunk) {
+		parts.push(chunk);
+	}
+	return parts;
+}
+
+/**
  * Full selector for output CSS: _meta.baseSelector + per-state suffix.
  * Legacy: when base is empty, state selector is the full selector.
+ * Comma-separated base: suffix is appended to each branch
+ * (e.g. `.a .b, .c .d` + `:hover` → `.a .b:hover, .c .d:hover`).
  *
  * @param {unknown} baseRaw
  * @param {unknown} suffixRaw
@@ -69,7 +111,11 @@ export function composeStylingFullSelector(baseRaw, suffixRaw) {
 	if (!suffix) {
 		return base;
 	}
-	return `${base}${suffix}`;
+	const list = splitSelectorList(base);
+	if (list.length <= 1) {
+		return `${base}${suffix}`;
+	}
+	return list.map((p) => `${p}${suffix}`).join(', ');
 }
 
 /**

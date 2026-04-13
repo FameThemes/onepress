@@ -9,6 +9,7 @@
  *
  * `base_selector` (optional, single-target only — ignored when `styling_multiple` => true): non-empty
  * string fixes `_meta.baseSelector` / `selector` in JS and hides the base selector field in the editor.
+ * Comma-separated lists apply each state suffix (e.g. `:hover`) to every branch: `.a, .b` + `:hover` → `.a:hover, .b:hover`.
  *
  * `styling_states` (control arg, exposed as `control.params.styling_states` in JS):
  * - `'all'` — full “Manage states”: presets, custom ids, remove (default if omitted).
@@ -119,7 +120,7 @@ $wp_customize->add_control(
 			'styling_multiple'    => false,
 			'styling_states'      => $onepress_styling_fixed_states_demo,
 			'priority'            => 7,
-			'base_selector'       => '.section-title-area .section-title',
+			'base_selector'       => '.section-title-area .section-title, .onepage-section .section-desc2',
 			// Example: array( 'font_face', 'raw', 'box_shadow' ),
 			'disable_fields'      => array(),
 		)
