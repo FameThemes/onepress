@@ -17,7 +17,7 @@ export function TrblLinkIconButton({ linked, onLinkedChange, linkLabel, unlinkLa
 		<Tooltip text={tooltipText}>
 			<Button
 				type="button"
-				variant={linked ? 'tertiary' : 'primary'}
+				variant={linked ? 'primary' : 'tertiary'}
 				size="small"
 				className="trbl-link-toggle icon-btn"
 				icon={linked ? linkOff : link}

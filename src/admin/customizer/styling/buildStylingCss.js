@@ -73,6 +73,24 @@ export function composeStylingFullSelector(baseRaw, suffixRaw) {
 }
 
 /**
+ * When `conf.force_selector` is non-empty, use it alone (ignores base + `conf.selector` for output).
+ *
+ * @param {string} baseMeta
+ * @param {Record<string, unknown> | null | undefined} conf
+ * @returns {string}
+ */
+export function resolveStateOutputSelector(baseMeta, conf) {
+	const force = stripSelector(
+		conf && conf.force_selector != null ? String(conf.force_selector) : ''
+	).trim();
+	if (force !== '') {
+		return force;
+	}
+	const suffix = stripSelector(conf && conf.selector != null ? String(conf.selector) : '');
+	return composeStylingFullSelector(baseMeta, suffix);
+}
+
+/**
  * @param {Record<string, unknown>} value
  * @param {typeof DEFAULT_BPS} breakpoints
  */
@@ -105,8 +123,7 @@ export function buildStylingCss(value, breakpoints = DEFAULT_BPS) {
 		}
 		const stateKey = keys[0];
 		const conf = entry[stateKey];
-		const suffix = stripSelector(conf && conf.selector != null ? String(conf.selector) : '');
-		const selector = composeStylingFullSelector(baseMeta, suffix);
+		const selector = resolveStateOutputSelector(baseMeta, conf && typeof conf === 'object' ? conf : {});
 		if (!selector) {
 			continue;
 		}

@@ -36,7 +36,7 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 	 * State UI policy: string 'all' (full manage UI), false (normal only, hide state tabs), or a fixed
 	 * `_meta.states`-shaped array (no add/remove custom states; labels/suffixes still editable).
 	 *
-	 * @var 'all'|false|array<int, array<string, array{label?: string, selector?: string}>>
+	 * @var 'all'|false|array<int, array<string, array{label?: string, selector?: string, force_selector?: string}>>
 	 */
 	public $styling_states = 'all';
 
@@ -62,6 +62,28 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 	 * @var string
 	 */
 	public $base_selector = '';
+
+	/**
+	 * Field ids to hide in the styling UI (model camelCase keys and/or composite aliases, see theme docs).
+	 * Each entry is passed through sanitize_key before JSON.
+	 *
+	 * @var list<string>
+	 */
+	public $disable_fields = array();
+
+	/**
+	 * When true, hide the editor popover title row (heading + manage states + preview picker).
+	 *
+	 * @var bool
+	 */
+	public $styling_hide_popover_heading = false;
+
+	/**
+	 * When true, hide the state tablist toolbar in the editor popover.
+	 *
+	 * @var bool
+	 */
+	public $styling_hide_state_tablist = false;
 
 	/**
 	 * Constructor.
@@ -102,6 +124,22 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 			$this->styling_groups = $clean !== array()
 				? array_values( array_unique( $clean, SORT_REGULAR ) )
 				: null;
+		}
+		if ( isset( $args['disable_fields'] ) && is_array( $args['disable_fields'] ) ) {
+			$df = array();
+			foreach ( $args['disable_fields'] as $fid ) {
+				$k = sanitize_key( (string) $fid );
+				if ( $k !== '' ) {
+					$df[] = $k;
+				}
+			}
+			$this->disable_fields = array_values( array_unique( $df, SORT_REGULAR ) );
+		}
+		if ( isset( $args['styling_hide_popover_heading'] ) ) {
+			$this->styling_hide_popover_heading = (bool) $args['styling_hide_popover_heading'];
+		}
+		if ( isset( $args['styling_hide_state_tablist'] ) ) {
+			$this->styling_hide_state_tablist = (bool) $args['styling_hide_state_tablist'];
 		}
 		parent::__construct($manager, $id, $args);
 	}
@@ -153,6 +191,9 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 		$this->json['editable_base_selector'] = $this->editable_base_selector;
 		$this->json['styling_groups']         = $this->styling_groups;
 		$this->json['base_selector']          = $this->styling_multiple ? '' : (string) $this->base_selector;
+		$this->json['disable_fields']         = $this->disable_fields;
+		$this->json['styling_hide_popover_heading'] = $this->styling_hide_popover_heading;
+		$this->json['styling_hide_state_tablist']   = $this->styling_hide_state_tablist;
 		$this->json['preview_device_ids']     = onepress_styling_preview_device_ids();
 	}
 

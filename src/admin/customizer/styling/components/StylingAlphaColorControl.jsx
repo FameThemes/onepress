@@ -31,6 +31,7 @@ function isCssColorParsable(raw) {
  * @param {(v: string) => void} props.onChange
  * @param {string} [props.className]
  * @param {boolean} [props.enableAlpha] — WordPress ColorPicker alpha channel (default true)
+ * @param {boolean} [props.disabled]
  */
 export function StylingAlphaColorControl({
 	label,
@@ -39,7 +40,11 @@ export function StylingAlphaColorControl({
 	onChange,
 	className,
 	enableAlpha = true,
+	disabled = false,
 }) {
+	if (disabled) {
+		return null;
+	}
 	const raw = String(value || '').trim();
 
 	const [popoverOpen, setPopoverOpen] = useState(false);

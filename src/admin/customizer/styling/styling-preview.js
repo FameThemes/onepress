@@ -5,7 +5,18 @@ import { buildStylingCss } from './buildStylingCss';
 import { buildGoogleFontsCss2Href, collectMergedGoogleFontAxes } from './stylingGoogleFonts';
 import { bindStylingSelectorPickPreview } from './stylingSelectorPickPreview';
 
+/** Fallback when `onepressStylingPreview.settingIds` is missing — keep in sync with `onepress_styling_default_theme_mod_setting_ids()` (PHP). */
 const DEFAULT_SETTING_IDS = [
+	'onepress_styling_body',
+	'onepress_styling_h1',
+	'onepress_styling_h2',
+	'onepress_styling_h3',
+	'onepress_styling_h4',
+	'onepress_styling_h5',
+	'onepress_styling_h6',
+	'onepress_styling_nav',
+	'onepress_styling_branding',
+	'onepress_styling_tagline',
 	'onepress_element_styling',
 	'onepress_element_styling_single',
 	'onepress_element_styling_fixed_states',

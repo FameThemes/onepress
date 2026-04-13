@@ -1,11 +1,11 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/frontend/libs/lightgallery.js":
+/***/ "./src/frontend/libs/lightgallery.js"
 /*!*******************************************!*\
   !*** ./src/frontend/libs/lightgallery.js ***!
   \*******************************************/
-/***/ (function(module, exports, __webpack_require__) {
+(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery - v1.3.9 - 2017-02-05
  * http://sachinchoolur.github.io/lightGallery/
@@ -1370,31 +1370,31 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! lightgallery
   $.fn.lightGallery.modules.video = Video;
 })(jQuery, window, document);
 
-/***/ }),
+/***/ },
 
-/***/ "./src/frontend/styles/lightgallery.scss":
+/***/ "./src/frontend/styles/lightgallery.scss"
 /*!***********************************************!*\
   !*** ./src/frontend/styles/lightgallery.scss ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
-/***/ }),
+/***/ },
 
-/***/ "jquery":
+/***/ "jquery"
 /*!*************************!*\
   !*** external "jQuery" ***!
   \*************************/
-/***/ ((module) => {
+(module) {
 
 "use strict";
 module.exports = window["jQuery"];
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -1416,6 +1416,12 @@ module.exports = window["jQuery"];
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module

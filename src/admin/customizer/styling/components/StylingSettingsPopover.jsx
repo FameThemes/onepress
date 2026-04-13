@@ -1,6 +1,7 @@
 /**
  * Popover: target (item name, base selector) + states (reorder, labels, suffixes).
  * Built-in pseudo states store per-state suffixes (e.g. :hover) combined with _meta.baseSelector when building CSS.
+ * Optional `force_selector` on a state uses that full selector only (base + suffix ignored for output).
  */
 import { Button, Icon, Popover, TextControl } from '@wordpress/components';
 import { shouldIgnoreStylingPopoverFocusOutside } from '../stylingPopoverFocusOutside';
@@ -543,18 +544,35 @@ export function StylingSettingsPopover({
 											onChange={(v) => onLabelChange(gIdx, v)}
 											autoComplete="off"
 										/>
-										<TextControl
-											__nextHasNoMarginBottom
-											label={__('State selector', 'onepress')}
-											help={__(
-												'Suffix appended to the base (e.g. :hover). Leave empty to use the base only.',
-												'onepress'
-											)}
-											value={String(row?.selector ?? '')}
-											onChange={(v) => onSelectorChange(gIdx, v)}
-											autoComplete="off"
-											spellCheck={false}
-										/>
+										{row &&
+										typeof row.force_selector === 'string' &&
+										row.force_selector.trim() !== '' ? (
+											<TextControl
+												__nextHasNoMarginBottom
+												label={__('Fixed CSS selector', 'onepress')}
+												help={__(
+													'This state is pinned to this full selector by the theme; base target and suffix are not combined.',
+													'onepress'
+												)}
+												value={String(row.force_selector)}
+												readOnly
+												autoComplete="off"
+												spellCheck={false}
+											/>
+										) : (
+											<TextControl
+												__nextHasNoMarginBottom
+												label={__('State selector', 'onepress')}
+												help={__(
+													'Suffix appended to the base (e.g. :hover). Leave empty to use the base only.',
+													'onepress'
+												)}
+												value={String(row?.selector ?? '')}
+												onChange={(v) => onSelectorChange(gIdx, v)}
+												autoComplete="off"
+												spellCheck={false}
+											/>
+										)}
 									</div>
 								) : null}
 							</div>

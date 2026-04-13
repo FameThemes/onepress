@@ -21,6 +21,7 @@ import {
 import { parseDeclarationForm, patchDeclarationForm } from './declarationForm';
 import { StylingDeviceProvider } from './components';
 import { resolveAllowedGroupIds, StylingAccordionPanels } from './StylingAccordionPanels';
+import { buildDisabledFieldSet } from './stylingDisableFields';
 import { rebuildFontSlicesInValue } from './stylingGoogleFonts';
 import { useGoogleFontFamilies } from './useGoogleFontFamilies';
 import { StylingSettingsPopover } from './components/StylingSettingsPopover';
@@ -156,6 +157,11 @@ export function StylingControlApp({ control, $ }) {
 		[control.params.styling_groups]
 	);
 
+	const disabledFieldSet = useMemo(
+		() => buildDisabledFieldSet(control.params.disable_fields),
+		[control.params.disable_fields]
+	);
+
 	const editorRootClassName = useMemo(() => {
 		const parts = [
 			'editor',
@@ -218,6 +224,10 @@ export function StylingControlApp({ control, $ }) {
 	const [editorPopoverOpen, setEditorPopoverOpen] = useState(false);
 	const [editorPopoverAnchor, setEditorPopoverAnchor] = useState(null);
 	const editButtonRef = useRef(null);
+	/** Mirrors `editorPopoverOpen` synchronously so the edit toggle survives stale closures vs. focus-outside ordering. */
+	const editorPopoverOpenRef = useRef(false);
+	/** Multi-target: pencil button element for the row whose editor is open (skip focus-outside close when retoggling that anchor). */
+	const lastMultiEditorAnchorRef = useRef(null);
 	const [editingItemIndex, setEditingItemIndex] = useState(null);
 	const editingItemIndexRef = useRef(null);
 	const [previewPickerActive, setPreviewPickerActive] = useState(false);
@@ -254,7 +264,14 @@ export function StylingControlApp({ control, $ }) {
 		}
 		const mode = getStatesStructureMode(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
 		const tpl = getFixedStatesTemplate(stylingStatesParam);
-		return normalizeStylingRootForStatesPolicy(v, mode, tpl, previewDeviceIds, multiple);
+		return normalizeStylingRootForStatesPolicy(
+			v,
+			mode,
+			tpl,
+			previewDeviceIds,
+			multiple,
+			lockedBaseSelector
+		);
 	});
 
 	const { families, loading: fontsLoading, error: fontsError } = useGoogleFontFamilies();
@@ -276,7 +293,14 @@ export function StylingControlApp({ control, $ }) {
 				}
 				const mode = getStatesStructureMode(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
 				const tpl = getFixedStatesTemplate(stylingStatesParam);
-				next = normalizeStylingRootForStatesPolicy(next, mode, tpl, previewDeviceIds, multiple);
+				next = normalizeStylingRootForStatesPolicy(
+					next,
+					mode,
+					tpl,
+					previewDeviceIds,
+					multiple,
+					lockedBaseSelector
+				);
 				setValue(next);
 			} catch {
 				// ignore
@@ -294,6 +318,7 @@ export function StylingControlApp({ control, $ }) {
 		multiple,
 		previewDeviceIds,
 		stylingStatesParam,
+		lockedBaseSelector,
 	]);
 
 	const structuralPayload = useMemo(() => {
@@ -537,6 +562,10 @@ export function StylingControlApp({ control, $ }) {
 		editingItemIndexRef.current = editingItemIndex;
 	}, [editingItemIndex]);
 
+	useLayoutEffect(() => {
+		editorPopoverOpenRef.current = editorPopoverOpen;
+	}, [editorPopoverOpen]);
+
 	const removePickerSnackbar = useCallback((id) => {
 		setPickerSnackbarNotices((prev) => prev.filter((n) => n.id !== id));
 	}, []);
@@ -638,8 +667,11 @@ export function StylingControlApp({ control, $ }) {
 			}
 			cancelPreviewPicker();
 		};
-		document.addEventListener('keydown', onKeyDown, true);
-		return () => document.removeEventListener('keydown', onKeyDown, true);
+		// Capture on `window` so we run before handlers that stop propagation on `document`
+		// (Customizer / components). Preview iframe has its own Escape handler in
+		// stylingSelectorPickPreview.js — key events from the iframe do not reach this window.
+		window.addEventListener('keydown', onKeyDown, true);
+		return () => window.removeEventListener('keydown', onKeyDown, true);
 	}, [cancelPreviewPicker]);
 
 	useEffect(() => {
@@ -726,6 +758,8 @@ export function StylingControlApp({ control, $ }) {
 	}, []);
 
 	const closeEditorPopover = useCallback(() => {
+		editorPopoverOpenRef.current = false;
+		lastMultiEditorAnchorRef.current = null;
 		cancelPreviewPicker();
 		setEditorPopoverOpen(false);
 		setStatesPopoverOpen(false);
@@ -762,34 +796,50 @@ export function StylingControlApp({ control, $ }) {
 			if (shouldIgnoreStylingPopoverFocusOutside(event)) {
 				return;
 			}
+			// useFocusOutside runs in setTimeout(0). If focus moved to the same edit toggle button,
+			// closing here races the button click: close runs first → click then "opens" again.
+			const toggleAnchor = multiple ? lastMultiEditorAnchorRef.current : editButtonRef.current;
+			if (toggleAnchor instanceof HTMLElement) {
+				const rt = event && 'relatedTarget' in event ? event.relatedTarget : null;
+				if (rt instanceof HTMLElement && (rt === toggleAnchor || toggleAnchor.contains(rt))) {
+					return;
+				}
+				const ae = document.activeElement;
+				if (ae instanceof HTMLElement && (ae === toggleAnchor || toggleAnchor.contains(ae))) {
+					return;
+				}
+			}
 			closeEditorPopover();
 		},
-		[closeEditorPopover]
+		[closeEditorPopover, multiple]
 	);
 
 	const toggleEditorPopover = useCallback(() => {
 		if (multiple) {
 			return;
 		}
-		if (editorPopoverOpen) {
+		if (editorPopoverOpenRef.current) {
 			closeEditorPopover();
 			return;
 		}
+		editorPopoverOpenRef.current = true;
 		setEditorPopoverOpen(true);
-	}, [multiple, editorPopoverOpen, closeEditorPopover]);
+	}, [multiple, closeEditorPopover]);
 
 	const toggleEditorForItem = useCallback(
 		(index, anchorEl) => {
-			if (editorPopoverOpen && editingItemIndex === index) {
+			if (editorPopoverOpenRef.current && editingItemIndex === index) {
 				closeEditorPopover();
 				return;
 			}
+			lastMultiEditorAnchorRef.current = anchorEl;
 			setEditorPopoverAnchor(anchorEl);
 			setEditingItemIndex(index);
 			setStateIndex(0);
+			editorPopoverOpenRef.current = true;
 			setEditorPopoverOpen(true);
 		},
-		[editorPopoverOpen, editingItemIndex, closeEditorPopover]
+		[editingItemIndex, closeEditorPopover]
 	);
 
 	const addItem = useCallback(() => {
@@ -819,6 +869,8 @@ export function StylingControlApp({ control, $ }) {
 		if (!defaultStylingPayload) {
 			return;
 		}
+		editorPopoverOpenRef.current = false;
+		lastMultiEditorAnchorRef.current = null;
 		setStatesPopoverOpen(false);
 		setStatesPopoverAnchor(null);
 		setEditorPopoverOpen(false);
@@ -896,6 +948,13 @@ export function StylingControlApp({ control, $ }) {
 	const showStateTabButtons = stateTabCount > 1;
 	const showStatesToolbar = showStateTabButtons || showStatesPopoverButton;
 
+	const hidePopoverHeading = control.params.styling_hide_popover_heading === true;
+	const hideStateTablist = control.params.styling_hide_state_tablist === true;
+	const showHeadingRow = !hidePopoverHeading;
+	const showStateTablistBlock = showStatesToolbar && !hideStateTablist;
+	const showPopoverHeader = showHeadingRow || showStateTablistBlock;
+	const tablistVisibleForA11y = showStateTabButtons && !hideStateTablist;
+
 	const popoverTitle = multiple
 		? editorPayload
 			? sprintf(
@@ -924,6 +983,7 @@ export function StylingControlApp({ control, $ }) {
 											: __('Reset to default', 'onepress')
 									}
 									showTooltip
+									size="small"
 									className='icon-btn'
 								>
 									<Icon icon={rotateLeft} size={20} />
@@ -938,6 +998,7 @@ export function StylingControlApp({ control, $ }) {
 										aria-haspopup="dialog"
 										label={__('Edit styling', 'onepress')}
 										className='icon-btn'
+										size="small"
 										showTooltip
 									>
 										<Icon icon={pencil} size={20} />
@@ -1011,98 +1072,103 @@ export function StylingControlApp({ control, $ }) {
 							shift
 						>
 
-							<div className='popover-header'>
-								<div className='flex items-center gap-2 w-full justify-between'>
-									<div className="grow onepress-styling-editor-popover__title ">{popoverTitle}</div>
-									<div className='flex items-center gap-2'>
-										{showStatesPopoverButton ? (
-											<Button
-												ref={manageStatesButtonRef}
-												className="onepress-styling-manage-states icon-btn"
-												variant="secondary"
-												onClick={toggleStatesPopover}
-												aria-expanded={statesPopoverOpen}
-												aria-haspopup="dialog"
-												size="small"
-												label={
-													allowAddRemoveInStatesPopover
-														? __('Manage states', 'onepress')
-														: __('State settings', 'onepress')
-												}
-												showTooltip
+							{showPopoverHeader ? (
+								<div className='popover-header'>
+									{showHeadingRow ? (
+										<div className='flex items-center gap-2 w-full justify-between'>
+											<div className="grow onepress-styling-editor-popover__title ">{popoverTitle}</div>
+											<div className='flex items-center gap-2'>
+												{showStatesPopoverButton ? (
+													<Button
+														ref={manageStatesButtonRef}
+														className="onepress-styling-manage-states icon-btn"
+														variant="secondary"
+														onClick={toggleStatesPopover}
+														aria-expanded={statesPopoverOpen}
+														aria-haspopup="dialog"
+														size="small"
+														label={
+															allowAddRemoveInStatesPopover
+																? __('Manage states', 'onepress')
+																: __('State settings', 'onepress')
+														}
+														showTooltip
 
-											>
-												<Icon icon={settings} size={20} />
-											</Button>
-										) : null}
+													>
+														<Icon icon={settings} size={20} />
+													</Button>
+												) : null}
 
-										{!lockedBaseSelector ? (<>
-											<Button
-												variant="secondary"
-												onClick={togglePreviewPicker}
-												isPressed={previewPickerActive}
-												disabled={!editableBaseSelector}
-												size="small"
-												label={
-													previewPickerActive
-														? __('Cancel picking from preview', 'onepress')
-														: __('Pick a selector from the site preview', 'onepress')
-												}
-												showTooltip
-												className='icon-btn'
-											>
-												{previewPickerActive
-													? <Icon icon={close} size={18} />
-													: <IconTarget size={18} />
-												}
-											</Button>
-										</>) : null}
+												{!lockedBaseSelector ? (<>
+													<Button
+														variant="secondary"
+														onClick={togglePreviewPicker}
+														isPressed={previewPickerActive}
+														disabled={!editableBaseSelector}
+														size="small"
+														label={
+															previewPickerActive
+																? __('Cancel picking from preview', 'onepress')
+																: __('Pick a selector from the site preview', 'onepress')
+														}
+														showTooltip
+														className='icon-btn'
+													>
+														{previewPickerActive
+															? <Icon icon={close} size={18} />
+															: <IconTarget size={18} />
+														}
+													</Button>
+												</>) : null}
 
-									</div>
-								</div>
-								{showStatesToolbar ? (
-									<div className=" onepress-styling styling-root">
-										<div className="states">
-											<div className="states-toolbar flex flex gap-2 justify-between items-center">
-												{showStateTabButtons ? (
-													<div className="state-tablist-scroll">
-														<div
-															className="state-tablist-inner  components-button-group "
-															role="tablist"
-															aria-label={__('Style states', 'onepress')}
-														>
-															{statesList.map((s, i) => (
-																<Button
-																	key={s.key}
-																	id={getStateTabId(i)}
-																	aria-selected={i === stateIndex}
-																	aria-controls={stateTabPanelId}
-																	tabIndex={i === stateIndex ? 0 : -1}
-																	variant="unstyled"
-																	onClick={() => setStateIndex(i)}
-																	onKeyDown={(e) => onStateTabKeyDown(e, i)}
-																	className={`tab-button ${i === stateIndex ? ' is-active' : ''}`}
-																>
-																	{s.label}
-																</Button>
-															))}
-														</div>
-													</div>
-												) : (
-													<span className="grow" aria-hidden />
-												)}
 											</div>
 										</div>
-									</div>
-								) : null}
+									) : null}
 
-							</div>
+									{showStateTablistBlock ? (
+										<div className=" onepress-styling styling-root">
+											<div className="states">
+												<div className="states-toolbar flex flex gap-2 justify-between items-center">
+													{showStateTabButtons ? (
+														<div className="state-tablist-scroll">
+															<div
+																className="state-tablist-inner  components-button-group "
+																role="tablist"
+																aria-label={__('Style states', 'onepress')}
+															>
+																{statesList.map((s, i) => (
+																	<Button
+																		key={s.key}
+																		id={getStateTabId(i)}
+																		aria-selected={i === stateIndex}
+																		aria-controls={stateTabPanelId}
+																		tabIndex={i === stateIndex ? 0 : -1}
+																		variant="unstyled"
+																		onClick={() => setStateIndex(i)}
+																		onKeyDown={(e) => onStateTabKeyDown(e, i)}
+																		className={`tab-button ${i === stateIndex ? ' is-active' : ''}`}
+																	>
+																		{s.label}
+																	</Button>
+																))}
+															</div>
+														</div>
+													) : (
+														<span className="grow" aria-hidden />
+													)}
+												</div>
+											</div>
+										</div>
+									) : null}
+
+								</div>
+							) : null}
 
 							<div
 								className="popover-body grow styling-root onepress-styling onepress-styling-editor-popover__inner"
-								role={showStateTabButtons ? 'tabpanel' : undefined}
-								id={showStateTabButtons ? stateTabPanelId : undefined}
-								aria-labelledby={showStateTabButtons ? getStateTabId(stateIndex) : undefined}
+								role={tablistVisibleForA11y ? 'tabpanel' : undefined}
+								id={tablistVisibleForA11y ? stateTabPanelId : undefined}
+								aria-labelledby={tablistVisibleForA11y ? getStateTabId(stateIndex) : undefined}
 							>
 
 								{showStatesPopoverButton ? (
@@ -1136,6 +1202,7 @@ export function StylingControlApp({ control, $ }) {
 									fontsLoading={fontsLoading}
 									fontsError={fontsError}
 									stylingGroups={control.params.styling_groups}
+									disabledFieldSet={disabledFieldSet}
 								/>
 
 								{!showStatesPopoverButton ? (

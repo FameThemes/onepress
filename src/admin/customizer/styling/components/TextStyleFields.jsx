@@ -10,6 +10,7 @@ import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
 import { StylingAlphaColorControl } from './StylingAlphaColorControl';
 import { StylingFontFaceSelectControls } from './StylingFontFaceSelectControls';
 import { StylingGoogleFontFamilyControl } from './StylingGoogleFontFamilyControl';
+import { isFieldDisabled } from '../stylingDisableFields';
 
 /**
  * @param {object} props
@@ -18,11 +19,21 @@ import { StylingGoogleFontFamilyControl } from './StylingGoogleFontFamilyControl
  * @param {import('../googleFontCollection').PickerFontFamily[]} props.families
  * @param {boolean} [props.fontsLoading]
  * @param {Error | null} [props.fontsError]
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet]
  */
-export function TextStyleFields({ model, onPatch, families, fontsLoading = false, fontsError = null }) {
+export function TextStyleFields({
+	model,
+	onPatch,
+	families,
+	fontsLoading = false,
+	fontsError = null,
+	disabledFieldSet,
+}) {
 	const list = families ?? mergePickerFamilies(null);
 	const loading = fontsLoading;
 	const error = fontsError;
+	const d = disabledFieldSet;
+	const dis = (key) => isFieldDisabled(d, key);
 
 	return (
 		<>
@@ -30,47 +41,54 @@ export function TextStyleFields({ model, onPatch, families, fontsLoading = false
 				label={__('Text color', 'onepress')}
 				value={model.color || ''}
 				onChange={(v) => onPatch({ color: v })}
+				disabled={dis('color')}
 			/>
-			<BaseControl label={__('Font family', 'onepress')} className="styling-text-font-family">
-				<StylingGoogleFontFamilyControl
-					value={model.fontFamily || ''}
-					onPatch={onPatch}
-					families={list}
-					loading={loading}
-					error={error}
-				/>
-				{error && !loading ? (
-					<TextControl
-						__nextHasNoMarginBottom
-						label={__('Font family (CSS fallback)', 'onepress')}
+			{dis('fontFamily') ? null : (
+				<BaseControl label={__('Font family', 'onepress')} className="styling-text-font-family">
+					<StylingGoogleFontFamilyControl
 						value={model.fontFamily || ''}
-						onChange={(v) => onPatch({ fontFamily: v })}
+						onPatch={onPatch}
+						families={list}
+						loading={loading}
+						error={error}
 					/>
-				) : null}
-			</BaseControl>
-			<StylingFontFaceSelectControls model={model} onPatch={onPatch} families={list} />
+					{error && !loading ? (
+						<TextControl
+							__nextHasNoMarginBottom
+							label={__('Font family (CSS fallback)', 'onepress')}
+							value={model.fontFamily || ''}
+							onChange={(v) => onPatch({ fontFamily: v })}
+						/>
+					) : null}
+				</BaseControl>
+			)}
+			<StylingFontFaceSelectControls model={model} onPatch={onPatch} families={list} disabledFieldSet={d} />
 			<ResponsiveUnitSliderField
 				label={__('Font size', 'onepress')}
 				value={model.fontSize || ''}
 				onChange={(v) => onPatch({ fontSize: v })}
+				disabled={dis('fontSize')}
 				{...SLIDER_PRESETS.fontSize}
 			/>
 			<ResponsiveUnitSliderField
 				label={__('Line height', 'onepress')}
 				value={model.lineHeight || ''}
 				onChange={(v) => onPatch({ lineHeight: v })}
+				disabled={dis('lineHeight')}
 				{...SLIDER_PRESETS.lineHeight}
 			/>
 			<ResponsiveUnitSliderField
 				label={__('Letter spacing', 'onepress')}
 				value={model.letterSpacing || ''}
 				onChange={(v) => onPatch({ letterSpacing: v })}
+				disabled={dis('letterSpacing')}
 				{...SLIDER_PRESETS.letterSpacing}
 			/>
 			<CssEnumButtonGroup
 				label={__('Text transform', 'onepress')}
 				value={model.textTransform || ''}
 				onChange={(v) => onPatch({ textTransform: v })}
+				disabled={dis('textTransform')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'none', label: 'none' },
@@ -83,6 +101,7 @@ export function TextStyleFields({ model, onPatch, families, fontsLoading = false
 				label={__('Text decoration', 'onepress')}
 				value={model.textDecoration || ''}
 				onChange={(v) => onPatch({ textDecoration: v })}
+				disabled={dis('textDecoration')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'none', label: 'none' },
@@ -94,6 +113,7 @@ export function TextStyleFields({ model, onPatch, families, fontsLoading = false
 				label={__('Text align', 'onepress')}
 				value={model.textAlign || ''}
 				onChange={(v) => onPatch({ textAlign: v })}
+				disabled={dis('textAlign')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'left', label: __('Left', 'onepress') },

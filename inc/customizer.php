@@ -89,6 +89,7 @@ function onepress_customize_register($wp_customize)
 	//Site Options
 	require_once $path . '/inc/customize-configs/options.php';
 	require_once $path . '/inc/customize-configs/options-global.php';
+	require_once $path . '/inc/customize-configs/options-typography.php';
 	require_once $path . '/inc/customize-configs/options-styling.php';
 	require_once $path . '/inc/customize-configs/options-colors.php';
 	require_once $path . '/inc/customize-configs/options-header.php';
@@ -172,11 +173,7 @@ function onepress_customize_preview_js()
 		wp_enqueue_script($handle);
 		$styling_ids = apply_filters(
 			'onepress_styling_theme_mod_setting_ids',
-			array(
-				'onepress_element_styling',
-				'onepress_element_styling_single',
-				'onepress_element_styling_fixed_states',
-			)
+			onepress_styling_default_theme_mod_setting_ids()
 		);
 		$styling_ids = array_values(array_filter(array_map('sanitize_key', (array) $styling_ids)));
 		wp_localize_script(

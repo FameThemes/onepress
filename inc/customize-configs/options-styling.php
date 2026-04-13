@@ -19,6 +19,11 @@
  * `text`, `background`, `spacing`, `border`, `shadow`, `display`, `raw`. Invalid ids are dropped.
  * If exactly one id is listed, that group stays open and its header toggle is disabled.
  *
+ * `disable_fields` (optional): array of field tokens (sanitize_key in PHP). Each entry is either a model
+ * key in snake_case / kebab-case (e.g. `font_family` → fontFamily) or a composite alias:
+ * `margin`, `padding`, `border_width`, `border_radius`, `outline`, `font_face`, `inset`, `background_type`,
+ * `flex_layout`, `grid_layout`, `box_shadow`, `raw`, `custom_declarations`. See stylingDisableFields.js.
+ *
  * @package OnePress
  */
 
@@ -71,7 +76,7 @@ $wp_customize->add_control(
 			'styling_breakpoints' => onepress_styling_default_breakpoints(),
 			'styling_multiple'    => false,
 			'styling_states'      => false,
-			'base_selector' => '.onepage-section .section-desc',
+			'base_selector' 			=> '.onepage-section .section-desc',
 			'styling_groups'      => array('text'),
 			'priority'            => 6,
 		)
@@ -115,6 +120,8 @@ $wp_customize->add_control(
 			'styling_states'      => $onepress_styling_fixed_states_demo,
 			'priority'            => 7,
 			'base_selector'       => '.section-title-area .section-title',
+			// Example: array( 'font_face', 'raw', 'box_shadow' ),
+			'disable_fields'      => array(),
 		)
 	)
 );

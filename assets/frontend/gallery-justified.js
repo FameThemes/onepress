@@ -1,11 +1,11 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/frontend/libs/gallery/jquery.justified.js":
+/***/ "./src/frontend/libs/gallery/jquery.justified.js"
 /*!*******************************************************!*\
   !*** ./src/frontend/libs/gallery/jquery.justified.js ***!
   \*******************************************************/
-/***/ ((module, exports, __webpack_require__) => {
+(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * justifiedGallery - v3.8.1
@@ -1180,18 +1180,18 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   };
 });
 
-/***/ }),
+/***/ },
 
-/***/ "jquery":
+/***/ "jquery"
 /*!*************************!*\
   !*** external "jQuery" ***!
   \*************************/
-/***/ ((module) => {
+(module) {
 
 "use strict";
 module.exports = window["jQuery"];
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -1213,6 +1213,12 @@ module.exports = window["jQuery"];
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module

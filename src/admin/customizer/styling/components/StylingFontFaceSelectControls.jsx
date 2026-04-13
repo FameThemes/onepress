@@ -9,6 +9,7 @@ import {
 	fontStylesForWeight,
 	uniqueFontWeights,
 } from '../googleFontCollection';
+import { isFieldDisabled } from '../stylingDisableFields';
 
 /** @typedef {import('../googleFontCollection').PickerFontFamily} PickerFontFamily */
 
@@ -51,8 +52,11 @@ function getSystemFontStyleOptions() {
  * @param {Record<string, string>} props.model
  * @param {(patch: Record<string, string>) => void} props.onPatch
  * @param {PickerFontFamily[] | null | undefined} props.families
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet]
  */
-export function StylingFontFaceSelectControls({ model, onPatch, families }) {
+export function StylingFontFaceSelectControls({ model, onPatch, families, disabledFieldSet }) {
+	const disW = isFieldDisabled(disabledFieldSet, 'fontWeight');
+	const disS = isFieldDisabled(disabledFieldSet, 'fontStyle');
 	const matched = useMemo(
 		() => findFamilyForModel(families, model.fontFamily || ''),
 		[families, model.fontFamily]
@@ -140,46 +144,58 @@ export function StylingFontFaceSelectControls({ model, onPatch, families }) {
 		}
 	}, [faces, matched?.slug, model.fontFamily, model.fontWeight, model.fontStyle, onPatch]);
 
+	if (disW && disS) {
+		return null;
+	}
+
 	const selectWeightOptions = matched?.isSystem ? systemWeightOptions : faces ? weightOptions : null;
 	const selectStyleOptions = matched?.isSystem ? systemStyleOptions : faces ? styleOptions : null;
 
 	if (selectWeightOptions && selectStyleOptions) {
 		return (
 			<>
-				<SelectControl
-					__nextHasNoMarginBottom
-					label={__('Font weight', 'onepress')}
-					value={model.fontWeight ?? ''}
-					options={selectWeightOptions}
-					onChange={(v) => onPatch({ fontWeight: v })}
-				/>
-				<SelectControl
-					__nextHasNoMarginBottom
-					label={__('Font style', 'onepress')}
-					value={model.fontStyle ?? ''}
-					options={selectStyleOptions}
-					onChange={(v) => onPatch({ fontStyle: v })}
-				/>
+				{disW ? null : (
+					<SelectControl
+						__nextHasNoMarginBottom
+						label={__('Font weight', 'onepress')}
+						value={model.fontWeight ?? ''}
+						options={selectWeightOptions}
+						onChange={(v) => onPatch({ fontWeight: v })}
+					/>
+				)}
+				{disS ? null : (
+					<SelectControl
+						__nextHasNoMarginBottom
+						label={__('Font style', 'onepress')}
+						value={model.fontStyle ?? ''}
+						options={selectStyleOptions}
+						onChange={(v) => onPatch({ fontStyle: v })}
+					/>
+				)}
 			</>
 		);
 	}
 
 	return (
 		<>
-			<SelectControl
-				__nextHasNoMarginBottom
-				label={__('Font weight', 'onepress')}
-				value={model.fontWeight ?? ''}
-				options={compactWeightOptions}
-				onChange={(v) => onPatch({ fontWeight: v })}
-			/>
-			<SelectControl
-				__nextHasNoMarginBottom
-				label={__('Font style', 'onepress')}
-				value={model.fontStyle ?? ''}
-				options={compactStyleOptions}
-				onChange={(v) => onPatch({ fontStyle: v })}
-			/>
+			{disW ? null : (
+				<SelectControl
+					__nextHasNoMarginBottom
+					label={__('Font weight', 'onepress')}
+					value={model.fontWeight ?? ''}
+					options={compactWeightOptions}
+					onChange={(v) => onPatch({ fontWeight: v })}
+				/>
+			)}
+			{disS ? null : (
+				<SelectControl
+					__nextHasNoMarginBottom
+					label={__('Font style', 'onepress')}
+					value={model.fontStyle ?? ''}
+					options={compactStyleOptions}
+					onChange={(v) => onPatch({ fontStyle: v })}
+				/>
+			)}
 		</>
 	);
 }

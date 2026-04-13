@@ -93,7 +93,7 @@ function onepress_styling_get_default_json_normal_only()
 /**
  * Build default single-target value from a fixed states template (same shape as `_meta.states` rows).
  *
- * @param array<int, array<string, array{label?:string, selector?:string}>> $template State entries.
+ * @param array<int, array<string, array{label?:string, selector?:string, force_selector?:string}>> $template State entries.
  * @return array<string, mixed>
  */
 function onepress_styling_get_default_value_from_states_template($template)
@@ -124,12 +124,15 @@ function onepress_styling_get_default_value_from_states_template($template)
 		}
 		$label    = isset($row['label']) ? sanitize_text_field((string) $row['label']) : $sk;
 		$selector = isset($row['selector']) ? onepress_styling_sanitize_selector((string) $row['selector']) : '';
-		$out['_meta']['states'][] = array(
-			$sk => array(
-				'label'    => $label,
-				'selector' => $selector,
-			),
+		$force    = isset($row['force_selector']) ? onepress_styling_sanitize_selector((string) $row['force_selector']) : '';
+		$state_row = array(
+			'label'    => $label,
+			'selector' => $selector,
 		);
+		if ($force !== '') {
+			$state_row['force_selector'] = $force;
+		}
+		$out['_meta']['states'][] = array( $sk => $state_row );
 		$out[ $sk ] = array();
 		foreach ($allowed_devices as $dev => $_) {
 			$out[ $sk ][ $dev ] = '';
@@ -142,7 +145,7 @@ function onepress_styling_get_default_value_from_states_template($template)
 }
 
 /**
- * @param array<int, array<string, array{label?:string, selector?:string}>> $template State entries.
+ * @param array<int, array<string, array{label?:string, selector?:string, force_selector?:string}>> $template State entries.
  * @return string
  */
 function onepress_styling_get_default_json_from_states_template($template)
@@ -289,6 +292,29 @@ function onepress_styling_compose_full_selector($base, $state_suffix)
 }
 
 /**
+ * Final CSS selector for one state: optional `force_selector` replaces base+suffix composition.
+ *
+ * @param string              $base_meta Sanitized `_meta.baseSelector`.
+ * @param array<string,mixed> $conf      State row: `selector`, optional `force_selector`.
+ * @return string
+ */
+function onepress_styling_resolve_state_output_selector($base_meta, $conf)
+{
+	$base_meta = is_string($base_meta) ? onepress_styling_sanitize_selector($base_meta) : '';
+	if (is_array($conf) && isset($conf['force_selector'])) {
+		$force = onepress_styling_sanitize_selector((string) $conf['force_selector']);
+		if ($force !== '') {
+			return $force;
+		}
+	}
+	$suffix = ( is_array($conf) && isset($conf['selector']) )
+		? onepress_styling_sanitize_selector((string) $conf['selector'])
+		: '';
+
+	return onepress_styling_compose_full_selector($base_meta, $suffix);
+}
+
+/**
  * Sanitize max-width token for @media.
  *
  * @param string $token Raw.
@@ -346,7 +372,7 @@ function onepress_styling_coerce_device_declarations($v)
  * Sanitize _meta.states array shape.
  *
  * @param mixed $meta Meta array.
- * @return array{baseSelector: string, states: array<int, array<string, array{label:string, selector:string}>>}
+ * @return array{baseSelector: string, states: array<int, array<string, array{label:string, selector:string, force_selector?:string}>>}
  */
 function onepress_styling_sanitize_meta($meta)
 {
@@ -372,12 +398,15 @@ function onepress_styling_sanitize_meta($meta)
 		}
 		$label    = isset($payload['label']) ? sanitize_text_field((string) $payload['label']) : $sk;
 		$selector = isset($payload['selector']) ? onepress_styling_sanitize_selector((string) $payload['selector']) : '';
-		$states[] = array(
-			$sk => array(
-				'label'    => $label,
-				'selector' => $selector,
-			),
+		$force    = isset($payload['force_selector']) ? onepress_styling_sanitize_selector((string) $payload['force_selector']) : '';
+		$row      = array(
+			'label'    => $label,
+			'selector' => $selector,
 		);
+		if ($force !== '') {
+			$row['force_selector'] = $force;
+		}
+		$states[] = array( $sk => $row );
 	}
 	if (empty($states)) {
 		return $fallback;
@@ -621,6 +650,150 @@ function onepress_styling_build_google_fonts_css2_url($merged)
 	return 'https://fonts.googleapis.com/css2?' . implode('&', $parts) . '&display=swap';
 }
 
+require_once __DIR__ . '/styling-customizer-controls-registry.php';
+
+/**
+ * Default theme_mod ids for styling (typography registry + demo element controls). Filter: `onepress_styling_theme_mod_setting_ids`.
+ *
+ * @return list<string>
+ */
+function onepress_styling_default_theme_mod_setting_ids()
+{
+	return array_merge(
+		onepress_styling_typography_theme_mod_ids(),
+		array(
+			'onepress_element_styling',
+			'onepress_element_styling_single',
+			'onepress_element_styling_fixed_states',
+		)
+	);
+}
+
+/**
+ * For registered theme_mod ids that define `base_selector` in the Customizer registry, force
+ * `_meta.baseSelector` so front output matches PHP config (overrides outdated saved values).
+ *
+ * @param string               $setting_id theme_mod key.
+ * @param array<string, mixed> $value      Single-target styling payload (not `items[]` multi).
+ * @return array<string, mixed>
+ */
+function onepress_styling_value_with_registry_base( $setting_id, $value )
+{
+	if ( ! is_array( $value ) ) {
+		return $value;
+	}
+	if ( isset( $value['items'] ) && is_array( $value['items'] ) ) {
+		return $value;
+	}
+	$id = sanitize_key( (string) $setting_id );
+	if ( $id === '' ) {
+		return $value;
+	}
+	$map = onepress_styling_registry_base_selector_map();
+	if ( empty( $map[ $id ] ) ) {
+		return $value;
+	}
+	$out = $value;
+	if ( ! isset( $out['_meta'] ) || ! is_array( $out['_meta'] ) ) {
+		$out['_meta'] = array();
+	}
+	$out['_meta']['baseSelector'] = $map[ $id ];
+	return $out;
+}
+
+/**
+ * For typography registry rows with `base_selector` + array `styling_states`, set each matching state’s
+ * `force_selector` from config: explicit template `force_selector`, else `base_selector` + template `selector`.
+ *
+ * @param string               $setting_id theme_mod key.
+ * @param array<string, mixed> $value      Single-target styling payload (not top-level `items[]` multi).
+ * @return array<string, mixed>
+ *
+ * Filter: `onepress_styling_value_with_registry_state_force_selectors` — ( $out, $setting_id, $value ).
+ */
+function onepress_styling_value_with_registry_state_force_selectors( $setting_id, $value ) {
+	if ( ! is_array( $value ) ) {
+		return $value;
+	}
+	if ( isset( $value['items'] ) && is_array( $value['items'] ) ) {
+		return $value;
+	}
+	$id = sanitize_key( (string) $setting_id );
+	if ( $id === '' ) {
+		return $value;
+	}
+	if ( empty( $value['_meta']['states'] ) || ! is_array( $value['_meta']['states'] ) ) {
+		return $value;
+	}
+	$ctrl = onepress_styling_registry_control_for_setting_id( $id );
+	if ( ! is_array( $ctrl ) ) {
+		return $value;
+	}
+	$base = ! empty( $ctrl['base_selector'] ) && is_string( $ctrl['base_selector'] )
+		? onepress_styling_sanitize_selector( $ctrl['base_selector'] )
+		: '';
+	if ( $base === '' ) {
+		return $value;
+	}
+	$tpl = isset( $ctrl['styling_states'] ) ? $ctrl['styling_states'] : null;
+	if ( ! is_array( $tpl ) || array() === $tpl ) {
+		return $value;
+	}
+	$tmpl_by_key = array();
+	foreach ( $tpl as $entry ) {
+		if ( ! is_array( $entry ) || count( $entry ) !== 1 ) {
+			continue;
+		}
+		$sk = sanitize_key( (string) key( $entry ) );
+		if ( $sk === '' ) {
+			continue;
+		}
+		$row                = current( $entry );
+		$tmpl_by_key[ $sk ] = is_array( $row ) ? $row : array();
+	}
+	if ( empty( $tmpl_by_key ) ) {
+		return $value;
+	}
+	$out   = $value;
+	$meta  = isset( $out['_meta'] ) && is_array( $out['_meta'] ) ? $out['_meta'] : array();
+	$built = array();
+	foreach ( $value['_meta']['states'] as $entry ) {
+		if ( ! is_array( $entry ) || count( $entry ) !== 1 ) {
+			$built[] = $entry;
+			continue;
+		}
+		$sk = sanitize_key( (string) key( $entry ) );
+		if ( $sk === '' || ! isset( $tmpl_by_key[ $sk ] ) ) {
+			$built[] = $entry;
+			continue;
+		}
+		$conf = current( $entry );
+		if ( ! is_array( $conf ) ) {
+			$built[] = $entry;
+			continue;
+		}
+		$tmpl_row = $tmpl_by_key[ $sk ];
+		$explicit = isset( $tmpl_row['force_selector'] ) ? onepress_styling_sanitize_selector( (string) $tmpl_row['force_selector'] ) : '';
+		if ( $explicit !== '' ) {
+			$forced = $explicit;
+		} else {
+			$suffix_tmpl = isset( $tmpl_row['selector'] ) ? onepress_styling_sanitize_selector( (string) $tmpl_row['selector'] ) : '';
+			$forced      = onepress_styling_compose_full_selector( $base, $suffix_tmpl );
+		}
+		if ( $forced === '' ) {
+			$built[] = $entry;
+			continue;
+		}
+		$next                 = $conf;
+		$next['force_selector'] = $forced;
+		$built[]              = array( $sk => $next );
+	}
+	$meta['states'] = $built;
+	$out['_meta']   = $meta;
+
+	return apply_filters( 'onepress_styling_value_with_registry_state_force_selectors', $out, $setting_id, $value );
+}
+
 /**
  * Enqueue one merged Google Fonts stylesheet for all registered styling theme_mods.
  *
@@ -633,11 +806,7 @@ function onepress_styling_enqueue_merged_google_fonts()
 	}
 	$ids = apply_filters(
 		'onepress_styling_theme_mod_setting_ids',
-		array(
-			'onepress_element_styling',
-			'onepress_element_styling_single',
-			'onepress_element_styling_fixed_states',
-		)
+		onepress_styling_default_theme_mod_setting_ids()
 	);
 	if (! is_array($ids) || empty($ids)) {
 		return;
@@ -656,6 +825,8 @@ function onepress_styling_enqueue_merged_google_fonts()
 		if (! is_array($arr)) {
 			continue;
 		}
+		$arr = onepress_styling_value_with_registry_base($setting_id, $arr);
+		$arr = onepress_styling_value_with_registry_state_force_selectors($setting_id, $arr);
 		onepress_styling_merge_google_axes_from_value_into($merged, $arr);
 	}
 	$url = onepress_styling_build_google_fonts_css2_url($merged);
@@ -820,11 +991,13 @@ function onepress_sanitize_styling_value_multi($raw)
 /**
  * Build CSS from sanitized array value.
  *
- * @param array<string, mixed> $value       Styling payload.
- * @param array<int, array>|null $breakpoints Override breakpoints.
+ * @param array<string, mixed>   $value                  Styling payload.
+ * @param array<int, array>|null $breakpoints            Override breakpoints.
+ * @param string|null            $override_base_selector When not null, use this as base for `baseSelector + state suffix`
+ *                                                     instead of `_meta.baseSelector`. States with `force_selector` ignore it.
  * @return string
  */
-function onepress_styling_build_css_from_value($value, $breakpoints = null)
+function onepress_styling_build_css_from_value($value, $breakpoints = null, $override_base_selector = null)
 {
 	if (! is_array($value)) {
 		return '';
@@ -833,7 +1006,7 @@ function onepress_styling_build_css_from_value($value, $breakpoints = null)
 		$parts = array();
 		foreach ($value['items'] as $item) {
 			if (is_array($item)) {
-				$parts[] = onepress_styling_build_css_from_value($item, $breakpoints);
+				$parts[] = onepress_styling_build_css_from_value($item, $breakpoints, $override_base_selector);
 			}
 		}
 		return trim(implode("\n", array_filter($parts)));
@@ -844,7 +1017,11 @@ function onepress_styling_build_css_from_value($value, $breakpoints = null)
 	$bps = $breakpoints ? $breakpoints : onepress_styling_default_breakpoints();
 	$css = '';
 
-	$base_meta = isset($value['_meta']['baseSelector']) ? onepress_styling_sanitize_selector((string) $value['_meta']['baseSelector']) : '';
+	if (null !== $override_base_selector) {
+		$base_meta = onepress_styling_sanitize_selector((string) $override_base_selector);
+	} else {
+		$base_meta = isset($value['_meta']['baseSelector']) ? onepress_styling_sanitize_selector((string) $value['_meta']['baseSelector']) : '';
+	}
 
 	foreach ($value['_meta']['states'] as $entry) {
 		if (! is_array($entry) || count($entry) !== 1) {
@@ -852,8 +1029,10 @@ function onepress_styling_build_css_from_value($value, $breakpoints = null)
 		}
 		$state_key = sanitize_key(key($entry));
 		$conf      = current($entry);
-		$suffix    = isset($conf['selector']) ? onepress_styling_sanitize_selector((string) $conf['selector']) : '';
-		$selector  = onepress_styling_compose_full_selector($base_meta, $suffix);
+		$selector  = onepress_styling_resolve_state_output_selector(
+			$base_meta,
+			is_array($conf) ? $conf : array()
+		);
 		if ($selector === '' || $state_key === '') {
 			continue;
 		}
@@ -887,17 +1066,27 @@ function onepress_styling_build_css_from_value($value, $breakpoints = null)
  * Runs in Customizer preview too so the iframe gets rules on first paint (postMessage JS may run
  * before the setting value is available). Live edits still update via preview JS style tags.
  *
+ * @param string|null $override_base_selector Optional. When not null, passed to `onepress_styling_build_css_from_value`
+ *                                            for every setting (replaces stored base for composition; `force_selector`
+ *                                            states unchanged). Filter `onepress_styling_print_theme_css_override_base`
+ *                                            can set this when the function is invoked with no args (e.g. `wp_head`).
  * @return void
  */
-function onepress_styling_print_theme_css()
+function onepress_styling_print_theme_css($override_base_selector = null)
 {
+	/**
+	 * Override base selector for inline theme styling output (all registered ids in one pass).
+	 *
+	 * @param string|null $override_base_selector Same semantics as `onepress_styling_print_theme_css()` argument.
+	 */
+	$override_base_selector = apply_filters('onepress_styling_print_theme_css_override_base', $override_base_selector);
+	if (null !== $override_base_selector && ! is_string($override_base_selector)) {
+		$override_base_selector = null;
+	}
+
 	$ids = apply_filters(
 		'onepress_styling_theme_mod_setting_ids',
-		array(
-			'onepress_element_styling',
-			'onepress_element_styling_single',
-			'onepress_element_styling_fixed_states',
-		)
+		onepress_styling_default_theme_mod_setting_ids()
 	);
 	if (! is_array($ids) || empty($ids)) {
 		return;
@@ -916,7 +1105,9 @@ function onepress_styling_print_theme_css()
 		if (! is_array($arr)) {
 			continue;
 		}
-		$all .= onepress_styling_build_css_from_value($arr);
+		$arr = onepress_styling_value_with_registry_base($id, $arr);
+		$arr = onepress_styling_value_with_registry_state_force_selectors($id, $arr);
+		$all .= onepress_styling_build_css_from_value($arr, null, $override_base_selector);
 	}
 	if ($all === '') {
 		return;

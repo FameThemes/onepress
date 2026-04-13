@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from '@wordpress/element';
 import { CssEnumButtonGroup } from './CssEnumButtonGroup';
 import { StylingAlphaColorControl } from './StylingAlphaColorControl';
 import { StylingBackgroundImageControl } from './StylingBackgroundImageControl';
+import { isFieldDisabled } from '../stylingDisableFields';
 
 /** @type {'color' | 'image' | 'gradient'} */
 const BG_TYPE_COLOR = 'color';
@@ -67,8 +68,11 @@ function inferBackgroundType(model) {
  * @param {string} props.sliceKey
  * @param {Record<string, string>} props.model
  * @param {(patch: Record<string, string>) => void} props.onPatch
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet]
  */
-export function BackgroundFields({ sliceKey, model, onPatch }) {
+export function BackgroundFields({ sliceKey, model, onPatch, disabledFieldSet }) {
+	const d = disabledFieldSet;
+	const dis = (key) => isFieldDisabled(d, key);
 	const inferred = inferBackgroundType(model);
 	const [uiType, setUiType] = useState(inferred);
 
@@ -145,26 +149,29 @@ export function BackgroundFields({ sliceKey, model, onPatch }) {
 
 	return (
 		<>
-			<CssEnumButtonGroup
-				label={__('Background type', 'onepress')}
-				value={uiType}
-				onChange={onBackgroundTypeChange}
-				options={[
-					{ value: BG_TYPE_COLOR, label: __('Color', 'onepress') },
-					{ value: BG_TYPE_IMAGE, label: __('Image', 'onepress') },
-					{ value: BG_TYPE_GRADIENT, label: __('Gradient', 'onepress') },
-				]}
-			/>
+			{dis('__onepressBgType') ? null : (
+				<CssEnumButtonGroup
+					label={__('Background type', 'onepress')}
+					value={uiType}
+					onChange={onBackgroundTypeChange}
+					options={[
+						{ value: BG_TYPE_COLOR, label: __('Color', 'onepress') },
+						{ value: BG_TYPE_IMAGE, label: __('Image', 'onepress') },
+						{ value: BG_TYPE_GRADIENT, label: __('Gradient', 'onepress') },
+					]}
+				/>
+			)}
 
 			{uiType === BG_TYPE_COLOR ? (
 				<StylingAlphaColorControl
 					label={__('Background color', 'onepress')}
 					value={model.backgroundColor || ''}
 					onChange={(v) => onPatch({ backgroundColor: v })}
+					disabled={dis('backgroundColor')}
 				/>
 			) : null}
 
-			{uiType === BG_TYPE_IMAGE ? (
+			{uiType === BG_TYPE_IMAGE && !dis('backgroundImage') ? (
 				<>
 					<BaseControl label={__('Background image', 'onepress')}>
 						<StylingBackgroundImageControl
@@ -179,6 +186,7 @@ export function BackgroundFields({ sliceKey, model, onPatch }) {
 								label={__('Background size', 'onepress')}
 								value={model.backgroundSize || ''}
 								onChange={(v) => onPatch({ backgroundSize: v })}
+								disabled={dis('backgroundSize')}
 								options={[
 									{ value: '', label: __('Default', 'onepress') },
 									{ value: 'auto', label: 'auto' },
@@ -190,6 +198,7 @@ export function BackgroundFields({ sliceKey, model, onPatch }) {
 								label={__('Background repeat', 'onepress')}
 								value={model.backgroundRepeat || ''}
 								onChange={(v) => onPatch({ backgroundRepeat: v })}
+								disabled={dis('backgroundRepeat')}
 								options={[
 									{ value: '', label: __('Default', 'onepress') },
 									{ value: 'no-repeat', label: 'no-repeat' },
@@ -202,6 +211,7 @@ export function BackgroundFields({ sliceKey, model, onPatch }) {
 								label={__('Background attachment', 'onepress')}
 								value={model.backgroundAttachment || ''}
 								onChange={(v) => onPatch({ backgroundAttachment: v })}
+								disabled={dis('backgroundAttachment')}
 								options={[
 									{ value: '', label: __('Default', 'onepress') },
 									{ value: 'scroll', label: 'scroll' },
@@ -214,7 +224,7 @@ export function BackgroundFields({ sliceKey, model, onPatch }) {
 				</>
 			) : null}
 
-			{uiType === BG_TYPE_GRADIENT ? (
+			{uiType === BG_TYPE_GRADIENT && !dis('backgroundImage') ? (
 				<BaseControl label={__('Background gradient', 'onepress')}>
 					<GradientPicker
 						__experimentalIsRenderedInSidebar

@@ -55,6 +55,7 @@ export function resolveAllowedGroupIds(stylingGroups) {
  * @param {boolean | undefined} [props.fontsLoading]
  * @param {Error | null | undefined} [props.fontsError]
  * @param {string[] | null | undefined} [props.stylingGroups] — whitelist + order; omit/null = all
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet] — model keys / internal sentinels to hide
  */
 export function StylingAccordionPanels({
 	model,
@@ -67,6 +68,7 @@ export function StylingAccordionPanels({
 	fontsLoading,
 	fontsError,
 	stylingGroups,
+	disabledFieldSet,
 }) {
 	const [openSection, setOpenSection] = useState(/** @type {StylingAccordionSection} */(null));
 
@@ -147,25 +149,61 @@ export function StylingAccordionPanels({
 							families={families}
 							fontsLoading={fontsLoading}
 							fontsError={fontsError}
+							disabledFieldSet={disabledFieldSet}
 						/>
 					);
 				case 'background':
-					return <BackgroundFields sliceKey={sliceKey} model={model} onPatch={onPatch} />;
+					return (
+						<BackgroundFields
+							sliceKey={sliceKey}
+							model={model}
+							onPatch={onPatch}
+							disabledFieldSet={disabledFieldSet}
+						/>
+					);
 				case 'spacing':
-					return <SpacingFields sliceKey={sliceKey} model={model} onPatch={onPatch} />;
+					return (
+						<SpacingFields
+							sliceKey={sliceKey}
+							model={model}
+							onPatch={onPatch}
+							disabledFieldSet={disabledFieldSet}
+						/>
+					);
 				case 'border':
-					return <BorderOutlineFields sliceKey={sliceKey} model={model} onPatch={onPatch} />;
+					return (
+						<BorderOutlineFields
+							sliceKey={sliceKey}
+							model={model}
+							onPatch={onPatch}
+							disabledFieldSet={disabledFieldSet}
+						/>
+					);
 				case 'shadow':
-					return <ShadowFields model={model} onPatch={onPatch} />;
+					return <ShadowFields model={model} onPatch={onPatch} disabledFieldSet={disabledFieldSet} />;
 				case 'display':
-					return <DisplayLayoutFields model={model} onPatch={onPatch} />;
+					return (
+						<DisplayLayoutFields model={model} onPatch={onPatch} disabledFieldSet={disabledFieldSet} />
+					);
 				case 'raw':
-					return <RawDeclarationsField value={rawCss} onChange={onRawChange} />;
+					return (
+						<RawDeclarationsField value={rawCss} onChange={onRawChange} disabledFieldSet={disabledFieldSet} />
+					);
 				default:
 					return null;
 			}
 		},
-		[model, onPatch, sliceKey, rawCss, onRawChange, families, fontsLoading, fontsError]
+		[
+			model,
+			onPatch,
+			sliceKey,
+			rawCss,
+			onRawChange,
+			families,
+			fontsLoading,
+			fontsError,
+			disabledFieldSet,
+		]
 	);
 
 	return (

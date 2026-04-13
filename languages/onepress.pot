@@ -3,998 +3,151 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/styling/StylingAccordionPanels.jsx:79
-msgid "Text"
+#: src/admin/customizer/styling/StylingControlApp.jsx:1019
+msgid "Item %d"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingAccordionPanels.jsx:80
-msgid "Background"
+#: src/admin/customizer/styling/StylingControlApp.jsx:1028
+msgid "Reset this item to default"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingAccordionPanels.jsx:81
-msgid "Spacing"
+#: src/admin/customizer/styling/StylingControlApp.jsx:1040
+msgid "Edit styling"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingAccordionPanels.jsx:82
-msgid "Border & radius"
+#: src/admin/customizer/styling/StylingControlApp.jsx:1053
+msgid "Add item"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingAccordionPanels.jsx:83
-msgid "Shadow"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingAccordionPanels.jsx:84
-msgid "Display & layout"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingAccordionPanels.jsx:85
-msgid "Custom declarations"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1029
+#: src/admin/customizer/styling/StylingControlApp.jsx:1092
 msgid "Manage states"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1030
-#: src/admin/customizer/styling/StylingControlApp.jsx:982
-#: src/admin/customizer/styling/StylingControlApp.jsx:1142
-#: src/admin/customizer/styling/StylingControlApp.jsx:1009
-#: src/admin/customizer/styling/StylingControlApp.jsx:1029
-#: src/admin/customizer/styling/StylingControlApp.jsx:1018
-#: src/admin/customizer/styling/StylingControlApp.jsx:1017
-#: src/admin/customizer/styling/StylingControlApp.jsx:995
-#: src/admin/customizer/styling/StylingControlApp.jsx:991
-#: src/admin/customizer/styling/StylingControlApp.jsx:987
-#: src/admin/customizer/styling/StylingControlApp.jsx:986
-#: src/admin/customizer/styling/StylingControlApp.jsx:990
-#: src/admin/customizer/styling/StylingControlApp.jsx:989
-#: src/admin/customizer/styling/StylingControlApp.jsx:1044
-#: src/admin/customizer/styling/StylingControlApp.jsx:967
-#: src/admin/customizer/styling/StylingControlApp.jsx:988
-#: src/admin/customizer/styling/StylingControlApp.jsx:953
-#: src/admin/customizer/styling/StylingControlApp.jsx:954
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:517
-#: src/admin/customizer/styling/StylingControlApp.jsx:948
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:511
-#: src/admin/customizer/styling/StylingControlApp.jsx:947
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:510
-#: src/admin/customizer/styling/StylingControlApp.jsx:949
-#: src/admin/customizer/styling/StylingControlApp.jsx:968
-#: src/admin/customizer/styling/StylingControlApp.jsx:964
-#: src/admin/customizer/styling/StylingControlApp.jsx:965
-#: src/admin/customizer/styling/StylingControlApp.jsx:962
-#: src/admin/customizer/styling/StylingControlApp.jsx:950
-#: src/admin/customizer/styling/StylingControlApp.jsx:946
-#: src/admin/customizer/styling/StylingControlApp.jsx:921
-#: src/admin/customizer/styling/StylingControlApp.jsx:852
-#: src/admin/customizer/styling/StylingControlApp.jsx:849
-#: src/admin/customizer/styling/StylingControlApp.jsx:811
-#: src/admin/customizer/styling/StylingControlApp.jsx:808
-#: src/admin/customizer/styling/StylingControlApp.jsx:799
-#: src/admin/customizer/styling/StylingControlApp.jsx:800
-#: src/admin/customizer/styling/StylingControlApp.jsx:798
-#: src/admin/customizer/styling/StylingControlApp.jsx:786
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:459
+#: src/admin/customizer/styling/StylingControlApp.jsx:1093
 msgid "State settings"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1048
+#: src/admin/customizer/styling/StylingControlApp.jsx:1111
 msgid "Cancel picking from preview"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1049
+#: src/admin/customizer/styling/StylingControlApp.jsx:1112
 msgid "Pick a selector from the site preview"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1072
+#: src/admin/customizer/styling/StylingControlApp.jsx:1137
 msgid "Style states"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1147
-#: src/admin/customizer/styling/StylingControlApp.jsx:1149
-#: src/admin/customizer/styling/StylingControlApp.jsx:1146
-#: src/admin/customizer/styling/StylingControlApp.jsx:1148
-#: src/admin/customizer/styling/StylingControlApp.jsx:927
-#: src/admin/customizer/styling/StylingControlApp.jsx:1270
-#: src/admin/customizer/styling/StylingControlApp.jsx:1137
-#: src/admin/customizer/styling/StylingControlApp.jsx:1158
-#: src/admin/customizer/styling/StylingControlApp.jsx:1160
-#: src/admin/customizer/styling/StylingControlApp.jsx:1136
-#: src/admin/customizer/styling/StylingControlApp.jsx:1135
-#: src/admin/customizer/styling/StylingControlApp.jsx:1113
-#: src/admin/customizer/styling/StylingControlApp.jsx:1109
-#: src/admin/customizer/styling/StylingControlApp.jsx:1105
-#: src/admin/customizer/styling/StylingControlApp.jsx:1104
-#: src/admin/customizer/styling/StylingControlApp.jsx:1107
-#: src/admin/customizer/styling/StylingControlApp.jsx:1106
-#: src/admin/customizer/styling/StylingControlApp.jsx:1103
-#: src/admin/customizer/styling/StylingControlApp.jsx:1083
-#: src/admin/customizer/styling/StylingControlApp.jsx:1100
-#: src/admin/customizer/styling/StylingControlApp.jsx:1099
-#: src/admin/customizer/styling/StylingControlApp.jsx:1094
-#: src/admin/customizer/styling/StylingControlApp.jsx:1084
-#: src/admin/customizer/styling/StylingControlApp.jsx:1050
-#: src/admin/customizer/styling/StylingControlApp.jsx:1051
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:418
+#: src/admin/customizer/styling/StylingControlApp.jsx:1214
 msgid "Item name"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1148
-#: src/admin/customizer/styling/StylingControlApp.jsx:1150
-#: src/admin/customizer/styling/StylingControlApp.jsx:1147
-#: src/admin/customizer/styling/StylingControlApp.jsx:1149
-#: src/admin/customizer/styling/StylingControlApp.jsx:928
-#: src/admin/customizer/styling/StylingControlApp.jsx:1271
-#: src/admin/customizer/styling/StylingControlApp.jsx:1138
-#: src/admin/customizer/styling/StylingControlApp.jsx:1159
-#: src/admin/customizer/styling/StylingControlApp.jsx:1161
-#: src/admin/customizer/styling/StylingControlApp.jsx:1137
-#: src/admin/customizer/styling/StylingControlApp.jsx:1136
-#: src/admin/customizer/styling/StylingControlApp.jsx:1114
-#: src/admin/customizer/styling/StylingControlApp.jsx:1110
-#: src/admin/customizer/styling/StylingControlApp.jsx:1106
-#: src/admin/customizer/styling/StylingControlApp.jsx:1105
-#: src/admin/customizer/styling/StylingControlApp.jsx:1108
-#: src/admin/customizer/styling/StylingControlApp.jsx:1107
-#: src/admin/customizer/styling/StylingControlApp.jsx:1104
-#: src/admin/customizer/styling/StylingControlApp.jsx:1084
-#: src/admin/customizer/styling/StylingControlApp.jsx:1101
-#: src/admin/customizer/styling/StylingControlApp.jsx:1100
-#: src/admin/customizer/styling/StylingControlApp.jsx:1095
-#: src/admin/customizer/styling/StylingControlApp.jsx:1085
-#: src/admin/customizer/styling/StylingControlApp.jsx:1051
-#: src/admin/customizer/styling/StylingControlApp.jsx:1052
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:419
+#: src/admin/customizer/styling/StylingControlApp.jsx:1215
 msgid "Label shown in the list for this target."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1160
-#: src/admin/customizer/styling/StylingControlApp.jsx:1162
-#: src/admin/customizer/styling/StylingControlApp.jsx:1159
-#: src/admin/customizer/styling/StylingControlApp.jsx:1161
-#: src/admin/customizer/styling/StylingControlApp.jsx:940
-#: src/admin/customizer/styling/StylingControlApp.jsx:1283
-#: src/admin/customizer/styling/StylingControlApp.jsx:1150
-#: src/admin/customizer/styling/StylingControlApp.jsx:1171
-#: src/admin/customizer/styling/StylingControlApp.jsx:1173
-#: src/admin/customizer/styling/StylingControlApp.jsx:1149
-#: src/admin/customizer/styling/StylingControlApp.jsx:1148
-#: src/admin/customizer/styling/StylingControlApp.jsx:1126
-#: src/admin/customizer/styling/StylingControlApp.jsx:1122
-#: src/admin/customizer/styling/StylingControlApp.jsx:1118
-#: src/admin/customizer/styling/StylingControlApp.jsx:1117
-#: src/admin/customizer/styling/StylingControlApp.jsx:1120
-#: src/admin/customizer/styling/StylingControlApp.jsx:1119
-#: src/admin/customizer/styling/StylingControlApp.jsx:1116
-#: src/admin/customizer/styling/StylingControlApp.jsx:1096
-#: src/admin/customizer/styling/StylingControlApp.jsx:1113
-#: src/admin/customizer/styling/StylingControlApp.jsx:1112
-#: src/admin/customizer/styling/StylingControlApp.jsx:1107
-#: src/admin/customizer/styling/StylingControlApp.jsx:1097
-#: src/admin/customizer/styling/StylingControlApp.jsx:1063
-#: src/admin/customizer/styling/StylingControlApp.jsx:1064
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:430
+#: src/admin/customizer/styling/StylingControlApp.jsx:1227
 msgid "Base CSS selector"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1163
-#: src/admin/customizer/styling/StylingControlApp.jsx:1165
-#: src/admin/customizer/styling/StylingControlApp.jsx:1162
-#: src/admin/customizer/styling/StylingControlApp.jsx:1164
-#: src/admin/customizer/styling/StylingControlApp.jsx:943
-#: src/admin/customizer/styling/StylingControlApp.jsx:1286
-#: src/admin/customizer/styling/StylingControlApp.jsx:1153
-#: src/admin/customizer/styling/StylingControlApp.jsx:1174
-#: src/admin/customizer/styling/StylingControlApp.jsx:1176
-#: src/admin/customizer/styling/StylingControlApp.jsx:1152
-#: src/admin/customizer/styling/StylingControlApp.jsx:1151
-#: src/admin/customizer/styling/StylingControlApp.jsx:1129
-#: src/admin/customizer/styling/StylingControlApp.jsx:1125
-#: src/admin/customizer/styling/StylingControlApp.jsx:1121
-#: src/admin/customizer/styling/StylingControlApp.jsx:1120
-#: src/admin/customizer/styling/StylingControlApp.jsx:1123
-#: src/admin/customizer/styling/StylingControlApp.jsx:1122
-#: src/admin/customizer/styling/StylingControlApp.jsx:1119
-#: src/admin/customizer/styling/StylingControlApp.jsx:1099
-#: src/admin/customizer/styling/StylingControlApp.jsx:1116
-#: src/admin/customizer/styling/StylingControlApp.jsx:1115
-#: src/admin/customizer/styling/StylingControlApp.jsx:1110
-#: src/admin/customizer/styling/StylingControlApp.jsx:1100
-#: src/admin/customizer/styling/StylingControlApp.jsx:1066
-#: src/admin/customizer/styling/StylingControlApp.jsx:1067
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:433
+#: src/admin/customizer/styling/StylingControlApp.jsx:1230
 msgid ""
 "Rules apply to this target. Each state can add a suffix (e.g. :hover) in "
 "its settings or below when that tab is active."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1167
-#: src/admin/customizer/styling/StylingControlApp.jsx:1169
-#: src/admin/customizer/styling/StylingControlApp.jsx:1166
-#: src/admin/customizer/styling/StylingControlApp.jsx:1168
-#: src/admin/customizer/styling/StylingControlApp.jsx:947
-#: src/admin/customizer/styling/StylingControlApp.jsx:1290
-#: src/admin/customizer/styling/StylingControlApp.jsx:1157
-#: src/admin/customizer/styling/StylingControlApp.jsx:1178
-#: src/admin/customizer/styling/StylingControlApp.jsx:1180
-#: src/admin/customizer/styling/StylingControlApp.jsx:1156
-#: src/admin/customizer/styling/StylingControlApp.jsx:1155
-#: src/admin/customizer/styling/StylingControlApp.jsx:1133
-#: src/admin/customizer/styling/StylingControlApp.jsx:1129
-#: src/admin/customizer/styling/StylingControlApp.jsx:1125
-#: src/admin/customizer/styling/StylingControlApp.jsx:1124
-#: src/admin/customizer/styling/StylingControlApp.jsx:1127
-#: src/admin/customizer/styling/StylingControlApp.jsx:1126
-#: src/admin/customizer/styling/StylingControlApp.jsx:1123
-#: src/admin/customizer/styling/StylingControlApp.jsx:1103
-#: src/admin/customizer/styling/StylingControlApp.jsx:1120
-#: src/admin/customizer/styling/StylingControlApp.jsx:1119
-#: src/admin/customizer/styling/StylingControlApp.jsx:1114
-#: src/admin/customizer/styling/StylingControlApp.jsx:1104
-#: src/admin/customizer/styling/StylingControlApp.jsx:1070
-#: src/admin/customizer/styling/StylingControlApp.jsx:1071
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:437
+#: src/admin/customizer/styling/StylingControlApp.jsx:1234
 msgid "The base selector is fixed for this control and cannot be changed here."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1209
+#: src/admin/customizer/styling/StylingControlApp.jsx:1276
 msgid "Reset"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1210
+#: src/admin/customizer/styling/StylingControlApp.jsx:1277
 msgid "Cancel"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1215
+#: src/admin/customizer/styling/StylingControlApp.jsx:1282
 msgid ""
 "Reset all targets to their default styling? Every item in this list will be "
 "restored and unsaved changes will be lost."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1219
+#: src/admin/customizer/styling/StylingControlApp.jsx:1286
 msgid ""
 "Reset this styling block to its default? Current declarations will be "
 "replaced."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1229
+#: src/admin/customizer/styling/StylingControlApp.jsx:1296
 #. %s: item label
 msgid ""
 "Reset \"%s\" to its default styling? This target's declarations will be "
 "replaced."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1236
+#: src/admin/customizer/styling/StylingControlApp.jsx:1303
 msgid "this item"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:176
+#: src/admin/customizer/styling/StylingControlApp.jsx:182
 msgid "Desktop"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:177
+#: src/admin/customizer/styling/StylingControlApp.jsx:183
 msgid "Tablet"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:178
+#: src/admin/customizer/styling/StylingControlApp.jsx:184
 msgid "Mobile"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:185
+#: src/admin/customizer/styling/StylingControlApp.jsx:191
 msgid "Element styling"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:192
+#: src/admin/customizer/styling/StylingControlApp.jsx:198
 msgid ""
 "Per state and breakpoint, enter CSS declarations only (no selectors or "
 "curly braces). Example: color: #2271b1; padding: 8px 12px;"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:275
+#: src/admin/customizer/styling/StylingControlApp.jsx:292
 msgid "Item 1"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:596
+#: src/admin/customizer/styling/StylingControlApp.jsx:625
 msgid "CSS selector applied:"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:603
+#: src/admin/customizer/styling/StylingControlApp.jsx:632
 #. %s: CSS selector string
 msgid "CSS selector applied: %s"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:807
+#: src/admin/customizer/styling/StylingControlApp.jsx:857
 msgid "New item"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:885
+#: src/admin/customizer/styling/StylingControlApp.jsx:937
 msgid "Invalid styling configuration (no states). Save to reset defaults."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:903
+#: src/admin/customizer/styling/StylingControlApp.jsx:962
 #. %s: item label
 msgid "Edit styling: %s"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:923
+#: src/admin/customizer/styling/StylingControlApp.jsx:982
 msgid "Reset all items to default"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:924
+#: src/admin/customizer/styling/StylingControlApp.jsx:983
 msgid "Reset to default"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:958
-msgid "Item %d"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:967
-msgid "Reset this item to default"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:979
-msgid "Edit styling"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:992
-msgid "Add item"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:149
-msgid "Background type"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:153
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:228
-msgid "Color"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:154
-msgid "Image"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:155
-msgid "Gradient"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:161
-msgid "Background color"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:169
-#: src/admin/customizer/styling/components/StylingBackgroundImageControl.jsx:47
-msgid "Background image"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:179
-msgid "Background size"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:190
-msgid "Background repeat"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:202
-msgid "Background attachment"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:206
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:204
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:205
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:209
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:63
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:60
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:61
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:284
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:285
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:177
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:98
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:97
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:96
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:60
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:51
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:50
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:61
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:65
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:70
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:62
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:26
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:73
-#: src/admin/customizer/styling/components/GridLayoutFields.jsx:51
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:110
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:188
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:187
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:165
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:166
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:98
-msgid "Default"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BackgroundFields.jsx:224
-msgid "Background gradient"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:23
-msgid "Border style"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:36
-msgid "Border width"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:46
-msgid "Link border widths"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:47
-msgid "Unlink border widths"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:51
-msgid "Border color"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:57
-msgid "Outline style"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:77
-msgid "Outline width"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:83
-msgid "Outline color"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderOutlineFields.jsx:88
-msgid "Outline offset"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderRadiusField.jsx:101
-msgid "Top right"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderRadiusField.jsx:107
-msgid "Bottom right"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderRadiusField.jsx:113
-msgid "Bottom left"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderRadiusField.jsx:68
-msgid "Border radius"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderRadiusField.jsx:72
-msgid "Link corners"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderRadiusField.jsx:73
-msgid "Unlink corners"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderRadiusField.jsx:79
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:98
-msgid "Value"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BorderRadiusField.jsx:95
-msgid "Top left"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:155
-msgid ""
-"This value uses multiple shadows or a color the generator cannot parse. "
-"Edit it as CSS, or use a single shadow with a hex, rgb, hsl, or keyword "
-"color."
-msgstr ""
-
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:184
-msgid "Box shadow"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:188
-msgid "Shift right"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:195
-msgid "Shift down"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:202
-msgid "Spread"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:209
-msgid "Blur"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:221
-msgid "Inset"
-msgstr ""
-
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:98
-#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:95
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:243
-msgid "Opacity"
-msgstr ""
-
-#: src/admin/customizer/styling/components/DeviceSwitcherChip.jsx:25
-msgid "Switch breakpoint (all length fields)"
-msgstr ""
-
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:216
-msgid "Display"
-msgstr ""
-
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:233
-msgid "Visibility"
-msgstr ""
-
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:248
-msgid "Position"
-msgstr ""
-
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:263
-msgid "Width"
-msgstr ""
-
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:269
-msgid "Height"
-msgstr ""
-
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:275
-msgid "Z-index"
-msgstr ""
-
-#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:280
-msgid "Overflow"
-msgstr ""
-
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:18
-msgid "Flex"
-msgstr ""
-
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:20
-msgid "Flex direction"
-msgstr ""
-
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:32
-msgid "Flex wrap"
-msgstr ""
-
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:43
-msgid "Justify content"
-msgstr ""
-
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:56
-msgid "Align items"
-msgstr ""
-
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:69
-msgid "Align content"
-msgstr ""
-
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:81
-#: src/admin/customizer/styling/components/GridLayoutFields.jsx:59
-msgid "Gap"
-msgstr ""
-
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:87
-msgid "Row gap"
-msgstr ""
-
-#: src/admin/customizer/styling/components/FlexLayoutFields.jsx:93
-msgid "Column gap"
-msgstr ""
-
-#: src/admin/customizer/styling/components/GridLayoutFields.jsx:19
-msgid "Grid"
-msgstr ""
-
-#: src/admin/customizer/styling/components/GridLayoutFields.jsx:20
-msgid "Grid template columns"
-msgstr ""
-
-#: src/admin/customizer/styling/components/GridLayoutFields.jsx:27
-msgid "Grid template rows"
-msgstr ""
-
-#: src/admin/customizer/styling/components/GridLayoutFields.jsx:35
-msgid "Grid auto flow"
-msgstr ""
-
-#: src/admin/customizer/styling/components/GridLayoutFields.jsx:47
-msgid "Justify items"
-msgstr ""
-
-#: src/admin/customizer/styling/components/InsetSidesFields.jsx:17
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:108
-msgid "Top"
-msgstr ""
-
-#: src/admin/customizer/styling/components/InsetSidesFields.jsx:23
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:101
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:114
-msgid "Right"
-msgstr ""
-
-#: src/admin/customizer/styling/components/InsetSidesFields.jsx:29
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:120
-msgid "Bottom"
-msgstr ""
-
-#: src/admin/customizer/styling/components/InsetSidesFields.jsx:35
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:99
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:126
-msgid "Left"
-msgstr ""
-
-#: src/admin/customizer/styling/components/PreservedPropertiesNotice.jsx:16
-msgid "Extra CSS properties from manual edits are preserved."
-msgstr ""
-
-#: src/admin/customizer/styling/components/RawDeclarationsField.jsx:18
-msgid "Raw CSS (full string for this state & device)"
-msgstr ""
-
-#: src/admin/customizer/styling/components/RawDeclarationsField.jsx:31
-msgid ""
-"Overrides are parsed into the groups above when possible; other properties "
-"stay preserved."
-msgstr ""
-
-#: src/admin/customizer/styling/components/SpacingFields.jsx:18
-msgid "Margin"
-msgstr ""
-
-#: src/admin/customizer/styling/components/SpacingFields.jsx:25
-msgid "Padding"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingAlphaColorControl.jsx:104
-msgid ""
-"Swatch and picker need a parseable color (hex, rgb, hsl). You can still use "
-"any CSS color value here (e.g. var(--token))."
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingAlphaColorControl.jsx:123
-#. %s: field label
-msgid "Toggle color picker (%s)"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingAlphaColorControl.jsx:135
-msgid "#000000"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingBackgroundImageControl.jsx:48
-msgid "Use image"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingBackgroundImageControl.jsx:79
-msgid "Select from Media Library"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingBackgroundImageControl.jsx:83
-msgid "Remove"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:171
-msgid "Font weight"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:178
-msgid "Font style"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:72
-msgid "Bold"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:79
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:189
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:188
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:166
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:167
-#: src/admin/customizer/styling/stylingStatesPolicy.js:52
+#: src/admin/customizer/styling/stylingStatesPolicy.js:53
 msgid "Normal"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:80
-msgid "Italic"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx:81
-msgid "Oblique"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:136
-msgid "Search fonts"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:140
-msgid "Type to filter…"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:146
-msgid "Loading Google Fonts…"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:154
-#. %s: error message
-msgid ""
-"Google Fonts could not be loaded (%s). System fonts below are still "
-"available."
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:229
-msgid "No fonts match your search."
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:233
-msgid "No fonts to show."
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:237
-msgid "Close"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:97
-msgid "Default (inherit)"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:364
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:363
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:352
-msgid ""
-"Enter a valid id (letters, numbers, hyphens, underscores; may not start "
-"with _)."
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:369
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:368
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:357
-msgid "This id is reserved."
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:373
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:372
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:361
-msgid "This id is already in use."
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:410
-msgid "Settings"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:452
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:446
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:445
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:393
-msgid "States"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:46
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:45
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:46
-msgid "Hover"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:47
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:46
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:47
-msgid "Focus"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:48
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:47
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:48
-msgid "Active"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:49
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:48
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:49
-msgid "Focus visible"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:495
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:489
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:488
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:437
-msgid "Drag to reorder"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:50
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:49
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:50
-msgid "Disabled"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:51
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:50
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:51
-msgid "Visited"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:526
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:520
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:519
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:468
-#. %s: state key
-msgid "Remove state %s"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:541
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:535
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:534
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:483
-msgid "Tab label"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:548
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:542
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:541
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:490
-msgid "State selector"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:549
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:543
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:542
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:491
-msgid "Suffix appended to the base (e.g. :hover). Leave empty to use the base only."
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:568
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:562
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:561
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:510
-msgid "Add pseudo-state"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:589
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:583
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:582
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:531
-msgid "Custom state"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:605
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:599
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:598
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:547
-msgid "e.g. my-state"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:611
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:605
-#: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:604
-#: src/admin/customizer/styling/components/StylingStatesPopover.jsx:553
-msgid "Add"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:100
-msgid "Center"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:102
-msgid "Justify"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:30
-msgid "Text color"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:34
-msgid "Font family"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:45
-msgid "Font family (CSS fallback)"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:53
-msgid "Font size"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:59
-msgid "Line height"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:65
-msgid "Letter spacing"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:71
-msgid "Text transform"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:83
-msgid "Text decoration"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:89
-msgid "Underline"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:90
-msgid "Line through"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TextStyleFields.jsx:94
-msgid "Text align"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:46
-msgid "Link sides"
-msgstr ""
-
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:47
-msgid "Unlink sides"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:10
-msgid "Gray 900"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:11
-msgid "Gray 700"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:12
-msgid "Gray 500"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:13
-msgid "Gray 400"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:14
-msgid "Gray 200"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:15
-msgid "Gray 100"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:16
-msgid "Red"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:17
-msgid "Orange"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:18
-msgid "Amber"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:19
-msgid "Green"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:20
-msgid "Teal"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:21
-msgid "Blue"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:22
-msgid "Indigo"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:23
-msgid "Purple"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:8
-msgid "Black"
-msgstr ""
-
-#: src/admin/customizer/styling/stylingColorPalette.js:9
-msgid "White"
 msgstr ""

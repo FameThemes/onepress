@@ -4,13 +4,18 @@
 import { TextareaControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { DeviceSwitcherChip } from './DeviceSwitcherChip';
+import { isFieldDisabled } from '../stylingDisableFields';
 
 /**
  * @param {object} props
  * @param {string} props.value
  * @param {(v: string) => void} props.onChange
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet]
  */
-export function RawDeclarationsField({ value, onChange }) {
+export function RawDeclarationsField({ value, onChange, disabledFieldSet }) {
+	if (isFieldDisabled(disabledFieldSet, '__onepressRawDeclarations')) {
+		return null;
+	}
 	return (
 		<div className="rfield">
 			<div className="rfield-h">

@@ -842,8 +842,9 @@ body.wp-customizer .media-modal-backdrop {
   }
 }
 
+/* Do not hide `.popover-header` here: state tabs live inside it and must stay visible
+   when `styling_hide_popover_heading` is used with multi-state controls (e.g. menu hover). */
 .group-count-1 {
-  .popover-header,
   .onepress-styling-editor-popover__title,
   .onepress-styling-editor-popover__header {
     display: none;
@@ -1064,7 +1065,7 @@ body.wp-customizer .media-modal-backdrop {
     color: inherit;
     font: inherit;
     position: absolute;
-    left: 8px;
+    left: 4px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
@@ -1323,7 +1324,7 @@ body.wp-customizer .media-modal-backdrop {
     top: 0;
     z-index: 1;
     background: #fff;
-    padding: var(--opc-panel-spacing);
+    padding: var(--opc-panel-spacing) var(--opc-panel-spacing) 0;
   }
   .popover-body {
     overflow-x: hidden;
@@ -1349,7 +1350,6 @@ body.wp-customizer .media-modal-backdrop {
   transform: translateX(-50%);
   width: min(100vw - 32px, 520px);
   pointer-events: none;
-
   .components-snackbar-list {
     pointer-events: auto;
   }
@@ -1723,5 +1723,5 @@ body.wp-customizer .media-modal-backdrop {
   background: #f6f7f7;
   color: #1d2327;
   padding: 10px;
-  border-radius: 4px;
+  border-radius: 3px;
 }

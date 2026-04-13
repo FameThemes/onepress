@@ -5,7 +5,7 @@
 $wp_customize->add_section(
 	'onepress_colors_settings',
 	array(
-		'priority'    => 4,
+		'priority'    => 5,
 		'title'       => esc_html__( 'Site Colors', 'onepress' ),
 		'description' => '',
 		'panel'       => 'onepress_options',

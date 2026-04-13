@@ -9,20 +9,25 @@ import { CssEnumButtonGroup } from './CssEnumButtonGroup';
 import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
 import { StylingAlphaColorControl } from './StylingAlphaColorControl';
 import { TrblSidesField } from './TrblSidesField';
+import { isFieldDisabled } from '../stylingDisableFields';
 
 /**
  * @param {object} props
  * @param {string} props.sliceKey
  * @param {Record<string, string>} props.model
  * @param {(patch: Record<string, string>) => void} props.onPatch
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet]
  */
-export function BorderOutlineFields({ sliceKey, model, onPatch }) {
+export function BorderOutlineFields({ sliceKey, model, onPatch, disabledFieldSet }) {
+	const d = disabledFieldSet;
+	const dis = (key) => isFieldDisabled(d, key);
 	return (
 		<>
 			<CssEnumButtonGroup
 				label={__('Border style', 'onepress')}
 				value={model.borderStyle || ''}
 				onChange={(v) => onPatch({ borderStyle: v })}
+				disabled={dis('borderStyle')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'none', label: 'none' },
@@ -46,17 +51,25 @@ export function BorderOutlineFields({ sliceKey, model, onPatch }) {
 				linkLabel={__('Link border widths', 'onepress')}
 				unlinkLabel={__('Unlink border widths', 'onepress')}
 				preferLinkedWhenEmpty
+				disabledFieldSet={disabledFieldSet}
 			/>
 			<StylingAlphaColorControl
 				label={__('Border color', 'onepress')}
 				value={model.borderColor || ''}
 				onChange={(v) => onPatch({ borderColor: v })}
+				disabled={dis('borderColor')}
 			/>
-			<BorderRadiusField sliceKey={sliceKey} model={model} onPatch={onPatch} />
+			<BorderRadiusField
+				sliceKey={sliceKey}
+				model={model}
+				onPatch={onPatch}
+				disabledFieldSet={disabledFieldSet}
+			/>
 			<SelectControl
 				label={__('Outline style', 'onepress')}
 				value={model.outlineStyle || ''}
 				onChange={(v) => onPatch({ outlineStyle: v })}
+				disabled={dis('outlineStyle')}
 				options={[
 					{ label: __('Default', 'onepress'), value: '' },
 					{ label: 'auto', value: 'auto' },
@@ -77,17 +90,20 @@ export function BorderOutlineFields({ sliceKey, model, onPatch }) {
 				label={__('Outline width', 'onepress')}
 				value={model.outlineWidth || ''}
 				onChange={(v) => onPatch({ outlineWidth: v })}
+				disabled={dis('outlineWidth')}
 				{...SLIDER_PRESETS.borderWidth}
 			/>
 			<StylingAlphaColorControl
 				label={__('Outline color', 'onepress')}
 				value={model.outlineColor || ''}
 				onChange={(v) => onPatch({ outlineColor: v })}
+				disabled={dis('outlineColor')}
 			/>
 			<ResponsiveUnitSliderField
 				label={__('Outline offset', 'onepress')}
 				value={model.outlineOffset || ''}
 				onChange={(v) => onPatch({ outlineOffset: v })}
+				disabled={dis('outlineOffset')}
 				{...SLIDER_PRESETS.outlineOffset}
 			/>
 		</>

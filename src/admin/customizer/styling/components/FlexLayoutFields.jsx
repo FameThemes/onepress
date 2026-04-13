@@ -6,13 +6,30 @@ import { __ } from '@wordpress/i18n';
 import { CssEnumButtonGroup } from './CssEnumButtonGroup';
 import { SLIDER_PRESETS } from '../cssUnitSlider';
 import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
+import { areAllKeysDisabled, isFieldDisabled } from '../stylingDisableFields';
+
+const FLEX_KEYS = [
+	'flexDirection',
+	'flexWrap',
+	'justifyContent',
+	'alignItems',
+	'alignContent',
+	'gap',
+	'rowGap',
+	'columnGap',
+];
 
 /**
  * @param {object} props
  * @param {Record<string, string>} props.model
  * @param {(patch: Record<string, string>) => void} props.onPatch
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet]
  */
-export function FlexLayoutFields({ model, onPatch }) {
+export function FlexLayoutFields({ model, onPatch, disabledFieldSet }) {
+	if (areAllKeysDisabled(disabledFieldSet, FLEX_KEYS)) {
+		return null;
+	}
+	const dis = (k) => isFieldDisabled(disabledFieldSet, k);
 	return (
 		<div className="subsection">
 			<strong className="subsection-title">{__('Flex', 'onepress')}</strong>
@@ -20,6 +37,7 @@ export function FlexLayoutFields({ model, onPatch }) {
 				label={__('Flex direction', 'onepress')}
 				value={model.flexDirection || ''}
 				onChange={(v) => onPatch({ flexDirection: v })}
+				disabled={dis('flexDirection')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'row', label: 'row' },
@@ -32,6 +50,7 @@ export function FlexLayoutFields({ model, onPatch }) {
 				label={__('Flex wrap', 'onepress')}
 				value={model.flexWrap || ''}
 				onChange={(v) => onPatch({ flexWrap: v })}
+				disabled={dis('flexWrap')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'nowrap', label: 'nowrap' },
@@ -43,6 +62,7 @@ export function FlexLayoutFields({ model, onPatch }) {
 				label={__('Justify content', 'onepress')}
 				value={model.justifyContent || ''}
 				onChange={(v) => onPatch({ justifyContent: v })}
+				disabled={dis('justifyContent')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'flex-start', label: 'start' },
@@ -56,6 +76,7 @@ export function FlexLayoutFields({ model, onPatch }) {
 				label={__('Align items', 'onepress')}
 				value={model.alignItems || ''}
 				onChange={(v) => onPatch({ alignItems: v })}
+				disabled={dis('alignItems')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'stretch', label: 'stretch' },
@@ -69,6 +90,7 @@ export function FlexLayoutFields({ model, onPatch }) {
 				label={__('Align content', 'onepress')}
 				value={model.alignContent || ''}
 				onChange={(v) => onPatch({ alignContent: v })}
+				disabled={dis('alignContent')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'flex-start', label: 'start' },
@@ -81,18 +103,21 @@ export function FlexLayoutFields({ model, onPatch }) {
 				label={__('Gap', 'onepress')}
 				value={model.gap || ''}
 				onChange={(v) => onPatch({ gap: v })}
+				disabled={dis('gap')}
 				{...SLIDER_PRESETS.gap}
 			/>
 			<ResponsiveUnitSliderField
 				label={__('Row gap', 'onepress')}
 				value={model.rowGap || ''}
 				onChange={(v) => onPatch({ rowGap: v })}
+				disabled={dis('rowGap')}
 				{...SLIDER_PRESETS.gap}
 			/>
 			<ResponsiveUnitSliderField
 				label={__('Column gap', 'onepress')}
 				value={model.columnGap || ''}
 				onChange={(v) => onPatch({ columnGap: v })}
+				disabled={dis('columnGap')}
 				{...SLIDER_PRESETS.gap}
 			/>
 		</div>

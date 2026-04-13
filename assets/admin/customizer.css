@@ -730,7 +730,8 @@ body.wp-customizer .media-modal-backdrop {
 [class^=components-custom-gradient-]) {
   height: 32px;
 }
-.group-count-1 .popover-header,
+/* Do not hide `.popover-header` here: state tabs live inside it and must stay visible
+   when `styling_hide_popover_heading` is used with multi-state controls (e.g. menu hover). */
 .group-count-1 .onepress-styling-editor-popover__title,
 .group-count-1 .onepress-styling-editor-popover__header {
   display: none;
@@ -917,7 +918,7 @@ body.wp-customizer .media-modal-backdrop {
   color: inherit;
   font: inherit;
   position: absolute;
-  left: 8px;
+  left: 4px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
@@ -1138,7 +1139,7 @@ body.wp-customizer .media-modal-backdrop {
   top: 0;
   z-index: 1;
   background: #fff;
-  padding: var(--opc-panel-spacing);
+  padding: var(--opc-panel-spacing) var(--opc-panel-spacing) 0;
 }
 .onepress-styling-editor-popover .popover-body {
   overflow-x: hidden;
@@ -1480,7 +1481,7 @@ body.wp-customizer .media-modal-backdrop {
   background: #f6f7f7;
   color: #1d2327;
   padding: 10px;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 /*!*****************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/@wordpress/scripts/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/frontend/fontawesome-v6/css/all.min.css ***!

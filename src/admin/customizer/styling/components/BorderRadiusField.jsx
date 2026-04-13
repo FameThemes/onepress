@@ -7,6 +7,7 @@ import { SLIDER_PRESETS } from '../cssUnitSlider';
 import { deriveLinkedSides } from './deriveLinkedSides';
 import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
 import { TrblLinkIconButton } from './TrblLinkIconButton';
+import { areAllKeysDisabled } from '../stylingDisableFields';
 
 const KEYS = {
 	tl: 'borderTopLeftRadius',
@@ -20,8 +21,9 @@ const KEYS = {
  * @param {string} props.sliceKey
  * @param {Record<string, string>} props.model
  * @param {(patch: Record<string, string>) => void} props.onPatch
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet]
  */
-export function BorderRadiusField({ sliceKey, model, onPatch }) {
+export function BorderRadiusField({ sliceKey, model, onPatch, disabledFieldSet }) {
 	const keyList = [KEYS.tl, KEYS.tr, KEYS.br, KEYS.bl];
 	const [linked, setLinked] = useState(() => deriveLinkedSides(model, keyList));
 
@@ -29,6 +31,10 @@ export function BorderRadiusField({ sliceKey, model, onPatch }) {
 		setLinked(deriveLinkedSides(model, keyList));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sliceKey]);
+
+	if (areAllKeysDisabled(disabledFieldSet, keyList)) {
+		return null;
+	}
 
 	const patchCorner = (k, val) => {
 		if (linked) {

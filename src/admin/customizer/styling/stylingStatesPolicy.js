@@ -7,6 +7,7 @@
  */
 
 import { __ } from '@wordpress/i18n';
+import { composeStylingFullSelector } from './buildStylingCss';
 
 function cloneValue(v) {
 	return JSON.parse(JSON.stringify(v));
@@ -85,8 +86,9 @@ function coerceToNormalOnly(payload, previewDeviceIds) {
  * @param {Record<string, unknown>} payload
  * @param {object[]} template
  * @param {string[]} previewDeviceIds
+ * @param {string} [registryBaseForForce] When set (e.g. PHP `base_selector`), each state gets `force_selector` = explicit template `force_selector` or base + template suffix.
  */
-function coerceToFixedStates(payload, template, previewDeviceIds) {
+function coerceToFixedStates(payload, template, previewDeviceIds, registryBaseForForce = '') {
 	const next = cloneValue(payload);
 	next._meta = typeof next._meta === 'object' && next._meta !== null ? next._meta : {};
 	const existingStates = Array.isArray(next._meta.states) ? next._meta.states : [];
@@ -115,11 +117,24 @@ function coerceToFixedStates(payload, template, previewDeviceIds) {
 		const tmpl = entry[k];
 		const prev = byKey[k] || {};
 		allowed.add(k);
+		const baseTrim = typeof registryBaseForForce === 'string' ? registryBaseForForce.trim() : '';
+		const explicitRaw = tmpl && typeof tmpl.force_selector === 'string' ? tmpl.force_selector : '';
+		const explicit = explicitRaw.trim();
+		const tmplSuffix = tmpl && tmpl.selector != null ? String(tmpl.selector) : '';
+		const row = {
+			label: typeof prev.label === 'string' && prev.label !== '' ? prev.label : String(tmpl?.label || k),
+			selector: typeof prev.selector === 'string' ? prev.selector : String(tmpl?.selector ?? ''),
+		};
+		if (explicit !== '') {
+			row.force_selector = explicitRaw.trim();
+		} else if (baseTrim !== '') {
+			const composed = composeStylingFullSelector(baseTrim, tmplSuffix);
+			if (composed !== '') {
+				row.force_selector = composed;
+			}
+		}
 		newStates.push({
-			[k]: {
-				label: typeof prev.label === 'string' && prev.label !== '' ? prev.label : String(tmpl?.label || k),
-				selector: typeof prev.selector === 'string' ? prev.selector : String(tmpl?.selector ?? ''),
-			},
+			[k]: row,
 		});
 		if (!next[k] || typeof next[k] !== 'object' || Array.isArray(next[k])) {
 			next[k] = {};
@@ -160,8 +175,9 @@ function coerceToFixedStates(payload, template, previewDeviceIds) {
  * @param {'all' | 'fixed' | 'normal-only'} mode
  * @param {object[] | null} fixedTemplate
  * @param {string[]} previewDeviceIds
+ * @param {string} [registryBaseForForce]
  */
-export function normalizeSingleStylingPayload(item, mode, fixedTemplate, previewDeviceIds) {
+export function normalizeSingleStylingPayload(item, mode, fixedTemplate, previewDeviceIds, registryBaseForForce = '') {
 	if (!item || typeof item !== 'object') {
 		return item;
 	}
@@ -169,7 +185,7 @@ export function normalizeSingleStylingPayload(item, mode, fixedTemplate, preview
 		return coerceToNormalOnly(item, previewDeviceIds);
 	}
 	if (mode === 'fixed' && fixedTemplate && fixedTemplate.length) {
-		return coerceToFixedStates(item, fixedTemplate, previewDeviceIds);
+		return coerceToFixedStates(item, fixedTemplate, previewDeviceIds, registryBaseForForce);
 	}
 	return item;
 }
@@ -180,8 +196,16 @@ export function normalizeSingleStylingPayload(item, mode, fixedTemplate, preview
  * @param {object[] | null} fixedTemplate
  * @param {string[]} previewDeviceIds
  * @param {boolean} isMultiple
+ * @param {string} [registryBaseForForce] Single-target: PHP `base_selector` for registry-composed `force_selector`.
  */
-export function normalizeStylingRootForStatesPolicy(root, mode, fixedTemplate, previewDeviceIds, isMultiple) {
+export function normalizeStylingRootForStatesPolicy(
+	root,
+	mode,
+	fixedTemplate,
+	previewDeviceIds,
+	isMultiple,
+	registryBaseForForce = ''
+) {
 	if (mode === 'all') {
 		return root;
 	}
@@ -195,10 +219,11 @@ export function normalizeStylingRootForStatesPolicy(root, mode, fixedTemplate, p
 				/** @type {Record<string, unknown>} */ (item),
 				mode,
 				fixedTemplate,
-				previewDeviceIds
+				previewDeviceIds,
+				''
 			)
 		);
 		return next;
 	}
-	return normalizeSingleStylingPayload(root, mode, fixedTemplate, previewDeviceIds);
+	return normalizeSingleStylingPayload(root, mode, fixedTemplate, previewDeviceIds, registryBaseForForce);
 }

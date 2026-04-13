@@ -10,6 +10,7 @@ import { GridLayoutFields } from './GridLayoutFields';
 import { InsetSidesFields } from './InsetSidesFields';
 import { ResponsiveFieldShell } from './ResponsiveFieldShell';
 import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
+import { isFieldDisabled } from '../stylingDisableFields';
 
 const Z_INDEX_MIN = -100;
 const Z_INDEX_MAX = 99999;
@@ -72,8 +73,9 @@ function formatOpacityCss(n) {
  * @param {string} [props.help]
  * @param {string} props.value
  * @param {(v: string) => void} props.onChange
+ * @param {boolean} [props.disabled]
  */
-function OpacityRangeField({ label, help, value, onChange }) {
+function OpacityRangeField({ label, help, value, onChange, disabled = false }) {
 	const raw = String(value ?? '');
 	const canRange = canUseOpacityRange(raw);
 	const sliderVal = opacitySliderValue(raw);
@@ -99,6 +101,7 @@ function OpacityRangeField({ label, help, value, onChange }) {
 							step={0.01}
 							withInputField={false}
 							__nextHasNoMarginBottom
+							disabled={disabled}
 						/>
 						<input
 							className="unit-input components-text-control__input"
@@ -106,6 +109,7 @@ function OpacityRangeField({ label, help, value, onChange }) {
 							value={raw}
 							onChange={(e) => onChange(e.target.value)}
 							aria-label={label}
+							disabled={disabled}
 						/>
 					</>
 				) : (
@@ -115,6 +119,7 @@ function OpacityRangeField({ label, help, value, onChange }) {
 						value={raw}
 						onChange={(e) => onChange(e.target.value)}
 						aria-label={label}
+						disabled={disabled}
 					/>
 				)}
 			</div>
@@ -143,8 +148,9 @@ function parseZIndexInt(raw) {
  * @param {string} props.label
  * @param {string} props.value
  * @param {(v: string) => void} props.onChange
+ * @param {boolean} [props.disabled]
  */
-function ZIndexRangeField({ label, value, onChange }) {
+function ZIndexRangeField({ label, value, onChange, disabled = false }) {
 	const raw = String(value ?? '');
 	const trimmed = raw.trim();
 	const isAuto = /^auto$/i.test(trimmed);
@@ -174,6 +180,7 @@ function ZIndexRangeField({ label, value, onChange }) {
 							step={1}
 							withInputField={false}
 							__nextHasNoMarginBottom
+							disabled={disabled}
 						/>
 						<input
 							className="unit-input components-text-control__input"
@@ -181,6 +188,7 @@ function ZIndexRangeField({ label, value, onChange }) {
 							value={raw}
 							onChange={(e) => onChange(e.target.value)}
 							aria-label={label}
+							disabled={disabled}
 						/>
 					</>
 				) : (
@@ -190,6 +198,7 @@ function ZIndexRangeField({ label, value, onChange }) {
 						value={raw}
 						onChange={(e) => onChange(e.target.value)}
 						aria-label={label}
+						disabled={disabled}
 					/>
 				)}
 			</div>
@@ -201,14 +210,16 @@ function ZIndexRangeField({ label, value, onChange }) {
  * @param {object} props
  * @param {Record<string, string>} props.model
  * @param {(patch: Record<string, string>) => void} props.onPatch
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet]
  */
-export function DisplayLayoutFields({ model, onPatch }) {
+export function DisplayLayoutFields({ model, onPatch, disabledFieldSet }) {
 	const displayVal = (model.display || '').toLowerCase();
 	const isFlex = displayVal === 'flex' || displayVal === 'inline-flex';
 	const isGrid = displayVal === 'grid' || displayVal === 'inline-grid';
 	const showPositionExtras = ['relative', 'absolute', 'fixed', 'sticky'].includes(
 		(model.position || '').toLowerCase()
 	);
+	const dis = (k) => isFieldDisabled(disabledFieldSet, k);
 
 	return (
 		<>
@@ -216,6 +227,7 @@ export function DisplayLayoutFields({ model, onPatch }) {
 				label={__('Display', 'onepress')}
 				value={model.display || ''}
 				onChange={(v) => onPatch({ display: v })}
+				disabled={dis('display')}
 				options={[
 					{ label: __('Default', 'onepress'), value: '' },
 					{ label: 'none', value: 'none' },
@@ -233,21 +245,25 @@ export function DisplayLayoutFields({ model, onPatch }) {
 				label={__('Visibility', 'onepress')}
 				value={model.visibility || ''}
 				onChange={(v) => onPatch({ visibility: v })}
+				disabled={dis('visibility')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'visible', label: 'visible' },
 					{ value: 'hidden', label: 'hidden' },
 				]}
 			/>
-			<OpacityRangeField
-				label={__('Opacity', 'onepress')}
-				value={model.opacity || ''}
-				onChange={(v) => onPatch({ opacity: v })}
-			/>
+			{dis('opacity') ? null : (
+				<OpacityRangeField
+					label={__('Opacity', 'onepress')}
+					value={model.opacity || ''}
+					onChange={(v) => onPatch({ opacity: v })}
+				/>
+			)}
 			<SelectControl
 				label={__('Position', 'onepress')}
 				value={model.position || ''}
 				onChange={(v) => onPatch({ position: v })}
+				disabled={dis('position')}
 				options={[
 					{ label: __('Default', 'onepress'), value: '' },
 					{ label: 'static', value: 'static' },
@@ -258,28 +274,34 @@ export function DisplayLayoutFields({ model, onPatch }) {
 				]}
 				__nextHasNoMarginBottom
 			/>
-			{showPositionExtras ? <InsetSidesFields model={model} onPatch={onPatch} /> : null}
+			{showPositionExtras ? (
+				<InsetSidesFields model={model} onPatch={onPatch} disabledFieldSet={disabledFieldSet} />
+			) : null}
 			<ResponsiveUnitSliderField
 				label={__('Width', 'onepress')}
 				value={model.width || ''}
 				onChange={(v) => onPatch({ width: v })}
+				disabled={dis('width')}
 				{...SLIDER_PRESETS.lengthWide}
 			/>
 			<ResponsiveUnitSliderField
 				label={__('Height', 'onepress')}
 				value={model.height || ''}
 				onChange={(v) => onPatch({ height: v })}
+				disabled={dis('height')}
 				{...SLIDER_PRESETS.lengthWide}
 			/>
 			<ZIndexRangeField
 				label={__('Z-index', 'onepress')}
 				value={model.zIndex || ''}
 				onChange={(v) => onPatch({ zIndex: v })}
+				disabled={dis('zIndex')}
 			/>
 			<CssEnumButtonGroup
 				label={__('Overflow', 'onepress')}
 				value={model.overflow || ''}
 				onChange={(v) => onPatch({ overflow: v })}
+				disabled={dis('overflow')}
 				options={[
 					{ value: '', label: __('Default', 'onepress') },
 					{ value: 'visible', label: 'visible' },
@@ -288,8 +310,12 @@ export function DisplayLayoutFields({ model, onPatch }) {
 					{ value: 'auto', label: 'auto' },
 				]}
 			/>
-			{isFlex ? <FlexLayoutFields model={model} onPatch={onPatch} /> : null}
-			{isGrid ? <GridLayoutFields model={model} onPatch={onPatch} /> : null}
+			{isFlex ? (
+				<FlexLayoutFields model={model} onPatch={onPatch} disabledFieldSet={disabledFieldSet} />
+			) : null}
+			{isGrid ? (
+				<GridLayoutFields model={model} onPatch={onPatch} disabledFieldSet={disabledFieldSet} />
+			) : null}
 		</>
 	);
 }

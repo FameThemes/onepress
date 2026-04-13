@@ -7,6 +7,7 @@ import { SLIDER_PRESETS } from '../cssUnitSlider';
 import { deriveLinkedSides } from './deriveLinkedSides';
 import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
 import { TrblLinkIconButton } from './TrblLinkIconButton';
+import { areAllKeysDisabled } from '../stylingDisableFields';
 
 /**
  * @param {object} props
@@ -19,6 +20,7 @@ import { TrblLinkIconButton } from './TrblLinkIconButton';
  * @param {string} [props.linkLabel]
  * @param {string} [props.unlinkLabel]
  * @param {boolean} [props.preferLinkedWhenEmpty] — when all four values are empty, show linked UI (default false)
+ * @param {Set<string> | null | undefined} [props.disabledFieldSet]
  */
 function resolveLinkedState(model, keyList, preferLinkedWhenEmpty) {
 	const derived = deriveLinkedSides(model, keyList);
@@ -41,6 +43,7 @@ export function TrblSidesField({
 	linkLabel,
 	unlinkLabel,
 	preferLinkedWhenEmpty = false,
+	disabledFieldSet,
 }) {
 	const preset = sliderPreset ?? SLIDER_PRESETS.length;
 	const linkStr = linkLabel ?? __('Link sides', 'onepress');
@@ -54,6 +57,10 @@ export function TrblSidesField({
 		setLinked(resolveLinkedState(model, keyList, preferLinkedWhenEmpty));
 		// eslint-disable-next-line react-hooks/exhaustive-deps -- reset when switching state×device
 	}, [sliceKey]);
+
+	if (areAllKeysDisabled(disabledFieldSet, keyList)) {
+		return null;
+	}
 
 	const patchSide = (side, val) => {
 		if (linked) {

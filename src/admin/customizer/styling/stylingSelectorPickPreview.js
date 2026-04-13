@@ -106,170 +106,167 @@ function selectorTargetsOnly(sel, el) {
 	}
 }
 
-/**
- * @param {Element} el
- * @returns {string}
- */
-function nthOfTypeSuffix(el) {
-	const parent = el.parentElement;
-	if (!parent) {
-		return '';
-	}
-	const tag = el.tagName;
-	const siblings = Array.from(parent.children).filter((n) => n.tagName === tag);
-	if (siblings.length <= 1) {
-		return '';
-	}
-	const idx = siblings.indexOf(el) + 1;
-	return `:nth-of-type(${idx})`;
-}
+/** Max descendant levels (space-separated segments) in the suggested selector. */
+const SELECTOR_MAX_DEPTH = 5;
 
 /**
- * Shortest segment for the clicked element: fewest classes / #id / tag+nth.
+ * Bootstrap / grid utility classes omitted from path segments (still ok on `#id` targets).
  *
- * @param {Element} el
- * @returns {string}
- */
-function pickCompactRight(el) {
-	const tag = el.tagName.toLowerCase();
-	if (el.id && /^[a-zA-Z][\w-]*$/.test(el.id)) {
-		const idSel = `#${cssEscape(el.id)}`;
-		if (selectorTargetsOnly(idSel, el)) {
-			return idSel;
-		}
-	}
-	const cls = meaningfulClasses(el);
-	for (let n = 1; n <= Math.min(3, cls.length); n++) {
-		const s = `.${cls.slice(0, n).map(cssEscape).join('.')}`;
-		if (selectorTargetsOnly(s, el)) {
-			return s;
-		}
-	}
-	if (cls.length) {
-		return `.${cls.slice(0, 3).map(cssEscape).join('.')}`;
-	}
-	return tag + nthOfTypeSuffix(el);
-}
-
-/**
- * Segment for ancestors (no global-uniqueness check on the segment alone).
- *
- * @param {Element} el
- * @returns {string}
- */
-function compactSegmentAncestor(el) {
-	const tag = el.tagName.toLowerCase();
-	if (el.id && /^[a-zA-Z][\w-]*$/.test(el.id)) {
-		return `#${cssEscape(el.id)}`;
-	}
-	const cls = meaningfulClasses(el);
-	if (cls.length) {
-		return `.${cls.slice(0, 3).map(cssEscape).join('.')}`;
-	}
-	return tag + nthOfTypeSuffix(el);
-}
-
-/**
- * @param {Element} el
+ * @param {string} c
  * @returns {boolean}
  */
-function hasStrongAnchor(el) {
+function isBootstrapLayoutClass(c) {
+	if (/^(container|container-fluid|row)$/.test(c)) {
+		return true;
+	}
+	if (/^col-([a-z]+-)*\d+$/.test(c)) {
+		return true;
+	}
+	if (/^col-\d+$/.test(c)) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Classes used for path segments: meaningful, minus layout grid noise.
+ *
+ * @param {Element} el
+ * @returns {string[]}
+ */
+function semanticClasses(el) {
+	return meaningfulClasses(el).filter((c) => !isBootstrapLayoutClass(c));
+}
+
+/**
+ * One path segment: never `tag.class`, never `:pseudo`. Prefer `#id.class` when id exists.
+ *
+ * @param {Element} el
+ * @param {{ isTarget?: boolean }} [opts] — target may fall back to any meaningful class if only grid classes.
+ * @returns {string}
+ */
+function segmentForElement(el, opts = {}) {
+	const idOk = el.id && /^[a-zA-Z][\w-]*$/.test(el.id);
+	let classes = semanticClasses(el);
+	if (opts.isTarget && classes.length === 0) {
+		classes = meaningfulClasses(el);
+	}
+	const maxCls = 3;
+	const clsPart = classes.slice(0, maxCls).map(cssEscape);
+	if (idOk) {
+		const idSel = `#${cssEscape(el.id)}`;
+		if (clsPart.length) {
+			return `${idSel}.${clsPart.join('.')}`;
+		}
+		return idSel;
+	}
+	if (clsPart.length) {
+		return `.${clsPart.join('.')}`;
+	}
+	return '';
+}
+
+/**
+ * @param {Element} el
+ * @param {boolean} isTarget
+ * @returns {boolean}
+ */
+function contributesToPath(el, isTarget) {
+	if (ignorableEl(el)) {
+		return false;
+	}
 	if (el.id && /^[a-zA-Z][\w-]*$/.test(el.id)) {
 		return true;
 	}
-	return meaningfulClasses(el).length > 0;
+	if (isTarget) {
+		return meaningfulClasses(el).length > 0;
+	}
+	return semanticClasses(el).length > 0;
 }
 
 /**
- * Prefer short descendant selectors (e.g. `.section-title-area .section-title`) before a long `>` chain.
+ * From target up to body: list of elements that get a segment (target … outer).
+ *
+ * @param {Element} el
+ * @returns {Element[]}
+ */
+function collectPathElements(el) {
+	/** @type {Element[]} */
+	const innerToOuter = [];
+	let node = el;
+	let hop = 0;
+	const maxHop = 40;
+	while (node && node !== document.body && hop < maxHop) {
+		const isTarget = node === el;
+		if (contributesToPath(node, isTarget)) {
+			innerToOuter.push(node);
+		}
+		node = node.parentElement;
+		hop++;
+	}
+	return innerToOuter;
+}
+
+/**
+ * @param {string[]} segmentsOuterToInner
+ * @param {Element} el
+ * @returns {string[]}
+ */
+function pruneMiddleSegments(segmentsOuterToInner, el) {
+	let segs = segmentsOuterToInner;
+	if (segs.length <= 2) {
+		return segs;
+	}
+	let changed = true;
+	while (changed && segs.length > 2) {
+		changed = false;
+		for (let i = 1; i < segs.length - 1; i++) {
+			const next = [...segs.slice(0, i), ...segs.slice(i + 1)];
+			const cand = next.join(' ');
+			if (selectorTargetsOnly(cand, el)) {
+				segs = next;
+				changed = true;
+				break;
+			}
+		}
+	}
+	return segs;
+}
+
+/**
+ * Short descendant path: only `.class` / `#id.class`, no `>`, no `:pseudo`, ≤ {@link SELECTOR_MAX_DEPTH} levels.
  *
  * @param {Element} el
  * @returns {string}
  */
 function shortestUniqueSelector(el) {
-	const right = pickCompactRight(el);
-	if (selectorTargetsOnly(right, el)) {
-		return right;
+	const innerToOuter = collectPathElements(el);
+	if (innerToOuter.length === 0) {
+		return el.tagName.toLowerCase();
 	}
-
-	let node = el.parentElement;
-	let depth = 0;
-	const maxHop = 22;
-	while (node && node !== document.body && depth < maxHop) {
-		if (hasStrongAnchor(node)) {
-			const left = compactSegmentAncestor(node);
-			const cand = `${left} ${right}`;
-			if (selectorTargetsOnly(cand, el)) {
-				return cand;
-			}
+	/** @type {string[]} outer → inner */
+	const fullOuterToInner = [];
+	for (let i = innerToOuter.length - 1; i >= 0; i--) {
+		const node = innerToOuter[i];
+		const seg = segmentForElement(node, { isTarget: node === el });
+		if (seg) {
+			fullOuterToInner.push(seg);
 		}
-		node = node.parentElement;
-		depth++;
 	}
-
-	const parts = [right];
-	node = el.parentElement;
-	depth = 0;
-	while (node && node !== document.body && depth < maxHop) {
-		parts.unshift(compactSegmentAncestor(node));
-		const cand = parts.join(' ');
+	if (fullOuterToInner.length === 0) {
+		return el.tagName.toLowerCase();
+	}
+	const n = fullOuterToInner.length;
+	const maxK = Math.min(SELECTOR_MAX_DEPTH, n);
+	for (let k = 1; k <= maxK; k++) {
+		const slice = fullOuterToInner.slice(-k);
+		const cand = slice.join(' ');
 		if (selectorTargetsOnly(cand, el)) {
-			return cand;
-		}
-		node = node.parentElement;
-		depth++;
-	}
-
-	for (let depth = 6; depth <= 28; depth += 2) {
-		const strict = buildSelectorPathStrict(el, depth);
-		if (strict && selectorTargetsOnly(strict, el)) {
-			return strict;
+			return pruneMiddleSegments(slice, el).join(' ');
 		}
 	}
-	return buildSelectorPathStrict(el, 28);
-}
-
-/**
- * @param {Element} el
- * @returns {string}
- */
-function segmentFor(el) {
-	let part = el.tagName.toLowerCase();
-	const cls = meaningfulClasses(el);
-	for (const c of cls.slice(0, 2)) {
-		part += `.${cssEscape(c)}`;
-	}
-	const nth = nthOfTypeSuffix(el);
-	return part + nth;
-}
-
-/**
- * Full child-combinator path (fallback).
- *
- * @param {Element} el
- * @param {number} maxDepth
- * @returns {string}
- */
-function buildSelectorPathStrict(el, maxDepth) {
-	if (el.id && /^[a-zA-Z][\w-]*$/.test(el.id)) {
-		const idSel = `#${cssEscape(el.id)}`;
-		try {
-			if (document.querySelectorAll(idSel).length === 1) {
-				return idSel;
-			}
-		} catch {
-			// continue with path
-		}
-	}
-	const parts = [];
-	let cur = el;
-	let d = 0;
-	while (cur && cur.nodeType === 1 && cur !== document.body && d < maxDepth) {
-		parts.unshift(segmentFor(cur));
-		cur = cur.parentElement;
-		d++;
-	}
-	return parts.join(' > ');
+	const fallbackSlice = fullOuterToInner.slice(-maxK);
+	return pruneMiddleSegments(fallbackSlice, el).join(' ');
 }
 
 /**
@@ -588,6 +585,9 @@ function onKeyDown(e) {
 	if (e.key === 'Escape' || e.keyCode === 27) {
 		e.preventDefault();
 		e.stopPropagation();
+		if (typeof e.stopImmediatePropagation === 'function') {
+			e.stopImmediatePropagation();
+		}
 		const api = /** @type {*} */ (window).wp?.customize;
 		teardown(api);
 	}
