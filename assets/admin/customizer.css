@@ -761,7 +761,7 @@ body.wp-customizer .media-modal-backdrop {
   width: 24px;
 }
 .onepress-styling .states {
-  margin: 10px 0 0px;
+  margin: 8px 0 0px;
 }
 .onepress-styling .states-toolbar {
   display: flex;
@@ -815,6 +815,7 @@ body.wp-customizer .media-modal-backdrop {
   border-color: transparent;
   box-shadow: none;
   outline: none !important;
+  font-weight: 600;
 }
 .onepress-styling .state-tablist-inner .tab-button.is-active {
   border-color: #007cba;

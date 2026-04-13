@@ -881,7 +881,7 @@ body.wp-customizer .media-modal-backdrop {
 
 .onepress-styling {
   .states {
-    margin: 10px 0 0px;
+    margin: 8px 0 0px;
   }
 
   .states-toolbar {
@@ -939,6 +939,7 @@ body.wp-customizer .media-modal-backdrop {
       border-color: transparent;
       box-shadow: none;
       outline: none !important;
+      font-weight: 600;
       &.is-active {
         border-color: #007cba;
       }
