@@ -49,39 +49,42 @@ function ShadowLengthRow({ parts, lengthKey, label, preset, onPartsChange }) {
 	};
 
 	return (
-		<div className={`shgen-row unit-slider${canSlider ? ' has-range' : ''}`}>
+		<div className="flex flex-col">
 			<span className="shgen-row-label">{label}</span>
-			{canSlider ? (
-				<>
-					<RangeControl
-						className="unit-range-field"
-						label={label}
-						hideLabelFromVision
-						value={sliderVal}
-						onChange={apply}
-						min={preset.min}
-						max={preset.max}
-						step={preset.step}
-						withInputField={false}
-						__nextHasNoMarginBottom
-					/>
+			<div className={`shgen-row unit-slider${canSlider ? ' has-range' : ''}`}>
+
+				{canSlider ? (
+					<>
+						<RangeControl
+							className="unit-range-field"
+							label={label}
+							hideLabelFromVision
+							value={sliderVal}
+							onChange={apply}
+							min={preset.min}
+							max={preset.max}
+							step={preset.step}
+							withInputField={false}
+							__nextHasNoMarginBottom
+						/>
+						<input
+							className="unit-input components-text-control__input"
+							type="text"
+							value={value}
+							onChange={onText}
+							aria-label={label}
+						/>
+					</>
+				) : (
 					<input
-						className="unit-input components-text-control__input"
+						className="unit-input is-full components-text-control__input"
 						type="text"
 						value={value}
 						onChange={onText}
 						aria-label={label}
 					/>
-				</>
-			) : (
-				<input
-					className="unit-input is-full components-text-control__input"
-					type="text"
-					value={value}
-					onChange={onText}
-					aria-label={label}
-				/>
-			)}
+				)}
+			</div>
 		</div>
 	);
 }
@@ -95,38 +98,40 @@ function ShadowOpacityRow({ opacity, onChange }) {
 	const label = __('Opacity', 'onepress');
 	const v = Math.min(1, Math.max(0, opacity));
 	return (
-		<div className="shgen-row unit-slider has-range">
+		<div className="flex flex-col">
 			<span className="shgen-row-label">{label}</span>
-			<RangeControl
-				className="unit-range-field"
-				label={label}
-				hideLabelFromVision
-				value={v}
-				onChange={(n) => {
-					if (n === undefined || n === null || !Number.isFinite(n)) {
-						return;
-					}
-					onChange(Math.min(1, Math.max(0, n)));
-				}}
-				min={0}
-				max={1}
-				step={0.01}
-				withInputField={false}
-				__nextHasNoMarginBottom
-			/>
-			<input
-				className="unit-input components-text-control__input"
-				type="text"
-				value={String(Math.round(v * 1000) / 1000)}
-				onChange={(e) => {
-					const x = parseFloat(e.target.value);
-					if (!Number.isFinite(x)) {
-						return;
-					}
-					onChange(Math.min(1, Math.max(0, x)));
-				}}
-				aria-label={label}
-			/>
+			<div className="shgen-row unit-slider has-range">
+				<RangeControl
+					className="unit-range-field"
+					label={label}
+					hideLabelFromVision
+					value={v}
+					onChange={(n) => {
+						if (n === undefined || n === null || !Number.isFinite(n)) {
+							return;
+						}
+						onChange(Math.min(1, Math.max(0, n)));
+					}}
+					min={0}
+					max={1}
+					step={0.01}
+					withInputField={false}
+					__nextHasNoMarginBottom
+				/>
+				<input
+					className="unit-input components-text-control__input"
+					type="text"
+					value={String(Math.round(v * 1000) / 1000)}
+					onChange={(e) => {
+						const x = parseFloat(e.target.value);
+						if (!Number.isFinite(x)) {
+							return;
+						}
+						onChange(Math.min(1, Math.max(0, x)));
+					}}
+					aria-label={label}
+				/>
+			</div>
 		</div>
 	);
 }

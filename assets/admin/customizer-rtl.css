@@ -720,11 +720,14 @@ body.wp-customizer .media-modal {
 body.wp-customizer .media-modal-backdrop {
   z-index: 8000000;
 }
-.styling-root .components-input-control__container .components-input-control__input:not(.is-small) {
+.styling-root .components-input-control__container .components-input-control__input:not(.is-small),
+.styling-root .components-input-control__container .components-select-control__input:not(.is-small) {
   min-height: 32px !important;
   height: 32px !important;
 }
-.styling-root .components-button:not(.is-small, .components-custom-gradient-picker__control-point-button, [class^=components-custom-gradient-]) {
+.styling-root .components-button:not(.is-small,
+.components-custom-gradient-picker__control-point-button,
+[class^=components-custom-gradient-]) {
   height: 32px;
 }
 .group-count-1 .popover-header,
@@ -746,6 +749,17 @@ body.wp-customizer .media-modal-backdrop {
 .group-count-1 .components-panel__body-toggle {
   display: none;
 }
+.components-button.icon-btn {
+  padding: 6px;
+  width: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.components-button.icon-btn.is-small {
+  padding: 0px;
+  width: 24px;
+}
 .onepress-styling .states {
   margin: 10px 0 0px;
 }
@@ -757,6 +771,53 @@ body.wp-customizer .media-modal-backdrop {
 }
 .onepress-styling .states-toolbar .components-button-group {
   flex-wrap: wrap;
+}
+.onepress-styling {
+  /* State tabs: single row + horizontal scroll when many; thin 2px scrollbar (WebKit) */
+}
+.onepress-styling .states-toolbar > .state-tablist-scroll {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+.onepress-styling .state-tablist-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+}
+.onepress-styling .state-tablist-scroll::-webkit-scrollbar {
+  height: 2px;
+}
+.onepress-styling .state-tablist-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.onepress-styling .state-tablist-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.35);
+  border-radius: 1px;
+}
+.onepress-styling .state-tablist-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.onepress-styling .state-tablist-inner {
+  display: flex;
+  flex-wrap: nowrap !important;
+  align-items: stretch;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: -moz-min-content;
+  min-width: min-content;
+}
+.onepress-styling .state-tablist-inner .tab-button {
+  border-width: 0px 0px 2px 0px;
+  border-style: solid;
+  border-color: transparent;
+  box-shadow: none;
+  outline: none !important;
+}
+.onepress-styling .state-tablist-inner .tab-button.is-active {
+  border-color: #007cba;
 }
 .onepress-styling .components-base-control .components-base-control__field {
   margin-bottom: 0px;
@@ -788,6 +849,7 @@ body.wp-customizer .media-modal-backdrop {
   font-size: 11px;
   font-weight: 500;
   text-transform: uppercase;
+  line-height: 1.4;
 }
 .onepress-styling .rfield-body .components-base-control__field {
   margin-bottom: 0;
@@ -958,12 +1020,13 @@ body.wp-customizer .media-modal-backdrop {
   margin: 0px;
   padding: 0px;
 }
-.onepress-styling .enum-label {
+.onepress-styling .enum-label, .onepress-styling .shgen-row-label {
   display: block;
   font-size: 11px;
   font-weight: 500;
   text-transform: uppercase;
   margin-bottom: 4px;
+  line-height: 1.4;
 }
 .onepress-styling .enum-buttons {
   flex-wrap: wrap;
@@ -1000,14 +1063,6 @@ body.wp-customizer .media-modal-backdrop {
 }
 .onepress-styling .shgen-block .shgen-row:first-of-type {
   margin-top: 0;
-}
-.onepress-styling .shgen-block .shgen-row .shgen-row-label {
-  flex: 0 0 108px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #1e1e1e;
-  line-height: 1.2;
 }
 .onepress-styling .shgen-block .shgen-row.unit-slider.has-range .unit-range-field {
   flex: 1;
@@ -1094,6 +1149,35 @@ body.wp-customizer .media-modal-backdrop {
 .onepress-styling-editor-popover__title {
   font-size: 13px;
   font-weight: 600;
+}
+/* Snackbar: base selector picked from preview (Customizer pane) */
+.onepress-styling-pick-snackbar-wrap {
+  position: fixed;
+  z-index: 500100;
+  bottom: 48px;
+  right: 50%;
+  transform: translateX(50%);
+  width: min(100vw - 32px, 520px);
+  pointer-events: none;
+}
+.onepress-styling-pick-snackbar-wrap .components-snackbar-list {
+  pointer-events: auto;
+}
+.onepress-styling-pick-snackbar__inner {
+  display: block;
+  line-height: 1.45;
+}
+.onepress-styling-pick-snackbar__label {
+  font-weight: 600;
+}
+.onepress-styling-pick-snackbar__selector {
+  display: inline;
+  font-size: 12px;
+  font-family: Consolas, Monaco, monospace;
+  word-break: break-all;
+  padding: 1px 4px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
 }
 /* Settings popover is portaled outside .onepress-styling */
 .onepress-styling-settings-popover .components-popover__content {
@@ -1269,9 +1353,9 @@ body.wp-customizer .media-modal-backdrop {
 }
 .styling-font-picker-popover .components-popover__content {
   width: min(100vw - 48px, 320px);
-  max-width: 320px;
+  max-width: 300px;
   box-sizing: border-box;
-  padding: 12px;
+  padding: var(--opc-panel-spacing);
   max-height: min(85vh, 560px);
   display: flex;
   flex-direction: column;

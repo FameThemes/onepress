@@ -17,12 +17,12 @@ export function TrblLinkIconButton({ linked, onLinkedChange, linkLabel, unlinkLa
 		<Tooltip text={tooltipText}>
 			<Button
 				type="button"
-				variant="tertiary"
+				variant={linked ? 'tertiary' : 'primary'}
 				size="small"
-				className="trbl-link-toggle"
+				className="trbl-link-toggle icon-btn"
 				icon={linked ? linkOff : link}
 				label={tooltipText}
-				aria-pressed={linked}
+				// aria-pressed={linked}
 				onClick={() => onLinkedChange(!linked)}
 			/>
 		</Tooltip>

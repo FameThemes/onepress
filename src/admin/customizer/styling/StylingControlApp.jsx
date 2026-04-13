@@ -3,13 +3,14 @@
  */
 import {
 	Button,
-	ButtonGroup,
 	__experimentalConfirmDialog as ConfirmDialog,
 	Icon,
 	Popover,
+	SnackbarList,
 	TextControl,
+	Tabs,
 } from '@wordpress/components';
-import { pencil, rotateLeft, settings } from '@wordpress/icons';
+import { pencil, rotateLeft, settings, close } from '@wordpress/icons';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import {
@@ -31,15 +32,10 @@ import {
 } from './stylingStatesPolicy';
 
 const IconTarget = ({ size = 24 }) => {
-	return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-focus-2">
+	return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-current-location">
 		<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-		<path d="M11.5 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" />
-		<path d="M5 12a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-		<path d="M12 3l0 2" />
-		<path d="M3 12l2 0" />
-		<path d="M12 19l0 2" />
-		<path d="M19 12l2 0" />
-	</svg>;
+		<path d="M12 1a1 1 0 0 1 1 1v1.055a9.004 9.004 0 0 1 7.946 7.945h1.054a1 1 0 0 1 0 2h-1.055a9.004 9.004 0 0 1 -7.944 7.945l-.001 1.055a1 1 0 0 1 -2 0v-1.055a9.004 9.004 0 0 1 -7.945 -7.944l-1.055 -.001a1 1 0 0 1 0 -2h1.055a9.004 9.004 0 0 1 7.945 -7.945v-1.055a1 1 0 0 1 1 -1m0 4a7 7 0 1 0 0 14a7 7 0 0 0 0 -14m0 3a4 4 0 1 1 -4 4l.005 -.2a4 4 0 0 1 3.995 -3.8" />
+	</svg>
 }
 
 /**
@@ -226,6 +222,10 @@ export function StylingControlApp({ control, $ }) {
 	const editingItemIndexRef = useRef(null);
 	const [previewPickerActive, setPreviewPickerActive] = useState(false);
 	const previewPickerActiveRef = useRef(false);
+	const pickSnackbarSeqRef = useRef(0);
+	const [pickerSnackbarNotices, setPickerSnackbarNotices] = useState(
+		/** @type {Array<{ id: string, explicitDismiss?: boolean, content: import('react').ReactNode, spokenMessage?: string }>} */([])
+	);
 	const [statesPopoverOpen, setStatesPopoverOpen] = useState(false);
 	const [statesPopoverAnchor, setStatesPopoverAnchor] = useState(null);
 	const manageStatesButtonRef = useRef(null);
@@ -352,6 +352,40 @@ export function StylingControlApp({ control, $ }) {
 
 	const activeState = statesList[stateIndex] || statesList[0];
 	const activeKey = activeState ? activeState.key : '';
+
+	const stateTabPanelId = `onepress-styling-state-panel-${String(control.id)}`;
+	const getStateTabId = (i) => `onepress-styling-state-tab-${String(control.id)}-${String(i)}`;
+
+	const onStateTabKeyDown = useCallback(
+		(event, index) => {
+			const n = statesList.length;
+			if (n < 2) {
+				return;
+			}
+			let next = index;
+			if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+				event.preventDefault();
+				next = (index + 1) % n;
+			} else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+				event.preventDefault();
+				next = (index - 1 + n) % n;
+			} else if (event.key === 'Home') {
+				event.preventDefault();
+				next = 0;
+			} else if (event.key === 'End') {
+				event.preventDefault();
+				next = n - 1;
+			} else {
+				return;
+			}
+			setStateIndex(next);
+			const id = `onepress-styling-state-tab-${String(control.id)}-${String(next)}`;
+			window.requestAnimationFrame(() => {
+				document.getElementById(id)?.focus();
+			});
+		},
+		[control.id, statesList.length]
+	);
 
 	const metaBaseSelector = useMemo(() => {
 		if (lockedBaseSelector) {
@@ -503,6 +537,21 @@ export function StylingControlApp({ control, $ }) {
 		editingItemIndexRef.current = editingItemIndex;
 	}, [editingItemIndex]);
 
+	const removePickerSnackbar = useCallback((id) => {
+		setPickerSnackbarNotices((prev) => prev.filter((n) => n.id !== id));
+	}, []);
+
+	useEffect(() => {
+		if (pickerSnackbarNotices.length === 0) {
+			return undefined;
+		}
+		const id = pickerSnackbarNotices[0].id;
+		const t = window.setTimeout(() => {
+			removePickerSnackbar(id);
+		}, 5000);
+		return () => window.clearTimeout(t);
+	}, [pickerSnackbarNotices, removePickerSnackbar]);
+
 	const cancelPreviewPicker = useCallback(() => {
 		if (!previewPickerActiveRef.current) {
 			return;
@@ -534,6 +583,28 @@ export function StylingControlApp({ control, $ }) {
 			previewPickerActiveRef.current = false;
 			setPreviewPickerActive(false);
 			onBaseSelectorChange(String(payload.selector || ''));
+			const trimmed = String(payload.selector ?? '').trim();
+			const appliedDisplay = trimmed === '' ? '.' : trimmed;
+			pickSnackbarSeqRef.current += 1;
+			setPickerSnackbarNotices([
+				{
+					id: `onepress-styling-pick-${String(control.id)}-${String(pickSnackbarSeqRef.current)}`,
+					explicitDismiss: true,
+					content: (
+						<span className="onepress-styling-pick-snackbar__inner">
+							<span className="onepress-styling-pick-snackbar__label">
+								{__('CSS selector applied:', 'onepress')}
+							</span>{' '}
+							<code className="onepress-styling-pick-snackbar__selector">{appliedDisplay}</code>
+						</span>
+					),
+					spokenMessage: sprintf(
+						/* translators: %s: CSS selector string */
+						__('CSS selector applied: %s', 'onepress'),
+						appliedDisplay
+					),
+				},
+			]);
 		};
 		const onEnded = (payload) => {
 			if (!payload || payload.controlId !== control.id) {
@@ -674,6 +745,7 @@ export function StylingControlApp({ control, $ }) {
 			cancelPreviewPicker();
 			return;
 		}
+		setPickerSnackbarNotices([]);
 		previewPickerActiveRef.current = true;
 		setPreviewPickerActive(true);
 		previewer.send('onepress-styling-start-pick', {
@@ -843,7 +915,7 @@ export function StylingControlApp({ control, $ }) {
 							<span className="grow customize-control-title">{controlLabel}</span>
 							<div className="flex gap-2">
 								<Button
-									variant="secondary"
+									variant="minimal"
 									onClick={() => setResetConfirm({ kind: 'all' })}
 									disabled={!defaultStylingPayload}
 									label={
@@ -852,6 +924,7 @@ export function StylingControlApp({ control, $ }) {
 											: __('Reset to default', 'onepress')
 									}
 									showTooltip
+									className='icon-btn'
 								>
 									<Icon icon={rotateLeft} size={20} />
 								</Button>
@@ -864,6 +937,7 @@ export function StylingControlApp({ control, $ }) {
 										aria-expanded={editorPopoverOpen}
 										aria-haspopup="dialog"
 										label={__('Edit styling', 'onepress')}
+										className='icon-btn'
 										showTooltip
 									>
 										<Icon icon={pencil} size={20} />
@@ -886,12 +960,13 @@ export function StylingControlApp({ control, $ }) {
 
 											<div className="flex gap-2">
 												<Button
-													variant="secondary"
+													variant="minimal"
 													onClick={() => setResetConfirm({ kind: 'item', index })}
 													size="small"
 													disabled={!defaultStylingPayload}
 													label={__('Reset this item to default', 'onepress')}
 													showTooltip
+													className='icon-btn'
 												>
 													<Icon icon={rotateLeft} size={18} />
 												</Button>
@@ -904,6 +979,7 @@ export function StylingControlApp({ control, $ }) {
 													label={__('Edit styling', 'onepress')}
 													showTooltip
 													size="small"
+													className='icon-btn'
 												>
 													<Icon icon={pencil} size={18} />
 												</Button>
@@ -942,7 +1018,7 @@ export function StylingControlApp({ control, $ }) {
 										{showStatesPopoverButton ? (
 											<Button
 												ref={manageStatesButtonRef}
-												className="onepress-styling-manage-states"
+												className="onepress-styling-manage-states icon-btn"
 												variant="secondary"
 												onClick={toggleStatesPopover}
 												aria-expanded={statesPopoverOpen}
@@ -954,6 +1030,7 @@ export function StylingControlApp({ control, $ }) {
 														: __('State settings', 'onepress')
 												}
 												showTooltip
+
 											>
 												<Icon icon={settings} size={20} />
 											</Button>
@@ -972,123 +1049,146 @@ export function StylingControlApp({ control, $ }) {
 														: __('Pick a selector from the site preview', 'onepress')
 												}
 												showTooltip
+												className='icon-btn'
 											>
 												{previewPickerActive
-													? __('Cancel pick', 'onepress')
-													: __('Find target', 'onepress')}
+													? <Icon icon={close} size={18} />
+													: <IconTarget size={18} />
+												}
 											</Button>
 										</>) : null}
 
 									</div>
 								</div>
-								<div className=" onepress-styling styling-root">
-									{showStatesToolbar ? (
+								{showStatesToolbar ? (
+									<div className=" onepress-styling styling-root">
 										<div className="states">
 											<div className="states-toolbar flex flex gap-2 justify-between items-center">
 												{showStateTabButtons ? (
-													<ButtonGroup>
-														{statesList.map((s, i) => (
-															<Button
-																key={s.key}
-																variant={i === stateIndex ? 'primary' : 'secondary'}
-																onClick={() => setStateIndex(i)}
-															>
-																{s.label}
-
-															</Button>
-														))}
-													</ButtonGroup>
+													<div className="state-tablist-scroll">
+														<div
+															className="state-tablist-inner  components-button-group "
+															role="tablist"
+															aria-label={__('Style states', 'onepress')}
+														>
+															{statesList.map((s, i) => (
+																<Button
+																	key={s.key}
+																	id={getStateTabId(i)}
+																	aria-selected={i === stateIndex}
+																	aria-controls={stateTabPanelId}
+																	tabIndex={i === stateIndex ? 0 : -1}
+																	variant="unstyled"
+																	onClick={() => setStateIndex(i)}
+																	onKeyDown={(e) => onStateTabKeyDown(e, i)}
+																	className={`tab-button ${i === stateIndex ? ' is-active' : ''}`}
+																>
+																	{s.label}
+																</Button>
+															))}
+														</div>
+													</div>
 												) : (
 													<span className="grow" aria-hidden />
 												)}
 											</div>
 										</div>
-									) : null}
-								</div>
+									</div>
+								) : null}
+
 							</div>
 
-							<div className="popover-body grow styling-root onepress-styling onepress-styling-editor-popover__inner">
+							<div
+								className="popover-body grow styling-root onepress-styling onepress-styling-editor-popover__inner"
+								role={showStateTabButtons ? 'tabpanel' : undefined}
+								id={showStateTabButtons ? stateTabPanelId : undefined}
+								aria-labelledby={showStateTabButtons ? getStateTabId(stateIndex) : undefined}
+							>
 
-									{showStatesPopoverButton ? (
-										<StylingSettingsPopover
-											anchor={statesPopoverAnchor}
-											isOpen={statesPopoverOpen}
-											onClose={closeStatesPopover}
-											value={editorPayload}
-											commit={commitActiveItem}
-											previewDeviceIds={previewDeviceIds}
-											activeStateKey={activeKey}
-											setStateIndex={setStateIndex}
-											allowAddRemoveStates={allowAddRemoveInStatesPopover}
-											multiple={multiple}
-											lockedBaseSelector={lockedBaseSelector}
-											editableBaseSelector={editableBaseSelector}
-											metaBaseSelector={metaBaseSelector}
-											onBaseSelectorChange={onBaseSelectorChange}
-											onItemTitleChange={onItemTitleChange}
-										/>
-									) : null}
-
-									<StylingAccordionPanels
-										model={sliceParsed.model}
-										unknownCount={unknownCount}
-										onPatch={onPatch}
-										sliceKey={sliceKey}
-										rawCss={currentText}
-										onRawChange={onChangeText}
-										families={families}
-										fontsLoading={fontsLoading}
-										fontsError={fontsError}
-										stylingGroups={control.params.styling_groups}
+								{showStatesPopoverButton ? (
+									<StylingSettingsPopover
+										anchor={statesPopoverAnchor}
+										isOpen={statesPopoverOpen}
+										onClose={closeStatesPopover}
+										value={editorPayload}
+										commit={commitActiveItem}
+										previewDeviceIds={previewDeviceIds}
+										activeStateKey={activeKey}
+										setStateIndex={setStateIndex}
+										allowAddRemoveStates={allowAddRemoveInStatesPopover}
+										multiple={multiple}
+										lockedBaseSelector={lockedBaseSelector}
+										editableBaseSelector={editableBaseSelector}
+										metaBaseSelector={metaBaseSelector}
+										onBaseSelectorChange={onBaseSelectorChange}
+										onItemTitleChange={onItemTitleChange}
 									/>
+								) : null}
 
-									{!showStatesPopoverButton ? (
-										<>
-											{multiple ? (
+								<StylingAccordionPanels
+									model={sliceParsed.model}
+									unknownCount={unknownCount}
+									onPatch={onPatch}
+									sliceKey={sliceKey}
+									rawCss={currentText}
+									onRawChange={onChangeText}
+									families={families}
+									fontsLoading={fontsLoading}
+									fontsError={fontsError}
+									stylingGroups={control.params.styling_groups}
+								/>
+
+								{!showStatesPopoverButton ? (
+									<>
+										{multiple ? (
+											<TextControl
+												__nextHasNoMarginBottom
+												className="styling-item-name-field"
+												label={__('Item name', 'onepress')}
+												help={__('Label shown in the list for this target.', 'onepress')}
+												value={String(editorPayload.title ?? '')}
+												onChange={onItemTitleChange}
+												autoComplete="off"
+												spellCheck={false}
+											/>
+										) : null}
+										{!lockedBaseSelector ? (
+											<div className="field-base-selector">
 												<TextControl
 													__nextHasNoMarginBottom
-													className="styling-item-name-field"
-													label={__('Item name', 'onepress')}
-													help={__('Label shown in the list for this target.', 'onepress')}
-													value={String(editorPayload.title ?? '')}
-													onChange={onItemTitleChange}
+													className="styling-selector-field"
+													label={__('Base CSS selector', 'onepress')}
+													help={
+														editableBaseSelector
+															? __(
+																'Rules apply to this target. Each state can add a suffix (e.g. :hover) in its settings or below when that tab is active.',
+																'onepress'
+															)
+															: __(
+																'The base selector is fixed for this control and cannot be changed here.',
+																'onepress'
+															)
+													}
+													value={metaBaseSelector}
+													onChange={onBaseSelectorChange}
+													disabled={!editableBaseSelector}
 													autoComplete="off"
 													spellCheck={false}
 												/>
-											) : null}
-											{!lockedBaseSelector ? (
-												<div className="field-base-selector">
-													<TextControl
-														__nextHasNoMarginBottom
-														className="styling-selector-field"
-														label={__('Base CSS selector', 'onepress')}
-														help={
-															editableBaseSelector
-																? __(
-																		'Rules apply to this target. Each state can add a suffix (e.g. :hover) in its settings or below when that tab is active.',
-																		'onepress'
-																	)
-																: __(
-																		'The base selector is fixed for this control and cannot be changed here.',
-																		'onepress'
-																	)
-														}
-														value={metaBaseSelector}
-														onChange={onBaseSelectorChange}
-														disabled={!editableBaseSelector}
-														autoComplete="off"
-														spellCheck={false}
-													/>
-												</div>
-											) : null}
-										</>
-									) : null}
+											</div>
+										) : null}
+									</>
+								) : null}
 
-									
+
 
 							</div>
 						</Popover>
 					) : null}
+				</div>
+
+				<div className="onepress-styling-pick-snackbar-wrap" aria-live="polite">
+					<SnackbarList notices={pickerSnackbarNotices} onRemove={removePickerSnackbar} />
 				</div>
 
 				<ConfirmDialog

@@ -123,10 +123,12 @@ export function StylingGoogleFontFamilyControl({ value, onPatch, families, loadi
 				<Popover
 					anchor={popoverAnchor}
 					onClose={closePopover}
-					placement="bottom-start"
+					placement="bottom"
 					shift
 					className="styling-font-picker-popover"
 					focusOnMount="firstElement"
+					noArrow={false}
+					offset={8}
 				>
 					<div className="styling-font-picker-popover__inner">
 						<TextControl

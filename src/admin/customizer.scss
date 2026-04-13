@@ -823,16 +823,21 @@ body.wp-customizer .media-modal {
 body.wp-customizer .media-modal-backdrop {
   z-index: 8000000;
 }
- 
+
 .styling-root {
   .components-input-control__container {
-    .components-input-control__input:not(.is-small) {
+    .components-input-control__input:not(.is-small),
+    .components-select-control__input:not(.is-small) {
       min-height: 32px !important;
       height: 32px !important;
     }
   }
 
-  .components-button:not(.is-small, .components-custom-gradient-picker__control-point-button, [class^="components-custom-gradient-"] ) {
+  .components-button:not(
+      .is-small,
+      .components-custom-gradient-picker__control-point-button,
+      [class^="components-custom-gradient-"]
+    ) {
     height: 32px;
   }
 }
@@ -860,6 +865,20 @@ body.wp-customizer .media-modal-backdrop {
   }
 }
 
+.components-button {
+  &.icon-btn {
+    padding: 6px;
+    width: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    &.is-small {
+      padding: 0px;
+      width: 24px;
+    }
+  }
+}
+
 .onepress-styling {
   .states {
     margin: 10px 0 0px;
@@ -876,13 +895,64 @@ body.wp-customizer .media-modal-backdrop {
     flex-wrap: wrap;
   }
 
+  /* State tabs: single row + horizontal scroll when many; thin 2px scrollbar (WebKit) */
+  .states-toolbar > .state-tablist-scroll {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .state-tablist-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+
+    &::-webkit-scrollbar {
+      height: 2px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.35);
+      border-radius: 1px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .state-tablist-inner  {
+    display: flex;
+    flex-wrap: nowrap !important;
+    align-items: stretch;
+    width: max-content;
+    min-width: min-content;
+    .tab-button {
+      border-width: 0px 0px 2px 0px;
+      border-style: solid;
+      border-color: transparent;
+      box-shadow: none;
+      outline: none !important;
+      &.is-active {
+        border-color: #007cba;
+      }
+    }
+  }
+
   .components-base-control {
     .components-base-control__field {
       margin-bottom: 0px;
     }
   }
 
-  .states-toolbar .components-button.onepress-styling-manage-states:not(.is-small) {
+  .states-toolbar
+    .components-button.onepress-styling-manage-states:not(.is-small) {
     min-width: 32px;
     width: 32px;
     height: 32px;
@@ -912,6 +982,7 @@ body.wp-customizer .media-modal-backdrop {
     font-size: 11px;
     font-weight: 500;
     text-transform: uppercase;
+    line-height: 1.4;
   }
 
   .rfield-body {
@@ -1104,8 +1175,7 @@ body.wp-customizer .media-modal-backdrop {
         // }
         > .components-panel__body-title {
           margin: calc(var(--opc-panel-spacing) * -1)
-            calc(var(--opc-panel-spacing) * -1)
-            0;
+            calc(var(--opc-panel-spacing) * -1) 0;
           padding: calc(var(--opc-panel-spacing) * -2);
           border-bottom: 1px solid #e0e0e0;
           background: #f0f0f0;
@@ -1118,12 +1188,13 @@ body.wp-customizer .media-modal-backdrop {
     padding: 0px;
   }
 
-  .enum-label {
+  .enum-label, .shgen-row-label {
     display: block;
     font-size: 11px;
     font-weight: 500;
     text-transform: uppercase;
     margin-bottom: 4px;
+    line-height: 1.4;
   }
 
   .enum-buttons {
@@ -1165,14 +1236,7 @@ body.wp-customizer .media-modal-backdrop {
       margin-top: 0;
     }
 
-    .shgen-row-label {
-      flex: 0 0 108px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: #1e1e1e;
-      line-height: 1.2;
-    }
+    
 
     &.unit-slider.has-range .unit-range-field {
       flex: 1;
@@ -1273,6 +1337,40 @@ body.wp-customizer .media-modal-backdrop {
 .onepress-styling-editor-popover__title {
   font-size: 13px;
   font-weight: 600;
+}
+
+/* Snackbar: base selector picked from preview (Customizer pane) */
+.onepress-styling-pick-snackbar-wrap {
+  position: fixed;
+  z-index: 500100;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100vw - 32px, 520px);
+  pointer-events: none;
+
+  .components-snackbar-list {
+    pointer-events: auto;
+  }
+}
+
+.onepress-styling-pick-snackbar__inner {
+  display: block;
+  line-height: 1.45;
+}
+
+.onepress-styling-pick-snackbar__label {
+  font-weight: 600;
+}
+
+.onepress-styling-pick-snackbar__selector {
+  display: inline;
+  font-size: 12px;
+  font-family: Consolas, Monaco, monospace;
+  word-break: break-all;
+  padding: 1px 4px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
 }
 
 /* Settings popover is portaled outside .onepress-styling */
@@ -1423,7 +1521,9 @@ body.wp-customizer .media-modal-backdrop {
 
 /* Fake input: label comes from wrapping BaseControl (TextStyleFields) */
 .onepress-styling
-  .styling-font-family-trigger.styling-font-family-trigger--input-like:not(.is-small) {
+  .styling-font-family-trigger.styling-font-family-trigger--input-like:not(
+    .is-small
+  ) {
   display: flex;
   align-items: center;
   width: 100%;
@@ -1478,9 +1578,9 @@ body.wp-customizer .media-modal-backdrop {
 
 .styling-font-picker-popover .components-popover__content {
   width: min(100vw - 48px, 320px);
-  max-width: 320px;
+  max-width: 300px;
   box-sizing: border-box;
-  padding: 12px;
+  padding: var(--opc-panel-spacing);
   max-height: min(85vh, 560px);
   display: flex;
   flex-direction: column;
