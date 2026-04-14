@@ -823,6 +823,14 @@ function FontManagerControlApp({
   }, []);
   const draft = (_editor$ = editor?.[1]) !== null && _editor$ !== void 0 ? _editor$ : null;
   const draftMode = (_editor$2 = editor?.[0]) !== null && _editor$2 !== void 0 ? _editor$2 : null;
+  const controlLabel = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    const l = control.params?.label;
+    return typeof l === 'string' && l.trim() !== '' ? l : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Font manager', 'onepress');
+  }, [control.params?.label]);
+  const controlDescription = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    const d = control.params?.description;
+    return typeof d === 'string' && d.trim() !== '' ? d : '';
+  }, [control.params?.description]);
   const previewAxesByFamily = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
     const items = mergeItemsForPreview(root.items, editor);
     return (0,_styling_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_8__.fontManagerItemsToGoogleAxesPlainObject)(items);
@@ -974,9 +982,13 @@ function FontManagerControlApp({
   const inlineEditForId = draftMode === 'edit' && draft ? draft.id : null;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-control font-manager-control--app"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "font-manager-control__list-heading"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Fonts saved', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-manager-control__intro"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "customize-control-title"
+  }, controlLabel), controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "description mt-2"
+  }, controlDescription) : null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: 'font-manager-list' + (draftMode === 'edit' ? ' font-manager-list--expanded' : ''),
     role: "region",
     "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Fonts saved', 'onepress')

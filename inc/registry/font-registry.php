@@ -42,11 +42,11 @@ if ( ! function_exists( 'onepress_font_manager_controls_config' ) ) {
 			'id'      => 'onepress_font_manager',
 			'setting' => $setting_defaults,
 			'control' => array(
-				'label'       => esc_html__( 'Font manager', 'onepress' ),
-				'description' => esc_html__(
-					'Maintain a list of fonts. For Google families, all styles are listed and selected by default; uncheck any you do not want loaded. Close discards unsaved editor changes.',
-					'onepress'
-				),
+				'label'       => esc_html__( 'Font Manager', 'onepress' ),
+				// 'description' => esc_html__(
+				// 	'Maintain a list of fonts. For Google families, all styles are listed and selected by default; uncheck any you do not want loaded. Close discards unsaved editor changes.',
+				// 	'onepress'
+				// ),
 				'section'     => $section,
 				'priority'    => 1,
 			),

@@ -243,6 +243,16 @@ export function FontManagerControlApp({ control, $ }) {
 	const draft = editor?.[1] ?? null;
 	const draftMode = editor?.[0] ?? null;
 
+	const controlLabel = useMemo(() => {
+		const l = control.params?.label;
+		return typeof l === 'string' && l.trim() !== '' ? l : __('Font manager', 'onepress');
+	}, [control.params?.label]);
+
+	const controlDescription = useMemo(() => {
+		const d = control.params?.description;
+		return typeof d === 'string' && d.trim() !== '' ? d : '';
+	}, [control.params?.description]);
+
 	const previewAxesByFamily = useMemo(() => {
 		const items = mergeItemsForPreview(root.items, editor);
 		return fontManagerItemsToGoogleAxesPlainObject(items);
@@ -445,7 +455,12 @@ export function FontManagerControlApp({ control, $ }) {
 
 	return (
 		<div className="font-manager-control font-manager-control--app">
-			<p className="font-manager-control__list-heading">{__('Fonts saved', 'onepress')}</p>
+			<div className="font-manager-control__intro">
+				<span className="customize-control-title">{controlLabel}</span>
+				{controlDescription ? (
+					<p className="description mt-2">{controlDescription}</p>
+				) : null}
+			</div>
 			<div
 				className={
 					'font-manager-list' +

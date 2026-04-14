@@ -1615,6 +1615,17 @@ body.wp-customizer .media-modal-backdrop {
   padding: 10px;
   border-radius: 3px;
 }
+/* Font manager: label + description render inside React; hide core duplicates when present */
+.customize-control-font_manager > .customize-control-title,
+.customize-control-font_manager > .description.customize-control-description {
+  display: none;
+}
+.font-manager-control__intro {
+  margin-bottom: 8px;
+}
+.font-manager-control__intro .customize-control-title {
+  display: block;
+}
 /* Font manager control (reuses .onepress-styling font picker styles) */
 .onepress-font-manager.font-manager-control,
 .onepress-font-manager .font-manager-control {
@@ -1623,7 +1634,7 @@ body.wp-customizer .media-modal-backdrop {
 .font-manager-list__units {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--opc-panel-spacing);
   margin: 0 0 16px 0;
   padding: 0;
 }
@@ -1639,25 +1650,30 @@ body.wp-customizer .media-modal-backdrop {
 }
 .font-manager-list__empty {
   margin: 0;
-  padding: 12px 14px;
+  padding: 10px;
   font-size: 13px;
   color: #646970;
   border: 1px solid #c3c4c7;
-  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
   background: #fff;
+  font-weight: 600;
 }
 .font-manager-list__item {
   border: 1px solid #c3c4c7;
-  border-radius: 4px;
-  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+  background: #f6f7f7;
   overflow: hidden;
+  font-weight: 600;
+  color: #1d2327;
+  font-size: 13px;
 }
 .font-manager-list__row {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 8px 10px;
-  font-size: 13px;
+  padding: 10px;
 }
 .font-manager-control__editor-below-list {
   margin-bottom: 12px;
