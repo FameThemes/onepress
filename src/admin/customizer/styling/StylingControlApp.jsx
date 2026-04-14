@@ -39,6 +39,22 @@ import {
 import { remapStylingRootToLengthUnit } from './stylingLengthUnitRemap';
 
 /**
+ * Normalize `disable_fields` from PHP / Customize (array, or rare object shape).
+ *
+ * @param {unknown} raw
+ * @returns {unknown[]}
+ */
+function coerceCustomizerDisableFieldsList(raw) {
+	if (Array.isArray(raw)) {
+		return raw;
+	}
+	if (raw && typeof raw === 'object') {
+		return Object.values(raw);
+	}
+	return [];
+}
+
+/**
  * @param {JQueryStatic} $ jQuery
  * @param {import('@wordpress/customize').Control} control
  */
@@ -205,10 +221,11 @@ export function StylingControlApp({ control, $ }) {
 		[control.params.styling_groups]
 	);
 
-	const disabledFieldSet = useMemo(
-		() => buildDisabledFieldSet(control.params.disable_fields),
-		[control.params.disable_fields]
-	);
+	const disabledFieldSet = useMemo(() => {
+		const p = control.params;
+		const raw = p.disable_fields ?? p.disableFields;
+		return buildDisabledFieldSet(coerceCustomizerDisableFieldsList(raw));
+	}, [control.params.disable_fields, control.params.disableFields, control.id]);
 
 	const editorRootClassName = useMemo(() => {
 		const parts = [
@@ -267,6 +284,22 @@ export function StylingControlApp({ control, $ }) {
 		}
 		return null;
 	}, [control]);
+
+	/** One `items[]` row shape when adding / per-item reset; required when `default_value.items` is `[]`. */
+	const multiItemTemplateRow = useMemo(() => {
+		if (!multiple) {
+			return null;
+		}
+		const tpl = control.params.styling_new_item_template ?? control.params.stylingNewItemTemplate;
+		if (tpl && typeof tpl === 'object' && !Array.isArray(tpl)) {
+			return cloneValue(tpl);
+		}
+		const items = Array.isArray(defaultStylingPayload?.items) ? defaultStylingPayload.items : [];
+		if (items[0]) {
+			return cloneValue(items[0]);
+		}
+		return null;
+	}, [multiple, control.params.styling_new_item_template, control.params.stylingNewItemTemplate, defaultStylingPayload]);
 
 	const [stateIndex, setStateIndex] = useState(0);
 	const [editorPopoverOpen, setEditorPopoverOpen] = useState(false);
@@ -1115,8 +1148,7 @@ export function StylingControlApp({ control, $ }) {
 		if (!multiple || !defaultStylingPayload) {
 			return;
 		}
-		const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
-		const template = items && items[0] ? cloneValue(items[0]) : null;
+		const template = multiItemTemplateRow ? cloneValue(multiItemTemplateRow) : null;
 		if (!template || !Array.isArray(value.items)) {
 			return;
 		}
@@ -1133,7 +1165,7 @@ export function StylingControlApp({ control, $ }) {
 		setPendingCustomSelector('');
 		setPendingCustomItemName('');
 		setPendingAddFormOpen(true);
-	}, [multiple, defaultStylingPayload, value, cancelPreviewPicker]);
+	}, [multiple, defaultStylingPayload, multiItemTemplateRow, value, cancelPreviewPicker]);
 
 	const confirmPendingAddWithPreset = useCallback(
 		/** @param {{ id: string, selector: string, name: string }} preset */(preset) => {
@@ -1144,8 +1176,7 @@ export function StylingControlApp({ control, $ }) {
 			if (sel === '') {
 				return;
 			}
-			const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
-			const template = items && items[0] ? cloneValue(items[0]) : null;
+			const template = multiItemTemplateRow ? cloneValue(multiItemTemplateRow) : null;
 			if (!template || !Array.isArray(value.items)) {
 				return;
 			}
@@ -1180,7 +1211,7 @@ export function StylingControlApp({ control, $ }) {
 			editorPopoverOpenRef.current = true;
 			setEditorPopoverOpen(true);
 		},
-		[multiple, defaultStylingPayload, value, commitRoot, cancelPendingAdd]
+		[multiple, defaultStylingPayload, multiItemTemplateRow, value, commitRoot, cancelPendingAdd]
 	);
 
 	const confirmPendingAddCustom = useCallback(() => {
@@ -1188,8 +1219,7 @@ export function StylingControlApp({ control, $ }) {
 		if (!sel || !multiple || !defaultStylingPayload) {
 			return;
 		}
-		const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
-		const template = items && items[0] ? cloneValue(items[0]) : null;
+		const template = multiItemTemplateRow ? cloneValue(multiItemTemplateRow) : null;
 		if (!template || !Array.isArray(value.items)) {
 			return;
 		}
@@ -1220,6 +1250,7 @@ export function StylingControlApp({ control, $ }) {
 		pendingCustomItemName,
 		multiple,
 		defaultStylingPayload,
+		multiItemTemplateRow,
 		value,
 		commitRoot,
 		cancelPendingAdd,
@@ -1270,24 +1301,45 @@ export function StylingControlApp({ control, $ }) {
 		setPendingAddCustomOpen(false);
 		setPendingCustomSelector('');
 		setPendingCustomItemName('');
-		commitRoot(cloneValue(defaultStylingPayload));
-	}, [defaultStylingPayload, commitRoot]);
+		let next = cloneValue(defaultStylingPayload);
+		if (multiple) {
+			// `null` second arg: never fill empty `items` from `control.params.default_value` (PHP may ship `items => []`).
+			next = ensureMultiShape(next, null, __('Item 1', 'onepress'));
+			const mode = getStatesStructureMode(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
+			const tpl = getFixedStatesTemplate(stylingStatesParam);
+			next = normalizeStylingRootForStatesPolicy(
+				next,
+				mode,
+				tpl,
+				previewDeviceIds,
+				multiple,
+				lockedBaseSelector
+			);
+		}
+		commitRoot(next);
+	}, [
+		defaultStylingPayload,
+		commitRoot,
+		multiple,
+		stylingStatesParam,
+		previewDeviceIds,
+		lockedBaseSelector,
+	]);
 
 	const onResetItemToDefault = useCallback(
 		(itemIndex) => {
 			if (!multiple || !defaultStylingPayload || !Array.isArray(value.items)) {
 				return;
 			}
-			const defItems = defaultStylingPayload.items;
-			if (!Array.isArray(defItems) || defItems.length === 0) {
+			if (!multiItemTemplateRow) {
 				return;
 			}
 			const current = value.items[itemIndex];
 			if (!current) {
 				return;
 			}
-			// Always use the first default row as the empty “shape” (states × devices). Per-item data must not come from defItems[itemIndex] — defaults only ship one template row.
-			const template = cloneValue(defItems[0]);
+			// Empty “shape” (states × devices) from PHP `styling_new_item_template` or first `default_value.items[]` row.
+			const template = cloneValue(multiItemTemplateRow);
 			template.id = current.id;
 			const base = String(current._meta?.baseSelector ?? current.selector ?? '').trim();
 			const elId = typeof current._meta?.elId === 'string' ? current._meta.elId.trim() : '';
@@ -1348,6 +1400,7 @@ export function StylingControlApp({ control, $ }) {
 		[
 			multiple,
 			defaultStylingPayload,
+			multiItemTemplateRow,
 			value,
 			commitRoot,
 			editorPopoverOpen,
@@ -1372,11 +1425,16 @@ export function StylingControlApp({ control, $ }) {
 		setStateIndex((i) => (i >= n ? 0 : i));
 	}, [structuralStates.length]);
 
+	const multiItemsEmpty =
+		multiple && Array.isArray(value?.items) && value.items.length === 0;
+
+	// Empty multi list has no row to read `_meta.states` from — still show add / reset UI, not this error.
 	if (
-		!structuralStates.length ||
-		!structuralStates[0] ||
-		typeof structuralStates[0] !== 'object' ||
-		Object.keys(structuralStates[0]).length !== 1
+		!multiItemsEmpty &&
+		(!structuralStates.length ||
+			!structuralStates[0] ||
+			typeof structuralStates[0] !== 'object' ||
+			Object.keys(structuralStates[0]).length !== 1)
 	) {
 		return (
 			<p className="description">

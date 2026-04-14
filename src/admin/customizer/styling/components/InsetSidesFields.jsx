@@ -4,7 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { SLIDER_PRESETS } from '../cssUnitSlider';
 import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
-import { areAllKeysDisabled } from '../stylingDisableFields';
+import { areAllKeysDisabled, isFieldDisabled } from '../stylingDisableFields';
 
 /**
  * @param {object} props
@@ -17,7 +17,7 @@ export function InsetSidesFields({ model, onPatch, disabledFieldSet }) {
 	if (areAllKeysDisabled(disabledFieldSet, insetKeys)) {
 		return null;
 	}
-	const dis = (k) => Boolean(disabledFieldSet?.has(k));
+	const dis = (k) => isFieldDisabled(disabledFieldSet, k);
 	return (
 		<div className="trbl">
 			<ResponsiveUnitSliderField

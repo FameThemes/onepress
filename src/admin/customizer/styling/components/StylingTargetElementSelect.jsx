@@ -169,7 +169,7 @@ export function StylingTargetElementSelect({
 				<Popover
 					anchor={anchor}
 					onClose={close}
-					placement="bottom-start"
+					placement="bottom"
 					shift
 					className="onepress-styling-target-preset__popover styling-font-picker-popover"
 					focusOnMount="firstElement"

@@ -24,35 +24,53 @@ if (! function_exists('onepress_styling_button_target_elements_registry')) {
 			return $cache;
 		}
 
-		$cat = 'buttons';
+		$base = 'base';
+		$hero_sections = 'hero_sections';
+		$custom = 'custom';
 		$data = array(
 			'categories' => array(
-				$cat => esc_html__('General', 'onepress'),
+				$base => esc_html__('Basic', 'onepress'),
+				$hero_sections => esc_html__('Fontpage sections', 'onepress'),
 			),
 			'elements'   => array(
 				array(
-					'id'       => 'onepress_btn_primary',
-					'selector' => 'body .btn.btn-theme-primary',
-					'name'     => esc_html__('Primary', 'onepress'),
-					'category' => $cat,
+					'id'       => 'global',
+					'selector' => 'body .btn, input[type=reset], input[type=submit], input[type=submit], .pirate-forms-submit-button, .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit',
+					'name'     => esc_html__('Global default', 'onepress'),
+					'category' => $base,
 				),
 				array(
-					'id'       => 'onepress_btn_secondary',
-					'selector' => 'body .nav-links a, body .nav-links .page-numbers, .entry-content .wp-block-button__link, input[type=reset], input[type=submit], input[type=submit], .pirate-forms-submit-button, .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit',
-					'name'     => esc_html__('Secondary', 'onepress'),
-					'category' => $cat,
+					'id'       => 'hero_primary',
+					'selector' => '#hero .container .btn.btn-theme-primary',
+					'name'     => esc_html__('Hero Button Primary', 'onepress'),
+					'category' => $hero_sections,
 				),
 				array(
-					'id'       => 'onepress_btn_outline',
-					'selector' => 'body .btn.btn-secondary-outline',
-					'name'     => esc_html__('Outline', 'onepress'),
-					'category' => $cat,
+					'id'       => 'hereo_secondary',
+					'selector' => '#hero .container .btn.btn-secondary-outline',
+					'name'     => esc_html__('Hero Button Secondary', 'onepress'),
+					'category' => $hero_sections,
 				),
+				array(
+					'id'       => 'hero_cta',
+					'selector' => 'body .aaat',
+					'name'     => esc_html__('Section CTA Button', 'onepress'),
+					'category' => $hero_sections,
+					'locked'   => true,
+					'message'  => wp_kses_post(
+						sprintf(
+							/* translators: %s: linked bold product name "OnePress Plus" (HTML). */
+							__('Update to %s version to unlock this feature.', 'onepress'),
+							'<a href="' . esc_url('https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_dashboard&utm_medium=compare_table&utm_campaign=onepress') . '" target="_blank" rel="noopener noreferrer"><strong>' . esc_html__('OnePress Plus', 'onepress') . '</strong></a>'
+						)
+					),
+				),
+
 				array(
 					'id'       => 'custom_item',
 					'selector' => '',
 					'name'     => esc_html__('Custom target (create new)', 'onepress'),
-					'category' => $cat,
+					'category' => $custom,
 					'locked'   => true,
 					'multiple' => true,
 					'message'  => wp_kses_post(
@@ -80,55 +98,10 @@ if (! function_exists('onepress_styling_button_default_value_multiple')) {
 	 */
 	function onepress_styling_button_default_value_multiple()
 	{
-		$button_states = array(
-			array(
-				'normal' => array(
-					'label'    => __('Normal', 'onepress'),
-					'selector' => '',
-				),
-			),
-			array(
-				'hover' => array(
-					'label'    => __('Hover', 'onepress'),
-					'selector' => ':hover',
-				),
-			),
-		);
-
-		$variants = array(
-			array(
-				'id'       => 'onepress_btn_primary',
-				'title'    => esc_html__('Primary button', 'onepress'),
-				'selector' => 'body .btn.btn-theme-primary',
-			),
-			array(
-				'id'       => 'onepress_btn_secondary',
-				'title'    => esc_html__('Secondary button', 'onepress'),
-				'selector' => 'body .nav-links a, body .nav-links .page-numbers, .entry-content .wp-block-button__link, input[type=reset], input[type=submit], input[type=submit], .pirate-forms-submit-button, .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit',
-			),
-			array(
-				'id'       => 'onepress_btn_outline',
-				'title'    => esc_html__('Outline button', 'onepress'),
-				'selector' => 'body .btn.btn-secondary-outline',
-			),
-		);
-
-		$items = array();
-		// foreach ($variants as $v) {
-		// 	$one = onepress_styling_get_default_value_from_states_template($button_states);
-		// 	$sel = $v['selector'];
-		// 	$one['_meta']['baseSelector'] = $sel;
-		// 	$one['_meta']['elId']         = $v['id'];
-		// 	$one['_meta']['elName']       = $v['title'];
-		// 	$one['id']                    = $v['id'];
-		// 	$one['title']                 = $v['title'];
-		// 	$one['selector']              = $sel;
-		// 	$items[]                      = $one;
-		// }
 
 		return array(
 			'_onepressStyling' => true,
-			'items'            => $items,
+			'items'            => [],
 		);
 	}
 }
@@ -168,15 +141,12 @@ if (! function_exists('onepress_styling_button_controls_config')) {
 			),
 			'control' => array(
 				'label'               => esc_html__('Buttons', 'onepress'),
-				// 'description'         => esc_html__(
-				// 	'Style primary, secondary, and outline buttons. Add rows from presets or edit each variant. Normal and hover per breakpoint.',
-				// 	'onepress'
-				// ),
 				'section'             => $section,
 				'priority'            => 10,
 				'styling_breakpoints' => onepress_styling_default_breakpoints(),
 				'styling_multiple'    => true,
 				'styling_states'      => $button_states,
+				'disable_fields'      => array('font_size'),
 				'styling_groups'      => array('text', 'background', 'border', 'spacing', 'shadow'),
 				'styling_hide_popover_heading'     => false,
 				'styling_hide_gear_button'         => true,

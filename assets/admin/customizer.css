@@ -769,13 +769,15 @@ body.wp-customizer .media-modal-backdrop {
 }
 .enum-label,
 .shgen-row-label,
-.field-title {
+.field-title,
+.onepress-styling .components-input-control__label {
   display: block;
   font-size: 11px;
   font-weight: 500;
   text-transform: uppercase;
   margin-bottom: 4px;
   line-height: 1.4;
+  color: #3c434a !important;
 }
 .onepress-styling .states {
   margin: 8px 0 0px;
@@ -1069,10 +1071,6 @@ body.wp-customizer .media-modal-backdrop {
   gap: 8px;
   margin-top: 8px;
 }
-.onepress-styling .trbl-block {
-  padding-bottom: 12px;
-  border-bottom: 1px solid #dcdcde;
-}
 .onepress-styling .trbl-head {
   display: flex;
   flex-wrap: wrap;
@@ -1203,9 +1201,6 @@ body.wp-customizer .media-modal-backdrop {
 }
 .onepress-styling {
   /* Inset: [label] … [toggle] — ToggleControl defaults to toggle-first; reorder + space-between */
-}
-.onepress-styling .shgen-block .shgen-inset-toggle {
-  margin-top: 8px;
 }
 .onepress-styling .shgen-block .shgen-inset-toggle .components-toggle-control {
   margin-bottom: 0;

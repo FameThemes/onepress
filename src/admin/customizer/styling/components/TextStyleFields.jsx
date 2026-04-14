@@ -1,5 +1,10 @@
 /**
  * Text group fields (typography).
+ *
+ * `disabledFieldSet` holds **declaration model** keys (camelCase: `fontSize`, `lineHeight`, …),
+ * matching `declarationForm.js` and `onPatch`. PHP `disable_fields` uses tokens after `sanitize_key()` (lowercase,
+ * underscores/hyphens kept — it does not turn `_` into `-`); `buildDisabledFieldSet()` maps those tokens onto the same model keys.
+ * Typography length sliders omit the row when disabled (same as font family / text color), because `RangeControl` would still show a label row.
  */
 import { BaseControl, TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -42,7 +47,8 @@ export function TextStyleFields({
 	const loading = fontsLoading;
 	const error = fontsError;
 	const d = disabledFieldSet;
-	const dis = (key) => isFieldDisabled(d, key);
+	/** @param {string} modelKey — camelCase model property, not raw PHP token */
+	const dis = (modelKey) => isFieldDisabled(d, modelKey);
 
 	return (
 		<>
@@ -80,27 +86,36 @@ export function TextStyleFields({
 				</BaseControl>
 			)}
 			<StylingFontFaceSelectControls model={model} onPatch={onPatch} families={resolveList} disabledFieldSet={d} />
-			<ResponsiveUnitSliderField
-				label={__('Font size', 'onepress')}
-				value={model.fontSize || ''}
-				onChange={(v) => onPatch({ fontSize: v })}
-				disabled={dis('fontSize')}
-				{...SLIDER_PRESETS.fontSize}
-			/>
-			<ResponsiveUnitSliderField
-				label={__('Line height', 'onepress')}
-				value={model.lineHeight || ''}
-				onChange={(v) => onPatch({ lineHeight: v })}
-				disabled={dis('lineHeight')}
-				{...SLIDER_PRESETS.lineHeight}
-			/>
-			<ResponsiveUnitSliderField
-				label={__('Letter spacing', 'onepress')}
-				value={model.letterSpacing || ''}
-				onChange={(v) => onPatch({ letterSpacing: v })}
-				disabled={dis('letterSpacing')}
-				{...SLIDER_PRESETS.letterSpacing}
-			/>
+			{dis('fontSize')
+				? null
+				: (
+						<ResponsiveUnitSliderField
+							label={__('Font size', 'onepress')}
+							{...SLIDER_PRESETS.fontSize}
+							value={model.fontSize || ''}
+							onChange={(v) => onPatch({ fontSize: v })}
+						/>
+					)}
+			{dis('lineHeight')
+				? null
+				: (
+						<ResponsiveUnitSliderField
+							label={__('Line height', 'onepress')}
+							{...SLIDER_PRESETS.lineHeight}
+							value={model.lineHeight || ''}
+							onChange={(v) => onPatch({ lineHeight: v })}
+						/>
+					)}
+			{dis('letterSpacing')
+				? null
+				: (
+						<ResponsiveUnitSliderField
+							label={__('Letter spacing', 'onepress')}
+							{...SLIDER_PRESETS.letterSpacing}
+							value={model.letterSpacing || ''}
+							onChange={(v) => onPatch({ letterSpacing: v })}
+						/>
+					)}
 			<CssEnumButtonGroup
 				label={__('Text transform', 'onepress')}
 				value={model.textTransform || ''}

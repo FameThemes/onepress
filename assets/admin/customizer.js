@@ -4182,6 +4182,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * Normalize `disable_fields` from PHP / Customize (array, or rare object shape).
+ *
+ * @param {unknown} raw
+ * @returns {unknown[]}
+ */
+function coerceCustomizerDisableFieldsList(raw) {
+  if (Array.isArray(raw)) {
+    return raw;
+  }
+  if (raw && typeof raw === 'object') {
+    return Object.values(raw);
+  }
+  return [];
+}
+
+/**
  * @param {JQueryStatic} $ jQuery
  * @param {import('@wordpress/customize').Control} control
  */
@@ -4336,7 +4352,12 @@ function StylingControlApp({
   }, [multiple, control.params.base_selector]);
   const targetElementsRegistry = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_13__.normalizeTargetElementsRegistry)(control.params?.styling_target_elements), [control.params?.styling_target_elements]);
   const visibleStylingGroupIds = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_StylingAccordionPanels__WEBPACK_IMPORTED_MODULE_12__.resolveAllowedGroupIds)(control.params.styling_groups), [control.params.styling_groups]);
-  const disabledFieldSet = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_14__.buildDisabledFieldSet)(control.params.disable_fields), [control.params.disable_fields]);
+  const disabledFieldSet = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
+    var _p$disable_fields;
+    const p = control.params;
+    const raw = (_p$disable_fields = p.disable_fields) !== null && _p$disable_fields !== void 0 ? _p$disable_fields : p.disableFields;
+    return (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_14__.buildDisabledFieldSet)(coerceCustomizerDisableFieldsList(raw));
+  }, [control.params.disable_fields, control.params.disableFields, control.id]);
   const editorRootClassName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
     const parts = ['editor', 'onepress-styling-editor', `onepress-styling-editor--group-count-${visibleStylingGroupIds.length <= 1 ? '1' : 'gt1'}`];
     for (const id of visibleStylingGroupIds) {
@@ -4387,6 +4408,23 @@ function StylingControlApp({
     }
     return null;
   }, [control]);
+
+  /** One `items[]` row shape when adding / per-item reset; required when `default_value.items` is `[]`. */
+  const multiItemTemplateRow = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
+    var _control$params$styli;
+    if (!multiple) {
+      return null;
+    }
+    const tpl = (_control$params$styli = control.params.styling_new_item_template) !== null && _control$params$styli !== void 0 ? _control$params$styli : control.params.stylingNewItemTemplate;
+    if (tpl && typeof tpl === 'object' && !Array.isArray(tpl)) {
+      return cloneValue(tpl);
+    }
+    const items = Array.isArray(defaultStylingPayload?.items) ? defaultStylingPayload.items : [];
+    if (items[0]) {
+      return cloneValue(items[0]);
+    }
+    return null;
+  }, [multiple, control.params.styling_new_item_template, control.params.stylingNewItemTemplate, defaultStylingPayload]);
   const [stateIndex, setStateIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(0);
   const [editorPopoverOpen, setEditorPopoverOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(false);
   /** Mirrors `editorPopoverOpen` synchronously so the edit toggle survives stale closures vs. focus-outside ordering. */
@@ -5090,8 +5128,7 @@ function StylingControlApp({
     if (!multiple || !defaultStylingPayload) {
       return;
     }
-    const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
-    const template = items && items[0] ? cloneValue(items[0]) : null;
+    const template = multiItemTemplateRow ? cloneValue(multiItemTemplateRow) : null;
     if (!template || !Array.isArray(value.items)) {
       return;
     }
@@ -5108,7 +5145,7 @@ function StylingControlApp({
     setPendingCustomSelector('');
     setPendingCustomItemName('');
     setPendingAddFormOpen(true);
-  }, [multiple, defaultStylingPayload, value, cancelPreviewPicker]);
+  }, [multiple, defaultStylingPayload, multiItemTemplateRow, value, cancelPreviewPicker]);
   const confirmPendingAddWithPreset = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(/** @param {{ id: string, selector: string, name: string }} preset */preset => {
     if (!preset || typeof preset.selector !== 'string' || !multiple || !defaultStylingPayload) {
       return;
@@ -5117,8 +5154,7 @@ function StylingControlApp({
     if (sel === '') {
       return;
     }
-    const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
-    const template = items && items[0] ? cloneValue(items[0]) : null;
+    const template = multiItemTemplateRow ? cloneValue(multiItemTemplateRow) : null;
     if (!template || !Array.isArray(value.items)) {
       return;
     }
@@ -5152,14 +5188,13 @@ function StylingControlApp({
     setStateIndex(0);
     editorPopoverOpenRef.current = true;
     setEditorPopoverOpen(true);
-  }, [multiple, defaultStylingPayload, value, commitRoot, cancelPendingAdd]);
+  }, [multiple, defaultStylingPayload, multiItemTemplateRow, value, commitRoot, cancelPendingAdd]);
   const confirmPendingAddCustom = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(() => {
     const sel = pendingCustomSelector.trim();
     if (!sel || !multiple || !defaultStylingPayload) {
       return;
     }
-    const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
-    const template = items && items[0] ? cloneValue(items[0]) : null;
+    const template = multiItemTemplateRow ? cloneValue(multiItemTemplateRow) : null;
     if (!template || !Array.isArray(value.items)) {
       return;
     }
@@ -5184,7 +5219,7 @@ function StylingControlApp({
     setStateIndex(0);
     editorPopoverOpenRef.current = true;
     setEditorPopoverOpen(true);
-  }, [pendingCustomSelector, pendingCustomItemName, multiple, defaultStylingPayload, value, commitRoot, cancelPendingAdd]);
+  }, [pendingCustomSelector, pendingCustomItemName, multiple, defaultStylingPayload, multiItemTemplateRow, value, commitRoot, cancelPendingAdd]);
   const handlePendingTargetPreset = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(/** @param {Record<string, unknown>} preset */preset => {
     if (!preset || typeof preset !== 'object') {
       return;
@@ -5224,23 +5259,30 @@ function StylingControlApp({
     setPendingAddCustomOpen(false);
     setPendingCustomSelector('');
     setPendingCustomItemName('');
-    commitRoot(cloneValue(defaultStylingPayload));
-  }, [defaultStylingPayload, commitRoot]);
+    let next = cloneValue(defaultStylingPayload);
+    if (multiple) {
+      // `null` second arg: never fill empty `items` from `control.params.default_value` (PHP may ship `items => []`).
+      next = ensureMultiShape(next, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Item 1', 'onepress'));
+      const mode = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.getStatesStructureMode)(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
+      const tpl = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.getFixedStatesTemplate)(stylingStatesParam);
+      next = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.normalizeStylingRootForStatesPolicy)(next, mode, tpl, previewDeviceIds, multiple, lockedBaseSelector);
+    }
+    commitRoot(next);
+  }, [defaultStylingPayload, commitRoot, multiple, stylingStatesParam, previewDeviceIds, lockedBaseSelector]);
   const onResetItemToDefault = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(itemIndex => {
     var _ref3, _current$_meta$baseSe;
     if (!multiple || !defaultStylingPayload || !Array.isArray(value.items)) {
       return;
     }
-    const defItems = defaultStylingPayload.items;
-    if (!Array.isArray(defItems) || defItems.length === 0) {
+    if (!multiItemTemplateRow) {
       return;
     }
     const current = value.items[itemIndex];
     if (!current) {
       return;
     }
-    // Always use the first default row as the empty “shape” (states × devices). Per-item data must not come from defItems[itemIndex] — defaults only ship one template row.
-    const template = cloneValue(defItems[0]);
+    // Empty “shape” (states × devices) from PHP `styling_new_item_template` or first `default_value.items[]` row.
+    const template = cloneValue(multiItemTemplateRow);
     template.id = current.id;
     const base = String((_ref3 = (_current$_meta$baseSe = current._meta?.baseSelector) !== null && _current$_meta$baseSe !== void 0 ? _current$_meta$baseSe : current.selector) !== null && _ref3 !== void 0 ? _ref3 : '').trim();
     const elId = typeof current._meta?.elId === 'string' ? current._meta.elId.trim() : '';
@@ -5292,7 +5334,7 @@ function StylingControlApp({
       setStatesPopoverAnchor(null);
       setStateIndex(0);
     }
-  }, [multiple, defaultStylingPayload, value, commitRoot, editorPopoverOpen, editingItemIndex, targetElementsRegistry]);
+  }, [multiple, defaultStylingPayload, multiItemTemplateRow, value, commitRoot, editorPopoverOpen, editingItemIndex, targetElementsRegistry]);
   const structuralStates = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
     const meta = structuralPayload && structuralPayload._meta;
     if (!meta || !Array.isArray(meta.states)) {
@@ -5307,7 +5349,10 @@ function StylingControlApp({
     }
     setStateIndex(i => i >= n ? 0 : i);
   }, [structuralStates.length]);
-  if (!structuralStates.length || !structuralStates[0] || typeof structuralStates[0] !== 'object' || Object.keys(structuralStates[0]).length !== 1) {
+  const multiItemsEmpty = multiple && Array.isArray(value?.items) && value.items.length === 0;
+
+  // Empty multi list has no row to read `_meta.states` from — still show add / reset UI, not this error.
+  if (!multiItemsEmpty && (!structuralStates.length || !structuralStates[0] || typeof structuralStates[0] !== 'object' || Object.keys(structuralStates[0]).length !== 1)) {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
       className: "description"
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Invalid styling configuration (no states). Save to reset defaults.', 'onepress'));
@@ -6691,7 +6736,9 @@ function BoxShadowGeneratorField({
       className: "shgen-block trbl-block"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "trbl-head"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Box shadow', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", {
+      className: "field-title-bold"
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Box shadow', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "trbl-head-actions"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeviceSwitcherChip__WEBPACK_IMPORTED_MODULE_7__.DeviceSwitcherChip, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LengthUnitSwitcherChip__WEBPACK_IMPORTED_MODULE_8__.LengthUnitSwitcherChip, null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
       className: "description unknown-hint"
@@ -6715,12 +6762,14 @@ function BoxShadowGeneratorField({
   };
   const colorComposite = (0,colord__WEBPACK_IMPORTED_MODULE_2__.colord)(parts.colorHex).alpha(parts.opacity).toRgbString();
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "shgen-block trbl-block"
+    className: "shgen-block trbl-block flex flex-col gap-3"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "trbl-head"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Box shadow', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", {
+    className: "field-title-bold"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Box shadow', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "trbl-head-actions"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeviceSwitcherChip__WEBPACK_IMPORTED_MODULE_7__.DeviceSwitcherChip, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LengthUnitSwitcherChip__WEBPACK_IMPORTED_MODULE_8__.LengthUnitSwitcherChip, null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ShadowLengthRow, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LengthUnitSwitcherChip__WEBPACK_IMPORTED_MODULE_8__.LengthUnitSwitcherChip, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeviceSwitcherChip__WEBPACK_IMPORTED_MODULE_7__.DeviceSwitcherChip, null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ShadowLengthRow, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Shift right', 'onepress'),
     parts: parts,
     lengthKey: "offsetX",
@@ -7667,7 +7716,7 @@ function InsetSidesFields({
   if ((0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_4__.areAllKeysDisabled)(disabledFieldSet, insetKeys)) {
     return null;
   }
-  const dis = k => Boolean(disabledFieldSet?.has(k));
+  const dis = k => (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_4__.isFieldDisabled)(disabledFieldSet, k);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "trbl"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_3__.ResponsiveUnitSliderField, {
@@ -10536,7 +10585,7 @@ function StylingTargetElementSelect({
   }))), open && anchor ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Popover, {
     anchor: anchor,
     onClose: close,
-    placement: "bottom-start",
+    placement: "bottom",
     shift: true,
     className: "onepress-styling-target-preset__popover styling-font-picker-popover",
     focusOnMount: "firstElement",
@@ -10640,6 +10689,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Text group fields (typography).
+ *
+ * `disabledFieldSet` holds **declaration model** keys (camelCase: `fontSize`, `lineHeight`, …),
+ * matching `declarationForm.js` and `onPatch`. PHP `disable_fields` uses tokens after `sanitize_key()` (lowercase,
+ * underscores/hyphens kept — it does not turn `_` into `-`); `buildDisabledFieldSet()` maps those tokens onto the same model keys.
+ * Typography length sliders omit the row when disabled (same as font family / text color), because `RangeControl` would still show a label row.
  */
 
 
@@ -10682,7 +10736,8 @@ function TextStyleFields({
   const loading = fontsLoading;
   const error = fontsError;
   const d = disabledFieldSet;
-  const dis = key => (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_11__.isFieldDisabled)(d, key);
+  /** @param {string} modelKey — camelCase model property, not raw PHP token */
+  const dis = modelKey => (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_11__.isFieldDisabled)(d, modelKey);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingAlphaColorControl__WEBPACK_IMPORTED_MODULE_7__.StylingAlphaColorControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Text color', 'onepress'),
     value: model.color || '',
@@ -10715,30 +10770,27 @@ function TextStyleFields({
     onPatch: onPatch,
     families: resolveList,
     disabledFieldSet: d
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
+  }), dis('fontSize') ? null : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Font size', 'onepress'),
+    ..._cssUnitSlider__WEBPACK_IMPORTED_MODULE_4__.SLIDER_PRESETS.fontSize,
     value: model.fontSize || '',
     onChange: v => onPatch({
       fontSize: v
-    }),
-    disabled: dis('fontSize'),
-    ..._cssUnitSlider__WEBPACK_IMPORTED_MODULE_4__.SLIDER_PRESETS.fontSize
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
+    })
+  }), dis('lineHeight') ? null : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Line height', 'onepress'),
+    ..._cssUnitSlider__WEBPACK_IMPORTED_MODULE_4__.SLIDER_PRESETS.lineHeight,
     value: model.lineHeight || '',
     onChange: v => onPatch({
       lineHeight: v
-    }),
-    disabled: dis('lineHeight'),
-    ..._cssUnitSlider__WEBPACK_IMPORTED_MODULE_4__.SLIDER_PRESETS.lineHeight
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
+    })
+  }), dis('letterSpacing') ? null : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Letter spacing', 'onepress'),
+    ..._cssUnitSlider__WEBPACK_IMPORTED_MODULE_4__.SLIDER_PRESETS.letterSpacing,
     value: model.letterSpacing || '',
     onChange: v => onPatch({
       letterSpacing: v
-    }),
-    disabled: dis('letterSpacing'),
-    ..._cssUnitSlider__WEBPACK_IMPORTED_MODULE_4__.SLIDER_PRESETS.letterSpacing
+    })
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CssEnumButtonGroup__WEBPACK_IMPORTED_MODULE_5__.CssEnumButtonGroup, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Text transform', 'onepress'),
     value: model.textTransform || '',
@@ -11090,8 +11142,8 @@ function TrblSidesFieldInline({
     className: "trbl-block trbl-block--inline-layout"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "trbl-head-inline"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", {
-    className: "trbl-field-title"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "trbl-field-title field-title"
   }, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "trbl-head-inline__spacer",
     "aria-hidden": true
@@ -12167,8 +12219,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /**
  * `control.params.disable_fields` (PHP): hide or skip styling UI fields.
- * Tokens are normalized in PHP with sanitize_key (lowercase, a-z0-9_-).
- * Use model camelCase keys (font_family → fontFamily) or composite aliases below.
+ *
+ * WordPress `sanitize_key()` lowercases and removes characters not in `[a-z0-9_\-]`; it does **not** convert `_` to `-`.
+ * Registry values like `font_size` stay `font_size`; `fontSize` becomes `fontsize`.
+ *
+ * `buildDisabledFieldSet()` turns those tokens into **declaration model** keys (camelCase: `fontSize`, `lineHeight`, …)
+ * used by `declarationForm.js`, `onPatch`, and `isFieldDisabled(set, 'fontSize')` in field components.
+ * Composite aliases: keys in `COMPOSITE_FIELDS` below.
  */
 
 /** @type {Record<string, string[]>} keys: lowercase with underscores */
@@ -12197,6 +12254,23 @@ function normalizeCompositeKey(raw) {
 }
 
 /**
+ * @param {string} s
+ * @returns {string} letters+digits only, lowercased (for matching PHP `sanitize_key` output to model keys)
+ */
+function flatModelKey(s) {
+  return String(s || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+}
+
+/**
+ * Every `isFieldDisabled(..., key)` key in styling components + composite expansions.
+ * PHP passes tokens through `sanitize_key`, which lowercases and strips non [a-z0-9_-],
+ * so `fontSize` / `font-size` become `fontsize` — we map those back via flat match.
+ *
+ * @type {string[]}
+ */
+const KNOWN_STYLING_MODEL_KEYS = Array.from(new Set([...Object.values(COMPOSITE_FIELDS).flat(), 'color', 'fontFamily', 'fontSize', 'lineHeight', 'letterSpacing', 'textTransform', 'textDecoration', 'textAlign', 'fontWeight', 'fontStyle', 'borderStyle', 'borderColor', 'outlineStyle', 'outlineWidth', 'outlineColor', 'outlineOffset', 'display', 'visibility', 'opacity', 'position', 'width', 'height', 'zIndex', 'overflow', 'gridTemplateColumns', 'gridTemplateRows', 'gridAutoFlow', 'justifyItems', 'gap', 'flexDirection', 'flexWrap', 'justifyContent', 'alignItems', 'alignContent', 'rowGap', 'columnGap', 'top', 'right', 'bottom', 'left', '__onepressBgType', 'backgroundColor', 'backgroundImage', 'backgroundSize', 'backgroundRepeat', 'backgroundAttachment', 'boxShadow']));
+
+/**
  * @param {string} raw user token (may be font_family, fontFamily, etc.)
  * @returns {string} model property key
  */
@@ -12209,6 +12283,28 @@ function disableFieldTokenToModelKey(raw) {
     return t.replace(/_([a-zA-Z0-9])/g, (_, c) => c.toUpperCase()).replace(/-([a-zA-Z0-9])/g, (_, c) => c.toUpperCase());
   }
   return t;
+}
+
+/**
+ * Map a token already normalized with `normalizeCompositeKey` (lowercase, `-` → `_`) to a model key.
+ *
+ * @param {string} norm
+ * @returns {string}
+ */
+function normalizedDisableTokenToModelKey(norm) {
+  if (!norm) {
+    return '';
+  }
+  if (norm.includes('_')) {
+    return disableFieldTokenToModelKey(norm);
+  }
+  const flatN = flatModelKey(norm);
+  for (const mk of KNOWN_STYLING_MODEL_KEYS) {
+    if (flatModelKey(mk) === flatN) {
+      return mk;
+    }
+  }
+  return disableFieldTokenToModelKey(norm);
 }
 
 /**
@@ -12229,7 +12325,7 @@ function buildDisabledFieldSet(raw) {
     if (expanded) {
       expanded.forEach(k => set.add(k));
     } else {
-      const key = disableFieldTokenToModelKey(item);
+      const key = normalizedDisableTokenToModelKey(norm);
       if (key) {
         set.add(key);
       }
@@ -12244,7 +12340,23 @@ function buildDisabledFieldSet(raw) {
  * @returns {boolean}
  */
 function isFieldDisabled(set, modelKey) {
-  return Boolean(set && modelKey && set.has(modelKey));
+  if (!set || !modelKey) {
+    return false;
+  }
+  if (set.has(modelKey)) {
+    return true;
+  }
+  // PHP `sanitize_key` + transport may leave `fontsize` / `font_size` in the set while UI checks `fontSize`.
+  const wanted = flatModelKey(modelKey);
+  if (!wanted) {
+    return false;
+  }
+  for (const k of set) {
+    if (flatModelKey(k) === wanted) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -12256,7 +12368,7 @@ function areAllKeysDisabled(set, modelKeys) {
   if (!set || !modelKeys.length) {
     return false;
   }
-  return modelKeys.every(k => set.has(k));
+  return modelKeys.every(k => isFieldDisabled(set, k));
 }
 
 /***/ },

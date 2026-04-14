@@ -64,8 +64,10 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 	public $base_selector = '';
 
 	/**
-	 * Field ids to hide in the styling UI (model camelCase keys and/or composite aliases, see theme docs).
-	 * Each entry is passed through sanitize_key before JSON.
+	 * Tokens for fields to disable in the styling UI. Prefer snake_case in PHP (e.g. `font_size`, `line_height`);
+	 * each value is passed through `sanitize_key()` (lowercase; strips chars outside `[a-z0-9_\-]` — underscores are kept).
+	 * The Customizer JS maps these to internal declaration **model** keys (camelCase: `fontSize`, `lineHeight`).
+	 * Composite aliases: `margin`, `font_face`, `raw`, etc. (see `stylingDisableFields.js`).
 	 *
 	 * @var list<string>
 	 */
@@ -235,14 +237,24 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 			} elseif ( is_array( $sdef ) ) {
 				$from_setting = $sdef;
 			}
+			// Include explicit `items => []` so “reset all” matches server default (no fallback to one template row).
 			if (
 				is_array( $from_setting )
 				&& isset( $from_setting['items'] )
 				&& is_array( $from_setting['items'] )
-				&& $from_setting['items'] !== array()
 			) {
 				$default_for_js = $from_setting;
 			}
+			// Row shape for “Add item” when `default_value.items` is empty (states/devices match this control).
+			if ( false === $this->styling_states ) {
+				$new_row_single = onepress_styling_get_default_value_normal_only();
+			} elseif ( is_array( $this->styling_states ) && $this->styling_states !== array() ) {
+				$new_row_single = onepress_styling_get_default_value_from_states_template( $this->styling_states );
+			} else {
+				$new_row_single = onepress_styling_get_default_value();
+			}
+			$this->json['styling_new_item_template'] = onepress_styling_item_from_single_payload( $new_row_single );
+			$this->json['stylingNewItemTemplate']     = $this->json['styling_new_item_template'];
 		} elseif (false === $this->styling_states) {
 			$default_for_js = onepress_styling_get_default_value_normal_only();
 		} elseif (is_array($this->styling_states) && $this->styling_states !== array()) {
@@ -258,6 +270,8 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 		$this->json['styling_groups']         = $this->styling_groups;
 		$this->json['base_selector']          = $this->styling_multiple ? '' : (string) $this->base_selector;
 		$this->json['disable_fields']         = $this->disable_fields;
+		// Some stacks expose Customize control data with camelCase keys; keep both in sync.
+		$this->json['disableFields']          = $this->disable_fields;
 		$this->json['styling_hide_popover_heading']         = $this->styling_hide_popover_heading;
 		$this->json['styling_hide_gear_button']             = $this->styling_hide_gear_button;
 		$this->json['styling_hide_preview_pick_button']     = $this->styling_hide_preview_pick_button;

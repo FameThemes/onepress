@@ -216,7 +216,7 @@ export function TrblSidesFieldInline({
 	return (
 		<div className="trbl-block trbl-block--inline-layout">
 			<div className="trbl-head-inline">
-				<strong className="trbl-field-title">{label}</strong>
+				<span className="trbl-field-title field-title">{label}</span>
 				<span className="trbl-head-inline__spacer" aria-hidden />
 				<LengthUnitSwitcherChip />
 				<DeviceSwitcherChip />

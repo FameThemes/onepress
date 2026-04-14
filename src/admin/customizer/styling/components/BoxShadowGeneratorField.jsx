@@ -184,7 +184,7 @@ export function BoxShadowGeneratorField({ value, onChange }) {
 		return (
 			<div className="shgen-block trbl-block">
 				<div className="trbl-head">
-					<strong>{__('Box shadow', 'onepress')}</strong>
+					<strong className="field-title-bold">{__('Box shadow', 'onepress')}</strong>
 					<div className="trbl-head-actions">
 						<DeviceSwitcherChip />
 						<LengthUnitSwitcherChip />
@@ -218,12 +218,12 @@ export function BoxShadowGeneratorField({ value, onChange }) {
 	const colorComposite = colord(parts.colorHex).alpha(parts.opacity).toRgbString();
 
 	return (
-		<div className="shgen-block trbl-block">
+		<div className="shgen-block trbl-block flex flex-col gap-3">
 			<div className="trbl-head">
-				<strong>{__('Box shadow', 'onepress')}</strong>
+				<strong className="field-title-bold">{__('Box shadow', 'onepress')}</strong>
 				<div className="trbl-head-actions">
-					<DeviceSwitcherChip />
 					<LengthUnitSwitcherChip />
+					<DeviceSwitcherChip />
 				</div>
 			</div>
 			<ShadowLengthRow
