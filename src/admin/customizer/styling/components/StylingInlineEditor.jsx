@@ -76,6 +76,7 @@ function StylingInlineEditorInner({
 	stylingGroups,
 	disabledFieldSet,
 	onCloseEditor,
+	targetElementsRegistry,
 }) {
 	if (!editorPayload) {
 		return null;
@@ -204,20 +205,24 @@ function StylingInlineEditorInner({
 					/>
 				) : null}
 
-				<div className="onepress-styling-target-preset-wrap">
-					<p className="enum-label">{__('Target Element', 'onepress')}</p>
-					<StylingTargetElementSelect
-						currentSelector={metaBaseSelector}
-						currentElId={
-							typeof editorPayload?._meta?.elId === 'string' ? editorPayload._meta.elId : ''
-						}
-						selectedPresetName={
-							typeof editorPayload?._meta?.elName === 'string' ? editorPayload._meta.elName : ''
-						}
-						onSelectPreset={onSelectTargetPreset}
-						disabled={Boolean(lockedBaseSelector) || !editableBaseSelector}
-					/>
-				</div>
+				{/* Single-target + PHP `base_selector`: hide preset (selector fixed in registry). */}
+				{lockedBaseSelector === '' ? (
+					<div className="onepress-styling-target-preset-wrap">
+						<p className="enum-label">{__('Target Element', 'onepress')}</p>
+						<StylingTargetElementSelect
+							targetRegistry={targetElementsRegistry}
+							currentSelector={metaBaseSelector}
+							currentElId={
+								typeof editorPayload?._meta?.elId === 'string' ? editorPayload._meta.elId : ''
+							}
+							selectedPresetName={
+								typeof editorPayload?._meta?.elName === 'string' ? editorPayload._meta.elName : ''
+							}
+							onSelectPreset={onSelectTargetPreset}
+							disabled={!editableBaseSelector}
+						/>
+					</div>
+				) : null}
 
 				{!multiItemAwaitingPresetTarget ? (
 					<StylingAccordionPanels

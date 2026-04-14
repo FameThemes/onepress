@@ -470,7 +470,7 @@ export function FontManagerControlApp({ control, $ }) {
 				aria-label={__('Fonts saved', 'onepress')}
 			>
 				{root.items.length === 0 ? (
-					<div className="font-manager-list__empty">{__('No fonts yet.', 'onepress')}</div>
+					<div className="font-manager-list__empty"></div>
 				) : (
 					<div className="font-manager-list__units">
 						{root.items.map((item) => {

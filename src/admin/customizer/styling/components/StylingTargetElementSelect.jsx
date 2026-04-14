@@ -7,8 +7,8 @@ import { __ } from '@wordpress/i18n';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from '@wordpress/element';
 import {
 	findMatchingTargetPreset,
-	getStylingTargetElementsRegistry,
 	normalizeSelectorForPresetMatch,
+	normalizeTargetElementsRegistry,
 } from '../targetElementsRegistry';
 
 const LIST_MAX_H = 280;
@@ -20,6 +20,7 @@ const LIST_MAX_H = 280;
  * @param {string} [props.selectedPresetName] — `_meta.elName` (stable label in trigger)
  * @param {(preset: { selector: string, name: string, id: string }) => void} props.onSelectPreset
  * @param {boolean} [props.disabled]
+ * @param {{ categories: Record<string, string>, elements: Array<{ id: string, selector: string, name: string, category: string }> }} [props.targetRegistry] — `control.params.styling_target_elements`
  */
 export function StylingTargetElementSelect({
 	currentSelector,
@@ -27,13 +28,13 @@ export function StylingTargetElementSelect({
 	selectedPresetName = '',
 	onSelectPreset,
 	disabled = false,
+	targetRegistry: targetRegistryProp,
 }) {
-	const [registry, setRegistry] = useState(() => getStylingTargetElementsRegistry());
+	const registry = useMemo(
+		() => normalizeTargetElementsRegistry(targetRegistryProp),
+		[targetRegistryProp]
+	);
 	const { categories, elements } = registry;
-
-	useLayoutEffect(() => {
-		setRegistry(getStylingTargetElementsRegistry());
-	}, []);
 
 	const [open, setOpen] = useState(false);
 	const [search, setSearch] = useState('');
@@ -43,7 +44,10 @@ export function StylingTargetElementSelect({
 	const elIdStr = String(currentElId || '').trim();
 	const selStr = String(currentSelector || '').trim();
 
-	const matched = useMemo(() => findMatchingTargetPreset(currentSelector, currentElId), [currentSelector, currentElId]);
+	const matched = useMemo(
+		() => findMatchingTargetPreset(currentSelector, currentElId, registry),
+		[currentSelector, currentElId, registry]
+	);
 
 	const categoryOrder = useMemo(() => Object.keys(categories), [categories]);
 
@@ -101,7 +105,7 @@ export function StylingTargetElementSelect({
 
 	const savedLabel = String(selectedPresetName || '').trim();
 	const triggerLabel =
-		savedLabel || (matched ? matched.name : '') || __('Target Element…', 'onepress');
+		(matched ? matched.name : '') || savedLabel || __('Target Element…', 'onepress');
 
 	if (elements.length === 0) {
 		return null;

@@ -3,8 +3,8 @@
 /**
  * Element styling (Customizer) — demo settings using control type `styling` (section `onepress_global_settings`).
  *
- * Typography styling rows live in `inc/registry/typo-registry.php` and are registered from
- * `inc/customize-configs/options-typography.php`. When you add or remove `styling` theme_mod ids here,
+ * Typography / button styling registry configs live in `inc/registry/typo-registry.php` and `inc/registry/button-registry.php`
+ * (registered from `inc/customize-configs/options-typography.php` and `options-buttons.php`). When you add or remove `styling` theme_mod ids here,
  * update `onepress_styling_default_theme_mod_setting_ids()` in `inc/styling-css.php` so front CSS and
  * preview stay aligned.
  *
@@ -60,6 +60,7 @@ $wp_customize->add_control(
 			'styling_multiple'    => true,
 			'styling_states'        => 'all',
 			'priority'              => 5,
+			'styling_target_elements' => onepress_styling_typography_target_elements_registry(),
 		)
 	)
 );

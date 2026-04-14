@@ -994,7 +994,7 @@ function FontManagerControlApp({
     "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Fonts saved', 'onepress')
   }, root.items.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-list__empty"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('No fonts yet.', 'onepress')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-list__units"
   }, root.items.map(item => {
     const label = (0,_fontManagerModel__WEBPACK_IMPORTED_MODULE_10__.displayNameForItem)(item) || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('(unnamed)', 'onepress');
@@ -4170,6 +4170,27 @@ function cloneValue(v) {
 }
 
 /**
+ * Row label in multi-item list: matched target preset name first when control has `styling_target_elements`, then title / id / fallback.
+ *
+ * @param {Record<string, unknown>} item
+ * @param {number} index
+ * @param {{ elements: Array<{ name: string, id: string, selector: string }> }} registry
+ * @returns {string}
+ */
+function getMultiStylingItemListRowLabel(item, index, registry) {
+  if (registry?.elements?.length) {
+    var _ref, _item$_meta$baseSelec;
+    const base = String((_ref = (_item$_meta$baseSelec = item._meta?.baseSelector) !== null && _item$_meta$baseSelec !== void 0 ? _item$_meta$baseSelec : item.selector) !== null && _ref !== void 0 ? _ref : '').trim();
+    const elId = typeof item._meta?.elId === 'string' ? item._meta.elId : '';
+    const matched = (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_13__.findMatchingTargetPreset)(base, elId, registry);
+    if (matched?.name) {
+      return matched.name;
+    }
+  }
+  return item.title || item.id || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Item %d', 'onepress'), index + 1);
+}
+
+/**
  * @param {Record<string, unknown>} singleClone
  * @param {string} itemTitle
  * @returns {Record<string, unknown>}
@@ -4242,10 +4263,11 @@ function StylingControlApp({
     const s = control.params.base_selector;
     return typeof s === 'string' && s.trim() !== '' ? s.trim() : '';
   }, [multiple, control.params.base_selector]);
+  const targetElementsRegistry = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_13__.normalizeTargetElementsRegistry)(control.params?.styling_target_elements), [control.params?.styling_target_elements]);
   const visibleStylingGroupIds = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_StylingAccordionPanels__WEBPACK_IMPORTED_MODULE_12__.resolveAllowedGroupIds)(control.params.styling_groups), [control.params.styling_groups]);
   const disabledFieldSet = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_14__.buildDisabledFieldSet)(control.params.disable_fields), [control.params.disable_fields]);
   const editorRootClassName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
-    const parts = ['editor', 'onepress-styling-editor', `onepress-styling-editor--group-count-${String(visibleStylingGroupIds.length)}`];
+    const parts = ['editor', 'onepress-styling-editor', `onepress-styling-editor--group-count-${visibleStylingGroupIds.length <= 1 ? '1' : 'gt1'}`];
     for (const id of visibleStylingGroupIds) {
       parts.push(`onepress-styling-editor--group-${id}`);
     }
@@ -4270,7 +4292,7 @@ function StylingControlApp({
   }, [control.params.label]);
   const controlDescription = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
     const d = control.params.description;
-    return typeof d === 'string' && d.trim() !== '' ? d : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Per state and breakpoint, enter CSS declarations only (no selectors or curly braces). Example: color: #2271b1; padding: 8px 12px;', 'onepress');
+    return d;
   }, [control.params.description]);
   const addItemLabel = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
     const l = control.params.add_item_label;
@@ -4707,8 +4729,8 @@ function StylingControlApp({
       return;
     }
     setValue(prev => {
-      var _ref, _prev$_meta$baseSelec;
-      const prevBase = String((_ref = (_prev$_meta$baseSelec = prev?._meta?.baseSelector) !== null && _prev$_meta$baseSelec !== void 0 ? _prev$_meta$baseSelec : prev?.selector) !== null && _ref !== void 0 ? _ref : '').trim();
+      var _ref2, _prev$_meta$baseSelec;
+      const prevBase = String((_ref2 = (_prev$_meta$baseSelec = prev?._meta?.baseSelector) !== null && _prev$_meta$baseSelec !== void 0 ? _prev$_meta$baseSelec : prev?.selector) !== null && _ref2 !== void 0 ? _ref2 : '').trim();
       if (prevBase === lockedBaseSelector) {
         return prev;
       }
@@ -5049,7 +5071,8 @@ function StylingControlApp({
     fontsError,
     stylingGroups: control.params.styling_groups,
     disabledFieldSet,
-    onCloseEditor: closeEditorPopover
+    onCloseEditor: closeEditorPopover,
+    targetElementsRegistry
   } : null;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components__WEBPACK_IMPORTED_MODULE_11__.StylingDeviceProvider, {
     deviceId: deviceId,
@@ -5104,7 +5127,7 @@ function StylingControlApp({
     className: "styling-list-item flex justify-between items-center gap-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "grow truncate text-sm"
-  }, item.title || item.id || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Item %d', 'onepress'), index + 1)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, getMultiStylingItemListRowLabel(item, index, targetElementsRegistry)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "minimal",
@@ -5159,9 +5182,10 @@ function StylingControlApp({
     className: "onepress-styling-pending-add-inline__picker"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "enum-label"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Target Element', 'onepress')), (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_13__.getStylingTargetElementsRegistry)().elements.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Target Element', 'onepress')), targetElementsRegistry.elements.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "description"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('No targets are available.', 'onepress')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components__WEBPACK_IMPORTED_MODULE_11__.StylingTargetElementSelect, {
+    targetRegistry: targetElementsRegistry,
     currentSelector: "",
     currentElId: "",
     selectedPresetName: "",
@@ -8672,7 +8696,8 @@ function StylingInlineEditorInner({
   fontsError,
   stylingGroups,
   disabledFieldSet,
-  onCloseEditor
+  onCloseEditor,
+  targetElementsRegistry
 }) {
   if (!editorPayload) {
     return null;
@@ -8765,17 +8790,18 @@ function StylingInlineEditorInner({
     onBaseSelectorChange: onBaseSelectorChange,
     onItemTitleChange: onItemTitleChange,
     showStatesSection: showStatesPopoverButton
-  }) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }) : null, lockedBaseSelector === '' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-styling-target-preset-wrap"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "enum-label"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Target Element', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingTargetElementSelect__WEBPACK_IMPORTED_MODULE_7__.StylingTargetElementSelect, {
+    targetRegistry: targetElementsRegistry,
     currentSelector: metaBaseSelector,
     currentElId: typeof editorPayload?._meta?.elId === 'string' ? editorPayload._meta.elId : '',
     selectedPresetName: typeof editorPayload?._meta?.elName === 'string' ? editorPayload._meta.elName : '',
     onSelectPreset: onSelectTargetPreset,
-    disabled: Boolean(lockedBaseSelector) || !editableBaseSelector
-  })), !multiItemAwaitingPresetTarget ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingAccordionPanels__WEBPACK_IMPORTED_MODULE_6__.StylingAccordionPanels, {
+    disabled: !editableBaseSelector
+  })) : null, !multiItemAwaitingPresetTarget ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingAccordionPanels__WEBPACK_IMPORTED_MODULE_6__.StylingAccordionPanels, {
     model: sliceParsed.model,
     unknownCount: unknownCount,
     onPatch: onPatch,
@@ -9625,29 +9651,28 @@ const LIST_MAX_H = 280;
  * @param {string} [props.selectedPresetName] — `_meta.elName` (stable label in trigger)
  * @param {(preset: { selector: string, name: string, id: string }) => void} props.onSelectPreset
  * @param {boolean} [props.disabled]
+ * @param {{ categories: Record<string, string>, elements: Array<{ id: string, selector: string, name: string, category: string }> }} [props.targetRegistry] — `control.params.styling_target_elements`
  */
 function StylingTargetElementSelect({
   currentSelector,
   currentElId = '',
   selectedPresetName = '',
   onSelectPreset,
-  disabled = false
+  disabled = false,
+  targetRegistry: targetRegistryProp
 }) {
-  const [registry, setRegistry] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(() => (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.getStylingTargetElementsRegistry)());
+  const registry = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.normalizeTargetElementsRegistry)(targetRegistryProp), [targetRegistryProp]);
   const {
     categories,
     elements
   } = registry;
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useLayoutEffect)(() => {
-    setRegistry((0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.getStylingTargetElementsRegistry)());
-  }, []);
   const [open, setOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(false);
   const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)('');
   const triggerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useRef)(null);
   const [anchor, setAnchor] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(null);
   const elIdStr = String(currentElId || '').trim();
   const selStr = String(currentSelector || '').trim();
-  const matched = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.findMatchingTargetPreset)(currentSelector, currentElId), [currentSelector, currentElId]);
+  const matched = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.findMatchingTargetPreset)(currentSelector, currentElId, registry), [currentSelector, currentElId, registry]);
   const categoryOrder = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => Object.keys(categories), [categories]);
   const filtered = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
     const q = search.trim().toLowerCase();
@@ -9691,7 +9716,7 @@ function StylingTargetElementSelect({
     setAnchor(triggerRef.current);
   }, [open]);
   const savedLabel = String(selectedPresetName || '').trim();
-  const triggerLabel = savedLabel || (matched ? matched.name : '') || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Target Element…', 'onepress');
+  const triggerLabel = (matched ? matched.name : '') || savedLabel || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Target Element…', 'onepress');
   if (elements.length === 0) {
     return null;
   }
@@ -11917,21 +11942,19 @@ function normalizeStylingRootForStatesPolicy(root, mode, fixedTemplate, previewD
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   findMatchingTargetPreset: () => (/* binding */ findMatchingTargetPreset),
-/* harmony export */   getStylingTargetElementsRegistry: () => (/* binding */ getStylingTargetElementsRegistry),
-/* harmony export */   normalizeSelectorForPresetMatch: () => (/* binding */ normalizeSelectorForPresetMatch)
+/* harmony export */   normalizeSelectorForPresetMatch: () => (/* binding */ normalizeSelectorForPresetMatch),
+/* harmony export */   normalizeTargetElementsRegistry: () => (/* binding */ normalizeTargetElementsRegistry)
 /* harmony export */ });
 /**
- * Preset targets from PHP (`onepressStylingTargetElements`) — read once per page load.
+ * Preset targets from `control.params.styling_target_elements` (per `Onepress_Customize_Styling_Control`).
  */
 
 /** @typedef {{ id: string, selector: string, name: string, category: string }} TargetElementPreset */
 
 /** @typedef {{ categories: Record<string, string>, elements: TargetElementPreset[] }} TargetElementsRegistry */
 
-/** @type {TargetElementsRegistry | null} */
-let cached = null;
-
 /**
+ * @param {unknown} raw
  * @returns {TargetElementPreset[]}
  */
 function normalizeElements(raw) {
@@ -11961,24 +11984,18 @@ function normalizeElements(raw) {
 }
 
 /**
+ * @param {unknown} raw — `control.params.styling_target_elements` from Customize.
  * @returns {TargetElementsRegistry}
  */
-function getStylingTargetElementsRegistry() {
-  const w = typeof window !== 'undefined' && window.onepressStylingTargetElements && typeof window.onepressStylingTargetElements === 'object' ? window.onepressStylingTargetElements : null;
-  const categories = w && w.categories && typeof w.categories === 'object' && !Array.isArray(w.categories) ? (/** @type {Record<string, string>} */w.categories) : {};
-  const elements = normalizeElements(w?.elements);
-  // First read can run before `wp_localize_script` output; drop empty cache when data appears.
-  if (cached && cached.elements.length === 0 && elements.length > 0) {
-    cached = null;
-  }
-  if (cached) {
-    return cached;
-  }
-  cached = {
+function normalizeTargetElementsRegistry(raw) {
+  const categories = raw && typeof raw === 'object' && raw.categories && typeof raw.categories === 'object' && !Array.isArray(raw.categories) ? (/** @type {Record<string, string>} */{
+    ...raw.categories
+  }) : {};
+  const elements = normalizeElements(raw && typeof raw === 'object' && 'elements' in raw ? /** @type {{ elements?: unknown }} */raw.elements : undefined);
+  return {
     categories,
     elements
   };
-  return cached;
 }
 
 /**
@@ -11996,14 +12013,15 @@ function normalizeSelectorForPresetMatch(s) {
  *
  * @param {string} currentSelector
  * @param {string} [currentElId]
+ * @param {TargetElementsRegistry} [registry]
  * @returns {TargetElementPreset | null}
  */
-function findMatchingTargetPreset(currentSelector, currentElId) {
-  const id = String(currentElId || '').trim();
-  const selN = normalizeSelectorForPresetMatch(currentSelector);
+function findMatchingTargetPreset(currentSelector, currentElId, registry) {
   const {
     elements
-  } = getStylingTargetElementsRegistry();
+  } = registry !== null && registry !== void 0 ? registry : normalizeTargetElementsRegistry(null);
+  const id = String(currentElId || '').trim();
+  const selN = normalizeSelectorForPresetMatch(currentSelector);
   if (id) {
     const byId = elements.find(e => e.id === id);
     if (byId) {

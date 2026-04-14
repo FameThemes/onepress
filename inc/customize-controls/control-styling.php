@@ -115,6 +115,14 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 	public $add_item_label = '';
 
 	/**
+	 * Preset target elements for this control only: categories (slug => label) + elements list.
+	 * Same shape as `onepress_styling_typography_target_elements_registry()`. Null = empty presets in JS.
+	 *
+	 * @var array{categories: array<string, string>, elements: list<array{id: string, selector: string, name: string, category: string}>}|null
+	 */
+	public $styling_target_elements = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param WP_Customize_Manager $manager Manager.
@@ -183,6 +191,9 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 		if ( isset( $args['add_item_label'] ) ) {
 			$this->add_item_label = sanitize_text_field( wp_unslash( (string) $args['add_item_label'] ) );
 		}
+		if ( isset( $args['styling_target_elements'] ) && is_array( $args['styling_target_elements'] ) ) {
+			$this->styling_target_elements = onepress_styling_sanitize_control_target_elements( $args['styling_target_elements'] );
+		}
 		parent::__construct($manager, $id, $args);
 	}
 
@@ -219,6 +230,21 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 
 		if ($this->styling_multiple) {
 			$default_for_js = onepress_styling_get_default_value_multiple();
+			$sdef           = $this->setting->default;
+			$from_setting   = null;
+			if ( is_string( $sdef ) && $sdef !== '' ) {
+				$from_setting = json_decode( $sdef, true );
+			} elseif ( is_array( $sdef ) ) {
+				$from_setting = $sdef;
+			}
+			if (
+				is_array( $from_setting )
+				&& isset( $from_setting['items'] )
+				&& is_array( $from_setting['items'] )
+				&& $from_setting['items'] !== array()
+			) {
+				$default_for_js = $from_setting;
+			}
 		} elseif (false === $this->styling_states) {
 			$default_for_js = onepress_styling_get_default_value_normal_only();
 		} elseif (is_array($this->styling_states) && $this->styling_states !== array()) {
@@ -241,6 +267,14 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 		$this->json['styling_font_family_source']   = $this->styling_font_family_source;
 		$this->json['add_item_label']               = (string) $this->add_item_label;
 		$this->json['preview_device_ids']     = onepress_styling_preview_device_ids();
+		$targets                               = $this->styling_target_elements;
+		if ( ! is_array( $targets ) ) {
+			$targets = array(
+				'categories' => array(),
+				'elements'   => array(),
+			);
+		}
+		$this->json['styling_target_elements'] = $targets;
 	}
 
 	/**
@@ -256,4 +290,60 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 		</div>
 		<?php
 	}
+}
+
+/**
+ * Sanitize preset target registry for Customizer JSON (`styling_target_elements` control arg).
+ *
+ * @param array<string, mixed> $raw Raw categories + elements.
+ * @return array{categories: array<string, string>, elements: list<array{id: string, selector: string, name: string, category: string}>}
+ */
+function onepress_styling_sanitize_control_target_elements( $raw ) {
+	if ( ! is_array( $raw ) ) {
+		return array(
+			'categories' => array(),
+			'elements'   => array(),
+		);
+	}
+	$categories = array();
+	if ( isset( $raw['categories'] ) && is_array( $raw['categories'] ) ) {
+		foreach ( $raw['categories'] as $k => $v ) {
+			$sk = sanitize_key( (string) $k );
+			if ( $sk === '' ) {
+				continue;
+			}
+			$categories[ $sk ] = sanitize_text_field( wp_unslash( (string) $v ) );
+		}
+	}
+	$elements = array();
+	if ( isset( $raw['elements'] ) && is_array( $raw['elements'] ) ) {
+		foreach ( $raw['elements'] as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$id       = isset( $row['id'] ) ? sanitize_key( (string) wp_unslash( $row['id'] ) ) : '';
+			$selector = isset( $row['selector'] ) ? onepress_styling_sanitize_selector( (string) $row['selector'] ) : '';
+			$name     = isset( $row['name'] ) ? sanitize_text_field( wp_unslash( (string) $row['name'] ) ) : '';
+			$category = isset( $row['category'] ) ? sanitize_key( (string) $row['category'] ) : 'other';
+			if ( $category === '' ) {
+				$category = 'other';
+			}
+			if ( $selector === '' || $name === '' ) {
+				continue;
+			}
+			if ( $id === '' ) {
+				$id = strlen( $selector ) <= 200 ? $selector : substr( $selector, 0, 200 );
+			}
+			$elements[] = array(
+				'id'       => $id,
+				'selector' => $selector,
+				'name'     => $name,
+				'category' => $category,
+			);
+		}
+	}
+	return array(
+		'categories' => $categories,
+		'elements'   => array_values( $elements ),
+	);
 }

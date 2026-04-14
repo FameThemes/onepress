@@ -1,19 +1,102 @@
 <?php
 
 /**
- * Typography (and similar) registry: one `Onepress_Customize_Styling_Control` row per theme_mod id.
+ * Typography registry: config rows for `Onepress_Customize_Styling_Control` (one row per theme_mod id).
  *
- * Customizer wiring: `inc/customize-configs/options-typography.php` loops `onepress_styling_typography_controls_config()`.
- * Loaded for CSS / font merge / preview ids via `inc/styling-css.php` (`onepress_styling_typography_theme_mod_ids()`, etc.).
- * Separate demo `styling` controls (global section): `inc/customize-configs/options-styling.php` — keep their ids in
- * `onepress_styling_default_theme_mod_setting_ids()` in `styling-css.php`.
+ * Helpers (theme_mod ids, base_selector maps, control lookup): `inc/styling-controls-registry.php`.
+ * Customizer: `inc/customize-configs/options-typography.php`. Loaded from `inc/styling-css.php`.
  *
- * Edit `onepress_styling_typography_controls_config()` (or filter it) to add/reorder/remove typography controls in one place.
+ * Preset target elements for typography controls: `onepress_styling_typography_target_elements_registry()`.
  *
  * @package OnePress
  */
 
-if (! function_exists('onepress_styling_typography_controls_config')) {
+if ( ! function_exists( 'onepress_styling_typography_target_elements_registry' ) ) {
+	/**
+	 * Default preset CSS targets for typography styling controls (Customizer UI).
+	 *
+	 * Filters (in order): `onepress_styling_typography_target_elements_registry`, then legacy `onepress_styling_target_elements_registry`.
+	 *
+	 * @return array{categories: array<string, string>, elements: list<array{id: string, selector: string, name: string, category: string}>}
+	 */
+	function onepress_styling_typography_target_elements_registry() {
+		static $cache = null;
+		if ( null !== $cache ) {
+			return $cache;
+		}
+
+		$categories = array(
+			'basic'   => esc_html__( 'Basic', 'onepress' ),
+			'header'  => esc_html__( 'Header', 'onepress' ),
+			'footer'  => esc_html__( 'Footer', 'onepress' ),
+			'content' => esc_html__( 'Content', 'onepress' ),
+			'sidebar' => esc_html__( 'Sidebar', 'onepress' ),
+			'other'   => esc_html__( 'Other', 'onepress' ),
+		);
+
+		$elements = array(
+			array(
+				'id'       => 'onepress_typo_p',
+				'selector' => 'body, body p',
+				'name'     => esc_html__( 'Paragraph', 'onepress' ),
+				'category' => 'basic',
+			),
+			array(
+				'id'       => 'onepress_typo_site_title',
+				'selector' => '#page .site-branding .site-title, #page .site-branding .site-text-logo',
+				'name'     => esc_html__( 'Site Title', 'onepress' ),
+				'category' => 'header',
+			),
+			array(
+				'id'       => 'onepress_typo_site_tagline',
+				'selector' => '#page .site-branding .site-description',
+				'name'     => esc_html__( 'Site Tagline', 'onepress' ),
+				'category' => 'header',
+			),
+			array(
+				'id'       => 'onepress_typo_menu',
+				'selector' => '.onepress-menu a',
+				'name'     => esc_html__( 'Menu', 'onepress' ),
+				'category' => 'header',
+			),
+			array(
+				'id'       => 'onepress_hero_heading',
+				'selector' => '.hero__content .hero-large-text, .hero__content .hcl2-content h1, .hero__content .hcl2-content h2, .hero__content .hcl2-content h3',
+				'name'     => esc_html__( 'Hero Heading', 'onepress' ),
+				'category' => 'content',
+			),
+			array(
+				'id'       => 'onepress_typo_heading',
+				'selector' => 'body h1, body h2, body h3, body h4, body h5, body h6, .entry-header .entry-title, body .section-title-area .section-title, body .section-title-area .section-subtitle, body .hero-content-style1 h2',
+				'name'     => esc_html__( 'Heading', 'onepress' ),
+				'category' => 'content',
+			),
+			array(
+				'id'       => 'onepress_slider_slide_typo_title',
+				'selector' => '.section-slider .section-op-slider .item--title',
+				'name'     => esc_html__( 'Slider Slide Title', 'onepress' ),
+				'category' => 'content',
+			),
+			array(
+				'id'       => 'onepress_slider_slide_typo_content',
+				'selector' => '.section-slider .section-op-slider .item--desc',
+				'name'     => esc_html__( 'Slider Slide Content', 'onepress' ),
+				'category' => 'content',
+			),
+		);
+
+		$data  = array(
+			'categories' => $categories,
+			'elements'   => $elements,
+		);
+		$data  = apply_filters( 'onepress_styling_typography_target_elements_registry', $data );
+		$cache = apply_filters( 'onepress_styling_target_elements_registry', $data );
+
+		return $cache;
+	}
+}
+
+if ( ! function_exists( 'onepress_styling_typography_controls_config' ) ) {
 	/**
 	 * Typography section: one styling control per theme_mod id.
 	 *
@@ -27,11 +110,12 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 	 *   In `styling_states` template rows, optional `force_selector` (string) — full CSS selector override; if omitted, theme resolves `force_selector` as `base_selector` + that row’s `selector` for the matching theme_mod id (front + preview).
 	 *   When `styling_multiple` => true on the control, use setting default `onepress_styling_get_default_value_multiple()` (array; sanitize stores JSON) and sanitize `onepress_sanitize_styling_value_multi` (not the single-target helpers).
 	 *   Optional with `styling_multiple`: `add_item_label` (string) — “Add item” button text.
+	 *   Optional: `description` (string) — help text under the control (Customizer `WP_Customize_Control` description; shown by `StylingControlApp`).
+	 *   Optional: `styling_target_elements` (array) — preset targets for this control (`categories` + `elements`); see `onepress_styling_typography_target_elements_registry()`.
 	 *
 	 * @return array<int, array{id: string, setting: array<string, mixed>, control: array<string, mixed>}>
 	 */
-	function onepress_styling_typography_controls_config()
-	{
+	function onepress_styling_typography_controls_config() {
 		$section = 'onepress_typography';
 
 		$setting_defaults = array(
@@ -47,14 +131,14 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 		);
 
 		$control_defaults = array(
-			'section'             => $section,
-			'styling_breakpoints' => onepress_styling_default_breakpoints(),
-			'styling_multiple'    => false,
-			'styling_states'      => false,
-			'styling_groups'      => array('text'),
+			'section'                      => $section,
+			'styling_breakpoints'          => onepress_styling_default_breakpoints(),
+			'styling_multiple'             => false,
+			'styling_states'               => false,
+			'styling_groups'               => array( 'text' ),
 			'styling_hide_popover_heading' => true,
-			'styling_hide_state_tablist' => true,
-			'styling_font_family_source' => 'local',
+			'styling_hide_state_tablist'   => true,
+			'styling_font_family_source'   => 'local',
 		);
 
 		$rows = array();
@@ -65,35 +149,17 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 			'control' => array_merge(
 				$control_defaults,
 				array(
-					'label'         => esc_html__('Custom typography targets', 'onepress'),
-					'description'   => esc_html__(
-						'Add selectors as separate items; each has its own text styles. Normal state only — use Add item for more targets.',
-						'onepress'
-					),
-					'priority'      => 23,
-					'styling_multiple' => true,
-					// 'styling_states'   => array(
-					// 	array(
-					// 		'normal' => array(
-					// 			'label'    => __('Normal', 'onepress'),
-					// 			'selector' => '',
-					// 		),
-					// 	),
-					// 	array(
-					// 		'hover' => array(
-					// 			'label'    => __('Hover', 'onepress'),
-					// 			'selector' => ':hover',
-					// 		),
-					// 	),
-					// ),
-					'styling_hide_state_tablist'   => true,
-
-					'disable_fields' => array('color'),
-					'styling_groups'   => array('text'),
-					'styling_hide_popover_heading' => false,
-					'styling_hide_gear_button' => true,
+					'label'       => esc_html__( 'Custom typography targets', 'onepress' ),
+					'priority'           => 23,
+					'styling_multiple'   => true,
+					'styling_hide_state_tablist' => true,
+					'disable_fields'     => array( 'color' ),
+					'styling_groups'     => array( 'text' ),
+					'styling_hide_popover_heading'     => false,
+					'styling_hide_gear_button'         => true,
 					'styling_hide_preview_pick_button' => true,
-					'add_item_label' => __('Add typography', 'onepress'),
+					'add_item_label'             => __( 'Add typography', 'onepress' ),
+					'styling_target_elements'    => onepress_styling_typography_target_elements_registry(),
 				)
 			),
 		);
@@ -103,94 +169,6 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 		 *
 		 * @param array<int, array{id: string, setting: array<string, mixed>, control: array<string, mixed>}> $rows
 		 */
-		return apply_filters('onepress_styling_typography_controls_config', $rows);
-	}
-}
-
-if (! function_exists('onepress_styling_typography_theme_mod_ids')) {
-	/**
-	 * Theme mod ids declared by `onepress_styling_typography_controls_config()` (for CSS output, Google Fonts merge, preview JS).
-	 *
-	 * @return list<string>
-	 */
-	function onepress_styling_typography_theme_mod_ids()
-	{
-		$ids = array();
-		foreach (onepress_styling_typography_controls_config() as $row) {
-			if (empty($row['id']) || ! is_string($row['id'])) {
-				continue;
-			}
-			$k = sanitize_key($row['id']);
-			if ($k !== '') {
-				$ids[] = $k;
-			}
-		}
-		$ids = array_values(array_unique($ids, SORT_STRING));
-
-		/**
-		 * Typography styling theme_mod ids derived from the controls registry.
-		 *
-		 * @param list<string> $ids
-		 */
-		return apply_filters('onepress_styling_typography_theme_mod_ids', $ids);
-	}
-}
-
-if (! function_exists('onepress_styling_registry_base_selector_map')) {
-	/**
-	 * theme_mod id → canonical `base_selector` from the typography controls registry (sanitized).
-	 * Used to override stale `_meta.baseSelector` in saved JSON when printing CSS / merging fonts.
-	 *
-	 * @return array<string, string>
-	 */
-	function onepress_styling_registry_base_selector_map()
-	{
-		$map = array();
-		foreach (onepress_styling_typography_controls_config() as $row) {
-			$sid = isset($row['id']) ? sanitize_key((string) $row['id']) : '';
-			if ($sid === '') {
-				continue;
-			}
-			$ctrl = isset($row['control']) && is_array($row['control']) ? $row['control'] : array();
-			if (empty($ctrl['base_selector']) || ! is_string($ctrl['base_selector'])) {
-				continue;
-			}
-			$sel = onepress_styling_sanitize_selector($ctrl['base_selector']);
-			if ($sel !== '') {
-				$map[$sid] = $sel;
-			}
-		}
-
-		/**
-		 * Extra registry ids → base selector (child themes / plugins).
-		 *
-		 * @param array<string, string> $map
-		 */
-		return apply_filters('onepress_styling_registry_base_selector_map', $map);
-	}
-}
-
-if (! function_exists('onepress_styling_registry_control_for_setting_id')) {
-	/**
-	 * Control args for a typography registry row by theme_mod id (after `onepress_styling_typography_controls_config` filter).
-	 *
-	 * @param string $setting_id theme_mod / control id.
-	 * @return array<string, mixed>|null
-	 */
-	function onepress_styling_registry_control_for_setting_id($setting_id)
-	{
-		$want = sanitize_key((string) $setting_id);
-		if ($want === '') {
-			return null;
-		}
-		foreach (onepress_styling_typography_controls_config() as $row) {
-			$rid = isset($row['id']) ? sanitize_key((string) $row['id']) : '';
-			if ($rid !== $want) {
-				continue;
-			}
-			return isset($row['control']) && is_array($row['control']) ? $row['control'] : null;
-		}
-
-		return null;
+		return apply_filters( 'onepress_styling_typography_controls_config', $rows );
 	}
 }

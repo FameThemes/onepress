@@ -730,13 +730,16 @@ function onepress_styling_apply_font_manager_google_axes_priority( array &$styli
 	}
 }
 
-// Typography registry: theme_mod ids, base_selector map, control lookup (`inc/registry/typo-registry.php`).
+// Registry configs (`*_controls_config()` only).
 require_once __DIR__ . '/registry/typo-registry.php';
+require_once __DIR__ . '/registry/button-registry.php';
+// Shared registry helpers: theme_mod ids, base_selector maps, control lookup (`inc/styling-controls-registry.php`).
+require_once __DIR__ . '/styling-controls-registry.php';
 
 /**
- * Default theme_mod ids merged for styling CSS output and preview (typography + global demos).
+ * Default theme_mod ids merged for styling CSS output and preview (typography + buttons + global demos).
  *
- * Typography ids: `onepress_styling_typography_theme_mod_ids()` from `inc/registry/typo-registry.php`.
+ * Typography / button ids: `onepress_styling_typography_theme_mod_ids()`, `onepress_styling_button_theme_mod_ids()` in `inc/styling-controls-registry.php`.
  * Demo globals: `inc/customize-configs/options-styling.php` — extend this list when adding/removing those settings.
  *
  * Filter: `onepress_styling_theme_mod_setting_ids`.
@@ -747,6 +750,7 @@ function onepress_styling_default_theme_mod_setting_ids()
 {
 	return array_merge(
 		onepress_styling_typography_theme_mod_ids(),
+		onepress_styling_button_theme_mod_ids(),
 		array(
 			'onepress_element_styling',
 			'onepress_element_styling_single',
@@ -756,7 +760,8 @@ function onepress_styling_default_theme_mod_setting_ids()
 }
 
 /**
- * For theme_mod ids that define `base_selector` in the typography registry (`inc/registry/typo-registry.php`),
+ * For theme_mod ids that define `base_selector` in a styling registry row
+ * (`inc/registry/typo-registry.php`, `inc/registry/button-registry.php`; merged via `onepress_styling_registry_merged_base_selector_map()`),
  * force `_meta.baseSelector` so front output matches PHP config (overrides outdated saved values).
  *
  * @param string               $setting_id theme_mod key.
@@ -775,7 +780,7 @@ function onepress_styling_value_with_registry_base( $setting_id, $value )
 	if ( $id === '' ) {
 		return $value;
 	}
-	$map = onepress_styling_registry_base_selector_map();
+	$map = onepress_styling_registry_merged_base_selector_map();
 	if ( empty( $map[ $id ] ) ) {
 		return $value;
 	}
@@ -788,7 +793,7 @@ function onepress_styling_value_with_registry_base( $setting_id, $value )
 }
 
 /**
- * For `typo-registry.php` rows with `base_selector` + array `styling_states`, set each matching state’s
+ * For registry rows (typography, buttons, …) with `base_selector` + array `styling_states`, set each matching state’s
  * `force_selector` from config: explicit template `force_selector`, else `base_selector` + template `selector`.
  *
  * @param string               $setting_id theme_mod key.

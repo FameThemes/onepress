@@ -827,6 +827,7 @@ body.wp-customizer .media-modal-backdrop {
   box-shadow: none;
   outline: none !important;
   font-weight: 600;
+  border-radius: 0px;
 }
 .onepress-styling .state-tablist-inner .tab-button.is-active {
   border-color: #007cba;
@@ -1001,7 +1002,7 @@ body.wp-customizer .media-modal-backdrop {
   border-width: 1px 0px 0px 0px;
 }
 .onepress-styling .acc-panel .fields {
-  padding: var(--opc-panel-spacing);
+  padding: calc(var(--opc-panel-spacing) * 2);
 }
 .onepress-styling .acc-panel .fields .components-flex:not(.list-fields) {
   gap: 4px;
@@ -1012,15 +1013,6 @@ body.wp-customizer .media-modal-backdrop {
   border-style: solid;
   border-width: 0px 0px 1px 0px;
   border-color: #e0e0e0;
-}
-.onepress-styling .acc-panel .components-panel__body:last-child {
-  border-width: 0px;
-}
-.onepress-styling .acc-panel .components-panel__body.is-opened > .components-panel__body-title {
-  margin: calc(var(--opc-panel-spacing) * -1) calc(var(--opc-panel-spacing) * -1) 0;
-  padding: calc(var(--opc-panel-spacing) * -2);
-  border-bottom: 1px solid #e0e0e0;
-  background: #f0f0f0;
 }
 .onepress-styling .components-panel__body > .components-panel__body-title {
   margin: 0px;
@@ -1190,7 +1182,7 @@ body.wp-customizer .media-modal-backdrop {
 .onepress-styling-inline-editor.onepress-styling-editor-popover .popover-body {
   flex: 1 1 auto;
   min-height: 0;
-  padding: 0 0 var(--opc-panel-spacing);
+  padding: 0;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -1198,8 +1190,7 @@ body.wp-customizer .media-modal-backdrop {
   flex-shrink: 0;
   display: flex;
   justify-content: flex-end;
-  padding: 10px var(--opc-panel-spacing) var(--opc-panel-spacing);
-  border-top: 1px solid #f0f0f1;
+  padding: var(--opc-panel-spacing) var(--opc-panel-spacing) 0;
   background: #fff;
 }
 .onepress-styling-editor-popover__inner {
@@ -1531,9 +1522,12 @@ body.wp-customizer .media-modal-backdrop {
   padding-top: 4px;
 }
 .onepress-styling-target-preset-wrap {
-  padding-left: var(--opc-panel-spacing);
-  padding-right: var(--opc-panel-spacing);
-  padding-bottom: var(--opc-panel-spacing);
+  padding-left: calc(var(--opc-panel-spacing) * 2);
+  padding-right: calc(var(--opc-panel-spacing) * 2);
+  padding-bottom: 0;
+}
+.onepress-styling-editor--group-count-gt1 .onepress-styling-target-preset-wrap {
+  padding-bottom: calc(var(--opc-panel-spacing));
 }
 .onepress-styling-awaiting-target-hint {
   margin: 0 0 12px;
@@ -1647,17 +1641,6 @@ body.wp-customizer .media-modal-backdrop {
 .font-manager-list.font-manager-list--expanded {
   max-height: none;
   overflow: visible;
-}
-.font-manager-list__empty {
-  margin: 0;
-  padding: 10px;
-  font-size: 13px;
-  color: #646970;
-  border: 1px solid #c3c4c7;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-  border-radius: 3px;
-  background: #fff;
-  font-weight: 600;
 }
 .font-manager-list__item {
   border: 1px solid #c3c4c7;

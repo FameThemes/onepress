@@ -89,8 +89,10 @@ function onepress_customize_register($wp_customize)
 	//Site Options
 	require_once $path . '/inc/customize-configs/options.php';
 	require_once $path . '/inc/customize-configs/options-global.php';
-	// Typography section from `inc/registry/typo-registry.php`.
+	// Typography section (config `inc/registry/typo-registry.php`; helpers `inc/styling-controls-registry.php`).
 	require_once $path . '/inc/customize-configs/options-typography.php';
+	// Buttons section (config `inc/registry/button-registry.php`).
+	require_once $path . '/inc/customize-configs/options-buttons.php';
 	// Font manager controls from `inc/registry/font-registry.php`.
 	require_once $path . '/inc/customize-configs/options-font-manager.php';
 	// Global demo `styling` controls — ids must stay in sync with `onepress_styling_default_theme_mod_setting_ids()` (styling-css.php).

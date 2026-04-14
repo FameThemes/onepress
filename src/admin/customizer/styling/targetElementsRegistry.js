@@ -1,15 +1,13 @@
 /**
- * Preset targets from PHP (`onepressStylingTargetElements`) — read once per page load.
+ * Preset targets from `control.params.styling_target_elements` (per `Onepress_Customize_Styling_Control`).
  */
 
 /** @typedef {{ id: string, selector: string, name: string, category: string }} TargetElementPreset */
 
 /** @typedef {{ categories: Record<string, string>, elements: TargetElementPreset[] }} TargetElementsRegistry */
 
-/** @type {TargetElementsRegistry | null} */
-let cached = null;
-
 /**
+ * @param {unknown} raw
  * @returns {TargetElementPreset[]}
  */
 function normalizeElements(raw) {
@@ -39,30 +37,18 @@ function normalizeElements(raw) {
 }
 
 /**
+ * @param {unknown} raw — `control.params.styling_target_elements` from Customize.
  * @returns {TargetElementsRegistry}
  */
-export function getStylingTargetElementsRegistry() {
-	const w =
-		typeof window !== 'undefined' && window.onepressStylingTargetElements && typeof window.onepressStylingTargetElements === 'object'
-			? window.onepressStylingTargetElements
-			: null;
+export function normalizeTargetElementsRegistry(raw) {
 	const categories =
-		w && w.categories && typeof w.categories === 'object' && !Array.isArray(w.categories)
-			? /** @type {Record<string, string>} */ (w.categories)
+		raw && typeof raw === 'object' && raw.categories && typeof raw.categories === 'object' && !Array.isArray(raw.categories)
+			? /** @type {Record<string, string>} */ ({ ...raw.categories })
 			: {};
-	const elements = normalizeElements(w?.elements);
-	// First read can run before `wp_localize_script` output; drop empty cache when data appears.
-	if (cached && cached.elements.length === 0 && elements.length > 0) {
-		cached = null;
-	}
-	if (cached) {
-		return cached;
-	}
-	cached = {
-		categories,
-		elements,
-	};
-	return cached;
+	const elements = normalizeElements(
+		raw && typeof raw === 'object' && 'elements' in raw ? /** @type {{ elements?: unknown }} */ (raw).elements : undefined
+	);
+	return { categories, elements };
 }
 
 /**
@@ -82,12 +68,13 @@ export function normalizeSelectorForPresetMatch(s) {
  *
  * @param {string} currentSelector
  * @param {string} [currentElId]
+ * @param {TargetElementsRegistry} [registry]
  * @returns {TargetElementPreset | null}
  */
-export function findMatchingTargetPreset(currentSelector, currentElId) {
+export function findMatchingTargetPreset(currentSelector, currentElId, registry) {
+	const { elements } = registry ?? normalizeTargetElementsRegistry(null);
 	const id = String(currentElId || '').trim();
 	const selN = normalizeSelectorForPresetMatch(currentSelector);
-	const { elements } = getStylingTargetElementsRegistry();
 	if (id) {
 		const byId = elements.find((e) => e.id === id);
 		if (byId) {

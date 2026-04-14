@@ -19,7 +19,7 @@ import {
 import { parseDeclarationForm, patchDeclarationForm } from './declarationForm';
 import { StylingDeviceProvider, StylingTargetElementSelect } from './components';
 import { resolveAllowedGroupIds } from './StylingAccordionPanels';
-import { getStylingTargetElementsRegistry } from './targetElementsRegistry';
+import { findMatchingTargetPreset, normalizeTargetElementsRegistry } from './targetElementsRegistry';
 import { buildDisabledFieldSet } from './stylingDisableFields';
 import { rebuildFontSlicesInValue } from './stylingGoogleFonts';
 import { useGoogleFontFamilies } from './useGoogleFontFamilies';
@@ -66,6 +66,26 @@ function pushStylingPayloadToCustomizer($, control, dataObj) {
 
 function cloneValue(v) {
 	return JSON.parse(JSON.stringify(v));
+}
+
+/**
+ * Row label in multi-item list: matched target preset name first when control has `styling_target_elements`, then title / id / fallback.
+ *
+ * @param {Record<string, unknown>} item
+ * @param {number} index
+ * @param {{ elements: Array<{ name: string, id: string, selector: string }> }} registry
+ * @returns {string}
+ */
+function getMultiStylingItemListRowLabel(item, index, registry) {
+	if (registry?.elements?.length) {
+		const base = String(item._meta?.baseSelector ?? item.selector ?? '').trim();
+		const elId = typeof item._meta?.elId === 'string' ? item._meta.elId : '';
+		const matched = findMatchingTargetPreset(base, elId, registry);
+		if (matched?.name) {
+			return matched.name;
+		}
+	}
+	return item.title || item.id || sprintf(__('Item %d', 'onepress'), index + 1);
 }
 
 /**
@@ -144,6 +164,11 @@ export function StylingControlApp({ control, $ }) {
 		return typeof s === 'string' && s.trim() !== '' ? s.trim() : '';
 	}, [multiple, control.params.base_selector]);
 
+	const targetElementsRegistry = useMemo(
+		() => normalizeTargetElementsRegistry(control.params?.styling_target_elements),
+		[control.params?.styling_target_elements]
+	);
+
 	const visibleStylingGroupIds = useMemo(
 		() => resolveAllowedGroupIds(control.params.styling_groups),
 		[control.params.styling_groups]
@@ -158,7 +183,7 @@ export function StylingControlApp({ control, $ }) {
 		const parts = [
 			'editor',
 			'onepress-styling-editor',
-			`onepress-styling-editor--group-count-${String(visibleStylingGroupIds.length)}`,
+			`onepress-styling-editor--group-count-${visibleStylingGroupIds.length <=1 ?'1' : 'gt1'}`,
 		];
 		for (const id of visibleStylingGroupIds) {
 			parts.push(`onepress-styling-editor--group-${id}`);
@@ -185,12 +210,7 @@ export function StylingControlApp({ control, $ }) {
 
 	const controlDescription = useMemo(() => {
 		const d = control.params.description;
-		return typeof d === 'string' && d.trim() !== ''
-			? d
-			: __(
-				'Per state and breakpoint, enter CSS declarations only (no selectors or curly braces). Example: color: #2271b1; padding: 8px 12px;',
-				'onepress'
-			);
+		return d;
 	}, [control.params.description]);
 
 	const addItemLabel = useMemo(() => {
@@ -1124,6 +1144,7 @@ export function StylingControlApp({ control, $ }) {
 				stylingGroups: control.params.styling_groups,
 				disabledFieldSet,
 				onCloseEditor: closeEditorPopover,
+				targetElementsRegistry,
 			}
 			: null;
 
@@ -1181,7 +1202,7 @@ export function StylingControlApp({ control, $ }) {
 										>
 											<div className="styling-list-item flex justify-between items-center gap-2">
 												<span className="grow truncate text-sm">
-													{item.title || item.id || sprintf(__('Item %d', 'onepress'), index + 1)}
+													{getMultiStylingItemListRowLabel(item, index, targetElementsRegistry)}
 												</span>
 
 												<div className="flex gap-2">
@@ -1238,12 +1259,13 @@ export function StylingControlApp({ control, $ }) {
 										<div className="onepress-styling-pending-add-inline">
 											<div className="onepress-styling-pending-add-inline__picker">
 												<p className="enum-label">{__('Target Element', 'onepress')}</p>
-												{getStylingTargetElementsRegistry().elements.length === 0 ? (
+												{targetElementsRegistry.elements.length === 0 ? (
 													<p className="description">
 														{__('No targets are available.', 'onepress')}
 													</p>
 												) : (
 													<StylingTargetElementSelect
+														targetRegistry={targetElementsRegistry}
 														currentSelector=""
 														currentElId=""
 														selectedPresetName=""
