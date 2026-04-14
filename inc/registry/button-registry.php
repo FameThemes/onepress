@@ -150,10 +150,10 @@ if ( ! function_exists( 'onepress_styling_button_controls_config' ) ) {
 			),
 			'control' => array(
 				'label'               => esc_html__( 'Buttons', 'onepress' ),
-				'description'         => esc_html__(
-					'Style primary, secondary, and outline buttons. Add rows from presets or edit each variant. Normal and hover per breakpoint.',
-					'onepress'
-				),
+				// 'description'         => esc_html__(
+				// 	'Style primary, secondary, and outline buttons. Add rows from presets or edit each variant. Normal and hover per breakpoint.',
+				// 	'onepress'
+				// ),
 				'section'             => $section,
 				'priority'            => 10,
 				'styling_breakpoints' => onepress_styling_default_breakpoints(),
@@ -165,7 +165,7 @@ if ( ! function_exists( 'onepress_styling_button_controls_config' ) ) {
 				'styling_hide_preview_pick_button' => true,
 				'styling_hide_state_tablist'       => false,
 				'styling_font_family_source'       => 'local',
-				'add_item_label'                   => __( 'Add button', 'onepress' ),
+				'add_item_label'                   => __( 'Add button style', 'onepress' ),
 				'styling_target_elements'          => onepress_styling_button_target_elements_registry(),
 			),
 		);
