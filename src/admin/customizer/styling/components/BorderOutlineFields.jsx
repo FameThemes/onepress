@@ -8,7 +8,7 @@ import { BorderRadiusField } from './BorderRadiusField';
 import { CssEnumButtonGroup } from './CssEnumButtonGroup';
 import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
 import { StylingAlphaColorControl } from './StylingAlphaColorControl';
-import { TrblSidesField } from './TrblSidesField';
+import { TrblSidesFieldInline } from './TrblSidesField';
 import { isFieldDisabled } from '../stylingDisableFields';
 
 /**
@@ -36,7 +36,7 @@ export function BorderOutlineFields({ sliceKey, model, onPatch, disabledFieldSet
 					{ value: 'dotted', label: 'dotted' },
 				]}
 			/>
-			<TrblSidesField
+			<TrblSidesFieldInline
 				sliceKey={sliceKey}
 				label={__('Border width', 'onepress')}
 				model={model}

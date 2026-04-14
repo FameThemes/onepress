@@ -2,7 +2,7 @@
  * Margin + padding (TRBL).
  */
 import { __ } from '@wordpress/i18n';
-import { TrblSidesField } from './TrblSidesField';
+import { TrblSidesFieldInline } from './TrblSidesField';
 
 /**
  * @param {object} props
@@ -14,7 +14,7 @@ import { TrblSidesField } from './TrblSidesField';
 export function SpacingFields({ sliceKey, model, onPatch, disabledFieldSet }) {
 	return (
 		<>
-			<TrblSidesField
+			<TrblSidesFieldInline
 				sliceKey={sliceKey}
 				label={__('Margin', 'onepress')}
 				model={model}
@@ -22,7 +22,7 @@ export function SpacingFields({ sliceKey, model, onPatch, disabledFieldSet }) {
 				keys={{ t: 'marginTop', r: 'marginRight', b: 'marginBottom', l: 'marginLeft' }}
 				disabledFieldSet={disabledFieldSet}
 			/>
-			<TrblSidesField
+			<TrblSidesFieldInline
 				sliceKey={sliceKey}
 				label={__('Padding', 'onepress')}
 				model={model}

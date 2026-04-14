@@ -27,7 +27,7 @@ if (! function_exists('onepress_styling_button_target_elements_registry')) {
 		$cat = 'buttons';
 		$data = array(
 			'categories' => array(
-				$cat => esc_html__('Buttons', 'onepress'),
+				$cat => esc_html__('Button Styling', 'onepress'),
 			),
 			'elements'   => array(
 				array(
@@ -53,9 +53,11 @@ if (! function_exists('onepress_styling_button_target_elements_registry')) {
 					'selector' => '',
 					'name'     => esc_html__('Custom target (create new)', 'onepress'),
 					'category' => $cat,
-					'locked'   => false,
+					'locked'   => true,
 					'multiple' => true,
-					'message'  => esc_html__('Update to OnePress Plus version to unlock this feature', 'onepress'),
+					'message'  => wp_kses_post(
+						__( 'Update to <strong>OnePress Plus</strong> version to unlock this feature.', 'onepress' )
+					),
 				),
 			),
 		);

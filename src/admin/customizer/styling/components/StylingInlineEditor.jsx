@@ -296,9 +296,12 @@ function StylingInlineEditorInner({
 							disabled={!editableBaseSelector}
 						/>
 						{targetNotice ? (
-							<p className="description mt-2" role="status">
-								{targetNotice}
-							</p>
+							<p
+								className="description mt-2 onepress-styling-locked-message-html"
+								role="status"
+								// Sanitized server-side with `wp_kses_post` (preset `message`).
+								dangerouslySetInnerHTML={{ __html: targetNotice }}
+							/>
 						) : null}
 						{customUnlockMode ? (
 							<div className="onepress-styling-custom-target-field flex flex-wrap gap-2 items-end mt-2">

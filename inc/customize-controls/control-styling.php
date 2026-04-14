@@ -293,6 +293,8 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 /**
  * Sanitize preset target registry for Customizer JSON (`styling_target_elements` control arg).
  *
+ * Element `message` (optional): may contain HTML; stored after `wp_kses_post` for safe rendering in JS.
+ *
  * @param array<string, mixed> $raw Raw categories + elements.
  * @return array{categories: array<string, string>, elements: list<array<string, mixed>>}
  */
@@ -330,7 +332,7 @@ function onepress_styling_sanitize_control_target_elements( $raw ) {
 			} elseif ( isset( $row['mutiple'] ) ) {
 				$multiple = (bool) $row['mutiple'];
 			}
-			$message = isset( $row['message'] ) ? sanitize_text_field( wp_unslash( (string) $row['message'] ) ) : '';
+			$message = isset( $row['message'] ) ? wp_kses_post( wp_unslash( (string) $row['message'] ) ) : '';
 			if ( $category === '' ) {
 				$category = 'other';
 			}

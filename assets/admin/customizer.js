@@ -4364,7 +4364,7 @@ function StylingControlApp({
   const [pendingAddLockedMessage, setPendingAddLockedMessage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useState)('');
   const [pendingAddCustomOpen, setPendingAddCustomOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useState)(false);
   const [pendingCustomSelector, setPendingCustomSelector] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useState)('');
-  const [pendingCustomPresetName, setPendingCustomPresetName] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useState)('');
+  const [pendingCustomItemName, setPendingCustomItemName] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useState)('');
   /** Anchor for editor popover after inline add (wrapper around add row / form). */
   const pendingAddInlineRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useRef)(/** @type {HTMLDivElement | null} */null);
   const pendingAddDraftRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useRef)({
@@ -4930,7 +4930,7 @@ function StylingControlApp({
       setPendingAddLockedMessage('');
       setPendingAddCustomOpen(false);
       setPendingCustomSelector('');
-      setPendingCustomPresetName('');
+      setPendingCustomItemName('');
     }
   }, [multiple, cancelPreviewPicker]);
   const togglePreviewPicker = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useCallback)(() => {
@@ -4974,7 +4974,7 @@ function StylingControlApp({
     setPendingAddLockedMessage('');
     setPendingAddCustomOpen(false);
     setPendingCustomSelector('');
-    setPendingCustomPresetName('');
+    setPendingCustomItemName('');
     if (editorPopoverOpenRef.current && editingItemIndex === index) {
       closeEditorPopover();
       return;
@@ -5017,7 +5017,7 @@ function StylingControlApp({
     setPendingAddLockedMessage('');
     setPendingAddCustomOpen(false);
     setPendingCustomSelector('');
-    setPendingCustomPresetName('');
+    setPendingCustomItemName('');
     cancelPreviewPicker();
   }, [cancelPreviewPicker]);
   const startPendingAdd = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useCallback)(() => {
@@ -5040,7 +5040,7 @@ function StylingControlApp({
     setPendingAddLockedMessage('');
     setPendingAddCustomOpen(false);
     setPendingCustomSelector('');
-    setPendingCustomPresetName('');
+    setPendingCustomItemName('');
     setPendingAddFormOpen(true);
   }, [multiple, defaultStylingPayload, value, cancelPreviewPicker]);
   const confirmPendingAddWithPreset = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useCallback)(/** @param {{ id: string, selector: string, name: string }} preset */preset => {
@@ -5099,7 +5099,7 @@ function StylingControlApp({
     }
     const itemId = `cust-${Date.now().toString(36)}`;
     const newItem = cloneValue(template);
-    const label = pendingCustomPresetName.trim() !== '' ? pendingCustomPresetName.trim() : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Custom target', 'onepress');
+    const label = pendingCustomItemName.trim() !== '' ? pendingCustomItemName.trim() : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Custom target', 'onepress');
     newItem.id = itemId;
     newItem.title = label;
     newItem.selector = sel;
@@ -5118,7 +5118,7 @@ function StylingControlApp({
     setStateIndex(0);
     editorPopoverOpenRef.current = true;
     setEditorPopoverOpen(true);
-  }, [pendingCustomSelector, pendingCustomPresetName, multiple, defaultStylingPayload, value, commitRoot, cancelPendingAdd]);
+  }, [pendingCustomSelector, pendingCustomItemName, multiple, defaultStylingPayload, value, commitRoot, cancelPendingAdd]);
   const handlePendingTargetPreset = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useCallback)(/** @param {Record<string, unknown>} preset */preset => {
     if (!preset || typeof preset !== 'object') {
       return;
@@ -5127,20 +5127,20 @@ function StylingControlApp({
       setPendingAddLockedMessage(String(preset.message || ''));
       setPendingAddCustomOpen(false);
       setPendingCustomSelector('');
-      setPendingCustomPresetName('');
+      setPendingCustomItemName('');
       return;
     }
     if (preset.unlockCustomForm === true) {
       setPendingAddLockedMessage('');
       setPendingAddCustomOpen(true);
       setPendingCustomSelector('');
-      setPendingCustomPresetName(typeof preset.name === 'string' ? preset.name.trim() : '');
+      setPendingCustomItemName(typeof preset.name === 'string' ? preset.name.trim() : '');
       return;
     }
     setPendingAddLockedMessage('');
     setPendingAddCustomOpen(false);
     setPendingCustomSelector('');
-    setPendingCustomPresetName('');
+    setPendingCustomItemName('');
     confirmPendingAddWithPreset(/** @type {{ id: string, selector: string, name: string }} */preset);
   }, [confirmPendingAddWithPreset]);
   const onResetToDefault = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useCallback)(() => {
@@ -5157,7 +5157,7 @@ function StylingControlApp({
     setPendingAddLockedMessage('');
     setPendingAddCustomOpen(false);
     setPendingCustomSelector('');
-    setPendingCustomPresetName('');
+    setPendingCustomItemName('');
     commitRoot(cloneValue(defaultStylingPayload));
   }, [defaultStylingPayload, commitRoot]);
   const onResetItemToDefault = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_8__.useCallback)(itemIndex => {
@@ -5396,9 +5396,22 @@ function StylingControlApp({
     usedPresetIds: usedPresetIdsSet,
     disabled: Boolean(lockedBaseSelector) || !editableBaseSelector
   }), pendingAddLockedMessage ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "description mt-2"
-  }, pendingAddLockedMessage) : null, pendingAddCustomOpen ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-styling-pending-custom-target flex flex-wrap gap-2 items-end mt-3"
+    className: "description mt-2 onepress-styling-locked-message-html"
+    // Sanitized server-side with `wp_kses_post` (preset `message`).
+    ,
+    dangerouslySetInnerHTML: {
+      __html: pendingAddLockedMessage
+    }
+  }) : null, pendingAddCustomOpen ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling-pending-custom-target flex flex-col gap-3 mt-3"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __nextHasNoMarginBottom: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Name', 'onepress'),
+    value: pendingCustomItemName,
+    onChange: setPendingCustomItemName,
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Label shown in the list', 'onepress')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex flex-wrap gap-2 items-end"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grow min-w-[12rem]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
@@ -5411,8 +5424,9 @@ function StylingControlApp({
     variant: "secondary",
     onClick: togglePreviewPicker,
     isPressed: previewPickerActive,
-    disabled: !editableBaseSelector,
-    size: "small",
+    disabled: !editableBaseSelector
+    // size="small"
+    ,
     label: previewPickerActive ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Cancel picking from preview', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Pick a selector from the site preview', 'onepress'),
     showTooltip: true,
     className: "icon-btn"
@@ -5421,16 +5435,16 @@ function StylingControlApp({
     size: 18
   }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(IconTarget, {
     size: 18
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    variant: "primary",
-    onClick: confirmPendingAddCustom,
-    disabled: pendingCustomSelector.trim() === ''
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Add', 'onepress'))) : null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-styling-pending-add-inline__actions"
+  })))) : null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling-pending-add-inline__actions flex flex-wrap gap-2 items-center justify-end"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "secondary",
     onClick: cancelPendingAdd
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Cancel', 'onepress')))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Cancel', 'onepress')), pendingAddCustomOpen ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "primary",
+    onClick: confirmPendingAddCustom,
+    disabled: pendingCustomSelector.trim() === ''
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('Add', 'onepress')) : null)) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "secondary",
     className: "mt-2 p-0 h-auto",
     onClick: startPendingAdd
@@ -6214,7 +6228,7 @@ function BorderOutlineFields({
       value: 'dotted',
       label: 'dotted'
     }]
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblSidesField__WEBPACK_IMPORTED_MODULE_8__.TrblSidesField, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblSidesField__WEBPACK_IMPORTED_MODULE_8__.TrblSidesFieldInline, {
     sliceKey: sliceKey,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Border width', 'onepress'),
     model: model,
@@ -7803,6 +7817,8 @@ __webpack_require__.r(__webpack_exports__);
  * @param {number} props.step
  * @param {string} props.defaultSuffix
  * @param {boolean} [props.disabled]
+ * @param {boolean} [props.embed] — omit label row + device chip (use inside grouped TRBL / shared header).
+ * @param {boolean} [props.inputOnly] — text input only, no RangeControl (compact TRBL rows).
  */
 function ResponsiveUnitSliderField({
   label,
@@ -7813,10 +7829,12 @@ function ResponsiveUnitSliderField({
   max,
   step,
   defaultSuffix,
-  disabled = false
+  disabled = false,
+  embed = false,
+  inputOnly = false
 }) {
   const parsed = (0,_cssUnitSlider__WEBPACK_IMPORTED_MODULE_2__.parseCssSingleLengthValue)(value, defaultSuffix);
-  const canUseSlider = parsed !== null;
+  const canUseSlider = parsed !== null && !inputOnly;
   const sliderVal = canUseSlider && parsed ? (0,_cssUnitSlider__WEBPACK_IMPORTED_MODULE_2__.clampNumber)(parsed.num, min, max) : min;
   const onRangeChange = n => {
     if (!parsed || n === undefined || n === null || !Number.isFinite(n)) {
@@ -7827,11 +7845,8 @@ function ResponsiveUnitSliderField({
   const onTextChange = e => {
     onChange(e.target.value);
   };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveFieldShell__WEBPACK_IMPORTED_MODULE_3__.ResponsiveFieldShell, {
-    label: label,
-    help: help
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `unit-slider${canUseSlider ? ' has-range' : ''}`
+  const inner = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `unit-slider${canUseSlider ? ' has-range' : ''}${embed ? ' unit-slider--embed' : ''}`
   }, canUseSlider ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RangeControl, {
     className: "unit-range-field",
     label: label,
@@ -7858,7 +7873,14 @@ function ResponsiveUnitSliderField({
     onChange: onTextChange,
     disabled: disabled,
     "aria-label": label
-  })));
+  }));
+  if (embed) {
+    return inner;
+  }
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveFieldShell__WEBPACK_IMPORTED_MODULE_3__.ResponsiveFieldShell, {
+    label: label,
+    help: help
+  }, inner);
 }
 
 /***/ },
@@ -7945,7 +7967,7 @@ function SpacingFields({
   onPatch,
   disabledFieldSet
 }) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblSidesField__WEBPACK_IMPORTED_MODULE_2__.TrblSidesField, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblSidesField__WEBPACK_IMPORTED_MODULE_2__.TrblSidesFieldInline, {
     sliceKey: sliceKey,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Margin', 'onepress'),
     model: model,
@@ -7957,7 +7979,7 @@ function SpacingFields({
       l: 'marginLeft'
     },
     disabledFieldSet: disabledFieldSet
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblSidesField__WEBPACK_IMPORTED_MODULE_2__.TrblSidesField, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblSidesField__WEBPACK_IMPORTED_MODULE_2__.TrblSidesFieldInline, {
     sliceKey: sliceKey,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding', 'onepress'),
     model: model,
@@ -9109,9 +9131,14 @@ function StylingInlineEditorInner({
     usedPresetIds: usedPresetIds,
     disabled: !editableBaseSelector
   }), targetNotice ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "description mt-2",
+    className: "description mt-2 onepress-styling-locked-message-html",
     role: "status"
-  }, targetNotice) : null, customUnlockMode ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    // Sanitized server-side with `wp_kses_post` (preset `message`).
+    ,
+    dangerouslySetInnerHTML: {
+      __html: targetNotice
+    }
+  }) : null, customUnlockMode ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-styling-custom-target-field flex flex-wrap gap-2 items-end mt-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grow min-w-[12rem]"
@@ -10461,7 +10488,8 @@ function TrblLinkIconButton({
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   TrblSidesField: () => (/* binding */ TrblSidesField)
+/* harmony export */   TrblSidesField: () => (/* binding */ TrblSidesField),
+/* harmony export */   TrblSidesFieldInline: () => (/* binding */ TrblSidesFieldInline)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -10471,13 +10499,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _cssUnitSlider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../cssUnitSlider */ "./src/admin/customizer/styling/cssUnitSlider.js");
 /* harmony import */ var _deriveLinkedSides__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./deriveLinkedSides */ "./src/admin/customizer/styling/components/deriveLinkedSides.js");
-/* harmony import */ var _ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ResponsiveUnitSliderField */ "./src/admin/customizer/styling/components/ResponsiveUnitSliderField.jsx");
-/* harmony import */ var _TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TrblLinkIconButton */ "./src/admin/customizer/styling/components/TrblLinkIconButton.jsx");
-/* harmony import */ var _stylingDisableFields__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../stylingDisableFields */ "./src/admin/customizer/styling/stylingDisableFields.js");
+/* harmony import */ var _DeviceSwitcherChip__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DeviceSwitcherChip */ "./src/admin/customizer/styling/components/DeviceSwitcherChip.jsx");
+/* harmony import */ var _ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ResponsiveUnitSliderField */ "./src/admin/customizer/styling/components/ResponsiveUnitSliderField.jsx");
+/* harmony import */ var _TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TrblLinkIconButton */ "./src/admin/customizer/styling/components/TrblLinkIconButton.jsx");
+/* harmony import */ var _stylingDisableFields__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../stylingDisableFields */ "./src/admin/customizer/styling/stylingDisableFields.js");
 
 /**
  * Top / right / bottom / left text fields with optional “link all sides”.
  */
+
 
 
 
@@ -10530,7 +10560,7 @@ function TrblSidesField({
     setLinked(resolveLinkedState(model, keyList, preferLinkedWhenEmpty));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- reset when switching state×device
   }, [sliceKey]);
-  if ((0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_7__.areAllKeysDisabled)(disabledFieldSet, keyList)) {
+  if ((0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_8__.areAllKeysDisabled)(disabledFieldSet, keyList)) {
     return null;
   }
   const patchSide = (side, val) => {
@@ -10563,39 +10593,146 @@ function TrblSidesField({
     className: "trbl-block"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "trbl-head"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_6__.TrblLinkIconButton, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_7__.TrblLinkIconButton, {
     linked: linked,
     onLinkedChange: setLinkedSides,
     linkLabel: linkStr,
     unlinkLabel: unlinkStr
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "trbl"
-  }, linked ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_5__.ResponsiveUnitSliderField, {
+  }, linked ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Value', 'onepress'),
     value: (model[keys.t] || model[keys.r] || model[keys.b] || model[keys.l] || '').trim(),
     onChange: v => patchSide(keys.t, v),
     ...preset
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_5__.ResponsiveUnitSliderField, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Top', 'onepress'),
     value: model[keys.t] || '',
     onChange: v => patchSide(keys.t, v),
     ...preset
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_5__.ResponsiveUnitSliderField, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Right', 'onepress'),
     value: model[keys.r] || '',
     onChange: v => patchSide(keys.r, v),
     ...preset
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_5__.ResponsiveUnitSliderField, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Bottom', 'onepress'),
     value: model[keys.b] || '',
     onChange: v => patchSide(keys.b, v),
     ...preset
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_5__.ResponsiveUnitSliderField, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Left', 'onepress'),
     value: model[keys.l] || '',
     onChange: v => patchSide(keys.l, v),
     ...preset
   }))));
+}
+
+/**
+ * TRBL with header row `[title] … [device]` and one row `[T][R][B][L][link]`.
+ * Same props as {@link TrblSidesField}.
+ */
+function TrblSidesFieldInline({
+  sliceKey,
+  label,
+  model,
+  onPatch,
+  keys,
+  sliderPreset,
+  linkLabel,
+  unlinkLabel,
+  preferLinkedWhenEmpty = false,
+  disabledFieldSet
+}) {
+  const preset = sliderPreset !== null && sliderPreset !== void 0 ? sliderPreset : _cssUnitSlider__WEBPACK_IMPORTED_MODULE_3__.SLIDER_PRESETS.length;
+  const linkStr = linkLabel !== null && linkLabel !== void 0 ? linkLabel : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Link sides', 'onepress');
+  const unlinkStr = unlinkLabel !== null && unlinkLabel !== void 0 ? unlinkLabel : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Unlink sides', 'onepress');
+  const keyList = [keys.t, keys.r, keys.b, keys.l];
+  const [linked, setLinked] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(() => resolveLinkedState(model, keyList, preferLinkedWhenEmpty));
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    setLinked(resolveLinkedState(model, keyList, preferLinkedWhenEmpty));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reset when switching state×device
+  }, [sliceKey]);
+  if ((0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_8__.areAllKeysDisabled)(disabledFieldSet, keyList)) {
+    return null;
+  }
+  const patchSide = (side, val) => {
+    if (linked) {
+      onPatch({
+        [keys.t]: val,
+        [keys.r]: val,
+        [keys.b]: val,
+        [keys.l]: val
+      });
+    } else {
+      onPatch({
+        [side]: val
+      });
+    }
+  };
+  const setLinkedSides = on => {
+    setLinked(on);
+    if (on) {
+      const v = (model[keys.t] || model[keys.r] || model[keys.b] || model[keys.l] || '').trim();
+      onPatch({
+        [keys.t]: v,
+        [keys.r]: v,
+        [keys.b]: v,
+        [keys.l]: v
+      });
+    }
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "trbl-block trbl-block--inline-layout"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "trbl-head-inline"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", {
+    className: "trbl-field-title"
+  }, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "trbl-head-inline__spacer",
+    "aria-hidden": true
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeviceSwitcherChip__WEBPACK_IMPORTED_MODULE_5__.DeviceSwitcherChip, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "trbl-inline-row"
+  }, linked ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "trbl-inline-cell trbl-inline-cell--linked"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
+    embed: true,
+    inputOnly: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Value', 'onepress'),
+    value: (model[keys.t] || model[keys.r] || model[keys.b] || model[keys.l] || '').trim(),
+    onChange: v => patchSide(keys.t, v),
+    ...preset
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "trbl-inline-link"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_7__.TrblLinkIconButton, {
+    linked: linked,
+    onLinkedChange: setLinkedSides,
+    linkLabel: linkStr,
+    unlinkLabel: unlinkStr
+  }))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, ['t', 'r', 'b', 'l'].map(sideKey => {
+    const k = keys[sideKey];
+    const sideLabel = sideKey === 't' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Top', 'onepress') : sideKey === 'r' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Right', 'onepress') : sideKey === 'b' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Bottom', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Left', 'onepress');
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: k,
+      className: "trbl-inline-cell"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
+      embed: true,
+      inputOnly: true,
+      label: sideLabel,
+      value: model[k] || '',
+      onChange: v => patchSide(k, v),
+      ...preset
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "trbl-inline-side-label"
+    }, sideLabel));
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "trbl-inline-link"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_7__.TrblLinkIconButton, {
+    linked: linked,
+    onLinkedChange: setLinkedSides,
+    linkLabel: linkStr,
+    unlinkLabel: unlinkStr
+  })))));
 }
 
 /***/ },
@@ -10695,6 +10832,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   TextStyleFields: () => (/* reexport safe */ _TextStyleFields__WEBPACK_IMPORTED_MODULE_26__.TextStyleFields),
 /* harmony export */   TrblLinkIconButton: () => (/* reexport safe */ _TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_27__.TrblLinkIconButton),
 /* harmony export */   TrblSidesField: () => (/* reexport safe */ _TrblSidesField__WEBPACK_IMPORTED_MODULE_28__.TrblSidesField),
+/* harmony export */   TrblSidesFieldInline: () => (/* reexport safe */ _TrblSidesField__WEBPACK_IMPORTED_MODULE_28__.TrblSidesFieldInline),
 /* harmony export */   dashiconClassForDeviceId: () => (/* reexport safe */ _deviceDashicons__WEBPACK_IMPORTED_MODULE_6__.dashiconClassForDeviceId),
 /* harmony export */   deriveLinkedSides: () => (/* reexport safe */ _deriveLinkedSides__WEBPACK_IMPORTED_MODULE_4__.deriveLinkedSides),
 /* harmony export */   useStylingDevice: () => (/* reexport safe */ _StylingDeviceContext__WEBPACK_IMPORTED_MODULE_22__.useStylingDevice)

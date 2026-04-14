@@ -288,7 +288,7 @@ export function StylingControlApp({ control, $ }) {
 	const [pendingAddLockedMessage, setPendingAddLockedMessage] = useState('');
 	const [pendingAddCustomOpen, setPendingAddCustomOpen] = useState(false);
 	const [pendingCustomSelector, setPendingCustomSelector] = useState('');
-	const [pendingCustomPresetName, setPendingCustomPresetName] = useState('');
+	const [pendingCustomItemName, setPendingCustomItemName] = useState('');
 	/** Anchor for editor popover after inline add (wrapper around add row / form). */
 	const pendingAddInlineRef = useRef(/** @type {HTMLDivElement | null} */(null));
 	const pendingAddDraftRef = useRef({ form: false, custom: false });
@@ -967,7 +967,7 @@ export function StylingControlApp({ control, $ }) {
 			setPendingAddLockedMessage('');
 			setPendingAddCustomOpen(false);
 			setPendingCustomSelector('');
-			setPendingCustomPresetName('');
+			setPendingCustomItemName('');
 		}
 	}, [multiple, cancelPreviewPicker]);
 
@@ -1015,7 +1015,7 @@ export function StylingControlApp({ control, $ }) {
 			setPendingAddLockedMessage('');
 			setPendingAddCustomOpen(false);
 			setPendingCustomSelector('');
-			setPendingCustomPresetName('');
+			setPendingCustomItemName('');
 			if (editorPopoverOpenRef.current && editingItemIndex === index) {
 				closeEditorPopover();
 				return;
@@ -1066,7 +1066,7 @@ export function StylingControlApp({ control, $ }) {
 		setPendingAddLockedMessage('');
 		setPendingAddCustomOpen(false);
 		setPendingCustomSelector('');
-		setPendingCustomPresetName('');
+		setPendingCustomItemName('');
 		cancelPreviewPicker();
 	}, [cancelPreviewPicker]);
 
@@ -1090,7 +1090,7 @@ export function StylingControlApp({ control, $ }) {
 		setPendingAddLockedMessage('');
 		setPendingAddCustomOpen(false);
 		setPendingCustomSelector('');
-		setPendingCustomPresetName('');
+		setPendingCustomItemName('');
 		setPendingAddFormOpen(true);
 	}, [multiple, defaultStylingPayload, value, cancelPreviewPicker]);
 
@@ -1155,7 +1155,7 @@ export function StylingControlApp({ control, $ }) {
 		const itemId = `cust-${Date.now().toString(36)}`;
 		const newItem = cloneValue(template);
 		const label =
-			pendingCustomPresetName.trim() !== '' ? pendingCustomPresetName.trim() : __('Custom target', 'onepress');
+			pendingCustomItemName.trim() !== '' ? pendingCustomItemName.trim() : __('Custom target', 'onepress');
 		newItem.id = itemId;
 		newItem.title = label;
 		newItem.selector = sel;
@@ -1176,7 +1176,7 @@ export function StylingControlApp({ control, $ }) {
 		setEditorPopoverOpen(true);
 	}, [
 		pendingCustomSelector,
-		pendingCustomPresetName,
+		pendingCustomItemName,
 		multiple,
 		defaultStylingPayload,
 		value,
@@ -1193,20 +1193,20 @@ export function StylingControlApp({ control, $ }) {
 				setPendingAddLockedMessage(String(preset.message || ''));
 				setPendingAddCustomOpen(false);
 				setPendingCustomSelector('');
-				setPendingCustomPresetName('');
+				setPendingCustomItemName('');
 				return;
 			}
 			if (preset.unlockCustomForm === true) {
 				setPendingAddLockedMessage('');
 				setPendingAddCustomOpen(true);
 				setPendingCustomSelector('');
-				setPendingCustomPresetName(typeof preset.name === 'string' ? preset.name.trim() : '');
+				setPendingCustomItemName(typeof preset.name === 'string' ? preset.name.trim() : '');
 				return;
 			}
 			setPendingAddLockedMessage('');
 			setPendingAddCustomOpen(false);
 			setPendingCustomSelector('');
-			setPendingCustomPresetName('');
+			setPendingCustomItemName('');
 			confirmPendingAddWithPreset(
 				/** @type {{ id: string, selector: string, name: string }} */(preset)
 			);
@@ -1228,7 +1228,7 @@ export function StylingControlApp({ control, $ }) {
 		setPendingAddLockedMessage('');
 		setPendingAddCustomOpen(false);
 		setPendingCustomSelector('');
-		setPendingCustomPresetName('');
+		setPendingCustomItemName('');
 		commitRoot(cloneValue(defaultStylingPayload));
 	}, [defaultStylingPayload, commitRoot]);
 
@@ -1507,10 +1507,22 @@ export function StylingControlApp({ control, $ }) {
 															disabled={Boolean(lockedBaseSelector) || !editableBaseSelector}
 														/>
 														{pendingAddLockedMessage ? (
-															<p className="description mt-2">{pendingAddLockedMessage}</p>
+															<p
+																className="description mt-2 onepress-styling-locked-message-html"
+																// Sanitized server-side with `wp_kses_post` (preset `message`).
+																dangerouslySetInnerHTML={{ __html: pendingAddLockedMessage }}
+															/>
 														) : null}
 														{pendingAddCustomOpen ? (
-															<div className="onepress-styling-pending-custom-target flex flex-wrap gap-2 items-end mt-3">
+															<div className="onepress-styling-pending-custom-target flex flex-col gap-3 mt-3">
+																<TextControl
+																	__nextHasNoMarginBottom
+																	label={__('Name', 'onepress')}
+																	value={pendingCustomItemName}
+																	onChange={setPendingCustomItemName}
+																	placeholder={__('Label shown in the list', 'onepress')}
+																/>
+																<div className="flex flex-wrap gap-2 items-end">
 																<div className="grow min-w-[12rem]">
 																	<TextControl
 																		__nextHasNoMarginBottom
@@ -1525,7 +1537,7 @@ export function StylingControlApp({ control, $ }) {
 																	onClick={togglePreviewPicker}
 																	isPressed={previewPickerActive}
 																	disabled={!editableBaseSelector}
-																	size="small"
+																	// size="small"
 																	label={
 																		previewPickerActive
 																			? __('Cancel picking from preview', 'onepress')
@@ -1540,22 +1552,25 @@ export function StylingControlApp({ control, $ }) {
 																		<IconTarget size={18} />
 																	)}
 																</Button>
-																<Button
-																	variant="primary"
-																	onClick={confirmPendingAddCustom}
-																	disabled={pendingCustomSelector.trim() === ''}
-																>
-																	{__('Add', 'onepress')}
-																</Button>
+																</div>
 															</div>
 														) : null}
 													</>
 												)}
 											</div>
-											<div className="onepress-styling-pending-add-inline__actions">
+											<div className="onepress-styling-pending-add-inline__actions flex flex-wrap gap-2 items-center justify-end">
 												<Button variant="secondary" onClick={cancelPendingAdd}>
 													{__('Cancel', 'onepress')}
 												</Button>
+												{pendingAddCustomOpen ? (
+													<Button
+														variant="primary"
+														onClick={confirmPendingAddCustom}
+														disabled={pendingCustomSelector.trim() === ''}
+													>
+														{__('Add', 'onepress')}
+													</Button>
+												) : null}
 											</div>
 										</div>
 									) : (

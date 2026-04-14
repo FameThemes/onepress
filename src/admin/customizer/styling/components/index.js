@@ -26,4 +26,4 @@ export { StylingInlineEditor } from './StylingInlineEditor';
 export { StylingTargetElementSelect } from './StylingTargetElementSelect';
 export { TextStyleFields } from './TextStyleFields';
 export { TrblLinkIconButton } from './TrblLinkIconButton';
-export { TrblSidesField } from './TrblSidesField';
+export { TrblSidesField, TrblSidesFieldInline } from './TrblSidesField';

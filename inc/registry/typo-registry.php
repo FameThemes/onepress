@@ -149,7 +149,7 @@ if ( ! function_exists( 'onepress_styling_typography_controls_config' ) ) {
 			'control' => array_merge(
 				$control_defaults,
 				array(
-					'label'       => esc_html__( 'Custom typography targets', 'onepress' ),
+					'label'       => esc_html__( 'Typography Manager', 'onepress' ),
 					'priority'           => 23,
 					'styling_multiple'   => true,
 					'styling_hide_state_tablist' => true,

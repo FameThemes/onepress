@@ -20,6 +20,8 @@ import { ResponsiveFieldShell } from './ResponsiveFieldShell';
  * @param {number} props.step
  * @param {string} props.defaultSuffix
  * @param {boolean} [props.disabled]
+ * @param {boolean} [props.embed] — omit label row + device chip (use inside grouped TRBL / shared header).
+ * @param {boolean} [props.inputOnly] — text input only, no RangeControl (compact TRBL rows).
  */
 export function ResponsiveUnitSliderField({
 	label,
@@ -31,9 +33,11 @@ export function ResponsiveUnitSliderField({
 	step,
 	defaultSuffix,
 	disabled = false,
+	embed = false,
+	inputOnly = false,
 }) {
 	const parsed = parseCssSingleLengthValue(value, defaultSuffix);
-	const canUseSlider = parsed !== null;
+	const canUseSlider = parsed !== null && !inputOnly;
 
 	const sliderVal =
 		canUseSlider && parsed ? clampNumber(parsed.num, min, max) : min;
@@ -49,46 +53,52 @@ export function ResponsiveUnitSliderField({
 		onChange(e.target.value);
 	};
 
-	return (
-		<ResponsiveFieldShell label={label} help={help}>
-			<div
-				className={`unit-slider${canUseSlider ? ' has-range' : ''}`}
-			>
-				{canUseSlider ? (
-					<>
-						<RangeControl
-							className="unit-range-field"
-							label={label}
-							hideLabelFromVision
-							value={sliderVal}
-							onChange={onRangeChange}
-							min={min}
-							max={max}
-							step={step}
-							disabled={disabled}
-							withInputField={false}
-							__nextHasNoMarginBottom
-						/>
-						<input
-							className="unit-input components-text-control__input"
-							type="text"
-							value={value}
-							onChange={onTextChange}
-							disabled={disabled}
-							aria-label={label}
-						/>
-					</>
-				) : (
+	const inner = (
+		<div className={`unit-slider${canUseSlider ? ' has-range' : ''}${embed ? ' unit-slider--embed' : ''}`}>
+			{canUseSlider ? (
+				<>
+					<RangeControl
+						className="unit-range-field"
+						label={label}
+						hideLabelFromVision
+						value={sliderVal}
+						onChange={onRangeChange}
+						min={min}
+						max={max}
+						step={step}
+						disabled={disabled}
+						withInputField={false}
+						__nextHasNoMarginBottom
+					/>
 					<input
-						className="unit-input is-full components-text-control__input"
+						className="unit-input components-text-control__input"
 						type="text"
 						value={value}
 						onChange={onTextChange}
 						disabled={disabled}
 						aria-label={label}
 					/>
-				)}
-			</div>
+				</>
+			) : (
+				<input
+					className="unit-input is-full components-text-control__input"
+					type="text"
+					value={value}
+					onChange={onTextChange}
+					disabled={disabled}
+					aria-label={label}
+				/>
+			)}
+		</div>
+	);
+
+	if (embed) {
+		return inner;
+	}
+
+	return (
+		<ResponsiveFieldShell label={label} help={help}>
+			{inner}
 		</ResponsiveFieldShell>
 	);
 }
