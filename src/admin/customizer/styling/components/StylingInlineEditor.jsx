@@ -1,9 +1,9 @@
 /**
  * Inline styling editor panel (toolbar, state tabs, settings popover anchor, preset, accordions).
  */
-import { Button, Icon } from '@wordpress/components';
+import { Button, Icon, TextControl } from '@wordpress/components';
 import { close, settings } from '@wordpress/icons';
-import { memo } from '@wordpress/element';
+import { memo, useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { StylingAccordionPanels } from '../StylingAccordionPanels';
 import { StylingTargetElementSelect } from './StylingTargetElementSelect';
@@ -77,17 +77,90 @@ function StylingInlineEditorInner({
 	disabledFieldSet,
 	onCloseEditor,
 	targetElementsRegistry,
+	usedPresetIds = null,
+	previewPickerActiveRef = null,
 }) {
+	const rootRef = useRef(/** @type {HTMLDivElement | null} */(null));
+	const [targetNotice, setTargetNotice] = useState('');
+	const [customUnlockMode, setCustomUnlockMode] = useState(false);
+
+	useEffect(() => {
+		setTargetNotice('');
+		setCustomUnlockMode(false);
+	}, [editorPayload]);
+
+	useEffect(() => {
+		if (!editorPayload) {
+			return undefined;
+		}
+		const onPointerDown = (/** @type {PointerEvent} */ e) => {
+			if (previewPickerActive || (previewPickerActiveRef && previewPickerActiveRef.current)) {
+				return;
+			}
+			const t = e.target;
+			if (!(t instanceof Node)) {
+				return;
+			}
+			const root = rootRef.current;
+			if (root && root.contains(t)) {
+				return;
+			}
+			if (t instanceof Element && typeof t.closest === 'function') {
+				if (t.closest('.components-popover')) {
+					return;
+				}
+				if (t.closest('.media-modal')) {
+					return;
+				}
+				if (t.closest('.components-modal__frame')) {
+					return;
+				}
+				if (t.closest('.onepress-styling-pick-snackbar-wrap')) {
+					return;
+				}
+			}
+			onCloseEditor();
+		};
+		document.addEventListener('pointerdown', onPointerDown, true);
+		return () => document.removeEventListener('pointerdown', onPointerDown, true);
+	}, [editorPayload, onCloseEditor, previewPickerActive, previewPickerActiveRef]);
+
+	const handlePresetSelect = useCallback(
+		/** @param {Record<string, unknown>} preset */(preset) => {
+			if (!preset || typeof preset !== 'object') {
+				return;
+			}
+			if (preset.locked === true) {
+				setTargetNotice(String(preset.message || ''));
+				setCustomUnlockMode(false);
+				return;
+			}
+			if (preset.unlockCustomForm === true) {
+				setTargetNotice('');
+				setCustomUnlockMode(true);
+				return;
+			}
+			setTargetNotice('');
+			setCustomUnlockMode(false);
+			onSelectTargetPreset(
+				/** @type {{ id: string, selector: string, name: string }} */(preset)
+			);
+		},
+		[onSelectTargetPreset]
+	);
+
 	if (!editorPayload) {
 		return null;
 	}
 
-	const showActionsToolbar = showGearButton || showPreviewPickButton;
+	const toolbarPreviewPick = showPreviewPickButton && !customUnlockMode;
+	const showActionsToolbar = showGearButton || toolbarPreviewPick;
 	const showTablist = showStateTablistBlock && !(multiple && multiItemAwaitingPresetTarget);
 	const showStickyChrome = showActionsToolbar || showTablist;
 
 	return (
 		<div
+			ref={rootRef}
 			className={`onepress-styling-inline-editor onepress-styling-editor-popover group-count-${String(visibleStylingGroupCount)}`}
 		>
 			<span className="onepress-styling-inline-editor__arrow" aria-hidden="true">
@@ -112,7 +185,7 @@ function StylingInlineEditorInner({
 									<Icon icon={settings} size={20} />
 								</Button>
 							) : null}
-							{showPreviewPickButton ? (
+							{toolbarPreviewPick ? (
 								<Button
 									variant="secondary"
 									onClick={togglePreviewPicker}
@@ -218,9 +291,49 @@ function StylingInlineEditorInner({
 							selectedPresetName={
 								typeof editorPayload?._meta?.elName === 'string' ? editorPayload._meta.elName : ''
 							}
-							onSelectPreset={onSelectTargetPreset}
+							onSelectPreset={handlePresetSelect}
+							usedPresetIds={usedPresetIds}
 							disabled={!editableBaseSelector}
 						/>
+						{targetNotice ? (
+							<p className="description mt-2" role="status">
+								{targetNotice}
+							</p>
+						) : null}
+						{customUnlockMode ? (
+							<div className="onepress-styling-custom-target-field flex flex-wrap gap-2 items-end mt-2">
+								<div className="grow min-w-[12rem]">
+									<TextControl
+										__nextHasNoMarginBottom
+										label={__('Base selector', 'onepress')}
+										value={metaBaseSelector}
+										onChange={(v) => onBaseSelectorChange(v)}
+										placeholder={__('e.g. .my-button', 'onepress')}
+										disabled={!editableBaseSelector}
+									/>
+								</div>
+								<Button
+									variant="secondary"
+									onClick={togglePreviewPicker}
+									isPressed={previewPickerActive}
+									disabled={!editableBaseSelector}
+									size="small"
+									label={
+										previewPickerActive
+											? __('Cancel picking from preview', 'onepress')
+											: __('Pick a selector from the site preview', 'onepress')
+									}
+									showTooltip
+									className="icon-btn"
+								>
+									{previewPickerActive ? (
+										<Icon icon={close} size={18} />
+									) : (
+										<IconTarget size={18} />
+									)}
+								</Button>
+							</div>
+						) : null}
 					</div>
 				) : null}
 

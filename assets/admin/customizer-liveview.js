@@ -2082,7 +2082,7 @@ function onKeyDown(e) {
 
 /**
  * @param {*} api wp.customize (preview frame)
- * @param {{ controlId: string, itemIndex: number|null }} data
+ * @param {{ controlId: string, itemIndex: number|null|undefined }} data — use `itemIndex: -1` for pending-add draft (Customizer pane).
  */
 function startSession(api, data) {
   var _data$itemIndex;

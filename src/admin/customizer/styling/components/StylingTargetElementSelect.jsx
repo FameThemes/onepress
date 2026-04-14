@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from '@wordpress/element';
 import {
 	findMatchingTargetPreset,
+	isTargetPresetConsumed,
 	normalizeSelectorForPresetMatch,
 	normalizeTargetElementsRegistry,
 } from '../targetElementsRegistry';
@@ -18,9 +19,10 @@ const LIST_MAX_H = 280;
  * @param {string} props.currentSelector — active base selector
  * @param {string} [props.currentElId] — `_meta.elId` when chosen from registry
  * @param {string} [props.selectedPresetName] — `_meta.elName` (stable label in trigger)
- * @param {(preset: { selector: string, name: string, id: string }) => void} props.onSelectPreset
+ * @param {(preset: Record<string, unknown>) => void} props.onSelectPreset — normal `{ id, selector, name }`, or `{ locked, message, … }`, or `{ unlockCustomForm: true, … }`
  * @param {boolean} [props.disabled]
- * @param {{ categories: Record<string, string>, elements: Array<{ id: string, selector: string, name: string, category: string }> }} [props.targetRegistry] — `control.params.styling_target_elements`
+ * @param {{ categories: Record<string, string>, elements: Array<Record<string, unknown>> }} [props.targetRegistry] — `control.params.styling_target_elements`
+ * @param {Set<string>|string[]|null} [props.usedPresetIds] — registry `id` values already used (`_meta.elId` on items); presets consumed except `custom_item` + `multiple`
  */
 export function StylingTargetElementSelect({
 	currentSelector,
@@ -29,6 +31,7 @@ export function StylingTargetElementSelect({
 	onSelectPreset,
 	disabled = false,
 	targetRegistry: targetRegistryProp,
+	usedPresetIds = null,
 }) {
 	const registry = useMemo(
 		() => normalizeTargetElementsRegistry(targetRegistryProp),
@@ -60,7 +63,7 @@ export function StylingTargetElementSelect({
 			(e) =>
 				e.name.toLowerCase().includes(q) ||
 				e.id.toLowerCase().includes(q) ||
-				e.selector.toLowerCase().includes(q)
+				(e.selector && e.selector.toLowerCase().includes(q))
 		);
 	}, [elements, search]);
 
@@ -110,6 +113,40 @@ export function StylingTargetElementSelect({
 	if (elements.length === 0) {
 		return null;
 	}
+
+	/**
+	 * @param {import('../targetElementsRegistry').TargetElementPreset} el
+	 */
+	const onRowActivate = (el) => {
+		if (el.locked === true) {
+			onSelectPreset({
+				id: el.id,
+				name: el.name,
+				selector: el.selector || '',
+				locked: true,
+				message: typeof el.message === 'string' ? el.message : '',
+			});
+			close();
+			return;
+		}
+		if (el.id === 'custom_item' && el.multiple === true) {
+			onSelectPreset({
+				id: el.id,
+				name: el.name,
+				selector: el.selector || '',
+				unlockCustomForm: true,
+				multiple: true,
+			});
+			close();
+			return;
+		}
+		const sel = String(el.selector || '').trim();
+		if (!sel) {
+			return;
+		}
+		onSelectPreset({ id: el.id, selector: sel, name: el.name });
+		close();
+	};
 
 	return (
 		<div className="onepress-styling-target-preset">
@@ -170,25 +207,40 @@ export function StylingTargetElementSelect({
 												{group.map((el) => {
 													const idMatch = elIdStr !== '' && elIdStr === el.id;
 													const selMatch =
+														Boolean(el.selector) &&
 														selStr !== '' &&
 														normalizeSelectorForPresetMatch(selStr) ===
 															normalizeSelectorForPresetMatch(el.selector);
 													const isActive = idMatch || selMatch;
+													const consumed = isTargetPresetConsumed(el, usedPresetIds);
+													const isSpecialLocked = el.locked === true;
+													const isSpecialCustom = el.id === 'custom_item' && el.multiple === true;
+													const rowDisabled = Boolean(disabled || (consumed && !isSpecialLocked && !isSpecialCustom));
 													return (
 														<li key={el.id}>
 															<button
 																type="button"
 																className={
 																	'onepress-styling-target-preset__row' +
-																	(isActive ? ' is-active' : '')
+																	(isActive ? ' is-active' : '') +
+																	(rowDisabled ? ' is-disabled' : '') +
+																	(consumed && !isSpecialLocked && !isSpecialCustom ? ' is-consumed' : '')
 																}
+																disabled={rowDisabled}
+																aria-disabled={rowDisabled}
 																onClick={() => {
-																	onSelectPreset({ id: el.id, selector: el.selector, name: el.name });
-																	close();
+																	if (rowDisabled) {
+																		return;
+																	}
+																	onRowActivate(el);
 																}}
 															>
 																<span className="onepress-styling-target-preset__row-name">{el.name}</span>
-																{/* <code className="onepress-styling-target-preset__row-sel">{el.selector}</code> */}
+																{consumed && !isSpecialLocked && !isSpecialCustom ? (
+																	<span className="onepress-styling-target-preset__row-badge">
+																		{__('Added', 'onepress')}
+																	</span>
+																) : null}
 															</button>
 														</li>
 													);
@@ -199,8 +251,8 @@ export function StylingTargetElementSelect({
 								})
 							)}
 						</div>
-						<div className="styling-font-picker__footer">
-							<Button variant="tertiary" onClick={close}>
+						<div className="styling-font-picker__footer flex justify-end">
+							<Button variant="tertiary" size='small' onClick={close}>
 								{__('Close', 'onepress')}
 							</Button>
 						</div>

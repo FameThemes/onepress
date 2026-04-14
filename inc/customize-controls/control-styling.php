@@ -217,9 +217,7 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 				: onepress_styling_get_default_value();
 		}
 		if ($this->styling_multiple && is_array($decoded)) {
-			if (isset($decoded['items']) && is_array($decoded['items']) && $decoded['items'] === array()) {
-				$decoded = onepress_styling_get_default_value_multiple();
-			} elseif (! isset($decoded['items']) && isset($decoded['_meta'])) {
+			if (! isset($decoded['items']) && isset($decoded['_meta'])) {
 				$decoded = array(
 					'_onepressStyling' => true,
 					'items'            => array( onepress_styling_item_from_single_payload( $decoded ) ),
@@ -296,7 +294,7 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
  * Sanitize preset target registry for Customizer JSON (`styling_target_elements` control arg).
  *
  * @param array<string, mixed> $raw Raw categories + elements.
- * @return array{categories: array<string, string>, elements: list<array{id: string, selector: string, name: string, category: string}>}
+ * @return array{categories: array<string, string>, elements: list<array<string, mixed>>}
  */
 function onepress_styling_sanitize_control_target_elements( $raw ) {
 	if ( ! is_array( $raw ) ) {
@@ -325,21 +323,44 @@ function onepress_styling_sanitize_control_target_elements( $raw ) {
 			$selector = isset( $row['selector'] ) ? onepress_styling_sanitize_selector( (string) $row['selector'] ) : '';
 			$name     = isset( $row['name'] ) ? sanitize_text_field( wp_unslash( (string) $row['name'] ) ) : '';
 			$category = isset( $row['category'] ) ? sanitize_key( (string) $row['category'] ) : 'other';
+			$locked   = isset( $row['locked'] ) && (bool) $row['locked'];
+			$multiple = false;
+			if ( isset( $row['multiple'] ) ) {
+				$multiple = (bool) $row['multiple'];
+			} elseif ( isset( $row['mutiple'] ) ) {
+				$multiple = (bool) $row['mutiple'];
+			}
+			$message = isset( $row['message'] ) ? sanitize_text_field( wp_unslash( (string) $row['message'] ) ) : '';
 			if ( $category === '' ) {
 				$category = 'other';
 			}
-			if ( $selector === '' || $name === '' ) {
+			$allow_empty_selector = $locked || ( 'custom_item' === $id && $multiple );
+			if ( $name === '' || ( $selector === '' && ! $allow_empty_selector ) ) {
 				continue;
 			}
 			if ( $id === '' ) {
-				$id = strlen( $selector ) <= 200 ? $selector : substr( $selector, 0, 200 );
+				if ( $selector !== '' ) {
+					$id = strlen( $selector ) <= 200 ? $selector : substr( $selector, 0, 200 );
+				} else {
+					continue;
+				}
 			}
-			$elements[] = array(
+			$entry = array(
 				'id'       => $id,
 				'selector' => $selector,
 				'name'     => $name,
 				'category' => $category,
 			);
+			if ( $locked ) {
+				$entry['locked'] = true;
+			}
+			if ( $multiple ) {
+				$entry['multiple'] = true;
+			}
+			if ( $message !== '' ) {
+				$entry['message'] = $message;
+			}
+			$elements[] = $entry;
 		}
 	}
 	return array(

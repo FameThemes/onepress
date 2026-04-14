@@ -1093,9 +1093,6 @@ function onepress_sanitize_styling_value_multi($raw)
 			$items_out[] = $san;
 		}
 	}
-	if (empty($items_out)) {
-		$items_out[] = onepress_styling_sanitize_styling_item(onepress_styling_get_default_value());
-	}
 	return wp_json_encode(
 		array(
 			'_onepressStyling' => true,

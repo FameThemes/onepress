@@ -212,15 +212,15 @@ export function StylingLocalFontFamilyControl({ value, onPatch, onPickFamily, fa
 							</p>
 						) : null}
 						{!families?.length ? (
-							<p className="styling-font-picker__empty">
-								{__(
+							<div className="styling-font-picker__empty">
+								{/* {__(
 									'No fonts in Font manager yet. Add fonts under Typography → Font manager.',
 									'onepress'
-								)}
-							</p>
+								)} */}
+							</div>
 						) : null}
-						<div className="styling-font-picker__footer">
-							<Button variant="tertiary" onClick={closePopover}>
+						<div className="styling-font-picker__footer flex justify-end">
+							<Button variant="tertiary" size='small' onClick={closePopover}>
 								{__('Close', 'onepress')}
 							</Button>
 						</div>

@@ -7,8 +7,9 @@ import {
 	Icon,
 	SnackbarList,
 	Tabs,
+	TextControl,
 } from '@wordpress/components';
-import { pencil, rotateLeft, trash, chevronDown, chevronUp } from '@wordpress/icons';
+import { close, pencil, rotateLeft, trash, chevronDown, chevronUp } from '@wordpress/icons';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import {
@@ -114,7 +115,31 @@ function wrapSingleAsMulti(singleClone, itemTitle) {
  * @param {Record<string, unknown> | null} defaultMulti
  * @param {string} migrateTitle
  */
+/** Sentinel `itemIndex` when picking a selector for the pending-add custom target draft (`StylingControlApp`). */
+const PENDING_ADD_PICK_ITEM_INDEX = -1;
+
+const IconTarget = ({ size = 24 }) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width={size}
+		height={size}
+		viewBox="0 0 24 24"
+		fill="currentColor"
+		className="icon icon-tabler icons-tabler-filled icon-tabler-current-location"
+	>
+		<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+		<path d="M12 1a1 1 0 0 1 1 1v1.055a9.004 9.004 0 0 1 7.946 7.945h1.054a1 1 0 0 1 0 2h-1.055a9.004 9.004 0 0 1 -7.944 7.945l-.001 1.055a1 1 0 0 1 -2 0v-1.055a9.004 9.004 0 0 1 -7.945 -7.944l-1.055 -.001a1 1 0 0 1 0 -2h1.055a9.004 9.004 0 0 1 7.945 -7.945v-1.055a1 1 0 0 1 1 -1m0 4a7 7 0 1 0 0 14a7 7 0 0 0 0 -14m0 3a4 4 0 1 1 -4 4l.005 -.2a4 4 0 0 1 3.995 -3.8" />
+	</svg>
+);
+
 function ensureMultiShape(v, defaultMulti, migrateTitle) {
+	// Saved / in-flight explicit empty list — must not fall through to `defaultMulti` (would resurrect defaults).
+	if (v && typeof v === 'object' && Array.isArray(v.items) && v.items.length === 0) {
+		const out = cloneValue(v);
+		out._onepressStyling = true;
+		out.items = [];
+		return out;
+	}
 	if (v && Array.isArray(v.items) && v.items.length) {
 		return cloneValue(v);
 	}
@@ -256,9 +281,22 @@ export function StylingControlApp({ control, $ }) {
 		/** @type {{ kind: 'all' } | { kind: 'item', index: number } | null} */(null)
 	);
 	const [deleteItemIndex, setDeleteItemIndex] = useState(/** @type {number | null} */(null));
+	/** Index pending delete confirm — avoids stale `deleteItemIndex` when `ConfirmDialog` fires `onConfirm`. */
+	const deletePendingIndexRef = useRef(/** @type {number | null} */(null));
+	const removeItemAtRef = useRef(/** @type {((index: number) => void) | null} */(null));
 	const [pendingAddFormOpen, setPendingAddFormOpen] = useState(false);
+	const [pendingAddLockedMessage, setPendingAddLockedMessage] = useState('');
+	const [pendingAddCustomOpen, setPendingAddCustomOpen] = useState(false);
+	const [pendingCustomSelector, setPendingCustomSelector] = useState('');
+	const [pendingCustomPresetName, setPendingCustomPresetName] = useState('');
 	/** Anchor for editor popover after inline add (wrapper around add row / form). */
 	const pendingAddInlineRef = useRef(/** @type {HTMLDivElement | null} */(null));
+	const pendingAddDraftRef = useRef({ form: false, custom: false });
+
+	useLayoutEffect(() => {
+		pendingAddDraftRef.current = { form: pendingAddFormOpen, custom: pendingAddCustomOpen };
+	}, [pendingAddFormOpen, pendingAddCustomOpen]);
+
 	const [deviceId, setDeviceId] = useState(() => {
 		const fromPreview = getCustomizerPreviewDevice();
 		if (fromPreview && previewDeviceIds.includes(fromPreview)) {
@@ -290,6 +328,34 @@ export function StylingControlApp({ control, $ }) {
 			lockedBaseSelector
 		);
 	});
+
+	const usedPresetIdsSet = useMemo(() => {
+		const s = new Set();
+		if (!multiple || !Array.isArray(value?.items)) {
+			return s;
+		}
+		for (const it of value.items) {
+			const el = typeof it?._meta?.elId === 'string' ? it._meta.elId.trim() : '';
+			if (el !== '') {
+				s.add(el);
+			}
+		}
+		return s;
+	}, [multiple, value?.items]);
+
+	const usedPresetIdsForEditor = useMemo(() => {
+		if (editingItemIndex == null || !Array.isArray(value?.items)) {
+			return usedPresetIdsSet;
+		}
+		const cur = value.items[editingItemIndex];
+		const curEl = typeof cur?._meta?.elId === 'string' ? cur._meta.elId.trim() : '';
+		if (curEl === '') {
+			return usedPresetIdsSet;
+		}
+		const next = new Set(usedPresetIdsSet);
+		next.delete(curEl);
+		return next;
+	}, [usedPresetIdsSet, editingItemIndex, value?.items]);
 
 	const { families, loading: fontsLoading, error: fontsError } = useGoogleFontFamilies();
 	const customizeApi =
@@ -351,8 +417,18 @@ export function StylingControlApp({ control, $ }) {
 		if (multiple && Array.isArray(value.items) && value.items[0]) {
 			return value.items[0];
 		}
+		if (
+			multiple &&
+			Array.isArray(value.items) &&
+			value.items.length === 0 &&
+			defaultStylingPayload &&
+			Array.isArray(defaultStylingPayload.items) &&
+			defaultStylingPayload.items[0]
+		) {
+			return defaultStylingPayload.items[0];
+		}
 		return value;
-	}, [multiple, value]);
+	}, [multiple, value, defaultStylingPayload]);
 
 	const editorPayload = useMemo(() => {
 		if (!multiple) {
@@ -668,6 +744,39 @@ export function StylingControlApp({ control, $ }) {
 				return;
 			}
 			if (multiple) {
+				const idxRaw = payload.itemIndex;
+				if (idxRaw === PENDING_ADD_PICK_ITEM_INDEX) {
+					const u = pendingAddDraftRef.current;
+					if (!u.form || !u.custom) {
+						return;
+					}
+					const picked = String(payload.selector || '').trim();
+					previewPickerActiveRef.current = false;
+					setPreviewPickerActive(false);
+					setPendingCustomSelector(picked);
+					const appliedDisplay = picked === '' ? '.' : picked;
+					pickSnackbarSeqRef.current += 1;
+					setPickerSnackbarNotices([
+						{
+							id: `onepress-styling-pick-${String(control.id)}-${String(pickSnackbarSeqRef.current)}`,
+							explicitDismiss: true,
+							content: (
+								<span className="onepress-styling-pick-snackbar__inner">
+									<span className="onepress-styling-pick-snackbar__label">
+										{__('CSS selector applied:', 'onepress')}
+									</span>{' '}
+									<code className="onepress-styling-pick-snackbar__selector">{appliedDisplay}</code>
+								</span>
+							),
+							spokenMessage: sprintf(
+								/* translators: %s: CSS selector string */
+								__('CSS selector applied: %s', 'onepress'),
+								appliedDisplay
+							),
+						},
+					]);
+					return;
+				}
 				const want = Number(payload.itemIndex);
 				if (want !== editingItemIndexRef.current) {
 					return;
@@ -855,6 +964,10 @@ export function StylingControlApp({ control, $ }) {
 		if (multiple) {
 			setEditingItemIndex(null);
 			setPendingAddFormOpen(false);
+			setPendingAddLockedMessage('');
+			setPendingAddCustomOpen(false);
+			setPendingCustomSelector('');
+			setPendingCustomPresetName('');
 		}
 	}, [multiple, cancelPreviewPicker]);
 
@@ -870,11 +983,19 @@ export function StylingControlApp({ control, $ }) {
 		setPickerSnackbarNotices([]);
 		previewPickerActiveRef.current = true;
 		setPreviewPickerActive(true);
+		let itemIndex = null;
+		if (multiple) {
+			if (pendingAddFormOpen && pendingAddCustomOpen) {
+				itemIndex = PENDING_ADD_PICK_ITEM_INDEX;
+			} else {
+				itemIndex = editingItemIndex;
+			}
+		}
 		previewer.send('onepress-styling-start-pick', {
 			controlId: control.id,
-			itemIndex: multiple ? editingItemIndex : null,
+			itemIndex,
 		});
-	}, [control.id, multiple, editingItemIndex, cancelPreviewPicker]);
+	}, [control.id, multiple, editingItemIndex, pendingAddFormOpen, pendingAddCustomOpen, cancelPreviewPicker]);
 
 	const toggleEditorPopover = useCallback(() => {
 		if (multiple) {
@@ -891,6 +1012,10 @@ export function StylingControlApp({ control, $ }) {
 	const toggleEditorForItem = useCallback(
 		(index) => {
 			setPendingAddFormOpen(false);
+			setPendingAddLockedMessage('');
+			setPendingAddCustomOpen(false);
+			setPendingCustomSelector('');
+			setPendingCustomPresetName('');
 			if (editorPopoverOpenRef.current && editingItemIndex === index) {
 				closeEditorPopover();
 				return;
@@ -905,24 +1030,45 @@ export function StylingControlApp({ control, $ }) {
 
 	const removeItemAt = useCallback(
 		(index) => {
-			if (!multiple || !Array.isArray(value.items) || value.items.length <= 1) {
+			if (!multiple || typeof index !== 'number' || index < 0) {
 				return;
 			}
-			const nextRoot = cloneValue(value);
-			nextRoot.items = value.items.filter((_, i) => i !== index);
-			commitRoot(nextRoot);
-			if (editorPopoverOpen && editingItemIndex === index) {
+			setValue((prevRoot) => {
+				if (!Array.isArray(prevRoot?.items) || prevRoot.items.length === 0) {
+					return prevRoot;
+				}
+				if (index >= prevRoot.items.length) {
+					return prevRoot;
+				}
+				const nextRoot = cloneValue(prevRoot);
+				nextRoot.items = prevRoot.items.filter((_, i) => i !== index);
+				rebuildFontSlicesInValue(nextRoot, mergedForFontSlices);
+				pushStylingPayloadToCustomizer($, control, nextRoot);
+				return nextRoot;
+			});
+			const open = editorPopoverOpenRef.current;
+			const ei = editingItemIndexRef.current;
+			if (open && ei === index) {
 				closeEditorPopover();
-			} else if (editorPopoverOpen && editingItemIndex != null && editingItemIndex > index) {
-				setEditingItemIndex(editingItemIndex - 1);
+			} else if (open && ei != null && ei > index) {
+				setEditingItemIndex(ei - 1);
 			}
 		},
-		[multiple, value, commitRoot, editorPopoverOpen, editingItemIndex, closeEditorPopover]
+		[multiple, mergedForFontSlices, $, control, closeEditorPopover]
 	);
+
+	useLayoutEffect(() => {
+		removeItemAtRef.current = removeItemAt;
+	}, [removeItemAt]);
 
 	const cancelPendingAdd = useCallback(() => {
 		setPendingAddFormOpen(false);
-	}, []);
+		setPendingAddLockedMessage('');
+		setPendingAddCustomOpen(false);
+		setPendingCustomSelector('');
+		setPendingCustomPresetName('');
+		cancelPreviewPicker();
+	}, [cancelPreviewPicker]);
 
 	const startPendingAdd = useCallback(() => {
 		if (!multiple || !defaultStylingPayload) {
@@ -941,6 +1087,10 @@ export function StylingControlApp({ control, $ }) {
 			setStatesPopoverOpen(false);
 			setStatesPopoverAnchor(null);
 		}
+		setPendingAddLockedMessage('');
+		setPendingAddCustomOpen(false);
+		setPendingCustomSelector('');
+		setPendingCustomPresetName('');
 		setPendingAddFormOpen(true);
 	}, [multiple, defaultStylingPayload, value, cancelPreviewPicker]);
 
@@ -992,6 +1142,78 @@ export function StylingControlApp({ control, $ }) {
 		[multiple, defaultStylingPayload, value, commitRoot, cancelPendingAdd]
 	);
 
+	const confirmPendingAddCustom = useCallback(() => {
+		const sel = pendingCustomSelector.trim();
+		if (!sel || !multiple || !defaultStylingPayload) {
+			return;
+		}
+		const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
+		const template = items && items[0] ? cloneValue(items[0]) : null;
+		if (!template || !Array.isArray(value.items)) {
+			return;
+		}
+		const itemId = `cust-${Date.now().toString(36)}`;
+		const newItem = cloneValue(template);
+		const label =
+			pendingCustomPresetName.trim() !== '' ? pendingCustomPresetName.trim() : __('Custom target', 'onepress');
+		newItem.id = itemId;
+		newItem.title = label;
+		newItem.selector = sel;
+		if (!newItem._meta || typeof newItem._meta !== 'object') {
+			newItem._meta = {};
+		}
+		newItem._meta.baseSelector = sel;
+		newItem._meta.elId = 'custom_item';
+		newItem._meta.elName = label;
+		const nextRoot = cloneValue(value);
+		nextRoot.items = [...nextRoot.items, newItem];
+		const newIndex = nextRoot.items.length - 1;
+		commitRoot(nextRoot);
+		cancelPendingAdd();
+		setEditingItemIndex(newIndex);
+		setStateIndex(0);
+		editorPopoverOpenRef.current = true;
+		setEditorPopoverOpen(true);
+	}, [
+		pendingCustomSelector,
+		pendingCustomPresetName,
+		multiple,
+		defaultStylingPayload,
+		value,
+		commitRoot,
+		cancelPendingAdd,
+	]);
+
+	const handlePendingTargetPreset = useCallback(
+		/** @param {Record<string, unknown>} preset */(preset) => {
+			if (!preset || typeof preset !== 'object') {
+				return;
+			}
+			if (preset.locked === true) {
+				setPendingAddLockedMessage(String(preset.message || ''));
+				setPendingAddCustomOpen(false);
+				setPendingCustomSelector('');
+				setPendingCustomPresetName('');
+				return;
+			}
+			if (preset.unlockCustomForm === true) {
+				setPendingAddLockedMessage('');
+				setPendingAddCustomOpen(true);
+				setPendingCustomSelector('');
+				setPendingCustomPresetName(typeof preset.name === 'string' ? preset.name.trim() : '');
+				return;
+			}
+			setPendingAddLockedMessage('');
+			setPendingAddCustomOpen(false);
+			setPendingCustomSelector('');
+			setPendingCustomPresetName('');
+			confirmPendingAddWithPreset(
+				/** @type {{ id: string, selector: string, name: string }} */(preset)
+			);
+		},
+		[confirmPendingAddWithPreset]
+	);
+
 	const onResetToDefault = useCallback(() => {
 		if (!defaultStylingPayload) {
 			return;
@@ -1003,6 +1225,10 @@ export function StylingControlApp({ control, $ }) {
 		setEditingItemIndex(null);
 		setStateIndex(0);
 		setPendingAddFormOpen(false);
+		setPendingAddLockedMessage('');
+		setPendingAddCustomOpen(false);
+		setPendingCustomSelector('');
+		setPendingCustomPresetName('');
 		commitRoot(cloneValue(defaultStylingPayload));
 	}, [defaultStylingPayload, commitRoot]);
 
@@ -1145,6 +1371,8 @@ export function StylingControlApp({ control, $ }) {
 				disabledFieldSet,
 				onCloseEditor: closeEditorPopover,
 				targetElementsRegistry,
+				usedPresetIds: usedPresetIdsForEditor,
+				previewPickerActiveRef,
 			}
 			: null;
 
@@ -1194,8 +1422,9 @@ export function StylingControlApp({ control, $ }) {
 
 						{multiple ? (
 							<div className="onepress-styling-items mt-3">
-								<div className="flex flex-col gap-2">
-									{itemsList.map((item, index) => (
+								{itemsList.length > 0 ? (
+									<div className="flex flex-col gap-2">
+										{itemsList.map((item, index) => (
 										<div
 											key={item.id || `idx-${String(index)}`}
 											className="onepress-styling-items__row flex flex-col gap-2"
@@ -1219,9 +1448,11 @@ export function StylingControlApp({ control, $ }) {
 													</Button>
 													<Button
 														variant="minimal"
-														onClick={() => setDeleteItemIndex(index)}
+														onClick={() => {
+															deletePendingIndexRef.current = index;
+															setDeleteItemIndex(index);
+														}}
 														size="small"
-														disabled={itemsList.length <= 1}
 														label={__('Remove this item from the list', 'onepress')}
 														showTooltip
 														className="icon-btn"
@@ -1252,8 +1483,9 @@ export function StylingControlApp({ control, $ }) {
 												/>
 											) : null}
 										</div>
-									))}
-								</div>
+										))}
+									</div>
+								) : null}
 								<div className="block mt-2" ref={pendingAddInlineRef}>
 									{pendingAddFormOpen ? (
 										<div className="onepress-styling-pending-add-inline">
@@ -1264,14 +1496,60 @@ export function StylingControlApp({ control, $ }) {
 														{__('No targets are available.', 'onepress')}
 													</p>
 												) : (
-													<StylingTargetElementSelect
-														targetRegistry={targetElementsRegistry}
-														currentSelector=""
-														currentElId=""
-														selectedPresetName=""
-														onSelectPreset={confirmPendingAddWithPreset}
-														disabled={Boolean(lockedBaseSelector) || !editableBaseSelector}
-													/>
+													<>
+														<StylingTargetElementSelect
+															targetRegistry={targetElementsRegistry}
+															currentSelector=""
+															currentElId=""
+															selectedPresetName=""
+															onSelectPreset={handlePendingTargetPreset}
+															usedPresetIds={usedPresetIdsSet}
+															disabled={Boolean(lockedBaseSelector) || !editableBaseSelector}
+														/>
+														{pendingAddLockedMessage ? (
+															<p className="description mt-2">{pendingAddLockedMessage}</p>
+														) : null}
+														{pendingAddCustomOpen ? (
+															<div className="onepress-styling-pending-custom-target flex flex-wrap gap-2 items-end mt-3">
+																<div className="grow min-w-[12rem]">
+																	<TextControl
+																		__nextHasNoMarginBottom
+																		label={__('Base selector', 'onepress')}
+																		value={pendingCustomSelector}
+																		onChange={setPendingCustomSelector}
+																		placeholder={__('e.g. .my-button', 'onepress')}
+																	/>
+																</div>
+																<Button
+																	variant="secondary"
+																	onClick={togglePreviewPicker}
+																	isPressed={previewPickerActive}
+																	disabled={!editableBaseSelector}
+																	size="small"
+																	label={
+																		previewPickerActive
+																			? __('Cancel picking from preview', 'onepress')
+																			: __('Pick a selector from the site preview', 'onepress')
+																	}
+																	showTooltip
+																	className="icon-btn"
+																>
+																	{previewPickerActive ? (
+																		<Icon icon={close} size={18} />
+																	) : (
+																		<IconTarget size={18} />
+																	)}
+																</Button>
+																<Button
+																	variant="primary"
+																	onClick={confirmPendingAddCustom}
+																	disabled={pendingCustomSelector.trim() === ''}
+																>
+																	{__('Add', 'onepress')}
+																</Button>
+															</div>
+														) : null}
+													</>
 												)}
 											</div>
 											<div className="onepress-styling-pending-add-inline__actions">
@@ -1355,13 +1633,21 @@ export function StylingControlApp({ control, $ }) {
 				<ConfirmDialog
 					isOpen={deleteItemIndex !== null}
 					onConfirm={() => {
-						if (deleteItemIndex === null) {
+						const index = deletePendingIndexRef.current;
+						deletePendingIndexRef.current = null;
+						setDeleteItemIndex(null);
+						if (index == null || typeof index !== 'number') {
 							return;
 						}
-						removeItemAt(deleteItemIndex);
+						const run = removeItemAtRef.current;
+						if (typeof run === 'function') {
+							run(index);
+						}
+					}}
+					onCancel={() => {
+						deletePendingIndexRef.current = null;
 						setDeleteItemIndex(null);
 					}}
-					onCancel={() => setDeleteItemIndex(null)}
 					confirmButtonText={__('Delete', 'onepress')}
 					cancelButtonText={__('Cancel', 'onepress')}
 				>

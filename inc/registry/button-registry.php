@@ -48,6 +48,15 @@ if (! function_exists('onepress_styling_button_target_elements_registry')) {
 					'name'     => esc_html__('Outline button', 'onepress'),
 					'category' => $cat,
 				),
+				array(
+					'id'       => 'custom_item',
+					'selector' => '',
+					'name'     => esc_html__('Custom target (create new)', 'onepress'),
+					'category' => $cat,
+					'locked'   => true,
+					'multiple' => true,
+					'message'  => esc_html__('Update to OnePress Plus version to unlock this feature', 'onepress'),
+				),
 			),
 		);
 
@@ -96,20 +105,28 @@ if (! function_exists('onepress_styling_button_default_value_multiple')) {
 				'title'    => esc_html__('Outline button', 'onepress'),
 				'selector' => 'body .btn.btn-secondary-outline',
 			),
+			array(
+				'id'       => 'custom_item',
+				'selector' => '',
+				'name'     => esc_html__( 'Custom target (create new)', 'onepress' ),
+				'locked'   => true,
+				'multiple' => true,
+				'message' => esc_html__('Update to OnePress Plus version to unlock this feature', 'onepress'),
+		),
 		);
 
 		$items = array();
-		foreach ($variants as $v) {
-			$one = onepress_styling_get_default_value_from_states_template($button_states);
-			$sel = $v['selector'];
-			$one['_meta']['baseSelector'] = $sel;
-			$one['_meta']['elId']         = $v['id'];
-			$one['_meta']['elName']       = $v['title'];
-			$one['id']                    = $v['id'];
-			$one['title']                 = $v['title'];
-			$one['selector']              = $sel;
-			$items[]                      = $one;
-		}
+		// foreach ($variants as $v) {
+		// 	$one = onepress_styling_get_default_value_from_states_template($button_states);
+		// 	$sel = $v['selector'];
+		// 	$one['_meta']['baseSelector'] = $sel;
+		// 	$one['_meta']['elId']         = $v['id'];
+		// 	$one['_meta']['elName']       = $v['title'];
+		// 	$one['id']                    = $v['id'];
+		// 	$one['title']                 = $v['title'];
+		// 	$one['selector']              = $sel;
+		// 	$items[]                      = $one;
+		// }
 
 		return array(
 			'_onepressStyling' => true,

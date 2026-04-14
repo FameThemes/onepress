@@ -1693,6 +1693,9 @@ body.wp-customizer .media-modal-backdrop {
   border: 1px solid #dcdcde;
   border-radius: 2px;
   background: #fff;
+  li, ul {
+    margin: 0px;
+  }
 }
 
 .styling-font-picker__row {
@@ -1833,9 +1836,10 @@ body.wp-customizer .media-modal-backdrop {
 
 .onepress-styling-target-preset__row {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   width: 100%;
   text-align: left;
   padding: 8px 10px 8px 20px;
@@ -1857,10 +1861,32 @@ body.wp-customizer .media-modal-backdrop {
     border-color: #f2f2f2;
     background: #f2f2f2;
   }
+
+  &:disabled,
+  &.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &:disabled:hover,
+  &.is-disabled:hover {
+    background: #fff;
+  }
 }
 
 .onepress-styling-target-preset__row-name {
-  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.onepress-styling-target-preset__row-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: #787c82;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .onepress-styling-target-preset__row-sel {

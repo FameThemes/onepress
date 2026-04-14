@@ -2,9 +2,40 @@
  * Preset targets from `control.params.styling_target_elements` (per `Onepress_Customize_Styling_Control`).
  */
 
-/** @typedef {{ id: string, selector: string, name: string, category: string }} TargetElementPreset */
+/**
+ * @typedef {{ id: string, selector: string, name: string, category: string, locked?: boolean, multiple?: boolean, message?: string }} TargetElementPreset
+ */
 
 /** @typedef {{ categories: Record<string, string>, elements: TargetElementPreset[] }} TargetElementsRegistry */
+
+/**
+ * Presets with this id + `multiple` may be added many times; others at most once per `elId` in saved items.
+ *
+ * @param {TargetElementPreset} el
+ * @returns {boolean}
+ */
+export function isUnlimitedTargetPreset(el) {
+	return el.id === 'custom_item' && el.multiple === true;
+}
+
+/**
+ * @param {TargetElementPreset} el
+ * @param {Set<string>|string[]|null|undefined} usedPresetIds — `_meta.elId` values already present
+ * @returns {boolean}
+ */
+export function isTargetPresetConsumed(el, usedPresetIds) {
+	if (!el?.id || isUnlimitedTargetPreset(el)) {
+		return false;
+	}
+	if (!usedPresetIds) {
+		return false;
+	}
+	const id = String(el.id);
+	if (usedPresetIds instanceof Set) {
+		return usedPresetIds.has(id);
+	}
+	return usedPresetIds.includes(id);
+}
 
 /**
  * @param {unknown} raw
@@ -20,18 +51,37 @@ function normalizeElements(raw) {
 			continue;
 		}
 		const id = typeof row.id === 'string' ? row.id.trim() : '';
-		const selector = typeof row.selector === 'string' ? row.selector.trim() : '';
+		let selector = typeof row.selector === 'string' ? row.selector.trim() : '';
 		const name = typeof row.name === 'string' ? row.name.trim() : '';
 		const category = typeof row.category === 'string' ? row.category.trim() : 'other';
-		if (!selector || !name) {
+		const locked = row.locked === true;
+		const multiple = row.multiple === true || row.mutiple === true;
+		const message = typeof row.message === 'string' ? row.message.trim() : '';
+		const allowEmpty = locked || (id === 'custom_item' && multiple);
+		if (!name || (!selector && !allowEmpty)) {
 			continue;
 		}
-		out.push({
-			id: id || selector,
+		const resolvedId = id || (selector ? (selector.length <= 200 ? selector : selector.slice(0, 200)) : '');
+		if (!resolvedId) {
+			continue;
+		}
+		/** @type {TargetElementPreset} */
+		const el = {
+			id: resolvedId,
 			selector,
 			name,
 			category: category || 'other',
-		});
+		};
+		if (locked) {
+			el.locked = true;
+		}
+		if (multiple) {
+			el.multiple = true;
+		}
+		if (message) {
+			el.message = message;
+		}
+		out.push(el);
 	}
 	return out;
 }
@@ -84,5 +134,7 @@ export function findMatchingTargetPreset(currentSelector, currentElId, registry)
 	if (!selN) {
 		return null;
 	}
-	return elements.find((e) => normalizeSelectorForPresetMatch(e.selector) === selN) || null;
+	return (
+		elements.find((e) => e.selector && normalizeSelectorForPresetMatch(e.selector) === selN) || null
+	);
 }
