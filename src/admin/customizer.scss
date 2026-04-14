@@ -1333,7 +1333,7 @@ body.wp-customizer .media-modal-backdrop {
   display: flex;
   flex-direction: column;
   margin-top: 0px;
-  padding: 0px;
+  padding: var(--opc-panel-spacing) 0px;
   border: 1px solid #dcdcde;
   background: #fff;
   overflow: visible;
