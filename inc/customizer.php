@@ -91,6 +91,7 @@ function onepress_customize_register($wp_customize)
 	require_once $path . '/inc/customize-configs/options-global.php';
 	// Typography section from `inc/registry/typo-registry.php`.
 	require_once $path . '/inc/customize-configs/options-typography.php';
+	// Font manager controls from `inc/registry/font-registry.php`.
 	require_once $path . '/inc/customize-configs/options-font-manager.php';
 	// Global demo `styling` controls — ids must stay in sync with `onepress_styling_default_theme_mod_setting_ids()` (styling-css.php).
 	require_once $path . '/inc/customize-configs/options-styling.php';
@@ -184,6 +185,20 @@ function onepress_customize_preview_js()
 			'onepressStylingPreview',
 			array(
 				'settingIds' => $styling_ids,
+			)
+		);
+
+		require_once get_template_directory() . '/inc/registry/font-registry.php';
+		$font_manager_preview_ids = apply_filters(
+			'onepress_font_manager_preview_theme_mod_ids',
+			onepress_font_manager_theme_mod_ids()
+		);
+		$font_manager_preview_ids = array_values( array_filter( array_map( 'sanitize_key', (array) $font_manager_preview_ids ) ) );
+		wp_localize_script(
+			$handle,
+			'onepressFontManagerPreview',
+			array(
+				'settingIds' => $font_manager_preview_ids,
 			)
 		);
 	}

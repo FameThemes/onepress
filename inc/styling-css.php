@@ -424,7 +424,7 @@ function onepress_styling_coerce_device_declarations($v)
  * Sanitize _meta.states array shape.
  *
  * @param mixed $meta Meta array.
- * @return array{baseSelector: string, states: array<int, array<string, array{label:string, selector:string, force_selector?:string}>>}
+ * @return array{baseSelector: string, states: array<int, array<string, array{label:string, selector:string, force_selector?:string}>>, elId?: string, elName?: string}
  */
 function onepress_styling_sanitize_meta($meta)
 {
@@ -463,10 +463,23 @@ function onepress_styling_sanitize_meta($meta)
 	if (empty($states)) {
 		return $fallback;
 	}
-	return array(
+	$out = array(
 		'baseSelector' => $base,
 		'states'       => $states,
 	);
+	if ( isset( $meta['elId'] ) ) {
+		$el_id = sanitize_key( (string) $meta['elId'] );
+		if ( $el_id !== '' ) {
+			$out['elId'] = $el_id;
+		}
+	}
+	if ( isset( $meta['elName'] ) ) {
+		$el_name = sanitize_text_field( (string) $meta['elName'] );
+		if ( $el_name !== '' ) {
+			$out['elName'] = $el_name;
+		}
+	}
+	return $out;
 }
 
 /**
@@ -702,6 +715,21 @@ function onepress_styling_build_google_fonts_css2_url($merged)
 	return 'https://fonts.googleapis.com/css2?' . implode('&', $parts) . '&display=swap';
 }
 
+/**
+ * For each Google family in the font manager map, replace styling’s axis pairs (font manager is authoritative).
+ *
+ * @param array<string, array<string, true>> $styling_merged Accumulator from styling theme_mods.
+ * @param array<string, array<string, true>> $fm_map         From `onepress_font_manager_collect_google_axes_map_for_merge()`.
+ */
+function onepress_styling_apply_font_manager_google_axes_priority( array &$styling_merged, array $fm_map ) {
+	foreach ( $fm_map as $family => $pairs ) {
+		if ( ! is_string( $family ) || $family === '' || ! is_array( $pairs ) || array() === $pairs ) {
+			continue;
+		}
+		$styling_merged[ $family ] = $pairs;
+	}
+}
+
 // Typography registry: theme_mod ids, base_selector map, control lookup (`inc/registry/typo-registry.php`).
 require_once __DIR__ . '/registry/typo-registry.php';
 
@@ -853,7 +881,8 @@ function onepress_styling_value_with_registry_state_force_selectors( $setting_id
 }
 
 /**
- * Enqueue one merged Google Fonts stylesheet for all registered styling theme_mods.
+ * Enqueue one merged Google Fonts stylesheet: all styling theme_mods + font manager registry.
+ * For each Google family present in font manager, font manager’s selected variants replace styling’s pairs (no duplicate requests).
  *
  * @return void
  */
@@ -887,6 +916,8 @@ function onepress_styling_enqueue_merged_google_fonts()
 		$arr = onepress_styling_value_with_registry_state_force_selectors($setting_id, $arr);
 		onepress_styling_merge_google_axes_from_value_into($merged, $arr);
 	}
+	$fm_axes = onepress_font_manager_collect_google_axes_map_for_merge();
+	onepress_styling_apply_font_manager_google_axes_priority( $merged, $fm_axes );
 	$url = onepress_styling_build_google_fonts_css2_url($merged);
 	if ($url === '') {
 		return;
@@ -895,6 +926,28 @@ function onepress_styling_enqueue_merged_google_fonts()
 }
 
 add_action('wp_enqueue_scripts', 'onepress_styling_enqueue_merged_google_fonts', 19);
+
+/**
+ * Print Google Fonts preconnect hints immediately before the merged stylesheet tag.
+ *
+ * @param string $tag    Full HTML link tag for the enqueued style.
+ * @param string $handle Style handle.
+ * @param string $href   Stylesheet URL.
+ * @param string $media  Media attribute.
+ * @return string
+ */
+function onepress_styling_google_fonts_preconnect_style_tag($tag, $handle, $href, $media)
+{
+	if ('onepress-styling-google-fonts' !== $handle) {
+		return $tag;
+	}
+	$gfonts  = esc_url('https://fonts.googleapis.com');
+	$gstatic = esc_url('https://fonts.gstatic.com');
+	$pre     = "<link rel='preconnect' href='" . $gfonts . "'>\n";
+	$pre    .= "<link rel='preconnect' href='" . $gstatic . "' crossorigin>\n";
+	return $pre . $tag;
+}
+add_filter('style_loader_tag', 'onepress_styling_google_fonts_preconnect_style_tag', 10, 4);
 
 /**
  * Sanitize one single-target styling object (no `items` wrapper).

@@ -3,11 +3,12 @@
  */
 import { Button, CheckboxControl } from '@wordpress/components';
 import { pencil, trash } from '@wordpress/icons';
-import { Fragment, useCallback, useEffect, useMemo, useState } from '@wordpress/element';
+import { useCallback, useEffect, useMemo, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { StylingGoogleFontFamilyControl } from '../styling/components/StylingGoogleFontFamilyControl';
 import { findFamilyForModel } from '../styling/googleFontCollection';
 import {
+	fontManagerItemsToGoogleAxesPlainObject,
 	normalizeFontWeightForGoogle,
 	normalizeItalForGoogle,
 } from '../styling/stylingGoogleFonts';
@@ -20,6 +21,7 @@ import {
 	normalizeFontManagerValue,
 	parseFontManagerSetting,
 } from './fontManagerModel';
+import { ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE } from './fontManagerPreviewConstants';
 
 /** @typedef {import('./fontManagerModel').FontManagerItem} FontManagerItem */
 /** @typedef {import('../styling/googleFontCollection').PickerFontFamily} PickerFontFamily */
@@ -84,6 +86,26 @@ function allVariationKeysForGoogleFamily(family) {
  * @param {FontManagerItem | null} draft
  * @returns {PickerFontFamily | null}
  */
+/**
+ * Saved list + open editor draft so preview matches what the user is editing.
+ *
+ * @param {import('./fontManagerModel').FontManagerItem[]} rootItems
+ * @param {['add' | 'edit', FontManagerItem] | null} editor
+ */
+function mergeItemsForPreview(rootItems, editor) {
+	if (!editor) {
+		return rootItems;
+	}
+	const [mode, draft] = editor;
+	if (!draft) {
+		return rootItems;
+	}
+	if (mode === 'add') {
+		return [...rootItems, draft];
+	}
+	return rootItems.map((it) => (it.id === draft.id ? draft : it));
+}
+
 function findFontManagerFamily(families, draft) {
 	if (!draft || !families?.length) {
 		return null;
@@ -170,7 +192,7 @@ export function FontManagerControlApp({ control, $ }) {
 	}, [control.setting]);
 
 	const commitRoot = useCallback(
-		/** @param {import('./fontManagerModel').FontManagerValue} next */ (next) => {
+		/** @param {import('./fontManagerModel').FontManagerValue} next */(next) => {
 			const normalized = normalizeFontManagerValue(next);
 			setRoot(normalized);
 			pushFontManagerPayload($, control, normalized);
@@ -183,7 +205,7 @@ export function FontManagerControlApp({ control, $ }) {
 	}, []);
 
 	const openEdit = useCallback(
-		/** @param {FontManagerItem} item */ (item) => {
+		/** @param {FontManagerItem} item */(item) => {
 			let next = normalizeFontManagerItem({ ...item });
 			const fam = findFontManagerFamily(families, next);
 			if (next.isGoogleFamily && fam && !fam.isSystem) {
@@ -205,7 +227,7 @@ export function FontManagerControlApp({ control, $ }) {
 	}, []);
 
 	const setDraft = useCallback(
-		/** @param {FontManagerItem | ((prev: FontManagerItem) => FontManagerItem)} u */ (u) => {
+		/** @param {FontManagerItem | ((prev: FontManagerItem) => FontManagerItem)} u */(u) => {
 			setEditor((prev) => {
 				if (!prev) {
 					return prev;
@@ -221,6 +243,28 @@ export function FontManagerControlApp({ control, $ }) {
 	const draft = editor?.[1] ?? null;
 	const draftMode = editor?.[0] ?? null;
 
+	const previewAxesByFamily = useMemo(() => {
+		const items = mergeItemsForPreview(root.items, editor);
+		return fontManagerItemsToGoogleAxesPlainObject(items);
+	}, [root.items, editor]);
+
+	useEffect(() => {
+		const previewer =
+			typeof wp !== 'undefined' && wp.customize && wp.customize.previewer
+				? wp.customize.previewer
+				: null;
+		if (!previewer || typeof previewer.send !== 'function') {
+			return undefined;
+		}
+		const id = window.requestAnimationFrame(() => {
+			previewer.send(ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE, {
+				settingId: String(control.id),
+				axesByFamily: previewAxesByFamily,
+			});
+		});
+		return () => window.cancelAnimationFrame(id);
+	}, [previewAxesByFamily, control.id]);
+
 	const draftResolvedFamily = useMemo(
 		() => findFontManagerFamily(families, draft),
 		[families, draft]
@@ -235,7 +279,7 @@ export function FontManagerControlApp({ control, $ }) {
 	);
 
 	const onPickFont = useCallback(
-		/** @param {PickerFontFamily} font */ (font) => {
+		/** @param {PickerFontFamily} font */(font) => {
 			setDraft((d) => {
 				if (!d) {
 					return d;
@@ -264,10 +308,10 @@ export function FontManagerControlApp({ control, $ }) {
 		[setDraft]
 	);
 
-	const noopFontPatch = useCallback(() => {}, []);
+	const noopFontPatch = useCallback(() => { }, []);
 
 	const toggleVariation = useCallback(
-		/** @param {string} key */ (key) => {
+		/** @param {string} key */(key) => {
 			setDraft((d) => {
 				const set = new Set(d.variations);
 				if (set.has(key)) {
@@ -302,7 +346,7 @@ export function FontManagerControlApp({ control, $ }) {
 	}, [commitRoot, draft, draftMode, root.items]);
 
 	const deleteItem = useCallback(
-		/** @param {string} id */ (id) => {
+		/** @param {string} id */(id) => {
 			// eslint-disable-next-line no-alert
 			if (!window.confirm(__('Remove this font from the list?', 'onepress'))) {
 				return;
@@ -324,13 +368,13 @@ export function FontManagerControlApp({ control, $ }) {
 
 	const editorPanel =
 		draft !== null ? (
-			<div className="font-manager-editor">
-				<p className="font-manager-editor__title">
+			<div className="font-manager-editor flex flex-col gap-4">
+				<div className="font-manager-editor__title font-bold">
 					{draftMode === 'add' ? __('New font', 'onepress') : __('Edit font', 'onepress')}
-				</p>
+				</div>
 
 				<div className="font-manager-control__picker">
-					<p className="font-manager-control__picker-label">{__('Search fonts', 'onepress')}</p>
+					<div className="field-title font-manager-control__picker-label">{__('Font Family', 'onepress')}</div>
 					<StylingGoogleFontFamilyControl
 						value={draft.fontFamily}
 						onPatch={noopFontPatch}
@@ -342,26 +386,20 @@ export function FontManagerControlApp({ control, $ }) {
 				</div>
 
 				{showGoogleCategory ? (
-					<p className="font-manager-editor__category">
+					<div className="font-manager-editor__category">
 						<span className="font-manager-editor__category-badge">
 							{__('Google Font', 'onepress')}
 						</span>
-					</p>
+					</div>
 				) : null}
 
 				{showVariationPanel ? (
-					<fieldset className="font-manager-control__variations">
-						<legend className="font-manager-control__variations-legend">
-							{sprintf(
-								/* translators: %s: font name */
-								__('Styles for %s', 'onepress'),
-								draft.googleName || draft.fontFamily
-							)}
-						</legend>
-						<p className="font-manager-control__variations-hint">
-							{__('Only checked styles are loaded from Google.', 'onepress')}
-						</p>
-						<ul className="font-manager-control__variation-list">
+					<div className="font-manager-control__variations flex flex-col gap-2">
+						<div className="field-title font-manager-control__variations-legend">
+							{__('Variations', 'onepress')}
+						</div>
+
+						<div className="flex flex-col gap-2 font-manager-control__variation-list">
 							{variationFaces.map((face, idx) => {
 								const key = axisPairFromFace(face);
 								const w = String(face.fontWeight ?? '400');
@@ -369,32 +407,34 @@ export function FontManagerControlApp({ control, $ }) {
 								const label =
 									st === 'italic' || st === 'oblique'
 										? sprintf(
-												/* translators: 1: weight, 2: style */
-												__('%1$s · %2$s', 'onepress'),
-												w,
-												st
-											)
+											/* translators: 1: weight, 2: style */
+											__('%1$s · %2$s', 'onepress'),
+											w,
+											st
+										)
 										: w;
 								return (
-									<li key={`${key}-${idx}`}>
+									<div key={`${key}-${idx}`}>
 										<CheckboxControl
 											__nextHasNoMarginBottom
 											label={label}
 											checked={draft.variations.includes(key)}
 											onChange={() => toggleVariation(key)}
 										/>
-									</li>
+									</div>
 								);
 							})}
-						</ul>
-					</fieldset>
+						</div>
+					</div>
 				) : null}
 
-				<div className="font-manager-editor__actions">
-					<Button variant="tertiary" onClick={closeEditor}>
+				<div className="flex gap-2 justify-end font-manager-editor__actions">
+					<Button variant="tertiary" onClick={closeEditor}
+						size='small'
+					>
 						{__('Close', 'onepress')}
 					</Button>
-					<Button variant="primary" onClick={saveDraft}>
+					<Button variant="primary" onClick={saveDraft} size='small'>
 						{__('Save', 'onepress')}
 					</Button>
 				</div>
@@ -406,53 +446,67 @@ export function FontManagerControlApp({ control, $ }) {
 	return (
 		<div className="font-manager-control font-manager-control--app">
 			<p className="font-manager-control__list-heading">{__('Fonts saved', 'onepress')}</p>
-			<ul
+			<div
 				className={
 					'font-manager-list' +
 					(draftMode === 'edit' ? ' font-manager-list--expanded' : '')
 				}
+				role="region"
 				aria-label={__('Fonts saved', 'onepress')}
 			>
 				{root.items.length === 0 ? (
-					<li className="font-manager-list__empty">{__('No fonts yet.', 'onepress')}</li>
+					<div className="font-manager-list__empty">{__('No fonts yet.', 'onepress')}</div>
 				) : (
-					root.items.map((item) => {
-						const label = displayNameForItem(item) || __('(unnamed)', 'onepress');
-						const showInlineEditor = inlineEditForId === item.id;
-						return (
-							<Fragment key={item.id}>
-								<li className="font-manager-list__row">
-									<span className="font-manager-list__name" title={item.fontFamily || label}>
-										{label}
-									</span>
-									<span className="font-manager-list__spacer" aria-hidden />
-									<Button
-										className="font-manager-list__icon-btn"
-										variant="tertiary"
-										size="small"
-										icon={pencil}
-										label={__('Edit font', 'onepress')}
-										disabled={draft !== null}
-										onClick={() => openEdit(item)}
-									/>
-									<Button
-										className="font-manager-list__icon-btn"
-										variant="tertiary"
-										size="small"
-										icon={trash}
-										label={__('Remove font', 'onepress')}
-										disabled={draft !== null}
-										onClick={() => deleteItem(item.id)}
-									/>
-								</li>
-								{showInlineEditor ? (
-									<li className="font-manager-list__editor-slot">{editorPanel}</li>
-								) : null}
-							</Fragment>
-						);
-					})
+					<div className="font-manager-list__units">
+						{root.items.map((item) => {
+							const label = displayNameForItem(item) || __('(unnamed)', 'onepress');
+							const showFlyoutEditor = inlineEditForId === item.id;
+							return (
+								<div key={item.id} className="font-manager-list__unit">
+									<div className="font-manager-list__item">
+										<div className="font-manager-list__row">
+											<span className="font-manager-list__name" title={item.fontFamily || label}>
+												{label}
+											</span>
+											<span className="font-manager-list__spacer" aria-hidden />
+											<Button
+												className="font-manager-list__icon-btn"
+												variant="tertiary"
+												size="small"
+												icon={pencil}
+												label={__('Edit font', 'onepress')}
+												disabled={draft !== null}
+												onClick={() => openEdit(item)}
+											/>
+											<Button
+												className="font-manager-list__icon-btn"
+												variant="tertiary"
+												size="small"
+												icon={trash}
+												label={__('Remove font', 'onepress')}
+												disabled={draft !== null}
+												onClick={() => deleteItem(item.id)}
+											/>
+										</div>
+									</div>
+									{showFlyoutEditor ? (
+										<div
+											className="font-manager-editor-flyout"
+											role="group"
+											aria-label={__('Font layout editor', 'onepress')}
+										>
+											<span className="font-manager-editor-flyout__arrow" aria-hidden="true">
+												<span className="font-manager-editor-flyout__arrow-fill" />
+											</span>
+											<div className="font-manager-editor-flyout__panel">{editorPanel}</div>
+										</div>
+									) : null}
+								</div>
+							);
+						})}
+					</div>
 				)}
-			</ul>
+			</div>
 
 			{draft !== null && draftMode === 'add' ? (
 				<div className="font-manager-control__editor-below-list">{editorPanel}</div>

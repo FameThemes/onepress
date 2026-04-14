@@ -72,11 +72,26 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 	public $disable_fields = array();
 
 	/**
-	 * When true, hide the editor popover title row (heading + manage states + preview picker).
+	 * Legacy: when true, hides both inline toolbar action buttons (settings gear and preview pick).
+	 * Prefer `styling_hide_gear_button` and `styling_hide_preview_pick_button` for separate control.
 	 *
 	 * @var bool
 	 */
 	public $styling_hide_popover_heading = false;
+
+	/**
+	 * When true, hide the settings (gear) button and the settings popover entry point.
+	 *
+	 * @var bool
+	 */
+	public $styling_hide_gear_button = false;
+
+	/**
+	 * When true, hide the “pick selector from preview” toolbar button.
+	 *
+	 * @var bool
+	 */
+	public $styling_hide_preview_pick_button = false;
 
 	/**
 	 * When true, hide the state tablist toolbar in the editor popover.
@@ -84,6 +99,20 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 	 * @var bool
 	 */
 	public $styling_hide_state_tablist = false;
+
+	/**
+	 * Font family picker: `local` (Font manager list) or `google` (full catalog).
+	 *
+	 * @var 'google'|'local'
+	 */
+	public $styling_font_family_source = 'local';
+
+	/**
+	 * When `styling_multiple` is true, label for the “Add item” button (Customizer UI). Empty = JS default “Add item”.
+	 *
+	 * @var string
+	 */
+	public $add_item_label = '';
 
 	/**
 	 * Constructor.
@@ -138,8 +167,21 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 		if ( isset( $args['styling_hide_popover_heading'] ) ) {
 			$this->styling_hide_popover_heading = (bool) $args['styling_hide_popover_heading'];
 		}
+		if ( isset( $args['styling_hide_gear_button'] ) ) {
+			$this->styling_hide_gear_button = (bool) $args['styling_hide_gear_button'];
+		}
+		if ( isset( $args['styling_hide_preview_pick_button'] ) ) {
+			$this->styling_hide_preview_pick_button = (bool) $args['styling_hide_preview_pick_button'];
+		}
 		if ( isset( $args['styling_hide_state_tablist'] ) ) {
 			$this->styling_hide_state_tablist = (bool) $args['styling_hide_state_tablist'];
+		}
+		if ( isset( $args['styling_font_family_source'] ) ) {
+			$src = sanitize_key( (string) $args['styling_font_family_source'] );
+			$this->styling_font_family_source = ( 'google' === $src ) ? 'google' : 'local';
+		}
+		if ( isset( $args['add_item_label'] ) ) {
+			$this->add_item_label = sanitize_text_field( wp_unslash( (string) $args['add_item_label'] ) );
 		}
 		parent::__construct($manager, $id, $args);
 	}
@@ -192,8 +234,12 @@ class Onepress_Customize_Styling_Control extends WP_Customize_Control
 		$this->json['styling_groups']         = $this->styling_groups;
 		$this->json['base_selector']          = $this->styling_multiple ? '' : (string) $this->base_selector;
 		$this->json['disable_fields']         = $this->disable_fields;
-		$this->json['styling_hide_popover_heading'] = $this->styling_hide_popover_heading;
-		$this->json['styling_hide_state_tablist']   = $this->styling_hide_state_tablist;
+		$this->json['styling_hide_popover_heading']         = $this->styling_hide_popover_heading;
+		$this->json['styling_hide_gear_button']             = $this->styling_hide_gear_button;
+		$this->json['styling_hide_preview_pick_button']     = $this->styling_hide_preview_pick_button;
+		$this->json['styling_hide_state_tablist']           = $this->styling_hide_state_tablist;
+		$this->json['styling_font_family_source']   = $this->styling_font_family_source;
+		$this->json['add_item_label']               = (string) $this->add_item_label;
 		$this->json['preview_device_ids']     = onepress_styling_preview_device_ids();
 	}
 

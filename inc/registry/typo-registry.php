@@ -21,9 +21,12 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 	 * - `id` (string) — theme_mod / control id
 	 * - `setting` (array) — passed to `$wp_customize->add_setting( $id, $setting )`
 	 * - `control` (array) — passed as second arg to `Onepress_Customize_Styling_Control` (must not include control id key).
-	 *   Optional: `styling_hide_popover_heading`, `styling_hide_state_tablist` (bool) — simplify the editor popover chrome.
+	 *   Optional: `styling_hide_popover_heading` (legacy: hides gear + preview-pick toolbar buttons),
+	 *   `styling_hide_gear_button`, `styling_hide_preview_pick_button`, `styling_hide_state_tablist` (bool).
+	 *   Optional: `styling_font_family_source` — `local` (default; Font manager list) or `google` (full catalog).
 	 *   In `styling_states` template rows, optional `force_selector` (string) — full CSS selector override; if omitted, theme resolves `force_selector` as `base_selector` + that row’s `selector` for the matching theme_mod id (front + preview).
 	 *   When `styling_multiple` => true on the control, use setting default `onepress_styling_get_default_value_multiple()` (array; sanitize stores JSON) and sanitize `onepress_sanitize_styling_value_multi` (not the single-target helpers).
+	 *   Optional with `styling_multiple`: `add_item_label` (string) — “Add item” button text.
 	 *
 	 * @return array<int, array{id: string, setting: array<string, mixed>, control: array<string, mixed>}>
 	 */
@@ -51,94 +54,10 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 			'styling_groups'      => array('text'),
 			'styling_hide_popover_heading' => true,
 			'styling_hide_state_tablist' => true,
+			'styling_font_family_source' => 'local',
 		);
 
 		$rows = array();
-
-		$rows[] = array(
-			'id'      => 'onepress_styling_body',
-			'setting' => $setting_defaults,
-			'control' => array_merge(
-				$control_defaults,
-				array(
-					'label'         => esc_html__('Body Typography', 'onepress'),
-					'priority'      => 10,
-					'base_selector' => 'body, body p',
-				)
-			),
-		);
-
-		for ($i = 1; $i <= 6; $i++) {
-			$rows[] = array(
-				'id'      => 'onepress_styling_h' . $i,
-				'setting' => $setting_defaults,
-				'control' => array_merge(
-					$control_defaults,
-					array(
-						'label'         => sprintf(esc_html__('Heading %d Typography', 'onepress'), $i),
-						'priority'      => 10 + $i,
-						'base_selector' => 'body h' . $i,
-					)
-				),
-			);
-		}
-
-		$rows[] = array(
-			'id'      => 'onepress_styling_nav',
-			'setting' => $setting_defaults,
-			'control' => array_merge(
-				$control_defaults,
-				array(
-					'label'         => esc_html__('Menu Typography', 'onepress'),
-					'priority'      => 20,
-					'base_selector' => 'body .onepress-menu > li > a',
-					'styling_hide_state_tablist' => false,
-					'styling_hide_popover_heading' => true,
-					'styling_states' => array(
-						array(
-							'normal' => array(
-								'label'    => __('Normal', 'onepress'),
-								'selector' => '',
-							),
-						),
-						array(
-							'hover' => array(
-								'label'    => __('Hover', 'onepress'),
-								'selector' => ':hover',
-								'force_selector' => 'body .onepress-menu li.onepress-current-item > a, body .onepress-menu li:hover > a',
-							),
-						),
-					)
-				)
-			),
-		);
-
-		$rows[] = array(
-			'id'      => 'onepress_styling_branding',
-			'setting' => $setting_defaults,
-			'control' => array_merge(
-				$control_defaults,
-				array(
-					'label'         => esc_html__('Branding Typography', 'onepress'),
-					'priority'      => 21,
-					'base_selector' => 'body #page .site-branding .site-title, body #page .site-branding .site-text-logo',
-				)
-			),
-		);
-
-		$rows[] = array(
-			'id'      => 'onepress_styling_tagline',
-			'setting' => $setting_defaults,
-			'control' => array_merge(
-				$control_defaults,
-				array(
-					'label'         => esc_html__('Tagline Typography', 'onepress'),
-					'priority'      => 22,
-					'base_selector' => 'body #page .site-branding .site-description',
-				)
-			),
-		);
-
 
 		$rows[] = array(
 			'id'      => 'onepress_styling_customs',
@@ -153,10 +72,28 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 					),
 					'priority'      => 23,
 					'styling_multiple' => true,
-					'styling_states'   => false,
-					'styling_groups'   => array( 'text' ),
+					// 'styling_states'   => array(
+					// 	array(
+					// 		'normal' => array(
+					// 			'label'    => __('Normal', 'onepress'),
+					// 			'selector' => '',
+					// 		),
+					// 	),
+					// 	array(
+					// 		'hover' => array(
+					// 			'label'    => __('Hover', 'onepress'),
+					// 			'selector' => ':hover',
+					// 		),
+					// 	),
+					// ),
 					'styling_hide_state_tablist'   => true,
+
+					'disable_fields' => array('color'),
+					'styling_groups'   => array('text'),
 					'styling_hide_popover_heading' => false,
+					'styling_hide_gear_button' => true,
+					'styling_hide_preview_pick_button' => true,
+					'add_item_label' => __('Add typography', 'onepress'),
 				)
 			),
 		);

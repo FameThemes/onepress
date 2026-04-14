@@ -5,11 +5,10 @@ import {
 	Button,
 	__experimentalConfirmDialog as ConfirmDialog,
 	Icon,
-	Popover,
 	SnackbarList,
 	Tabs,
 } from '@wordpress/components';
-import { pencil, rotateLeft, settings, close, trash } from '@wordpress/icons';
+import { pencil, rotateLeft, trash, chevronDown, chevronUp } from '@wordpress/icons';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import {
@@ -18,25 +17,19 @@ import {
 	syncCustomizerPreviewDevice,
 } from './customizerPreviewDeviceSync';
 import { parseDeclarationForm, patchDeclarationForm } from './declarationForm';
-import { StylingDeviceProvider } from './components';
-import { resolveAllowedGroupIds, StylingAccordionPanels } from './StylingAccordionPanels';
+import { StylingDeviceProvider, StylingTargetElementSelect } from './components';
+import { resolveAllowedGroupIds } from './StylingAccordionPanels';
+import { getStylingTargetElementsRegistry } from './targetElementsRegistry';
 import { buildDisabledFieldSet } from './stylingDisableFields';
 import { rebuildFontSlicesInValue } from './stylingGoogleFonts';
 import { useGoogleFontFamilies } from './useGoogleFontFamilies';
-import { StylingSettingsPopover } from './components/StylingSettingsPopover';
-import { shouldIgnoreStylingPopoverFocusOutside } from './stylingPopoverFocusOutside';
+import { useFontManagerCatalogFamilies } from './useFontManagerCatalogFamilies';
+import { StylingInlineEditor } from './components/StylingInlineEditor';
 import {
 	getFixedStatesTemplate,
 	getStatesStructureMode,
 	normalizeStylingRootForStatesPolicy,
 } from './stylingStatesPolicy';
-
-const IconTarget = ({ size = 24 }) => {
-	return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-current-location">
-		<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-		<path d="M12 1a1 1 0 0 1 1 1v1.055a9.004 9.004 0 0 1 7.946 7.945h1.054a1 1 0 0 1 0 2h-1.055a9.004 9.004 0 0 1 -7.944 7.945l-.001 1.055a1 1 0 0 1 -2 0v-1.055a9.004 9.004 0 0 1 -7.945 -7.944l-1.055 -.001a1 1 0 0 1 0 -2h1.055a9.004 9.004 0 0 1 7.945 -7.945v-1.055a1 1 0 0 1 1 -1m0 4a7 7 0 1 0 0 14a7 7 0 0 0 0 -14m0 3a4 4 0 1 1 -4 4l.005 -.2a4 4 0 0 1 3.995 -3.8" />
-	</svg>
-}
 
 /**
  * @param {JQueryStatic} $ jQuery
@@ -200,6 +193,11 @@ export function StylingControlApp({ control, $ }) {
 			);
 	}, [control.params.description]);
 
+	const addItemLabel = useMemo(() => {
+		const l = control.params.add_item_label;
+		return typeof l === 'string' && l.trim() !== '' ? l.trim() : __('Add item', 'onepress');
+	}, [control.params.add_item_label]);
+
 	const defaultStylingPayload = useMemo(() => {
 		const fromParams = control.params.default_value;
 		if (fromParams && typeof fromParams === 'object' && !Array.isArray(fromParams)) {
@@ -221,12 +219,8 @@ export function StylingControlApp({ control, $ }) {
 
 	const [stateIndex, setStateIndex] = useState(0);
 	const [editorPopoverOpen, setEditorPopoverOpen] = useState(false);
-	const [editorPopoverAnchor, setEditorPopoverAnchor] = useState(null);
-	const editButtonRef = useRef(null);
 	/** Mirrors `editorPopoverOpen` synchronously so the edit toggle survives stale closures vs. focus-outside ordering. */
 	const editorPopoverOpenRef = useRef(false);
-	/** Multi-target: pencil button element for the row whose editor is open (skip focus-outside close when retoggling that anchor). */
-	const lastMultiEditorAnchorRef = useRef(null);
 	const [editingItemIndex, setEditingItemIndex] = useState(null);
 	const editingItemIndexRef = useRef(null);
 	const [previewPickerActive, setPreviewPickerActive] = useState(false);
@@ -242,6 +236,9 @@ export function StylingControlApp({ control, $ }) {
 		/** @type {{ kind: 'all' } | { kind: 'item', index: number } | null} */(null)
 	);
 	const [deleteItemIndex, setDeleteItemIndex] = useState(/** @type {number | null} */(null));
+	const [pendingAddFormOpen, setPendingAddFormOpen] = useState(false);
+	/** Anchor for editor popover after inline add (wrapper around add row / form). */
+	const pendingAddInlineRef = useRef(/** @type {HTMLDivElement | null} */(null));
 	const [deviceId, setDeviceId] = useState(() => {
 		const fromPreview = getCustomizerPreviewDevice();
 		if (fromPreview && previewDeviceIds.includes(fromPreview)) {
@@ -275,6 +272,15 @@ export function StylingControlApp({ control, $ }) {
 	});
 
 	const { families, loading: fontsLoading, error: fontsError } = useGoogleFontFamilies();
+	const customizeApi =
+		typeof wp !== 'undefined' && wp.customize ? /** @type {import('@wordpress/customize').Customize} */ (wp.customize) : null;
+	const localManagedFonts = useFontManagerCatalogFamilies(customizeApi, families);
+	const mergedForFontSlices = useMemo(
+		() => [...localManagedFonts, ...(families ?? [])],
+		[localManagedFonts, families]
+	);
+	const fontFamilySource =
+		control.params.styling_font_family_source === 'google' ? 'google' : 'local';
 
 	useEffect(() => {
 		const setting = control.setting;
@@ -330,6 +336,9 @@ export function StylingControlApp({ control, $ }) {
 
 	const editorPayload = useMemo(() => {
 		if (!multiple) {
+			if (!editorPopoverOpen) {
+				return null;
+			}
 			return value;
 		}
 		if (
@@ -418,8 +427,8 @@ export function StylingControlApp({ control, $ }) {
 		}
 		const meta = editorPayload?._meta;
 		const b = meta?.baseSelector;
-		if (typeof b === 'string' && b.trim() !== '') {
-			return b;
+		if (typeof b === 'string') {
+			return b.trim();
 		}
 		const states = meta?.states;
 		if (!Array.isArray(states)) {
@@ -439,45 +448,59 @@ export function StylingControlApp({ control, $ }) {
 		return '';
 	}, [editorPayload, lockedBaseSelector]);
 
+	/** New multi items use empty `_meta.baseSelector` until user picks a preset or a selector from preview. */
+	const multiItemAwaitingPresetTarget = useMemo(() => {
+		if (!multiple || !editorPayload) {
+			return false;
+		}
+		const base = String(editorPayload._meta?.baseSelector ?? '').trim();
+		return base === '';
+	}, [multiple, editorPayload]);
+
 	const commitRoot = useCallback(
 		(nextRoot) => {
-			rebuildFontSlicesInValue(nextRoot, families);
+			rebuildFontSlicesInValue(nextRoot, mergedForFontSlices);
 			setValue(nextRoot);
 			pushStylingPayloadToCustomizer($, control, nextRoot);
 		},
-		[$, control, families]
+		[$, control, mergedForFontSlices]
 	);
 
 	const commitActiveItem = useCallback(
 		(nextItem) => {
-			rebuildFontSlicesInValue(nextItem, families);
 			if (multiple) {
 				const i = editingItemIndex;
-				if (i == null || !Array.isArray(value.items)) {
+				if (i == null) {
 					return;
 				}
-				const nextRoot = cloneValue(value);
-				nextRoot.items = [...nextRoot.items];
-				nextRoot.items[i] = nextItem;
-				setValue(nextRoot);
-				pushStylingPayloadToCustomizer($, control, nextRoot);
+				setValue((prevRoot) => {
+					if (!Array.isArray(prevRoot?.items) || prevRoot.items[i] == null) {
+						return prevRoot;
+					}
+					const nextRoot = cloneValue(prevRoot);
+					const item = cloneValue(nextItem);
+					rebuildFontSlicesInValue(item, mergedForFontSlices);
+					nextRoot.items = [...nextRoot.items];
+					nextRoot.items[i] = item;
+					pushStylingPayloadToCustomizer($, control, nextRoot);
+					return nextRoot;
+				});
 			} else {
-				setValue(nextItem);
-				pushStylingPayloadToCustomizer($, control, nextItem);
+				const item = cloneValue(nextItem);
+				rebuildFontSlicesInValue(item, mergedForFontSlices);
+				setValue(item);
+				pushStylingPayloadToCustomizer($, control, item);
 			}
 		},
-		[multiple, editingItemIndex, value, families, $, control]
+		[multiple, editingItemIndex, mergedForFontSlices, $, control]
 	);
 
 	useEffect(() => {
-		if (fontsLoading) {
-			return;
-		}
 		setValue((prev) => {
 			const next = cloneValue(prev);
 			let changed = false;
 			const beforeJson = JSON.stringify(prev);
-			rebuildFontSlicesInValue(next, families);
+			rebuildFontSlicesInValue(next, mergedForFontSlices);
 			if (JSON.stringify(next) !== beforeJson) {
 				changed = true;
 			}
@@ -487,7 +510,7 @@ export function StylingControlApp({ control, $ }) {
 			pushStylingPayloadToCustomizer($, control, next);
 			return next;
 		});
-	}, [fontsLoading, families, $, control]);
+	}, [mergedForFontSlices, $, control]);
 
 	const currentText =
 		activeKey &&
@@ -524,7 +547,11 @@ export function StylingControlApp({ control, $ }) {
 	);
 
 	const onBaseSelectorChange = useCallback(
-		(nextBase) => {
+		/**
+		 * @param {string} nextBase
+		 * @param {{ elementPresetId?: string, elementPresetName?: string } | undefined} [binding] — from preset: `_meta.elId`, `_meta.elName`, item `id` (multi). Omit clears `elId` / `elName` (manual / preview pick).
+		 */
+		(nextBase, binding) => {
 			if (lockedBaseSelector || !editorPayload) {
 				return;
 			}
@@ -533,8 +560,25 @@ export function StylingControlApp({ control, $ }) {
 				next._meta = {};
 			}
 			const trimmed = String(nextBase ?? '').trim();
-			next._meta.baseSelector = trimmed === '' ? '.' : trimmed;
-			next.selector = next._meta.baseSelector;
+			next._meta.baseSelector = trimmed;
+			next.selector = trimmed;
+			const pid = binding && typeof binding.elementPresetId === 'string' ? binding.elementPresetId.trim() : '';
+			if (pid !== '') {
+				next._meta.elId = pid;
+				const pnm =
+					binding && typeof binding.elementPresetName === 'string' ? binding.elementPresetName.trim() : '';
+				if (pnm !== '') {
+					next._meta.elName = pnm;
+				} else {
+					delete next._meta.elName;
+				}
+				if (multiple) {
+					next.id = pid;
+				}
+			} else {
+				delete next._meta.elId;
+				delete next._meta.elName;
+			}
 			if (Array.isArray(next._meta.states)) {
 				next._meta.states = next._meta.states.map((entry) => {
 					if (!entry || typeof entry !== 'object') {
@@ -555,7 +599,7 @@ export function StylingControlApp({ control, $ }) {
 			}
 			commitActiveItem(next);
 		},
-		[editorPayload, commitActiveItem, lockedBaseSelector]
+		[editorPayload, commitActiveItem, lockedBaseSelector, multiple]
 	);
 
 	useLayoutEffect(() => {
@@ -714,14 +758,46 @@ export function StylingControlApp({ control, $ }) {
 
 	const onItemTitleChange = useCallback(
 		(nextTitle) => {
-			if (!multiple || !editorPayload) {
+			if (!multiple) {
 				return;
 			}
-			const next = cloneValue(editorPayload);
-			next.title = String(nextTitle ?? '');
-			commitActiveItem(next);
+			const i = editingItemIndex;
+			if (i == null) {
+				return;
+			}
+			setValue((prevRoot) => {
+				if (!Array.isArray(prevRoot?.items) || prevRoot.items[i] == null) {
+					return prevRoot;
+				}
+				const nextRoot = cloneValue(prevRoot);
+				const next = cloneValue(nextRoot.items[i]);
+				next.title = String(nextTitle ?? '');
+				rebuildFontSlicesInValue(next, mergedForFontSlices);
+				nextRoot.items = [...nextRoot.items];
+				nextRoot.items[i] = next;
+				pushStylingPayloadToCustomizer($, control, nextRoot);
+				return nextRoot;
+			});
 		},
-		[multiple, editorPayload, commitActiveItem]
+		[multiple, editingItemIndex, mergedForFontSlices, $, control]
+	);
+
+	const onSelectTargetPreset = useCallback(
+		/** @param {{ id: string, selector: string, name: string }} preset */(preset) => {
+			if (!preset || typeof preset.selector !== 'string') {
+				return;
+			}
+			const presetId = typeof preset.id === 'string' ? preset.id.trim() : '';
+			const presetNm = typeof preset.name === 'string' ? preset.name.trim() : '';
+			onBaseSelectorChange(
+				preset.selector,
+				presetId !== '' ? { elementPresetId: presetId, elementPresetName: presetNm } : undefined
+			);
+			if (multiple && typeof preset.name === 'string' && preset.name.trim() !== '') {
+				onItemTitleChange(preset.name);
+			}
+		},
+		[onBaseSelectorChange, multiple, onItemTitleChange]
 	);
 
 	const unknownCount = Object.keys(sliceParsed.unknown).length;
@@ -729,17 +805,10 @@ export function StylingControlApp({ control, $ }) {
 
 	useLayoutEffect(() => {
 		if (!editorPopoverOpen) {
-			if (!multiple) {
-				setEditorPopoverAnchor(null);
-			}
 			setStatesPopoverOpen(false);
 			setStatesPopoverAnchor(null);
-			return;
 		}
-		if (!multiple) {
-			setEditorPopoverAnchor(editButtonRef.current);
-		}
-	}, [editorPopoverOpen, multiple]);
+	}, [editorPopoverOpen]);
 
 	useLayoutEffect(() => {
 		if (!statesPopoverOpen) {
@@ -759,14 +828,13 @@ export function StylingControlApp({ control, $ }) {
 
 	const closeEditorPopover = useCallback(() => {
 		editorPopoverOpenRef.current = false;
-		lastMultiEditorAnchorRef.current = null;
 		cancelPreviewPicker();
 		setEditorPopoverOpen(false);
 		setStatesPopoverOpen(false);
 		setStatesPopoverAnchor(null);
 		if (multiple) {
 			setEditingItemIndex(null);
-			setEditorPopoverAnchor(null);
+			setPendingAddFormOpen(false);
 		}
 	}, [multiple, cancelPreviewPicker]);
 
@@ -788,32 +856,6 @@ export function StylingControlApp({ control, $ }) {
 		});
 	}, [control.id, multiple, editingItemIndex, cancelPreviewPicker]);
 
-	const handlePopoverFocusOutside = useCallback(
-		(event) => {
-			if (previewPickerActiveRef.current) {
-				return;
-			}
-			if (shouldIgnoreStylingPopoverFocusOutside(event)) {
-				return;
-			}
-			// useFocusOutside runs in setTimeout(0). If focus moved to the same edit toggle button,
-			// closing here races the button click: close runs first → click then "opens" again.
-			const toggleAnchor = multiple ? lastMultiEditorAnchorRef.current : editButtonRef.current;
-			if (toggleAnchor instanceof HTMLElement) {
-				const rt = event && 'relatedTarget' in event ? event.relatedTarget : null;
-				if (rt instanceof HTMLElement && (rt === toggleAnchor || toggleAnchor.contains(rt))) {
-					return;
-				}
-				const ae = document.activeElement;
-				if (ae instanceof HTMLElement && (ae === toggleAnchor || toggleAnchor.contains(ae))) {
-					return;
-				}
-			}
-			closeEditorPopover();
-		},
-		[closeEditorPopover, multiple]
-	);
-
 	const toggleEditorPopover = useCallback(() => {
 		if (multiple) {
 			return;
@@ -827,13 +869,12 @@ export function StylingControlApp({ control, $ }) {
 	}, [multiple, closeEditorPopover]);
 
 	const toggleEditorForItem = useCallback(
-		(index, anchorEl) => {
+		(index) => {
+			setPendingAddFormOpen(false);
 			if (editorPopoverOpenRef.current && editingItemIndex === index) {
 				closeEditorPopover();
 				return;
 			}
-			lastMultiEditorAnchorRef.current = anchorEl;
-			setEditorPopoverAnchor(anchorEl);
 			setEditingItemIndex(index);
 			setStateIndex(0);
 			editorPopoverOpenRef.current = true;
@@ -859,7 +900,11 @@ export function StylingControlApp({ control, $ }) {
 		[multiple, value, commitRoot, editorPopoverOpen, editingItemIndex, closeEditorPopover]
 	);
 
-	const addItem = useCallback(() => {
+	const cancelPendingAdd = useCallback(() => {
+		setPendingAddFormOpen(false);
+	}, []);
+
+	const startPendingAdd = useCallback(() => {
 		if (!multiple || !defaultStylingPayload) {
 			return;
 		}
@@ -868,32 +913,76 @@ export function StylingControlApp({ control, $ }) {
 		if (!template || !Array.isArray(value.items)) {
 			return;
 		}
-		const id = `item-${Date.now().toString(36)}`;
-		const newItem = cloneValue(template);
-		newItem.id = id;
-		newItem.title = __('New item', 'onepress');
-		newItem.selector = '.new-target';
-		if (!newItem._meta || typeof newItem._meta !== 'object') {
-			newItem._meta = {};
+		if (editorPopoverOpenRef.current) {
+			editorPopoverOpenRef.current = false;
+			setEditorPopoverOpen(false);
+			setEditingItemIndex(null);
+			cancelPreviewPicker();
+			setStatesPopoverOpen(false);
+			setStatesPopoverAnchor(null);
 		}
-		newItem._meta.baseSelector = '.new-target';
-		const nextRoot = cloneValue(value);
-		nextRoot.items = [...nextRoot.items, newItem];
-		commitRoot(nextRoot);
-	}, [multiple, defaultStylingPayload, value, commitRoot]);
+		setPendingAddFormOpen(true);
+	}, [multiple, defaultStylingPayload, value, cancelPreviewPicker]);
+
+	const confirmPendingAddWithPreset = useCallback(
+		/** @param {{ id: string, selector: string, name: string }} preset */(preset) => {
+			if (!preset || typeof preset.selector !== 'string' || !multiple || !defaultStylingPayload) {
+				return;
+			}
+			const sel = preset.selector.trim();
+			if (sel === '') {
+				return;
+			}
+			const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
+			const template = items && items[0] ? cloneValue(items[0]) : null;
+			if (!template || !Array.isArray(value.items)) {
+				return;
+			}
+			const presetId = typeof preset.id === 'string' ? preset.id.trim() : '';
+			const newItem = cloneValue(template);
+			newItem.id = presetId !== '' ? presetId : `item-${Date.now().toString(36)}`;
+			const presetNm = typeof preset.name === 'string' ? preset.name.trim() : '';
+			newItem.title = presetNm !== '' ? presetNm : __('New item', 'onepress');
+			newItem.selector = sel;
+			if (!newItem._meta || typeof newItem._meta !== 'object') {
+				newItem._meta = {};
+			}
+			newItem._meta.baseSelector = sel;
+			if (presetId !== '') {
+				newItem._meta.elId = presetId;
+				if (presetNm !== '') {
+					newItem._meta.elName = presetNm;
+				} else {
+					delete newItem._meta.elName;
+				}
+			} else {
+				delete newItem._meta.elId;
+				delete newItem._meta.elName;
+			}
+			const nextRoot = cloneValue(value);
+			nextRoot.items = [...nextRoot.items, newItem];
+			const newIndex = nextRoot.items.length - 1;
+			commitRoot(nextRoot);
+			cancelPendingAdd();
+			setEditingItemIndex(newIndex);
+			setStateIndex(0);
+			editorPopoverOpenRef.current = true;
+			setEditorPopoverOpen(true);
+		},
+		[multiple, defaultStylingPayload, value, commitRoot, cancelPendingAdd]
+	);
 
 	const onResetToDefault = useCallback(() => {
 		if (!defaultStylingPayload) {
 			return;
 		}
 		editorPopoverOpenRef.current = false;
-		lastMultiEditorAnchorRef.current = null;
 		setStatesPopoverOpen(false);
 		setStatesPopoverAnchor(null);
 		setEditorPopoverOpen(false);
-		setEditorPopoverAnchor(null);
 		setEditingItemIndex(null);
 		setStateIndex(0);
+		setPendingAddFormOpen(false);
 		commitRoot(cloneValue(defaultStylingPayload));
 	}, [defaultStylingPayload, commitRoot]);
 
@@ -961,29 +1050,82 @@ export function StylingControlApp({ control, $ }) {
 	const stateTabCount = structuralStates.length;
 
 	const showStatesPopoverButton = statesStructureMode === 'all' || statesStructureMode === 'fixed';
-	/** Gear opens settings popover: full state UI, or target-only (item name / base selector) when states UI is off. */
-	const showEditorSettingsButton =
-		showStatesPopoverButton || multiple || !lockedBaseSelector;
 	const allowAddRemoveInStatesPopover = statesStructureMode === 'all';
+	const settingsPopoverUseful =
+		showStatesPopoverButton || multiple || !lockedBaseSelector;
+	const legacyHideToolbarActions = control.params.styling_hide_popover_heading === true;
+	const hideGearByParam =
+		legacyHideToolbarActions || control.params.styling_hide_gear_button === true;
+	const hidePreviewPickByParam =
+		legacyHideToolbarActions || control.params.styling_hide_preview_pick_button === true;
+	const showGearButton = !hideGearByParam && settingsPopoverUseful;
+	const showPreviewPickButton = !hidePreviewPickByParam && !lockedBaseSelector;
+	const gearButtonLabel = showStatesPopoverButton
+		? allowAddRemoveInStatesPopover
+			? __('Manage states', 'onepress')
+			: __('State settings', 'onepress')
+		: __('Settings', 'onepress');
 	const showStateTabButtons = stateTabCount > 1;
 	const showStatesToolbar = showStateTabButtons || showStatesPopoverButton;
 
-	const hidePopoverHeading = control.params.styling_hide_popover_heading === true;
 	const hideStateTablist = control.params.styling_hide_state_tablist === true;
-	const showHeadingRow = !hidePopoverHeading;
 	const showStateTablistBlock = showStatesToolbar && !hideStateTablist;
-	const showPopoverHeader = showHeadingRow || showStateTablistBlock;
 	const tablistVisibleForA11y = showStateTabButtons && !hideStateTablist;
 
-	const popoverTitle = multiple
-		? editorPayload
-			? sprintf(
-				/* translators: %s: item label */
-				__('Edit styling: %s', 'onepress'),
-				String(editorPayload.title || editorPayload.id || '')
-			)
-			: __('Edit styling', 'onepress')
-		: __('Edit styling', 'onepress');
+	const inlineEditorProps =
+		editorPopoverOpen && editorPayload
+			? {
+				visibleStylingGroupCount: visibleStylingGroupIds.length,
+				showGearButton,
+				showPreviewPickButton,
+				gearButtonLabel,
+				lockedBaseSelector,
+				editableBaseSelector,
+				allowAddRemoveInStatesPopover,
+				showStatesPopoverButton,
+				toggleStatesPopover,
+				statesPopoverOpen,
+				statesPopoverAnchor,
+				togglePreviewPicker,
+				previewPickerActive,
+				manageStatesButtonRef,
+				showStateTablistBlock,
+				multiple,
+				multiItemAwaitingPresetTarget,
+				showStateTabButtons,
+				statesList,
+				stateIndex,
+				setStateIndex,
+				onStateTabKeyDown,
+				stateTabPanelId,
+				getStateTabId,
+				tablistVisibleForA11y,
+				closeStatesPopover,
+				commitActiveItem,
+				editorPayload,
+				previewDeviceIds,
+				activeKey,
+				onBaseSelectorChange,
+				onItemTitleChange,
+				metaBaseSelector,
+				onSelectTargetPreset,
+				sliceParsed,
+				unknownCount,
+				onPatch,
+				sliceKey,
+				currentText,
+				onChangeText,
+				families,
+				localManagedFonts,
+				mergedForFontSlices,
+				fontFamilySource,
+				fontsLoading,
+				fontsError,
+				stylingGroups: control.params.styling_groups,
+				disabledFieldSet,
+				onCloseEditor: closeEditorPopover,
+			}
+			: null;
 
 	return (
 		<StylingDeviceProvider deviceId={deviceId} setDeviceId={setDeviceIdSynced} breakpoints={breakpoints}>
@@ -1010,12 +1152,10 @@ export function StylingControlApp({ control, $ }) {
 								</Button>
 								{!multiple ? (
 									<Button
-										ref={editButtonRef}
 										variant="secondary"
 										onClick={toggleEditorPopover}
 										isPressed={editorPopoverOpen}
 										aria-expanded={editorPopoverOpen}
-										aria-haspopup="dialog"
 										label={__('Edit styling', 'onepress')}
 										className='icon-btn'
 										size="small"
@@ -1027,314 +1167,114 @@ export function StylingControlApp({ control, $ }) {
 							</div>
 						</div>
 
+						{!multiple && inlineEditorProps ? (
+							<StylingInlineEditor key="styling-inline-single" {...inlineEditorProps} />
+						) : null}
+
 						{multiple ? (
 							<div className="onepress-styling-items mt-3">
 								<div className="flex flex-col gap-2">
 									{itemsList.map((item, index) => (
 										<div
 											key={item.id || `idx-${String(index)}`}
-											className="styling-list-item flex justify-between items-center gap-2"
+											className="onepress-styling-items__row flex flex-col gap-2"
 										>
-											<span className="grow truncate text-sm">
-												{item.title || item.id || sprintf(__('Item %d', 'onepress'), index + 1)}
-											</span>
+											<div className="styling-list-item flex justify-between items-center gap-2">
+												<span className="grow truncate text-sm">
+													{item.title || item.id || sprintf(__('Item %d', 'onepress'), index + 1)}
+												</span>
 
-											<div className="flex gap-2">
-												<Button
-													variant="minimal"
-													onClick={() => setResetConfirm({ kind: 'item', index })}
-													size="small"
-													disabled={!defaultStylingPayload}
-													label={__('Reset this item to default', 'onepress')}
-													showTooltip
-													className='icon-btn'
-												>
-													<Icon icon={rotateLeft} size={18} />
-												</Button>
-												<Button
-													variant="minimal"
-													onClick={() => setDeleteItemIndex(index)}
-													size="small"
-													disabled={itemsList.length <= 1}
-													label={__('Remove this item from the list', 'onepress')}
-													showTooltip
-													className="icon-btn"
-													isDestructive
-												>
-													<Icon icon={trash} size={18} />
-												</Button>
-												<Button
-													variant="secondary"
-													onClick={(e) => toggleEditorForItem(index, e.currentTarget)}
-													isPressed={editorPopoverOpen && editingItemIndex === index}
-													aria-expanded={editorPopoverOpen && editingItemIndex === index}
-													aria-haspopup="dialog"
-													label={__('Edit styling', 'onepress')}
-													showTooltip
-													size="small"
-													className='icon-btn'
-												>
-													<Icon icon={pencil} size={18} />
-												</Button>
+												<div className="flex gap-2">
+													<Button
+														variant="minimal"
+														onClick={() => setResetConfirm({ kind: 'item', index })}
+														size="small"
+														disabled={!defaultStylingPayload}
+														label={__('Reset this item to default', 'onepress')}
+														showTooltip
+														className='icon-btn'
+													>
+														<Icon icon={rotateLeft} size={18} />
+													</Button>
+													<Button
+														variant="minimal"
+														onClick={() => setDeleteItemIndex(index)}
+														size="small"
+														disabled={itemsList.length <= 1}
+														label={__('Remove this item from the list', 'onepress')}
+														showTooltip
+														className="icon-btn"
+														isDestructive
+													>
+														<Icon icon={trash} size={18} />
+													</Button>
+													<Button
+														variant="secondary"
+														onClick={() => toggleEditorForItem(index)}
+														isPressed={editorPopoverOpen && editingItemIndex === index}
+														aria-expanded={editorPopoverOpen && editingItemIndex === index}
+														label={__('Edit styling', 'onepress')}
+														showTooltip
+														size="small"
+														className='icon-btn'
+													>
+														{editorPopoverOpen && editingItemIndex === index
+															? <Icon icon={chevronUp} size={18} /> :
+															<Icon icon={chevronDown} size={18} />}
+													</Button>
+												</div>
 											</div>
+											{inlineEditorProps && editingItemIndex === index ? (
+												<StylingInlineEditor
+													key={item.id || `styling-inline-${String(index)}`}
+													{...inlineEditorProps}
+												/>
+											) : null}
 										</div>
 									))}
 								</div>
-								<div className='block mt-2'>
-									<Button variant="secondary" className="mt-2 p-0 h-auto" onClick={addItem}>
-										{__('Add item', 'onepress')}
-									</Button>
+								<div className="block mt-2" ref={pendingAddInlineRef}>
+									{pendingAddFormOpen ? (
+										<div className="onepress-styling-pending-add-inline">
+											<div className="onepress-styling-pending-add-inline__picker">
+												<p className="enum-label">{__('Target Element', 'onepress')}</p>
+												{getStylingTargetElementsRegistry().elements.length === 0 ? (
+													<p className="description">
+														{__('No targets are available.', 'onepress')}
+													</p>
+												) : (
+													<StylingTargetElementSelect
+														currentSelector=""
+														currentElId=""
+														selectedPresetName=""
+														onSelectPreset={confirmPendingAddWithPreset}
+														disabled={Boolean(lockedBaseSelector) || !editableBaseSelector}
+													/>
+												)}
+											</div>
+											<div className="onepress-styling-pending-add-inline__actions">
+												<Button variant="secondary" onClick={cancelPendingAdd}>
+													{__('Cancel', 'onepress')}
+												</Button>
+											</div>
+										</div>
+									) : (
+										<Button
+											variant="secondary"
+											className="mt-2 p-0 h-auto"
+											onClick={startPendingAdd}
+										>
+											{addItemLabel}
+										</Button>
+									)}
 								</div>
 							</div>
 						) : null}
 
+						{controlDescription ? (
+							<p className="description mt-2">{controlDescription}</p>
+						) : null}
 					</div>
-
-
-					{editorPopoverOpen && editorPopoverAnchor && editorPayload ? (
-						<Popover
-							anchor={editorPopoverAnchor}
-							onClose={closeEditorPopover}
-							onFocusOutside={handlePopoverFocusOutside}
-							placement="bottom-end"
-							offset={8}
-							className={`onepress-styling-editor-popover group-count-${String(visibleStylingGroupIds.length)}`}
-							// focusOnMount="firstElement"
-							noArrow={false}
-							shift
-						>
-
-							{showPopoverHeader ? (
-								<div className='popover-header'>
-									{showHeadingRow ? (
-										<div className='flex items-center gap-2 w-full justify-between'>
-											<div className="grow onepress-styling-editor-popover__title ">{popoverTitle}</div>
-											<div className='flex items-center gap-2'>
-												{showEditorSettingsButton ? (
-													<Button
-														ref={manageStatesButtonRef}
-														className="onepress-styling-manage-states icon-btn"
-														variant="secondary"
-														onClick={toggleStatesPopover}
-														aria-expanded={statesPopoverOpen}
-														aria-haspopup="dialog"
-														size="small"
-														label={
-															showStatesPopoverButton
-																? allowAddRemoveInStatesPopover
-																	? __('Manage states', 'onepress')
-																	: __('State settings', 'onepress')
-																: __('Settings', 'onepress')
-														}
-														showTooltip
-
-													>
-														<Icon icon={settings} size={20} />
-													</Button>
-												) : null}
-
-												{!lockedBaseSelector ? (<>
-													<Button
-														variant="secondary"
-														onClick={togglePreviewPicker}
-														isPressed={previewPickerActive}
-														disabled={!editableBaseSelector}
-														size="small"
-														label={
-															previewPickerActive
-																? __('Cancel picking from preview', 'onepress')
-																: __('Pick a selector from the site preview', 'onepress')
-														}
-														showTooltip
-														className='icon-btn'
-													>
-														{previewPickerActive
-															? <Icon icon={close} size={18} />
-															: <IconTarget size={18} />
-														}
-													</Button>
-												</>) : null}
-
-											</div>
-										</div>
-									) : null}
-
-									{!showHeadingRow && showEditorSettingsButton ? (
-										<div className="flex items-center gap-2 w-full justify-end onepress-styling-editor-popover__header-tools">
-											<Button
-												ref={manageStatesButtonRef}
-												className="onepress-styling-manage-states icon-btn"
-												variant="secondary"
-												onClick={toggleStatesPopover}
-												aria-expanded={statesPopoverOpen}
-												aria-haspopup="dialog"
-												size="small"
-												label={
-													showStatesPopoverButton
-														? allowAddRemoveInStatesPopover
-															? __('Manage states', 'onepress')
-															: __('State settings', 'onepress')
-														: __('Settings', 'onepress')
-												}
-												showTooltip
-											>
-												<Icon icon={settings} size={20} />
-											</Button>
-											{!lockedBaseSelector ? (
-												<Button
-													variant="secondary"
-													onClick={togglePreviewPicker}
-													isPressed={previewPickerActive}
-													disabled={!editableBaseSelector}
-													size="small"
-													label={
-														previewPickerActive
-															? __('Cancel picking from preview', 'onepress')
-															: __('Pick a selector from the site preview', 'onepress')
-													}
-													showTooltip
-													className="icon-btn"
-												>
-													{previewPickerActive ? (
-														<Icon icon={close} size={18} />
-													) : (
-														<IconTarget size={18} />
-													)}
-												</Button>
-											) : null}
-										</div>
-									) : null}
-
-									{showStateTablistBlock ? (
-										<div className=" onepress-styling styling-root">
-											<div className="states">
-												<div className="states-toolbar flex flex gap-2 justify-between items-center">
-													{showStateTabButtons ? (
-														<div className="state-tablist-scroll">
-															<div
-																className="state-tablist-inner  components-button-group "
-																role="tablist"
-																aria-label={__('Style states', 'onepress')}
-															>
-																{statesList.map((s, i) => (
-																	<Button
-																		key={s.key}
-																		id={getStateTabId(i)}
-																		aria-selected={i === stateIndex}
-																		aria-controls={stateTabPanelId}
-																		tabIndex={i === stateIndex ? 0 : -1}
-																		variant="unstyled"
-																		onClick={() => setStateIndex(i)}
-																		onKeyDown={(e) => onStateTabKeyDown(e, i)}
-																		className={`tab-button ${i === stateIndex ? ' is-active' : ''}`}
-																	>
-																		{s.label}
-																	</Button>
-																))}
-															</div>
-														</div>
-													) : (
-														<span className="grow" aria-hidden />
-													)}
-												</div>
-											</div>
-										</div>
-									) : null}
-
-								</div>
-							) : null}
-
-							<div
-								className="popover-body grow styling-root onepress-styling onepress-styling-editor-popover__inner"
-								role={tablistVisibleForA11y ? 'tabpanel' : undefined}
-								id={tablistVisibleForA11y ? stateTabPanelId : undefined}
-								aria-labelledby={tablistVisibleForA11y ? getStateTabId(stateIndex) : undefined}
-							>
-
-								{!showPopoverHeader && showEditorSettingsButton ? (
-									<div className="flex items-center gap-2 w-full justify-end pb-2 mb-2 onepress-styling-editor-popover__header-tools">
-										<Button
-											ref={manageStatesButtonRef}
-											className="onepress-styling-manage-states icon-btn"
-											variant="secondary"
-											onClick={toggleStatesPopover}
-											aria-expanded={statesPopoverOpen}
-											aria-haspopup="dialog"
-											size="small"
-											label={
-												showStatesPopoverButton
-													? allowAddRemoveInStatesPopover
-														? __('Manage states', 'onepress')
-														: __('State settings', 'onepress')
-													: __('Settings', 'onepress')
-											}
-											showTooltip
-										>
-											<Icon icon={settings} size={20} />
-										</Button>
-										{!lockedBaseSelector ? (
-											<Button
-												variant="secondary"
-												onClick={togglePreviewPicker}
-												isPressed={previewPickerActive}
-												disabled={!editableBaseSelector}
-												size="small"
-												label={
-													previewPickerActive
-														? __('Cancel picking from preview', 'onepress')
-														: __('Pick a selector from the site preview', 'onepress')
-												}
-												showTooltip
-												className="icon-btn"
-											>
-												{previewPickerActive ? (
-													<Icon icon={close} size={18} />
-												) : (
-													<IconTarget size={18} />
-												)}
-											</Button>
-										) : null}
-									</div>
-								) : null}
-
-								{showEditorSettingsButton ? (
-									<StylingSettingsPopover
-										anchor={statesPopoverAnchor}
-										isOpen={statesPopoverOpen}
-										onClose={closeStatesPopover}
-										value={editorPayload}
-										commit={commitActiveItem}
-										previewDeviceIds={previewDeviceIds}
-										activeStateKey={activeKey}
-										setStateIndex={setStateIndex}
-										allowAddRemoveStates={allowAddRemoveInStatesPopover}
-										multiple={multiple}
-										lockedBaseSelector={lockedBaseSelector}
-										editableBaseSelector={editableBaseSelector}
-										metaBaseSelector={metaBaseSelector}
-										onBaseSelectorChange={onBaseSelectorChange}
-										onItemTitleChange={onItemTitleChange}
-										showStatesSection={showStatesPopoverButton}
-									/>
-								) : null}
-
-								<StylingAccordionPanels
-									model={sliceParsed.model}
-									unknownCount={unknownCount}
-									onPatch={onPatch}
-									sliceKey={sliceKey}
-									rawCss={currentText}
-									onRawChange={onChangeText}
-									families={families}
-									fontsLoading={fontsLoading}
-									fontsError={fontsError}
-									stylingGroups={control.params.styling_groups}
-									disabledFieldSet={disabledFieldSet}
-								/>
-
-							</div>
-						</Popover>
-					) : null}
 				</div>
 
 				<div className="onepress-styling-pick-snackbar-wrap" aria-live="polite">

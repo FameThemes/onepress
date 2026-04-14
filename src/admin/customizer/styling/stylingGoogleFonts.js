@@ -1,8 +1,11 @@
 /**
  * _meta.fontSlices + merged Google Fonts CSS2 URLs (preview + PHP mirror).
+ * Font manager families override styling axis sets for the same Google display name.
  */
 import { parseDeclarationForm } from './declarationForm';
 import { findFamilyForModel } from './googleFontCollection';
+import { normalizeFontManagerItem, parseFontManagerSetting } from '../font-manager/fontManagerModel';
+import { isValidFontManagerVariationPair } from '../font-manager/fontManagerGoogleCss2';
 
 /** @typedef {{ source: string, slug: string, family: string }} FontSliceMeta */
 
@@ -206,6 +209,130 @@ export function collectMergedGoogleFontAxes(values) {
 		mergeGoogleFontAxesInto(acc, v);
 	}
 	return acc;
+}
+
+/**
+ * @param {unknown[]} items Font manager `items` rows
+ * @returns {Map<string, Set<string>>}
+ */
+export function collectGoogleFontAxesFromFontManagerItems(items) {
+	const acc = new Map();
+	if (!Array.isArray(items)) {
+		return acc;
+	}
+	for (const row of items) {
+		const item = normalizeFontManagerItem(row);
+		if (!item.isGoogleFamily) {
+			continue;
+		}
+		const fam = String(item.googleName || '').trim();
+		if (!fam) {
+			continue;
+		}
+		const rawVars = Array.isArray(item.variations) ? item.variations : [];
+		const vars = rawVars.map((p) => String(p).trim()).filter(isValidFontManagerVariationPair);
+		const useVars = vars.length ? vars : ['0,400'];
+		if (!acc.has(fam)) {
+			acc.set(fam, new Set());
+		}
+		const set = acc.get(fam);
+		for (const v of useVars) {
+			set.add(v);
+		}
+	}
+	return acc;
+}
+
+/**
+ * Google display name → axis pairs from font manager JSON (all registered items).
+ *
+ * @param {unknown} raw theme_mod get() string or object
+ * @returns {Map<string, Set<string>>}
+ */
+export function collectGoogleFontAxesFromFontManagerSettingRaw(raw) {
+	const parsed = parseFontManagerSetting(raw);
+	return collectGoogleFontAxesFromFontManagerItems(parsed?.items || []);
+}
+
+/**
+ * Plain object for postMessage (family → axis pairs).
+ *
+ * @param {unknown[]} items
+ * @returns {Record<string, string[]>}
+ */
+export function fontManagerItemsToGoogleAxesPlainObject(items) {
+	const map = collectGoogleFontAxesFromFontManagerItems(items);
+	/** @type {Record<string, string[]>} */
+	const o = {};
+	for (const [fam, set] of map) {
+		o[fam] = [...set].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+	}
+	return o;
+}
+
+/**
+ * Merge axes from several font manager theme_mods (union per family).
+ *
+ * @param {*} api wp.customize
+ * @param {string[]} fontManagerSettingIds
+ * @returns {Map<string, Set<string>>}
+ */
+/**
+ * @param {Map<string, Set<string>>} into
+ * @param {Map<string, Set<string>>} partial
+ */
+function mergeGoogleAxesMaps(into, partial) {
+	for (const [fam, set] of partial) {
+		if (!into.has(fam)) {
+			into.set(fam, new Set());
+		}
+		const target = into.get(fam);
+		for (const p of set) {
+			target.add(p);
+		}
+	}
+}
+
+/**
+ * @param {*} api wp.customize
+ * @param {string[]} fontManagerSettingIds
+ * @param {Record<string, Map<string, Set<string>>> | null | undefined} liveBySetting — optional unsaved draft axes per setting id
+ */
+export function collectMergedGoogleFontAxesFromFontManagerSettings(api, fontManagerSettingIds, liveBySetting) {
+	const merged = new Map();
+	for (const id of fontManagerSettingIds) {
+		const live = liveBySetting && liveBySetting[id];
+		if (live && live.size) {
+			mergeGoogleAxesMaps(merged, live);
+			continue;
+		}
+		try {
+			const v = api(id);
+			if (!v || typeof v.get !== 'function') {
+				continue;
+			}
+			const partial = collectGoogleFontAxesFromFontManagerSettingRaw(v.get());
+			mergeGoogleAxesMaps(merged, partial);
+		} catch {
+			continue;
+		}
+	}
+	return merged;
+}
+
+/**
+ * Styling-derived axes first; for every family in fontManagerMap, replace with font manager’s full variant set.
+ *
+ * @param {Map<string, Set<string>>} stylingMap
+ * @param {Map<string, Set<string>>} fontManagerMap
+ * @returns {Map<string, Set<string>>}
+ */
+export function mergeGoogleFontAxesFontManagerPriority(stylingMap, fontManagerMap) {
+	const out = new Map(stylingMap);
+	for (const [fam, set] of fontManagerMap) {
+		out.set(fam, new Set(set));
+	}
+	return out;
 }
 
 /**

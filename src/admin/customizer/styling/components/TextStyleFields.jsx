@@ -10,13 +10,17 @@ import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
 import { StylingAlphaColorControl } from './StylingAlphaColorControl';
 import { StylingFontFaceSelectControls } from './StylingFontFaceSelectControls';
 import { StylingGoogleFontFamilyControl } from './StylingGoogleFontFamilyControl';
+import { StylingLocalFontFamilyControl } from './StylingLocalFontFamilyControl';
 import { isFieldDisabled } from '../stylingDisableFields';
 
 /**
  * @param {object} props
  * @param {Record<string, string>} props.model
  * @param {(patch: Record<string, string>) => void} props.onPatch
- * @param {import('../googleFontCollection').PickerFontFamily[]} props.families
+ * @param {import('../googleFontCollection').PickerFontFamily[]} props.families — Google catalog (picker when source is google)
+ * @param {import('../googleFontCollection').PickerFontFamily[]} [props.localFontFamilies] — Font manager list (picker when source is local)
+ * @param {import('../googleFontCollection').PickerFontFamily[]} [props.faceResolveFamilies] — merged local + Google for weight/style + font slices
+ * @param {'google'|'local'} [props.fontFamilySource]
  * @param {boolean} [props.fontsLoading]
  * @param {Error | null} [props.fontsError]
  * @param {Set<string> | null | undefined} [props.disabledFieldSet]
@@ -25,11 +29,16 @@ export function TextStyleFields({
 	model,
 	onPatch,
 	families,
+	localFontFamilies,
+	faceResolveFamilies,
+	fontFamilySource = 'local',
 	fontsLoading = false,
 	fontsError = null,
 	disabledFieldSet,
 }) {
-	const list = families ?? mergePickerFamilies(null);
+	const googleList = families ?? mergePickerFamilies(null);
+	const resolveList = faceResolveFamilies ?? googleList;
+	const localList = localFontFamilies ?? [];
 	const loading = fontsLoading;
 	const error = fontsError;
 	const d = disabledFieldSet;
@@ -45,14 +54,22 @@ export function TextStyleFields({
 			/>
 			{dis('fontFamily') ? null : (
 				<BaseControl label={__('Font family', 'onepress')} className="styling-text-font-family">
-					<StylingGoogleFontFamilyControl
-						value={model.fontFamily || ''}
-						onPatch={onPatch}
-						families={list}
-						loading={loading}
-						error={error}
-					/>
-					{error && !loading ? (
+					{fontFamilySource === 'local' ? (
+						<StylingLocalFontFamilyControl
+							value={model.fontFamily || ''}
+							onPatch={onPatch}
+							families={localList}
+						/>
+					) : (
+						<StylingGoogleFontFamilyControl
+							value={model.fontFamily || ''}
+							onPatch={onPatch}
+							families={googleList}
+							loading={loading}
+							error={error}
+						/>
+					)}
+					{fontFamilySource !== 'local' && error && !loading ? (
 						<TextControl
 							__nextHasNoMarginBottom
 							label={__('Font family (CSS fallback)', 'onepress')}
@@ -62,7 +79,7 @@ export function TextStyleFields({
 					) : null}
 				</BaseControl>
 			)}
-			<StylingFontFaceSelectControls model={model} onPatch={onPatch} families={list} disabledFieldSet={d} />
+			<StylingFontFaceSelectControls model={model} onPatch={onPatch} families={resolveList} disabledFieldSet={d} />
 			<ResponsiveUnitSliderField
 				label={__('Font size', 'onepress')}
 				value={model.fontSize || ''}

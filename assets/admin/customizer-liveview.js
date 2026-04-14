@@ -2,6 +2,346 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/admin/customizer/font-manager/font-manager-preview.js"
+/*!*******************************************************************!*\
+  !*** ./src/admin/customizer/font-manager/font-manager-preview.js ***!
+  \*******************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   bindOnepressFontManagerPreview: () => (/* binding */ bindOnepressFontManagerPreview)
+/* harmony export */ });
+/* harmony import */ var _styling_unifiedCustomizerGoogleFonts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../styling/unifiedCustomizerGoogleFonts */ "./src/admin/customizer/styling/unifiedCustomizerGoogleFonts.js");
+/* harmony import */ var _fontManagerPreviewConstants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fontManagerPreviewConstants */ "./src/admin/customizer/font-manager/fontManagerPreviewConstants.js");
+/**
+ * Customizer preview iframe: refresh merged Google Fonts when font manager settings change (see unifiedCustomizerGoogleFonts).
+ */
+
+
+
+/** @type {boolean} */
+let fontManagerPreviewListenersBound = false;
+
+/**
+ * @param {JQueryStatic} $ jQuery
+ * @param {*} api wp.customize
+ * @param {string[]} [settingIds]
+ */
+function bindOnepressFontManagerPreview($, api, settingIds) {
+  const fromWindow = typeof window !== 'undefined' && window.onepressFontManagerPreview && Array.isArray(window.onepressFontManagerPreview.settingIds) && window.onepressFontManagerPreview.settingIds.length ? window.onepressFontManagerPreview.settingIds.map(String) : null;
+  const ids = (settingIds && settingIds.length ? settingIds : fromWindow) || ['onepress_font_manager'];
+  function paintMerged() {
+    (0,_styling_unifiedCustomizerGoogleFonts__WEBPACK_IMPORTED_MODULE_0__.paintMergedCustomizerGoogleFonts)($, api);
+  }
+  if (!fontManagerPreviewListenersBound) {
+    fontManagerPreviewListenersBound = true;
+    if (api.preview && typeof api.preview.bind === 'function') {
+      api.preview.bind(_fontManagerPreviewConstants__WEBPACK_IMPORTED_MODULE_1__.ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE, data => {
+        const sid = typeof data?.settingId === 'string' ? data.settingId.trim() : '';
+        if (sid && data?.axesByFamily && typeof data.axesByFamily === 'object') {
+          (0,_styling_unifiedCustomizerGoogleFonts__WEBPACK_IMPORTED_MODULE_0__.setLiveFontManagerGoogleAxesFromPlain)(sid, data.axesByFamily);
+        }
+        paintMerged();
+      });
+    }
+    for (const id of ids) {
+      try {
+        api(id, value => {
+          value.bind(() => {
+            (0,_styling_unifiedCustomizerGoogleFonts__WEBPACK_IMPORTED_MODULE_0__.clearLiveFontManagerGoogleAxes)(id);
+            paintMerged();
+          });
+        });
+      } catch {
+        continue;
+      }
+    }
+  }
+  paintMerged();
+}
+
+/***/ },
+
+/***/ "./src/admin/customizer/font-manager/fontManagerGoogleCss2.js"
+/*!********************************************************************!*\
+  !*** ./src/admin/customizer/font-manager/fontManagerGoogleCss2.js ***!
+  \********************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fontManagerGoogleItemToCss2Href: () => (/* binding */ fontManagerGoogleItemToCss2Href),
+/* harmony export */   googleCss2HrefForFontManagerFamily: () => (/* binding */ googleCss2HrefForFontManagerFamily),
+/* harmony export */   isValidFontManagerVariationPair: () => (/* binding */ isValidFontManagerVariationPair),
+/* harmony export */   uniqueGoogleFontManagerCss2Hrefs: () => (/* binding */ uniqueGoogleFontManagerCss2Hrefs)
+/* harmony export */ });
+/**
+ * Google Fonts CSS2 URLs for font manager items (mirror PHP onepress_font_manager_google_css2_href).
+ */
+
+/** @typedef {import('./fontManagerModel').FontManagerItem} FontManagerItem */
+
+/**
+ * @param {string} pair
+ * @returns {boolean}
+ */
+function isValidFontManagerVariationPair(pair) {
+  return /^[01],\d{3}$/.test(String(pair || '').trim());
+}
+
+/**
+ * @param {string} googleDisplayName — API family name (e.g. "Open Sans")
+ * @param {string[]} variations — "ital,wght" tokens e.g. "0,400"
+ * @returns {string}
+ */
+function googleCss2HrefForFontManagerFamily(googleDisplayName, variations) {
+  const name = String(googleDisplayName || '').trim();
+  if (!name) {
+    return '';
+  }
+  const raw = Array.isArray(variations) ? variations : [];
+  const pairs = [...new Set(raw.map(p => String(p).trim()).filter(isValidFontManagerVariationPair))].sort();
+  const usePairs = pairs.length ? pairs : ['0,400'];
+  const enc = encodeURIComponent(name).replace(/%20/g, '+');
+  return `https://fonts.googleapis.com/css2?family=${enc}:ital,wght@${usePairs.join(';')}&display=swap`;
+}
+
+/**
+ * @param {FontManagerItem | null | undefined} item
+ * @returns {string}
+ */
+function fontManagerGoogleItemToCss2Href(item) {
+  if (!item || !item.isGoogleFamily) {
+    return '';
+  }
+  const gn = String(item.googleName || '').trim();
+  if (!gn) {
+    return '';
+  }
+  return googleCss2HrefForFontManagerFamily(gn, item.variations);
+}
+
+/**
+ * @param {FontManagerItem[]} items
+ * @returns {string[]} unique hrefs
+ */
+function uniqueGoogleFontManagerCss2Hrefs(items) {
+  const seen = new Set();
+  const out = [];
+  for (const item of items) {
+    const h = fontManagerGoogleItemToCss2Href(item);
+    if (h && !seen.has(h)) {
+      seen.add(h);
+      out.push(h);
+    }
+  }
+  return out;
+}
+
+/***/ },
+
+/***/ "./src/admin/customizer/font-manager/fontManagerModel.js"
+/*!***************************************************************!*\
+  !*** ./src/admin/customizer/font-manager/fontManagerModel.js ***!
+  \***************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   defaultFontManagerValue: () => (/* binding */ defaultFontManagerValue),
+/* harmony export */   displayNameForItem: () => (/* binding */ displayNameForItem),
+/* harmony export */   emptyFontItem: () => (/* binding */ emptyFontItem),
+/* harmony export */   newFontItemId: () => (/* binding */ newFontItemId),
+/* harmony export */   normalizeFontManagerItem: () => (/* binding */ normalizeFontManagerItem),
+/* harmony export */   normalizeFontManagerValue: () => (/* binding */ normalizeFontManagerValue),
+/* harmony export */   parseFontManagerSetting: () => (/* binding */ parseFontManagerSetting)
+/* harmony export */ });
+/**
+ * Font manager JSON: list of font items (mirror PHP onepress_font_manager_*).
+ */
+
+/**
+ * @typedef {{
+ *   id: string,
+ *   fontFamily: string,
+ *   googleSlug: string,
+ *   googleName: string,
+ *   isGoogleFamily: boolean,
+ *   variations: string[]
+ * }} FontManagerItem
+ */
+
+/**
+ * @typedef {{ _onepressFontManager: true, items: FontManagerItem[] }} FontManagerValue
+ */
+
+/**
+ * @returns {string}
+ */
+function newFontItemId() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return `font-${crypto.randomUUID()}`;
+  }
+  return `font-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+/**
+ * @returns {FontManagerItem}
+ */
+function emptyFontItem() {
+  return {
+    id: newFontItemId(),
+    fontFamily: '',
+    googleSlug: '',
+    googleName: '',
+    isGoogleFamily: false,
+    variations: []
+  };
+}
+
+/**
+ * @param {unknown} raw
+ * @returns {FontManagerItem}
+ */
+function normalizeFontManagerItem(raw) {
+  const base = emptyFontItem();
+  if (!raw || typeof raw !== 'object') {
+    return base;
+  }
+  const o = /** @type {Record<string, unknown>} */raw;
+  let id = typeof o.id === 'string' ? o.id.trim() : '';
+  if (!id) {
+    id = newFontItemId();
+  }
+  const vars = [];
+  if (Array.isArray(o.variations)) {
+    for (const v of o.variations) {
+      const s = typeof v === 'string' ? v.trim() : '';
+      if (/^[01],\d{3}$/.test(s)) {
+        vars.push(s);
+      }
+    }
+  }
+  return {
+    id,
+    fontFamily: typeof o.fontFamily === 'string' ? o.fontFamily.trim() : '',
+    googleSlug: typeof o.googleSlug === 'string' ? o.googleSlug.trim() : '',
+    googleName: typeof o.googleName === 'string' ? o.googleName.trim() : '',
+    isGoogleFamily: Boolean(o.isGoogleFamily),
+    variations: [...new Set(vars)]
+  };
+}
+
+/**
+ * @returns {FontManagerValue}
+ */
+function defaultFontManagerValue() {
+  return {
+    _onepressFontManager: true,
+    items: []
+  };
+}
+
+/**
+ * Legacy root (single font fields on root) → items[0].
+ *
+ * @param {Record<string, unknown>} o
+ * @returns {FontManagerValue | null}
+ */
+function migrateLegacyRootToItems(o) {
+  const hasLegacy = typeof o.fontFamily === 'string' && o.fontFamily.trim() !== '' || typeof o.googleSlug === 'string' && o.googleSlug.trim() !== '';
+  if (!hasLegacy) {
+    return null;
+  }
+  const item = normalizeFontManagerItem({
+    ...o,
+    id: typeof o.id === 'string' && o.id.trim() ? o.id : 'migrated-1'
+  });
+  return {
+    _onepressFontManager: true,
+    items: [item]
+  };
+}
+
+/**
+ * @param {unknown} raw
+ * @returns {FontManagerValue}
+ */
+function normalizeFontManagerValue(raw) {
+  const base = defaultFontManagerValue();
+  if (!raw || typeof raw !== 'object') {
+    return base;
+  }
+  const o = /** @type {Record<string, unknown>} */raw;
+  if (!o._onepressFontManager) {
+    return base;
+  }
+  if (Array.isArray(o.items)) {
+    const items = o.items.map(it => normalizeFontManagerItem(it));
+    return {
+      _onepressFontManager: true,
+      items
+    };
+  }
+  const migrated = migrateLegacyRootToItems(o);
+  if (migrated) {
+    return migrated;
+  }
+  return base;
+}
+
+/**
+ * @param {unknown} raw
+ * @returns {FontManagerValue}
+ */
+function parseFontManagerSetting(raw) {
+  if (typeof raw === 'string' && raw.trim() !== '') {
+    try {
+      return normalizeFontManagerValue(JSON.parse(raw));
+    } catch {
+      return defaultFontManagerValue();
+    }
+  }
+  if (raw && typeof raw === 'object') {
+    return normalizeFontManagerValue(raw);
+  }
+  return defaultFontManagerValue();
+}
+
+/**
+ * @param {FontManagerItem} item
+ * @returns {string}
+ */
+function displayNameForItem(item) {
+  if (item.googleName) {
+    return item.googleName;
+  }
+  const ff = item.fontFamily.trim();
+  if (ff) {
+    const first = ff.split(',')[0].trim().replace(/^["']|["']$/g, '');
+    return first || ff;
+  }
+  return '';
+}
+
+/***/ },
+
+/***/ "./src/admin/customizer/font-manager/fontManagerPreviewConstants.js"
+/*!**************************************************************************!*\
+  !*** ./src/admin/customizer/font-manager/fontManagerPreviewConstants.js ***!
+  \**************************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE: () => (/* binding */ ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE)
+/* harmony export */ });
+/** Message channel: controls pane → preview iframe (Google font link hrefs). */
+const ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE = 'onepress-font-manager-preview-fonts';
+
+/***/ },
+
 /***/ "./src/admin/customizer/styling/buildStylingCss.js"
 /*!*********************************************************!*\
   !*** ./src/admin/customizer/styling/buildStylingCss.js ***!
@@ -655,7 +995,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   bindOnepressStylingPreview: () => (/* binding */ bindOnepressStylingPreview)
 /* harmony export */ });
 /* harmony import */ var _buildStylingCss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./buildStylingCss */ "./src/admin/customizer/styling/buildStylingCss.js");
-/* harmony import */ var _stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./stylingGoogleFonts */ "./src/admin/customizer/styling/stylingGoogleFonts.js");
+/* harmony import */ var _unifiedCustomizerGoogleFonts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./unifiedCustomizerGoogleFonts */ "./src/admin/customizer/styling/unifiedCustomizerGoogleFonts.js");
 /* harmony import */ var _stylingSelectorPickPreview__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stylingSelectorPickPreview */ "./src/admin/customizer/styling/stylingSelectorPickPreview.js");
 /**
  * Customizer preview iframe: apply styling theme_mods as <style> tags + one merged Google Fonts stylesheet.
@@ -666,8 +1006,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /** Fallback when `onepressStylingPreview.settingIds` is missing — keep in sync with `onepress_styling_default_theme_mod_setting_ids()` (PHP). */
 const DEFAULT_SETTING_IDS = ['onepress_styling_body', 'onepress_styling_h1', 'onepress_styling_h2', 'onepress_styling_h3', 'onepress_styling_h4', 'onepress_styling_h5', 'onepress_styling_h6', 'onepress_styling_nav', 'onepress_styling_branding', 'onepress_styling_tagline', 'onepress_element_styling', 'onepress_element_styling_single', 'onepress_element_styling_fixed_states'];
-const GOOGLE_LINK_ID = 'onepress-styling-google-fonts-preview';
-
 /** Avoid duplicate value.bind when preview-ready runs more than once (iframe refresh). */
 let stylingPreviewListenersBound = false;
 
@@ -719,17 +1057,7 @@ function bindOnepressStylingPreview($, api, settingIds = DEFAULT_SETTING_IDS) {
         continue;
       }
     }
-    const merged = (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_1__.collectMergedGoogleFontAxes)(values);
-    const href = (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_1__.buildGoogleFontsCss2Href)(merged);
-    let $link = $(`link#${GOOGLE_LINK_ID}`);
-    if (!href) {
-      $link.remove();
-      return;
-    }
-    if (!$link.length) {
-      $link = $('<link rel="stylesheet" />').attr('id', GOOGLE_LINK_ID).attr('crossorigin', 'anonymous').appendTo('head');
-    }
-    $link.attr('href', href);
+    (0,_unifiedCustomizerGoogleFonts__WEBPACK_IMPORTED_MODULE_1__.paintMergedCustomizerGoogleFonts)($, api);
   }
   if (!stylingPreviewListenersBound) {
     stylingPreviewListenersBound = true;
@@ -758,8 +1086,13 @@ function bindOnepressStylingPreview($, api, settingIds = DEFAULT_SETTING_IDS) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   buildGoogleFontsCss2Href: () => (/* binding */ buildGoogleFontsCss2Href),
+/* harmony export */   collectGoogleFontAxesFromFontManagerItems: () => (/* binding */ collectGoogleFontAxesFromFontManagerItems),
+/* harmony export */   collectGoogleFontAxesFromFontManagerSettingRaw: () => (/* binding */ collectGoogleFontAxesFromFontManagerSettingRaw),
 /* harmony export */   collectMergedGoogleFontAxes: () => (/* binding */ collectMergedGoogleFontAxes),
+/* harmony export */   collectMergedGoogleFontAxesFromFontManagerSettings: () => (/* binding */ collectMergedGoogleFontAxesFromFontManagerSettings),
+/* harmony export */   fontManagerItemsToGoogleAxesPlainObject: () => (/* binding */ fontManagerItemsToGoogleAxesPlainObject),
 /* harmony export */   googleAxisPairFromSlice: () => (/* binding */ googleAxisPairFromSlice),
+/* harmony export */   mergeGoogleFontAxesFontManagerPriority: () => (/* binding */ mergeGoogleFontAxesFontManagerPriority),
 /* harmony export */   mergeGoogleFontAxesInto: () => (/* binding */ mergeGoogleFontAxesInto),
 /* harmony export */   normalizeFontWeightForGoogle: () => (/* binding */ normalizeFontWeightForGoogle),
 /* harmony export */   normalizeItalForGoogle: () => (/* binding */ normalizeItalForGoogle),
@@ -767,9 +1100,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _declarationForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./declarationForm */ "./src/admin/customizer/styling/declarationForm.js");
 /* harmony import */ var _googleFontCollection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./googleFontCollection */ "./src/admin/customizer/styling/googleFontCollection.js");
+/* harmony import */ var _font_manager_fontManagerModel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../font-manager/fontManagerModel */ "./src/admin/customizer/font-manager/fontManagerModel.js");
+/* harmony import */ var _font_manager_fontManagerGoogleCss2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../font-manager/fontManagerGoogleCss2 */ "./src/admin/customizer/font-manager/fontManagerGoogleCss2.js");
 /**
  * _meta.fontSlices + merged Google Fonts CSS2 URLs (preview + PHP mirror).
+ * Font manager families override styling axis sets for the same Google display name.
  */
+
+
 
 
 
@@ -981,6 +1319,132 @@ function collectMergedGoogleFontAxes(values) {
     mergeGoogleFontAxesInto(acc, v);
   }
   return acc;
+}
+
+/**
+ * @param {unknown[]} items Font manager `items` rows
+ * @returns {Map<string, Set<string>>}
+ */
+function collectGoogleFontAxesFromFontManagerItems(items) {
+  const acc = new Map();
+  if (!Array.isArray(items)) {
+    return acc;
+  }
+  for (const row of items) {
+    const item = (0,_font_manager_fontManagerModel__WEBPACK_IMPORTED_MODULE_2__.normalizeFontManagerItem)(row);
+    if (!item.isGoogleFamily) {
+      continue;
+    }
+    const fam = String(item.googleName || '').trim();
+    if (!fam) {
+      continue;
+    }
+    const rawVars = Array.isArray(item.variations) ? item.variations : [];
+    const vars = rawVars.map(p => String(p).trim()).filter(_font_manager_fontManagerGoogleCss2__WEBPACK_IMPORTED_MODULE_3__.isValidFontManagerVariationPair);
+    const useVars = vars.length ? vars : ['0,400'];
+    if (!acc.has(fam)) {
+      acc.set(fam, new Set());
+    }
+    const set = acc.get(fam);
+    for (const v of useVars) {
+      set.add(v);
+    }
+  }
+  return acc;
+}
+
+/**
+ * Google display name → axis pairs from font manager JSON (all registered items).
+ *
+ * @param {unknown} raw theme_mod get() string or object
+ * @returns {Map<string, Set<string>>}
+ */
+function collectGoogleFontAxesFromFontManagerSettingRaw(raw) {
+  const parsed = (0,_font_manager_fontManagerModel__WEBPACK_IMPORTED_MODULE_2__.parseFontManagerSetting)(raw);
+  return collectGoogleFontAxesFromFontManagerItems(parsed?.items || []);
+}
+
+/**
+ * Plain object for postMessage (family → axis pairs).
+ *
+ * @param {unknown[]} items
+ * @returns {Record<string, string[]>}
+ */
+function fontManagerItemsToGoogleAxesPlainObject(items) {
+  const map = collectGoogleFontAxesFromFontManagerItems(items);
+  /** @type {Record<string, string[]>} */
+  const o = {};
+  for (const [fam, set] of map) {
+    o[fam] = [...set].sort((a, b) => a.localeCompare(b, undefined, {
+      numeric: true
+    }));
+  }
+  return o;
+}
+
+/**
+ * Merge axes from several font manager theme_mods (union per family).
+ *
+ * @param {*} api wp.customize
+ * @param {string[]} fontManagerSettingIds
+ * @returns {Map<string, Set<string>>}
+ */
+/**
+ * @param {Map<string, Set<string>>} into
+ * @param {Map<string, Set<string>>} partial
+ */
+function mergeGoogleAxesMaps(into, partial) {
+  for (const [fam, set] of partial) {
+    if (!into.has(fam)) {
+      into.set(fam, new Set());
+    }
+    const target = into.get(fam);
+    for (const p of set) {
+      target.add(p);
+    }
+  }
+}
+
+/**
+ * @param {*} api wp.customize
+ * @param {string[]} fontManagerSettingIds
+ * @param {Record<string, Map<string, Set<string>>> | null | undefined} liveBySetting — optional unsaved draft axes per setting id
+ */
+function collectMergedGoogleFontAxesFromFontManagerSettings(api, fontManagerSettingIds, liveBySetting) {
+  const merged = new Map();
+  for (const id of fontManagerSettingIds) {
+    const live = liveBySetting && liveBySetting[id];
+    if (live && live.size) {
+      mergeGoogleAxesMaps(merged, live);
+      continue;
+    }
+    try {
+      const v = api(id);
+      if (!v || typeof v.get !== 'function') {
+        continue;
+      }
+      const partial = collectGoogleFontAxesFromFontManagerSettingRaw(v.get());
+      mergeGoogleAxesMaps(merged, partial);
+    } catch {
+      continue;
+    }
+  }
+  return merged;
+}
+
+/**
+ * Styling-derived axes first; for every family in fontManagerMap, replace with font manager’s full variant set.
+ *
+ * @param {Map<string, Set<string>>} stylingMap
+ * @param {Map<string, Set<string>>} fontManagerMap
+ * @returns {Map<string, Set<string>>}
+ */
+function mergeGoogleFontAxesFontManagerPriority(stylingMap, fontManagerMap) {
+  const out = new Map(stylingMap);
+  for (const [fam, set] of fontManagerMap) {
+    out.set(fam, new Set(set));
+  }
+  return out;
 }
 
 /**
@@ -1683,6 +2147,158 @@ function bindStylingSelectorPickPreview(api) {
   });
 }
 
+/***/ },
+
+/***/ "./src/admin/customizer/styling/unifiedCustomizerGoogleFonts.js"
+/*!**********************************************************************!*\
+  !*** ./src/admin/customizer/styling/unifiedCustomizerGoogleFonts.js ***!
+  \**********************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ONEPRESS_MERGED_GOOGLE_FONTS_PREVIEW_LINK_ID: () => (/* binding */ ONEPRESS_MERGED_GOOGLE_FONTS_PREVIEW_LINK_ID),
+/* harmony export */   clearLiveFontManagerGoogleAxes: () => (/* binding */ clearLiveFontManagerGoogleAxes),
+/* harmony export */   paintMergedCustomizerGoogleFonts: () => (/* binding */ paintMergedCustomizerGoogleFonts),
+/* harmony export */   setLiveFontManagerGoogleAxesFromPlain: () => (/* binding */ setLiveFontManagerGoogleAxesFromPlain)
+/* harmony export */ });
+/* harmony import */ var _font_manager_fontManagerGoogleCss2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../font-manager/fontManagerGoogleCss2 */ "./src/admin/customizer/font-manager/fontManagerGoogleCss2.js");
+/* harmony import */ var _stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./stylingGoogleFonts */ "./src/admin/customizer/styling/stylingGoogleFonts.js");
+/**
+ * Customizer preview: one merged Google Fonts CSS2 link from styling theme_mods + font manager (FM wins per family).
+ */
+
+
+
+/** Single preview link; replaces legacy styling-only + per-family font-manager links. */
+const ONEPRESS_MERGED_GOOGLE_FONTS_PREVIEW_LINK_ID = 'onepress-merged-google-fonts-preview';
+
+/** Unsaved font manager draft in controls: setting id → family → axis pairs */
+const liveFontManagerGoogleAxesBySettingId = /** @type {Record<string, Map<string, Set<string>>>} */{};
+
+/**
+ * @param {string} settingId
+ * @param {Record<string, unknown>} plain — family → string[]
+ */
+function setLiveFontManagerGoogleAxesFromPlain(settingId, plain) {
+  const sid = String(settingId || '').trim();
+  if (!sid || !plain || typeof plain !== 'object') {
+    return;
+  }
+  const m = new Map();
+  for (const [fam, arr] of Object.entries(plain)) {
+    const f = String(fam || '').trim();
+    if (!f || !Array.isArray(arr)) {
+      continue;
+    }
+    const set = new Set(arr.map(x => String(x).trim()).filter(_font_manager_fontManagerGoogleCss2__WEBPACK_IMPORTED_MODULE_0__.isValidFontManagerVariationPair));
+    if (set.size) {
+      m.set(f, set);
+    }
+  }
+  if (m.size) {
+    liveFontManagerGoogleAxesBySettingId[sid] = m;
+  } else {
+    delete liveFontManagerGoogleAxesBySettingId[sid];
+  }
+}
+
+/**
+ * @param {string} settingId
+ */
+function clearLiveFontManagerGoogleAxes(settingId) {
+  const sid = String(settingId || '').trim();
+  if (sid) {
+    delete liveFontManagerGoogleAxesBySettingId[sid];
+  }
+}
+function getLiveFontManagerMap() {
+  return liveFontManagerGoogleAxesBySettingId;
+}
+const LEGACY_STYLING_LINK_ID = 'onepress-styling-google-fonts-preview';
+const LEGACY_FM_WRAP_ID = 'onepress-font-manager-preview-links';
+
+/** @type {string[]} */
+const DEFAULT_STYLING_SETTING_IDS = ['onepress_styling_body', 'onepress_styling_h1', 'onepress_styling_h2', 'onepress_styling_h3', 'onepress_styling_h4', 'onepress_styling_h5', 'onepress_styling_h6', 'onepress_styling_nav', 'onepress_styling_branding', 'onepress_styling_tagline', 'onepress_element_styling', 'onepress_element_styling_single', 'onepress_element_styling_fixed_states'];
+
+/**
+ * @param {unknown} raw
+ * @returns {Record<string, unknown> | null}
+ */
+function parseStylingSettingRaw(raw) {
+  try {
+    if (typeof raw === 'string' && raw) {
+      return JSON.parse(raw);
+    }
+    if (raw && typeof raw === 'object') {
+      return /** @type {Record<string, unknown>} */raw;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+/**
+ * @returns {string[]}
+ */
+function getStylingPreviewSettingIds() {
+  const w = typeof window !== 'undefined' ? window.onepressStylingPreview : null;
+  if (w && Array.isArray(w.settingIds) && w.settingIds.length) {
+    return w.settingIds.map(String);
+  }
+  return DEFAULT_STYLING_SETTING_IDS;
+}
+
+/**
+ * @returns {string[]}
+ */
+function getFontManagerPreviewSettingIds() {
+  const w = typeof window !== 'undefined' ? window.onepressFontManagerPreview : null;
+  if (w && Array.isArray(w.settingIds) && w.settingIds.length) {
+    return w.settingIds.map(String);
+  }
+  return ['onepress_font_manager'];
+}
+
+/**
+ * @param {JQueryStatic} $ jQuery
+ * @param {*} api wp.customize
+ */
+function paintMergedCustomizerGoogleFonts($, api) {
+  const stylingIds = getStylingPreviewSettingIds();
+  const fmIds = getFontManagerPreviewSettingIds();
+
+  /** @type {Record<string, unknown>[]} */
+  const stylingValues = [];
+  for (const id of stylingIds) {
+    try {
+      const value = api(id);
+      if (!value || typeof value.get !== 'function') {
+        continue;
+      }
+      stylingValues.push(parseStylingSettingRaw(value.get()) || {});
+    } catch {
+      continue;
+    }
+  }
+  const stylingMap = (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_1__.collectMergedGoogleFontAxes)(stylingValues);
+  const fontManagerMap = (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_1__.collectMergedGoogleFontAxesFromFontManagerSettings)(api, fmIds, getLiveFontManagerMap());
+  const merged = (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_1__.mergeGoogleFontAxesFontManagerPriority)(stylingMap, fontManagerMap);
+  const href = (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_1__.buildGoogleFontsCss2Href)(merged);
+  $(`#${LEGACY_STYLING_LINK_ID}`).remove();
+  $(`#${LEGACY_FM_WRAP_ID}`).remove();
+  let $link = $(`#${ONEPRESS_MERGED_GOOGLE_FONTS_PREVIEW_LINK_ID}`);
+  if (!href) {
+    $link.remove();
+    return;
+  }
+  if (!$link.length) {
+    $link = $('<link rel="stylesheet" />').attr('id', ONEPRESS_MERGED_GOOGLE_FONTS_PREVIEW_LINK_ID).attr('crossorigin', 'anonymous').appendTo('head');
+  }
+  $link.attr('href', href);
+}
+
 /***/ }
 
 /******/ 	});
@@ -1755,6 +2371,7 @@ var __webpack_exports__ = {};
   \******************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _customizer_styling_styling_preview__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./customizer/styling/styling-preview */ "./src/admin/customizer/styling/styling-preview.js");
+/* harmony import */ var _customizer_font_manager_font_manager_preview__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./customizer/font-manager/font-manager-preview */ "./src/admin/customizer/font-manager/font-manager-preview.js");
 /**
  * customizer.js
  *
@@ -1762,6 +2379,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Contains handlers to make Theme Customizer preview reload changes asynchronously.
  */
+
 
 
 (function ($, api) {
@@ -1838,6 +2456,7 @@ __webpack_require__.r(__webpack_exports__);
   wp.customize.bind('preview-ready', function () {
     update_css();
     (0,_customizer_styling_styling_preview__WEBPACK_IMPORTED_MODULE_0__.bindOnepressStylingPreview)($, api);
+    (0,_customizer_font_manager_font_manager_preview__WEBPACK_IMPORTED_MODULE_1__.bindOnepressFontManagerPreview)($, api);
   });
   $(window).resize(function () {
     update_css();

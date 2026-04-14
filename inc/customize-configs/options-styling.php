@@ -12,6 +12,8 @@
  * sanitize encodes JSON for theme_mod). Single target: omit `styling_multiple`, use a `onepress_styling_get_default_value*()`
  * array and `onepress_sanitize_styling_value`.
  *
+ * `add_item_label` (optional, multiple-target only): custom label for the add-row button (default in JS: “Add item”).
+ *
  * `base_selector` (optional, single-target only — ignored when `styling_multiple` => true): non-empty
  * string fixes `_meta.baseSelector` / `selector` in JS and hides the base selector field in the editor.
  * Comma-separated lists apply each state suffix (e.g. `:hover`) to every branch: `.a, .b` + `:hover` → `.a:hover, .b:hover`.
@@ -24,6 +26,9 @@
  * `styling_groups` (optional): `null`/omit = all accordion groups. Otherwise an array of ids in display order:
  * `text`, `background`, `spacing`, `border`, `shadow`, `display`, `raw`. Invalid ids are dropped.
  * If exactly one id is listed, that group stays open and its header toggle is disabled.
+ *
+ * `styling_hide_gear_button` / `styling_hide_preview_pick_button` (optional bool): hide toolbar actions.
+ * `styling_hide_popover_heading` (legacy bool): same as hiding both. `styling_hide_state_tablist`: hide state tabs row.
  *
  * `disable_fields` (optional): array of field tokens (sanitize_key in PHP). Each entry is either a model
  * key in snake_case / kebab-case (e.g. `font_family` → fontFamily) or a composite alias:

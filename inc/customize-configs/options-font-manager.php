@@ -1,36 +1,30 @@
 <?php
 /**
- * Font manager (Customizer) — JSON theme_mod with optional Google Fonts axes.
+ * Font manager (Customizer) — rows from `inc/registry/font-registry.php`.
  *
- * Front: `onepress_font_manager_enqueue_front_styles` (see `inc/font-manager.php`) enqueues
- * the Google stylesheet when `isGoogleFamily` is true. Filter `onepress_font_manager_theme_mod_id`
- * to point at a different setting id.
+ * Front: Google Fonts from font manager merge into `onepress_styling_enqueue_merged_google_fonts` (single CSS2 URL;
+ * font manager variants override styling per family). `onepress_font_manager_enqueue_front_styles` is a no-op for fonts.
  *
  * @package OnePress
  */
 
-$wp_customize->add_setting(
-	'onepress_font_manager',
-		array(
-		'default'              => onepress_font_manager_default_value(),
-		'sanitize_callback'    => 'onepress_sanitize_font_manager_value',
-		'sanitize_js_callback' => array( 'Onepress_Customize_Font_Manager_Control', 'sanitize_value_for_js' ),
-		'transport'            => 'refresh',
-	)
-);
+require_once get_template_directory() . '/inc/registry/font-registry.php';
 
-$wp_customize->add_control(
-	new Onepress_Customize_Font_Manager_Control(
-		$wp_customize,
-		'onepress_font_manager',
-		array(
-			'label'       => esc_html__( 'Font manager', 'onepress' ),
-			'description' => esc_html__(
-				'Maintain a list of fonts. For Google families, all styles are listed and selected by default; uncheck any you do not want loaded. Close discards unsaved editor changes.',
-				'onepress'
-			),
-			'section'     => 'onepress_typography',
-			'priority'    => 1,
+foreach ( onepress_font_manager_controls_config() as $row ) {
+	if ( empty( $row['id'] ) || ! is_string( $row['id'] ) ) {
+		continue;
+	}
+	$id           = $row['id'];
+	$setting_args = isset( $row['setting'] ) && is_array( $row['setting'] ) ? $row['setting'] : array();
+	$control_args = isset( $row['control'] ) && is_array( $row['control'] ) ? $row['control'] : array();
+
+	$wp_customize->add_setting( $id, $setting_args );
+
+	$wp_customize->add_control(
+		new Onepress_Customize_Font_Manager_Control(
+			$wp_customize,
+			$id,
+			$control_args
 		)
-	)
-);
+	);
+}

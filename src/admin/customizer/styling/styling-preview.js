@@ -2,7 +2,7 @@
  * Customizer preview iframe: apply styling theme_mods as <style> tags + one merged Google Fonts stylesheet.
  */
 import { buildStylingCss } from './buildStylingCss';
-import { buildGoogleFontsCss2Href, collectMergedGoogleFontAxes } from './stylingGoogleFonts';
+import { paintMergedCustomizerGoogleFonts } from './unifiedCustomizerGoogleFonts';
 import { bindStylingSelectorPickPreview } from './stylingSelectorPickPreview';
 
 /** Fallback when `onepressStylingPreview.settingIds` is missing — keep in sync with `onepress_styling_default_theme_mod_setting_ids()` (PHP). */
@@ -21,8 +21,6 @@ const DEFAULT_SETTING_IDS = [
 	'onepress_element_styling_single',
 	'onepress_element_styling_fixed_states',
 ];
-const GOOGLE_LINK_ID = 'onepress-styling-google-fonts-preview';
-
 /** Avoid duplicate value.bind when preview-ready runs more than once (iframe refresh). */
 let stylingPreviewListenersBound = false;
 
@@ -81,20 +79,7 @@ export function bindOnepressStylingPreview($, api, settingIds = DEFAULT_SETTING_
 				continue;
 			}
 		}
-		const merged = collectMergedGoogleFontAxes(values);
-		const href = buildGoogleFontsCss2Href(merged);
-		let $link = $(`link#${GOOGLE_LINK_ID}`);
-		if (!href) {
-			$link.remove();
-			return;
-		}
-		if (!$link.length) {
-			$link = $('<link rel="stylesheet" />')
-				.attr('id', GOOGLE_LINK_ID)
-				.attr('crossorigin', 'anonymous')
-				.appendTo('head');
-		}
-		$link.attr('href', href);
+		paintMergedCustomizerGoogleFonts($, api);
 	}
 
 	if (!stylingPreviewListenersBound) {

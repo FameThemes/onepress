@@ -67,7 +67,20 @@ function onepres_customizer_control_scripts()
 	$handle = onepress_load_build_script('customizer', ['customize-controls', 'wp-color-picker'], true);
 	wp_localize_script($handle, 'ONEPRESS_CUSTOMIZER_DATA', $customizer_data);
 
-	
+	require_once get_template_directory() . '/inc/registry/target-elements.php';
+	$target_registry = onepress_styling_target_elements_registry();
+	wp_localize_script(
+		$handle,
+		'onepressStylingTargetElements',
+		array(
+			'categories' => isset( $target_registry['categories'] ) && is_array( $target_registry['categories'] )
+				? $target_registry['categories']
+				: array(),
+			'elements'   => isset( $target_registry['elements'] ) && is_array( $target_registry['elements'] )
+				? array_values( $target_registry['elements'] )
+				: array(),
+		)
+	);
 }
 
 add_action('customize_controls_enqueue_scripts', 'onepres_customizer_control_scripts', 99);

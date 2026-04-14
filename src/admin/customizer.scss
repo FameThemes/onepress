@@ -842,9 +842,7 @@ body.wp-customizer .media-modal-backdrop {
   }
 }
 
-/* Do not hide `.popover-header` or `.onepress-styling-editor-popover__title` here: state tabs and
-   the popover title row are controlled in JS (`styling_hide_popover_heading`). Single-group controls
-   still get compact accordion rules below. */
+/* Single-group controls: compact accordion. Optional `.onepress-styling-editor-popover__header` when present. */
 .group-count-1 {
   .onepress-styling-editor-popover__header {
     display: none;
@@ -880,6 +878,17 @@ body.wp-customizer .media-modal-backdrop {
   }
 }
 
+.enum-label,
+.shgen-row-label,
+.field-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
 .onepress-styling {
   .states {
     margin: 8px 0 0px;
@@ -890,6 +899,7 @@ body.wp-customizer .media-modal-backdrop {
     flex-wrap: wrap;
     align-items: center;
     gap: 8px;
+    border-bottom: 1px solid #dcdcde;
   }
 
   .states-toolbar .components-button-group {
@@ -901,6 +911,7 @@ body.wp-customizer .media-modal-backdrop {
     flex: 1 1 auto;
     min-width: 0;
     max-width: 100%;
+    margin-bottom: -1px;
   }
 
   .state-tablist-scroll {
@@ -928,7 +939,7 @@ body.wp-customizer .media-modal-backdrop {
     }
   }
 
-  .state-tablist-inner  {
+  .state-tablist-inner {
     display: flex;
     flex-wrap: nowrap !important;
     align-items: stretch;
@@ -1140,10 +1151,6 @@ body.wp-customizer .media-modal-backdrop {
     }
   }
 
-  .panels {
-    margin-top: 8px;
-  }
-
   .components-panel__body-toggle.components-button {
     height: 40px;
     display: flex;
@@ -1171,7 +1178,7 @@ body.wp-customizer .media-modal-backdrop {
         border-width: 0px;
       }
       &.is-opened {
-        padding: var(--opc-panel-spacing);
+        // padding: var(--opc-panel-spacing);
         // .components-panel__body-title {
         //   margin: 0px -8px;
         // }
@@ -1188,15 +1195,6 @@ body.wp-customizer .media-modal-backdrop {
   .components-panel__body > .components-panel__body-title {
     margin: 0px;
     padding: 0px;
-  }
-
-  .enum-label, .shgen-row-label {
-    display: block;
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-    line-height: 1.4;
   }
 
   .enum-buttons {
@@ -1237,8 +1235,6 @@ body.wp-customizer .media-modal-backdrop {
     &:first-of-type {
       margin-top: 0;
     }
-
-    
 
     &.unit-slider.has-range .unit-range-field {
       flex: 1;
@@ -1301,13 +1297,11 @@ body.wp-customizer .media-modal-backdrop {
   }
 }
 
-/* Main styling editor popover (Edit) — portaled outside .onepress-styling */
+/* Styling editor chrome: used by inline panel and (legacy) portaled popover content */
 //
 .onepress-styling-editor-popover {
-  width: min(100vw - 24px, 300px);
-  max-width: 300px;
+  width: 100%;
   box-sizing: border-box;
-  max-height: min(88vh, 720px);
   overflow: none;
   padding: 0px;
   .components-popover__content {
@@ -1329,6 +1323,75 @@ body.wp-customizer .media-modal-backdrop {
   .popover-body {
     overflow-x: hidden;
     overflow-y: auto;
+  }
+}
+
+.onepress-styling-inline-editor.onepress-styling-editor-popover {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;
+  padding: 0px;
+  border: 1px solid #dcdcde;
+  background: #fff;
+  overflow: visible;
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  .onepress-styling-inline-editor__arrow {
+    position: absolute;
+    left: 12px;
+    bottom: 100%;
+    z-index: 3;
+    width: 0;
+    height: 0;
+    margin: 0 0 -1px;
+    padding: 0;
+    border-style: solid;
+    border-width: 0 8px 9px 8px;
+    border-color: transparent transparent #dcdcde transparent;
+    pointer-events: none;
+    line-height: 0;
+    font-size: 0;
+  }
+
+  .onepress-styling-inline-editor__arrow-fill {
+    position: absolute;
+    left: -7px;
+    top: 1px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 7px 8px 7px;
+    border-color: transparent transparent #fff transparent;
+  }
+
+  .popover-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    flex-shrink: 0;
+    background: #fff;
+    padding: 0 0 var(--opc-panel-spacing);
+  }
+
+  .popover-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0 0 var(--opc-panel-spacing);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .onepress-styling-inline-editor__footer {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px var(--opc-panel-spacing) var(--opc-panel-spacing);
+    border-top: 1px solid #f0f0f1;
+    background: #fff;
   }
 }
 
@@ -1714,6 +1777,95 @@ body.wp-customizer .media-modal-backdrop {
   padding-top: 4px;
 }
 
+.onepress-styling-target-preset-wrap {
+  padding-left: var(--opc-panel-spacing);
+  padding-right: var(--opc-panel-spacing);
+  padding-bottom: var(--opc-panel-spacing);
+}
+
+.onepress-styling-awaiting-target-hint {
+  margin: 0 0 12px;
+  color: #50575e;
+}
+
+.onepress-styling-pending-add-inline {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.onepress-styling-pending-add-inline__hint {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.onepress-styling-pending-add-inline__picker {
+  margin-bottom: 12px;
+}
+
+.onepress-styling-pending-add-inline__actions {
+  padding-top: 4px;
+}
+
+.onepress-styling-target-preset__group-title {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #646970;
+  margin: 10px 10px 6px;
+  padding: 0 2px;
+}
+
+.onepress-styling-target-preset__group:first-child
+  .onepress-styling-target-preset__group-title {
+  margin-top: 4px;
+}
+
+.onepress-styling-target-preset__row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px 8px 20px;
+  margin: 0px;
+  border: 0px none;
+  border-radius: 0;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #1d2327;
+
+  &:hover {
+    background: #f6f7f7;
+    border-color: #8c8f94;
+  }
+
+  &.is-active {
+    border-color: #f2f2f2;
+    background: #f2f2f2;
+  }
+}
+
+.onepress-styling-target-preset__row-name {
+  font-weight: 600;
+}
+
+.onepress-styling-target-preset__row-sel {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: #50575e;
+  word-break: break-word;
+  white-space: normal;
+  max-width: 100%;
+}
+
 .styling-list-item {
   border: 1px solid #c3c4c7;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
@@ -1732,61 +1884,18 @@ body.wp-customizer .media-modal-backdrop {
   margin-top: 8px;
 }
 
-.font-manager-control__picker-label {
-  margin: 0 0 6px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #50575e;
-}
-
-.font-manager-control__variations {
-  margin: 16px 0 0;
-  padding: 12px;
-  border: 1px solid #c3c4c7;
-  border-radius: 4px;
-  background: #f6f7f7;
-}
-
-.font-manager-control__variations-legend {
-  padding: 0 4px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.font-manager-control__variations-hint {
-  margin: 4px 0 8px;
-  font-size: 12px;
-  color: #50575e;
-}
-
-.font-manager-control__variation-list {
-  margin: 0;
+.font-manager-list__units {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 16px 0;
   padding: 0;
-  list-style: none;
 }
 
-.font-manager-control__variation-list li {
-  margin: 0;
-}
-
-.font-manager-control__list-heading {
-  margin: 0 0 8px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #50575e;
-}
-
-.font-manager-list {
-  margin: 0 0 12px;
-  padding: 0;
-  list-style: none;
-  border: 1px solid #c3c4c7;
-  border-radius: 4px;
-  background: #fff;
-  max-height: 220px;
-  overflow: auto;
+.font-manager-list__unit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* Inline editor: show full list + form without inner scroll */
@@ -1800,6 +1909,16 @@ body.wp-customizer .media-modal-backdrop {
   padding: 12px 14px;
   font-size: 13px;
   color: #646970;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.font-manager-list__item {
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
 }
 
 .font-manager-list__row {
@@ -1807,32 +1926,63 @@ body.wp-customizer .media-modal-backdrop {
   align-items: center;
   gap: 4px;
   padding: 8px 10px;
-  border-bottom: 1px solid #dcdcde;
   font-size: 13px;
-}
-
-.font-manager-list__row:last-child {
-  border-bottom: none;
-}
-
-.font-manager-list__editor-slot {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-bottom: 1px solid #dcdcde;
-  background: #f6f7f7;
-}
-
-.font-manager-list__editor-slot .font-manager-editor {
-  margin: 0;
-  border: none;
-  border-radius: 0;
-  background: #f0f6fc;
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.05);
 }
 
 .font-manager-control__editor-below-list {
   margin-bottom: 12px;
+}
+
+/* Detached editor under list row: white panel + upward caret */
+.font-manager-editor-flyout {
+  position: relative;
+  margin-top: 2px;
+}
+
+.font-manager-editor-flyout__arrow {
+  position: absolute;
+  left: 12px;
+  bottom: 100%;
+  z-index: 3;
+  width: 0;
+  height: 0;
+  margin: 0 0 -1px;
+  padding: 0;
+  border-style: solid;
+  border-width: 0 8px 9px 8px;
+  border-color: transparent transparent #dcdcde transparent;
+  pointer-events: none;
+  line-height: 0;
+  font-size: 0;
+}
+
+.font-manager-editor-flyout__arrow-fill {
+  position: absolute;
+  left: -7px;
+  top: 1px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 7px 8px 7px;
+  border-color: transparent transparent #fff transparent;
+}
+
+.font-manager-editor-flyout__panel {
+  position: relative;
+  z-index: 1;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.font-manager-editor-flyout__panel .font-manager-editor {
+  margin: 0;
+  padding: 14px;
+  border: none;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
 }
 
 .font-manager-list__name {
@@ -1864,16 +2014,6 @@ body.wp-customizer .media-modal-backdrop {
   background: #f0f6fc;
 }
 
-.font-manager-editor__title {
-  margin: 0 0 12px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.font-manager-editor__category {
-  margin: 8px 0 0;
-}
-
 .font-manager-editor__category-badge {
   display: inline-block;
   padding: 2px 8px;
@@ -1887,12 +2027,3 @@ body.wp-customizer .media-modal-backdrop {
   border-radius: 2px;
 }
 
-.font-manager-editor__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: flex-end;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid #c3c4c7;
-}

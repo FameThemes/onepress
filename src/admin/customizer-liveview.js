@@ -7,6 +7,7 @@
  */
 
 import { bindOnepressStylingPreview } from './customizer/styling/styling-preview';
+import { bindOnepressFontManagerPreview } from './customizer/font-manager/font-manager-preview';
 
 ( function( $ , api ) {
 
@@ -89,6 +90,7 @@ import { bindOnepressStylingPreview } from './customizer/styling/styling-preview
     wp.customize.bind( 'preview-ready', function() {
         update_css();
         bindOnepressStylingPreview( $, api );
+        bindOnepressFontManagerPreview( $, api );
     });
 
     $( window ).resize( function(){

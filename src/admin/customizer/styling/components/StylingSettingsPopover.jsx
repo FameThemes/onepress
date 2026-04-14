@@ -85,7 +85,7 @@ const RESERVED_STATE_KEYS = new Set(['_meta', '_onepressstyling']);
  * @param {string} [props.lockedBaseSelector] Non-empty when base selector is fixed in PHP (hide field).
  * @param {boolean} [props.editableBaseSelector]
  * @param {string} [props.metaBaseSelector]
- * @param {(v: string) => void} [props.onBaseSelectorChange]
+ * @param {(v: string, binding?: { elementPresetId?: string, elementPresetName?: string }) => void} [props.onBaseSelectorChange]
  * @param {(v: string) => void} [props.onItemTitleChange]
  * @param {boolean} [props.showStatesSection] When false, hide states list and add-state UI (target settings only).
  */
@@ -235,7 +235,7 @@ export function StylingSettingsPopover({
 			}
 			if (stateKey === 'normal') {
 				const trimmed = String(newSelector ?? '').trim();
-				next._meta.baseSelector = trimmed === '' ? '.' : trimmed;
+				next._meta.baseSelector = trimmed;
 				const updated = states.map((e, i) =>
 					i === globalIndex
 						? {
@@ -325,10 +325,10 @@ export function StylingSettingsPopover({
 			const sel = String(selector || '').trim();
 			const next = cloneValue(value);
 			if (!next._meta) {
-				next._meta = { baseSelector: '.', states: [] };
+				next._meta = { baseSelector: '', states: [] };
 			}
-			if (typeof next._meta.baseSelector !== 'string' || next._meta.baseSelector.trim() === '') {
-				next._meta.baseSelector = '.';
+			if (typeof next._meta.baseSelector !== 'string') {
+				next._meta.baseSelector = '';
 			}
 			const cur = normalizeStatesEntriesOrder(next._meta.states || []);
 			const { normal: n0, rest: r0 } = partitionStatesEntries(cur);

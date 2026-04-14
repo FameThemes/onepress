@@ -1,6 +1,6 @@
 <?php
 /**
- * Font manager theme_mod: JSON list of fonts + sanitize + Google Fonts enqueue.
+ * Font manager theme_mod: JSON list of fonts + sanitize + Google Fonts enqueue (all registry ids).
  *
  * @package OnePress
  */
@@ -198,7 +198,71 @@ function onepress_font_manager_item_google_href($item)
 }
 
 /**
- * Enqueue Google Fonts for each Google item in theme mod.
+ * Collect Google axis pairs from all font manager theme_mods (family => pair => true), for merging with styling.
+ *
+ * @return array<string, array<string, true>>
+ */
+function onepress_font_manager_collect_google_axes_map_for_merge()
+{
+	require_once get_template_directory() . '/inc/registry/font-registry.php';
+
+	$mod_ids = onepress_font_manager_theme_mod_ids();
+
+	$legacy = apply_filters('onepress_font_manager_theme_mod_id', 'onepress_font_manager');
+	$legacy = sanitize_key((string) $legacy);
+	if ($legacy !== '' && ! in_array($legacy, $mod_ids, true)) {
+		$mod_ids[] = $legacy;
+	}
+
+	/**
+	 * @param list<string> $mod_ids
+	 */
+	$mod_ids = apply_filters('onepress_font_manager_enqueue_theme_mod_ids', $mod_ids);
+	if (! is_array($mod_ids) || $mod_ids === array()) {
+		return array();
+	}
+
+	$mod_ids = array_values(array_unique(array_filter(array_map('sanitize_key', $mod_ids))));
+
+	$merged = array();
+
+	foreach ($mod_ids as $mod_id) {
+		$raw = get_theme_mod($mod_id, '');
+		if ($raw === '' || $raw === null) {
+			continue;
+		}
+		$data = onepress_font_manager_parse($raw);
+		if (empty($data['items']) || ! is_array($data['items'])) {
+			continue;
+		}
+		foreach ($data['items'] as $item) {
+			if (! is_array($item) || empty($item['isGoogleFamily'])) {
+				continue;
+			}
+			$family = trim((string) ($item['googleName'] ?? ''));
+			if ($family === '') {
+				continue;
+			}
+			$vars = isset($item['variations']) && is_array($item['variations']) ? $item['variations'] : array();
+			if ($vars === array()) {
+				$vars = array('0,400');
+			}
+			if (! isset($merged[ $family ])) {
+				$merged[ $family ] = array();
+			}
+			foreach ($vars as $p) {
+				if (onepress_font_manager_is_valid_variation_pair((string) $p)) {
+					$merged[ $family ][ (string) $p ] = true;
+				}
+			}
+		}
+	}
+
+	return $merged;
+}
+
+/**
+ * Front: Google Fonts from font manager are merged into `onepress_styling_enqueue_merged_google_fonts` (no separate handles).
  *
  * @return void
  */
@@ -207,33 +271,7 @@ function onepress_font_manager_enqueue_front_styles()
 	if (is_admin()) {
 		return;
 	}
-	$mod_id = apply_filters('onepress_font_manager_theme_mod_id', 'onepress_font_manager');
-	$mod_id = sanitize_key((string) $mod_id);
-	if ($mod_id === '') {
-		return;
-	}
-	$raw = get_theme_mod($mod_id, '');
-	if ($raw === '' || $raw === null) {
-		return;
-	}
-	$data = onepress_font_manager_parse($raw);
-	if (empty($data['items']) || ! is_array($data['items'])) {
-		return;
-	}
-	foreach ($data['items'] as $item) {
-		if (! is_array($item)) {
-			continue;
-		}
-		$href = onepress_font_manager_item_google_href($item);
-		if ($href === '') {
-			continue;
-		}
-		$hid = isset($item['id']) ? sanitize_key((string) $item['id']) : '';
-		if ($hid === '') {
-			$hid = substr(md5($href), 0, 8);
-		}
-		wp_enqueue_style('onepress-font-mgr-' . $hid, esc_url_raw($href), array(), null);
-	}
+	// Intentionally empty: avoids duplicate requests; font manager variants override styling per family in styling-css.php.
 }
 
 add_action('wp_enqueue_scripts', 'onepress_font_manager_enqueue_front_styles', 20);

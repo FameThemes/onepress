@@ -1,5 +1,6 @@
 /**
- * Accordion groups: Text, Background, Spacing, Border, Shadow, Display, Custom (raw).
+ * Styling field groups: Text, Background, Spacing, Border, Shadow, Display, Custom (raw).
+ * Each group is an independent toggle (classic collapsible); several can be open at once.
  */
 import { Panel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -28,7 +29,7 @@ export const STYLING_PANEL_GROUP_IDS = [
 ];
 
 /** @typedef {'text'|'background'|'spacing'|'border'|'shadow'|'display'|'raw'} StylingAccordionSectionId */
-/** @typedef {StylingAccordionSectionId | null} StylingAccordionSection */
+/** @typedef {Partial<Record<StylingAccordionSectionId, boolean>>} OpenSectionsMap */
 
 /**
  * @param {unknown} stylingGroups — from `control.params.styling_groups`; null/undefined = all
@@ -51,7 +52,10 @@ export function resolveAllowedGroupIds(stylingGroups) {
  * @param {string} props.sliceKey — `${state}__${device}` to reset link toggles
  * @param {string} props.rawCss
  * @param {(v: string) => void} props.onRawChange
- * @param {import('./googleFontCollection').PickerFontFamily[] | undefined} [props.families]
+ * @param {import('./googleFontCollection').PickerFontFamily[] | undefined} [props.families] — Google catalog
+ * @param {import('./googleFontCollection').PickerFontFamily[] | undefined} [props.localFontFamilies]
+ * @param {import('./googleFontCollection').PickerFontFamily[] | undefined} [props.faceResolveFamilies]
+ * @param {'google'|'local'|undefined} [props.fontFamilySource]
  * @param {boolean | undefined} [props.fontsLoading]
  * @param {Error | null | undefined} [props.fontsError]
  * @param {string[] | null | undefined} [props.stylingGroups] — whitelist + order; omit/null = all
@@ -65,12 +69,15 @@ export function StylingAccordionPanels({
 	rawCss,
 	onRawChange,
 	families,
+	localFontFamilies,
+	faceResolveFamilies,
+	fontFamilySource,
 	fontsLoading,
 	fontsError,
 	stylingGroups,
 	disabledFieldSet,
 }) {
-	const [openSection, setOpenSection] = useState(/** @type {StylingAccordionSection} */(null));
+	const [openBySection, setOpenBySection] = useState(/** @type {OpenSectionsMap} */({}));
 
 	const allowedIds = useMemo(() => resolveAllowedGroupIds(stylingGroups), [stylingGroups]);
 
@@ -90,10 +97,24 @@ export function StylingAccordionPanels({
 	);
 
 	useEffect(() => {
-		if (openSection && !allowedIds.includes(openSection)) {
-			setOpenSection(null);
-		}
-	}, [allowedIds, openSection]);
+		setOpenBySection((prev) => {
+			const next = { ...prev };
+			let changed = false;
+			for (const k of Object.keys(next)) {
+				if (!allowedIds.includes(/** @type {StylingAccordionSectionId} */ (k))) {
+					delete next[/** @type {StylingAccordionSectionId} */ (k)];
+					changed = true;
+				}
+			}
+			for (const id of allowedIds) {
+				if (!(id in next)) {
+					next[id] = false;
+					changed = true;
+				}
+			}
+			return changed ? next : prev;
+		});
+	}, [allowedIds]);
 
 	/**
 	 * @param {StylingAccordionSectionId} sectionId
@@ -107,35 +128,23 @@ export function StylingAccordionPanels({
 			if (singleGroupLocked) {
 				return {
 					opened: true,
-					onToggle: () => { },
+					onToggle: () => {},
 					lockOpen: true,
 				};
 			}
-			if (openSection !== null && openSection !== sectionId) {
-				return null;
-			}
-			if (openSection === null) {
-				return {
-					opened: false,
-					onToggle: (/** @type {boolean} */ next) => {
-						if (next) {
-							setOpenSection(sectionId);
-						}
-					},
-					lockOpen: false,
-				};
-			}
+			const opened = Boolean(openBySection[sectionId]);
 			return {
-				opened: true,
+				opened,
 				onToggle: (/** @type {boolean} */ next) => {
-					if (!next) {
-						setOpenSection(null);
-					}
+					setOpenBySection((prev) => ({
+						...prev,
+						[sectionId]: Boolean(next),
+					}));
 				},
 				lockOpen: false,
 			};
 		},
-		[allowedIds, openSection, singleGroupLocked]
+		[allowedIds, openBySection, singleGroupLocked]
 	);
 
 	const renderGroupBody = useCallback(
@@ -147,6 +156,9 @@ export function StylingAccordionPanels({
 							model={model}
 							onPatch={onPatch}
 							families={families}
+							localFontFamilies={localFontFamilies}
+							faceResolveFamilies={faceResolveFamilies}
+							fontFamilySource={fontFamilySource}
 							fontsLoading={fontsLoading}
 							fontsError={fontsError}
 							disabledFieldSet={disabledFieldSet}
@@ -200,6 +212,9 @@ export function StylingAccordionPanels({
 			rawCss,
 			onRawChange,
 			families,
+			localFontFamilies,
+			faceResolveFamilies,
+			fontFamilySource,
 			fontsLoading,
 			fontsError,
 			disabledFieldSet,
@@ -210,7 +225,7 @@ export function StylingAccordionPanels({
 		<div className="panels">
 			<PreservedPropertiesNotice count={unknownCount} />
 
-			<Panel className={`acc-panel${openSection && !singleGroupLocked ? ' acc-panel--focus-section' : ''}`}>
+			<Panel className="acc-panel acc-panel--independent-toggles">
 				{allowedIds.map((sectionId) => {
 					const p = sectionPanelProps(sectionId);
 					if (!p) {

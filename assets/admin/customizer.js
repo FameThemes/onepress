@@ -585,10 +585,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styling_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../styling/stylingGoogleFonts */ "./src/admin/customizer/styling/stylingGoogleFonts.js");
 /* harmony import */ var _styling_useGoogleFontFamilies__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../styling/useGoogleFontFamilies */ "./src/admin/customizer/styling/useGoogleFontFamilies.js");
 /* harmony import */ var _fontManagerModel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./fontManagerModel */ "./src/admin/customizer/font-manager/fontManagerModel.js");
+/* harmony import */ var _fontManagerPreviewConstants__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./fontManagerPreviewConstants */ "./src/admin/customizer/font-manager/fontManagerPreviewConstants.js");
 
 /**
  * Customizer control `font_manager`: saved font list + add/edit panel (picker, Google mode, variants).
  */
+
 
 
 
@@ -675,6 +677,25 @@ function allVariationKeysForGoogleFamily(family) {
  * @param {FontManagerItem | null} draft
  * @returns {PickerFontFamily | null}
  */
+/**
+ * Saved list + open editor draft so preview matches what the user is editing.
+ *
+ * @param {import('./fontManagerModel').FontManagerItem[]} rootItems
+ * @param {['add' | 'edit', FontManagerItem] | null} editor
+ */
+function mergeItemsForPreview(rootItems, editor) {
+  if (!editor) {
+    return rootItems;
+  }
+  const [mode, draft] = editor;
+  if (!draft) {
+    return rootItems;
+  }
+  if (mode === 'add') {
+    return [...rootItems, draft];
+  }
+  return rootItems.map(it => it.id === draft.id ? draft : it);
+}
 function findFontManagerFamily(families, draft) {
   if (!draft || !families?.length) {
     return null;
@@ -802,6 +823,23 @@ function FontManagerControlApp({
   }, []);
   const draft = (_editor$ = editor?.[1]) !== null && _editor$ !== void 0 ? _editor$ : null;
   const draftMode = (_editor$2 = editor?.[0]) !== null && _editor$2 !== void 0 ? _editor$2 : null;
+  const previewAxesByFamily = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    const items = mergeItemsForPreview(root.items, editor);
+    return (0,_styling_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_8__.fontManagerItemsToGoogleAxesPlainObject)(items);
+  }, [root.items, editor]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
+    const previewer = typeof wp !== 'undefined' && wp.customize && wp.customize.previewer ? wp.customize.previewer : null;
+    if (!previewer || typeof previewer.send !== 'function') {
+      return undefined;
+    }
+    const id = window.requestAnimationFrame(() => {
+      previewer.send(_fontManagerPreviewConstants__WEBPACK_IMPORTED_MODULE_11__.ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE, {
+        settingId: String(control.id),
+        axesByFamily: previewAxesByFamily
+      });
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [previewAxesByFamily, control.id]);
   const draftResolvedFamily = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => findFontManagerFamily(families, draft), [families, draft]);
   const variationFaces = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => draft?.isGoogleFamily && draftResolvedFamily && !draftResolvedFamily.isSystem ? effectiveGoogleFacesForUi(draftResolvedFamily) : [], [draft?.isGoogleFamily, draftResolvedFamily]);
   const onPickFont = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useCallback)(/** @param {PickerFontFamily} font */font => {
@@ -883,33 +921,30 @@ function FontManagerControlApp({
   const showVariationPanel = Boolean(draft?.isGoogleFamily && variationFaces.length);
   const showGoogleCategory = draft && draft.isGoogleFamily;
   const editorPanel = draft !== null ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "font-manager-editor"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "font-manager-editor__title"
+    className: "font-manager-editor flex flex-col gap-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-manager-editor__title font-bold"
   }, draftMode === 'add' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('New font', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Edit font', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-control__picker"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "font-manager-control__picker-label"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Search fonts', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_styling_components_StylingGoogleFontFamilyControl__WEBPACK_IMPORTED_MODULE_6__.StylingGoogleFontFamilyControl, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "field-title font-manager-control__picker-label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Font Family', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_styling_components_StylingGoogleFontFamilyControl__WEBPACK_IMPORTED_MODULE_6__.StylingGoogleFontFamilyControl, {
     value: draft.fontFamily,
     onPatch: noopFontPatch,
     onPickFamily: onPickFont,
     families: families,
     loading: loading,
     error: error
-  })), showGoogleCategory ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  })), showGoogleCategory ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-editor__category"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-manager-editor__category-badge"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Google Font', 'onepress'))) : null, showVariationPanel ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", {
-    className: "font-manager-control__variations"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("legend", {
-    className: "font-manager-control__variations-legend"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.sprintf)(/* translators: %s: font name */
-  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Styles for %s', 'onepress'), draft.googleName || draft.fontFamily)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "font-manager-control__variations-hint"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Only checked styles are loaded from Google.', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
-    className: "font-manager-control__variation-list"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Google Font', 'onepress'))) : null, showVariationPanel ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-manager-control__variations flex flex-col gap-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "field-title font-manager-control__variations-legend"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Variations', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex flex-col gap-2 font-manager-control__variation-list"
   }, variationFaces.map((face, idx) => {
     var _face$fontWeight;
     const key = axisPairFromFace(face);
@@ -917,7 +952,7 @@ function FontManagerControlApp({
     const st = String(face.fontStyle || 'normal');
     const label = st === 'italic' || st === 'oblique' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.sprintf)(/* translators: 1: weight, 2: style */
     (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('%1$s · %2$s', 'onepress'), w, st) : w;
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: `${key}-${idx}`
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
       __nextHasNoMarginBottom: true,
@@ -926,30 +961,38 @@ function FontManagerControlApp({
       onChange: () => toggleVariation(key)
     }));
   }))) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "font-manager-editor__actions"
+    className: "flex gap-2 justify-end font-manager-editor__actions"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "tertiary",
-    onClick: closeEditor
+    onClick: closeEditor,
+    size: "small"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Close', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "primary",
-    onClick: saveDraft
+    onClick: saveDraft,
+    size: "small"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Save', 'onepress')))) : null;
   const inlineEditForId = draftMode === 'edit' && draft ? draft.id : null;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-control font-manager-control--app"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "font-manager-control__list-heading"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Fonts saved', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Fonts saved', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: 'font-manager-list' + (draftMode === 'edit' ? ' font-manager-list--expanded' : ''),
+    role: "region",
     "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Fonts saved', 'onepress')
-  }, root.items.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+  }, root.items.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-list__empty"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('No fonts yet.', 'onepress')) : root.items.map(item => {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('No fonts yet.', 'onepress')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-manager-list__units"
+  }, root.items.map(item => {
     const label = (0,_fontManagerModel__WEBPACK_IMPORTED_MODULE_10__.displayNameForItem)(item) || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('(unnamed)', 'onepress');
-    const showInlineEditor = inlineEditForId === item.id;
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-      key: item.id
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+    const showFlyoutEditor = inlineEditForId === item.id;
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: item.id,
+      className: "font-manager-list__unit"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "font-manager-list__item"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "font-manager-list__row"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "font-manager-list__name",
@@ -973,10 +1016,19 @@ function FontManagerControlApp({
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Remove font', 'onepress'),
       disabled: draft !== null,
       onClick: () => deleteItem(item.id)
-    })), showInlineEditor ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
-      className: "font-manager-list__editor-slot"
-    }, editorPanel) : null);
-  })), draft !== null && draftMode === 'add' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }))), showFlyoutEditor ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "font-manager-editor-flyout",
+      role: "group",
+      "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Font layout editor', 'onepress')
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "font-manager-editor-flyout__arrow",
+      "aria-hidden": "true"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "font-manager-editor-flyout__arrow-fill"
+    })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "font-manager-editor-flyout__panel"
+    }, editorPanel)) : null);
+  }))), draft !== null && draftMode === 'add' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-control__editor-below-list"
   }, editorPanel) : null, draft === null ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-control__add-wrap"
@@ -984,6 +1036,187 @@ function FontManagerControlApp({
     variant: "secondary",
     onClick: openAdd
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Add font', 'onepress'))) : null);
+}
+
+/***/ },
+
+/***/ "./src/admin/customizer/font-manager/fontManagerCatalog.js"
+/*!*****************************************************************!*\
+  !*** ./src/admin/customizer/font-manager/fontManagerCatalog.js ***!
+  \*****************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fontManagerItemToPickerFontFamily: () => (/* binding */ fontManagerItemToPickerFontFamily),
+/* harmony export */   fontManagerValueToPickerFamilies: () => (/* binding */ fontManagerValueToPickerFamilies),
+/* harmony export */   variationsToFontFaces: () => (/* binding */ variationsToFontFaces)
+/* harmony export */ });
+/* harmony import */ var _fontManagerModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fontManagerModel */ "./src/admin/customizer/font-manager/fontManagerModel.js");
+/**
+ * Font manager items → PickerFontFamily[] for styling UI + font slice rebuild.
+ */
+
+
+/** @typedef {import('./fontManagerModel').FontManagerItem} FontManagerItem */
+/** @typedef {import('../styling/googleFontCollection').PickerFontFamily} PickerFontFamily */
+
+/**
+ * @param {string[]} variations axis pairs e.g. "0,400"
+ * @returns {{ fontWeight: string, fontStyle: string }[]}
+ */
+function variationsToFontFaces(variations) {
+  if (!Array.isArray(variations) || variations.length === 0) {
+    return [{
+      fontWeight: '400',
+      fontStyle: 'normal'
+    }];
+  }
+  const out = [];
+  for (const v of variations) {
+    const m = /^([01]),(\d{3})$/.exec(String(v).trim());
+    if (!m) {
+      continue;
+    }
+    out.push({
+      fontWeight: m[2],
+      fontStyle: m[1] === '1' ? 'italic' : 'normal'
+    });
+  }
+  return out.length ? out : [{
+    fontWeight: '400',
+    fontStyle: 'normal'
+  }];
+}
+
+/**
+ * @param {FontManagerItem} item
+ * @param {PickerFontFamily[] | null | undefined} googleFamilies — optional, for preview image URL by slug
+ * @returns {PickerFontFamily & { __rowId?: string }}
+ */
+function fontManagerItemToPickerFontFamily(item, googleFamilies) {
+  const isGoogle = Boolean(item.isGoogleFamily);
+  let preview = '';
+  if (isGoogle && item.googleSlug && googleFamilies?.length) {
+    const g = googleFamilies.find(f => !f.isSystem && f.slug === item.googleSlug);
+    if (g?.preview) {
+      preview = g.preview;
+    }
+  }
+  const slugForSlices = isGoogle && item.googleSlug ? item.googleSlug : item.id;
+  return {
+    slug: slugForSlices,
+    name: (0,_fontManagerModel__WEBPACK_IMPORTED_MODULE_0__.displayNameForItem)(item) || item.id,
+    fontFamily: item.fontFamily,
+    preview,
+    fontFace: isGoogle ? variationsToFontFaces(item.variations) : [],
+    isSystem: !isGoogle,
+    __rowId: item.id
+  };
+}
+
+/**
+ * @param {unknown} raw Parsed font manager root or JSON string
+ * @param {PickerFontFamily[] | null | undefined} googleFamilies
+ * @returns {PickerFontFamily[]}
+ */
+function fontManagerValueToPickerFamilies(raw, googleFamilies) {
+  let root = raw;
+  if (typeof raw === 'string' && raw.trim()) {
+    try {
+      root = JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+  if (!root || typeof root !== 'object') {
+    return [];
+  }
+  const items = /** @type {{ items?: unknown }} */root.items;
+  if (!Array.isArray(items)) {
+    return [];
+  }
+  return items.map(row => fontManagerItemToPickerFontFamily((0,_fontManagerModel__WEBPACK_IMPORTED_MODULE_0__.normalizeFontManagerItem)(row), googleFamilies)).filter(f => f.fontFamily.trim() !== '' || f.name);
+}
+
+/***/ },
+
+/***/ "./src/admin/customizer/font-manager/fontManagerGoogleCss2.js"
+/*!********************************************************************!*\
+  !*** ./src/admin/customizer/font-manager/fontManagerGoogleCss2.js ***!
+  \********************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fontManagerGoogleItemToCss2Href: () => (/* binding */ fontManagerGoogleItemToCss2Href),
+/* harmony export */   googleCss2HrefForFontManagerFamily: () => (/* binding */ googleCss2HrefForFontManagerFamily),
+/* harmony export */   isValidFontManagerVariationPair: () => (/* binding */ isValidFontManagerVariationPair),
+/* harmony export */   uniqueGoogleFontManagerCss2Hrefs: () => (/* binding */ uniqueGoogleFontManagerCss2Hrefs)
+/* harmony export */ });
+/**
+ * Google Fonts CSS2 URLs for font manager items (mirror PHP onepress_font_manager_google_css2_href).
+ */
+
+/** @typedef {import('./fontManagerModel').FontManagerItem} FontManagerItem */
+
+/**
+ * @param {string} pair
+ * @returns {boolean}
+ */
+function isValidFontManagerVariationPair(pair) {
+  return /^[01],\d{3}$/.test(String(pair || '').trim());
+}
+
+/**
+ * @param {string} googleDisplayName — API family name (e.g. "Open Sans")
+ * @param {string[]} variations — "ital,wght" tokens e.g. "0,400"
+ * @returns {string}
+ */
+function googleCss2HrefForFontManagerFamily(googleDisplayName, variations) {
+  const name = String(googleDisplayName || '').trim();
+  if (!name) {
+    return '';
+  }
+  const raw = Array.isArray(variations) ? variations : [];
+  const pairs = [...new Set(raw.map(p => String(p).trim()).filter(isValidFontManagerVariationPair))].sort();
+  const usePairs = pairs.length ? pairs : ['0,400'];
+  const enc = encodeURIComponent(name).replace(/%20/g, '+');
+  return `https://fonts.googleapis.com/css2?family=${enc}:ital,wght@${usePairs.join(';')}&display=swap`;
+}
+
+/**
+ * @param {FontManagerItem | null | undefined} item
+ * @returns {string}
+ */
+function fontManagerGoogleItemToCss2Href(item) {
+  if (!item || !item.isGoogleFamily) {
+    return '';
+  }
+  const gn = String(item.googleName || '').trim();
+  if (!gn) {
+    return '';
+  }
+  return googleCss2HrefForFontManagerFamily(gn, item.variations);
+}
+
+/**
+ * @param {FontManagerItem[]} items
+ * @returns {string[]} unique hrefs
+ */
+function uniqueGoogleFontManagerCss2Hrefs(items) {
+  const seen = new Set();
+  const out = [];
+  for (const item of items) {
+    const h = fontManagerGoogleItemToCss2Href(item);
+    if (h && !seen.has(h)) {
+      seen.add(h);
+      out.push(h);
+    }
+  }
+  return out;
 }
 
 /***/ },
@@ -1172,6 +1405,22 @@ function displayNameForItem(item) {
   }
   return '';
 }
+
+/***/ },
+
+/***/ "./src/admin/customizer/font-manager/fontManagerPreviewConstants.js"
+/*!**************************************************************************!*\
+  !*** ./src/admin/customizer/font-manager/fontManagerPreviewConstants.js ***!
+  \**************************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE: () => (/* binding */ ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE)
+/* harmony export */ });
+/** Message channel: controls pane → preview iframe (Google font link hrefs). */
+const ONEPRESS_FONT_MANAGER_PREVIEW_MESSAGE = 'onepress-font-manager-preview-fonts';
 
 /***/ },
 
@@ -3615,7 +3864,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components */ "./src/admin/customizer/styling/components/index.js");
 
 /**
- * Accordion groups: Text, Background, Spacing, Border, Shadow, Display, Custom (raw).
+ * Styling field groups: Text, Background, Spacing, Border, Shadow, Display, Custom (raw).
+ * Each group is an independent toggle (classic collapsible); several can be open at once.
  */
 
 
@@ -3626,7 +3876,7 @@ __webpack_require__.r(__webpack_exports__);
 const STYLING_PANEL_GROUP_IDS = ['text', 'background', 'spacing', 'border', 'shadow', 'display', 'raw'];
 
 /** @typedef {'text'|'background'|'spacing'|'border'|'shadow'|'display'|'raw'} StylingAccordionSectionId */
-/** @typedef {StylingAccordionSectionId | null} StylingAccordionSection */
+/** @typedef {Partial<Record<StylingAccordionSectionId, boolean>>} OpenSectionsMap */
 
 /**
  * @param {unknown} stylingGroups — from `control.params.styling_groups`; null/undefined = all
@@ -3649,7 +3899,10 @@ function resolveAllowedGroupIds(stylingGroups) {
  * @param {string} props.sliceKey — `${state}__${device}` to reset link toggles
  * @param {string} props.rawCss
  * @param {(v: string) => void} props.onRawChange
- * @param {import('./googleFontCollection').PickerFontFamily[] | undefined} [props.families]
+ * @param {import('./googleFontCollection').PickerFontFamily[] | undefined} [props.families] — Google catalog
+ * @param {import('./googleFontCollection').PickerFontFamily[] | undefined} [props.localFontFamilies]
+ * @param {import('./googleFontCollection').PickerFontFamily[] | undefined} [props.faceResolveFamilies]
+ * @param {'google'|'local'|undefined} [props.fontFamilySource]
  * @param {boolean | undefined} [props.fontsLoading]
  * @param {Error | null | undefined} [props.fontsError]
  * @param {string[] | null | undefined} [props.stylingGroups] — whitelist + order; omit/null = all
@@ -3663,12 +3916,15 @@ function StylingAccordionPanels({
   rawCss,
   onRawChange,
   families,
+  localFontFamilies,
+  faceResolveFamilies,
+  fontFamilySource,
   fontsLoading,
   fontsError,
   stylingGroups,
   disabledFieldSet
 }) {
-  const [openSection, setOpenSection] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(/** @type {StylingAccordionSection} */null);
+  const [openBySection, setOpenBySection] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(/** @type {OpenSectionsMap} */{});
   const allowedIds = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useMemo)(() => resolveAllowedGroupIds(stylingGroups), [stylingGroups]);
   const singleGroupLocked = allowedIds.length === 1;
   const groupTitles = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useMemo)(() => ({
@@ -3681,10 +3937,26 @@ function StylingAccordionPanels({
     raw: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Custom declarations', 'onepress')
   }), []);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
-    if (openSection && !allowedIds.includes(openSection)) {
-      setOpenSection(null);
-    }
-  }, [allowedIds, openSection]);
+    setOpenBySection(prev => {
+      const next = {
+        ...prev
+      };
+      let changed = false;
+      for (const k of Object.keys(next)) {
+        if (!allowedIds.includes(/** @type {StylingAccordionSectionId} */k)) {
+          delete next[(/** @type {StylingAccordionSectionId} */k)];
+          changed = true;
+        }
+      }
+      for (const id of allowedIds) {
+        if (!(id in next)) {
+          next[id] = false;
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [allowedIds]);
 
   /**
    * @param {StylingAccordionSectionId} sectionId
@@ -3701,30 +3973,18 @@ function StylingAccordionPanels({
         lockOpen: true
       };
     }
-    if (openSection !== null && openSection !== sectionId) {
-      return null;
-    }
-    if (openSection === null) {
-      return {
-        opened: false,
-        onToggle: (/** @type {boolean} */next) => {
-          if (next) {
-            setOpenSection(sectionId);
-          }
-        },
-        lockOpen: false
-      };
-    }
+    const opened = Boolean(openBySection[sectionId]);
     return {
-      opened: true,
+      opened,
       onToggle: (/** @type {boolean} */next) => {
-        if (!next) {
-          setOpenSection(null);
-        }
+        setOpenBySection(prev => ({
+          ...prev,
+          [sectionId]: Boolean(next)
+        }));
       },
       lockOpen: false
     };
-  }, [allowedIds, openSection, singleGroupLocked]);
+  }, [allowedIds, openBySection, singleGroupLocked]);
   const renderGroupBody = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)((/** @type {StylingAccordionSectionId} */sectionId) => {
     switch (sectionId) {
       case 'text':
@@ -3732,6 +3992,9 @@ function StylingAccordionPanels({
           model: model,
           onPatch: onPatch,
           families: families,
+          localFontFamilies: localFontFamilies,
+          faceResolveFamilies: faceResolveFamilies,
+          fontFamilySource: fontFamilySource,
           fontsLoading: fontsLoading,
           fontsError: fontsError,
           disabledFieldSet: disabledFieldSet
@@ -3778,13 +4041,13 @@ function StylingAccordionPanels({
       default:
         return null;
     }
-  }, [model, onPatch, sliceKey, rawCss, onRawChange, families, fontsLoading, fontsError, disabledFieldSet]);
+  }, [model, onPatch, sliceKey, rawCss, onRawChange, families, localFontFamilies, faceResolveFamilies, fontFamilySource, fontsLoading, fontsError, disabledFieldSet]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "panels"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components__WEBPACK_IMPORTED_MODULE_4__.PreservedPropertiesNotice, {
     count: unknownCount
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
-    className: `acc-panel${openSection && !singleGroupLocked ? ' acc-panel--focus-section' : ''}`
+    className: "acc-panel acc-panel--independent-toggles"
   }, allowedIds.map(sectionId => {
     const p = sectionPanelProps(sectionId);
     if (!p) {
@@ -3820,10 +4083,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/close.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/pencil.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/rotate-left.mjs");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/settings.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/chevron-down.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/chevron-up.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/pencil.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/rotate-left.mjs");
 /* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/trash.mjs");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__);
@@ -3833,12 +4096,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _declarationForm__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./declarationForm */ "./src/admin/customizer/styling/declarationForm.js");
 /* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components */ "./src/admin/customizer/styling/components/index.js");
 /* harmony import */ var _StylingAccordionPanels__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./StylingAccordionPanels */ "./src/admin/customizer/styling/StylingAccordionPanels.jsx");
-/* harmony import */ var _stylingDisableFields__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./stylingDisableFields */ "./src/admin/customizer/styling/stylingDisableFields.js");
-/* harmony import */ var _stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./stylingGoogleFonts */ "./src/admin/customizer/styling/stylingGoogleFonts.js");
-/* harmony import */ var _useGoogleFontFamilies__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./useGoogleFontFamilies */ "./src/admin/customizer/styling/useGoogleFontFamilies.js");
-/* harmony import */ var _components_StylingSettingsPopover__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/StylingSettingsPopover */ "./src/admin/customizer/styling/components/StylingSettingsPopover.jsx");
-/* harmony import */ var _stylingPopoverFocusOutside__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./stylingPopoverFocusOutside */ "./src/admin/customizer/styling/stylingPopoverFocusOutside.js");
-/* harmony import */ var _stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./stylingStatesPolicy */ "./src/admin/customizer/styling/stylingStatesPolicy.js");
+/* harmony import */ var _targetElementsRegistry__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./targetElementsRegistry */ "./src/admin/customizer/styling/targetElementsRegistry.js");
+/* harmony import */ var _stylingDisableFields__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./stylingDisableFields */ "./src/admin/customizer/styling/stylingDisableFields.js");
+/* harmony import */ var _stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./stylingGoogleFonts */ "./src/admin/customizer/styling/stylingGoogleFonts.js");
+/* harmony import */ var _useGoogleFontFamilies__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./useGoogleFontFamilies */ "./src/admin/customizer/styling/useGoogleFontFamilies.js");
+/* harmony import */ var _useFontManagerCatalogFamilies__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./useFontManagerCatalogFamilies */ "./src/admin/customizer/styling/useFontManagerCatalogFamilies.js");
+/* harmony import */ var _components_StylingInlineEditor__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/StylingInlineEditor */ "./src/admin/customizer/styling/components/StylingInlineEditor.jsx");
+/* harmony import */ var _stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./stylingStatesPolicy */ "./src/admin/customizer/styling/stylingStatesPolicy.js");
 
 /**
  * Customizer control `styling`: state tabs + accordion groups; device via icons on responsive fields.
@@ -3857,24 +4121,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const IconTarget = ({
-  size = 24
-}) => {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
-    xmlns: "http://www.w3.org/2000/svg",
-    width: size,
-    height: size,
-    viewBox: "0 0 24 24",
-    fill: "currentColor",
-    className: "icon icon-tabler icons-tabler-filled icon-tabler-current-location"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-    stroke: "none",
-    d: "M0 0h24v24H0z",
-    fill: "none"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-    d: "M12 1a1 1 0 0 1 1 1v1.055a9.004 9.004 0 0 1 7.946 7.945h1.054a1 1 0 0 1 0 2h-1.055a9.004 9.004 0 0 1 -7.944 7.945l-.001 1.055a1 1 0 0 1 -2 0v-1.055a9.004 9.004 0 0 1 -7.945 -7.944l-1.055 -.001a1 1 0 0 1 0 -2h1.055a9.004 9.004 0 0 1 7.945 -7.945v-1.055a1 1 0 0 1 1 -1m0 4a7 7 0 1 0 0 14a7 7 0 0 0 0 -14m0 3a4 4 0 1 1 -4 4l.005 -.2a4 4 0 0 1 3.995 -3.8"
-  }));
-};
+
 
 /**
  * @param {JQueryStatic} $ jQuery
@@ -3971,8 +4218,8 @@ function StylingControlApp({
     return ['desktop', 'tablet', 'mobile'];
   }, [control.params.preview_device_ids]);
   const stylingStatesParam = control.params.styling_states;
-  const statesStructureMode = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_18__.getStatesStructureMode)(stylingStatesParam !== undefined ? stylingStatesParam : 'all'), [stylingStatesParam]);
-  const fixedStatesTemplate = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_18__.getFixedStatesTemplate)(stylingStatesParam), [stylingStatesParam]);
+  const statesStructureMode = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.getStatesStructureMode)(stylingStatesParam !== undefined ? stylingStatesParam : 'all'), [stylingStatesParam]);
+  const fixedStatesTemplate = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.getFixedStatesTemplate)(stylingStatesParam), [stylingStatesParam]);
   const editableBaseSelector = control.params.editable_base_selector !== false;
 
   /** Single-target only: non-empty `base_selector` from PHP locks selector and hides the field. */
@@ -3984,7 +4231,7 @@ function StylingControlApp({
     return typeof s === 'string' && s.trim() !== '' ? s.trim() : '';
   }, [multiple, control.params.base_selector]);
   const visibleStylingGroupIds = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_StylingAccordionPanels__WEBPACK_IMPORTED_MODULE_12__.resolveAllowedGroupIds)(control.params.styling_groups), [control.params.styling_groups]);
-  const disabledFieldSet = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_13__.buildDisabledFieldSet)(control.params.disable_fields), [control.params.disable_fields]);
+  const disabledFieldSet = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_14__.buildDisabledFieldSet)(control.params.disable_fields), [control.params.disable_fields]);
   const editorRootClassName = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
     const parts = ['editor', 'onepress-styling-editor', `onepress-styling-editor--group-count-${String(visibleStylingGroupIds.length)}`];
     for (const id of visibleStylingGroupIds) {
@@ -4013,6 +4260,10 @@ function StylingControlApp({
     const d = control.params.description;
     return typeof d === 'string' && d.trim() !== '' ? d : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Per state and breakpoint, enter CSS declarations only (no selectors or curly braces). Example: color: #2271b1; padding: 8px 12px;', 'onepress');
   }, [control.params.description]);
+  const addItemLabel = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
+    const l = control.params.add_item_label;
+    return typeof l === 'string' && l.trim() !== '' ? l.trim() : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Add item', 'onepress');
+  }, [control.params.add_item_label]);
   const defaultStylingPayload = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
     const fromParams = control.params.default_value;
     if (fromParams && typeof fromParams === 'object' && !Array.isArray(fromParams)) {
@@ -4033,12 +4284,8 @@ function StylingControlApp({
   }, [control]);
   const [stateIndex, setStateIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(0);
   const [editorPopoverOpen, setEditorPopoverOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(false);
-  const [editorPopoverAnchor, setEditorPopoverAnchor] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(null);
-  const editButtonRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useRef)(null);
   /** Mirrors `editorPopoverOpen` synchronously so the edit toggle survives stale closures vs. focus-outside ordering. */
   const editorPopoverOpenRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useRef)(false);
-  /** Multi-target: pencil button element for the row whose editor is open (skip focus-outside close when retoggling that anchor). */
-  const lastMultiEditorAnchorRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useRef)(null);
   const [editingItemIndex, setEditingItemIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(null);
   const editingItemIndexRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useRef)(null);
   const [previewPickerActive, setPreviewPickerActive] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(false);
@@ -4050,6 +4297,9 @@ function StylingControlApp({
   const manageStatesButtonRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useRef)(null);
   const [resetConfirm, setResetConfirm] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(/** @type {{ kind: 'all' } | { kind: 'item', index: number } | null} */null);
   const [deleteItemIndex, setDeleteItemIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(/** @type {number | null} */null);
+  const [pendingAddFormOpen, setPendingAddFormOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(false);
+  /** Anchor for editor popover after inline add (wrapper around add row / form). */
+  const pendingAddInlineRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useRef)(/** @type {HTMLDivElement | null} */null);
   const [deviceId, setDeviceId] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useState)(() => {
     const fromPreview = (0,_customizerPreviewDeviceSync__WEBPACK_IMPORTED_MODULE_9__.getCustomizerPreviewDevice)();
     if (fromPreview && previewDeviceIds.includes(fromPreview)) {
@@ -4066,15 +4316,19 @@ function StylingControlApp({
     if (multiple) {
       v = ensureMultiShape(v, control.params.default_value || null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Item 1', 'onepress'));
     }
-    const mode = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_18__.getStatesStructureMode)(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
-    const tpl = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_18__.getFixedStatesTemplate)(stylingStatesParam);
-    return (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_18__.normalizeStylingRootForStatesPolicy)(v, mode, tpl, previewDeviceIds, multiple, lockedBaseSelector);
+    const mode = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.getStatesStructureMode)(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
+    const tpl = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.getFixedStatesTemplate)(stylingStatesParam);
+    return (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.normalizeStylingRootForStatesPolicy)(v, mode, tpl, previewDeviceIds, multiple, lockedBaseSelector);
   });
   const {
     families,
     loading: fontsLoading,
     error: fontsError
-  } = (0,_useGoogleFontFamilies__WEBPACK_IMPORTED_MODULE_15__.useGoogleFontFamilies)();
+  } = (0,_useGoogleFontFamilies__WEBPACK_IMPORTED_MODULE_16__.useGoogleFontFamilies)();
+  const customizeApi = typeof wp !== 'undefined' && wp.customize ? (/** @type {import('@wordpress/customize').Customize} */wp.customize) : null;
+  const localManagedFonts = (0,_useFontManagerCatalogFamilies__WEBPACK_IMPORTED_MODULE_17__.useFontManagerCatalogFamilies)(customizeApi, families);
+  const mergedForFontSlices = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => [...localManagedFonts, ...(families !== null && families !== void 0 ? families : [])], [localManagedFonts, families]);
+  const fontFamilySource = control.params.styling_font_family_source === 'google' ? 'google' : 'local';
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useEffect)(() => {
     const setting = control.setting;
     if (!setting || typeof setting.bind !== 'function') {
@@ -4090,9 +4344,9 @@ function StylingControlApp({
         if (multiple) {
           next = ensureMultiShape(next, control.params.default_value || null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Item 1', 'onepress'));
         }
-        const mode = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_18__.getStatesStructureMode)(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
-        const tpl = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_18__.getFixedStatesTemplate)(stylingStatesParam);
-        next = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_18__.normalizeStylingRootForStatesPolicy)(next, mode, tpl, previewDeviceIds, multiple, lockedBaseSelector);
+        const mode = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.getStatesStructureMode)(stylingStatesParam !== undefined ? stylingStatesParam : 'all');
+        const tpl = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.getFixedStatesTemplate)(stylingStatesParam);
+        next = (0,_stylingStatesPolicy__WEBPACK_IMPORTED_MODULE_19__.normalizeStylingRootForStatesPolicy)(next, mode, tpl, previewDeviceIds, multiple, lockedBaseSelector);
         setValue(next);
       } catch {
         // ignore
@@ -4113,6 +4367,9 @@ function StylingControlApp({
   }, [multiple, value]);
   const editorPayload = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
     if (!multiple) {
+      if (!editorPopoverOpen) {
+        return null;
+      }
       return value;
     }
     if (!editorPopoverOpen || editingItemIndex == null || !Array.isArray(value.items) || value.items[editingItemIndex] == null) {
@@ -4183,8 +4440,8 @@ function StylingControlApp({
     }
     const meta = editorPayload?._meta;
     const b = meta?.baseSelector;
-    if (typeof b === 'string' && b.trim() !== '') {
-      return b;
+    if (typeof b === 'string') {
+      return b.trim();
     }
     const states = meta?.states;
     if (!Array.isArray(states)) {
@@ -4204,37 +4461,52 @@ function StylingControlApp({
     }
     return '';
   }, [editorPayload, lockedBaseSelector]);
+
+  /** New multi items use empty `_meta.baseSelector` until user picks a preset or a selector from preview. */
+  const multiItemAwaitingPresetTarget = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => {
+    var _editorPayload$_meta$;
+    if (!multiple || !editorPayload) {
+      return false;
+    }
+    const base = String((_editorPayload$_meta$ = editorPayload._meta?.baseSelector) !== null && _editorPayload$_meta$ !== void 0 ? _editorPayload$_meta$ : '').trim();
+    return base === '';
+  }, [multiple, editorPayload]);
   const commitRoot = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(nextRoot => {
-    (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_14__.rebuildFontSlicesInValue)(nextRoot, families);
+    (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_15__.rebuildFontSlicesInValue)(nextRoot, mergedForFontSlices);
     setValue(nextRoot);
     pushStylingPayloadToCustomizer($, control, nextRoot);
-  }, [$, control, families]);
+  }, [$, control, mergedForFontSlices]);
   const commitActiveItem = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(nextItem => {
-    (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_14__.rebuildFontSlicesInValue)(nextItem, families);
     if (multiple) {
       const i = editingItemIndex;
-      if (i == null || !Array.isArray(value.items)) {
+      if (i == null) {
         return;
       }
-      const nextRoot = cloneValue(value);
-      nextRoot.items = [...nextRoot.items];
-      nextRoot.items[i] = nextItem;
-      setValue(nextRoot);
-      pushStylingPayloadToCustomizer($, control, nextRoot);
+      setValue(prevRoot => {
+        if (!Array.isArray(prevRoot?.items) || prevRoot.items[i] == null) {
+          return prevRoot;
+        }
+        const nextRoot = cloneValue(prevRoot);
+        const item = cloneValue(nextItem);
+        (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_15__.rebuildFontSlicesInValue)(item, mergedForFontSlices);
+        nextRoot.items = [...nextRoot.items];
+        nextRoot.items[i] = item;
+        pushStylingPayloadToCustomizer($, control, nextRoot);
+        return nextRoot;
+      });
     } else {
-      setValue(nextItem);
-      pushStylingPayloadToCustomizer($, control, nextItem);
+      const item = cloneValue(nextItem);
+      (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_15__.rebuildFontSlicesInValue)(item, mergedForFontSlices);
+      setValue(item);
+      pushStylingPayloadToCustomizer($, control, item);
     }
-  }, [multiple, editingItemIndex, value, families, $, control]);
+  }, [multiple, editingItemIndex, mergedForFontSlices, $, control]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useEffect)(() => {
-    if (fontsLoading) {
-      return;
-    }
     setValue(prev => {
       const next = cloneValue(prev);
       let changed = false;
       const beforeJson = JSON.stringify(prev);
-      (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_14__.rebuildFontSlicesInValue)(next, families);
+      (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_15__.rebuildFontSlicesInValue)(next, mergedForFontSlices);
       if (JSON.stringify(next) !== beforeJson) {
         changed = true;
       }
@@ -4244,7 +4516,7 @@ function StylingControlApp({
       pushStylingPayloadToCustomizer($, control, next);
       return next;
     });
-  }, [fontsLoading, families, $, control]);
+  }, [mergedForFontSlices, $, control]);
   const currentText = activeKey && editorPayload && editorPayload[activeKey] && typeof editorPayload[activeKey] === 'object' && editorPayload[activeKey][deviceId] != null ? String(editorPayload[activeKey][deviceId]) : '';
   const sliceParsed = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useMemo)(() => (0,_declarationForm__WEBPACK_IMPORTED_MODULE_10__.parseDeclarationForm)(currentText), [currentText]);
   const onChangeText = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(text => {
@@ -4262,7 +4534,12 @@ function StylingControlApp({
     const nextCss = (0,_declarationForm__WEBPACK_IMPORTED_MODULE_10__.patchDeclarationForm)(sliceParsed.model, sliceParsed.unknown, patch);
     onChangeText(nextCss);
   }, [sliceParsed.model, sliceParsed.unknown, onChangeText]);
-  const onBaseSelectorChange = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(nextBase => {
+  const onBaseSelectorChange = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(
+  /**
+   * @param {string} nextBase
+   * @param {{ elementPresetId?: string, elementPresetName?: string } | undefined} [binding] — from preset: `_meta.elId`, `_meta.elName`, item `id` (multi). Omit clears `elId` / `elName` (manual / preview pick).
+   */
+  (nextBase, binding) => {
     if (lockedBaseSelector || !editorPayload) {
       return;
     }
@@ -4271,8 +4548,24 @@ function StylingControlApp({
       next._meta = {};
     }
     const trimmed = String(nextBase !== null && nextBase !== void 0 ? nextBase : '').trim();
-    next._meta.baseSelector = trimmed === '' ? '.' : trimmed;
-    next.selector = next._meta.baseSelector;
+    next._meta.baseSelector = trimmed;
+    next.selector = trimmed;
+    const pid = binding && typeof binding.elementPresetId === 'string' ? binding.elementPresetId.trim() : '';
+    if (pid !== '') {
+      next._meta.elId = pid;
+      const pnm = binding && typeof binding.elementPresetName === 'string' ? binding.elementPresetName.trim() : '';
+      if (pnm !== '') {
+        next._meta.elName = pnm;
+      } else {
+        delete next._meta.elName;
+      }
+      if (multiple) {
+        next.id = pid;
+      }
+    } else {
+      delete next._meta.elId;
+      delete next._meta.elName;
+    }
     if (Array.isArray(next._meta.states)) {
       next._meta.states = next._meta.states.map(entry => {
         if (!entry || typeof entry !== 'object') {
@@ -4292,7 +4585,7 @@ function StylingControlApp({
       });
     }
     commitActiveItem(next);
-  }, [editorPayload, commitActiveItem, lockedBaseSelector]);
+  }, [editorPayload, commitActiveItem, lockedBaseSelector, multiple]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useLayoutEffect)(() => {
     editingItemIndexRef.current = editingItemIndex;
   }, [editingItemIndex]);
@@ -4436,28 +4729,49 @@ function StylingControlApp({
     });
   }, [multiple, lockedBaseSelector, value, $, control]);
   const onItemTitleChange = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(nextTitle => {
-    if (!multiple || !editorPayload) {
+    if (!multiple) {
       return;
     }
-    const next = cloneValue(editorPayload);
-    next.title = String(nextTitle !== null && nextTitle !== void 0 ? nextTitle : '');
-    commitActiveItem(next);
-  }, [multiple, editorPayload, commitActiveItem]);
+    const i = editingItemIndex;
+    if (i == null) {
+      return;
+    }
+    setValue(prevRoot => {
+      if (!Array.isArray(prevRoot?.items) || prevRoot.items[i] == null) {
+        return prevRoot;
+      }
+      const nextRoot = cloneValue(prevRoot);
+      const next = cloneValue(nextRoot.items[i]);
+      next.title = String(nextTitle !== null && nextTitle !== void 0 ? nextTitle : '');
+      (0,_stylingGoogleFonts__WEBPACK_IMPORTED_MODULE_15__.rebuildFontSlicesInValue)(next, mergedForFontSlices);
+      nextRoot.items = [...nextRoot.items];
+      nextRoot.items[i] = next;
+      pushStylingPayloadToCustomizer($, control, nextRoot);
+      return nextRoot;
+    });
+  }, [multiple, editingItemIndex, mergedForFontSlices, $, control]);
+  const onSelectTargetPreset = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(/** @param {{ id: string, selector: string, name: string }} preset */preset => {
+    if (!preset || typeof preset.selector !== 'string') {
+      return;
+    }
+    const presetId = typeof preset.id === 'string' ? preset.id.trim() : '';
+    const presetNm = typeof preset.name === 'string' ? preset.name.trim() : '';
+    onBaseSelectorChange(preset.selector, presetId !== '' ? {
+      elementPresetId: presetId,
+      elementPresetName: presetNm
+    } : undefined);
+    if (multiple && typeof preset.name === 'string' && preset.name.trim() !== '') {
+      onItemTitleChange(preset.name);
+    }
+  }, [onBaseSelectorChange, multiple, onItemTitleChange]);
   const unknownCount = Object.keys(sliceParsed.unknown).length;
   const sliceKey = `${activeKey}__${deviceId}`;
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useLayoutEffect)(() => {
     if (!editorPopoverOpen) {
-      if (!multiple) {
-        setEditorPopoverAnchor(null);
-      }
       setStatesPopoverOpen(false);
       setStatesPopoverAnchor(null);
-      return;
     }
-    if (!multiple) {
-      setEditorPopoverAnchor(editButtonRef.current);
-    }
-  }, [editorPopoverOpen, multiple]);
+  }, [editorPopoverOpen]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useLayoutEffect)(() => {
     if (!statesPopoverOpen) {
       setStatesPopoverAnchor(null);
@@ -4473,14 +4787,13 @@ function StylingControlApp({
   }, []);
   const closeEditorPopover = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(() => {
     editorPopoverOpenRef.current = false;
-    lastMultiEditorAnchorRef.current = null;
     cancelPreviewPicker();
     setEditorPopoverOpen(false);
     setStatesPopoverOpen(false);
     setStatesPopoverAnchor(null);
     if (multiple) {
       setEditingItemIndex(null);
-      setEditorPopoverAnchor(null);
+      setPendingAddFormOpen(false);
     }
   }, [multiple, cancelPreviewPicker]);
   const togglePreviewPicker = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(() => {
@@ -4500,28 +4813,6 @@ function StylingControlApp({
       itemIndex: multiple ? editingItemIndex : null
     });
   }, [control.id, multiple, editingItemIndex, cancelPreviewPicker]);
-  const handlePopoverFocusOutside = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(event => {
-    if (previewPickerActiveRef.current) {
-      return;
-    }
-    if ((0,_stylingPopoverFocusOutside__WEBPACK_IMPORTED_MODULE_17__.shouldIgnoreStylingPopoverFocusOutside)(event)) {
-      return;
-    }
-    // useFocusOutside runs in setTimeout(0). If focus moved to the same edit toggle button,
-    // closing here races the button click: close runs first → click then "opens" again.
-    const toggleAnchor = multiple ? lastMultiEditorAnchorRef.current : editButtonRef.current;
-    if (toggleAnchor instanceof HTMLElement) {
-      const rt = event && 'relatedTarget' in event ? event.relatedTarget : null;
-      if (rt instanceof HTMLElement && (rt === toggleAnchor || toggleAnchor.contains(rt))) {
-        return;
-      }
-      const ae = document.activeElement;
-      if (ae instanceof HTMLElement && (ae === toggleAnchor || toggleAnchor.contains(ae))) {
-        return;
-      }
-    }
-    closeEditorPopover();
-  }, [closeEditorPopover, multiple]);
   const toggleEditorPopover = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(() => {
     if (multiple) {
       return;
@@ -4533,13 +4824,12 @@ function StylingControlApp({
     editorPopoverOpenRef.current = true;
     setEditorPopoverOpen(true);
   }, [multiple, closeEditorPopover]);
-  const toggleEditorForItem = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)((index, anchorEl) => {
+  const toggleEditorForItem = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(index => {
+    setPendingAddFormOpen(false);
     if (editorPopoverOpenRef.current && editingItemIndex === index) {
       closeEditorPopover();
       return;
     }
-    lastMultiEditorAnchorRef.current = anchorEl;
-    setEditorPopoverAnchor(anchorEl);
     setEditingItemIndex(index);
     setStateIndex(0);
     editorPopoverOpenRef.current = true;
@@ -4558,7 +4848,10 @@ function StylingControlApp({
       setEditingItemIndex(editingItemIndex - 1);
     }
   }, [multiple, value, commitRoot, editorPopoverOpen, editingItemIndex, closeEditorPopover]);
-  const addItem = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(() => {
+  const cancelPendingAdd = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(() => {
+    setPendingAddFormOpen(false);
+  }, []);
+  const startPendingAdd = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(() => {
     if (!multiple || !defaultStylingPayload) {
       return;
     }
@@ -4567,31 +4860,71 @@ function StylingControlApp({
     if (!template || !Array.isArray(value.items)) {
       return;
     }
-    const id = `item-${Date.now().toString(36)}`;
+    if (editorPopoverOpenRef.current) {
+      editorPopoverOpenRef.current = false;
+      setEditorPopoverOpen(false);
+      setEditingItemIndex(null);
+      cancelPreviewPicker();
+      setStatesPopoverOpen(false);
+      setStatesPopoverAnchor(null);
+    }
+    setPendingAddFormOpen(true);
+  }, [multiple, defaultStylingPayload, value, cancelPreviewPicker]);
+  const confirmPendingAddWithPreset = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(/** @param {{ id: string, selector: string, name: string }} preset */preset => {
+    if (!preset || typeof preset.selector !== 'string' || !multiple || !defaultStylingPayload) {
+      return;
+    }
+    const sel = preset.selector.trim();
+    if (sel === '') {
+      return;
+    }
+    const items = Array.isArray(defaultStylingPayload.items) ? defaultStylingPayload.items : null;
+    const template = items && items[0] ? cloneValue(items[0]) : null;
+    if (!template || !Array.isArray(value.items)) {
+      return;
+    }
+    const presetId = typeof preset.id === 'string' ? preset.id.trim() : '';
     const newItem = cloneValue(template);
-    newItem.id = id;
-    newItem.title = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('New item', 'onepress');
-    newItem.selector = '.new-target';
+    newItem.id = presetId !== '' ? presetId : `item-${Date.now().toString(36)}`;
+    const presetNm = typeof preset.name === 'string' ? preset.name.trim() : '';
+    newItem.title = presetNm !== '' ? presetNm : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('New item', 'onepress');
+    newItem.selector = sel;
     if (!newItem._meta || typeof newItem._meta !== 'object') {
       newItem._meta = {};
     }
-    newItem._meta.baseSelector = '.new-target';
+    newItem._meta.baseSelector = sel;
+    if (presetId !== '') {
+      newItem._meta.elId = presetId;
+      if (presetNm !== '') {
+        newItem._meta.elName = presetNm;
+      } else {
+        delete newItem._meta.elName;
+      }
+    } else {
+      delete newItem._meta.elId;
+      delete newItem._meta.elName;
+    }
     const nextRoot = cloneValue(value);
     nextRoot.items = [...nextRoot.items, newItem];
+    const newIndex = nextRoot.items.length - 1;
     commitRoot(nextRoot);
-  }, [multiple, defaultStylingPayload, value, commitRoot]);
+    cancelPendingAdd();
+    setEditingItemIndex(newIndex);
+    setStateIndex(0);
+    editorPopoverOpenRef.current = true;
+    setEditorPopoverOpen(true);
+  }, [multiple, defaultStylingPayload, value, commitRoot, cancelPendingAdd]);
   const onResetToDefault = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(() => {
     if (!defaultStylingPayload) {
       return;
     }
     editorPopoverOpenRef.current = false;
-    lastMultiEditorAnchorRef.current = null;
     setStatesPopoverOpen(false);
     setStatesPopoverAnchor(null);
     setEditorPopoverOpen(false);
-    setEditorPopoverAnchor(null);
     setEditingItemIndex(null);
     setStateIndex(0);
+    setPendingAddFormOpen(false);
     commitRoot(cloneValue(defaultStylingPayload));
   }, [defaultStylingPayload, commitRoot]);
   const onResetItemToDefault = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_7__.useCallback)(itemIndex => {
@@ -4642,19 +4975,70 @@ function StylingControlApp({
   const itemsList = multiple && Array.isArray(value.items) ? value.items : [];
   const stateTabCount = structuralStates.length;
   const showStatesPopoverButton = statesStructureMode === 'all' || statesStructureMode === 'fixed';
-  /** Gear opens settings popover: full state UI, or target-only (item name / base selector) when states UI is off. */
-  const showEditorSettingsButton = showStatesPopoverButton || multiple || !lockedBaseSelector;
   const allowAddRemoveInStatesPopover = statesStructureMode === 'all';
+  const settingsPopoverUseful = showStatesPopoverButton || multiple || !lockedBaseSelector;
+  const legacyHideToolbarActions = control.params.styling_hide_popover_heading === true;
+  const hideGearByParam = legacyHideToolbarActions || control.params.styling_hide_gear_button === true;
+  const hidePreviewPickByParam = legacyHideToolbarActions || control.params.styling_hide_preview_pick_button === true;
+  const showGearButton = !hideGearByParam && settingsPopoverUseful;
+  const showPreviewPickButton = !hidePreviewPickByParam && !lockedBaseSelector;
+  const gearButtonLabel = showStatesPopoverButton ? allowAddRemoveInStatesPopover ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Manage states', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('State settings', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Settings', 'onepress');
   const showStateTabButtons = stateTabCount > 1;
   const showStatesToolbar = showStateTabButtons || showStatesPopoverButton;
-  const hidePopoverHeading = control.params.styling_hide_popover_heading === true;
   const hideStateTablist = control.params.styling_hide_state_tablist === true;
-  const showHeadingRow = !hidePopoverHeading;
   const showStateTablistBlock = showStatesToolbar && !hideStateTablist;
-  const showPopoverHeader = showHeadingRow || showStateTablistBlock;
   const tablistVisibleForA11y = showStateTabButtons && !hideStateTablist;
-  const popoverTitle = multiple ? editorPayload ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.sprintf)(/* translators: %s: item label */
-  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Edit styling: %s', 'onepress'), String(editorPayload.title || editorPayload.id || '')) : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Edit styling', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Edit styling', 'onepress');
+  const inlineEditorProps = editorPopoverOpen && editorPayload ? {
+    visibleStylingGroupCount: visibleStylingGroupIds.length,
+    showGearButton,
+    showPreviewPickButton,
+    gearButtonLabel,
+    lockedBaseSelector,
+    editableBaseSelector,
+    allowAddRemoveInStatesPopover,
+    showStatesPopoverButton,
+    toggleStatesPopover,
+    statesPopoverOpen,
+    statesPopoverAnchor,
+    togglePreviewPicker,
+    previewPickerActive,
+    manageStatesButtonRef,
+    showStateTablistBlock,
+    multiple,
+    multiItemAwaitingPresetTarget,
+    showStateTabButtons,
+    statesList,
+    stateIndex,
+    setStateIndex,
+    onStateTabKeyDown,
+    stateTabPanelId,
+    getStateTabId,
+    tablistVisibleForA11y,
+    closeStatesPopover,
+    commitActiveItem,
+    editorPayload,
+    previewDeviceIds,
+    activeKey,
+    onBaseSelectorChange,
+    onItemTitleChange,
+    metaBaseSelector,
+    onSelectTargetPreset,
+    sliceParsed,
+    unknownCount,
+    onPatch,
+    sliceKey,
+    currentText,
+    onChangeText,
+    families,
+    localManagedFonts,
+    mergedForFontSlices,
+    fontFamilySource,
+    fontsLoading,
+    fontsError,
+    stylingGroups: control.params.styling_groups,
+    disabledFieldSet,
+    onCloseEditor: closeEditorPopover
+  } : null;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components__WEBPACK_IMPORTED_MODULE_11__.StylingDeviceProvider, {
     deviceId: deviceId,
     setDeviceId: setDeviceIdSynced,
@@ -4680,28 +5064,31 @@ function StylingControlApp({
     size: "small",
     className: "icon-btn"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
     size: 20
   })), !multiple ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    ref: editButtonRef,
     variant: "secondary",
     onClick: toggleEditorPopover,
     isPressed: editorPopoverOpen,
     "aria-expanded": editorPopoverOpen,
-    "aria-haspopup": "dialog",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Edit styling', 'onepress'),
     className: "icon-btn",
     size: "small",
     showTooltip: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
     size: 20
-  })) : null)), multiple ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })) : null)), !multiple && inlineEditorProps ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StylingInlineEditor__WEBPACK_IMPORTED_MODULE_18__.StylingInlineEditor, {
+    key: "styling-inline-single",
+    ...inlineEditorProps
+  }) : null, multiple ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-styling-items mt-3"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex flex-col gap-2"
   }, itemsList.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: item.id || `idx-${String(index)}`,
+    className: "onepress-styling-items__row flex flex-col gap-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "styling-list-item flex justify-between items-center gap-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "grow truncate text-sm"
@@ -4719,7 +5106,7 @@ function StylingControlApp({
     showTooltip: true,
     className: "icon-btn"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
     size: 18
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "minimal",
@@ -4735,187 +5122,51 @@ function StylingControlApp({
     size: 18
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "secondary",
-    onClick: e => toggleEditorForItem(index, e.currentTarget),
+    onClick: () => toggleEditorForItem(index),
     isPressed: editorPopoverOpen && editingItemIndex === index,
     "aria-expanded": editorPopoverOpen && editingItemIndex === index,
-    "aria-haspopup": "dialog",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Edit styling', 'onepress'),
     showTooltip: true,
     size: "small",
     className: "icon-btn"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
+  }, editorPopoverOpen && editingItemIndex === index ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
     size: 18
-  })))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "block mt-2"
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
+    size: 18
+  })))), inlineEditorProps && editingItemIndex === index ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StylingInlineEditor__WEBPACK_IMPORTED_MODULE_18__.StylingInlineEditor, {
+    key: item.id || `styling-inline-${String(index)}`,
+    ...inlineEditorProps
+  }) : null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "block mt-2",
+    ref: pendingAddInlineRef
+  }, pendingAddFormOpen ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling-pending-add-inline"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling-pending-add-inline__picker"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "enum-label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Target Element', 'onepress')), (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_13__.getStylingTargetElementsRegistry)().elements.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "description"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('No targets are available.', 'onepress')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components__WEBPACK_IMPORTED_MODULE_11__.StylingTargetElementSelect, {
+    currentSelector: "",
+    currentElId: "",
+    selectedPresetName: "",
+    onSelectPreset: confirmPendingAddWithPreset,
+    disabled: Boolean(lockedBaseSelector) || !editableBaseSelector
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling-pending-add-inline__actions"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "secondary",
+    onClick: cancelPendingAdd
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Cancel', 'onepress')))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "secondary",
     className: "mt-2 p-0 h-auto",
-    onClick: addItem
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Add item', 'onepress')))) : null), editorPopoverOpen && editorPopoverAnchor && editorPayload ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Popover, {
-    anchor: editorPopoverAnchor,
-    onClose: closeEditorPopover,
-    onFocusOutside: handlePopoverFocusOutside,
-    placement: "bottom-end",
-    offset: 8,
-    className: `onepress-styling-editor-popover group-count-${String(visibleStylingGroupIds.length)}`
-    // focusOnMount="firstElement"
-    ,
-    noArrow: false,
-    shift: true
-  }, showPopoverHeader ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "popover-header"
-  }, showHeadingRow ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex items-center gap-2 w-full justify-between"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grow onepress-styling-editor-popover__title "
-  }, popoverTitle), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex items-center gap-2"
-  }, showEditorSettingsButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    ref: manageStatesButtonRef,
-    className: "onepress-styling-manage-states icon-btn",
-    variant: "secondary",
-    onClick: toggleStatesPopover,
-    "aria-expanded": statesPopoverOpen,
-    "aria-haspopup": "dialog",
-    size: "small",
-    label: showStatesPopoverButton ? allowAddRemoveInStatesPopover ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Manage states', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('State settings', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Settings', 'onepress'),
-    showTooltip: true
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
-    size: 20
-  })) : null, !lockedBaseSelector ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    variant: "secondary",
-    onClick: togglePreviewPicker,
-    isPressed: previewPickerActive,
-    disabled: !editableBaseSelector,
-    size: "small",
-    label: previewPickerActive ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Cancel picking from preview', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Pick a selector from the site preview', 'onepress'),
-    showTooltip: true,
-    className: "icon-btn"
-  }, previewPickerActive ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
-    size: 18
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(IconTarget, {
-    size: 18
-  }))) : null)) : null, !showHeadingRow && showEditorSettingsButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex items-center gap-2 w-full justify-end onepress-styling-editor-popover__header-tools"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    ref: manageStatesButtonRef,
-    className: "onepress-styling-manage-states icon-btn",
-    variant: "secondary",
-    onClick: toggleStatesPopover,
-    "aria-expanded": statesPopoverOpen,
-    "aria-haspopup": "dialog",
-    size: "small",
-    label: showStatesPopoverButton ? allowAddRemoveInStatesPopover ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Manage states', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('State settings', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Settings', 'onepress'),
-    showTooltip: true
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
-    size: 20
-  })), !lockedBaseSelector ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    variant: "secondary",
-    onClick: togglePreviewPicker,
-    isPressed: previewPickerActive,
-    disabled: !editableBaseSelector,
-    size: "small",
-    label: previewPickerActive ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Cancel picking from preview', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Pick a selector from the site preview', 'onepress'),
-    showTooltip: true,
-    className: "icon-btn"
-  }, previewPickerActive ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
-    size: 18
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(IconTarget, {
-    size: 18
-  })) : null) : null, showStateTablistBlock ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: " onepress-styling styling-root"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "states"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "states-toolbar flex flex gap-2 justify-between items-center"
-  }, showStateTabButtons ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "state-tablist-scroll"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "state-tablist-inner  components-button-group ",
-    role: "tablist",
-    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Style states', 'onepress')
-  }, statesList.map((s, i) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    key: s.key,
-    id: getStateTabId(i),
-    "aria-selected": i === stateIndex,
-    "aria-controls": stateTabPanelId,
-    tabIndex: i === stateIndex ? 0 : -1,
-    variant: "unstyled",
-    onClick: () => setStateIndex(i),
-    onKeyDown: e => onStateTabKeyDown(e, i),
-    className: `tab-button ${i === stateIndex ? ' is-active' : ''}`
-  }, s.label)))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "grow",
-    "aria-hidden": true
-  })))) : null) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "popover-body grow styling-root onepress-styling onepress-styling-editor-popover__inner",
-    role: tablistVisibleForA11y ? 'tabpanel' : undefined,
-    id: tablistVisibleForA11y ? stateTabPanelId : undefined,
-    "aria-labelledby": tablistVisibleForA11y ? getStateTabId(stateIndex) : undefined
-  }, !showPopoverHeader && showEditorSettingsButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex items-center gap-2 w-full justify-end pb-2 mb-2 onepress-styling-editor-popover__header-tools"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    ref: manageStatesButtonRef,
-    className: "onepress-styling-manage-states icon-btn",
-    variant: "secondary",
-    onClick: toggleStatesPopover,
-    "aria-expanded": statesPopoverOpen,
-    "aria-haspopup": "dialog",
-    size: "small",
-    label: showStatesPopoverButton ? allowAddRemoveInStatesPopover ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Manage states', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('State settings', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Settings', 'onepress'),
-    showTooltip: true
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
-    size: 20
-  })), !lockedBaseSelector ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    variant: "secondary",
-    onClick: togglePreviewPicker,
-    isPressed: previewPickerActive,
-    disabled: !editableBaseSelector,
-    size: "small",
-    label: previewPickerActive ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Cancel picking from preview', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__.__)('Pick a selector from the site preview', 'onepress'),
-    showTooltip: true,
-    className: "icon-btn"
-  }, previewPickerActive ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
-    size: 18
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(IconTarget, {
-    size: 18
-  })) : null) : null, showEditorSettingsButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StylingSettingsPopover__WEBPACK_IMPORTED_MODULE_16__.StylingSettingsPopover, {
-    anchor: statesPopoverAnchor,
-    isOpen: statesPopoverOpen,
-    onClose: closeStatesPopover,
-    value: editorPayload,
-    commit: commitActiveItem,
-    previewDeviceIds: previewDeviceIds,
-    activeStateKey: activeKey,
-    setStateIndex: setStateIndex,
-    allowAddRemoveStates: allowAddRemoveInStatesPopover,
-    multiple: multiple,
-    lockedBaseSelector: lockedBaseSelector,
-    editableBaseSelector: editableBaseSelector,
-    metaBaseSelector: metaBaseSelector,
-    onBaseSelectorChange: onBaseSelectorChange,
-    onItemTitleChange: onItemTitleChange,
-    showStatesSection: showStatesPopoverButton
-  }) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingAccordionPanels__WEBPACK_IMPORTED_MODULE_12__.StylingAccordionPanels, {
-    model: sliceParsed.model,
-    unknownCount: unknownCount,
-    onPatch: onPatch,
-    sliceKey: sliceKey,
-    rawCss: currentText,
-    onRawChange: onChangeText,
-    families: families,
-    fontsLoading: fontsLoading,
-    fontsError: fontsError,
-    stylingGroups: control.params.styling_groups,
-    disabledFieldSet: disabledFieldSet
-  }))) : null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    onClick: startPendingAdd
+  }, addItemLabel))) : null, controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "description mt-2"
+  }, controlDescription) : null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-styling-pick-snackbar-wrap",
     "aria-live": "polite"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SnackbarList, {
@@ -8305,6 +8556,452 @@ function StylingGroupPanel({
 
 /***/ },
 
+/***/ "./src/admin/customizer/styling/components/StylingInlineEditor.jsx"
+/*!*************************************************************************!*\
+  !*** ./src/admin/customizer/styling/components/StylingInlineEditor.jsx ***!
+  \*************************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StylingInlineEditor: () => (/* binding */ StylingInlineEditor)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/close.mjs");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/settings.mjs");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _StylingAccordionPanels__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../StylingAccordionPanels */ "./src/admin/customizer/styling/StylingAccordionPanels.jsx");
+/* harmony import */ var _StylingTargetElementSelect__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./StylingTargetElementSelect */ "./src/admin/customizer/styling/components/StylingTargetElementSelect.jsx");
+/* harmony import */ var _StylingSettingsPopover__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./StylingSettingsPopover */ "./src/admin/customizer/styling/components/StylingSettingsPopover.jsx");
+
+/**
+ * Inline styling editor panel (toolbar, state tabs, settings popover anchor, preset, accordions).
+ */
+
+
+
+
+
+
+
+const IconTarget = ({
+  size = 24
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: size,
+  height: size,
+  viewBox: "0 0 24 24",
+  fill: "currentColor",
+  className: "icon icon-tabler icons-tabler-filled icon-tabler-current-location"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+  stroke: "none",
+  d: "M0 0h24v24H0z",
+  fill: "none"
+}), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+  d: "M12 1a1 1 0 0 1 1 1v1.055a9.004 9.004 0 0 1 7.946 7.945h1.054a1 1 0 0 1 0 2h-1.055a9.004 9.004 0 0 1 -7.944 7.945l-.001 1.055a1 1 0 0 1 -2 0v-1.055a9.004 9.004 0 0 1 -7.945 -7.944l-1.055 -.001a1 1 0 0 1 0 -2h1.055a9.004 9.004 0 0 1 7.945 -7.945v-1.055a1 1 0 0 1 1 -1m0 4a7 7 0 1 0 0 14a7 7 0 0 0 0 -14m0 3a4 4 0 1 1 -4 4l.005 -.2a4 4 0 0 1 3.995 -3.8"
+}));
+
+/**
+ * @param {object} props
+ */
+function StylingInlineEditorInner({
+  visibleStylingGroupCount,
+  showGearButton,
+  showPreviewPickButton,
+  gearButtonLabel,
+  lockedBaseSelector,
+  editableBaseSelector,
+  allowAddRemoveInStatesPopover,
+  showStatesPopoverButton,
+  toggleStatesPopover,
+  statesPopoverOpen,
+  statesPopoverAnchor,
+  togglePreviewPicker,
+  previewPickerActive,
+  manageStatesButtonRef,
+  showStateTablistBlock,
+  multiple,
+  multiItemAwaitingPresetTarget,
+  showStateTabButtons,
+  statesList,
+  stateIndex,
+  setStateIndex,
+  onStateTabKeyDown,
+  stateTabPanelId,
+  getStateTabId,
+  tablistVisibleForA11y,
+  closeStatesPopover,
+  commitActiveItem,
+  editorPayload,
+  previewDeviceIds,
+  activeKey,
+  onBaseSelectorChange,
+  onItemTitleChange,
+  metaBaseSelector,
+  onSelectTargetPreset,
+  sliceParsed,
+  unknownCount,
+  onPatch,
+  sliceKey,
+  currentText,
+  onChangeText,
+  families,
+  localManagedFonts,
+  mergedForFontSlices,
+  fontFamilySource,
+  fontsLoading,
+  fontsError,
+  stylingGroups,
+  disabledFieldSet,
+  onCloseEditor
+}) {
+  if (!editorPayload) {
+    return null;
+  }
+  const showActionsToolbar = showGearButton || showPreviewPickButton;
+  const showTablist = showStateTablistBlock && !(multiple && multiItemAwaitingPresetTarget);
+  const showStickyChrome = showActionsToolbar || showTablist;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `onepress-styling-inline-editor onepress-styling-editor-popover group-count-${String(visibleStylingGroupCount)}`
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "onepress-styling-inline-editor__arrow",
+    "aria-hidden": "true"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "onepress-styling-inline-editor__arrow-fill"
+  })), showStickyChrome ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "popover-header onepress-styling-inline-editor__header"
+  }, showActionsToolbar ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex items-center gap-2 w-full justify-end pb-2 onepress-styling-editor-popover__header-tools"
+  }, showGearButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    ref: manageStatesButtonRef,
+    className: "onepress-styling-manage-states icon-btn",
+    variant: "secondary",
+    onClick: toggleStatesPopover,
+    "aria-expanded": statesPopoverOpen,
+    "aria-haspopup": "dialog",
+    size: "small",
+    label: gearButtonLabel,
+    showTooltip: true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
+    size: 20
+  })) : null, showPreviewPickButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "secondary",
+    onClick: togglePreviewPicker,
+    isPressed: previewPickerActive,
+    disabled: !editableBaseSelector,
+    size: "small",
+    label: previewPickerActive ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Cancel picking from preview', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Pick a selector from the site preview', 'onepress'),
+    showTooltip: true,
+    className: "icon-btn"
+  }, previewPickerActive ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
+    size: 18
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(IconTarget, {
+    size: 18
+  })) : null) : null, showTablist ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling styling-root"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "states"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "states-toolbar flex flex gap-2 justify-between items-center"
+  }, showStateTabButtons ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "state-tablist-scroll"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "state-tablist-inner  components-button-group ",
+    role: "tablist",
+    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Style states', 'onepress')
+  }, statesList.map((s, i) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    key: s.key,
+    id: getStateTabId(i),
+    "aria-selected": i === stateIndex,
+    "aria-controls": stateTabPanelId,
+    tabIndex: i === stateIndex ? 0 : -1,
+    variant: "unstyled",
+    onClick: () => setStateIndex(i),
+    onKeyDown: e => onStateTabKeyDown(e, i),
+    className: `tab-button ${i === stateIndex ? ' is-active' : ''}`
+  }, s.label)))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "grow",
+    "aria-hidden": true
+  })))) : null) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "popover-body grow styling-root onepress-styling onepress-styling-editor-popover__inner",
+    role: tablistVisibleForA11y && !multiItemAwaitingPresetTarget ? 'tabpanel' : undefined,
+    id: tablistVisibleForA11y && !multiItemAwaitingPresetTarget ? stateTabPanelId : undefined,
+    "aria-labelledby": tablistVisibleForA11y && !multiItemAwaitingPresetTarget ? getStateTabId(stateIndex) : undefined
+  }, showGearButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingSettingsPopover__WEBPACK_IMPORTED_MODULE_8__.StylingSettingsPopover, {
+    anchor: statesPopoverAnchor,
+    isOpen: statesPopoverOpen,
+    onClose: closeStatesPopover,
+    value: editorPayload,
+    commit: commitActiveItem,
+    previewDeviceIds: previewDeviceIds,
+    activeStateKey: activeKey,
+    setStateIndex: setStateIndex,
+    allowAddRemoveStates: allowAddRemoveInStatesPopover,
+    multiple: multiple,
+    lockedBaseSelector: lockedBaseSelector,
+    editableBaseSelector: editableBaseSelector,
+    metaBaseSelector: metaBaseSelector,
+    onBaseSelectorChange: onBaseSelectorChange,
+    onItemTitleChange: onItemTitleChange,
+    showStatesSection: showStatesPopoverButton
+  }) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling-target-preset-wrap"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "enum-label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Target Element', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingTargetElementSelect__WEBPACK_IMPORTED_MODULE_7__.StylingTargetElementSelect, {
+    currentSelector: metaBaseSelector,
+    currentElId: typeof editorPayload?._meta?.elId === 'string' ? editorPayload._meta.elId : '',
+    selectedPresetName: typeof editorPayload?._meta?.elName === 'string' ? editorPayload._meta.elName : '',
+    onSelectPreset: onSelectTargetPreset,
+    disabled: Boolean(lockedBaseSelector) || !editableBaseSelector
+  })), !multiItemAwaitingPresetTarget ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingAccordionPanels__WEBPACK_IMPORTED_MODULE_6__.StylingAccordionPanels, {
+    model: sliceParsed.model,
+    unknownCount: unknownCount,
+    onPatch: onPatch,
+    sliceKey: sliceKey,
+    rawCss: currentText,
+    onRawChange: onChangeText,
+    families: families,
+    localFontFamilies: localManagedFonts,
+    faceResolveFamilies: mergedForFontSlices,
+    fontFamilySource: fontFamilySource,
+    fontsLoading: fontsLoading,
+    fontsError: fontsError,
+    stylingGroups: stylingGroups,
+    disabledFieldSet: disabledFieldSet
+  }) : null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling-inline-editor__footer"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "secondary",
+    size: "small",
+    onClick: onCloseEditor,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Close styling editor', 'onepress')
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Close', 'onepress'))));
+}
+const StylingInlineEditor = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.memo)(StylingInlineEditorInner);
+
+/***/ },
+
+/***/ "./src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx"
+/*!***********************************************************************************!*\
+  !*** ./src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx ***!
+  \***********************************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StylingLocalFontFamilyControl: () => (/* binding */ StylingLocalFontFamilyControl)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/chevron-down-small.mjs");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _googleFontCollection__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../googleFontCollection */ "./src/admin/customizer/styling/googleFontCollection.js");
+
+/**
+ * Font family picker: same UI as Google control, list = fonts from Customizer Font manager only.
+ */
+
+
+
+
+
+
+/** @typedef {import('../googleFontCollection').PickerFontFamily} PickerFontFamily */
+
+const LIST_MAX_HEIGHT = 320;
+const ROW_HEIGHT = 48;
+const OVERSCAN = 6;
+
+/**
+ * @param {object} props
+ * @param {string} props.value
+ * @param {(patch: Record<string, string>) => void} props.onPatch
+ * @param {(font: PickerFontFamily) => void} [props.onPickFamily]
+ * @param {PickerFontFamily[]} props.families — from Font manager (may include __rowId)
+ */
+function StylingLocalFontFamilyControl({
+  value,
+  onPatch,
+  onPickFamily,
+  families
+}) {
+  const [popoverOpen, setPopoverOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(false);
+  const [popoverAnchor, setPopoverAnchor] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(null);
+  const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)('');
+  const [scrollTop, setScrollTop] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(0);
+  const triggerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useRef)(null);
+  const listScrollRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useRef)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
+    if (listScrollRef.current) {
+      listScrollRef.current.scrollTop = 0;
+    }
+    setScrollTop(0);
+  }, [search]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useLayoutEffect)(() => {
+    if (!popoverOpen) {
+      setPopoverAnchor(null);
+      setSearch('');
+      setScrollTop(0);
+      return;
+    }
+    setPopoverAnchor(triggerRef.current);
+  }, [popoverOpen]);
+  const filtered = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    if (!families?.length) {
+      return [];
+    }
+    const q = search.trim().toLowerCase();
+    if (!q) {
+      return families;
+    }
+    return families.filter(f => f.name.toLowerCase().includes(q) || f.slug.toLowerCase().includes(q) || f.fontFamily.toLowerCase().includes(q));
+  }, [families, search]);
+  const totalHeight = filtered.length * ROW_HEIGHT;
+  const start = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - OVERSCAN);
+  const end = Math.min(filtered.length, Math.ceil((scrollTop + LIST_MAX_HEIGHT) / ROW_HEIGHT) + OVERSCAN);
+  const visible = filtered.slice(start, end);
+  const offsetY = start * ROW_HEIGHT;
+  const togglePopover = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useCallback)(() => setPopoverOpen(o => !o), []);
+  const closePopover = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useCallback)(() => setPopoverOpen(false), []);
+  const pickFont = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useCallback)(/** @param {PickerFontFamily} font */font => {
+    const d = (0,_googleFontCollection__WEBPACK_IMPORTED_MODULE_5__.pickDefaultFace)(font);
+    onPatch({
+      fontFamily: font.fontFamily,
+      fontWeight: d.fontWeight,
+      fontStyle: d.fontStyle
+    });
+    onPickFamily?.(font);
+    closePopover();
+  }, [closePopover, onPatch, onPickFamily]);
+  const onListScroll = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useCallback)(e => {
+    setScrollTop(e.currentTarget.scrollTop);
+  }, []);
+  const display = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    const raw = String(value || '').trim();
+    if (!raw) {
+      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Default (inherit)', 'onepress');
+    }
+    const family = (0,_googleFontCollection__WEBPACK_IMPORTED_MODULE_5__.findFamilyForModel)(families, raw);
+    if (family) {
+      return family.name;
+    }
+    return raw;
+  }, [value, families]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "styling-font-family-control"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    ref: triggerRef,
+    className: "styling-font-family-trigger styling-font-family-trigger--input-like",
+    "aria-expanded": popoverOpen,
+    "aria-haspopup": "dialog",
+    onClick: togglePopover
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "styling-font-family-trigger__value"
+  }, display), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "styling-font-family-trigger__chevron",
+    "aria-hidden": true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
+    size: 20
+  }))), popoverOpen && popoverAnchor ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Popover, {
+    anchor: popoverAnchor,
+    onClose: closePopover,
+    placement: "bottom",
+    shift: true,
+    className: "styling-font-picker-popover",
+    focusOnMount: "firstElement",
+    noArrow: false,
+    offset: 8
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "styling-font-picker-popover__inner"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __nextHasNoMarginBottom: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Search fonts', 'onepress'),
+    hideLabelFromVision: true,
+    value: search,
+    onChange: setSearch,
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Type to filter…', 'onepress')
+  }), families?.length && filtered.length ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ref: listScrollRef,
+    className: "styling-font-picker__list",
+    style: {
+      maxHeight: LIST_MAX_HEIGHT
+    },
+    onScroll: onListScroll
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "styling-font-picker__list-spacer",
+    style: {
+      height: totalHeight,
+      position: 'relative'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "styling-font-picker__list-window",
+    style: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      transform: `translateY(${offsetY}px)`
+    }
+  }, visible.map(font => {
+    const isSystem = Boolean(font.isSystem);
+    const rowClass = 'styling-font-picker__row' + (isSystem ? ' styling-font-picker__row--system' : ' styling-font-picker__row--google');
+    const rowKey = /** @type {{ __rowId?: string }} */font.__rowId || font.slug;
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+      key: rowKey,
+      type: "button",
+      className: rowClass,
+      style: {
+        height: ROW_HEIGHT
+      },
+      onClick: () => pickFont(font),
+      "aria-label": isSystem ? undefined : font.name
+    }, isSystem ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "styling-font-picker__name styling-font-picker__name--live",
+      style: {
+        fontFamily: font.fontFamily
+      }
+    }, font.name) : font.preview ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      className: "styling-font-picker__preview styling-font-picker__preview--google",
+      src: font.preview,
+      alt: "",
+      loading: "lazy",
+      decoding: "async"
+    }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "styling-font-picker__preview styling-font-picker__preview--empty styling-font-picker__preview--google",
+      "aria-hidden": true
+    }));
+  })))) : null, families?.length && !filtered.length ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "styling-font-picker__empty"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No fonts match your search.', 'onepress')) : null, !families?.length ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "styling-font-picker__empty"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No fonts in Font manager yet. Add fonts under Typography → Font manager.', 'onepress')) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "styling-font-picker__footer"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "tertiary",
+    onClick: closePopover
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Close', 'onepress'))))) : null);
+}
+
+/***/ },
+
 /***/ "./src/admin/customizer/styling/components/StylingSettingsPopover.jsx"
 /*!****************************************************************************!*\
   !*** ./src/admin/customizer/styling/components/StylingSettingsPopover.jsx ***!
@@ -8438,7 +9135,7 @@ const RESERVED_STATE_KEYS = new Set(['_meta', '_onepressstyling']);
  * @param {string} [props.lockedBaseSelector] Non-empty when base selector is fixed in PHP (hide field).
  * @param {boolean} [props.editableBaseSelector]
  * @param {string} [props.metaBaseSelector]
- * @param {(v: string) => void} [props.onBaseSelectorChange]
+ * @param {(v: string, binding?: { elementPresetId?: string, elementPresetName?: string }) => void} [props.onBaseSelectorChange]
  * @param {(v: string) => void} [props.onItemTitleChange]
  * @param {boolean} [props.showStatesSection] When false, hide states list and add-state UI (target settings only).
  */
@@ -8566,7 +9263,7 @@ function StylingSettingsPopover({
     }
     if (stateKey === 'normal') {
       const trimmed = String(newSelector !== null && newSelector !== void 0 ? newSelector : '').trim();
-      next._meta.baseSelector = trimmed === '' ? '.' : trimmed;
+      next._meta.baseSelector = trimmed;
       const updated = states.map((e, i) => i === globalIndex ? {
         [stateKey]: {
           ...row,
@@ -8633,12 +9330,12 @@ function StylingSettingsPopover({
     const next = cloneValue(value);
     if (!next._meta) {
       next._meta = {
-        baseSelector: '.',
+        baseSelector: '',
         states: []
       };
     }
-    if (typeof next._meta.baseSelector !== 'string' || next._meta.baseSelector.trim() === '') {
-      next._meta.baseSelector = '.';
+    if (typeof next._meta.baseSelector !== 'string') {
+      next._meta.baseSelector = '';
     }
     const cur = normalizeStatesEntriesOrder(next._meta.states || []);
     const {
@@ -8877,6 +9574,204 @@ function StylingSettingsPopover({
 
 /***/ },
 
+/***/ "./src/admin/customizer/styling/components/StylingTargetElementSelect.jsx"
+/*!********************************************************************************!*\
+  !*** ./src/admin/customizer/styling/components/StylingTargetElementSelect.jsx ***!
+  \********************************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StylingTargetElementSelect: () => (/* binding */ StylingTargetElementSelect)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/library/chevron-down-small.mjs");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../targetElementsRegistry */ "./src/admin/customizer/styling/targetElementsRegistry.js");
+
+/**
+ * Hierarchical, searchable preset CSS targets (Customizer styling editor).
+ */
+
+
+
+
+
+const LIST_MAX_H = 280;
+
+/**
+ * @param {object} props
+ * @param {string} props.currentSelector — active base selector
+ * @param {string} [props.currentElId] — `_meta.elId` when chosen from registry
+ * @param {string} [props.selectedPresetName] — `_meta.elName` (stable label in trigger)
+ * @param {(preset: { selector: string, name: string, id: string }) => void} props.onSelectPreset
+ * @param {boolean} [props.disabled]
+ */
+function StylingTargetElementSelect({
+  currentSelector,
+  currentElId = '',
+  selectedPresetName = '',
+  onSelectPreset,
+  disabled = false
+}) {
+  const [registry, setRegistry] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(() => (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.getStylingTargetElementsRegistry)());
+  const {
+    categories,
+    elements
+  } = registry;
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useLayoutEffect)(() => {
+    setRegistry((0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.getStylingTargetElementsRegistry)());
+  }, []);
+  const [open, setOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(false);
+  const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)('');
+  const triggerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useRef)(null);
+  const [anchor, setAnchor] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(null);
+  const elIdStr = String(currentElId || '').trim();
+  const selStr = String(currentSelector || '').trim();
+  const matched = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.findMatchingTargetPreset)(currentSelector, currentElId), [currentSelector, currentElId]);
+  const categoryOrder = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => Object.keys(categories), [categories]);
+  const filtered = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) {
+      return elements;
+    }
+    return elements.filter(e => e.name.toLowerCase().includes(q) || e.id.toLowerCase().includes(q) || e.selector.toLowerCase().includes(q));
+  }, [elements, search]);
+  const grouped = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    /** @type {Map<string, typeof elements>} */
+    const map = new Map();
+    for (const e of filtered) {
+      const c = e.category || 'other';
+      if (!map.has(c)) {
+        map.set(c, []);
+      }
+      map.get(c).push(e);
+    }
+    return map;
+  }, [filtered]);
+  const orderedCategoryKeys = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    const seen = new Set(categoryOrder);
+    const extra = [...grouped.keys()].filter(k => !seen.has(k)).sort();
+    return [...categoryOrder, ...extra];
+  }, [categoryOrder, grouped]);
+  const toggle = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useCallback)(() => {
+    if (disabled) {
+      return;
+    }
+    setOpen(o => !o);
+  }, [disabled]);
+  const close = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useCallback)(() => {
+    setOpen(false);
+  }, []);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useLayoutEffect)(() => {
+    if (!open) {
+      setAnchor(null);
+      setSearch('');
+      return;
+    }
+    setAnchor(triggerRef.current);
+  }, [open]);
+  const savedLabel = String(selectedPresetName || '').trim();
+  const triggerLabel = savedLabel || (matched ? matched.name : '') || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Target Element…', 'onepress');
+  if (elements.length === 0) {
+    return null;
+  }
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling-target-preset"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    ref: triggerRef,
+    className: "onepress-styling-target-preset__trigger styling-font-family-trigger styling-font-family-trigger--input-like",
+    "aria-expanded": open,
+    "aria-haspopup": "dialog",
+    disabled: disabled,
+    onClick: toggle
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "styling-font-family-trigger__value"
+  }, triggerLabel), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "styling-font-family-trigger__chevron",
+    "aria-hidden": true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"],
+    size: 20
+  }))), open && anchor ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Popover, {
+    anchor: anchor,
+    onClose: close,
+    placement: "bottom-start",
+    shift: true,
+    className: "onepress-styling-target-preset__popover styling-font-picker-popover",
+    focusOnMount: "firstElement",
+    noArrow: false,
+    offset: 8
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "styling-font-picker-popover__inner"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __nextHasNoMarginBottom: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Search targets', 'onepress'),
+    hideLabelFromVision: true,
+    value: search,
+    onChange: setSearch,
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Search by name or selector…', 'onepress')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling-target-preset__list styling-font-picker__list",
+    style: {
+      maxHeight: LIST_MAX_H,
+      overflowY: 'auto'
+    }
+  }, filtered.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "styling-font-picker__empty"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No presets match your search.', 'onepress')) : orderedCategoryKeys.map(catKey => {
+    const group = grouped.get(catKey);
+    if (!group?.length) {
+      return null;
+    }
+    const catLabel = categories[catKey] || catKey;
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: catKey,
+      className: "onepress-styling-target-preset__group"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "onepress-styling-target-preset__group-title",
+      role: "presentation"
+    }, catLabel), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+      className: "onepress-styling-target-preset__group-list"
+    }, group.map(el => {
+      const idMatch = elIdStr !== '' && elIdStr === el.id;
+      const selMatch = selStr !== '' && (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.normalizeSelectorForPresetMatch)(selStr) === (0,_targetElementsRegistry__WEBPACK_IMPORTED_MODULE_5__.normalizeSelectorForPresetMatch)(el.selector);
+      const isActive = idMatch || selMatch;
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+        key: el.id
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+        type: "button",
+        className: 'onepress-styling-target-preset__row' + (isActive ? ' is-active' : ''),
+        onClick: () => {
+          onSelectPreset({
+            id: el.id,
+            selector: el.selector,
+            name: el.name
+          });
+          close();
+        }
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+        className: "onepress-styling-target-preset__row-name"
+      }, el.name)));
+    })));
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "styling-font-picker__footer"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "tertiary",
+    onClick: close
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Close', 'onepress'))))) : null);
+}
+
+/***/ },
+
 /***/ "./src/admin/customizer/styling/components/TextStyleFields.jsx"
 /*!*********************************************************************!*\
   !*** ./src/admin/customizer/styling/components/TextStyleFields.jsx ***!
@@ -8901,7 +9796,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _StylingAlphaColorControl__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./StylingAlphaColorControl */ "./src/admin/customizer/styling/components/StylingAlphaColorControl.jsx");
 /* harmony import */ var _StylingFontFaceSelectControls__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./StylingFontFaceSelectControls */ "./src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx");
 /* harmony import */ var _StylingGoogleFontFamilyControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./StylingGoogleFontFamilyControl */ "./src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx");
-/* harmony import */ var _stylingDisableFields__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../stylingDisableFields */ "./src/admin/customizer/styling/stylingDisableFields.js");
+/* harmony import */ var _StylingLocalFontFamilyControl__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./StylingLocalFontFamilyControl */ "./src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx");
+/* harmony import */ var _stylingDisableFields__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../stylingDisableFields */ "./src/admin/customizer/styling/stylingDisableFields.js");
 
 /**
  * Text group fields (typography).
@@ -8917,11 +9813,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * @param {object} props
  * @param {Record<string, string>} props.model
  * @param {(patch: Record<string, string>) => void} props.onPatch
- * @param {import('../googleFontCollection').PickerFontFamily[]} props.families
+ * @param {import('../googleFontCollection').PickerFontFamily[]} props.families — Google catalog (picker when source is google)
+ * @param {import('../googleFontCollection').PickerFontFamily[]} [props.localFontFamilies] — Font manager list (picker when source is local)
+ * @param {import('../googleFontCollection').PickerFontFamily[]} [props.faceResolveFamilies] — merged local + Google for weight/style + font slices
+ * @param {'google'|'local'} [props.fontFamilySource]
  * @param {boolean} [props.fontsLoading]
  * @param {Error | null} [props.fontsError]
  * @param {Set<string> | null | undefined} [props.disabledFieldSet]
@@ -8930,15 +9830,20 @@ function TextStyleFields({
   model,
   onPatch,
   families,
+  localFontFamilies,
+  faceResolveFamilies,
+  fontFamilySource = 'local',
   fontsLoading = false,
   fontsError = null,
   disabledFieldSet
 }) {
-  const list = families !== null && families !== void 0 ? families : (0,_googleFontCollection__WEBPACK_IMPORTED_MODULE_3__.mergePickerFamilies)(null);
+  const googleList = families !== null && families !== void 0 ? families : (0,_googleFontCollection__WEBPACK_IMPORTED_MODULE_3__.mergePickerFamilies)(null);
+  const resolveList = faceResolveFamilies !== null && faceResolveFamilies !== void 0 ? faceResolveFamilies : googleList;
+  const localList = localFontFamilies !== null && localFontFamilies !== void 0 ? localFontFamilies : [];
   const loading = fontsLoading;
   const error = fontsError;
   const d = disabledFieldSet;
-  const dis = key => (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_10__.isFieldDisabled)(d, key);
+  const dis = key => (0,_stylingDisableFields__WEBPACK_IMPORTED_MODULE_11__.isFieldDisabled)(d, key);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingAlphaColorControl__WEBPACK_IMPORTED_MODULE_7__.StylingAlphaColorControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Text color', 'onepress'),
     value: model.color || '',
@@ -8949,13 +9854,17 @@ function TextStyleFields({
   }), dis('fontFamily') ? null : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.BaseControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Font family', 'onepress'),
     className: "styling-text-font-family"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingGoogleFontFamilyControl__WEBPACK_IMPORTED_MODULE_9__.StylingGoogleFontFamilyControl, {
+  }, fontFamilySource === 'local' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingLocalFontFamilyControl__WEBPACK_IMPORTED_MODULE_10__.StylingLocalFontFamilyControl, {
     value: model.fontFamily || '',
     onPatch: onPatch,
-    families: list,
+    families: localList
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingGoogleFontFamilyControl__WEBPACK_IMPORTED_MODULE_9__.StylingGoogleFontFamilyControl, {
+    value: model.fontFamily || '',
+    onPatch: onPatch,
+    families: googleList,
     loading: loading,
     error: error
-  }), error && !loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+  }), fontFamilySource !== 'local' && error && !loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
     __nextHasNoMarginBottom: true,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Font family (CSS fallback)', 'onepress'),
     value: model.fontFamily || '',
@@ -8965,7 +9874,7 @@ function TextStyleFields({
   }) : null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StylingFontFaceSelectControls__WEBPACK_IMPORTED_MODULE_8__.StylingFontFaceSelectControls, {
     model: model,
     onPatch: onPatch,
-    families: list,
+    families: resolveList,
     disabledFieldSet: d
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ResponsiveUnitSliderField__WEBPACK_IMPORTED_MODULE_6__.ResponsiveUnitSliderField, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Font size', 'onepress'),
@@ -9356,16 +10265,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   SpacingFields: () => (/* reexport safe */ _SpacingFields__WEBPACK_IMPORTED_MODULE_16__.SpacingFields),
 /* harmony export */   StylingAlphaColorControl: () => (/* reexport safe */ _StylingAlphaColorControl__WEBPACK_IMPORTED_MODULE_17__.StylingAlphaColorControl),
 /* harmony export */   StylingBackgroundImageControl: () => (/* reexport safe */ _StylingBackgroundImageControl__WEBPACK_IMPORTED_MODULE_18__.StylingBackgroundImageControl),
-/* harmony export */   StylingDeviceProvider: () => (/* reexport safe */ _StylingDeviceContext__WEBPACK_IMPORTED_MODULE_21__.StylingDeviceProvider),
+/* harmony export */   StylingDeviceProvider: () => (/* reexport safe */ _StylingDeviceContext__WEBPACK_IMPORTED_MODULE_22__.StylingDeviceProvider),
 /* harmony export */   StylingFontFaceSelectControls: () => (/* reexport safe */ _StylingFontFaceSelectControls__WEBPACK_IMPORTED_MODULE_19__.StylingFontFaceSelectControls),
 /* harmony export */   StylingGoogleFontFamilyControl: () => (/* reexport safe */ _StylingGoogleFontFamilyControl__WEBPACK_IMPORTED_MODULE_20__.StylingGoogleFontFamilyControl),
-/* harmony export */   StylingGroupPanel: () => (/* reexport safe */ _StylingGroupPanel__WEBPACK_IMPORTED_MODULE_22__.StylingGroupPanel),
-/* harmony export */   TextStyleFields: () => (/* reexport safe */ _TextStyleFields__WEBPACK_IMPORTED_MODULE_23__.TextStyleFields),
-/* harmony export */   TrblLinkIconButton: () => (/* reexport safe */ _TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_24__.TrblLinkIconButton),
-/* harmony export */   TrblSidesField: () => (/* reexport safe */ _TrblSidesField__WEBPACK_IMPORTED_MODULE_25__.TrblSidesField),
+/* harmony export */   StylingGroupPanel: () => (/* reexport safe */ _StylingGroupPanel__WEBPACK_IMPORTED_MODULE_23__.StylingGroupPanel),
+/* harmony export */   StylingInlineEditor: () => (/* reexport safe */ _StylingInlineEditor__WEBPACK_IMPORTED_MODULE_24__.StylingInlineEditor),
+/* harmony export */   StylingLocalFontFamilyControl: () => (/* reexport safe */ _StylingLocalFontFamilyControl__WEBPACK_IMPORTED_MODULE_21__.StylingLocalFontFamilyControl),
+/* harmony export */   StylingTargetElementSelect: () => (/* reexport safe */ _StylingTargetElementSelect__WEBPACK_IMPORTED_MODULE_25__.StylingTargetElementSelect),
+/* harmony export */   TextStyleFields: () => (/* reexport safe */ _TextStyleFields__WEBPACK_IMPORTED_MODULE_26__.TextStyleFields),
+/* harmony export */   TrblLinkIconButton: () => (/* reexport safe */ _TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_27__.TrblLinkIconButton),
+/* harmony export */   TrblSidesField: () => (/* reexport safe */ _TrblSidesField__WEBPACK_IMPORTED_MODULE_28__.TrblSidesField),
 /* harmony export */   dashiconClassForDeviceId: () => (/* reexport safe */ _deviceDashicons__WEBPACK_IMPORTED_MODULE_6__.dashiconClassForDeviceId),
 /* harmony export */   deriveLinkedSides: () => (/* reexport safe */ _deriveLinkedSides__WEBPACK_IMPORTED_MODULE_4__.deriveLinkedSides),
-/* harmony export */   useStylingDevice: () => (/* reexport safe */ _StylingDeviceContext__WEBPACK_IMPORTED_MODULE_21__.useStylingDevice)
+/* harmony export */   useStylingDevice: () => (/* reexport safe */ _StylingDeviceContext__WEBPACK_IMPORTED_MODULE_22__.useStylingDevice)
 /* harmony export */ });
 /* harmony import */ var _BackgroundFields__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BackgroundFields */ "./src/admin/customizer/styling/components/BackgroundFields.jsx");
 /* harmony import */ var _BorderOutlineFields__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BorderOutlineFields */ "./src/admin/customizer/styling/components/BorderOutlineFields.jsx");
@@ -9388,11 +10300,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _StylingBackgroundImageControl__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./StylingBackgroundImageControl */ "./src/admin/customizer/styling/components/StylingBackgroundImageControl.jsx");
 /* harmony import */ var _StylingFontFaceSelectControls__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./StylingFontFaceSelectControls */ "./src/admin/customizer/styling/components/StylingFontFaceSelectControls.jsx");
 /* harmony import */ var _StylingGoogleFontFamilyControl__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./StylingGoogleFontFamilyControl */ "./src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx");
-/* harmony import */ var _StylingDeviceContext__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./StylingDeviceContext */ "./src/admin/customizer/styling/components/StylingDeviceContext.jsx");
-/* harmony import */ var _StylingGroupPanel__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./StylingGroupPanel */ "./src/admin/customizer/styling/components/StylingGroupPanel.jsx");
-/* harmony import */ var _TextStyleFields__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./TextStyleFields */ "./src/admin/customizer/styling/components/TextStyleFields.jsx");
-/* harmony import */ var _TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./TrblLinkIconButton */ "./src/admin/customizer/styling/components/TrblLinkIconButton.jsx");
-/* harmony import */ var _TrblSidesField__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./TrblSidesField */ "./src/admin/customizer/styling/components/TrblSidesField.jsx");
+/* harmony import */ var _StylingLocalFontFamilyControl__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./StylingLocalFontFamilyControl */ "./src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx");
+/* harmony import */ var _StylingDeviceContext__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./StylingDeviceContext */ "./src/admin/customizer/styling/components/StylingDeviceContext.jsx");
+/* harmony import */ var _StylingGroupPanel__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./StylingGroupPanel */ "./src/admin/customizer/styling/components/StylingGroupPanel.jsx");
+/* harmony import */ var _StylingInlineEditor__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./StylingInlineEditor */ "./src/admin/customizer/styling/components/StylingInlineEditor.jsx");
+/* harmony import */ var _StylingTargetElementSelect__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./StylingTargetElementSelect */ "./src/admin/customizer/styling/components/StylingTargetElementSelect.jsx");
+/* harmony import */ var _TextStyleFields__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./TextStyleFields */ "./src/admin/customizer/styling/components/TextStyleFields.jsx");
+/* harmony import */ var _TrblLinkIconButton__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./TrblLinkIconButton */ "./src/admin/customizer/styling/components/TrblLinkIconButton.jsx");
+/* harmony import */ var _TrblSidesField__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./TrblSidesField */ "./src/admin/customizer/styling/components/TrblSidesField.jsx");
+
+
+
 
 
 
@@ -10327,8 +11245,13 @@ function areAllKeysDisabled(set, modelKeys) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   buildGoogleFontsCss2Href: () => (/* binding */ buildGoogleFontsCss2Href),
+/* harmony export */   collectGoogleFontAxesFromFontManagerItems: () => (/* binding */ collectGoogleFontAxesFromFontManagerItems),
+/* harmony export */   collectGoogleFontAxesFromFontManagerSettingRaw: () => (/* binding */ collectGoogleFontAxesFromFontManagerSettingRaw),
 /* harmony export */   collectMergedGoogleFontAxes: () => (/* binding */ collectMergedGoogleFontAxes),
+/* harmony export */   collectMergedGoogleFontAxesFromFontManagerSettings: () => (/* binding */ collectMergedGoogleFontAxesFromFontManagerSettings),
+/* harmony export */   fontManagerItemsToGoogleAxesPlainObject: () => (/* binding */ fontManagerItemsToGoogleAxesPlainObject),
 /* harmony export */   googleAxisPairFromSlice: () => (/* binding */ googleAxisPairFromSlice),
+/* harmony export */   mergeGoogleFontAxesFontManagerPriority: () => (/* binding */ mergeGoogleFontAxesFontManagerPriority),
 /* harmony export */   mergeGoogleFontAxesInto: () => (/* binding */ mergeGoogleFontAxesInto),
 /* harmony export */   normalizeFontWeightForGoogle: () => (/* binding */ normalizeFontWeightForGoogle),
 /* harmony export */   normalizeItalForGoogle: () => (/* binding */ normalizeItalForGoogle),
@@ -10336,9 +11259,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _declarationForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./declarationForm */ "./src/admin/customizer/styling/declarationForm.js");
 /* harmony import */ var _googleFontCollection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./googleFontCollection */ "./src/admin/customizer/styling/googleFontCollection.js");
+/* harmony import */ var _font_manager_fontManagerModel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../font-manager/fontManagerModel */ "./src/admin/customizer/font-manager/fontManagerModel.js");
+/* harmony import */ var _font_manager_fontManagerGoogleCss2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../font-manager/fontManagerGoogleCss2 */ "./src/admin/customizer/font-manager/fontManagerGoogleCss2.js");
 /**
  * _meta.fontSlices + merged Google Fonts CSS2 URLs (preview + PHP mirror).
+ * Font manager families override styling axis sets for the same Google display name.
  */
+
+
 
 
 
@@ -10550,6 +11478,132 @@ function collectMergedGoogleFontAxes(values) {
     mergeGoogleFontAxesInto(acc, v);
   }
   return acc;
+}
+
+/**
+ * @param {unknown[]} items Font manager `items` rows
+ * @returns {Map<string, Set<string>>}
+ */
+function collectGoogleFontAxesFromFontManagerItems(items) {
+  const acc = new Map();
+  if (!Array.isArray(items)) {
+    return acc;
+  }
+  for (const row of items) {
+    const item = (0,_font_manager_fontManagerModel__WEBPACK_IMPORTED_MODULE_2__.normalizeFontManagerItem)(row);
+    if (!item.isGoogleFamily) {
+      continue;
+    }
+    const fam = String(item.googleName || '').trim();
+    if (!fam) {
+      continue;
+    }
+    const rawVars = Array.isArray(item.variations) ? item.variations : [];
+    const vars = rawVars.map(p => String(p).trim()).filter(_font_manager_fontManagerGoogleCss2__WEBPACK_IMPORTED_MODULE_3__.isValidFontManagerVariationPair);
+    const useVars = vars.length ? vars : ['0,400'];
+    if (!acc.has(fam)) {
+      acc.set(fam, new Set());
+    }
+    const set = acc.get(fam);
+    for (const v of useVars) {
+      set.add(v);
+    }
+  }
+  return acc;
+}
+
+/**
+ * Google display name → axis pairs from font manager JSON (all registered items).
+ *
+ * @param {unknown} raw theme_mod get() string or object
+ * @returns {Map<string, Set<string>>}
+ */
+function collectGoogleFontAxesFromFontManagerSettingRaw(raw) {
+  const parsed = (0,_font_manager_fontManagerModel__WEBPACK_IMPORTED_MODULE_2__.parseFontManagerSetting)(raw);
+  return collectGoogleFontAxesFromFontManagerItems(parsed?.items || []);
+}
+
+/**
+ * Plain object for postMessage (family → axis pairs).
+ *
+ * @param {unknown[]} items
+ * @returns {Record<string, string[]>}
+ */
+function fontManagerItemsToGoogleAxesPlainObject(items) {
+  const map = collectGoogleFontAxesFromFontManagerItems(items);
+  /** @type {Record<string, string[]>} */
+  const o = {};
+  for (const [fam, set] of map) {
+    o[fam] = [...set].sort((a, b) => a.localeCompare(b, undefined, {
+      numeric: true
+    }));
+  }
+  return o;
+}
+
+/**
+ * Merge axes from several font manager theme_mods (union per family).
+ *
+ * @param {*} api wp.customize
+ * @param {string[]} fontManagerSettingIds
+ * @returns {Map<string, Set<string>>}
+ */
+/**
+ * @param {Map<string, Set<string>>} into
+ * @param {Map<string, Set<string>>} partial
+ */
+function mergeGoogleAxesMaps(into, partial) {
+  for (const [fam, set] of partial) {
+    if (!into.has(fam)) {
+      into.set(fam, new Set());
+    }
+    const target = into.get(fam);
+    for (const p of set) {
+      target.add(p);
+    }
+  }
+}
+
+/**
+ * @param {*} api wp.customize
+ * @param {string[]} fontManagerSettingIds
+ * @param {Record<string, Map<string, Set<string>>> | null | undefined} liveBySetting — optional unsaved draft axes per setting id
+ */
+function collectMergedGoogleFontAxesFromFontManagerSettings(api, fontManagerSettingIds, liveBySetting) {
+  const merged = new Map();
+  for (const id of fontManagerSettingIds) {
+    const live = liveBySetting && liveBySetting[id];
+    if (live && live.size) {
+      mergeGoogleAxesMaps(merged, live);
+      continue;
+    }
+    try {
+      const v = api(id);
+      if (!v || typeof v.get !== 'function') {
+        continue;
+      }
+      const partial = collectGoogleFontAxesFromFontManagerSettingRaw(v.get());
+      mergeGoogleAxesMaps(merged, partial);
+    } catch {
+      continue;
+    }
+  }
+  return merged;
+}
+
+/**
+ * Styling-derived axes first; for every family in fontManagerMap, replace with font manager’s full variant set.
+ *
+ * @param {Map<string, Set<string>>} stylingMap
+ * @param {Map<string, Set<string>>} fontManagerMap
+ * @returns {Map<string, Set<string>>}
+ */
+function mergeGoogleFontAxesFontManagerPriority(stylingMap, fontManagerMap) {
+  const out = new Map(stylingMap);
+  for (const [fam, set] of fontManagerMap) {
+    out.set(fam, new Set(set));
+  }
+  return out;
 }
 
 /**
@@ -10837,6 +11891,177 @@ function normalizeStylingRootForStatesPolicy(root, mode, fixedTemplate, previewD
     return next;
   }
   return normalizeSingleStylingPayload(root, mode, fixedTemplate, previewDeviceIds, registryBaseForForce);
+}
+
+/***/ },
+
+/***/ "./src/admin/customizer/styling/targetElementsRegistry.js"
+/*!****************************************************************!*\
+  !*** ./src/admin/customizer/styling/targetElementsRegistry.js ***!
+  \****************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   findMatchingTargetPreset: () => (/* binding */ findMatchingTargetPreset),
+/* harmony export */   getStylingTargetElementsRegistry: () => (/* binding */ getStylingTargetElementsRegistry),
+/* harmony export */   normalizeSelectorForPresetMatch: () => (/* binding */ normalizeSelectorForPresetMatch)
+/* harmony export */ });
+/**
+ * Preset targets from PHP (`onepressStylingTargetElements`) — read once per page load.
+ */
+
+/** @typedef {{ id: string, selector: string, name: string, category: string }} TargetElementPreset */
+
+/** @typedef {{ categories: Record<string, string>, elements: TargetElementPreset[] }} TargetElementsRegistry */
+
+/** @type {TargetElementsRegistry | null} */
+let cached = null;
+
+/**
+ * @returns {TargetElementPreset[]}
+ */
+function normalizeElements(raw) {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  const out = [];
+  for (const row of raw) {
+    if (!row || typeof row !== 'object') {
+      continue;
+    }
+    const id = typeof row.id === 'string' ? row.id.trim() : '';
+    const selector = typeof row.selector === 'string' ? row.selector.trim() : '';
+    const name = typeof row.name === 'string' ? row.name.trim() : '';
+    const category = typeof row.category === 'string' ? row.category.trim() : 'other';
+    if (!selector || !name) {
+      continue;
+    }
+    out.push({
+      id: id || selector,
+      selector,
+      name,
+      category: category || 'other'
+    });
+  }
+  return out;
+}
+
+/**
+ * @returns {TargetElementsRegistry}
+ */
+function getStylingTargetElementsRegistry() {
+  const w = typeof window !== 'undefined' && window.onepressStylingTargetElements && typeof window.onepressStylingTargetElements === 'object' ? window.onepressStylingTargetElements : null;
+  const categories = w && w.categories && typeof w.categories === 'object' && !Array.isArray(w.categories) ? (/** @type {Record<string, string>} */w.categories) : {};
+  const elements = normalizeElements(w?.elements);
+  // First read can run before `wp_localize_script` output; drop empty cache when data appears.
+  if (cached && cached.elements.length === 0 && elements.length > 0) {
+    cached = null;
+  }
+  if (cached) {
+    return cached;
+  }
+  cached = {
+    categories,
+    elements
+  };
+  return cached;
+}
+
+/**
+ * Collapse whitespace for stable comparison (saved selector vs registry).
+ *
+ * @param {string} s
+ * @returns {string}
+ */
+function normalizeSelectorForPresetMatch(s) {
+  return String(s || '').trim().replace(/\s+/g, ' ');
+}
+
+/**
+ * Match preset for UI: registry id in `_meta.elId` first, else selector match (whitespace-normalized).
+ *
+ * @param {string} currentSelector
+ * @param {string} [currentElId]
+ * @returns {TargetElementPreset | null}
+ */
+function findMatchingTargetPreset(currentSelector, currentElId) {
+  const id = String(currentElId || '').trim();
+  const selN = normalizeSelectorForPresetMatch(currentSelector);
+  const {
+    elements
+  } = getStylingTargetElementsRegistry();
+  if (id) {
+    const byId = elements.find(e => e.id === id);
+    if (byId) {
+      return byId;
+    }
+  }
+  if (!selN) {
+    return null;
+  }
+  return elements.find(e => normalizeSelectorForPresetMatch(e.selector) === selN) || null;
+}
+
+/***/ },
+
+/***/ "./src/admin/customizer/styling/useFontManagerCatalogFamilies.js"
+/*!***********************************************************************!*\
+  !*** ./src/admin/customizer/styling/useFontManagerCatalogFamilies.js ***!
+  \***********************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ONEPRESS_FONT_MANAGER_SETTING_ID: () => (/* binding */ ONEPRESS_FONT_MANAGER_SETTING_ID),
+/* harmony export */   useFontManagerCatalogFamilies: () => (/* binding */ useFontManagerCatalogFamilies)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _font_manager_fontManagerCatalog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../font-manager/fontManagerCatalog */ "./src/admin/customizer/font-manager/fontManagerCatalog.js");
+/**
+ * Live list of fonts from Customizer setting `onepress_font_manager` (PickerFontFamily shape).
+ */
+
+
+
+/** Default theme_mod id; PHP filter `onepress_font_manager_theme_mod_id` may change it. */
+const ONEPRESS_FONT_MANAGER_SETTING_ID = 'onepress_font_manager';
+
+/**
+ * @param {import('@wordpress/customize').Customize | null | undefined} api
+ * @param {import('../font-manager/fontManagerCatalog').PickerFontFamily[] | null | undefined} googleFamilies — for preview URLs on Google entries
+ */
+function useFontManagerCatalogFamilies(api, googleFamilies) {
+  const [local, setLocal] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(/** @type {import('./googleFontCollection').PickerFontFamily[]} */[]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!api || typeof api !== 'function') {
+      setLocal([]);
+      return undefined;
+    }
+    const setting = api(ONEPRESS_FONT_MANAGER_SETTING_ID);
+    if (!setting || typeof setting.get !== 'function') {
+      setLocal([]);
+      return undefined;
+    }
+    const apply = () => {
+      const raw = setting.get();
+      setLocal((0,_font_manager_fontManagerCatalog__WEBPACK_IMPORTED_MODULE_1__.fontManagerValueToPickerFamilies)(raw, googleFamilies));
+    };
+    apply();
+    if (typeof setting.bind === 'function') {
+      setting.bind(apply);
+      return () => {
+        if (typeof setting.unbind === 'function') {
+          setting.unbind(apply);
+        }
+      };
+    }
+    return undefined;
+  }, [api, googleFamilies]);
+  return local;
 }
 
 /***/ },
@@ -16011,6 +17236,52 @@ __webpack_require__.r(__webpack_exports__);
 var chevron_down_small_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "m15.99 10.889-3.988 3.418-3.988-3.418.976-1.14 3.012 2.582 3.012-2.581.976 1.139Z" }) });
 
 //# sourceMappingURL=chevron-down-small.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/chevron-down.mjs"
+/*!*****************************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/chevron-down.mjs ***!
+  \*****************************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ chevron_down_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/chevron-down.tsx
+
+
+var chevron_down_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z" }) });
+
+//# sourceMappingURL=chevron-down.mjs.map
+
+
+/***/ },
+
+/***/ "./node_modules/@wordpress/icons/build-module/library/chevron-up.mjs"
+/*!***************************************************************************!*\
+  !*** ./node_modules/@wordpress/icons/build-module/library/chevron-up.mjs ***!
+  \***************************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ chevron_up_default)
+/* harmony export */ });
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+// packages/icons/src/library/chevron-up.tsx
+
+
+var chevron_up_default = /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, { d: "M6.5 12.4L12 8l5.5 4.4-.9 1.2L12 10l-4.5 3.6-1-1.2z" }) });
+
+//# sourceMappingURL=chevron-up.mjs.map
 
 
 /***/ },
