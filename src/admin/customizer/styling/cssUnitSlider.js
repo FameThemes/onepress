@@ -50,6 +50,55 @@ export function clampNumber(n, min, max) {
 	return Math.min(max, Math.max(min, n));
 }
 
+/**
+ * @param {string} presetDefaultSuffix — `''` means unitless (e.g. line-height); context must not override.
+ * @param {string | undefined} preferredSuffix — from length-unit context
+ * @returns {string}
+ */
+export function resolveEffectiveLengthSuffix(presetDefaultSuffix, preferredSuffix) {
+	if (presetDefaultSuffix === '') {
+		return '';
+	}
+	const p = typeof preferredSuffix === 'string' ? preferredSuffix.trim() : '';
+	return p || presetDefaultSuffix;
+}
+
+/**
+ * When the user picks a new default unit chip: keep the numeric part, only swap the suffix
+ * (e.g. `16px` → `16rem`, not a px↔rem scale conversion).
+ *
+ * @param {string} raw
+ * @param {string} targetSuffix
+ * @returns {string | null} null if not a single parseable length token
+ */
+export function replaceSingleLengthUnitSuffix(raw, targetSuffix) {
+	const t = (targetSuffix || 'px').trim().toLowerCase();
+	const s = String(raw).trim();
+	if (s === '') {
+		return null;
+	}
+	const parsed = parseCssSingleLengthValue(s, 'px');
+	if (parsed === null) {
+		return null;
+	}
+	return formatCssSingleLengthValue(parsed.num, t);
+}
+
+/**
+ * Lowercase unit from a single-token length, or null if none / not parseable.
+ *
+ * @param {string} raw
+ * @returns {string | null}
+ */
+export function explicitLengthCssUnit(raw) {
+	const s = String(raw).trim();
+	const m = s.match(SINGLE_LEN);
+	if (!m || !m[2] || !String(m[2]).trim()) {
+		return null;
+	}
+	return String(m[2]).trim().toLowerCase();
+}
+
 /** @type {Record<string, { min: number, max: number, step: number, defaultSuffix: string }>} */
 export const SLIDER_PRESETS = {
 	fontSize: { min: 8, max: 96, step: 1, defaultSuffix: 'px' },

@@ -240,7 +240,7 @@ export function StylingAccordionPanels({
 							onToggle={p.onToggle}
 							lockOpen={p.lockOpen}
 						>
-							<div className='fields list-fields flex flex-col gap-3'>
+							<div className='fields list-fields flex flex-col gap-4'>
 								{renderGroupBody(sectionId)}
 							</div>
 						</StylingGroupPanel>

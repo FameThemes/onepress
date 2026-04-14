@@ -18,7 +18,12 @@ import {
 	syncCustomizerPreviewDevice,
 } from './customizerPreviewDeviceSync';
 import { parseDeclarationForm, patchDeclarationForm } from './declarationForm';
-import { StylingDeviceProvider, StylingTargetElementSelect } from './components';
+import {
+	StylingDeviceProvider,
+	StylingLengthUnitProvider,
+	StylingTargetElementSelect,
+	STYLING_LENGTH_UNIT_SUFFIXES,
+} from './components';
 import { resolveAllowedGroupIds } from './StylingAccordionPanels';
 import { findMatchingTargetPreset, normalizeTargetElementsRegistry } from './targetElementsRegistry';
 import { buildDisabledFieldSet } from './stylingDisableFields';
@@ -31,6 +36,7 @@ import {
 	getStatesStructureMode,
 	normalizeStylingRootForStatesPolicy,
 } from './stylingStatesPolicy';
+import { remapStylingRootToLengthUnit } from './stylingLengthUnitRemap';
 
 /**
  * @param {JQueryStatic} $ jQuery
@@ -208,7 +214,7 @@ export function StylingControlApp({ control, $ }) {
 		const parts = [
 			'editor',
 			'onepress-styling-editor',
-			`onepress-styling-editor--group-count-${visibleStylingGroupIds.length <=1 ?'1' : 'gt1'}`,
+			`onepress-styling-editor--group-count-${visibleStylingGroupIds.length <= 1 ? '1' : 'gt1'}`,
 		];
 		for (const id of visibleStylingGroupIds) {
 			parts.push(`onepress-styling-editor--group-${id}`);
@@ -560,6 +566,41 @@ export function StylingControlApp({ control, $ }) {
 			pushStylingPayloadToCustomizer($, control, nextRoot);
 		},
 		[$, control, mergedForFontSlices]
+	);
+
+	const [lengthUnitPreferred, setLengthUnitPreferred] = useState('px');
+
+	const applyLengthTargetUnit = useCallback(
+		(nextSuffix) => {
+			const t = typeof nextSuffix === 'string' ? nextSuffix.trim().toLowerCase() : '';
+			if (!t || !STYLING_LENGTH_UNIT_SUFFIXES.has(t) || t === lengthUnitPreferred) {
+				return;
+			}
+			setValue((prevRoot) => {
+				const remapped = remapStylingRootToLengthUnit(
+					cloneValue(prevRoot),
+					t,
+					previewDeviceIds,
+					multiple
+				);
+				rebuildFontSlicesInValue(remapped, mergedForFontSlices);
+				pushStylingPayloadToCustomizer($, control, remapped);
+				return remapped;
+			});
+			setLengthUnitPreferred(t);
+		},
+		[lengthUnitPreferred, previewDeviceIds, multiple, mergedForFontSlices, $, control]
+	);
+
+	const adoptLengthSuffixFromField = useCallback(
+		(suffix) => {
+			const s = typeof suffix === 'string' ? suffix.trim().toLowerCase() : '';
+			if (!s || !STYLING_LENGTH_UNIT_SUFFIXES.has(s) || s === lengthUnitPreferred) {
+				return;
+			}
+			setLengthUnitPreferred(s);
+		},
+		[lengthUnitPreferred]
 	);
 
 	const commitActiveItem = useCallback(
@@ -1016,7 +1057,7 @@ export function StylingControlApp({ control, $ }) {
 			setPendingAddCustomOpen(false);
 			setPendingCustomSelector('');
 			setPendingCustomItemName('');
-			if (editorPopoverOpenRef.current && editingItemIndex === index) {
+			if (editorPopoverOpenRef.current && editingItemIndexRef.current === index) {
 				closeEditorPopover();
 				return;
 			}
@@ -1025,7 +1066,7 @@ export function StylingControlApp({ control, $ }) {
 			editorPopoverOpenRef.current = true;
 			setEditorPopoverOpen(true);
 		},
-		[editingItemIndex, closeEditorPopover]
+		[closeEditorPopover]
 	);
 
 	const removeItemAt = useCallback(
@@ -1245,10 +1286,55 @@ export function StylingControlApp({ control, $ }) {
 			if (!current) {
 				return;
 			}
-			const templateIndex = Math.min(itemIndex, defItems.length - 1);
-			const template = cloneValue(defItems[templateIndex]);
+			// Always use the first default row as the empty “shape” (states × devices). Per-item data must not come from defItems[itemIndex] — defaults only ship one template row.
+			const template = cloneValue(defItems[0]);
 			template.id = current.id;
-			template.title = current.title;
+			const base = String(current._meta?.baseSelector ?? current.selector ?? '').trim();
+			const elId = typeof current._meta?.elId === 'string' ? current._meta.elId.trim() : '';
+			const matched = findMatchingTargetPreset(base, elId, targetElementsRegistry);
+			const presetSel =
+				matched && typeof matched.selector === 'string' ? matched.selector.trim() : '';
+
+			if (presetSel !== '') {
+				template.title =
+					typeof matched.name === 'string' && matched.name.trim() !== ''
+						? matched.name.trim()
+						: current.title;
+				template.selector = presetSel;
+				if (!template._meta || typeof template._meta !== 'object') {
+					template._meta = {};
+				}
+				template._meta.baseSelector = presetSel;
+				if (matched.id) {
+					template._meta.elId = matched.id;
+				}
+				if (typeof matched.name === 'string' && matched.name.trim() !== '') {
+					template._meta.elName = matched.name.trim();
+				} else {
+					delete template._meta.elName;
+				}
+			} else {
+				// Custom / non-preset target: clear declarations but keep the same selector + meta identity.
+				template.title = current.title;
+				const curSel = String(current.selector ?? current._meta?.baseSelector ?? '').trim();
+				template.selector = curSel;
+				if (!template._meta || typeof template._meta !== 'object') {
+					template._meta = {};
+				}
+				template._meta.baseSelector = curSel;
+				if (elId) {
+					template._meta.elId = elId;
+				} else {
+					delete template._meta.elId;
+				}
+				const en = typeof current._meta?.elName === 'string' ? current._meta.elName.trim() : '';
+				if (en) {
+					template._meta.elName = en;
+				} else {
+					delete template._meta.elName;
+				}
+			}
+
 			const nextRoot = cloneValue(value);
 			nextRoot.items = [...nextRoot.items];
 			nextRoot.items[itemIndex] = template;
@@ -1259,7 +1345,15 @@ export function StylingControlApp({ control, $ }) {
 				setStateIndex(0);
 			}
 		},
-		[multiple, defaultStylingPayload, value, commitRoot, editorPopoverOpen, editingItemIndex]
+		[
+			multiple,
+			defaultStylingPayload,
+			value,
+			commitRoot,
+			editorPopoverOpen,
+			editingItemIndex,
+			targetElementsRegistry,
+		]
 	);
 
 	const structuralStates = useMemo(() => {
@@ -1378,312 +1472,317 @@ export function StylingControlApp({ control, $ }) {
 
 	return (
 		<StylingDeviceProvider deviceId={deviceId} setDeviceId={setDeviceIdSynced} breakpoints={breakpoints}>
-			<>
-				<div className={editorRootClassName}>
-					<div className="onepress-styling-control-intro">
-						<div className="w-full flex justify-between items-center">
-							<span className="grow customize-control-title">{controlLabel}</span>
-							<div className="flex gap-2">
-								<Button
-									variant="minimal"
-									onClick={() => setResetConfirm({ kind: 'all' })}
-									disabled={!defaultStylingPayload}
-									label={
-										multiple
-											? __('Reset all items to default', 'onepress')
-											: __('Reset to default', 'onepress')
-									}
-									showTooltip
-									size="small"
-									className='icon-btn'
-								>
-									<Icon icon={rotateLeft} size={20} />
-								</Button>
-								{!multiple ? (
+			<StylingLengthUnitProvider
+				preferredSuffix={lengthUnitPreferred}
+				onApplyTargetUnit={applyLengthTargetUnit}
+				onAdoptSuffixFromValue={adoptLengthSuffixFromField}
+			>
+				<>
+					<div className={editorRootClassName}>
+						<div className="onepress-styling-control-intro">
+							<div className="w-full flex justify-between items-center">
+								<span className="grow customize-control-title">{controlLabel}</span>
+								<div className="flex gap-2">
 									<Button
-										variant="secondary"
-										onClick={toggleEditorPopover}
-										isPressed={editorPopoverOpen}
-										aria-expanded={editorPopoverOpen}
-										label={__('Edit styling', 'onepress')}
-										className='icon-btn'
-										size="small"
+										variant="minimal"
+										onClick={() => setResetConfirm({ kind: 'all' })}
+										disabled={!defaultStylingPayload}
+										label={
+											multiple
+												? __('Reset all items to default', 'onepress')
+												: __('Reset to default', 'onepress')
+										}
 										showTooltip
+										size="small"
+										className='icon-btn'
 									>
-										<Icon icon={pencil} size={20} />
+										<Icon icon={rotateLeft} size={20} />
 									</Button>
-								) : null}
-							</div>
-						</div>
-
-						{!multiple && inlineEditorProps ? (
-							<StylingInlineEditor key="styling-inline-single" {...inlineEditorProps} />
-						) : null}
-
-						{multiple ? (
-							<div className="onepress-styling-items mt-3">
-								{itemsList.length > 0 ? (
-									<div className="flex flex-col gap-2">
-										{itemsList.map((item, index) => (
-										<div
-											key={item.id || `idx-${String(index)}`}
-											className="onepress-styling-items__row flex flex-col gap-2"
-										>
-											<div className="styling-list-item flex justify-between items-center gap-2">
-												<span className="grow truncate text-sm">
-													{getMultiStylingItemListRowLabel(item, index, targetElementsRegistry)}
-												</span>
-
-												<div className="flex gap-2">
-													<Button
-														variant="minimal"
-														onClick={() => setResetConfirm({ kind: 'item', index })}
-														size="small"
-														disabled={!defaultStylingPayload}
-														label={__('Reset this item to default', 'onepress')}
-														showTooltip
-														className='icon-btn'
-													>
-														<Icon icon={rotateLeft} size={18} />
-													</Button>
-													<Button
-														variant="minimal"
-														onClick={() => {
-															deletePendingIndexRef.current = index;
-															setDeleteItemIndex(index);
-														}}
-														size="small"
-														label={__('Remove this item from the list', 'onepress')}
-														showTooltip
-														className="icon-btn"
-														isDestructive
-													>
-														<Icon icon={trash} size={18} />
-													</Button>
-													<Button
-														variant="secondary"
-														onClick={() => toggleEditorForItem(index)}
-														isPressed={editorPopoverOpen && editingItemIndex === index}
-														aria-expanded={editorPopoverOpen && editingItemIndex === index}
-														label={__('Edit styling', 'onepress')}
-														showTooltip
-														size="small"
-														className='icon-btn'
-													>
-														{editorPopoverOpen && editingItemIndex === index
-															? <Icon icon={chevronUp} size={18} /> :
-															<Icon icon={chevronDown} size={18} />}
-													</Button>
-												</div>
-											</div>
-											{inlineEditorProps && editingItemIndex === index ? (
-												<StylingInlineEditor
-													key={item.id || `styling-inline-${String(index)}`}
-													{...inlineEditorProps}
-												/>
-											) : null}
-										</div>
-										))}
-									</div>
-								) : null}
-								<div className="block mt-2" ref={pendingAddInlineRef}>
-									{pendingAddFormOpen ? (
-										<div className="onepress-styling-pending-add-inline">
-											<div className="onepress-styling-pending-add-inline__picker">
-												<p className="enum-label">{__('Target Element', 'onepress')}</p>
-												{targetElementsRegistry.elements.length === 0 ? (
-													<p className="description">
-														{__('No targets are available.', 'onepress')}
-													</p>
-												) : (
-													<>
-														<StylingTargetElementSelect
-															targetRegistry={targetElementsRegistry}
-															currentSelector=""
-															currentElId=""
-															selectedPresetName=""
-															onSelectPreset={handlePendingTargetPreset}
-															usedPresetIds={usedPresetIdsSet}
-															disabled={Boolean(lockedBaseSelector) || !editableBaseSelector}
-														/>
-														{pendingAddLockedMessage ? (
-															<p
-																className="description mt-2 onepress-styling-locked-message-html"
-																// Sanitized server-side with `wp_kses_post` (preset `message`).
-																dangerouslySetInnerHTML={{ __html: pendingAddLockedMessage }}
-															/>
-														) : null}
-														{pendingAddCustomOpen ? (
-															<div className="onepress-styling-pending-custom-target flex flex-col gap-3 mt-3">
-																<TextControl
-																	__nextHasNoMarginBottom
-																	label={__('Name', 'onepress')}
-																	value={pendingCustomItemName}
-																	onChange={setPendingCustomItemName}
-																	placeholder={__('Label shown in the list', 'onepress')}
-																/>
-																<div className="flex flex-wrap gap-2 items-end">
-																<div className="grow min-w-[12rem]">
-																	<TextControl
-																		__nextHasNoMarginBottom
-																		label={__('Base selector', 'onepress')}
-																		value={pendingCustomSelector}
-																		onChange={setPendingCustomSelector}
-																		placeholder={__('e.g. .my-button', 'onepress')}
-																	/>
-																</div>
-																<Button
-																	variant="secondary"
-																	onClick={togglePreviewPicker}
-																	isPressed={previewPickerActive}
-																	disabled={!editableBaseSelector}
-																	// size="small"
-																	label={
-																		previewPickerActive
-																			? __('Cancel picking from preview', 'onepress')
-																			: __('Pick a selector from the site preview', 'onepress')
-																	}
-																	showTooltip
-																	className="icon-btn"
-																>
-																	{previewPickerActive ? (
-																		<Icon icon={close} size={18} />
-																	) : (
-																		<IconTarget size={18} />
-																	)}
-																</Button>
-																</div>
-															</div>
-														) : null}
-													</>
-												)}
-											</div>
-											<div className="onepress-styling-pending-add-inline__actions flex flex-wrap gap-2 items-center justify-end">
-												<Button variant="secondary" onClick={cancelPendingAdd}>
-													{__('Cancel', 'onepress')}
-												</Button>
-												{pendingAddCustomOpen ? (
-													<Button
-														variant="primary"
-														onClick={confirmPendingAddCustom}
-														disabled={pendingCustomSelector.trim() === ''}
-													>
-														{__('Add', 'onepress')}
-													</Button>
-												) : null}
-											</div>
-										</div>
-									) : (
+									{!multiple ? (
 										<Button
 											variant="secondary"
-											className="mt-2 p-0 h-auto"
-											onClick={startPendingAdd}
+											onClick={toggleEditorPopover}
+											isPressed={editorPopoverOpen}
+											aria-expanded={editorPopoverOpen}
+											label={__('Edit styling', 'onepress')}
+											className='icon-btn'
+											size="small"
+											showTooltip
 										>
-											{addItemLabel}
+											<Icon icon={pencil} size={20} />
 										</Button>
-									)}
+									) : null}
 								</div>
 							</div>
-						) : null}
 
-						{controlDescription ? (
-							<p className="description mt-2">{controlDescription}</p>
-						) : null}
+							{!multiple && inlineEditorProps ? (
+								<StylingInlineEditor key="styling-inline-single" {...inlineEditorProps} />
+							) : null}
+
+							{multiple ? (
+								<div className="onepress-styling-items mt-3">
+									{itemsList.length > 0 ? (
+										<div className="flex flex-col gap-2">
+											{itemsList.map((item, index) => (
+												<div
+													key={item.id || `idx-${String(index)}`}
+													className="onepress-styling-items__row flex flex-col gap-2"
+												>
+													<div className="styling-list-item flex justify-between items-center gap-2">
+														<span className="ilabel grow truncate text-sm"
+															onClick={() => toggleEditorForItem(index)}
+														>
+															{getMultiStylingItemListRowLabel(item, index, targetElementsRegistry)}
+														</span>
+
+														<div className="flex gap-2">
+															<Button
+																variant="tertiary"
+																onClick={() => setResetConfirm({ kind: 'item', index })}
+																size="small"
+																disabled={!defaultStylingPayload}
+																label={__('Reset this item to default', 'onepress')}
+																showTooltip
+																icon={rotateLeft}
+																// className='icon-btn'
+															>
+															</Button>
+
+															<Button
+																variant="secondary"
+																onClick={() => toggleEditorForItem(index)}
+																isPressed={editorPopoverOpen && editingItemIndex === index}
+																aria-expanded={editorPopoverOpen && editingItemIndex === index}
+																label={__('Edit styling', 'onepress')}
+																showTooltip
+																size="small"
+																// className='icon-btn'
+																icon={editorPopoverOpen && editingItemIndex === index ? chevronUp : pencil}
+															/>
+															<Button
+																variant="tertiary"
+																onClick={() => {
+																	deletePendingIndexRef.current = index;
+																	setDeleteItemIndex(index);
+																}}
+																size="small"
+																icon={trash}
+																label={__('Remove this item from the list', 'onepress')}
+																showTooltip
+																// className="icon-btn"
+															>
+															</Button>
+														</div>
+													</div>
+													{inlineEditorProps && editingItemIndex === index ? (
+														<StylingInlineEditor
+															key={item.id || `styling-inline-${String(index)}`}
+															{...inlineEditorProps}
+														/>
+													) : null}
+												</div>
+											))}
+										</div>
+									) : null}
+									<div className="block mt-2" ref={pendingAddInlineRef}>
+										{pendingAddFormOpen ? (
+											<div className="onepress-styling-pending-add-inline">
+												<div className="onepress-styling-pending-add-inline__picker">
+													<p className="enum-label">{__('Target Element', 'onepress')}</p>
+													{targetElementsRegistry.elements.length === 0 ? (
+														<p className="description">
+															{__('No targets are available.', 'onepress')}
+														</p>
+													) : (
+														<>
+															<StylingTargetElementSelect
+																targetRegistry={targetElementsRegistry}
+																currentSelector=""
+																currentElId=""
+																selectedPresetName=""
+																onSelectPreset={handlePendingTargetPreset}
+																usedPresetIds={usedPresetIdsSet}
+																disabled={Boolean(lockedBaseSelector) || !editableBaseSelector}
+															/>
+															{pendingAddLockedMessage ? (
+																<p
+																	className="description mt-2 onepress-styling-locked-message-html"
+																	// Sanitized server-side with `wp_kses_post` (preset `message`).
+																	dangerouslySetInnerHTML={{ __html: pendingAddLockedMessage }}
+																/>
+															) : null}
+															{pendingAddCustomOpen ? (
+																<div className="onepress-styling-pending-custom-target flex flex-col gap-3 mt-3">
+																	<TextControl
+																		__nextHasNoMarginBottom
+																		label={__('Name', 'onepress')}
+																		value={pendingCustomItemName}
+																		onChange={setPendingCustomItemName}
+																		placeholder={__('Label shown in the list', 'onepress')}
+																	/>
+																	<div className="flex flex-wrap gap-2 items-end">
+																		<div className="grow min-w-[12rem]">
+																			<TextControl
+																				__nextHasNoMarginBottom
+																				label={__('Base selector', 'onepress')}
+																				value={pendingCustomSelector}
+																				onChange={setPendingCustomSelector}
+																				placeholder={__('e.g. .my-button', 'onepress')}
+																			/>
+																		</div>
+																		<Button
+																			variant="secondary"
+																			onClick={togglePreviewPicker}
+																			isPressed={previewPickerActive}
+																			disabled={!editableBaseSelector}
+																			// size="small"
+																			label={
+																				previewPickerActive
+																					? __('Cancel picking from preview', 'onepress')
+																					: __('Pick a selector from the site preview', 'onepress')
+																			}
+																			showTooltip
+																			className="icon-btn"
+																		>
+																			{previewPickerActive ? (
+																				<Icon icon={close} size={18} />
+																			) : (
+																				<IconTarget size={18} />
+																			)}
+																		</Button>
+																	</div>
+																</div>
+															) : null}
+														</>
+													)}
+												</div>
+												<div className="onepress-styling-pending-add-inline__actions flex flex-wrap gap-2 items-center justify-end">
+													<Button variant="secondary" onClick={cancelPendingAdd}>
+														{__('Cancel', 'onepress')}
+													</Button>
+													{pendingAddCustomOpen ? (
+														<Button
+															variant="primary"
+															onClick={confirmPendingAddCustom}
+															disabled={pendingCustomSelector.trim() === ''}
+														>
+															{__('Add', 'onepress')}
+														</Button>
+													) : null}
+												</div>
+											</div>
+										) : (
+											<Button
+												variant="secondary"
+												className="mt-2 p-0 h-auto"
+												onClick={startPendingAdd}
+											>
+												{addItemLabel}
+											</Button>
+										)}
+									</div>
+								</div>
+							) : null}
+
+							{controlDescription ? (
+								<p className="description mt-2">{controlDescription}</p>
+							) : null}
+						</div>
 					</div>
-				</div>
 
-				<div className="onepress-styling-pick-snackbar-wrap" aria-live="polite">
-					<SnackbarList notices={pickerSnackbarNotices} onRemove={removePickerSnackbar} />
-				</div>
+					<div className="onepress-styling-pick-snackbar-wrap" aria-live="polite">
+						<SnackbarList notices={pickerSnackbarNotices} onRemove={removePickerSnackbar} />
+					</div>
 
-				<ConfirmDialog
-					isOpen={resetConfirm !== null}
-					onConfirm={() => {
-						const pending = resetConfirm;
-						setResetConfirm(null);
-						if (!pending) {
-							return;
-						}
-						if (pending.kind === 'all') {
-							onResetToDefault();
-						} else {
-							onResetItemToDefault(pending.index);
-						}
-					}}
-					onCancel={() => setResetConfirm(null)}
-					confirmButtonText={__('Reset', 'onepress')}
-					cancelButtonText={__('Cancel', 'onepress')}
-				>
-					{resetConfirm?.kind === 'all' ? (
-						<p>
-							{multiple
-								? __(
-									'Reset all targets to their default styling? Every item in this list will be restored and unsaved changes will be lost.',
-									'onepress'
-								)
-								: __(
-									'Reset this styling block to its default? Current declarations will be replaced.',
-									'onepress'
+					<ConfirmDialog
+						isOpen={resetConfirm !== null}
+						onConfirm={() => {
+							const pending = resetConfirm;
+							setResetConfirm(null);
+							if (!pending) {
+								return;
+							}
+							if (pending.kind === 'all') {
+								onResetToDefault();
+							} else {
+								onResetItemToDefault(pending.index);
+							}
+						}}
+						onCancel={() => setResetConfirm(null)}
+						confirmButtonText={__('Reset', 'onepress')}
+						cancelButtonText={__('Cancel', 'onepress')}
+					>
+						{resetConfirm?.kind === 'all' ? (
+							<p>
+								{multiple
+									? __(
+										'Reset all targets to their default styling? Every item in this list will be restored and unsaved changes will be lost.',
+										'onepress'
+									)
+									: __(
+										'Reset this styling block to its default? Current declarations will be replaced.',
+										'onepress'
+									)}
+							</p>
+						) : null}
+						{resetConfirm?.kind === 'item' ? (
+							<p>
+								{sprintf(
+									/* translators: %s: item label */
+									__(
+										'Reset "%s" to its default styling? This target\'s declarations will be replaced.',
+										'onepress'
+									),
+									String(
+										(Array.isArray(value.items) && value.items[resetConfirm.index]
+											? value.items[resetConfirm.index].title || value.items[resetConfirm.index].id
+											: '') || __('this item', 'onepress')
+									)
 								)}
-						</p>
-					) : null}
-					{resetConfirm?.kind === 'item' ? (
-						<p>
-							{sprintf(
-								/* translators: %s: item label */
-								__(
-									'Reset "%s" to its default styling? This target\'s declarations will be replaced.',
-									'onepress'
-								),
-								String(
-									(Array.isArray(value.items) && value.items[resetConfirm.index]
-										? value.items[resetConfirm.index].title || value.items[resetConfirm.index].id
-										: '') || __('this item', 'onepress')
-								)
-							)}
-						</p>
-					) : null}
-				</ConfirmDialog>
+							</p>
+						) : null}
+					</ConfirmDialog>
 
-				<ConfirmDialog
-					isOpen={deleteItemIndex !== null}
-					onConfirm={() => {
-						const index = deletePendingIndexRef.current;
-						deletePendingIndexRef.current = null;
-						setDeleteItemIndex(null);
-						if (index == null || typeof index !== 'number') {
-							return;
-						}
-						const run = removeItemAtRef.current;
-						if (typeof run === 'function') {
-							run(index);
-						}
-					}}
-					onCancel={() => {
-						deletePendingIndexRef.current = null;
-						setDeleteItemIndex(null);
-					}}
-					confirmButtonText={__('Delete', 'onepress')}
-					cancelButtonText={__('Cancel', 'onepress')}
-				>
-					{deleteItemIndex !== null ? (
-						<p>
-							{sprintf(
-								/* translators: %s: item label */
-								__(
-									'Remove "%s" from this list? This target and its styling will be deleted.',
-									'onepress'
-								),
-								String(
-									value.items?.[deleteItemIndex]
-										? value.items[deleteItemIndex].title || value.items[deleteItemIndex].id
-										: __('this item', 'onepress')
-								)
-							)}
-						</p>
-					) : null}
-				</ConfirmDialog>
-			</>
+					<ConfirmDialog
+						isOpen={deleteItemIndex !== null}
+						onConfirm={() => {
+							const index = deletePendingIndexRef.current;
+							deletePendingIndexRef.current = null;
+							setDeleteItemIndex(null);
+							if (index == null || typeof index !== 'number') {
+								return;
+							}
+							const run = removeItemAtRef.current;
+							if (typeof run === 'function') {
+								run(index);
+							}
+						}}
+						onCancel={() => {
+							deletePendingIndexRef.current = null;
+							setDeleteItemIndex(null);
+						}}
+						confirmButtonText={__('Delete', 'onepress')}
+						cancelButtonText={__('Cancel', 'onepress')}
+					>
+						{deleteItemIndex !== null ? (
+							<p>
+								{sprintf(
+									/* translators: %s: item label */
+									__(
+										'Remove "%s" from this list? This target and its styling will be deleted.',
+										'onepress'
+									),
+									String(
+										value.items?.[deleteItemIndex]
+											? value.items[deleteItemIndex].title || value.items[deleteItemIndex].id
+											: __('this item', 'onepress')
+									)
+								)}
+							</p>
+						) : null}
+					</ConfirmDialog>
+				</>
+			</StylingLengthUnitProvider>
 		</StylingDeviceProvider>
 	);
 }

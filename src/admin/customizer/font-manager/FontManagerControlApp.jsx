@@ -1,8 +1,12 @@
 /**
  * Customizer control `font_manager`: saved font list + add/edit panel (picker, Google mode, variants).
  */
-import { Button, CheckboxControl } from '@wordpress/components';
-import { pencil, trash } from '@wordpress/icons';
+import {
+	Button,
+	CheckboxControl,
+	__experimentalConfirmDialog as ConfirmDialog,
+} from '@wordpress/components';
+import { pencil, trash, chevronUp } from '@wordpress/icons';
 import { useCallback, useEffect, useMemo, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { StylingGoogleFontFamilyControl } from '../styling/components/StylingGoogleFontFamilyControl';
@@ -175,6 +179,9 @@ export function FontManagerControlApp({ control, $ }) {
 	/** @type {['add' | 'edit', FontManagerItem] | null} */
 	const [editor, setEditor] = useState(null);
 
+	const [removeFontConfirmId, setRemoveFontConfirmId] = useState(/** @type {string | null} */(null));
+	const [saveValidationOpen, setSaveValidationOpen] = useState(false);
+
 	const { families, loading, error } = useGoogleFontFamilies();
 
 	useEffect(() => {
@@ -220,6 +227,17 @@ export function FontManagerControlApp({ control, $ }) {
 			setEditor(['edit', next]);
 		},
 		[families]
+	);
+
+	const toggleEditForItem = useCallback(
+		/** @param {FontManagerItem} item */(item) => {
+			if (editor?.[0] === 'edit' && editor[1]?.id === item.id) {
+				setEditor(null);
+				return;
+			}
+			openEdit(item);
+		},
+		[editor, openEdit]
 	);
 
 	const closeEditor = useCallback(() => {
@@ -341,8 +359,7 @@ export function FontManagerControlApp({ control, $ }) {
 		}
 		const cleaned = normalizeFontManagerItem(draft);
 		if (!cleaned.fontFamily.trim() && !cleaned.googleName && !cleaned.googleSlug) {
-			// eslint-disable-next-line no-alert
-			window.alert(__('Choose a font before saving.', 'onepress'));
+			setSaveValidationOpen(true);
 			return;
 		}
 		let nextItems;
@@ -355,26 +372,46 @@ export function FontManagerControlApp({ control, $ }) {
 		setEditor(null);
 	}, [commitRoot, draft, draftMode, root.items]);
 
-	const deleteItem = useCallback(
-		/** @param {string} id */(id) => {
-			// eslint-disable-next-line no-alert
-			if (!window.confirm(__('Remove this font from the list?', 'onepress'))) {
-				return;
+	const requestRemoveFont = useCallback((/** @type {string} */ id) => {
+		setRemoveFontConfirmId(id);
+	}, []);
+
+	const confirmRemoveFont = useCallback(() => {
+		const id = removeFontConfirmId;
+		setRemoveFontConfirmId(null);
+		if (!id) {
+			return;
+		}
+		commitRoot({
+			_onepressFontManager: true,
+			items: root.items.filter((it) => it.id !== id),
+		});
+		setEditor((prev) => {
+			if (prev && prev[1]?.id === id) {
+				return null;
 			}
-			commitRoot({
-				_onepressFontManager: true,
-				items: root.items.filter((it) => it.id !== id),
-			});
-			if (editor && editor[1].id === id) {
-				setEditor(null);
-			}
-		},
-		[commitRoot, editor, root.items]
-	);
+			return prev;
+		});
+	}, [commitRoot, removeFontConfirmId, root.items]);
+
+	const cancelRemoveFont = useCallback(() => {
+		setRemoveFontConfirmId(null);
+	}, []);
 
 	const showVariationPanel = Boolean(draft?.isGoogleFamily && variationFaces.length);
 
 	const showGoogleCategory = draft && draft.isGoogleFamily;
+
+	const inlineEditForId = draftMode === 'edit' && draft ? draft.id : null;
+
+	const removeConfirmItem =
+		removeFontConfirmId != null
+			? root.items.find((it) => it.id === removeFontConfirmId)
+			: undefined;
+	const removeConfirmLabel =
+		removeConfirmItem != null
+			? displayNameForItem(removeConfirmItem) || __('(unnamed)', 'onepress')
+			: '';
 
 	const editorPanel =
 		draft !== null ? (
@@ -439,19 +476,23 @@ export function FontManagerControlApp({ control, $ }) {
 				) : null}
 
 				<div className="flex gap-2 justify-end font-manager-editor__actions">
-					<Button variant="tertiary" onClick={closeEditor}
-						size='small'
+					<Button
+						variant="secondary"
+						onClick={closeEditor}
+						size={inlineEditForId ? 'small' : 'default'}
 					>
 						{__('Close', 'onepress')}
 					</Button>
-					<Button variant="primary" onClick={saveDraft} size='small'>
+					<Button variant="primary"
+						onClick={saveDraft}
+						size={inlineEditForId ? 'small' : 'default'}>
 						{__('Save', 'onepress')}
 					</Button>
 				</div>
 			</div>
 		) : null;
 
-	const inlineEditForId = draftMode === 'edit' && draft ? draft.id : null;
+
 
 	return (
 		<div className="font-manager-control font-manager-control--app">
@@ -479,29 +520,46 @@ export function FontManagerControlApp({ control, $ }) {
 							return (
 								<div key={item.id} className="font-manager-list__unit">
 									<div className="font-manager-list__item">
-										<div className="font-manager-list__row">
-											<span className="font-manager-list__name" title={item.fontFamily || label}>
+										<div className="font-manager-list__row flex items-center gap-2">
+											<div
+												role="button"
+												tabIndex={0}
+												className='cursor-pointer reapeatable-title grow'
+												title={item.fontFamily || label}
+												onClick={() => toggleEditForItem(item)}
+												onKeyDown={(e) => {
+													if (e.key === 'Enter' || e.key === ' ') {
+														e.preventDefault();
+														toggleEditForItem(item);
+													}
+												}}
+											>
 												{label}
-											</span>
-											<span className="font-manager-list__spacer" aria-hidden />
-											<Button
-												className="font-manager-list__icon-btn"
-												variant="tertiary"
-												size="small"
-												icon={pencil}
-												label={__('Edit font', 'onepress')}
-												disabled={draft !== null}
-												onClick={() => openEdit(item)}
-											/>
-											<Button
-												className="font-manager-list__icon-btn"
-												variant="tertiary"
-												size="small"
-												icon={trash}
-												label={__('Remove font', 'onepress')}
-												disabled={draft !== null}
-												onClick={() => deleteItem(item.id)}
-											/>
+											</div>
+											<span className="" aria-hidden />
+											<div className="flex gap-2">
+												<Button
+													className="font-manager-list__icon-btn"
+													variant="secondary"
+													size="small"
+													icon={showFlyoutEditor ? chevronUp : pencil}
+													label={
+														showFlyoutEditor
+															? __('Close font editor', 'onepress')
+															: __('Edit font', 'onepress')
+													}
+													onClick={() => toggleEditForItem(item)}
+												/>
+												<Button
+													className="font-manager-list__icon-btn"
+													variant="tertiary"
+													size="small"
+													icon={trash}
+													label={__('Remove font', 'onepress')}
+													disabled={draft !== null}
+													onClick={() => requestRemoveFont(item.id)}
+												/>
+											</div>
 										</div>
 									</div>
 									{showFlyoutEditor ? (
@@ -534,6 +592,37 @@ export function FontManagerControlApp({ control, $ }) {
 					</Button>
 				</div>
 			) : null}
+
+			<ConfirmDialog
+				isOpen={removeFontConfirmId !== null}
+				onConfirm={confirmRemoveFont}
+				onCancel={cancelRemoveFont}
+				confirmButtonText={__('Remove', 'onepress')}
+				cancelButtonText={__('Cancel', 'onepress')}
+			>
+				{removeFontConfirmId !== null ? (
+					<p>
+						{sprintf(
+							/* translators: %s: font display name */
+							__(
+								'Remove "%s" from the font list? It will no longer be available for typography or styling.',
+								'onepress'
+							),
+							String(removeConfirmLabel)
+						)}
+					</p>
+				) : null}
+			</ConfirmDialog>
+
+			<ConfirmDialog
+				isOpen={saveValidationOpen}
+				onConfirm={() => setSaveValidationOpen(false)}
+				onCancel={() => setSaveValidationOpen(false)}
+				confirmButtonText={__('OK', 'onepress')}
+				cancelButtonText={__('Close', 'onepress')}
+			>
+				<p>{__('Choose a font before saving.', 'onepress')}</p>
+			</ConfirmDialog>
 		</div>
 	);
 }

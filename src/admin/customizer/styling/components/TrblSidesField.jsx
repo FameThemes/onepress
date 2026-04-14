@@ -6,6 +6,7 @@ import { __ } from '@wordpress/i18n';
 import { SLIDER_PRESETS } from '../cssUnitSlider';
 import { deriveLinkedSides } from './deriveLinkedSides';
 import { DeviceSwitcherChip } from './DeviceSwitcherChip';
+import { LengthUnitSwitcherChip } from './LengthUnitSwitcherChip';
 import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
 import { TrblLinkIconButton } from './TrblLinkIconButton';
 import { areAllKeysDisabled } from '../stylingDisableFields';
@@ -93,12 +94,15 @@ export function TrblSidesField({
 		<div className="trbl-block">
 			<div className="trbl-head">
 				<strong>{label}</strong>
-				<TrblLinkIconButton
-					linked={linked}
-					onLinkedChange={setLinkedSides}
-					linkLabel={linkStr}
-					unlinkLabel={unlinkStr}
-				/>
+				<div className="trbl-head-actions">
+					<LengthUnitSwitcherChip />
+					<TrblLinkIconButton
+						linked={linked}
+						onLinkedChange={setLinkedSides}
+						linkLabel={linkStr}
+						unlinkLabel={unlinkStr}
+					/>
+				</div>
 			</div>
 			<div className="trbl">
 				{linked ? (
@@ -108,6 +112,7 @@ export function TrblSidesField({
 							(model[keys.t] || model[keys.r] || model[keys.b] || model[keys.l] || '').trim()
 						}
 						onChange={(v) => patchSide(keys.t, v)}
+						showLengthUnitChip={false}
 						{...preset}
 					/>
 				) : (
@@ -116,24 +121,28 @@ export function TrblSidesField({
 							label={__('Top', 'onepress')}
 							value={model[keys.t] || ''}
 							onChange={(v) => patchSide(keys.t, v)}
+							showLengthUnitChip={false}
 							{...preset}
 						/>
 						<ResponsiveUnitSliderField
 							label={__('Right', 'onepress')}
 							value={model[keys.r] || ''}
 							onChange={(v) => patchSide(keys.r, v)}
+							showLengthUnitChip={false}
 							{...preset}
 						/>
 						<ResponsiveUnitSliderField
 							label={__('Bottom', 'onepress')}
 							value={model[keys.b] || ''}
 							onChange={(v) => patchSide(keys.b, v)}
+							showLengthUnitChip={false}
 							{...preset}
 						/>
 						<ResponsiveUnitSliderField
 							label={__('Left', 'onepress')}
 							value={model[keys.l] || ''}
 							onChange={(v) => patchSide(keys.l, v)}
+							showLengthUnitChip={false}
 							{...preset}
 						/>
 					</>
@@ -145,7 +154,8 @@ export function TrblSidesField({
 
 /**
  * TRBL with header row `[title] … [device]` and one row `[T][R][B][L][link]`.
- * Same props as {@link TrblSidesField}.
+ * Same props as {@link TrblSidesField}, plus optional per-slot labels (e.g. corners for radius).
+ * @param {{ t?: string, r?: string, b?: string, l?: string }} [props.sideLabels] — overrides default Top/Right/Bottom/Left
  */
 export function TrblSidesFieldInline({
 	sliceKey,
@@ -158,6 +168,7 @@ export function TrblSidesFieldInline({
 	unlinkLabel,
 	preferLinkedWhenEmpty = false,
 	disabledFieldSet,
+	sideLabels,
 }) {
 	const preset = sliderPreset ?? SLIDER_PRESETS.length;
 	const linkStr = linkLabel ?? __('Link sides', 'onepress');
@@ -207,6 +218,7 @@ export function TrblSidesFieldInline({
 			<div className="trbl-head-inline">
 				<strong className="trbl-field-title">{label}</strong>
 				<span className="trbl-head-inline__spacer" aria-hidden />
+				<LengthUnitSwitcherChip />
 				<DeviceSwitcherChip />
 			</div>
 			<div className="trbl-inline-row">
@@ -230,6 +242,7 @@ export function TrblSidesFieldInline({
 								onLinkedChange={setLinkedSides}
 								linkLabel={linkStr}
 								unlinkLabel={unlinkStr}
+								size="default"
 							/>
 						</div>
 					</>
@@ -238,13 +251,14 @@ export function TrblSidesFieldInline({
 						{(['t', 'r', 'b', 'l']).map((sideKey) => {
 							const k = keys[sideKey];
 							const sideLabel =
-								sideKey === 't'
+								(sideLabels && sideLabels[sideKey]) ||
+								(sideKey === 't'
 									? __('Top', 'onepress')
 									: sideKey === 'r'
 										? __('Right', 'onepress')
 										: sideKey === 'b'
 											? __('Bottom', 'onepress')
-											: __('Left', 'onepress');
+											: __('Left', 'onepress'));
 							return (
 								<div key={k} className="trbl-inline-cell">
 									<ResponsiveUnitSliderField
@@ -265,6 +279,7 @@ export function TrblSidesFieldInline({
 								onLinkedChange={setLinkedSides}
 								linkLabel={linkStr}
 								unlinkLabel={unlinkStr}
+								size="default"
 							/>
 						</div>
 					</>

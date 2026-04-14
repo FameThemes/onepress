@@ -106,6 +106,14 @@ function StylingInlineEditorInner({
 				return;
 			}
 			if (t instanceof Element && typeof t.closest === 'function') {
+				// Edit toggles live outside `rootRef` (intro pencil / per-row chevron). A capture-phase
+				// pointerdown would close here before click runs `toggleEditor*`, reopening the panel.
+				if (t.closest('.onepress-styling-control-intro')) {
+					return;
+				}
+				if (t.closest('.onepress-styling-items .styling-list-item')) {
+					return;
+				}
 				if (t.closest('.components-popover')) {
 					return;
 				}

@@ -10,7 +10,9 @@ import { findFamilyForModel, pickDefaultFace } from '../googleFontCollection';
 /** @typedef {import('../googleFontCollection').PickerFontFamily} PickerFontFamily */
 
 const LIST_MAX_HEIGHT = 320;
-const ROW_HEIGHT = 48;
+const ROW_HEIGHT = 35;
+/** Matches `.field-title` line + margin in customizer. */
+const GROUP_HEADER_HEIGHT = 30;
 const OVERSCAN = 6;
 
 /**
@@ -63,14 +65,68 @@ export function StylingGoogleFontFamilyControl({ value, onPatch, onPickFamily, f
 		);
 	}, [families, search]);
 
-	const totalHeight = filtered.length * ROW_HEIGHT;
-	const start = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - OVERSCAN);
-	const end = Math.min(
-		filtered.length,
-		Math.ceil((scrollTop + LIST_MAX_HEIGHT) / ROW_HEIGHT) + OVERSCAN
-	);
-	const visible = filtered.slice(start, end);
-	const offsetY = start * ROW_HEIGHT;
+	const { offsets, totalHeight } = useMemo(() => {
+		const system = filtered.filter((f) => Boolean(f.isSystem));
+		const google = filtered.filter((f) => !f.isSystem);
+		/** @type {Array<{ kind: 'header'; key: string; label: string } | { kind: 'font'; key: string; font: PickerFontFamily }>} */
+		const rows = [];
+		if (system.length) {
+			rows.push({
+				kind: 'header',
+				key: 'group-system',
+				label: __('System fonts', 'onepress'),
+			});
+			for (const font of system) {
+				rows.push({ kind: 'font', key: `sys:${font.slug}`, font });
+			}
+		}
+		if (google.length) {
+			rows.push({
+				kind: 'header',
+				key: 'group-google',
+				label: __('Google fonts', 'onepress'),
+			});
+			for (const font of google) {
+				rows.push({ kind: 'font', key: `gg:${font.slug}`, font });
+			}
+		}
+		let y = 0;
+		const offs = [];
+		for (const row of rows) {
+			const h = row.kind === 'header' ? GROUP_HEADER_HEIGHT : ROW_HEIGHT;
+			offs.push({ row, top: y, h });
+			y += h;
+		}
+		return { offsets: offs, totalHeight: y };
+	}, [filtered]);
+
+	const { start, end, offsetY } = useMemo(() => {
+		if (!offsets.length) {
+			return { start: 0, end: 0, offsetY: 0 };
+		}
+		const overscanPx = OVERSCAN * ROW_HEIGHT;
+		const viewBottom = scrollTop + LIST_MAX_HEIGHT;
+		let s = 0;
+		for (let i = 0; i < offsets.length; i++) {
+			const { top, h } = offsets[i];
+			if (top + h > scrollTop - overscanPx) {
+				s = Math.max(0, i - OVERSCAN);
+				break;
+			}
+		}
+		let e = s;
+		for (let i = s; i < offsets.length; i++) {
+			const { top } = offsets[i];
+			if (top > viewBottom + overscanPx) {
+				break;
+			}
+			e = i + 1;
+		}
+		e = Math.min(offsets.length, Math.max(e, s + 1));
+		return { start: s, end: e, offsetY: offsets[s].top };
+	}, [offsets, scrollTop]);
+
+	const visibleSlice = offsets.slice(start, end);
 
 	const togglePopover = useCallback(() => setPopoverOpen((o) => !o), []);
 	const closePopover = useCallback(() => setPopoverOpen(false), []);
@@ -182,7 +238,24 @@ export function StylingGoogleFontFamilyControl({ value, onPatch, onPickFamily, f
 											transform: `translateY(${offsetY}px)`,
 										}}
 									>
-										{visible.map((font) => {
+										{visibleSlice.map(({ row, h }) => {
+											if (row.kind === 'header') {
+												return (
+													<div
+														key={row.key}
+														className="field-title styling-font-picker__group-title"
+														style={{
+															height: h,
+															marginBottom: 0,
+															display: 'flex',
+															alignItems: 'center',
+														}}
+													>
+														{row.label}
+													</div>
+												);
+											}
+											const font = row.font;
 											const isSystem = Boolean(font.isSystem);
 											const rowClass =
 												'styling-font-picker__row' +
@@ -191,7 +264,7 @@ export function StylingGoogleFontFamilyControl({ value, onPatch, onPickFamily, f
 													: ' styling-font-picker__row--google');
 											return (
 												<button
-													key={font.slug}
+													key={row.key}
 													type="button"
 													className={rowClass}
 													style={{ height: ROW_HEIGHT }}
@@ -234,8 +307,8 @@ export function StylingGoogleFontFamilyControl({ value, onPatch, onPickFamily, f
 						{!families?.length ? (
 							<p className="styling-font-picker__empty">{__('No fonts to show.', 'onepress')}</p>
 						) : null}
-						<div className="styling-font-picker__footer">
-							<Button variant="tertiary" onClick={closePopover}>
+						<div className="styling-font-picker__footer flex justify-end">
+							<Button variant="tertiary" size='small' onClick={closePopover}>
 								{__('Close', 'onepress')}
 							</Button>
 						</div>

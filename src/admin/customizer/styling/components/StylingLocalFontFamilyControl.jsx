@@ -10,7 +10,7 @@ import { findFamilyForModel, pickDefaultFace } from '../googleFontCollection';
 /** @typedef {import('../googleFontCollection').PickerFontFamily} PickerFontFamily */
 
 const LIST_MAX_HEIGHT = 320;
-const ROW_HEIGHT = 48;
+const ROW_HEIGHT = 35;
 const OVERSCAN = 6;
 
 /**

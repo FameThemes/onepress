@@ -11,14 +11,14 @@ import { link, linkOff } from '@wordpress/icons';
  * @param {string} props.linkLabel — Tooltip (and aria) when unlinked: action to link
  * @param {string} props.unlinkLabel — When linked: action to unlink
  */
-export function TrblLinkIconButton({ linked, onLinkedChange, linkLabel, unlinkLabel }) {
+export function TrblLinkIconButton({ linked, onLinkedChange, linkLabel, unlinkLabel, size = 'small' }) {
 	const tooltipText = linked ? unlinkLabel : linkLabel;
 	return (
 		<Tooltip text={tooltipText}>
 			<Button
 				type="button"
-				variant={linked ? 'primary' : 'tertiary'}
-				size="small"
+				variant={'tertiary'}
+				size={size}
 				className="trbl-link-toggle icon-btn"
 				icon={linked ? linkOff : link}
 				label={tooltipText}

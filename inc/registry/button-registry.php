@@ -27,25 +27,25 @@ if (! function_exists('onepress_styling_button_target_elements_registry')) {
 		$cat = 'buttons';
 		$data = array(
 			'categories' => array(
-				$cat => esc_html__('Button Styling', 'onepress'),
+				$cat => esc_html__('General', 'onepress'),
 			),
 			'elements'   => array(
 				array(
 					'id'       => 'onepress_btn_primary',
 					'selector' => 'body .btn.btn-theme-primary',
-					'name'     => esc_html__('Primary button', 'onepress'),
+					'name'     => esc_html__('Primary', 'onepress'),
 					'category' => $cat,
 				),
 				array(
 					'id'       => 'onepress_btn_secondary',
 					'selector' => 'body .nav-links a, body .nav-links .page-numbers, .entry-content .wp-block-button__link, input[type=reset], input[type=submit], input[type=submit], .pirate-forms-submit-button, .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit',
-					'name'     => esc_html__('Secondary button', 'onepress'),
+					'name'     => esc_html__('Secondary', 'onepress'),
 					'category' => $cat,
 				),
 				array(
 					'id'       => 'onepress_btn_outline',
 					'selector' => 'body .btn.btn-secondary-outline',
-					'name'     => esc_html__('Outline button', 'onepress'),
+					'name'     => esc_html__('Outline', 'onepress'),
 					'category' => $cat,
 				),
 				array(
@@ -56,7 +56,11 @@ if (! function_exists('onepress_styling_button_target_elements_registry')) {
 					'locked'   => true,
 					'multiple' => true,
 					'message'  => wp_kses_post(
-						__( 'Update to <strong>OnePress Plus</strong> version to unlock this feature.', 'onepress' )
+						sprintf(
+							/* translators: %s: linked bold product name "OnePress Plus" (HTML). */
+							__('Update to %s version to unlock this feature.', 'onepress'),
+							'<a href="' . esc_url('https://www.famethemes.com/plugins/onepress-plus/?utm_source=theme_dashboard&utm_medium=compare_table&utm_campaign=onepress') . '" target="_blank" rel="noopener noreferrer"><strong>' . esc_html__('OnePress Plus', 'onepress') . '</strong></a>'
+						)
 					),
 				),
 			),

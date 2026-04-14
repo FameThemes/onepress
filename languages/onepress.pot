@@ -3,46 +3,108 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:248
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:266
 msgid "Font manager"
 msgstr ""
 
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:345
-msgid "Choose a font before saving."
-msgstr ""
-
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:361
-msgid "Remove this font from the list?"
-msgstr ""
-
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:383
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:420
 msgid "New font"
 msgstr ""
 
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:387
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:424
 msgid "Font Family"
 msgstr ""
 
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:401
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:438
 msgid "Google Font"
 msgstr ""
 
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:409
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:446
 msgid "Variations"
 msgstr ""
 
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:421
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:458
 #. 1: weight, 2: style
 msgid "%1$s · %2$s"
 msgstr ""
 
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:489
+msgid "Save"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:511
+msgid "Fonts saved"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:518
+msgid "(unnamed)"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:548
+msgid "Close font editor"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:549
+msgid "Edit font"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:558
+msgid "Remove font"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:569
+msgid "Font layout editor"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:591
+msgid "Add font"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:600
+msgid "Remove"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:601
+#: src/admin/customizer/styling/StylingControlApp.jsx:1765
+msgid "Cancel"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:607
+#. %s: font display name
+msgid ""
+"Remove \"%s\" from the font list? It will no longer be available for "
+"typography or styling."
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:621
+msgid "OK"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:622
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:484
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:482
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:485
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:487
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:480
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:468
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:469
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:464
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:460
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:458
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:455
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:444
 #: src/admin/customizer/font-manager/FontManagerControlApp.jsx:445
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:312
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:311
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:294
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:241
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:377
+#: src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx:224
 #: src/admin/customizer/styling/components/StylingInlineEditor.jsx:369
 #: src/admin/customizer/styling/components/StylingInlineEditor.jsx:366
 #: src/admin/customizer/styling/components/StylingInlineEditor.jsx:363
 #: src/admin/customizer/styling/components/StylingInlineEditor.jsx:362
 #: src/admin/customizer/styling/components/StylingInlineEditor.jsx:327
-#: src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx:224
 #: src/admin/customizer/styling/components/StylingInlineEditor.jsx:287
 #: src/admin/customizer/styling/components/StylingInlineEditor.jsx:253
 #: src/admin/customizer/styling/components/StylingInlineEditor.jsx:252
@@ -60,32 +122,8 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:448
-msgid "Save"
-msgstr ""
-
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:470
-msgid "Fonts saved"
-msgstr ""
-
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:477
-msgid "(unnamed)"
-msgstr ""
-
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:492
-msgid "Edit font"
-msgstr ""
-
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:501
-msgid "Remove font"
-msgstr ""
-
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:511
-msgid "Font layout editor"
-msgstr ""
-
-#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:533
-msgid "Add font"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:624
+msgid "Choose a font before saving."
 msgstr ""
 
 #: src/admin/customizer/styling/StylingAccordionPanels.jsx:88
@@ -116,22 +154,26 @@ msgstr ""
 msgid "Custom declarations"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1115
+#: src/admin/customizer/styling/StylingControlApp.jsx:1156
 msgid "New item"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1158
+#: src/admin/customizer/styling/StylingControlApp.jsx:1199
 msgid "Custom target"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1289
+#: src/admin/customizer/styling/StylingControlApp.jsx:1383
 msgid "Invalid styling configuration (no states). Save to reset defaults."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1311
+#: src/admin/customizer/styling/StylingControlApp.jsx:1405
 msgid "Manage states"
 msgstr ""
 
+#: src/admin/customizer/styling/StylingControlApp.jsx:1406
+#: src/admin/customizer/styling/StylingControlApp.jsx:1353
+#: src/admin/customizer/styling/StylingControlApp.jsx:1318
+#: src/admin/customizer/styling/StylingControlApp.jsx:1317
 #: src/admin/customizer/styling/StylingControlApp.jsx:1312
 #: src/admin/customizer/styling/StylingControlApp.jsx:1308
 #: src/admin/customizer/styling/StylingControlApp.jsx:1307
@@ -190,6 +232,10 @@ msgstr ""
 msgid "State settings"
 msgstr ""
 
+#: src/admin/customizer/styling/StylingControlApp.jsx:1407
+#: src/admin/customizer/styling/StylingControlApp.jsx:1354
+#: src/admin/customizer/styling/StylingControlApp.jsx:1319
+#: src/admin/customizer/styling/StylingControlApp.jsx:1318
 #: src/admin/customizer/styling/StylingControlApp.jsx:1313
 #: src/admin/customizer/styling/StylingControlApp.jsx:1309
 #: src/admin/customizer/styling/StylingControlApp.jsx:1308
@@ -248,63 +294,117 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1393
+#: src/admin/customizer/styling/StylingControlApp.jsx:1492
 msgid "Reset all items to default"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1394
+#: src/admin/customizer/styling/StylingControlApp.jsx:1493
 msgid "Reset to default"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1443
+#: src/admin/customizer/styling/StylingControlApp.jsx:1544
 msgid "Reset this item to default"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1456
-msgid "Remove this item from the list"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1468
+#: src/admin/customizer/styling/StylingControlApp.jsx:1556
 msgid "Edit styling"
 msgstr ""
 
+#: src/admin/customizer/styling/StylingControlApp.jsx:1570
+msgid "Remove this item from the list"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1591
+#: src/admin/customizer/styling/StylingControlApp.jsx:1538
+#: src/admin/customizer/styling/StylingControlApp.jsx:1541
+#: src/admin/customizer/styling/StylingControlApp.jsx:1542
+#: src/admin/customizer/styling/StylingControlApp.jsx:1537
+#: src/admin/customizer/styling/StylingControlApp.jsx:1502
+#: src/admin/customizer/styling/StylingControlApp.jsx:1501
+#: src/admin/customizer/styling/StylingControlApp.jsx:1496
+#: src/admin/customizer/styling/StylingControlApp.jsx:1495
 #: src/admin/customizer/styling/StylingControlApp.jsx:1493
-#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:284
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:292
 msgid "Target Element"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1496
+#: src/admin/customizer/styling/StylingControlApp.jsx:1594
 msgid "No targets are available."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1520
+#: src/admin/customizer/styling/StylingControlApp.jsx:1618
 msgid "Name"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1523
+#: src/admin/customizer/styling/StylingControlApp.jsx:1621
 msgid "Label shown in the list"
 msgstr ""
 
+#: src/admin/customizer/styling/StylingControlApp.jsx:1627
+#: src/admin/customizer/styling/StylingControlApp.jsx:1574
+#: src/admin/customizer/styling/StylingControlApp.jsx:1577
+#: src/admin/customizer/styling/StylingControlApp.jsx:1578
+#: src/admin/customizer/styling/StylingControlApp.jsx:1573
+#: src/admin/customizer/styling/StylingControlApp.jsx:1538
+#: src/admin/customizer/styling/StylingControlApp.jsx:1537
+#: src/admin/customizer/styling/StylingControlApp.jsx:1532
+#: src/admin/customizer/styling/StylingControlApp.jsx:1531
 #: src/admin/customizer/styling/StylingControlApp.jsx:1529
-#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:311
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:319
 msgid "Base selector"
 msgstr ""
 
+#: src/admin/customizer/styling/StylingControlApp.jsx:1630
+#: src/admin/customizer/styling/StylingControlApp.jsx:1577
+#: src/admin/customizer/styling/StylingControlApp.jsx:1580
+#: src/admin/customizer/styling/StylingControlApp.jsx:1581
+#: src/admin/customizer/styling/StylingControlApp.jsx:1576
+#: src/admin/customizer/styling/StylingControlApp.jsx:1541
+#: src/admin/customizer/styling/StylingControlApp.jsx:1540
+#: src/admin/customizer/styling/StylingControlApp.jsx:1535
+#: src/admin/customizer/styling/StylingControlApp.jsx:1534
 #: src/admin/customizer/styling/StylingControlApp.jsx:1532
-#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:314
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:322
 msgid "e.g. .my-button"
 msgstr ""
 
+#: src/admin/customizer/styling/StylingControlApp.jsx:1641
+#: src/admin/customizer/styling/StylingControlApp.jsx:1588
+#: src/admin/customizer/styling/StylingControlApp.jsx:1591
+#: src/admin/customizer/styling/StylingControlApp.jsx:1592
+#: src/admin/customizer/styling/StylingControlApp.jsx:1587
+#: src/admin/customizer/styling/StylingControlApp.jsx:1552
+#: src/admin/customizer/styling/StylingControlApp.jsx:1551
+#: src/admin/customizer/styling/StylingControlApp.jsx:1546
+#: src/admin/customizer/styling/StylingControlApp.jsx:1545
 #: src/admin/customizer/styling/StylingControlApp.jsx:1543
-#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:326
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:334
 msgid "Cancel picking from preview"
 msgstr ""
 
+#: src/admin/customizer/styling/StylingControlApp.jsx:1642
+#: src/admin/customizer/styling/StylingControlApp.jsx:1589
+#: src/admin/customizer/styling/StylingControlApp.jsx:1592
+#: src/admin/customizer/styling/StylingControlApp.jsx:1593
+#: src/admin/customizer/styling/StylingControlApp.jsx:1588
+#: src/admin/customizer/styling/StylingControlApp.jsx:1553
+#: src/admin/customizer/styling/StylingControlApp.jsx:1552
+#: src/admin/customizer/styling/StylingControlApp.jsx:1547
+#: src/admin/customizer/styling/StylingControlApp.jsx:1546
 #: src/admin/customizer/styling/StylingControlApp.jsx:1544
-#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:327
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:335
 msgid "Pick a selector from the site preview"
 msgstr ""
 
+#: src/admin/customizer/styling/StylingControlApp.jsx:1669
+#: src/admin/customizer/styling/StylingControlApp.jsx:1616
+#: src/admin/customizer/styling/StylingControlApp.jsx:1619
+#: src/admin/customizer/styling/StylingControlApp.jsx:1620
+#: src/admin/customizer/styling/StylingControlApp.jsx:1615
+#: src/admin/customizer/styling/StylingControlApp.jsx:1580
+#: src/admin/customizer/styling/StylingControlApp.jsx:1579
+#: src/admin/customizer/styling/StylingControlApp.jsx:1574
+#: src/admin/customizer/styling/StylingControlApp.jsx:1573
 #: src/admin/customizer/styling/StylingControlApp.jsx:1571
 #: src/admin/customizer/styling/StylingControlApp.jsx:1567
 #: src/admin/customizer/styling/StylingControlApp.jsx:1561
@@ -324,80 +424,76 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1614
+#: src/admin/customizer/styling/StylingControlApp.jsx:1712
 msgid "Reset"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1620
+#: src/admin/customizer/styling/StylingControlApp.jsx:1718
 msgid ""
 "Reset all targets to their default styling? Every item in this list will be "
 "restored and unsaved changes will be lost."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1624
+#: src/admin/customizer/styling/StylingControlApp.jsx:1722
 msgid ""
 "Reset this styling block to its default? Current declarations will be "
 "replaced."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1634
+#: src/admin/customizer/styling/StylingControlApp.jsx:1732
 #. %s: item label
 msgid ""
 "Reset \"%s\" to its default styling? This target's declarations will be "
 "replaced."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1666
+#: src/admin/customizer/styling/StylingControlApp.jsx:1764
 msgid "Delete"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1667
-msgid "Cancel"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1673
+#: src/admin/customizer/styling/StylingControlApp.jsx:1771
 #. %s: item label
 msgid "Remove \"%s\" from this list? This target and its styling will be deleted."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1680
+#: src/admin/customizer/styling/StylingControlApp.jsx:1778
 msgid "this item"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:224
+#: src/admin/customizer/styling/StylingControlApp.jsx:230
 msgid "Desktop"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:225
+#: src/admin/customizer/styling/StylingControlApp.jsx:231
 msgid "Tablet"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:226
+#: src/admin/customizer/styling/StylingControlApp.jsx:232
 msgid "Mobile"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:233
+#: src/admin/customizer/styling/StylingControlApp.jsx:239
 msgid "Element styling"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:243
+#: src/admin/customizer/styling/StylingControlApp.jsx:249
 msgid "Add item"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:384
+#: src/admin/customizer/styling/StylingControlApp.jsx:390
 msgid "Item 1"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:798
+#: src/admin/customizer/styling/StylingControlApp.jsx:839
 msgid "CSS selector applied:"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:805
+#: src/admin/customizer/styling/StylingControlApp.jsx:846
 #. %s: CSS selector string
 msgid "CSS selector applied: %s"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:89
+#: src/admin/customizer/styling/StylingControlApp.jsx:95
 msgid "Item %d"
 msgstr ""
 
@@ -442,6 +538,77 @@ msgstr ""
 msgid "Outline color"
 msgstr ""
 
+#: src/admin/customizer/styling/components/BorderRadiusField.jsx:26
+msgid "Border radius"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BorderRadiusField.jsx:31
+msgid "Link corners"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BorderRadiusField.jsx:32
+msgid "Unlink corners"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BorderRadiusField.jsx:35
+msgid "Top left"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BorderRadiusField.jsx:36
+msgid "Top right"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BorderRadiusField.jsx:37
+msgid "Bottom right"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BorderRadiusField.jsx:38
+msgid "Bottom left"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:134
+msgid "Opacity"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:194
+msgid ""
+"This value uses multiple shadows or a color the generator cannot parse. "
+"Edit it as CSS, or use a single shadow with a hex, rgb, hsl, or keyword "
+"color."
+msgstr ""
+
+#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:223
+msgid "Box shadow"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:230
+msgid "Shift right"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:237
+msgid "Shift down"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:244
+msgid "Spread"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:251
+msgid "Blur"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:263
+msgid "Inset"
+msgstr ""
+
+#: src/admin/customizer/styling/components/BoxShadowGeneratorField.jsx:270
+msgid "Color"
+msgstr ""
+
+#: src/admin/customizer/styling/components/LengthUnitSwitcherChip.jsx:25
+msgid "Default length unit"
+msgstr ""
+
 #: src/admin/customizer/styling/components/SpacingFields.jsx:19
 msgid "Margin"
 msgstr ""
@@ -450,28 +617,55 @@ msgstr ""
 msgid "Padding"
 msgstr ""
 
-#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:221
-msgid "Style states"
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:155
+#: src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx:97
+msgid "Default (inherit)"
 msgstr ""
 
-#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:367
-msgid "Close styling editor"
-msgstr ""
-
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:194
 #: src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx:136
 msgid "Search fonts"
 msgstr ""
 
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:198
 #: src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx:140
 msgid "Type to filter…"
 msgstr ""
 
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:204
+msgid "Loading Google Fonts…"
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:212
+#. %s: error message
+msgid ""
+"Google Fonts could not be loaded (%s). System fonts below are still "
+"available."
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:304
 #: src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx:211
 msgid "No fonts match your search."
 msgstr ""
 
-#: src/admin/customizer/styling/components/StylingLocalFontFamilyControl.jsx:97
-msgid "Default (inherit)"
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:308
+msgid "No fonts to show."
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:77
+msgid "System fonts"
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingGoogleFontFamilyControl.jsx:87
+msgid "Google fonts"
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:229
+msgid "Style states"
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:375
+msgid "Close styling editor"
 msgstr ""
 
 #: src/admin/customizer/styling/components/StylingSettingsPopover.jsx:367
@@ -626,7 +820,7 @@ msgid "Text align"
 msgstr ""
 
 #: src/admin/customizer/styling/components/TextStyleFields.jsx:136
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:247
+#: src/admin/customizer/styling/components/TrblSidesField.jsx:261
 msgid "Left"
 msgstr ""
 
@@ -635,7 +829,7 @@ msgid "Center"
 msgstr ""
 
 #: src/admin/customizer/styling/components/TextStyleFields.jsx:138
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:244
+#: src/admin/customizer/styling/components/TrblSidesField.jsx:258
 msgid "Right"
 msgstr ""
 
@@ -667,22 +861,22 @@ msgstr ""
 msgid "Letter spacing"
 msgstr ""
 
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:163
+#: src/admin/customizer/styling/components/TrblSidesField.jsx:174
 msgid "Link sides"
 msgstr ""
 
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:164
+#: src/admin/customizer/styling/components/TrblSidesField.jsx:175
 msgid "Unlink sides"
 msgstr ""
 
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:219
+#: src/admin/customizer/styling/components/TrblSidesField.jsx:231
 msgid "Value"
 msgstr ""
 
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:242
+#: src/admin/customizer/styling/components/TrblSidesField.jsx:256
 msgid "Top"
 msgstr ""
 
-#: src/admin/customizer/styling/components/TrblSidesField.jsx:246
+#: src/admin/customizer/styling/components/TrblSidesField.jsx:260
 msgid "Bottom"
 msgstr ""

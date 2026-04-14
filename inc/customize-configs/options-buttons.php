@@ -12,7 +12,6 @@ $wp_customize->add_section(
 	array(
 		'priority'    => 5,
 		'title'       => esc_html__( 'Buttons', 'onepress' ),
-		'description' => esc_html__( 'Style primary, secondary, and outline buttons. Targets use Bootstrap-style classes aligned with the theme.', 'onepress' ),
 		'panel'       => 'onepress_options',
 	)
 );

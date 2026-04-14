@@ -131,6 +131,9 @@
 .mt-5 {
   margin-top: 20px;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 :root {
   --opc-panel-spacing: 8px;
 }
@@ -721,11 +724,16 @@ body.wp-customizer .media-modal-backdrop {
   z-index: 8000000;
 }
 .styling-root .components-input-control__container .components-input-control__input:not(.is-small),
-.styling-root .components-input-control__container .components-select-control__input:not(.is-small) {
+.styling-root .components-input-control__container .components-select-control__input:not(.is-small),
+.onepress-styling .components-input-control__container .components-input-control__input:not(.is-small),
+.onepress-styling .components-input-control__container .components-select-control__input:not(.is-small) {
   min-height: 32px !important;
   height: 32px !important;
 }
 .styling-root .components-button:not(.is-small,
+.components-custom-gradient-picker__control-point-button,
+[class^=components-custom-gradient-]),
+.onepress-styling .components-button:not(.is-small,
 .components-custom-gradient-picker__control-point-button,
 [class^=components-custom-gradient-]) {
   height: 32px;
@@ -771,6 +779,12 @@ body.wp-customizer .media-modal-backdrop {
 }
 .onepress-styling .states {
   margin: 8px 0 0px;
+}
+.onepress-styling .reapeatable-title {
+  font-size: 13px;
+  font-weight: 600;
+  background: #f6f7f7;
+  color: #1d2327;
 }
 .onepress-styling .states-toolbar {
   display: flex;
@@ -856,6 +870,12 @@ body.wp-customizer .media-modal-backdrop {
   gap: 8px;
   margin-bottom: 4px;
 }
+.onepress-styling .styling-field-end-chips {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
+}
 .onepress-styling .rfield-label {
   flex: 1;
   min-width: 0;
@@ -881,6 +901,24 @@ body.wp-customizer .media-modal-backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+.onepress-styling .length-unit-chip.components-button {
+  min-width: 28px;
+  width: auto;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.onepress-styling .length-unit-chip__label {
+  font-size: 11px;
+  font-weight: 600;
+  /* font-family: ui-monospace, monospace; */
+  letter-spacing: 0.02em;
+  color: #646970;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.onepress-styling .length-unit-popover.components-popover .components-menu-item__item {
+  min-height: 36px;
 }
 .onepress-styling .device-dashicon {
   width: 16px;
@@ -1032,7 +1070,6 @@ body.wp-customizer .media-modal-backdrop {
   margin-top: 8px;
 }
 .onepress-styling .trbl-block {
-  margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid #dcdcde;
 }
@@ -1043,6 +1080,12 @@ body.wp-customizer .media-modal-backdrop {
   justify-content: space-between;
   gap: 8px;
   margin-bottom: 4px;
+}
+.onepress-styling .trbl-head-actions {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 .onepress-styling {
   /* TRBL inline: title + device on row 1; T/R/B/L + link on row 2 */
@@ -1066,7 +1109,7 @@ body.wp-customizer .media-modal-backdrop {
   display: flex;
   flex-wrap: nowrap;
   align-items: start;
-  gap: 8px 10px;
+  gap: 0;
 }
 .onepress-styling .trbl-block--inline-layout .trbl-inline-cell {
   display: flex;
@@ -1082,19 +1125,21 @@ body.wp-customizer .media-modal-backdrop {
 }
 .onepress-styling .trbl-block--inline-layout .trbl-inline-side-label {
   display: block;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 9px;
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   color: #50575e;
   margin-top: 4px;
   line-height: 1.2;
+  padding: 0 4px;
 }
 .onepress-styling .trbl-block--inline-layout .trbl-inline-link {
   flex: 0 0 auto;
   display: flex;
   align-items: flex-end;
   padding-bottom: 2px;
+  width: 32px;
 }
 .onepress-styling .trbl-block--inline-layout .unit-slider--embed {
   width: 100%;
@@ -1112,9 +1157,32 @@ body.wp-customizer .media-modal-backdrop {
 .onepress-styling .trbl-block--inline-layout .unit-slider--embed.has-range .unit-range-field .components-base-control__field {
   margin-bottom: 0;
 }
-.onepress-styling .trbl-block--inline-layout .unit-slider--embed .unit-input {
+.onepress-styling .trbl-inline-cell .unit-input {
   width: 100%;
   min-width: 0;
+  height: 32px;
+  border-radius: 0px;
+  border-left-width: 0px;
+}
+.onepress-styling .trbl-inline-cell.trbl-inline-cell--linked .unit-input {
+  border-left-width: 1px !important;
+}
+.onepress-styling .trbl-inline-cell:first-child .unit-input {
+  border-left-width: 1px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+.onepress-styling .trbl-inline-link button {
+  outline: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  border-width: 1px 1px 1px 0px !important;
+  border-style: solid;
+  border-color: #949494;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
 }
 .onepress-styling .shgen-block .shgen-row {
   display: flex;
@@ -1516,12 +1584,22 @@ body.wp-customizer .media-modal-backdrop {
   overflow-y: auto;
   flex: 1;
   min-height: 120px;
-  border: 1px solid #dcdcde;
   border-radius: 2px;
   background: #fff;
 }
-.styling-font-picker__list li, .styling-font-picker__list ul {
+.styling-font-picker__list li,
+.styling-font-picker__list ul {
   margin: 0px;
+}
+.styling-font-picker__list .styling-font-picker__group-title.field-title {
+  padding: 0px;
+  box-sizing: border-box;
+  background: none !important;
+}
+.styling-font-picker__list .styling-font-picker__row + .styling-font-picker__group-title.field-title {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 0 none;
 }
 .styling-font-picker__row {
   display: flex;
@@ -1529,9 +1607,9 @@ body.wp-customizer .media-modal-backdrop {
   gap: 8px;
   width: 100%;
   margin: 0;
-  padding: 0 8px;
+  padding: 0 8px 0px 16px;
   border: none;
-  border-bottom: 1px solid #f0f0f1;
+  border-bottom: 0px;
   background: #fff;
   cursor: pointer;
   text-align: left;
@@ -1554,6 +1632,9 @@ body.wp-customizer .media-modal-backdrop {
   justify-content: center;
   padding: 4px 8px;
 }
+.styling-font-picker__list-window {
+  padding: 0 var(--opc-panel-spacing);
+}
 .styling-font-picker__preview {
   flex-shrink: 0;
   width: 120px;
@@ -1571,9 +1652,10 @@ body.wp-customizer .media-modal-backdrop {
 .styling-font-picker__preview--google {
   width: 100%;
   max-width: 100%;
-  height: 30px;
+  height: 20px;
   -o-object-fit: contain;
      object-fit: contain;
+  margin-left: 16px;
 }
 .styling-font-picker__name--live {
   flex: 1;
@@ -1587,14 +1669,14 @@ body.wp-customizer .media-modal-backdrop {
 .styling-font-picker__name {
   flex: 1;
   min-width: 0;
-  font-size: 18px;
+  font-size: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .styling-font-picker__footer {
   flex-shrink: 0;
-  padding-top: 4px;
+  padding-top: 0;
 }
 .onepress-styling-target-preset-wrap {
   padding-left: calc(var(--opc-panel-spacing) * 2);
@@ -1702,6 +1784,10 @@ body.wp-customizer .media-modal-backdrop {
   padding: 10px;
   border-radius: 3px;
 }
+.styling-list-item .ilabel {
+  display: block;
+  cursor: pointer;
+}
 /* Font manager: label + description render inside React; hide core duplicates when present */
 .customize-control-font_manager > .customize-control-title,
 .customize-control-font_manager > .description.customize-control-description {
@@ -1801,17 +1887,6 @@ body.wp-customizer .media-modal-backdrop {
   background: #fff;
   box-shadow: none;
 }
-.font-manager-list__name {
-  flex: 1 1 auto;
-  min-width: 0;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.font-manager-list__spacer {
-  flex: 0 0 8px;
-}
 .font-manager-list__icon-btn {
   flex-shrink: 0;
 }
@@ -1820,10 +1895,11 @@ body.wp-customizer .media-modal-backdrop {
 }
 .font-manager-editor {
   margin-top: 4px;
-  padding: 14px;
-  border: 1px solid #2271b1;
-  border-radius: 4px;
-  background: #f0f6fc;
+  padding: 12px;
+  border: 1px solid #c3c4c7;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+  background: #fff;
 }
 .font-manager-editor__category-badge {
   display: inline-block;
@@ -1836,6 +1912,18 @@ body.wp-customizer .media-modal-backdrop {
   background: #fff;
   border: 1px solid #c3c4c7;
   border-radius: 2px;
+}
+.length-unit-dropdown .components-button:focus, .device-dropdown .components-button:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+.length-unit-popover .components-button.is-next-40px-default-size, .device-popover .components-button.is-next-40px-default-size {
+  min-height: 28px;
+  height: 28px;
+}
+.length-unit-popover .components-button.is-next-40px-default-size:focus, .device-popover .components-button.is-next-40px-default-size:focus {
+  box-shadow: none;
+  outline: none;
 }
 /*!*****************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/@wordpress/scripts/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/frontend/fontawesome-v6/css/all.min.css ***!

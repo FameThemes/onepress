@@ -1187,12 +1187,21 @@ function onepress_styling_build_css_from_value($value, $breakpoints = null, $ove
  */
 function onepress_styling_print_theme_css($override_base_selector = null)
 {
+	// `do_action( 'wp_head' )` with no extra args still passes array( '' ) to callbacks (wp-includes/plugin.php).
+	// Treat that like “no override” so stored `_meta.baseSelector` is used on the front.
+	if ( '' === $override_base_selector ) {
+		$override_base_selector = null;
+	}
+
 	/**
 	 * Override base selector for inline theme styling output (all registered ids in one pass).
 	 *
 	 * @param string|null $override_base_selector Same semantics as `onepress_styling_print_theme_css()` argument.
 	 */
 	$override_base_selector = apply_filters('onepress_styling_print_theme_css_override_base', $override_base_selector);
+	if ( '' === $override_base_selector ) {
+		$override_base_selector = null;
+	}
 	if (null !== $override_base_selector && ! is_string($override_base_selector)) {
 		$override_base_selector = null;
 	}

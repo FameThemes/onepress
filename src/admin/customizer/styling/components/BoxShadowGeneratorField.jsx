@@ -12,10 +12,18 @@ import {
 } from '../boxShadowGenerator';
 import {
 	clampNumber,
+	explicitLengthCssUnit,
+	formatCssSingleLengthValue,
 	parseCssSingleLengthValue,
+	resolveEffectiveLengthSuffix,
 	SLIDER_PRESETS,
 } from '../cssUnitSlider';
 import { DeviceSwitcherChip } from './DeviceSwitcherChip';
+import { LengthUnitSwitcherChip } from './LengthUnitSwitcherChip';
+import {
+	STYLING_LENGTH_UNIT_SUFFIXES,
+	useStylingLengthUnitOptional,
+} from './StylingLengthUnitContext';
 import { StylingAlphaColorControl } from './StylingAlphaColorControl';
 
 /**
@@ -27,8 +35,13 @@ import { StylingAlphaColorControl } from './StylingAlphaColorControl';
  * @param {(next: Record<string, string | number | boolean>) => void} props.onPartsChange
  */
 function ShadowLengthRow({ parts, lengthKey, label, preset, onPartsChange }) {
+	const lengthCtx = useStylingLengthUnitOptional();
+	const effectiveSuffix = resolveEffectiveLengthSuffix(
+		preset.defaultSuffix,
+		lengthCtx?.preferredSuffix
+	);
 	const value = parts[lengthKey];
-	const parsed = parseCssSingleLengthValue(value, preset.defaultSuffix);
+	const parsed = parseCssSingleLengthValue(value, effectiveSuffix);
 	const canSlider = parsed !== null;
 	const sliderVal =
 		canSlider && parsed
@@ -40,12 +53,33 @@ function ShadowLengthRow({ parts, lengthKey, label, preset, onPartsChange }) {
 			return;
 		}
 		onPartsChange(
-			patchLength(parts, lengthKey, n, preset.min, preset.max, preset.defaultSuffix)
+			patchLength(parts, lengthKey, n, preset.min, preset.max, effectiveSuffix)
 		);
 	};
 
 	const onText = (e) => {
 		onPartsChange({ ...parts, [lengthKey]: e.target.value });
+	};
+
+	const onBlur = () => {
+		let nextVal = value;
+		const raw = String(value).trim();
+		if (raw !== '') {
+			const p = parseCssSingleLengthValue(value, effectiveSuffix);
+			if (p !== null) {
+				const normalized = formatCssSingleLengthValue(p.num, p.suffix);
+				if (normalized !== value) {
+					onPartsChange({ ...parts, [lengthKey]: normalized });
+					nextVal = normalized;
+				}
+			}
+		}
+		if (preset.defaultSuffix !== '' && lengthCtx?.adoptSuffixFromValue) {
+			const u = explicitLengthCssUnit(nextVal);
+			if (u && STYLING_LENGTH_UNIT_SUFFIXES.has(u)) {
+				lengthCtx.adoptSuffixFromValue(u);
+			}
+		}
 	};
 
 	return (
@@ -72,6 +106,7 @@ function ShadowLengthRow({ parts, lengthKey, label, preset, onPartsChange }) {
 							type="text"
 							value={value}
 							onChange={onText}
+							onBlur={onBlur}
 							aria-label={label}
 						/>
 					</>
@@ -81,6 +116,7 @@ function ShadowLengthRow({ parts, lengthKey, label, preset, onPartsChange }) {
 						type="text"
 						value={value}
 						onChange={onText}
+						onBlur={onBlur}
 						aria-label={label}
 					/>
 				)}
@@ -149,7 +185,10 @@ export function BoxShadowGeneratorField({ value, onChange }) {
 			<div className="shgen-block trbl-block">
 				<div className="trbl-head">
 					<strong>{__('Box shadow', 'onepress')}</strong>
-					<DeviceSwitcherChip />
+					<div className="trbl-head-actions">
+						<DeviceSwitcherChip />
+						<LengthUnitSwitcherChip />
+					</div>
 				</div>
 				<p className="description unknown-hint">
 					{__(
@@ -182,7 +221,10 @@ export function BoxShadowGeneratorField({ value, onChange }) {
 		<div className="shgen-block trbl-block">
 			<div className="trbl-head">
 				<strong>{__('Box shadow', 'onepress')}</strong>
-				<DeviceSwitcherChip />
+				<div className="trbl-head-actions">
+					<DeviceSwitcherChip />
+					<LengthUnitSwitcherChip />
+				</div>
 			</div>
 			<ShadowLengthRow
 				label={__('Shift right', 'onepress')}

@@ -13,7 +13,6 @@ $wp_customize->add_section(
 	array(
 		'priority'    => 4,
 		'title'       => esc_html__( 'Typography', 'onepress' ),
-		'description' => esc_html__( 'Set font and text styles per target. Edit the registry in the theme to add or change controls in one place.', 'onepress' ),
 		'panel'       => 'onepress_options',
 	)
 );

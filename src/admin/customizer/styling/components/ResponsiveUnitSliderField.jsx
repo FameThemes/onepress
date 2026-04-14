@@ -1,13 +1,20 @@
 /**
- * Responsive field: row1 label + device chip; row2 RangeControl + CSS value input.
+ * Responsive field: row1 label + unit + device chips; row2 RangeControl + CSS value input.
  */
 import { RangeControl } from '@wordpress/components';
+import { useCallback } from '@wordpress/element';
 import {
 	clampNumber,
+	explicitLengthCssUnit,
 	formatCssSingleLengthValue,
 	parseCssSingleLengthValue,
+	resolveEffectiveLengthSuffix,
 } from '../cssUnitSlider';
 import { ResponsiveFieldShell } from './ResponsiveFieldShell';
+import {
+	STYLING_LENGTH_UNIT_SUFFIXES,
+	useStylingLengthUnitOptional,
+} from './StylingLengthUnitContext';
 
 /**
  * @param {object} props
@@ -22,6 +29,7 @@ import { ResponsiveFieldShell } from './ResponsiveFieldShell';
  * @param {boolean} [props.disabled]
  * @param {boolean} [props.embed] — omit label row + device chip (use inside grouped TRBL / shared header).
  * @param {boolean} [props.inputOnly] — text input only, no RangeControl (compact TRBL rows).
+ * @param {boolean} [props.showLengthUnitChip] — forwarded to shell when not embed (default true).
  */
 export function ResponsiveUnitSliderField({
 	label,
@@ -35,8 +43,14 @@ export function ResponsiveUnitSliderField({
 	disabled = false,
 	embed = false,
 	inputOnly = false,
+	showLengthUnitChip = true,
 }) {
-	const parsed = parseCssSingleLengthValue(value, defaultSuffix);
+	const lengthCtx = useStylingLengthUnitOptional();
+	const effectiveDefaultSuffix = resolveEffectiveLengthSuffix(
+		defaultSuffix,
+		lengthCtx?.preferredSuffix
+	);
+	const parsed = parseCssSingleLengthValue(value, effectiveDefaultSuffix);
 	const canUseSlider = parsed !== null && !inputOnly;
 
 	const sliderVal =
@@ -52,6 +66,27 @@ export function ResponsiveUnitSliderField({
 	const onTextChange = (e) => {
 		onChange(e.target.value);
 	};
+
+	const onInputBlur = useCallback(() => {
+		let nextVal = value;
+		const raw = String(value).trim();
+		if (raw !== '') {
+			const p = parseCssSingleLengthValue(value, effectiveDefaultSuffix);
+			if (p !== null) {
+				const normalized = formatCssSingleLengthValue(p.num, p.suffix);
+				if (normalized !== value) {
+					onChange(normalized);
+					nextVal = normalized;
+				}
+			}
+		}
+		if (defaultSuffix !== '' && lengthCtx?.adoptSuffixFromValue) {
+			const u = explicitLengthCssUnit(nextVal);
+			if (u && STYLING_LENGTH_UNIT_SUFFIXES.has(u)) {
+				lengthCtx.adoptSuffixFromValue(u);
+			}
+		}
+	}, [value, effectiveDefaultSuffix, onChange, defaultSuffix, lengthCtx]);
 
 	const inner = (
 		<div className={`unit-slider${canUseSlider ? ' has-range' : ''}${embed ? ' unit-slider--embed' : ''}`}>
@@ -75,6 +110,7 @@ export function ResponsiveUnitSliderField({
 						type="text"
 						value={value}
 						onChange={onTextChange}
+						onBlur={onInputBlur}
 						disabled={disabled}
 						aria-label={label}
 					/>
@@ -85,6 +121,7 @@ export function ResponsiveUnitSliderField({
 					type="text"
 					value={value}
 					onChange={onTextChange}
+					onBlur={onInputBlur}
 					disabled={disabled}
 					aria-label={label}
 				/>
@@ -97,7 +134,7 @@ export function ResponsiveUnitSliderField({
 	}
 
 	return (
-		<ResponsiveFieldShell label={label} help={help}>
+		<ResponsiveFieldShell label={label} help={help} showLengthUnitChip={showLengthUnitChip}>
 			{inner}
 		</ResponsiveFieldShell>
 	);

@@ -4,6 +4,7 @@ export { BorderRadiusField } from './BorderRadiusField';
 export { CssEnumButtonGroup } from './CssEnumButtonGroup';
 export { deriveLinkedSides } from './deriveLinkedSides';
 export { DeviceSwitcherChip } from './DeviceSwitcherChip';
+export { LengthUnitSwitcherChip } from './LengthUnitSwitcherChip';
 export { dashiconClassForDeviceId } from './deviceDashicons';
 export { DisplayLayoutFields } from './DisplayLayoutFields';
 export { FlexLayoutFields } from './FlexLayoutFields';
@@ -21,6 +22,13 @@ export { StylingFontFaceSelectControls } from './StylingFontFaceSelectControls';
 export { StylingGoogleFontFamilyControl } from './StylingGoogleFontFamilyControl';
 export { StylingLocalFontFamilyControl } from './StylingLocalFontFamilyControl';
 export { StylingDeviceProvider, useStylingDevice } from './StylingDeviceContext';
+export {
+	StylingLengthUnitProvider,
+	STYLING_LENGTH_UNIT_OPTIONS,
+	STYLING_LENGTH_UNIT_SUFFIXES,
+	usePreferredLengthSuffix,
+	useStylingLengthUnitOptional,
+} from './StylingLengthUnitContext';
 export { StylingGroupPanel } from './StylingGroupPanel';
 export { StylingInlineEditor } from './StylingInlineEditor';
 export { StylingTargetElementSelect } from './StylingTargetElementSelect';
