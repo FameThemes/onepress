@@ -32,19 +32,19 @@ if (! function_exists('onepress_styling_button_target_elements_registry')) {
 			'elements'   => array(
 				array(
 					'id'       => 'onepress_btn_primary',
-					'selector' => '.btn.btn-primary',
+					'selector' => 'body .btn.btn-theme-primary',
 					'name'     => esc_html__('Primary button', 'onepress'),
 					'category' => $cat,
 				),
 				array(
 					'id'       => 'onepress_btn_secondary',
-					'selector' => '.btn.btn-secondary',
+					'selector' => 'body .nav-links a, body .nav-links .page-numbers, .entry-content .wp-block-button__link, input[type=reset], input[type=submit], input[type=submit], .pirate-forms-submit-button, .contact-form div.wpforms-container-full .wpforms-form .wpforms-submit',
 					'name'     => esc_html__('Secondary button', 'onepress'),
 					'category' => $cat,
 				),
 				array(
 					'id'       => 'onepress_btn_outline',
-					'selector' => '.btn.btn-outline-primary',
+					'selector' => 'body .btn.btn-secondary-outline',
 					'name'     => esc_html__('Outline button', 'onepress'),
 					'category' => $cat,
 				),
@@ -53,7 +53,7 @@ if (! function_exists('onepress_styling_button_target_elements_registry')) {
 					'selector' => '',
 					'name'     => esc_html__('Custom target (create new)', 'onepress'),
 					'category' => $cat,
-					'locked'   => true,
+					'locked'   => false,
 					'multiple' => true,
 					'message'  => esc_html__('Update to OnePress Plus version to unlock this feature', 'onepress'),
 				),
@@ -105,14 +105,6 @@ if (! function_exists('onepress_styling_button_default_value_multiple')) {
 				'title'    => esc_html__('Outline button', 'onepress'),
 				'selector' => 'body .btn.btn-secondary-outline',
 			),
-			array(
-				'id'       => 'custom_item',
-				'selector' => '',
-				'name'     => esc_html__( 'Custom target (create new)', 'onepress' ),
-				'locked'   => true,
-				'multiple' => true,
-				'message' => esc_html__('Update to OnePress Plus version to unlock this feature', 'onepress'),
-		),
 		);
 
 		$items = array();
