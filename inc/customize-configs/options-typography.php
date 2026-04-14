@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Typography (Customizer) — section after Global. Controls are declared in
- * `onepress_styling_typography_controls_config()` (see `inc/styling-customizer-controls-registry.php`).
+ * Typography (Customizer) — section after Global. Rows come from
+ * `onepress_styling_typography_controls_config()` in `inc/registry/typo-registry.php`.
  *
  * @package OnePress
  */

@@ -3,142 +3,68 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1002
-msgid "Reset all items to default"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:291
+msgid "Choose a font before saving."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1003
-msgid "Reset to default"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:307
+msgid "Remove this font from the list?"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1039
-msgid "Item %d"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:329
+msgid "New font"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1048
-msgid "Reset this item to default"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:333
+msgid "Search fonts"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1059
-msgid "Remove this item from the list"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:347
+msgid "Google Font"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1072
-msgid "Edit styling"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:357
+#. %s: font name
+msgid "Styles for %s"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1085
-msgid "Add item"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:362
+msgid "Only checked styles are loaded from Google."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1217
-msgid "Style states"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:373
+#. 1: weight, 2: style
+msgid "%1$s · %2$s"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1267
-msgid "Manage states"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:395
+msgid "Close"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1268
-msgid "State settings"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:398
+msgid "Save"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1269
-msgid "Settings"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:414
+msgid "Fonts saved"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1284
-msgid "Cancel picking from preview"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:417
+msgid "No fonts yet."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1285
-msgid "Pick a selector from the site preview"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:420
+msgid "(unnamed)"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1359
-msgid "Reset"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:434
+msgid "Edit font"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1365
-msgid ""
-"Reset all targets to their default styling? Every item in this list will be "
-"restored and unsaved changes will be lost."
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:443
+msgid "Remove font"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1369
-msgid ""
-"Reset this styling block to its default? Current declarations will be "
-"replaced."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1379
-#. %s: item label
-msgid ""
-"Reset \"%s\" to its default styling? This target's declarations will be "
-"replaced."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1403
-msgid "Delete"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1404
-msgid "Cancel"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1410
-#. %s: item label
-msgid "Remove \"%s\" from this list? This target and its styling will be deleted."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1417
-msgid "this item"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:181
-msgid "Desktop"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:182
-msgid "Tablet"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:183
-msgid "Mobile"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:190
-msgid "Element styling"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:197
-msgid ""
-"Per state and breakpoint, enter CSS declarations only (no selectors or "
-"curly braces). Example: color: #2271b1; padding: 8px 12px;"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:292
-msgid "Item 1"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:625
-msgid "CSS selector applied:"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:632
-#. %s: CSS selector string
-msgid "CSS selector applied: %s"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:874
-msgid "New item"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:954
-msgid "Invalid styling configuration (no states). Save to reset defaults."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:982
-#. %s: item label
-msgid "Edit styling: %s"
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:464
+msgid "Add font"
 msgstr ""

@@ -702,10 +702,16 @@ function onepress_styling_build_google_fonts_css2_url($merged)
 	return 'https://fonts.googleapis.com/css2?' . implode('&', $parts) . '&display=swap';
 }
 
-require_once __DIR__ . '/styling-customizer-controls-registry.php';
+// Typography registry: theme_mod ids, base_selector map, control lookup (`inc/registry/typo-registry.php`).
+require_once __DIR__ . '/registry/typo-registry.php';
 
 /**
- * Default theme_mod ids for styling (typography registry + demo element controls). Filter: `onepress_styling_theme_mod_setting_ids`.
+ * Default theme_mod ids merged for styling CSS output and preview (typography + global demos).
+ *
+ * Typography ids: `onepress_styling_typography_theme_mod_ids()` from `inc/registry/typo-registry.php`.
+ * Demo globals: `inc/customize-configs/options-styling.php` — extend this list when adding/removing those settings.
+ *
+ * Filter: `onepress_styling_theme_mod_setting_ids`.
  *
  * @return list<string>
  */
@@ -722,8 +728,8 @@ function onepress_styling_default_theme_mod_setting_ids()
 }
 
 /**
- * For registered theme_mod ids that define `base_selector` in the Customizer registry, force
- * `_meta.baseSelector` so front output matches PHP config (overrides outdated saved values).
+ * For theme_mod ids that define `base_selector` in the typography registry (`inc/registry/typo-registry.php`),
+ * force `_meta.baseSelector` so front output matches PHP config (overrides outdated saved values).
  *
  * @param string               $setting_id theme_mod key.
  * @param array<string, mixed> $value      Single-target styling payload (not `items[]` multi).
@@ -754,7 +760,7 @@ function onepress_styling_value_with_registry_base( $setting_id, $value )
 }
 
 /**
- * For typography registry rows with `base_selector` + array `styling_states`, set each matching state’s
+ * For `typo-registry.php` rows with `base_selector` + array `styling_states`, set each matching state’s
  * `force_selector` from config: explicit template `force_selector`, else `base_selector` + template `selector`.
  *
  * @param string               $setting_id theme_mod key.

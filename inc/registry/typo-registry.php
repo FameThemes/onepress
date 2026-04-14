@@ -1,8 +1,14 @@
 <?php
 
 /**
- * Central registry for Customizer `Onepress_Customize_Styling_Control` rows (typography and similar).
- * Edit `onepress_styling_typography_controls_config()` (or filter it) to add/reorder/remove controls in one place.
+ * Typography (and similar) registry: one `Onepress_Customize_Styling_Control` row per theme_mod id.
+ *
+ * Customizer wiring: `inc/customize-configs/options-typography.php` loops `onepress_styling_typography_controls_config()`.
+ * Loaded for CSS / font merge / preview ids via `inc/styling-css.php` (`onepress_styling_typography_theme_mod_ids()`, etc.).
+ * Separate demo `styling` controls (global section): `inc/customize-configs/options-styling.php` — keep their ids in
+ * `onepress_styling_default_theme_mod_setting_ids()` in `styling-css.php`.
+ *
+ * Edit `onepress_styling_typography_controls_config()` (or filter it) to add/reorder/remove typography controls in one place.
  *
  * @package OnePress
  */
@@ -17,7 +23,7 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 	 * - `control` (array) — passed as second arg to `Onepress_Customize_Styling_Control` (must not include control id key).
 	 *   Optional: `styling_hide_popover_heading`, `styling_hide_state_tablist` (bool) — simplify the editor popover chrome.
 	 *   In `styling_states` template rows, optional `force_selector` (string) — full CSS selector override; if omitted, theme resolves `force_selector` as `base_selector` + that row’s `selector` for the matching theme_mod id (front + preview).
-	 *   When `styling_multiple` => true on the control, use setting default `onepress_styling_get_default_json_multiple()` and sanitize `onepress_sanitize_styling_value_multi` (not the single-target helpers).
+	 *   When `styling_multiple` => true on the control, use setting default `onepress_styling_get_default_value_multiple()` (array; sanitize stores JSON) and sanitize `onepress_sanitize_styling_value_multi` (not the single-target helpers).
 	 *
 	 * @return array<int, array{id: string, setting: array<string, mixed>, control: array<string, mixed>}>
 	 */
@@ -26,13 +32,13 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 		$section = 'onepress_typography';
 
 		$setting_defaults = array(
-			'default'           => onepress_styling_get_default_json(),
+			'default'           => onepress_styling_get_default_value(),
 			'sanitize_callback' => 'onepress_sanitize_styling_value',
 			'transport'         => 'postMessage',
 		);
 
 		$setting_defaults_multiple = array(
-			'default'           => onepress_styling_get_default_json_multiple(),
+			'default'           => onepress_styling_get_default_value_multiple(),
 			'sanitize_callback' => 'onepress_sanitize_styling_value_multi',
 			'transport'         => 'postMessage',
 		);
@@ -85,7 +91,7 @@ if (! function_exists('onepress_styling_typography_controls_config')) {
 				array(
 					'label'         => esc_html__('Menu Typography', 'onepress'),
 					'priority'      => 20,
-					'base_selector' => '.onepress-menu a',
+					'base_selector' => 'body .onepress-menu > li > a',
 					'styling_hide_state_tablist' => false,
 					'styling_hide_popover_heading' => true,
 					'styling_states' => array(

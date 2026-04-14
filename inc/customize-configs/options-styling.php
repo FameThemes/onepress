@@ -1,11 +1,16 @@
 <?php
 
 /**
- * Element styling (Customizer) — demo settings using control type `styling`.
+ * Element styling (Customizer) — demo settings using control type `styling` (section `onepress_global_settings`).
  *
- * Multiple targets: `styling_multiple` => true, default `onepress_styling_get_default_json_multiple()`,
- * sanitize `onepress_sanitize_styling_value_multi`. Single target: omit `styling_multiple`, use
- * `onepress_styling_get_default_json()` and `onepress_sanitize_styling_value`.
+ * Typography styling rows live in `inc/registry/typo-registry.php` and are registered from
+ * `inc/customize-configs/options-typography.php`. When you add or remove `styling` theme_mod ids here,
+ * update `onepress_styling_default_theme_mod_setting_ids()` in `inc/styling-css.php` so front CSS and
+ * preview stay aligned.
+ *
+ * Multiple targets: `styling_multiple` => true, default `onepress_styling_get_default_value_multiple()` (array;
+ * sanitize encodes JSON for theme_mod). Single target: omit `styling_multiple`, use a `onepress_styling_get_default_value*()`
+ * array and `onepress_sanitize_styling_value`.
  *
  * `base_selector` (optional, single-target only — ignored when `styling_multiple` => true): non-empty
  * string fixes `_meta.baseSelector` / `selector` in JS and hides the base selector field in the editor.
@@ -14,7 +19,7 @@
  * `styling_states` (control arg, exposed as `control.params.styling_states` in JS):
  * - `'all'` — full “Manage states”: presets, custom ids, remove (default if omitted).
  * - Non-empty array — same shape as `_meta.states` rows; fixed list only (no add/remove; labels/suffixes + reorder in popover).
- * - `false` — only `normal`; state tabs and state popover are hidden; use default from `onepress_styling_get_default_json_normal_only()`.
+ * - `false` — only `normal`; state tabs and state popover are hidden; use default from `onepress_styling_get_default_value_normal_only()`.
  *
  * `styling_groups` (optional): `null`/omit = all accordion groups. Otherwise an array of ids in display order:
  * `text`, `background`, `spacing`, `border`, `shadow`, `display`, `raw`. Invalid ids are dropped.
@@ -30,8 +35,8 @@
 
 $wp_customize->add_setting(
 	'onepress_element_styling',
-	array(
-		'default'           => onepress_styling_get_default_json_multiple(),
+		array(
+		'default'           => onepress_styling_get_default_value_multiple(),
 		'sanitize_callback' => 'onepress_sanitize_styling_value_multi',
 		'transport'         => 'postMessage',
 	)
@@ -59,8 +64,8 @@ $wp_customize->add_control(
 
 $wp_customize->add_setting(
 	'onepress_element_styling_single',
-	array(
-		'default'           => onepress_styling_get_default_json_normal_only(),
+		array(
+		'default'           => onepress_styling_get_default_value_normal_only(),
 		'sanitize_callback' => 'onepress_sanitize_styling_value',
 		'transport'         => 'postMessage',
 	)
@@ -101,8 +106,8 @@ $onepress_styling_fixed_states_demo = array(
 
 $wp_customize->add_setting(
 	'onepress_element_styling_fixed_states',
-	array(
-		'default'           => onepress_styling_get_default_json_from_states_template($onepress_styling_fixed_states_demo),
+		array(
+		'default'           => onepress_styling_get_default_value_from_states_template($onepress_styling_fixed_states_demo),
 		'sanitize_callback' => 'onepress_sanitize_styling_value',
 		'transport'         => 'postMessage',
 	)

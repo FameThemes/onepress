@@ -1725,3 +1725,174 @@ body.wp-customizer .media-modal-backdrop {
   padding: 10px;
   border-radius: 3px;
 }
+
+/* Font manager control (reuses .onepress-styling font picker styles) */
+.onepress-font-manager.font-manager-control,
+.onepress-font-manager .font-manager-control {
+  margin-top: 8px;
+}
+
+.font-manager-control__picker-label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #50575e;
+}
+
+.font-manager-control__variations {
+  margin: 16px 0 0;
+  padding: 12px;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #f6f7f7;
+}
+
+.font-manager-control__variations-legend {
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.font-manager-control__variations-hint {
+  margin: 4px 0 8px;
+  font-size: 12px;
+  color: #50575e;
+}
+
+.font-manager-control__variation-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.font-manager-control__variation-list li {
+  margin: 0;
+}
+
+.font-manager-control__list-heading {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #50575e;
+}
+
+.font-manager-list {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+  max-height: 220px;
+  overflow: auto;
+}
+
+/* Inline editor: show full list + form without inner scroll */
+.font-manager-list.font-manager-list--expanded {
+  max-height: none;
+  overflow: visible;
+}
+
+.font-manager-list__empty {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #646970;
+}
+
+.font-manager-list__row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #dcdcde;
+  font-size: 13px;
+}
+
+.font-manager-list__row:last-child {
+  border-bottom: none;
+}
+
+.font-manager-list__editor-slot {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #dcdcde;
+  background: #f6f7f7;
+}
+
+.font-manager-list__editor-slot .font-manager-editor {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: #f0f6fc;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.font-manager-control__editor-below-list {
+  margin-bottom: 12px;
+}
+
+.font-manager-list__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.font-manager-list__spacer {
+  flex: 0 0 8px;
+}
+
+.font-manager-list__icon-btn {
+  flex-shrink: 0;
+}
+
+.font-manager-control__add-wrap {
+  margin-bottom: 12px;
+}
+
+.font-manager-editor {
+  margin-top: 4px;
+  padding: 14px;
+  border: 1px solid #2271b1;
+  border-radius: 4px;
+  background: #f0f6fc;
+}
+
+.font-manager-editor__title {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.font-manager-editor__category {
+  margin: 8px 0 0;
+}
+
+.font-manager-editor__category-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #1d2327;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-radius: 2px;
+}
+
+.font-manager-editor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #c3c4c7;
+}

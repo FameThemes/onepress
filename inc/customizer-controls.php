@@ -11,6 +11,7 @@ require_once get_template_directory() . '/inc/customize-controls/control-editor.
 require_once get_template_directory() . '/inc/customize-controls/control-color-alpha.php';
 require_once get_template_directory() . '/inc/customize-controls/control-repeater.php';
 require_once get_template_directory() . '/inc/customize-controls/control-styling.php';
+require_once get_template_directory() . '/inc/customize-controls/control-font-manager.php';
 require_once get_template_directory() . '/inc/customize-controls/control-category.php';
 require_once get_template_directory() . '/inc/customize-controls/control-pages.php';
 require_once get_template_directory() . '/inc/customize-controls/control-media.php';

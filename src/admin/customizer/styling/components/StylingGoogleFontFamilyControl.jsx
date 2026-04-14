@@ -17,11 +17,12 @@ const OVERSCAN = 6;
  * @param {object} props
  * @param {string} props.value
  * @param {(patch: Record<string, string>) => void} props.onPatch
+ * @param {(font: PickerFontFamily) => void} [props.onPickFamily] Full family (slug, fontFace, isSystem) — use when onPatch alone is not enough.
  * @param {PickerFontFamily[]} props.families
  * @param {boolean} props.loading
  * @param {Error | null} props.error
  */
-export function StylingGoogleFontFamilyControl({ value, onPatch, families, loading, error }) {
+export function StylingGoogleFontFamilyControl({ value, onPatch, onPickFamily, families, loading, error }) {
 	const [popoverOpen, setPopoverOpen] = useState(false);
 	const [popoverAnchor, setPopoverAnchor] = useState(null);
 	const [search, setSearch] = useState('');
@@ -82,9 +83,10 @@ export function StylingGoogleFontFamilyControl({ value, onPatch, families, loadi
 				fontWeight: d.fontWeight,
 				fontStyle: d.fontStyle,
 			});
+			onPickFamily?.(font);
 			closePopover();
 		},
-		[closePopover, onPatch]
+		[closePopover, onPatch, onPickFamily]
 	);
 
 	const onListScroll = useCallback((e) => {
