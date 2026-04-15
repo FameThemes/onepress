@@ -58,6 +58,10 @@ export function bindOnepressStylingPreview($, api, settingIds = DEFAULT_SETTING_
 	const ids = fromWindow || settingIds;
 
 	function paintAll() {
+		// Server outputs v2 CSS via `wp_add_inline_style` (id may be `onepress-styling-v2-inline` after `style_loader_tag`, or WP default `onepress-styling-v2-inline-css`). Live preview rebuilds from `api().get()` into `#onepress-styling-preview-*` — remove server blocks every paint so stale saved CSS never stacks with unsaved edits.
+		$(
+			'[data-onepress-styling-v2="1"], #onepress-styling-v2-inline, #onepress-styling-v2-inline-css, #onepress-styling-inline'
+		).remove();
 		/** @type {Record<string, unknown>[]} */
 		const values = [];
 		for (const id of ids) {

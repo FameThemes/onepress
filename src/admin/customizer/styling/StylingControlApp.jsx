@@ -1604,7 +1604,7 @@ export function StylingControlApp({ control, $ }) {
 															{getMultiStylingItemListRowLabel(item, index, targetElementsRegistry)}
 														</span>
 
-														<div className="flex gap-2">
+														<div className="flex gap-1">
 															<Button
 																variant="tertiary"
 																onClick={() => setResetConfirm({ kind: 'item', index })}
@@ -1618,7 +1618,7 @@ export function StylingControlApp({ control, $ }) {
 															</Button>
 
 															<Button
-																variant="secondary"
+																variant={ editorPopoverOpen && editingItemIndex === index ? 'secondary' : 'tertiary' }
 																onClick={() => toggleEditorForItem(index)}
 																isPressed={editorPopoverOpen && editingItemIndex === index}
 																aria-expanded={editorPopoverOpen && editingItemIndex === index}
@@ -1638,6 +1638,7 @@ export function StylingControlApp({ control, $ }) {
 																icon={trash}
 																label={__('Remove this item from the list', 'onepress')}
 																showTooltip
+																isDestructive={true}
 																// className="icon-btn"
 															>
 															</Button>

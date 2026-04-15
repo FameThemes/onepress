@@ -144,7 +144,12 @@ export function buildStylingCss(value, breakpoints = DEFAULT_BPS) {
 	if (!value || typeof value !== 'object') {
 		return '';
 	}
-	if (Array.isArray(value.items) && value.items.length) {
+	// Multi-target root (`styling_multiple`): CSS comes only from `items[]`. Empty list must not fall through
+	// to root `_meta` / state slices (stale keys after remove-all or reset can otherwise keep old rules in preview).
+	if (Array.isArray(value.items)) {
+		if (value.items.length === 0) {
+			return '';
+		}
 		return value.items
 			.map((item) => buildStylingCss(item, breakpoints))
 			.filter(Boolean)

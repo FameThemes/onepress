@@ -1174,21 +1174,21 @@ function onepress_styling_build_css_from_value($value, $breakpoints = null, $ove
 }
 
 /**
- * Print inline CSS for registered theme_mods.
+ * Registered style handle for JSON theme_mod styling (separate from `onepress-style` + `onepress_custom_inline_style`).
  *
- * Runs in Customizer preview too so the iframe gets rules on first paint (postMessage JS may run
- * before the setting value is available). Live edits still update via preview JS style tags.
- *
- * @param string|null $override_base_selector Optional. When not null, passed to `onepress_styling_build_css_from_value`
- *                                            for every setting (replaces stored base for composition; `force_selector`
- *                                            states unchanged). Filter `onepress_styling_print_theme_css_override_base`
- *                                            can set this when the function is invoked with no args (e.g. `wp_head`).
- * @return void
+ * @since 2.3.x
  */
-function onepress_styling_print_theme_css($override_base_selector = null)
-{
-	// `do_action( 'wp_head' )` with no extra args still passes array( '' ) to callbacks (wp-includes/plugin.php).
-	// Treat that like “no override” so stored `_meta.baseSelector` is used on the front.
+function onepress_styling_v2_inline_style_handle() {
+	return 'onepress-styling-v2';
+}
+
+/**
+ * Build inline CSS string for registered styling theme_mods (no output).
+ *
+ * @param string|null $override_base_selector Optional. Passed to `onepress_styling_build_css_from_value` for each row.
+ * @return string Non-empty CSS or ''.
+ */
+function onepress_styling_get_theme_mods_inline_css($override_base_selector = null) {
 	if ( '' === $override_base_selector ) {
 		$override_base_selector = null;
 	}
@@ -1196,7 +1196,7 @@ function onepress_styling_print_theme_css($override_base_selector = null)
 	/**
 	 * Override base selector for inline theme styling output (all registered ids in one pass).
 	 *
-	 * @param string|null $override_base_selector Same semantics as `onepress_styling_print_theme_css()` argument.
+	 * @param string|null $override_base_selector Same as `onepress_styling_get_theme_mods_inline_css()` argument.
 	 */
 	$override_base_selector = apply_filters('onepress_styling_print_theme_css_override_base', $override_base_selector);
 	if ( '' === $override_base_selector ) {
@@ -1211,7 +1211,7 @@ function onepress_styling_print_theme_css($override_base_selector = null)
 		onepress_styling_default_theme_mod_setting_ids()
 	);
 	if (! is_array($ids) || empty($ids)) {
-		return;
+		return '';
 	}
 	$all = '';
 	foreach ($ids as $id) {
@@ -1231,11 +1231,66 @@ function onepress_styling_print_theme_css($override_base_selector = null)
 		$arr = onepress_styling_value_with_registry_state_force_selectors($id, $arr);
 		$all .= onepress_styling_build_css_from_value($arr, null, $override_base_selector);
 	}
-	if ($all === '') {
-		return;
-	}
-	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from sanitized declaration strings and selectors only.
-	echo "\n" . '<style id="onepress-styling-inline" type="text/css">' . "\n" . $all . "\n" . '</style>' . "\n";
+
+	return trim((string) $all);
 }
 
-add_action('wp_head', 'onepress_styling_print_theme_css', 100);
+/**
+ * Enqueue a no-src stylesheet and attach styling CSS via `wp_add_inline_style` (avoids echo; separate from `#onepress-theme-custom-inline` / theme-mod CSS).
+ *
+ * Runs on the front and in the Customizer preview iframe so the first paint matches saved mods; live edits still use preview JS tags.
+ */
+function onepress_styling_enqueue_v2_inline_style() {
+	$css = onepress_styling_get_theme_mods_inline_css( null );
+	if ( $css === '' ) {
+		return;
+	}
+	$handle = onepress_styling_v2_inline_style_handle();
+	$deps   = array();
+	if ( wp_style_is( 'onepress-style', 'registered' ) || wp_style_is( 'onepress-style', 'enqueued' ) ) {
+		$deps[] = 'onepress-style';
+	}
+	if ( function_exists( 'onepress_theme_custom_inline_style_handle' ) ) {
+		$theme_custom = onepress_theme_custom_inline_style_handle();
+		if ( wp_style_is( $theme_custom, 'enqueued' ) ) {
+			$deps[] = $theme_custom;
+		}
+	}
+	wp_register_style( $handle, false, $deps, null );
+	wp_enqueue_style( $handle );
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized declarations/selectors only (same as former echo path).
+	wp_add_inline_style( $handle, $css );
+}
+add_action( 'wp_enqueue_scripts', 'onepress_styling_enqueue_v2_inline_style', 20 );
+
+/**
+ * Use id `onepress-styling-v2-inline` instead of WP default `{handle}-inline-css` for Customizer preview targeting.
+ *
+ * @param string $tag    Full HTML tag for the style/link.
+ * @param string $handle Style handle.
+ * @param string $href   Stylesheet URL.
+ * @return string
+ */
+function onepress_styling_v2_style_loader_tag( $tag, $handle, $href ) {
+	if ( onepress_styling_v2_inline_style_handle() !== $handle ) {
+		return $tag;
+	}
+	$tag = preg_replace( '/\sid=([\'"])onepress-styling-v2-inline-css\1/', ' id=$1onepress-styling-v2-inline$1', $tag, 1 );
+	if ( is_string( $tag ) && false === strpos( $tag, 'data-onepress-styling-v2' ) ) {
+		$tag = preg_replace( '/<style\\s/i', '<style data-onepress-styling-v2="1" ', $tag, 1 );
+	}
+	return $tag;
+}
+add_filter( 'style_loader_tag', 'onepress_styling_v2_style_loader_tag', 10, 3 );
+
+/**
+ * @deprecated 2.3.x Use {@see onepress_styling_get_theme_mods_inline_css()} + {@see onepress_styling_enqueue_v2_inline_style()}. Hook removed: output is via `wp_add_inline_style`.
+ *
+ * @param string|null $override_base_selector Optional.
+ * @return void
+ */
+function onepress_styling_print_theme_css( $override_base_selector = null ) {
+	if ( function_exists( '_deprecated_function' ) ) {
+		_deprecated_function( __FUNCTION__, '2.3.x', 'onepress_styling_enqueue_v2_inline_style' );
+	}
+}

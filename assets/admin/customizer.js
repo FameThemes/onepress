@@ -1043,10 +1043,10 @@ function FontManagerControlApp({
       className: "",
       "aria-hidden": true
     }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "flex gap-2"
+      className: "flex gap-1"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
       className: "font-manager-list__icon-btn",
-      variant: "secondary",
+      variant: showFlyoutEditor ? 'secondary' : 'tertiary',
       size: "small",
       icon: showFlyoutEditor ? _wordpress_icons__WEBPACK_IMPORTED_MODULE_2__["default"] : _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["default"],
       label: showFlyoutEditor ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Close font editor', 'onepress') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Edit font', 'onepress'),
@@ -1057,6 +1057,7 @@ function FontManagerControlApp({
       size: "small",
       icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Remove font', 'onepress'),
+      isDestructive: true,
       disabled: draft !== null,
       onClick: () => requestRemoveFont(item.id)
     })))), showFlyoutEditor ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -5492,7 +5493,7 @@ function StylingControlApp({
     className: "ilabel grow truncate text-sm",
     onClick: () => toggleEditorForItem(index)
   }, getMultiStylingItemListRowLabel(item, index, targetElementsRegistry)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex gap-2"
+    className: "flex gap-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "tertiary",
     onClick: () => setResetConfirm({
@@ -5506,7 +5507,7 @@ function StylingControlApp({
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"]
     // className='icon-btn'
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    variant: "secondary",
+    variant: editorPopoverOpen && editingItemIndex === index ? 'secondary' : 'tertiary',
     onClick: () => toggleEditorForItem(index),
     isPressed: editorPopoverOpen && editingItemIndex === index,
     "aria-expanded": editorPopoverOpen && editingItemIndex === index,
@@ -5525,7 +5526,8 @@ function StylingControlApp({
     size: "small",
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Remove this item from the list', 'onepress'),
-    showTooltip: true
+    showTooltip: true,
+    isDestructive: true
     // className="icon-btn"
   }))), inlineEditorProps && editingItemIndex === index ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StylingInlineEditor__WEBPACK_IMPORTED_MODULE_18__.StylingInlineEditor, {
     key: item.id || `styling-inline-${String(index)}`,
@@ -5990,7 +5992,12 @@ function buildStylingCss(value, breakpoints = DEFAULT_BPS) {
   if (!value || typeof value !== 'object') {
     return '';
   }
-  if (Array.isArray(value.items) && value.items.length) {
+  // Multi-target root (`styling_multiple`): CSS comes only from `items[]`. Empty list must not fall through
+  // to root `_meta` / state slices (stale keys after remove-all or reset can otherwise keep old rules in preview).
+  if (Array.isArray(value.items)) {
+    if (value.items.length === 0) {
+      return '';
+    }
     return value.items.map(item => buildStylingCss(item, breakpoints)).filter(Boolean).join('\n').trim();
   }
   if (!value._meta || !Array.isArray(value._meta.states)) {

@@ -399,10 +399,6 @@ function onepress_scripts()
 
 	onepress_load_build_script('theme', $deps);
 
-
-	$custom_css = onepress_custom_inline_style();
-	wp_add_inline_style('onepress-style', $custom_css);
-
 	if (is_singular() && comments_open() && get_option('thread_comments')) {
 		wp_enqueue_script('comment-reply');
 	}

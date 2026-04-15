@@ -504,7 +504,12 @@ function buildStylingCss(value, breakpoints = DEFAULT_BPS) {
   if (!value || typeof value !== 'object') {
     return '';
   }
-  if (Array.isArray(value.items) && value.items.length) {
+  // Multi-target root (`styling_multiple`): CSS comes only from `items[]`. Empty list must not fall through
+  // to root `_meta` / state slices (stale keys after remove-all or reset can otherwise keep old rules in preview).
+  if (Array.isArray(value.items)) {
+    if (value.items.length === 0) {
+      return '';
+    }
     return value.items.map(item => buildStylingCss(item, breakpoints)).filter(Boolean).join('\n').trim();
   }
   if (!value._meta || !Array.isArray(value._meta.states)) {
@@ -1036,6 +1041,8 @@ function bindOnepressStylingPreview($, api, settingIds = DEFAULT_SETTING_IDS) {
   const fromWindow = typeof window !== 'undefined' && window.onepressStylingPreview && Array.isArray(window.onepressStylingPreview.settingIds) && window.onepressStylingPreview.settingIds.length ? window.onepressStylingPreview.settingIds.map(String) : null;
   const ids = fromWindow || settingIds;
   function paintAll() {
+    // Server outputs v2 CSS via `wp_add_inline_style` (id may be `onepress-styling-v2-inline` after `style_loader_tag`, or WP default `onepress-styling-v2-inline-css`). Live preview rebuilds from `api().get()` into `#onepress-styling-preview-*` — remove server blocks every paint so stale saved CSS never stacks with unsaved edits.
+    $('[data-onepress-styling-v2="1"], #onepress-styling-v2-inline, #onepress-styling-v2-inline-css, #onepress-styling-inline').remove();
     /** @type {Record<string, unknown>[]} */
     const values = [];
     for (const id of ids) {
@@ -2446,10 +2453,21 @@ __webpack_require__.r(__webpack_exports__);
       }
     });
   });
+
+  /**
+   * Work around Chrome dropping inline style rules on resize. Use .text() — .html() on <style>
+   * is often empty in the preview iframe, which was wiping `onepress_custom_inline_style` output.
+   */
   function update_css() {
-    var css_code = $('#onepress-style-inline-css').html();
-    // Fix Chrome Lost CSS When resize ??
-    $('#onepress-style-inline-css').replaceWith('<style class="replaced-style" id="onepress-style-inline-css">' + css_code + '</style>');
+    var $el = $('#onepress-theme-custom-inline');
+    if (!$el.length) {
+      return;
+    }
+    var css_code = $el.text();
+    if (css_code === '') {
+      css_code = $el.html() || '';
+    }
+    $el.replaceWith('<style class="replaced-style" id="onepress-theme-custom-inline" type="text/css" data-onepress-theme-custom-inline="1">' + css_code + '</style>');
   }
 
   // When preview ready: settings are registered; styling postMessage needs this (empty CSS after full reload).
@@ -2462,6 +2480,9 @@ __webpack_require__.r(__webpack_exports__);
     update_css();
   });
   wp.customize.selectiveRefresh.bind('partial-content-rendered', function (settings) {
+    if (settings.partial.id === 'onepress-style-live-css') {
+      update_css();
+    }
     if (settings.partial.id == 'onepress-header-section') {
       $(document).trigger('header_view_changed', [settings.partial.id]);
     }

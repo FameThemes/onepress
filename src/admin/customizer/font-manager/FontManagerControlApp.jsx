@@ -537,10 +537,10 @@ export function FontManagerControlApp({ control, $ }) {
 												{label}
 											</div>
 											<span className="" aria-hidden />
-											<div className="flex gap-2">
+											<div className="flex gap-1">
 												<Button
 													className="font-manager-list__icon-btn"
-													variant="secondary"
+													variant={showFlyoutEditor ? 'secondary' : 'tertiary'}
 													size="small"
 													icon={showFlyoutEditor ? chevronUp : pencil}
 													label={
@@ -556,6 +556,7 @@ export function FontManagerControlApp({ control, $ }) {
 													size="small"
 													icon={trash}
 													label={__('Remove font', 'onepress')}
+													isDestructive={true}
 													disabled={draft !== null}
 													onClick={() => requestRemoveFont(item.id)}
 												/>

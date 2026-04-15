@@ -1017,8 +1017,8 @@ if (! function_exists('onepress_custom_inline_style')) {
 
 			$css = ob_get_clean();
 
-			if (trim($css) == '') {
-				return;
+			if ( trim( $css ) === '' ) {
+				return '';
 			}
 
 			$css = apply_filters('onepress_custom_css', $css);
@@ -1049,6 +1049,62 @@ if (! function_exists('onepress_custom_inline_style')) {
 			return wp_strip_all_tags($css);
 		}
 	}
+
+if ( ! function_exists( 'onepress_theme_custom_inline_style_handle' ) ) {
+	/**
+	 * Style handle for CSS from {@see onepress_custom_inline_style()} only (not merged into `onepress-style`).
+	 *
+	 * @return string
+	 */
+	function onepress_theme_custom_inline_style_handle() {
+		return 'onepress-theme-custom-inline';
+	}
+
+	/**
+	 * Enqueue theme-mod / hero / colors CSS in its own style block (separate from main `onepress-style` and JSON styling v2).
+	 */
+	function onepress_enqueue_theme_custom_inline_style() {
+		$css    = onepress_custom_inline_style();
+		$is_str = is_string( $css );
+		if ( ! $is_str || $css === '' ) {
+			// Customizer partial targets `#onepress-theme-custom-inline`; keep an empty tag in preview so refresh still replaces the node.
+			if ( ! is_customize_preview() ) {
+				return;
+			}
+			$css = '';
+		}
+		$handle = onepress_theme_custom_inline_style_handle();
+		$deps   = array();
+		if ( wp_style_is( 'onepress-style', 'registered' ) || wp_style_is( 'onepress-style', 'enqueued' ) ) {
+			$deps[] = 'onepress-style';
+		}
+		wp_register_style( $handle, false, $deps, null );
+		wp_enqueue_style( $handle );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- same sources as legacy `wp_add_inline_style( 'onepress-style', … )`.
+		wp_add_inline_style( $handle, $css );
+	}
+	add_action( 'wp_enqueue_scripts', 'onepress_enqueue_theme_custom_inline_style', 18 );
+
+	/**
+	 * Stable id for Customizer selective refresh / preview JS (default would be `onepress-theme-custom-inline-inline-css`).
+	 *
+	 * @param string $tag    HTML.
+	 * @param string $handle Style handle.
+	 * @param string $href   URL.
+	 * @return string
+	 */
+	function onepress_theme_custom_inline_style_loader_tag( $tag, $handle, $href ) {
+		if ( onepress_theme_custom_inline_style_handle() !== $handle ) {
+			return $tag;
+		}
+		$tag = preg_replace( '/\sid=([\'"])onepress-theme-custom-inline-inline-css\1/', ' id=$1onepress-theme-custom-inline$1', $tag, 1 );
+		if ( is_string( $tag ) && false === strpos( $tag, 'data-onepress-theme-custom-inline' ) ) {
+			$tag = preg_replace( '/<style\\s/i', '<style data-onepress-theme-custom-inline="1" ', $tag, 1 );
+		}
+		return $tag;
+	}
+	add_filter( 'style_loader_tag', 'onepress_theme_custom_inline_style_loader_tag', 10, 3 );
+}
 
 
 	if (function_exists('wp_update_custom_css_post')) {

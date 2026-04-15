@@ -393,10 +393,11 @@ function onepress_customizer_partials( $wp_customize ) {
 	$wp_customize->selective_refresh->add_partial(
 		'onepress-style-live-css',
 		array(
-			'selector' => '#onepress-style-inline-css',
-			'settings' => $css_settings,
-			'container_inclusive' => false,
-			'render_callback' => 'onepress_custom_inline_style',
+			'selector'            => '#onepress-theme-custom-inline',
+			'settings'            => $css_settings,
+			// Replace the whole <style> node so browsers apply removals (e.g. cleared header bg); innerHTML-only updates can leave stale rules.
+			'container_inclusive' => true,
+			'render_callback'     => 'onepress_selective_refresh_inline_theme_css',
 		)
 	);
 
@@ -411,9 +412,22 @@ function onepress_customizer_partials( $wp_customize ) {
 	);
 
 }
+
+/**
+ * Selective refresh: return full style tag (Customizer preview). `onepress_custom_inline_style()` returns CSS text only.
+ *
+ * @return string
+ */
+function onepress_selective_refresh_inline_theme_css() {
+	$css = onepress_custom_inline_style();
+	if ( ! is_string( $css ) ) {
+		$css = '';
+	}
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from sanitized theme_mods like `onepress_custom_inline_style()`.
+	return '<style id="onepress-theme-custom-inline" class="replaced-style" type="text/css" data-onepress-theme-custom-inline="1">' . $css . '</style>';
+}
+
 add_action( 'customize_register', 'onepress_customizer_partials', 199 );
-
-
 
 /**
  * Selective render content

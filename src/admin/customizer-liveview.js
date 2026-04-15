@@ -79,12 +79,25 @@ import { bindOnepressFontManagerPreview } from './customizer/font-manager/font-m
         } );
     } );
 
-    function update_css( ){
-         var css_code = $( '#onepress-style-inline-css' ).html();
-        // Fix Chrome Lost CSS When resize ??
-        $( '#onepress-style-inline-css' ).replaceWith( '<style class="replaced-style" id="onepress-style-inline-css">'+css_code+'</style>' );
-
-    }
+	/**
+	 * Work around Chrome dropping inline style rules on resize. Use .text() — .html() on <style>
+	 * is often empty in the preview iframe, which was wiping `onepress_custom_inline_style` output.
+	 */
+	function update_css() {
+		var $el = $( '#onepress-theme-custom-inline' );
+		if ( ! $el.length ) {
+			return;
+		}
+		var css_code = $el.text();
+		if ( css_code === '' ) {
+			css_code = $el.html() || '';
+		}
+		$el.replaceWith(
+			'<style class="replaced-style" id="onepress-theme-custom-inline" type="text/css" data-onepress-theme-custom-inline="1">' +
+				css_code +
+				'</style>'
+		);
+	}
 
     // When preview ready: settings are registered; styling postMessage needs this (empty CSS after full reload).
     wp.customize.bind( 'preview-ready', function() {
@@ -98,14 +111,18 @@ import { bindOnepressFontManagerPreview } from './customizer/font-manager/font-m
     });
 
 
-    wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {
+	wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {
 
-        if (  settings.partial.id  == 'onepress-header-section' ) {
-            $( document ) .trigger( 'header_view_changed',[ settings.partial.id ] );
-        }
+		if ( settings.partial.id === 'onepress-style-live-css' ) {
+			update_css();
+		}
 
-        $( document ) .trigger( 'selectiveRefresh-rendered',[ settings.partial.id ] );
-    } );
+		if ( settings.partial.id == 'onepress-header-section' ) {
+			$( document ).trigger( 'header_view_changed', [ settings.partial.id ] );
+		}
+
+		$( document ).trigger( 'selectiveRefresh-rendered', [ settings.partial.id ] );
+	} );
 
 
 } )( jQuery , wp.customize );
