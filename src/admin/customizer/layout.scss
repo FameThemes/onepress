@@ -68,6 +68,10 @@ $opc-spacing: (
 	}
 }
 
+.opc-control, .opc-control * {
+	box-sizing: border-box;
+}
+
 .mx-auto {
 	margin-left: auto;
 	margin-right: auto;
@@ -510,3 +514,4 @@ $opc-spacing: (
 .relative {
 	position: relative;
 }
+

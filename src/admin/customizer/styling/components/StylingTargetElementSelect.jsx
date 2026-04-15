@@ -236,11 +236,6 @@ export function StylingTargetElementSelect({
 																}}
 															>
 																<span className="onepress-styling-target-preset__row-name">{el.name}</span>
-																{consumed && !isSpecialLocked && !isSpecialCustom ? (
-																	<span className="onepress-styling-target-preset__row-badge">
-																		{__('Added', 'onepress')}
-																	</span>
-																) : null}
 															</button>
 														</li>
 													);

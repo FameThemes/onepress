@@ -512,6 +512,9 @@
 .pl-16 {
   padding-left: 64px;
 }
+.opc-control, .opc-control * {
+  box-sizing: border-box;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -2653,14 +2656,6 @@ body.wp-customizer .media-modal-backdrop {
   min-width: 0;
   font-weight: 500;
 }
-.onepress-styling-target-preset__row-badge {
-  flex-shrink: 0;
-  font-size: 11px;
-  font-weight: 500;
-  color: #787c82;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
 .onepress-styling-target-preset__row-sel {
   display: block;
   font-size: 11px;
@@ -2823,6 +2818,38 @@ body.wp-customizer .media-modal-backdrop {
 .device-popover .components-button.is-next-40px-default-size:focus {
   box-shadow: none;
   outline: none;
+}
+/* Layout picker control — grid/gap/padding use utilities from customizer/layout.scss */
+.opc-layout-control .opc-layout-choice {
+  margin: 0;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 2px solid #dcdcde;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+.opc-layout-control .opc-layout-choice:hover {
+  border-color: #8c8f94;
+}
+.opc-layout-control .opc-layout-choice:focus {
+  outline: none;
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+.opc-layout-control .opc-layout-choice.is-selected {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  background: #f0f6fc;
+}
+.opc-layout-control .opc-layout-choice-img,
+.opc-layout-control .opc-layout-choice-svg svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: 72px;
 }
 /*!*****************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/@wordpress/scripts/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/frontend/fontawesome-v6/css/all.min.css ***!

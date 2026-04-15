@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Header Settings.
  *
@@ -9,9 +10,72 @@ $wp_customize->add_section(
 	'onepress_header_settings',
 	array(
 		'priority'    => 6,
-		'title'       => esc_html__( 'Header', 'onepress' ),
+		'title'       => esc_html__('Header', 'onepress'),
 		'description' => '',
 		'panel'       => 'onepress_options',
+	)
+);
+
+$onepress_header_layout_svg_dir = get_template_directory() . '/assets/images/svg';
+$onepress_header_layout_svg_uri = get_template_directory_uri() . '/assets/images/svg';
+$onepress_header_layout_ids     = array(1, 2, 3, 4, 5, 6, 7, 8);
+/** Preset id (SVG filename) => accessible label for the layout picker. */
+$onepress_header_layout_labels = array(
+	'1' => __('Logo left + Menu right', 'onepress'),
+	'2' => __('Logo left + Menu right + Social icons', 'onepress'),
+	'3' => __('Logo left + Menu right + CTA button', 'onepress'),
+	'4' => __('Logo left + Menu center + CTA right', 'onepress'),
+	'5' => __('Logo left + Menu center + CTA + Social icons', 'onepress'),
+	'6' => __('Logo center + Menu split on both sides', 'onepress'),
+	'7' => __('Logo center + Menu below (2-row)', 'onepress'),
+	'8' => __('Logo left + Hamburger (minimalist)', 'onepress'),
+);
+
+$onepress_header_layout_allowed = array();
+foreach ($onepress_header_layout_ids as $onepress_header_layout_n) {
+	$onepress_header_layout_file = $onepress_header_layout_svg_dir . '/' . $onepress_header_layout_n . '.svg';
+	if (is_readable($onepress_header_layout_file)) {
+		$onepress_header_layout_allowed[] = (string) $onepress_header_layout_n;
+	}
+}
+if ($onepress_header_layout_allowed === array()) {
+	$onepress_header_layout_allowed = array('1');
+}
+
+$wp_customize->add_setting(
+	'header_layout',
+	array(
+		'default'           => $onepress_header_layout_allowed[0],
+		'sanitize_callback' => function ($v) use ($onepress_header_layout_allowed) {
+			$v = (string) $v;
+			return in_array($v, $onepress_header_layout_allowed, true) ? $v : $onepress_header_layout_allowed[0];
+		},
+	)
+);
+
+$onepress_header_layout_choices = array();
+foreach ($onepress_header_layout_allowed as $onepress_header_layout_key) {
+	$onepress_header_layout_choices[] = array(
+		'value'   => $onepress_header_layout_key,
+		'label'   => isset($onepress_header_layout_labels[$onepress_header_layout_key])
+			? $onepress_header_layout_labels[$onepress_header_layout_key]
+			/* translators: %s: layout preset number (SVG id) when no label is defined. */
+			: sprintf(__('Header layout %s', 'onepress'), $onepress_header_layout_key),
+		'type'    => 'image',
+		'content' => $onepress_header_layout_svg_uri . '/' . $onepress_header_layout_key . '.svg',
+	);
+}
+
+$wp_customize->add_control(
+	new Onepress_Customize_Layout_Control(
+		$wp_customize,
+		'header_layout',
+		array(
+			'label'   => __('Header Layout', 'onepress'),
+			'section' => 'onepress_header_settings',
+			'columns' => 1,
+			'choices' => $onepress_header_layout_choices,
+		)
 	)
 );
 
@@ -29,11 +93,11 @@ $wp_customize->add_control(
 	'onepress_header_width',
 	array(
 		'type'    => 'select',
-		'label'   => esc_html__( 'Header Width', 'onepress' ),
+		'label'   => esc_html__('Header Width', 'onepress'),
 		'section' => 'onepress_header_settings',
 		'choices' => array(
-			'full-width' => esc_html__( 'Full Width', 'onepress' ),
-			'contained'  => esc_html__( 'Contained', 'onepress' ),
+			'full-width' => esc_html__('Full Width', 'onepress'),
+			'contained'  => esc_html__('Contained', 'onepress'),
 		),
 	)
 );
@@ -53,11 +117,11 @@ $wp_customize->add_control(
 	'onepress_header_position',
 	array(
 		'type'    => 'select',
-		'label'   => esc_html__( 'Header Position', 'onepress' ),
+		'label'   => esc_html__('Header Position', 'onepress'),
 		'section' => 'onepress_header_settings',
 		'choices' => array(
-			'top'        => esc_html__( 'Top', 'onepress' ),
-			'below_hero' => esc_html__( 'Below Hero Slider', 'onepress' ),
+			'top'        => esc_html__('Top', 'onepress'),
+			'below_hero' => esc_html__('Below Hero Slider', 'onepress'),
 		),
 	)
 );
@@ -75,9 +139,9 @@ $wp_customize->add_control(
 	'onepress_sticky_header_disable',
 	array(
 		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Disable Sticky Header?', 'onepress' ),
+		'label'       => esc_html__('Disable Sticky Header?', 'onepress'),
 		'section'     => 'onepress_header_settings',
-		'description' => esc_html__( 'Check this box to disable sticky header when scroll.', 'onepress' ),
+		'description' => esc_html__('Check this box to disable sticky header when scroll.', 'onepress'),
 	)
 );
 
@@ -94,9 +158,9 @@ $wp_customize->add_control(
 	'onepress_vertical_align_menu',
 	array(
 		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Center vertical align for menu', 'onepress' ),
+		'label'       => esc_html__('Center vertical align for menu', 'onepress'),
 		'section'     => 'onepress_header_settings',
-		'description' => esc_html__( 'If you use logo and your logo is too tall, check this box to auto vertical align menu.', 'onepress' ),
+		'description' => esc_html__('If you use logo and your logo is too tall, check this box to auto vertical align menu.', 'onepress'),
 	)
 );
 
@@ -113,7 +177,7 @@ $wp_customize->add_control(
 	'onepress_header_scroll_logo',
 	array(
 		'type'    => 'checkbox',
-		'label'   => esc_html__( 'Scroll to top when click to the site logo or site title, only apply on front page.', 'onepress' ),
+		'label'   => esc_html__('Scroll to top when click to the site logo or site title, only apply on front page.', 'onepress'),
 		'section' => 'onepress_header_settings',
 	)
 );
@@ -132,7 +196,7 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_header_bg_color',
 		array(
-			'label'       => esc_html__( 'Background Color', 'onepress' ),
+			'label'       => esc_html__('Background Color', 'onepress'),
 			'section'     => 'onepress_header_settings',
 			'description' => '',
 		)
@@ -154,9 +218,9 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_logo_text_color',
 		array(
-			'label'       => esc_html__( 'Site Title Color', 'onepress' ),
+			'label'       => esc_html__('Site Title Color', 'onepress'),
 			'section'     => 'onepress_header_settings',
-			'description' => esc_html__( 'Only set if you don\'t use an image logo.', 'onepress' ),
+			'description' => esc_html__('Only set if you don\'t use an image logo.', 'onepress'),
 		)
 	)
 );
@@ -174,9 +238,9 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_tagline_text_color',
 		array(
-			'label'       => esc_html__( 'Site Tagline Color', 'onepress' ),
+			'label'       => esc_html__('Site Tagline Color', 'onepress'),
 			'section'     => 'onepress_header_settings',
-			'description' => esc_html__( 'Only set if display site tagline.', 'onepress' ),
+			'description' => esc_html__('Only set if display site tagline.', 'onepress'),
 		)
 	)
 );
@@ -195,7 +259,7 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_menu_color',
 		array(
-			'label'       => esc_html__( 'Menu Link Color', 'onepress' ),
+			'label'       => esc_html__('Menu Link Color', 'onepress'),
 			'section'     => 'onepress_header_settings',
 			'description' => '',
 		)
@@ -216,7 +280,7 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_menu_hover_color',
 		array(
-			'label'       => esc_html__( 'Menu Link Hover/Active Color', 'onepress' ),
+			'label'       => esc_html__('Menu Link Hover/Active Color', 'onepress'),
 			'section'     => 'onepress_header_settings',
 			'description' => '',
 
@@ -238,7 +302,7 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_menu_hover_bg_color',
 		array(
-			'label'       => esc_html__( 'Menu Link Hover/Active BG Color', 'onepress' ),
+			'label'       => esc_html__('Menu Link Hover/Active BG Color', 'onepress'),
 			'section'     => 'onepress_header_settings',
 			'description' => '',
 		)
@@ -259,7 +323,7 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_menu_toggle_button_color',
 		array(
-			'label'       => esc_html__( 'Responsive Menu Button Color', 'onepress' ),
+			'label'       => esc_html__('Responsive Menu Button Color', 'onepress'),
 			'section'     => 'onepress_header_settings',
 			'description' => '',
 		)
@@ -281,9 +345,9 @@ $wp_customize->add_control(
 	'onepress_header_transparent',
 	array(
 		'type'        => 'checkbox',
-		'label'       => esc_html__( 'Header Transparent', 'onepress' ),
+		'label'       => esc_html__('Header Transparent', 'onepress'),
 		'section'     => 'onepress_header_settings',
-		'description' => esc_html__( 'Apply for front page template only.', 'onepress' ),
+		'description' => esc_html__('Apply for front page template only.', 'onepress'),
 	)
 );
 
@@ -301,9 +365,9 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_transparent_logo',
 		array(
-			'label'       => esc_html__( 'Transparent Logo', 'onepress' ),
+			'label'       => esc_html__('Transparent Logo', 'onepress'),
 			'section'     => 'onepress_header_settings',
-			'description' => esc_html__( 'Only apply when transparent header option is checked.', 'onepress' ),
+			'description' => esc_html__('Only apply when transparent header option is checked.', 'onepress'),
 		)
 	)
 );
@@ -322,8 +386,8 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_transparent_retina_logo',
 		array(
-			'label'       => esc_html__( 'Transparent Retina Logo', 'onepress' ),
-			'description' => esc_html__( 'Only apply when transparent header option is checked.', 'onepress' ),
+			'label'       => esc_html__('Transparent Retina Logo', 'onepress'),
+			'description' => esc_html__('Only apply when transparent header option is checked.', 'onepress'),
 			'section'     => 'onepress_header_settings',
 		)
 	)
@@ -342,7 +406,7 @@ $wp_customize->add_setting(
 $wp_customize->add_control(
 	'onepress_transparent_logo_height',
 	array(
-		'label'       => esc_html__( 'Transparent Logo Height in Pixel', 'onepress' ),
+		'label'       => esc_html__('Transparent Logo Height in Pixel', 'onepress'),
 		'section'     => 'onepress_header_settings',
 		'description' => '',
 	)
@@ -360,7 +424,7 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_transparent_site_title_c',
 		array(
-			'label'       => esc_html__( 'Transparent Site Title Color', 'onepress' ),
+			'label'       => esc_html__('Transparent Site Title Color', 'onepress'),
 			'section'     => 'onepress_header_settings',
 			'description' => '',
 		)
@@ -379,7 +443,7 @@ $wp_customize->add_control(
 		$wp_customize,
 		'onepress_transparent_tag_title_c',
 		array(
-			'label'       => esc_html__( 'Transparent Site Tagline Color', 'onepress' ),
+			'label'       => esc_html__('Transparent Site Tagline Color', 'onepress'),
 			'section'     => 'onepress_header_settings',
 			'description' => '',
 		)

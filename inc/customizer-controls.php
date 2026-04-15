@@ -15,6 +15,7 @@ require_once get_template_directory() . '/inc/customize-controls/control-font-ma
 require_once get_template_directory() . '/inc/customize-controls/control-category.php';
 require_once get_template_directory() . '/inc/customize-controls/control-pages.php';
 require_once get_template_directory() . '/inc/customize-controls/control-media.php';
+require_once get_template_directory() . '/inc/customize-controls/control-layout.php';
 
 
 class OnePress_Editor_Scripts

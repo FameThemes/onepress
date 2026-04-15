@@ -450,6 +450,58 @@ function registerFontManagerControl(api, $) {
 
 /***/ },
 
+/***/ "./src/admin/customizer/control-layout.js"
+/*!************************************************!*\
+  !*** ./src/admin/customizer/control-layout.js ***!
+  \************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   registerLayoutControl: () => (/* binding */ registerLayoutControl)
+/* harmony export */ });
+/**
+ * Customizer control: visual layout picker (`onepress-layout`).
+ */
+function registerLayoutControl(api, $) {
+  api.controlConstructor['onepress-layout'] = api.Control.extend({
+    ready() {
+      const control = this;
+      const container = control.container;
+      const input = container.find('input.opc-layout-input');
+      const buttons = container.find('.opc-layout-choice');
+      function syncUi() {
+        const val = String(input.val());
+        buttons.each(function () {
+          const $b = $(this);
+          const on = $b.attr('data-value') === val;
+          $b.toggleClass('is-selected', on);
+          $b.attr('aria-checked', on ? 'true' : 'false');
+        });
+      }
+      buttons.on('click', function () {
+        const next = $(this).attr('data-value');
+        if (typeof next === 'undefined') {
+          return;
+        }
+        input.val(next).trigger('change');
+        syncUi();
+      });
+      input.on('change', syncUi);
+      if (control.setting && typeof control.setting.bind === 'function') {
+        control.setting.bind(val => {
+          input.val(val);
+          syncUi();
+        });
+      }
+      syncUi();
+    }
+  });
+}
+
+/***/ },
+
 /***/ "./src/admin/customizer/control-repeatable.js"
 /*!****************************************************!*\
   !*** ./src/admin/customizer/control-repeatable.js ***!
@@ -10778,9 +10830,7 @@ function StylingTargetElementSelect({
         }
       }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
         className: "onepress-styling-target-preset__row-name"
-      }, el.name), consumed && !isSpecialLocked && !isSpecialCustom ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: "onepress-styling-target-preset__row-badge"
-      }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Added', 'onepress')) : null));
+      }, el.name)));
     })));
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "styling-font-picker__footer flex justify-end"
@@ -19408,14 +19458,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _customizer_alpha_color_picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./customizer/alpha-color-picker */ "./src/admin/customizer/alpha-color-picker.js");
 /* harmony import */ var _customizer_control_alpha_color__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./customizer/control-alpha-color */ "./src/admin/customizer/control-alpha-color.js");
 /* harmony import */ var _customizer_control_bindings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./customizer/control-bindings */ "./src/admin/customizer/control-bindings.js");
-/* harmony import */ var _customizer_control_repeatable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./customizer/control-repeatable */ "./src/admin/customizer/control-repeatable.js");
-/* harmony import */ var _customizer_control_font_manager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./customizer/control-font-manager */ "./src/admin/customizer/control-font-manager.js");
-/* harmony import */ var _customizer_control_styling__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./customizer/control-styling */ "./src/admin/customizer/control-styling.js");
-/* harmony import */ var _customizer_icon_picker__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./customizer/icon-picker */ "./src/admin/customizer/icon-picker.js");
-/* harmony import */ var _customizer_jquery_deparam__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./customizer/jquery-deparam */ "./src/admin/customizer/jquery-deparam.js");
-/* harmony import */ var _customizer_modal_editor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./customizer/modal-editor */ "./src/admin/customizer/modal-editor.js");
-/* harmony import */ var _customizer_plus_section__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./customizer/plus-section */ "./src/admin/customizer/plus-section.js");
-/* harmony import */ var _customizer_wp_editor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./customizer/wp-editor */ "./src/admin/customizer/wp-editor.js");
+/* harmony import */ var _customizer_control_layout__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./customizer/control-layout */ "./src/admin/customizer/control-layout.js");
+/* harmony import */ var _customizer_control_repeatable__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./customizer/control-repeatable */ "./src/admin/customizer/control-repeatable.js");
+/* harmony import */ var _customizer_control_font_manager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./customizer/control-font-manager */ "./src/admin/customizer/control-font-manager.js");
+/* harmony import */ var _customizer_control_styling__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./customizer/control-styling */ "./src/admin/customizer/control-styling.js");
+/* harmony import */ var _customizer_icon_picker__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./customizer/icon-picker */ "./src/admin/customizer/icon-picker.js");
+/* harmony import */ var _customizer_jquery_deparam__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./customizer/jquery-deparam */ "./src/admin/customizer/jquery-deparam.js");
+/* harmony import */ var _customizer_modal_editor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./customizer/modal-editor */ "./src/admin/customizer/modal-editor.js");
+/* harmony import */ var _customizer_plus_section__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./customizer/plus-section */ "./src/admin/customizer/plus-section.js");
+/* harmony import */ var _customizer_wp_editor__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./customizer/wp-editor */ "./src/admin/customizer/wp-editor.js");
+
 
 
 
@@ -19431,20 +19483,21 @@ __webpack_require__.r(__webpack_exports__);
 
 const api = wp.customize;
 const $ = jQuery;
-(0,_customizer_plus_section__WEBPACK_IMPORTED_MODULE_11__.registerPlusSection)(api);
-(0,_customizer_jquery_deparam__WEBPACK_IMPORTED_MODULE_9__.installDeparam)($);
+(0,_customizer_plus_section__WEBPACK_IMPORTED_MODULE_12__.registerPlusSection)(api);
+(0,_customizer_jquery_deparam__WEBPACK_IMPORTED_MODULE_10__.installDeparam)($);
 (0,_customizer_alpha_color_picker__WEBPACK_IMPORTED_MODULE_2__.installAlphaColorPicker)($);
 (0,_customizer_control_alpha_color__WEBPACK_IMPORTED_MODULE_3__.registerAlphaColorControl)(api, $);
-(0,_customizer_control_repeatable__WEBPACK_IMPORTED_MODULE_5__.registerRepeatableControl)(api, $);
-(0,_customizer_control_font_manager__WEBPACK_IMPORTED_MODULE_6__.registerFontManagerControl)(api, $);
-(0,_customizer_control_styling__WEBPACK_IMPORTED_MODULE_7__.registerStylingControl)(api, $);
-(0,_customizer_wp_editor__WEBPACK_IMPORTED_MODULE_12__.installWpEditor)($);
-(0,_customizer_modal_editor__WEBPACK_IMPORTED_MODULE_10__.initModalEditors)(api, $);
+(0,_customizer_control_layout__WEBPACK_IMPORTED_MODULE_5__.registerLayoutControl)(api, $);
+(0,_customizer_control_repeatable__WEBPACK_IMPORTED_MODULE_6__.registerRepeatableControl)(api, $);
+(0,_customizer_control_font_manager__WEBPACK_IMPORTED_MODULE_7__.registerFontManagerControl)(api, $);
+(0,_customizer_control_styling__WEBPACK_IMPORTED_MODULE_8__.registerStylingControl)(api, $);
+(0,_customizer_wp_editor__WEBPACK_IMPORTED_MODULE_13__.installWpEditor)($);
+(0,_customizer_modal_editor__WEBPACK_IMPORTED_MODULE_11__.initModalEditors)(api, $);
 jQuery(window).ready(function () {
   (0,_customizer_control_bindings__WEBPACK_IMPORTED_MODULE_4__.initControlBindings)($);
 });
 jQuery(document).ready(function () {
-  (0,_customizer_icon_picker__WEBPACK_IMPORTED_MODULE_8__.initIconPicker)($);
+  (0,_customizer_icon_picker__WEBPACK_IMPORTED_MODULE_9__.initIconPicker)($);
 });
 })();
 
