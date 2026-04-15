@@ -1678,6 +1678,13 @@ body.wp-customizer .media-modal-backdrop {
   margin-bottom: 4px;
   line-height: 1.4;
   color: #3c434a !important;
+}
+.enum-label:not(.trbl-field-title),
+.shgen-row-label:not(.trbl-field-title),
+.field-title:not(.trbl-field-title),
+.onepress-styling .components-input-control__label:not(.trbl-field-title),
+.onepress-styling .components-toggle-control__label:not(.trbl-field-title),
+.onepress-styling .components-base-control__label:not(.trbl-field-title) {
   margin-bottom: var(--opc-panel-spacing);
 }
 .onepress-styling .reapeatable-title {

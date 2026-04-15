@@ -297,18 +297,19 @@ export function DisplayLayoutFields({ model, onPatch, disabledFieldSet }) {
 				onChange={(v) => onPatch({ zIndex: v })}
 				disabled={dis('zIndex')}
 			/>
-			<CssEnumButtonGroup
+			<SelectControl
 				label={__('Overflow', 'onepress')}
 				value={model.overflow || ''}
 				onChange={(v) => onPatch({ overflow: v })}
 				disabled={dis('overflow')}
 				options={[
-					{ value: '', label: __('Default', 'onepress') },
-					{ value: 'visible', label: 'visible' },
-					{ value: 'hidden', label: 'hidden' },
-					{ value: 'scroll', label: 'scroll' },
-					{ value: 'auto', label: 'auto' },
+					{ label: __('Default', 'onepress'), value: '' },
+					{ label: 'visible', value: 'visible' },
+					{ label: 'hidden', value: 'hidden' },
+					{ label: 'scroll', value: 'scroll' },
+					{ label: 'auto', value: 'auto' },
 				]}
+				__nextHasNoMarginBottom
 			/>
 			{isFlex ? (
 				<FlexLayoutFields model={model} onPatch={onPatch} disabledFieldSet={disabledFieldSet} />

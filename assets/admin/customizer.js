@@ -7482,7 +7482,7 @@ function DisplayLayoutFields({
       zIndex: v
     }),
     disabled: dis('zIndex')
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CssEnumButtonGroup__WEBPACK_IMPORTED_MODULE_4__.CssEnumButtonGroup, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Overflow', 'onepress'),
     value: model.overflow || '',
     onChange: v => onPatch({
@@ -7490,21 +7490,22 @@ function DisplayLayoutFields({
     }),
     disabled: dis('overflow'),
     options: [{
-      value: '',
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Default', 'onepress')
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Default', 'onepress'),
+      value: ''
     }, {
-      value: 'visible',
-      label: 'visible'
+      label: 'visible',
+      value: 'visible'
     }, {
-      value: 'hidden',
-      label: 'hidden'
+      label: 'hidden',
+      value: 'hidden'
     }, {
-      value: 'scroll',
-      label: 'scroll'
+      label: 'scroll',
+      value: 'scroll'
     }, {
-      value: 'auto',
-      label: 'auto'
-    }]
+      label: 'auto',
+      value: 'auto'
+    }],
+    __nextHasNoMarginBottom: true
   }), isFlex ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FlexLayoutFields__WEBPACK_IMPORTED_MODULE_5__.FlexLayoutFields, {
     model: model,
     onPatch: onPatch,

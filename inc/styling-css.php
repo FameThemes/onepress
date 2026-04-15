@@ -740,7 +740,7 @@ require_once __DIR__ . '/styling-controls-registry.php';
  * Default theme_mod ids merged for styling CSS output and preview (typography + buttons + global demos).
  *
  * Typography / button ids: `onepress_styling_typography_theme_mod_ids()`, `onepress_styling_button_theme_mod_ids()` in `inc/styling-controls-registry.php`.
- * Demo globals: `inc/customize-configs/options-styling.php` — extend this list when adding/removing those settings.
+ * Demo globals: `onepress-debug` plugin `includes/customize-options-styling.php` — extend this list when adding/removing those settings.
  *
  * Filter: `onepress_styling_theme_mod_setting_ids`.
  *

@@ -3,6 +3,42 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
+#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:227
+msgid "Display"
+msgstr ""
+
+#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:245
+msgid "Visibility"
+msgstr ""
+
+#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:257
+msgid "Opacity"
+msgstr ""
+
+#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:263
+msgid "Position"
+msgstr ""
+
+#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:281
+msgid "Width"
+msgstr ""
+
+#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:288
+msgid "Height"
+msgstr ""
+
+#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:295
+msgid "Z-index"
+msgstr ""
+
+#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:301
+msgid "Overflow"
+msgstr ""
+
+#: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:306
+msgid "Default"
+msgstr ""
+
 #: src/admin/customizer/styling/components/StylingTargetElementSelect.jsx:111
 msgid "Target Element…"
 msgstr ""

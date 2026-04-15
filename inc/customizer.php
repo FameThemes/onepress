@@ -95,8 +95,7 @@ function onepress_customize_register($wp_customize)
 	require_once $path . '/inc/customize-configs/options-buttons.php';
 	// Font manager controls from `inc/registry/font-registry.php`.
 	require_once $path . '/inc/customize-configs/options-font-manager.php';
-	// Global demo `styling` controls — ids must stay in sync with `onepress_styling_default_theme_mod_setting_ids()` (styling-css.php).
-	require_once $path . '/inc/customize-configs/options-styling.php';
+	// Demo `styling` controls: `onepress-debug` plugin (`includes/customize-options-styling.php`). Ids stay in `onepress_styling_default_theme_mod_setting_ids()` (styling-css.php).
 	require_once $path . '/inc/customize-configs/options-colors.php';
 	require_once $path . '/inc/customize-configs/options-header.php';
 	require_once $path . '/inc/customize-configs/options-navigation.php';
