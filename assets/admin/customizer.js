@@ -5603,8 +5603,8 @@ function StylingControlApp({
     onSelectPreset: handlePendingTargetPreset,
     usedPresetIds: usedPresetIdsSet,
     disabled: Boolean(lockedBaseSelector) || !editableBaseSelector
-  }), pendingAddLockedMessage ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "description mt-2 onepress-styling-locked-message-html"
+  }), pendingAddLockedMessage ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "description mt-2 locked-message"
     // Sanitized server-side with `wp_kses_post` (preset `message`).
     ,
     dangerouslySetInnerHTML: {
@@ -9672,7 +9672,7 @@ function StylingInlineEditorInner({
     usedPresetIds: usedPresetIds,
     disabled: !editableBaseSelector
   })) : null, targetNotice ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "description onepress-styling-locked-message-html",
+    className: "description mt-2 locked-message",
     role: "status"
     // Sanitized server-side with `wp_kses_post` (preset `message`).
     ,

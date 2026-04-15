@@ -319,7 +319,7 @@ function StylingInlineEditorInner({
 
 						{targetNotice ? (
 							<div
-								className="description onepress-styling-locked-message-html"
+								className="description mt-2 locked-message"
 								role="status"
 								// Sanitized server-side with `wp_kses_post` (preset `message`).
 								dangerouslySetInnerHTML={{ __html: targetNotice }}

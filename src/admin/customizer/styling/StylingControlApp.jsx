@@ -1675,8 +1675,8 @@ export function StylingControlApp({ control, $ }) {
 																disabled={Boolean(lockedBaseSelector) || !editableBaseSelector}
 															/>
 															{pendingAddLockedMessage ? (
-																<p
-																	className="description mt-2 onepress-styling-locked-message-html"
+																<div
+																	className="description mt-2 locked-message"
 																	// Sanitized server-side with `wp_kses_post` (preset `message`).
 																	dangerouslySetInnerHTML={{ __html: pendingAddLockedMessage }}
 																/>

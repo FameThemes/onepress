@@ -3,6 +3,148 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
+#: src/admin/customizer/styling/StylingControlApp.jsx:1198
+msgid "New item"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1240
+msgid "Custom target"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:127
+msgid "Item %d"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1318
+msgid "Item 1"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1452
+msgid "Invalid styling configuration (no states). Save to reset defaults."
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1474
+msgid "Manage states"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1475
+msgid "State settings"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1476
+msgid "Settings"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1561
+msgid "Reset all items to default"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1562
+msgid "Reset to default"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1613
+msgid "Reset this item to default"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1625
+msgid "Edit styling"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1639
+msgid "Remove this item from the list"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1661
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:303
+msgid "Target Element"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1664
+msgid "No targets are available."
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1688
+msgid "Name"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1691
+msgid "Label shown in the list"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1715
+msgid "Add"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1758
+msgid "Reset"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1764
+msgid ""
+"Reset all targets to their default styling? Every item in this list will be "
+"restored and unsaved changes will be lost."
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1768
+msgid ""
+"Reset this styling block to its default? Current declarations will be "
+"replaced."
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1778
+#. %s: item label
+msgid ""
+"Reset \"%s\" to its default styling? This target's declarations will be "
+"replaced."
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1810
+msgid "Delete"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1811
+msgid "Cancel"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1817
+#. %s: item label
+msgid "Remove \"%s\" from this list? This target and its styling will be deleted."
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:1824
+msgid "this item"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:249
+msgid "Desktop"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:250
+msgid "Tablet"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:251
+msgid "Mobile"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:258
+msgid "Element styling"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:268
+msgid "Add item"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:874
+msgid "CSS selector applied:"
+msgstr ""
+
+#: src/admin/customizer/styling/StylingControlApp.jsx:881
+#. %s: CSS selector string
+msgid "CSS selector applied: %s"
+msgstr ""
+
 #: src/admin/customizer/styling/components/DisplayLayoutFields.jsx:227
 msgid "Display"
 msgstr ""
@@ -39,6 +181,31 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:195
+msgid "Style states"
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:248
+msgid "Cancel picking from preview"
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:249
+msgid "Pick a selector from the site preview"
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:333
+msgid "Item name"
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:379
+msgid "Close styling editor"
+msgstr ""
+
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:381
+#: src/admin/customizer/styling/components/StylingTargetElementSelect.jsx:251
+msgid "Close"
+msgstr ""
+
 #: src/admin/customizer/styling/components/StylingTargetElementSelect.jsx:111
 msgid "Target Element…"
 msgstr ""
@@ -53,8 +220,4 @@ msgstr ""
 
 #: src/admin/customizer/styling/components/StylingTargetElementSelect.jsx:193
 msgid "No presets match your search."
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingTargetElementSelect.jsx:251
-msgid "Close"
 msgstr ""
