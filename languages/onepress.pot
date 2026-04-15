@@ -3,6 +3,93 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:266
+msgid "Font manager"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:420
+msgid "New font"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:424
+msgid "Font Family"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:438
+msgid "Google Font"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:446
+msgid "Variations"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:458
+#. 1: weight, 2: style
+msgid "%1$s · %2$s"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:489
+msgid "Save"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:511
+msgid "Fonts saved"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:518
+msgid "(unnamed)"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:548
+msgid "Close font editor"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:549
+msgid "Edit font"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:558
+msgid "Remove font"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:570
+msgid "Font layout editor"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:592
+msgid "Add font"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:601
+msgid "Remove"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:602
+#: src/admin/customizer/styling/StylingControlApp.jsx:1813
+msgid "Cancel"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:608
+#. %s: font display name
+msgid ""
+"Remove \"%s\" from the font list? It will no longer be available for "
+"typography or styling."
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:622
+msgid "OK"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:623
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:381
+#: src/admin/customizer/styling/components/StylingTargetElementSelect.jsx:251
+msgid "Close"
+msgstr ""
+
+#: src/admin/customizer/font-manager/FontManagerControlApp.jsx:625
+msgid "Choose a font before saving."
+msgstr ""
+
 #: src/admin/customizer/styling/StylingControlApp.jsx:1198
 msgid "New item"
 msgstr ""
@@ -76,43 +163,39 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1758
+#: src/admin/customizer/styling/StylingControlApp.jsx:1760
 msgid "Reset"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1764
+#: src/admin/customizer/styling/StylingControlApp.jsx:1766
 msgid ""
 "Reset all targets to their default styling? Every item in this list will be "
 "restored and unsaved changes will be lost."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1768
+#: src/admin/customizer/styling/StylingControlApp.jsx:1770
 msgid ""
 "Reset this styling block to its default? Current declarations will be "
 "replaced."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1778
+#: src/admin/customizer/styling/StylingControlApp.jsx:1780
 #. %s: item label
 msgid ""
 "Reset \"%s\" to its default styling? This target's declarations will be "
 "replaced."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1810
+#: src/admin/customizer/styling/StylingControlApp.jsx:1812
 msgid "Delete"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1811
-msgid "Cancel"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1817
+#: src/admin/customizer/styling/StylingControlApp.jsx:1819
 #. %s: item label
 msgid "Remove \"%s\" from this list? This target and its styling will be deleted."
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1824
+#: src/admin/customizer/styling/StylingControlApp.jsx:1826
 msgid "this item"
 msgstr ""
 
@@ -199,11 +282,6 @@ msgstr ""
 
 #: src/admin/customizer/styling/components/StylingInlineEditor.jsx:379
 msgid "Close styling editor"
-msgstr ""
-
-#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:381
-#: src/admin/customizer/styling/components/StylingTargetElementSelect.jsx:251
-msgid "Close"
 msgstr ""
 
 #: src/admin/customizer/styling/components/StylingTargetElementSelect.jsx:111

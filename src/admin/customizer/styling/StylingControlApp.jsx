@@ -1613,12 +1613,12 @@ export function StylingControlApp({ control, $ }) {
 																label={__('Reset this item to default', 'onepress')}
 																showTooltip
 																icon={rotateLeft}
-																// className='icon-btn'
+															// className='icon-btn'
 															>
 															</Button>
 
 															<Button
-																variant={ editorPopoverOpen && editingItemIndex === index ? 'secondary' : 'tertiary' }
+																variant={editorPopoverOpen && editingItemIndex === index ? 'secondary' : 'tertiary'}
 																onClick={() => toggleEditorForItem(index)}
 																isPressed={editorPopoverOpen && editingItemIndex === index}
 																aria-expanded={editorPopoverOpen && editingItemIndex === index}
@@ -1639,7 +1639,7 @@ export function StylingControlApp({ control, $ }) {
 																label={__('Remove this item from the list', 'onepress')}
 																showTooltip
 																isDestructive={true}
-																// className="icon-btn"
+															// className="icon-btn"
 															>
 															</Button>
 														</div>
@@ -1718,13 +1718,15 @@ export function StylingControlApp({ control, $ }) {
 												</div>
 											</div>
 										) : (
-											<Button
-												variant="secondary"
-												className="mt-2"
-												onClick={startPendingAdd}
-											>
-												{addItemLabel}
-											</Button>
+											<div className='flex justify-end'>
+												<Button
+													variant="secondary"
+													className="mt-2 add-more-item"
+													onClick={startPendingAdd}
+												>
+													{addItemLabel}
+												</Button>
+											</div>
 										)}
 									</div>
 								</div>

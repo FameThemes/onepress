@@ -1048,7 +1048,7 @@ function FontManagerControlApp({
     variant: "secondary",
     onClick: closeEditor,
     size: inlineEditForId ? 'small' : 'default'
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Close', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Cancel', 'onepress')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "primary",
     onClick: saveDraft,
     size: inlineEditForId ? 'small' : 'default'
@@ -1127,9 +1127,10 @@ function FontManagerControlApp({
   }))), draft !== null && draftMode === 'add' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-manager-control__editor-below-list"
   }, editorPanel) : null, draft === null ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "font-manager-control__add-wrap"
+    className: "flex justify-end"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "secondary",
+    className: "add-more-item add-font",
     onClick: openAdd
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Add font', 'onepress'))) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalConfirmDialog, {
     isOpen: removeFontConfirmId !== null,
@@ -5633,11 +5634,13 @@ function StylingControlApp({
     variant: "primary",
     onClick: confirmPendingAddCustom,
     disabled: pendingCustomSelector.trim() === ''
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Add', 'onepress')) : null)) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Add', 'onepress')) : null)) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-end"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "secondary",
-    className: "mt-2",
+    className: "mt-2 add-more-item",
     onClick: startPendingAdd
-  }, addItemLabel))) : null, controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, addItemLabel)))) : null, controlDescription ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "description mt-2"
   }, controlDescription) : null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "onepress-styling-pick-snackbar-wrap",
@@ -9609,7 +9612,7 @@ function StylingInlineEditorInner({
     className: "grow",
     "aria-hidden": true
   })))) : null, showActionsToolbar ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex items-center gap-1 w-full justify-end pb-2 header-tools"
+    className: "flex items-center gap-1 w-full justify-end header-tools"
   }, showGearButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     ref: manageStatesButtonRef,
     className: "onepress-styling-manage-states icon-btn",

@@ -481,7 +481,7 @@ export function FontManagerControlApp({ control, $ }) {
 						onClick={closeEditor}
 						size={inlineEditForId ? 'small' : 'default'}
 					>
-						{__('Close', 'onepress')}
+						{__('Cancel', 'onepress')}
 					</Button>
 					<Button variant="primary"
 						onClick={saveDraft}
@@ -587,8 +587,8 @@ export function FontManagerControlApp({ control, $ }) {
 			) : null}
 
 			{draft === null ? (
-				<div className="font-manager-control__add-wrap">
-					<Button variant="secondary" onClick={openAdd}>
+				<div className="flex justify-end">
+					<Button variant="secondary" className="add-more-item add-font" onClick={openAdd}>
 						{__('Add font', 'onepress')}
 					</Button>
 				</div>

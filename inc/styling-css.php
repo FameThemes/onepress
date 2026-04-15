@@ -167,7 +167,7 @@ function onepress_styling_get_default_value_multiple()
 	$one['_meta']['baseSelector'] = $one['selector'];
 	return array(
 		'_onepressStyling' => true,
-		'items'            => array( $one ),
+		'items'            => [],
 	);
 }
 

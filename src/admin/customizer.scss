@@ -752,8 +752,7 @@ body.wp-customizer .media-modal-backdrop {
 .field-title,
 .onepress-styling .components-input-control__label,
 .onepress-styling .components-toggle-control__label,
-.onepress-styling .components-base-control__label
- {
+.onepress-styling .components-base-control__label {
   display: block;
   font-size: 11px;
   font-weight: 500;
@@ -2081,13 +2080,8 @@ body.wp-customizer .media-modal-backdrop {
   flex-shrink: 0;
 }
 
-.font-manager-control__add-wrap {
-  margin-bottom: 12px;
-}
-
 .font-manager-editor {
-  margin-top: 4px;
-  padding: 12px;
+  padding: calc(var(--opc-panel-spacing) * 2);
   border: 1px solid #c3c4c7;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
   border-radius: 3px;

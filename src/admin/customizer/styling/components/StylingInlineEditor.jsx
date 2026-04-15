@@ -220,7 +220,7 @@ function StylingInlineEditorInner({
 					) : null}
 
 					{showActionsToolbar ? (
-						<div className="flex items-center gap-1 w-full justify-end pb-2 header-tools">
+						<div className="flex items-center gap-1 w-full justify-end header-tools">
 							{showGearButton ? (
 								<Button
 									ref={manageStatesButtonRef}
