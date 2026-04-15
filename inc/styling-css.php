@@ -581,6 +581,146 @@ function onepress_styling_parse_declarations_map($css)
 }
 
 /**
+ * Whether a `font-family` declaration value counts as configured (non-empty, not a global reset keyword).
+ *
+ * @param string $value Raw value from the `font-family` declaration.
+ * @return bool
+ */
+function onepress_styling_family_decl_is_set($value)
+{
+	$v = trim((string) $value);
+	if ($v === '') {
+		return false;
+	}
+	$lower = strtolower($v);
+	$keywords = array('inherit', 'initial', 'unset', 'revert', 'revert-layer');
+	foreach ($keywords as $kw) {
+		if ($lower === $kw) {
+			return false;
+		}
+	}
+	/**
+	 * Whether the value counts as a configured font-family for {@see onepress_styling_has_fontfamily_setup()}.
+	 *
+	 * @param bool   $is_setup Default true after keyword checks.
+	 * @param string $value    Trimmed declaration value.
+	 */
+	return (bool) apply_filters('onepress_styling_family_decl_is_set', true, $v);
+}
+
+/**
+ * @param array<string, mixed> $payload Single-target styling object (`_meta`, per-state device maps).
+ * @return bool
+ */
+function onepress_styling_row_has_font_family(array $payload)
+{
+	if (empty($payload['_meta']) || ! is_array($payload['_meta']) || empty($payload['_meta']['states']) || ! is_array($payload['_meta']['states'])) {
+		return false;
+	}
+	$allowed     = onepress_styling_allowed_device_ids();
+	$font_slices = isset($payload['_meta']['fontSlices']) && is_array($payload['_meta']['fontSlices']) ? $payload['_meta']['fontSlices'] : array();
+	foreach ($payload['_meta']['states'] as $entry) {
+		if (! is_array($entry) || count($entry) !== 1) {
+			continue;
+		}
+		$sk = sanitize_key((string) key($entry));
+		if ($sk === '') {
+			continue;
+		}
+		$slice    = isset($payload[ $sk ]) && is_array($payload[ $sk ]) ? $payload[ $sk ] : array();
+		$per_meta = isset($font_slices[ $sk ]) && is_array($font_slices[ $sk ]) ? $font_slices[ $sk ] : array();
+		foreach (array_keys($allowed) as $dev) {
+			$decl = isset($slice[ $dev ]) ? (string) $slice[ $dev ] : '';
+			$map  = onepress_styling_parse_declarations_map($decl);
+			if (isset($map['font-family']) && onepress_styling_family_decl_is_set($map['font-family'])) {
+				return true;
+			}
+			if (isset($per_meta[ $dev ]) && is_array($per_meta[ $dev ])) {
+				$fam = trim((string) ($per_meta[ $dev ]['family'] ?? ''));
+				if ($fam !== '') {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * Single-target styling rows whose `_meta.elId` matches (multi `items[]` or one root object).
+ *
+ * @param array<string, mixed> $value             Decoded styling theme_mod.
+ * @param string               $target_element_id Preset / registry element id (`sanitize_key`).
+ * @return list<array<string, mixed>>
+ */
+function onepress_styling_rows_for_el(array $value, $target_element_id)
+{
+	$want = sanitize_key((string) $target_element_id);
+	if ($want === '') {
+		return array();
+	}
+	$out = array();
+	if (isset($value['items']) && is_array($value['items'])) {
+		foreach ($value['items'] as $item) {
+			if (! is_array($item)) {
+				continue;
+			}
+			$meta = isset($item['_meta']) && is_array($item['_meta']) ? $item['_meta'] : array();
+			$el   = isset($meta['elId']) ? sanitize_key((string) $meta['elId']) : '';
+			if ($el === $want) {
+				$out[] = $item;
+			}
+		}
+		return $out;
+	}
+	if (isset($value['_meta']) && is_array($value['_meta'])) {
+		$el = isset($value['_meta']['elId']) ? sanitize_key((string) $value['_meta']['elId']) : '';
+		if ($el === $want) {
+			$out[] = $value;
+		}
+	}
+	return $out;
+}
+
+/**
+ * True if a font-family is configured for the given styling theme_mod and target preset id (`_meta.elId`).
+ *
+ * Checks declaration strings (`font-family`) and optional `_meta.fontSlices` family metadata.
+ * For `styling_multiple` controls, any `items[]` row with matching `elId` is considered.
+ *
+ * @param string $customizer_setting_id theme_mod key (e.g. `onepress_styling_body`, `onepress_element_styling`).
+ * @param string $target_element_id     Registry / preset element id (same as `_meta.elId` in saved JSON).
+ * @return bool
+ */
+function onepress_styling_has_fontfamily_setup($customizer_setting_id, $target_element_id)
+{
+	$sid = sanitize_key((string) $customizer_setting_id);
+	if ($sid === '') {
+		return false;
+	}
+	$raw = get_theme_mod($sid, '');
+	if ($raw === '' || $raw === null) {
+		return false;
+	}
+	if (is_array($raw)) {
+		$value = $raw;
+	} else {
+		$decoded = json_decode((string) $raw, true);
+		$value   = is_array($decoded) ? $decoded : array();
+	}
+	if ($value === array()) {
+		return false;
+	}
+	$payloads = onepress_styling_rows_for_el($value, $target_element_id);
+	foreach ($payloads as $payload) {
+		if (onepress_styling_row_has_font_family($payload)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
  * @param string $w Raw font-weight.
  * @return string
  */

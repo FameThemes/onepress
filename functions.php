@@ -326,6 +326,8 @@ function onepress_scripts()
 	$version = $theme->get('Version');
 	$min_ext  = defined('WP_DEBUG') && WP_DEBUG ? '' : '.minified';
 
+	
+
 	if (!get_theme_mod('onepress_disable_g_font')) {
 		$google_font_url = onepress_fonts_url();
 		if ($google_font_url) {
