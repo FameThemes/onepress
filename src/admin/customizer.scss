@@ -896,10 +896,6 @@ body.wp-customizer .media-modal-backdrop {
 }
 
 .onepress-styling {
-  .states {
-    margin: 8px 0 0px;
-  }
-
   .reapeatable-title {
     font-size: 13px;
     font-weight: 600;
@@ -912,7 +908,6 @@ body.wp-customizer .media-modal-backdrop {
     flex-wrap: wrap;
     align-items: center;
     gap: 8px;
-    border-bottom: 1px solid #dcdcde;
   }
 
   .states-toolbar .components-button-group {
@@ -966,6 +961,10 @@ body.wp-customizer .media-modal-backdrop {
       outline: none !important;
       font-weight: 600;
       border-radius: 0px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       &.is-active {
         border-color: #007cba;
       }
@@ -1254,7 +1253,6 @@ body.wp-customizer .media-modal-backdrop {
     margin-top: 8px;
   }
 
-
   .trbl-head {
     display: flex;
     flex-wrap: wrap;
@@ -1416,7 +1414,6 @@ body.wp-customizer .media-modal-backdrop {
 
   /* Inset: [label] … [toggle] — ToggleControl defaults to toggle-first; reorder + space-between */
   .shgen-block .shgen-inset-toggle {
-    
     .components-toggle-control {
       margin-bottom: 0;
     }
@@ -1500,7 +1497,7 @@ body.wp-customizer .media-modal-backdrop {
   display: flex;
   flex-direction: column;
   margin-top: 0px;
-  padding: var(--opc-panel-spacing) 0px;
+  padding: 0 0px var(--opc-panel-spacing);
   border: 1px solid #dcdcde;
   background: #fff;
   overflow: visible;
@@ -1541,7 +1538,11 @@ body.wp-customizer .media-modal-backdrop {
     z-index: 1;
     flex-shrink: 0;
     background: #fff;
-    padding: 0 0 var(--opc-panel-spacing);
+    padding: 0;
+    border-bottom: 1px solid #dcdcde;
+  }
+  .header-tools {
+    padding-right: var(--opc-panel-spacing);
   }
 
   .popover-body {
@@ -2242,7 +2243,8 @@ body.wp-customizer .media-modal-backdrop {
   border-radius: 2px;
 }
 
-.length-unit-dropdown, .device-dropdown {
+.length-unit-dropdown,
+.device-dropdown {
   .components-button {
     &:focus {
       box-shadow: none !important;
@@ -2250,7 +2252,8 @@ body.wp-customizer .media-modal-backdrop {
     }
   }
 }
-.length-unit-popover, .device-popover {
+.length-unit-popover,
+.device-popover {
   .components-button.is-next-40px-default-size {
     min-height: 28px;
     height: 28px;

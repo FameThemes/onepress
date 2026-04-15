@@ -779,9 +779,6 @@ body.wp-customizer .media-modal-backdrop {
   line-height: 1.4;
   color: #3c434a !important;
 }
-.onepress-styling .states {
-  margin: 8px 0 0px;
-}
 .onepress-styling .reapeatable-title {
   font-size: 13px;
   font-weight: 600;
@@ -793,7 +790,6 @@ body.wp-customizer .media-modal-backdrop {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid #dcdcde;
 }
 .onepress-styling .states-toolbar .components-button-group {
   flex-wrap: wrap;
@@ -844,6 +840,10 @@ body.wp-customizer .media-modal-backdrop {
   outline: none !important;
   font-weight: 600;
   border-radius: 0px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .onepress-styling .state-tablist-inner .tab-button.is-active {
   border-color: #007cba;
@@ -1273,7 +1273,7 @@ body.wp-customizer .media-modal-backdrop {
   display: flex;
   flex-direction: column;
   margin-top: 0px;
-  padding: var(--opc-panel-spacing) 0px;
+  padding: 0 0px var(--opc-panel-spacing);
   border: 1px solid #dcdcde;
   background: #fff;
   overflow: visible;
@@ -1312,7 +1312,11 @@ body.wp-customizer .media-modal-backdrop {
   z-index: 1;
   flex-shrink: 0;
   background: #fff;
-  padding: 0 0 var(--opc-panel-spacing);
+  padding: 0;
+  border-bottom: 1px solid #dcdcde;
+}
+.onepress-styling-inline-editor.onepress-styling-editor-popover .header-tools {
+  padding-left: var(--opc-panel-spacing);
 }
 .onepress-styling-inline-editor.onepress-styling-editor-popover .popover-body {
   flex: 1 1 auto;
@@ -1908,15 +1912,18 @@ body.wp-customizer .media-modal-backdrop {
   border: 1px solid #c3c4c7;
   border-radius: 2px;
 }
-.length-unit-dropdown .components-button:focus, .device-dropdown .components-button:focus {
+.length-unit-dropdown .components-button:focus,
+.device-dropdown .components-button:focus {
   box-shadow: none !important;
   outline: none !important;
 }
-.length-unit-popover .components-button.is-next-40px-default-size, .device-popover .components-button.is-next-40px-default-size {
+.length-unit-popover .components-button.is-next-40px-default-size,
+.device-popover .components-button.is-next-40px-default-size {
   min-height: 28px;
   height: 28px;
 }
-.length-unit-popover .components-button.is-next-40px-default-size:focus, .device-popover .components-button.is-next-40px-default-size:focus {
+.length-unit-popover .components-button.is-next-40px-default-size:focus,
+.device-popover .components-button.is-next-40px-default-size:focus {
   box-shadow: none;
   outline: none;
 }

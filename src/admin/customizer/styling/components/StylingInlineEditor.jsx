@@ -175,9 +175,46 @@ function StylingInlineEditorInner({
 				<span className="onepress-styling-inline-editor__arrow-fill" />
 			</span>
 			{showStickyChrome ? (
-				<div className="popover-header onepress-styling-inline-editor__header">
+				<div className="popover-header onepress-styling-inline-editor__header flex flex-row justify-between items-center">
+
+					{showTablist ? (
+						<div className="onepress-styling styling-root grow">
+							<div className="states">
+								<div className="states-toolbar flex flex gap-2 justify-between items-center">
+									{showStateTabButtons ? (
+										<div className="state-tablist-scroll">
+											<div
+												className="state-tablist-inner  components-button-group "
+												role="tablist"
+												aria-label={__('Style states', 'onepress')}
+											>
+												{statesList.map((s, i) => (
+													<Button
+														key={s.key}
+														id={getStateTabId(i)}
+														aria-selected={i === stateIndex}
+														aria-controls={stateTabPanelId}
+														tabIndex={i === stateIndex ? 0 : -1}
+														variant="unstyled"
+														onClick={() => setStateIndex(i)}
+														onKeyDown={(e) => onStateTabKeyDown(e, i)}
+														className={`tab-button ${i === stateIndex ? ' is-active' : ''}`}
+													>
+														{s.label}
+													</Button>
+												))}
+											</div>
+										</div>
+									) : (
+										<span className="grow" aria-hidden />
+									)}
+								</div>
+							</div>
+						</div>
+					) : null}
+
 					{showActionsToolbar ? (
-						<div className="flex items-center gap-2 w-full justify-end pb-2 onepress-styling-editor-popover__header-tools">
+						<div className="flex items-center gap-1 w-full justify-end pb-2 header-tools">
 							{showGearButton ? (
 								<Button
 									ref={manageStatesButtonRef}
@@ -215,41 +252,6 @@ function StylingInlineEditorInner({
 									)}
 								</Button>
 							) : null}
-						</div>
-					) : null}
-					{showTablist ? (
-						<div className="onepress-styling styling-root">
-							<div className="states">
-								<div className="states-toolbar flex flex gap-2 justify-between items-center">
-									{showStateTabButtons ? (
-										<div className="state-tablist-scroll">
-											<div
-												className="state-tablist-inner  components-button-group "
-												role="tablist"
-												aria-label={__('Style states', 'onepress')}
-											>
-												{statesList.map((s, i) => (
-													<Button
-														key={s.key}
-														id={getStateTabId(i)}
-														aria-selected={i === stateIndex}
-														aria-controls={stateTabPanelId}
-														tabIndex={i === stateIndex ? 0 : -1}
-														variant="unstyled"
-														onClick={() => setStateIndex(i)}
-														onKeyDown={(e) => onStateTabKeyDown(e, i)}
-														className={`tab-button ${i === stateIndex ? ' is-active' : ''}`}
-													>
-														{s.label}
-													</Button>
-												))}
-											</div>
-										</div>
-									) : (
-										<span className="grow" aria-hidden />
-									)}
-								</div>
-							</div>
 						</div>
 					) : null}
 				</div>

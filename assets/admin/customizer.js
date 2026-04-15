@@ -9387,9 +9387,34 @@ function StylingInlineEditorInner({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "onepress-styling-inline-editor__arrow-fill"
   })), showStickyChrome ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "popover-header onepress-styling-inline-editor__header"
-  }, showActionsToolbar ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex items-center gap-2 w-full justify-end pb-2 onepress-styling-editor-popover__header-tools"
+    className: "popover-header onepress-styling-inline-editor__header flex flex-row justify-between items-center"
+  }, showTablist ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "onepress-styling styling-root grow"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "states"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "states-toolbar flex flex gap-2 justify-between items-center"
+  }, showStateTabButtons ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "state-tablist-scroll"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "state-tablist-inner  components-button-group ",
+    role: "tablist",
+    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Style states', 'onepress')
+  }, statesList.map((s, i) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    key: s.key,
+    id: getStateTabId(i),
+    "aria-selected": i === stateIndex,
+    "aria-controls": stateTabPanelId,
+    tabIndex: i === stateIndex ? 0 : -1,
+    variant: "unstyled",
+    onClick: () => setStateIndex(i),
+    onKeyDown: e => onStateTabKeyDown(e, i),
+    className: `tab-button ${i === stateIndex ? ' is-active' : ''}`
+  }, s.label)))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "grow",
+    "aria-hidden": true
+  })))) : null, showActionsToolbar ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex items-center gap-1 w-full justify-end pb-2 header-tools"
   }, showGearButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     ref: manageStatesButtonRef,
     className: "onepress-styling-manage-states icon-btn",
@@ -9417,32 +9442,7 @@ function StylingInlineEditorInner({
     size: 18
   }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(IconTarget, {
     size: 18
-  })) : null) : null, showTablist ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "onepress-styling styling-root"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "states"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "states-toolbar flex flex gap-2 justify-between items-center"
-  }, showStateTabButtons ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "state-tablist-scroll"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "state-tablist-inner  components-button-group ",
-    role: "tablist",
-    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Style states', 'onepress')
-  }, statesList.map((s, i) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    key: s.key,
-    id: getStateTabId(i),
-    "aria-selected": i === stateIndex,
-    "aria-controls": stateTabPanelId,
-    tabIndex: i === stateIndex ? 0 : -1,
-    variant: "unstyled",
-    onClick: () => setStateIndex(i),
-    onKeyDown: e => onStateTabKeyDown(e, i),
-    className: `tab-button ${i === stateIndex ? ' is-active' : ''}`
-  }, s.label)))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "grow",
-    "aria-hidden": true
-  })))) : null) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })) : null) : null) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "popover-body grow styling-root onepress-styling onepress-styling-editor-popover__inner",
     role: tablistVisibleForA11y && !multiItemAwaitingPresetTarget ? 'tabpanel' : undefined,
     id: tablistVisibleForA11y && !multiItemAwaitingPresetTarget ? stateTabPanelId : undefined,

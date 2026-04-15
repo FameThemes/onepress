@@ -3,159 +3,34 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:111
-msgid "Item %d"
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:189
+msgid "Style states"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1187
-msgid "New item"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1229
-msgid "Custom target"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1307
-msgid "Item 1"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1441
-msgid "Invalid styling configuration (no states). Save to reset defaults."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1463
-msgid "Manage states"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1464
-msgid "State settings"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1465
-msgid "Settings"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1550
-msgid "Reset all items to default"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1551
-msgid "Reset to default"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1602
-msgid "Reset this item to default"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1614
-msgid "Edit styling"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1628
-msgid "Remove this item from the list"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1649
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:294
 msgid "Target Element"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1652
-msgid "No targets are available."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1676
-msgid "Name"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1679
-msgid "Label shown in the list"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1685
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:321
 msgid "Base selector"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1688
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:324
 msgid "e.g. .my-button"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1699
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:336
 msgid "Cancel picking from preview"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1700
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:337
 msgid "Pick a selector from the site preview"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1727
-msgid "Add"
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:377
+msgid "Close styling editor"
 msgstr ""
 
-#: src/admin/customizer/styling/StylingControlApp.jsx:1770
-msgid "Reset"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1776
-msgid ""
-"Reset all targets to their default styling? Every item in this list will be "
-"restored and unsaved changes will be lost."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1780
-msgid ""
-"Reset this styling block to its default? Current declarations will be "
-"replaced."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1790
-#. %s: item label
-msgid ""
-"Reset \"%s\" to its default styling? This target's declarations will be "
-"replaced."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1822
-msgid "Delete"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1823
-msgid "Cancel"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1829
-#. %s: item label
-msgid "Remove \"%s\" from this list? This target and its styling will be deleted."
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:1836
-msgid "this item"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:247
-msgid "Desktop"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:248
-msgid "Tablet"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:249
-msgid "Mobile"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:256
-msgid "Element styling"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:266
-msgid "Add item"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:872
-msgid "CSS selector applied:"
-msgstr ""
-
-#: src/admin/customizer/styling/StylingControlApp.jsx:879
-#. %s: CSS selector string
-msgid "CSS selector applied: %s"
+#: src/admin/customizer/styling/components/StylingInlineEditor.jsx:379
+msgid "Close"
 msgstr ""
