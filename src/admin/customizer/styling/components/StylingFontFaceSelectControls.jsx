@@ -153,9 +153,10 @@ export function StylingFontFaceSelectControls({ model, onPatch, families, disabl
 
 	if (selectWeightOptions && selectStyleOptions) {
 		return (
-			<>
+			<div className='flex gap-2 justify-between'>
 				{disW ? null : (
 					<SelectControl
+						className='flex-1'
 						__nextHasNoMarginBottom
 						label={__('Font weight', 'onepress')}
 						value={model.fontWeight ?? ''}
@@ -165,6 +166,7 @@ export function StylingFontFaceSelectControls({ model, onPatch, families, disabl
 				)}
 				{disS ? null : (
 					<SelectControl
+						className='flex-1'
 						__nextHasNoMarginBottom
 						label={__('Font style', 'onepress')}
 						value={model.fontStyle ?? ''}
@@ -172,14 +174,15 @@ export function StylingFontFaceSelectControls({ model, onPatch, families, disabl
 						onChange={(v) => onPatch({ fontStyle: v })}
 					/>
 				)}
-			</>
+			</div>
 		);
 	}
 
 	return (
-		<>
+		<div className='flex gap-2 justify-between'>
 			{disW ? null : (
 				<SelectControl
+					className='flex-1'
 					__nextHasNoMarginBottom
 					label={__('Font weight', 'onepress')}
 					value={model.fontWeight ?? ''}
@@ -189,6 +192,7 @@ export function StylingFontFaceSelectControls({ model, onPatch, families, disabl
 			)}
 			{disS ? null : (
 				<SelectControl
+					className='flex-1'
 					__nextHasNoMarginBottom
 					label={__('Font style', 'onepress')}
 					value={model.fontStyle ?? ''}
@@ -196,6 +200,6 @@ export function StylingFontFaceSelectControls({ model, onPatch, families, disabl
 					onChange={(v) => onPatch({ fontStyle: v })}
 				/>
 			)}
-		</>
+		</div>
 	);
 }

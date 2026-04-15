@@ -18,7 +18,7 @@ export function LengthUnitSwitcherChip() {
 			className="length-unit-dropdown"
 			icon={
 				<span className="length-unit-chip__label flex items-center" aria-hidden>
-					<span className="text-sm font-medium">{preferredSuffix}</span>
+					<span className="text-xs font-medium">{preferredSuffix}</span>
 					<Icon icon={chevronDownSmall} size={18} />
 				</span>
 			}

@@ -6,6 +6,7 @@ import { close, settings } from '@wordpress/icons';
 import { memo, useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { StylingAccordionPanels } from '../StylingAccordionPanels';
+import { BaseSelectorField } from './BaseSelectorField';
 import { StylingTargetElementSelect } from './StylingTargetElementSelect';
 import { StylingSettingsPopover } from './StylingSettingsPopover';
 
@@ -161,6 +162,11 @@ function StylingInlineEditorInner({
 		return null;
 	}
 
+	const elIdForTarget =
+		typeof editorPayload._meta?.elId === 'string' ? editorPayload._meta.elId.trim() : '';
+	const showCustomItemNameField =
+		multiple && (customUnlockMode || elIdForTarget === 'custom_item');
+
 	const toolbarPreviewPick = showPreviewPickButton && !customUnlockMode;
 	const showActionsToolbar = showGearButton || toolbarPreviewPick;
 	const showTablist = showStateTablistBlock && !(multiple && multiItemAwaitingPresetTarget);
@@ -290,62 +296,58 @@ function StylingInlineEditorInner({
 
 				{/* Single-target + PHP `base_selector`: hide preset (selector fixed in registry). */}
 				{lockedBaseSelector === '' ? (
-					<div className="onepress-styling-target-preset-wrap">
-						<p className="enum-label">{__('Target Element', 'onepress')}</p>
-						<StylingTargetElementSelect
-							targetRegistry={targetElementsRegistry}
-							currentSelector={metaBaseSelector}
-							currentElId={
-								typeof editorPayload?._meta?.elId === 'string' ? editorPayload._meta.elId : ''
-							}
-							selectedPresetName={
-								typeof editorPayload?._meta?.elName === 'string' ? editorPayload._meta.elName : ''
-							}
-							onSelectPreset={handlePresetSelect}
-							usedPresetIds={usedPresetIds}
-							disabled={!editableBaseSelector}
-						/>
+					<div className="onepress-styling-target-preset-wrap flex flex-col gap-4">
+
+						{!showCustomItemNameField ?
+							<div>
+								<div className="enum-label">{__('Target Element', 'onepress')}</div>
+								<StylingTargetElementSelect
+									targetRegistry={targetElementsRegistry}
+									currentSelector={metaBaseSelector}
+									currentElId={
+										typeof editorPayload?._meta?.elId === 'string' ? editorPayload._meta.elId : ''
+									}
+									selectedPresetName={
+										typeof editorPayload?._meta?.elName === 'string' ? editorPayload._meta.elName : ''
+									}
+									onSelectPreset={handlePresetSelect}
+									usedPresetIds={usedPresetIds}
+									disabled={!editableBaseSelector}
+								/>
+							</div> : null}
+
+
 						{targetNotice ? (
-							<p
-								className="description mt-2 onepress-styling-locked-message-html"
+							<div
+								className="description onepress-styling-locked-message-html"
 								role="status"
 								// Sanitized server-side with `wp_kses_post` (preset `message`).
 								dangerouslySetInnerHTML={{ __html: targetNotice }}
 							/>
 						) : null}
-						{customUnlockMode ? (
-							<div className="onepress-styling-custom-target-field flex flex-wrap gap-2 items-end mt-2">
-								<div className="grow min-w-[12rem]">
-									<TextControl
-										__nextHasNoMarginBottom
-										label={__('Base selector', 'onepress')}
-										value={metaBaseSelector}
-										onChange={(v) => onBaseSelectorChange(v)}
-										placeholder={__('e.g. .my-button', 'onepress')}
-										disabled={!editableBaseSelector}
-									/>
-								</div>
-								<Button
-									variant="secondary"
-									onClick={togglePreviewPicker}
-									isPressed={previewPickerActive}
+						{showCustomItemNameField ? (
+							<>
+								<TextControl
+									__nextHasNoMarginBottom
+									className="styling-item-name-field"
+									label={__('Item name', 'onepress')}
+									value={String(editorPayload?.title ?? '')}
+									onChange={onItemTitleChange}
 									disabled={!editableBaseSelector}
-									size="small"
-									label={
-										previewPickerActive
-											? __('Cancel picking from preview', 'onepress')
-											: __('Pick a selector from the site preview', 'onepress')
-									}
-									showTooltip
-									className="icon-btn"
-								>
-									{previewPickerActive ? (
-										<Icon icon={close} size={18} />
-									) : (
-										<IconTarget size={18} />
-									)}
-								</Button>
-							</div>
+									autoComplete="off"
+									spellCheck={false}
+								/>
+							</>
+						) : null}
+						{customUnlockMode || showCustomItemNameField ? (
+							<BaseSelectorField
+								className="onepress-styling-custom-target-field flex flex-wrap gap-2 items-end"
+								value={metaBaseSelector}
+								onChange={(v) => onBaseSelectorChange(v)}
+								disabled={!editableBaseSelector}
+								togglePreviewPicker={togglePreviewPicker}
+								previewPickerActive={previewPickerActive}
+							/>
 						) : null}
 					</div>
 				) : null}

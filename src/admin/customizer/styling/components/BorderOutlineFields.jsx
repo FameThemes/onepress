@@ -10,6 +10,7 @@ import { ResponsiveUnitSliderField } from './ResponsiveUnitSliderField';
 import { StylingAlphaColorControl } from './StylingAlphaColorControl';
 import { TrblSidesFieldInline } from './TrblSidesField';
 import { isFieldDisabled } from '../stylingDisableFields';
+import { reset, closeSmall, lineDotted, lineDashed, lineSolid } from '@wordpress/icons';
 
 /**
  * @param {object} props
@@ -21,6 +22,11 @@ import { isFieldDisabled } from '../stylingDisableFields';
 export function BorderOutlineFields({ sliceKey, model, onPatch, disabledFieldSet }) {
 	const d = disabledFieldSet;
 	const dis = (key) => isFieldDisabled(d, key);
+	const borderStyleNorm = String(model.borderStyle || '').trim().toLowerCase();
+	const showBorderWidthColor = borderStyleNorm !== '' && borderStyleNorm !== 'none';
+	const outlineStyleNorm = String(model.outlineStyle || '').trim().toLowerCase();
+	const showOutlineSizeColorOffset =
+		outlineStyleNorm !== '' && outlineStyleNorm !== 'none' && outlineStyleNorm !== 'hidden';
 	return (
 		<>
 			<CssEnumButtonGroup
@@ -29,36 +35,40 @@ export function BorderOutlineFields({ sliceKey, model, onPatch, disabledFieldSet
 				onChange={(v) => onPatch({ borderStyle: v })}
 				disabled={dis('borderStyle')}
 				options={[
-					{ value: '', label: __('Default', 'onepress') },
-					{ value: 'none', label: 'none' },
-					{ value: 'solid', label: 'solid' },
-					{ value: 'dashed', label: 'dashed' },
-					{ value: 'dotted', label: 'dotted' },
+					{ value: '', label: __('Default', 'onepress'), icon: reset },
+					{ value: 'none', label: 'none', icon: closeSmall },
+					{ value: 'solid', label: 'solid', icon: lineSolid },
+					{ value: 'dashed', label: 'dashed', icon: lineDashed },
+					{ value: 'dotted', label: 'dotted', icon: lineDotted },
 				]}
 			/>
-			<TrblSidesFieldInline
-				sliceKey={sliceKey}
-				label={__('Border width', 'onepress')}
-				model={model}
-				onPatch={onPatch}
-				keys={{
-					t: 'borderTopWidth',
-					r: 'borderRightWidth',
-					b: 'borderBottomWidth',
-					l: 'borderLeftWidth',
-				}}
-				sliderPreset={SLIDER_PRESETS.borderWidth}
-				linkLabel={__('Link border widths', 'onepress')}
-				unlinkLabel={__('Unlink border widths', 'onepress')}
-				preferLinkedWhenEmpty
-				disabledFieldSet={disabledFieldSet}
-			/>
-			<StylingAlphaColorControl
-				label={__('Border color', 'onepress')}
-				value={model.borderColor || ''}
-				onChange={(v) => onPatch({ borderColor: v })}
-				disabled={dis('borderColor')}
-			/>
+			{showBorderWidthColor ? (
+				<>
+					<TrblSidesFieldInline
+						sliceKey={sliceKey}
+						label={__('Border width', 'onepress')}
+						model={model}
+						onPatch={onPatch}
+						keys={{
+							t: 'borderTopWidth',
+							r: 'borderRightWidth',
+							b: 'borderBottomWidth',
+							l: 'borderLeftWidth',
+						}}
+						sliderPreset={SLIDER_PRESETS.borderWidth}
+						linkLabel={__('Link border widths', 'onepress')}
+						unlinkLabel={__('Unlink border widths', 'onepress')}
+						preferLinkedWhenEmpty
+						disabledFieldSet={disabledFieldSet}
+					/>
+					<StylingAlphaColorControl
+						label={__('Border color', 'onepress')}
+						value={model.borderColor || ''}
+						onChange={(v) => onPatch({ borderColor: v })}
+						disabled={dis('borderColor')}
+					/>
+				</>
+			) : null}
 			<BorderRadiusField
 				sliceKey={sliceKey}
 				model={model}
@@ -86,26 +96,30 @@ export function BorderOutlineFields({ sliceKey, model, onPatch, disabledFieldSet
 				]}
 				__nextHasNoMarginBottom
 			/>
-			<ResponsiveUnitSliderField
-				label={__('Outline width', 'onepress')}
-				value={model.outlineWidth || ''}
-				onChange={(v) => onPatch({ outlineWidth: v })}
-				disabled={dis('outlineWidth')}
-				{...SLIDER_PRESETS.borderWidth}
-			/>
-			<StylingAlphaColorControl
-				label={__('Outline color', 'onepress')}
-				value={model.outlineColor || ''}
-				onChange={(v) => onPatch({ outlineColor: v })}
-				disabled={dis('outlineColor')}
-			/>
-			<ResponsiveUnitSliderField
-				label={__('Outline offset', 'onepress')}
-				value={model.outlineOffset || ''}
-				onChange={(v) => onPatch({ outlineOffset: v })}
-				disabled={dis('outlineOffset')}
-				{...SLIDER_PRESETS.outlineOffset}
-			/>
+			{showOutlineSizeColorOffset ? (
+				<>
+					<ResponsiveUnitSliderField
+						label={__('Outline width', 'onepress')}
+						value={model.outlineWidth || ''}
+						onChange={(v) => onPatch({ outlineWidth: v })}
+						disabled={dis('outlineWidth')}
+						{...SLIDER_PRESETS.borderWidth}
+					/>
+					<StylingAlphaColorControl
+						label={__('Outline color', 'onepress')}
+						value={model.outlineColor || ''}
+						onChange={(v) => onPatch({ outlineColor: v })}
+						disabled={dis('outlineColor')}
+					/>
+					<ResponsiveUnitSliderField
+						label={__('Outline offset', 'onepress')}
+						value={model.outlineOffset || ''}
+						onChange={(v) => onPatch({ outlineOffset: v })}
+						disabled={dis('outlineOffset')}
+						{...SLIDER_PRESETS.outlineOffset}
+					/>
+				</>
+			) : null}
 		</>
 	);
 }

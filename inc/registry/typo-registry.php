@@ -27,6 +27,7 @@ if (! function_exists('onepress_styling_typography_target_elements_registry')) {
 		}
 
 		$categories = array(
+			'base' => esc_html__('Base', 'onepress'),
 			'content' => esc_html__('Content', 'onepress'),
 			'header'  => esc_html__('Header', 'onepress'),
 			'basic'   => esc_html__('Basic', 'onepress'),
@@ -39,8 +40,15 @@ if (! function_exists('onepress_styling_typography_target_elements_registry')) {
 		$elements = [];
 		// Content
 		$elements[] = [
+			'id'       => 'base',
+			'selector' => 'body, button, input, select, textarea, div, p',
+			'name'     => esc_html__('Global', 'onepress'),
+			'category' => 'base',
+		];
+
+		$elements[] = [
 			'id'       => 'p',
-			'selector' => 'body, body p',
+			'selector' => '.entry-content',
 			'name'     => esc_html__('Paragraph', 'onepress'),
 			'category' => 'content',
 		];
@@ -80,7 +88,6 @@ if (! function_exists('onepress_styling_typography_target_elements_registry')) {
 		];
 
 
-
 		// FRONTPAGE SECTIONS
 		$elements[] = [
 			'id'       => 'frp_hero_heading',
@@ -117,7 +124,7 @@ if (! function_exists('onepress_styling_typography_target_elements_registry')) {
 		// Footer
 		$elements[] = [
 			'id'       => 'footer_widget_text',
-			'selector' => '#footer-widgets .container',
+			'selector' => '#footer-widgets .container, #footer-widgets .container p, #footer-widgets .container div',
 			'name'     => esc_html__('Footer Text', 'onepress'),
 			'category' => 'footer',
 		];

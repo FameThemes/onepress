@@ -1,13 +1,14 @@
 /**
  * Background group: type color | image | gradient; image extras only for image.
  */
-import { BaseControl, GradientPicker } from '@wordpress/components';
+import { BaseControl, GradientPicker, SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useCallback, useEffect, useState } from '@wordpress/element';
 import { CssEnumButtonGroup } from './CssEnumButtonGroup';
 import { StylingAlphaColorControl } from './StylingAlphaColorControl';
 import { StylingBackgroundImageControl } from './StylingBackgroundImageControl';
 import { isFieldDisabled } from '../stylingDisableFields';
+import { reset } from '@wordpress/icons';
 
 /** @type {'color' | 'image' | 'gradient'} */
 const BG_TYPE_COLOR = 'color';
@@ -182,43 +183,50 @@ export function BackgroundFields({ sliceKey, model, onPatch, disabledFieldSet })
 					</BaseControl>
 					{isCssUrlBackground(model.backgroundImage) ? (
 						<>
-							<CssEnumButtonGroup
+							<SelectControl
+								__nextHasNoMarginBottom
 								label={__('Background size', 'onepress')}
 								value={model.backgroundSize || ''}
-								onChange={(v) => onPatch({ backgroundSize: v })}
 								disabled={dis('backgroundSize')}
 								options={[
-									{ value: '', label: __('Default', 'onepress') },
-									{ value: 'auto', label: 'auto' },
-									{ value: 'cover', label: 'cover' },
-									{ value: 'contain', label: 'contain' },
+									{ label: __('Default', 'onepress'), value: '' },
+									{ label: 'auto', value: 'auto' },
+									{ label: 'cover', value: 'cover' },
+									{ label: 'contain', value: 'contain' },
 								]}
+								onChange={(v) => onPatch({ backgroundSize: v })}
 							/>
-							<CssEnumButtonGroup
-								label={__('Background repeat', 'onepress')}
-								value={model.backgroundRepeat || ''}
-								onChange={(v) => onPatch({ backgroundRepeat: v })}
-								disabled={dis('backgroundRepeat')}
-								options={[
-									{ value: '', label: __('Default', 'onepress') },
-									{ value: 'no-repeat', label: 'no-repeat' },
-									{ value: 'repeat', label: 'repeat' },
-									{ value: 'repeat-x', label: 'repeat-x' },
-									{ value: 'repeat-y', label: 'repeat-y' },
-								]}
-							/>
-							<CssEnumButtonGroup
-								label={__('Background attachment', 'onepress')}
-								value={model.backgroundAttachment || ''}
-								onChange={(v) => onPatch({ backgroundAttachment: v })}
-								disabled={dis('backgroundAttachment')}
-								options={[
-									{ value: '', label: __('Default', 'onepress') },
-									{ value: 'scroll', label: 'scroll' },
-									{ value: 'fixed', label: 'fixed' },
-									{ value: 'local', label: 'local' },
-								]}
-							/>
+							<div className='flex gap-2 justify-between'>
+								<SelectControl
+									className='flex-1'
+									__nextHasNoMarginBottom
+									label={__('Repeat', 'onepress')}
+									value={model.backgroundRepeat || ''}
+									disabled={dis('backgroundRepeat')}
+									options={[
+										{ label: __('Default', 'onepress'), value: '' },
+										{ label: 'no-repeat', value: 'no-repeat' },
+										{ label: 'repeat', value: 'repeat' },
+										{ label: 'repeat-x', value: 'repeat-x' },
+										{ label: 'repeat-y', value: 'repeat-y' },
+									]}
+									onChange={(v) => onPatch({ backgroundRepeat: v })}
+								/>
+								<SelectControl
+									className='flex-1'
+									__nextHasNoMarginBottom
+									label={__('Attachment', 'onepress')}
+									value={model.backgroundAttachment || ''}
+									disabled={dis('backgroundAttachment')}
+									options={[
+										{ label: __('Default', 'onepress'), value: '' },
+										{ label: 'scroll', value: 'scroll' },
+										{ label: 'fixed', value: 'fixed' },
+										{ label: 'local', value: 'local' },
+									]}
+									onChange={(v) => onPatch({ backgroundAttachment: v })}
+								/>
+							</div>
 						</>
 					) : null}
 				</>

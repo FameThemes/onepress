@@ -10023,7 +10023,6 @@ section > .customize-partial-edit-shortcut button {
 }
 .sidebar .widget a {
   color: #777777;
-  font-size: 14px;
 }
 .sidebar .widget a:hover {
   color: #03c4eb;
@@ -10640,7 +10639,6 @@ section > .customize-partial-edit-shortcut button {
 }
 .section-services .service-item .service-content p {
   margin: 0px;
-  font-size: 14px;
   color: #777777;
 }
 @media screen and (max-width: 720px) {

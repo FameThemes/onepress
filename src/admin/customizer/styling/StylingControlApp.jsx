@@ -9,7 +9,7 @@ import {
 	Tabs,
 	TextControl,
 } from '@wordpress/components';
-import { close, pencil, rotateLeft, trash, chevronDown, chevronUp } from '@wordpress/icons';
+import { pencil, rotateLeft, trash, chevronDown, chevronUp } from '@wordpress/icons';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import {
@@ -30,6 +30,7 @@ import { buildDisabledFieldSet } from './stylingDisableFields';
 import { rebuildFontSlicesInValue } from './stylingGoogleFonts';
 import { useGoogleFontFamilies } from './useGoogleFontFamilies';
 import { useFontManagerCatalogFamilies } from './useFontManagerCatalogFamilies';
+import { BaseSelectorField } from './components/BaseSelectorField';
 import { StylingInlineEditor } from './components/StylingInlineEditor';
 import {
 	getFixedStatesTemplate,
@@ -93,6 +94,7 @@ function cloneValue(v) {
 
 /**
  * Row label in multi-item list: matched target preset name first when control has `styling_target_elements`, then title / id / fallback.
+ * Custom targets (`elId` `custom_item`) use the saved item name, not the registry preset label (“Custom target…”).
  *
  * @param {Record<string, unknown>} item
  * @param {number} index
@@ -100,9 +102,23 @@ function cloneValue(v) {
  * @returns {string}
  */
 function getMultiStylingItemListRowLabel(item, index, registry) {
+	const elId = typeof item._meta?.elId === 'string' ? item._meta.elId.trim() : '';
+	if (elId === 'custom_item') {
+		const title = typeof item.title === 'string' ? item.title.trim() : '';
+		if (title !== '') {
+			return title;
+		}
+		const elName =
+			item._meta && typeof item._meta === 'object' && typeof item._meta.elName === 'string'
+				? item._meta.elName.trim()
+				: '';
+		if (elName !== '') {
+			return elName;
+		}
+		return sprintf(__('Item %d', 'onepress'), index + 1);
+	}
 	if (registry?.elements?.length) {
 		const base = String(item._meta?.baseSelector ?? item.selector ?? '').trim();
-		const elId = typeof item._meta?.elId === 'string' ? item._meta.elId : '';
 		const matched = findMatchingTargetPreset(base, elId, registry);
 		if (matched?.name) {
 			return matched.name;
@@ -139,20 +155,6 @@ function wrapSingleAsMulti(singleClone, itemTitle) {
  */
 /** Sentinel `itemIndex` when picking a selector for the pending-add custom target draft (`StylingControlApp`). */
 const PENDING_ADD_PICK_ITEM_INDEX = -1;
-
-const IconTarget = ({ size = 24 }) => (
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		width={size}
-		height={size}
-		viewBox="0 0 24 24"
-		fill="currentColor"
-		className="icon icon-tabler icons-tabler-filled icon-tabler-current-location"
-	>
-		<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-		<path d="M12 1a1 1 0 0 1 1 1v1.055a9.004 9.004 0 0 1 7.946 7.945h1.054a1 1 0 0 1 0 2h-1.055a9.004 9.004 0 0 1 -7.944 7.945l-.001 1.055a1 1 0 0 1 -2 0v-1.055a9.004 9.004 0 0 1 -7.945 -7.944l-1.055 -.001a1 1 0 0 1 0 -2h1.055a9.004 9.004 0 0 1 7.945 -7.945v-1.055a1 1 0 0 1 1 -1m0 4a7 7 0 1 0 0 14a7 7 0 0 0 0 -14m0 3a4 4 0 1 1 -4 4l.005 -.2a4 4 0 0 1 3.995 -3.8" />
-	</svg>
-);
 
 function ensureMultiShape(v, defaultMulti, migrateTitle) {
 	// Saved / in-flight explicit empty list — must not fall through to `defaultMulti` (would resurrect defaults).
@@ -974,7 +976,16 @@ export function StylingControlApp({ control, $ }) {
 				}
 				const nextRoot = cloneValue(prevRoot);
 				const next = cloneValue(nextRoot.items[i]);
-				next.title = String(nextTitle ?? '');
+				const t = String(nextTitle ?? '');
+				next.title = t;
+				if (next._meta && typeof next._meta === 'object' && next._meta.elId === 'custom_item') {
+					const trimmed = t.trim();
+					if (trimmed !== '') {
+						next._meta.elName = trimmed;
+					} else {
+						delete next._meta.elName;
+					}
+				}
 				rebuildFontSlicesInValue(next, mergedForFontSlices);
 				nextRoot.items = [...nextRoot.items];
 				nextRoot.items[i] = next;
@@ -1646,7 +1657,7 @@ export function StylingControlApp({ control, $ }) {
 										{pendingAddFormOpen ? (
 											<div className="onepress-styling-pending-add-inline">
 												<div className="onepress-styling-pending-add-inline__picker">
-													<p className="enum-label">{__('Target Element', 'onepress')}</p>
+													<div className="enum-label">{__('Target Element', 'onepress')}</div>
 													{targetElementsRegistry.elements.length === 0 ? (
 														<p className="description">
 															{__('No targets are available.', 'onepress')}
@@ -1678,37 +1689,13 @@ export function StylingControlApp({ control, $ }) {
 																		onChange={setPendingCustomItemName}
 																		placeholder={__('Label shown in the list', 'onepress')}
 																	/>
-																	<div className="flex flex-wrap gap-2 items-end">
-																		<div className="grow min-w-[12rem]">
-																			<TextControl
-																				__nextHasNoMarginBottom
-																				label={__('Base selector', 'onepress')}
-																				value={pendingCustomSelector}
-																				onChange={setPendingCustomSelector}
-																				placeholder={__('e.g. .my-button', 'onepress')}
-																			/>
-																		</div>
-																		<Button
-																			variant="secondary"
-																			onClick={togglePreviewPicker}
-																			isPressed={previewPickerActive}
-																			disabled={!editableBaseSelector}
-																			// size="small"
-																			label={
-																				previewPickerActive
-																					? __('Cancel picking from preview', 'onepress')
-																					: __('Pick a selector from the site preview', 'onepress')
-																			}
-																			showTooltip
-																			className="icon-btn"
-																		>
-																			{previewPickerActive ? (
-																				<Icon icon={close} size={18} />
-																			) : (
-																				<IconTarget size={18} />
-																			)}
-																		</Button>
-																	</div>
+																	<BaseSelectorField
+																		value={pendingCustomSelector}
+																		onChange={setPendingCustomSelector}
+																		disabled={!editableBaseSelector}
+																		togglePreviewPicker={togglePreviewPicker}
+																		previewPickerActive={previewPickerActive}
+																	/>
 																</div>
 															) : null}
 														</>
@@ -1732,7 +1719,7 @@ export function StylingControlApp({ control, $ }) {
 										) : (
 											<Button
 												variant="secondary"
-												className="mt-2 p-0 h-auto"
+												className="mt-2"
 												onClick={startPendingAdd}
 											>
 												{addItemLabel}

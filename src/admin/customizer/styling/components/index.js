@@ -1,3 +1,4 @@
+export { BaseSelectorField } from './BaseSelectorField';
 export { BackgroundFields } from './BackgroundFields';
 export { BorderOutlineFields } from './BorderOutlineFields';
 export { BorderRadiusField } from './BorderRadiusField';

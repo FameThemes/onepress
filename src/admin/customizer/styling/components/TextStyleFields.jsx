@@ -7,6 +7,21 @@
  * Typography length sliders omit the row when disabled (same as font family / text color), because `RangeControl` would still show a label row.
  */
 import { BaseControl, TextControl } from '@wordpress/components';
+import {
+	alignCenter,
+	alignJustify,
+	alignLeft,
+	alignRight,
+	close,
+	formatCapitalize,
+	formatLowercase,
+	formatStrikethrough,
+	formatUnderline,
+	formatUppercase,
+	lineSolid,
+	closeSmall,
+	reset,
+} from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import { mergePickerFamilies } from '../googleFontCollection';
 import { SLIDER_PRESETS } from '../cssUnitSlider';
@@ -122,11 +137,11 @@ export function TextStyleFields({
 				onChange={(v) => onPatch({ textTransform: v })}
 				disabled={dis('textTransform')}
 				options={[
-					{ value: '', label: __('Default', 'onepress') },
-					{ value: 'none', label: 'none' },
-					{ value: 'uppercase', label: 'ABC' },
-					{ value: 'lowercase', label: 'abc' },
-					{ value: 'capitalize', label: 'Cap' },
+					{ value: '', label: __('Default', 'onepress'), icon: reset },
+					{ value: 'none', label: __('None', 'onepress'), icon: closeSmall },
+					{ value: 'uppercase', label: __('Uppercase', 'onepress'), icon: formatUppercase },
+					{ value: 'lowercase', label: __('Lowercase', 'onepress'), icon: formatLowercase },
+					{ value: 'capitalize', label: __('Capitalize', 'onepress'), icon: formatCapitalize },
 				]}
 			/>
 			<CssEnumButtonGroup
@@ -135,10 +150,14 @@ export function TextStyleFields({
 				onChange={(v) => onPatch({ textDecoration: v })}
 				disabled={dis('textDecoration')}
 				options={[
-					{ value: '', label: __('Default', 'onepress') },
-					{ value: 'none', label: 'none' },
-					{ value: 'underline', label: __('Underline', 'onepress') },
-					{ value: 'line-through', label: __('Line through', 'onepress') },
+					{ value: '', label: __('Default', 'onepress'), icon: reset },
+					{ value: 'none', label: __('None', 'onepress'), icon: closeSmall },
+					{ value: 'underline', label: __('Underline', 'onepress'), icon: formatUnderline },
+					{
+						value: 'line-through',
+						label: __('Line through', 'onepress'),
+						icon: formatStrikethrough,
+					},
 				]}
 			/>
 			<CssEnumButtonGroup
@@ -147,13 +166,11 @@ export function TextStyleFields({
 				onChange={(v) => onPatch({ textAlign: v })}
 				disabled={dis('textAlign')}
 				options={[
-					{ value: '', label: __('Default', 'onepress') },
-					{ value: 'left', label: __('Left', 'onepress') },
-					{ value: 'center', label: __('Center', 'onepress') },
-					{ value: 'right', label: __('Right', 'onepress') },
-					{ value: 'justify', label: __('Justify', 'onepress') },
-					{ value: 'start', label: 'start' },
-					{ value: 'end', label: 'end' },
+					{ value: '', label: __('Default', 'onepress'), icon: reset },
+					{ value: 'left', label: __('Left', 'onepress'), icon: alignLeft },
+					{ value: 'center', label: __('Center', 'onepress'), icon: alignCenter },
+					{ value: 'right', label: __('Right', 'onepress'), icon: alignRight },
+					{ value: 'justify', label: __('Justify', 'onepress'), icon: alignJustify },
 				]}
 			/>
 		</>

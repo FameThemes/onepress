@@ -10,6 +10,7 @@ import {
 	formatBackgroundImageFromUrl,
 	parseBackgroundPositionToFocal,
 } from '../stylingBackgroundImageUtils';
+import { trash } from '@wordpress/icons';
 
 /**
  * @param {object} props
@@ -74,13 +75,21 @@ export function StylingBackgroundImageControl({
 
 	return (
 		<div className="styling-bg-image">
-			<div className="styling-bg-image__toolbar">
-				<Button variant="secondary" onClick={openMedia}>
-					{__('Select from Media Library', 'onepress')}
+			<div className="styling-bg-image__toolbar w-full flex items-center gap-2">
+				<Button
+					variant="secondary"
+					className='grow text-center flex justify-center items-center'
+					onClick={openMedia}>
+					{hasMedia ? __('Change image', 'onepress') : __('Select image', 'onepress')}
 				</Button>
 				{hasMedia ? (
-					<Button variant="tertiary" onClick={clearImage}>
-						{__('Remove', 'onepress')}
+					<Button
+						icon={trash}
+						showTooltip={true}
+						label={__('Remove image', 'onepress')}
+						isDestructive
+						variant='secondary'
+						onClick={clearImage}>
 					</Button>
 				) : null}
 			</div>
