@@ -680,7 +680,15 @@ if (! function_exists('onepress_custom_inline_style')) {
 				}
 				.btn-theme-primary-outline, .btn-theme-primary-outline:hover, .pricing__item:hover, .section-testimonials .card-theme-primary, .entry-content blockquote
 				{
-				border-color : #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+				border-color : #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+												?>;
+				}
+				/* Feature item icon (FA stack + SVG variants) — set the CSS
+				   variable so both .icon-background-default (color) and
+				   .feature-icon-svg-wrap (background-color) pick up the primary
+				   color via _sections.scss's var(--icon-bg-color). */
+				.feature-item {
+				--icon-bg-color: #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 												?>;
 				}
 				<?php
@@ -709,7 +717,11 @@ if (! function_exists('onepress_custom_inline_style')) {
 			 */
 			$secondary_color = sanitize_hex_color_no_hash(get_theme_mod('onepress_secondary_color'));
 			if ('' != $secondary_color) {
+				// FA stack hover (color rule) + SVG hover (background-color via
+				// var) — the var() form covers both .feature-icon-svg-wrap and
+				// any future selector consuming --icon-hover-bg-color.
 				echo ".feature-item:hover .icon-background-default{ color: #{$secondary_color}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo ".feature-item{ --icon-hover-bg-color: #{$secondary_color}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 			$menu_padding = get_theme_mod('onepress_menu_item_padding');
 			if ($menu_padding) {
