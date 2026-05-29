@@ -1,0 +1,179 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": true,
+		"useRootPaddingAwareAlignments": true,
+		"layout": {
+			"contentSize": "1110px",
+			"wideSize": "1230px"
+		},
+		"custom": {
+			"sidebarContentSize": "790px"
+		},
+		"color": {
+			"defaultPalette": false,
+			"defaultGradients": false,
+			"palette": [
+				{ "name": "Primary",    "slug": "primary",    "color": "#03c4eb" },
+				{ "name": "Secondary",  "slug": "secondary",  "color": "#333333" },
+				{ "name": "Heading",    "slug": "heading",    "color": "#333333" },
+				{ "name": "Text",       "slug": "text",       "color": "#777777" },
+				{ "name": "Border",     "slug": "border",     "color": "#e9e9e9" },
+				{ "name": "Light",      "slug": "light",      "color": "#f8f9f9" },
+				{ "name": "White",      "slug": "white",      "color": "#ffffff" },
+				{ "name": "Black",      "slug": "black",      "color": "#000000" }
+			]
+		},
+		"spacing": {
+			"units": ["px", "em", "rem", "%", "vw", "vh"],
+			"spacingScale": {
+				"steps": 7
+			}
+		},
+		"typography": {
+			"fluid": true,
+			"customFontSize": true,
+			"defaultFontSizes": false,
+			"fontFamilies": [
+				{
+					"name": "Open Sans",
+					"slug": "open-sans",
+					"fontFamily": "\"Open Sans\", Helvetica, Arial, sans-serif"
+				},
+				{
+					"name": "Raleway",
+					"slug": "raleway",
+					"fontFamily": "Raleway, Helvetica, Arial, sans-serif"
+				},
+				{
+					"name": "System",
+					"slug": "system",
+					"fontFamily": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif"
+				},
+				{
+					"name": "Monospace",
+					"slug": "monospace",
+					"fontFamily": "Monaco, Consolas, \"Andale Mono\", \"DejaVu Sans Mono\", monospace"
+				}
+			],
+			"fontSizes": [
+				{
+					"name": "Small",
+					"slug": "small",
+					"size": "12px",
+					"fluid": { "min": "11px", "max": "12px" }
+				},
+				{
+					"name": "Normal",
+					"slug": "normal",
+					"size": "14px",
+					"fluid": { "min": "14px", "max": "16px" }
+				},
+				{
+					"name": "Medium",
+					"slug": "medium",
+					"size": "18px",
+					"fluid": { "min": "16px", "max": "20px" }
+				},
+				{
+					"name": "Large",
+					"slug": "large",
+					"size": "25px",
+					"fluid": { "min": "20px", "max": "28px" }
+				},
+				{
+					"name": "X-Large",
+					"slug": "x-large",
+					"size": "33px",
+					"fluid": { "min": "28px", "max": "40px" }
+				},
+				{
+					"name": "XX-Large",
+					"slug": "xx-large",
+					"size": "40px",
+					"fluid": { "min": "32px", "max": "48px" }
+				}
+			]
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var(--wp--preset--color--white)",
+			"text": "var(--wp--preset--color--text)"
+		},
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--open-sans)",
+			"fontSize": "var(--wp--preset--font-size--normal)",
+			"lineHeight": "1.7"
+		},
+		"elements": {
+			"link": {
+				"color": { "text": "var(--wp--preset--color--primary)" },
+				":hover": {
+					"color": { "text": "var(--wp--preset--color--text)" },
+					"typography": { "textDecoration": "underline" }
+				}
+			},
+			"button": {
+				"color": {
+					"background": "var(--wp--preset--color--primary)",
+					"text": "var(--wp--preset--color--white)"
+				},
+				"typography": {
+					"fontFamily": "var(--wp--preset--font-family--raleway)",
+					"fontWeight": "600",
+					"textTransform": "uppercase"
+				},
+				":hover": {
+					"color": {
+						"background": "var(--wp--preset--color--secondary)",
+						"text": "var(--wp--preset--color--white)"
+					}
+				}
+			},
+			"heading": {
+				"color": { "text": "var(--wp--preset--color--heading)" },
+				"typography": {
+					"fontFamily": "var(--wp--preset--font-family--raleway)",
+					"fontWeight": "600"
+				}
+			},
+			"h1": {
+				"typography": {
+					"fontSize": "var(--wp--preset--font-size--x-large)",
+					"lineHeight": "1.2"
+				}
+			},
+			"h2": {
+				"typography": {
+					"fontSize": "var(--wp--preset--font-size--large)",
+					"lineHeight": "1.3"
+				}
+			},
+			"h3": {
+				"typography": {
+					"fontSize": "20px",
+					"lineHeight": "1.3"
+				}
+			},
+			"h4": {
+				"typography": {
+					"fontSize": "17px"
+				}
+			},
+			"h5": {
+				"typography": {
+					"fontSize": "15px",
+					"textTransform": "uppercase"
+				}
+			},
+			"h6": {
+				"typography": {
+					"fontSize": "12px",
+					"textTransform": "uppercase"
+				}
+			}
+		}
+	}
+}

@@ -50,7 +50,12 @@
 }
 
 .single-post .no-sidebar .site-main,
-.single-post .no-sidebar .entry-content > * {
+// Since 2.4.1: also skip `.alignleft` / `.alignright` so this auto-centering
+// rule does not override the viewport-edge negative margins set in
+// `_gutenberg.scss`. Without this, `.single-post .no-sidebar .entry-content`
+// (specificity 0,3,1) beats the `.entry-content > .alignleft` rule
+// (specificity 0,2,0) and forces `margin: auto`, cancelling the bleed.
+.single-post .no-sidebar .entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright) {
 	margin-left: auto;
 	margin-right: auto;
 }

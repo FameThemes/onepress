@@ -79,6 +79,8 @@
 }
 
 .highlight {
+	// Since 2.4.1: consume theme.json palette var so Customizer-driven
+	// `onepress_primary_color` propagates here too (via Phase B1 bridge).
 	color: variables.$primary;
 }
 
@@ -91,6 +93,7 @@
 		padding: 30px;
 		position: relative;
 		background: variables.$meta;
+		// Since 2.4.1: consume theme.json palette var.
 		border-left: 3px solid variables.$primary;
 		font-style: italic;
 
@@ -164,6 +167,7 @@
 
 		&:hover,
 		&.current {
+			// Since 2.4.1: consume theme.json palette var.
 			background: variables.$primary;
 			text-decoration: none;
 		}
@@ -348,6 +352,7 @@
 				font-size: 11px;
 
 				&:hover {
+					// Since 2.4.1: consume theme.json palette var.
 					color: variables.$primary;
 				}
 
