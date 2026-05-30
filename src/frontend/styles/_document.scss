@@ -7,6 +7,24 @@
 ------------------------------*/
 @use "sass:math";
 
+// Since 2.4.1: semantic font-family aliases declared at `:root`.
+//
+// `--wp--preset--font-family--body` and `--wp--preset--font-family--heading`
+// are NOT registered in `theme.json.settings.typography.fontFamilies` because
+// they are semantic intent vars (consumed by `theme.json.styles` + the
+// OnePress Plus typography hand-off), not user-pickable typefaces. Keeping
+// them out of theme.json keeps the editor "Font family" dropdown clean.
+//
+// Both default to the canonical typeface vars (`--wp--preset--font-family--open-sans`
+// / `--wp--preset--font-family--raleway`) via indirection. Any later
+// stylesheet — child theme, OnePress Plus, custom CSS — can override either
+// alias with a single `:root { --wp--preset--font-family--body: … }` rule,
+// since CSS cascade lets a later same-specificity declaration win.
+:root {
+	--wp--preset--font-family--body: var(--wp--preset--font-family--open-sans);
+	--wp--preset--font-family--heading: var(--wp--preset--font-family--raleway);
+}
+
 html, body {
 	margin: 0;
 	padding: 0;
