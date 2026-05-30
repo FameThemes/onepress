@@ -228,53 +228,63 @@
 }
 
 /* WordPress Gallery
-------------------------------*/
+------------------------------
+ * Grid-based layout (gap-aware) replaces the legacy
+ * `display: inline-block; max-width: 33.33%` packing. The old approach
+ * jammed every item edge-to-edge with no breathing room — small
+ * `size-thumbnail` images sat orphaned in the corner of each cell and
+ * adjacent rows touched. CSS Grid + `gap` makes spacing one source of
+ * truth and works in every WP-supported browser since 2017.
+ *
+ * Column count is driven by the WP-emitted `gallery-columns-N` class
+ * mapped to a `--gallery-cols` custom property — fewer rule duplicates
+ * than the old per-N max-width block, and lets a child theme tweak a
+ * single column count by setting the var.
+ *
+ * Image rule (`.gallery-icon img`) fills the cell width while keeping
+ * aspect ratio. Small thumbnails will upscale visibly; that's the
+ * trade for consistent visual rhythm. Authors who care about sharpness
+ * should pass `size="medium"` (or larger) to the [gallery] shortcode.
+ */
 
 .gallery {
+	display: grid;
+	grid-template-columns: repeat(var(--gallery-cols, 3), 1fr);
+	gap: 1rem;
 	margin-bottom: 1.5em;
 }
 
+.gallery-columns-1 { --gallery-cols: 1; }
+.gallery-columns-2 { --gallery-cols: 2; }
+.gallery-columns-3 { --gallery-cols: 3; }
+.gallery-columns-4 { --gallery-cols: 4; }
+.gallery-columns-5 { --gallery-cols: 5; }
+.gallery-columns-6 { --gallery-cols: 6; }
+.gallery-columns-7 { --gallery-cols: 7; }
+.gallery-columns-8 { --gallery-cols: 8; }
+.gallery-columns-9 { --gallery-cols: 9; }
+
 .gallery-item {
-	display: inline-block;
+	margin: 0;
 	text-align: center;
-	vertical-align: top;
-	width: 100%;
 
-	.gallery-columns-2 & {
-		max-width: 50%;
-	}
+	.gallery-icon {
+		margin: 0;
 
-	.gallery-columns-3 & {
-		max-width: 33.33%;
-	}
-
-	.gallery-columns-4 & {
-		max-width: 25%;
-	}
-
-	.gallery-columns-5 & {
-		max-width: 20%;
-	}
-
-	.gallery-columns-6 & {
-		max-width: 16.66%;
-	}
-
-	.gallery-columns-7 & {
-		max-width: 14.28%;
-	}
-
-	.gallery-columns-8 & {
-		max-width: 12.5%;
-	}
-
-	.gallery-columns-9 & {
-		max-width: 11.11%;
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+			max-width: 100%;
+		}
 	}
 }
 
 .gallery-caption {
 	display: block;
+	margin-top: .25em;
+	font-size: 13px;
+	line-height: 1.4;
 }
 
 /* Comments
