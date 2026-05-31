@@ -653,6 +653,13 @@ if (! function_exists('onepress_custom_inline_style')) {
 			<?php
 			/**
 			 * Theme Color
+			 *
+			 * Since 2.4.1: rule values consume `var(--wp--preset--color--{slug}, <fallback>)`
+			 * instead of the saved hex. Customizer changes now propagate via the
+			 * CSS var (server-side: `inc/theme-json-bridge.php`; client-side
+			 * live preview: `customizer-liveview.js`). The wrapping IF guards,
+			 * variable computation, and selector groups are kept as-is to
+			 * minimise diff.
 			 */
 			$primary = sanitize_hex_color_no_hash(get_theme_mod('onepress_primary_color'));
 			if ($primary != '') { ?>
@@ -663,8 +670,7 @@ if (! function_exists('onepress_custom_inline_style')) {
 				.btn-theme-primary-outline, .sidebar .widget a:hover, .section-services .service-item .service-image i, .counter_item .counter__number,
 				.team-member .member-thumb .member-profile a:hover, .icon-background-default
 				{
-				color: #<?php echo $primary;  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-								?>;
+				color: var(--wp--preset--color--primary, #03c4eb);
 				}
 				input[type="reset"], input[type="submit"], input[type="submit"], input[type="reset"]:hover, input[type="submit"]:hover, input[type="submit"]:hover .nav-links a:hover, .btn-theme-primary, .btn-theme-primary-outline:hover, .section-testimonials .card-theme-primary,
 				.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce button.button.alt,
@@ -675,13 +681,18 @@ if (! function_exists('onepress_custom_inline_style')) {
 				.nav-links .page-numbers:hover,
 				.nav-links .page-numbers.current
 				{
-				background: #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-											?>;
+				background: var(--wp--preset--color--primary, #03c4eb);
 				}
 				.btn-theme-primary-outline, .btn-theme-primary-outline:hover, .pricing__item:hover, .section-testimonials .card-theme-primary, .entry-content blockquote
 				{
-				border-color : #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-												?>;
+				border-color : var(--wp--preset--color--primary, #03c4eb);
+				}
+				/* Feature item icon (FA stack + SVG variants) — set the CSS
+				   variable so both .icon-background-default (color) and
+				   .feature-icon-svg-wrap (background-color) pick up the primary
+				   color via _sections.scss's var(--icon-bg-color). */
+				.feature-item {
+				--icon-bg-color: var(--wp--preset--color--primary, #03c4eb);
 				}
 				<?php
 				if (class_exists('WooCommerce')) { ?>
@@ -689,15 +700,13 @@ if (! function_exists('onepress_custom_inline_style')) {
 					.woocommerce a.button.alt,
 					.woocommerce button.button.alt,
 					.woocommerce input.button.alt {
-					background-color: #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-															?>;
+					background-color: var(--wp--preset--color--primary, #03c4eb);
 					}
 					.woocommerce #respond input#submit.alt:hover,
 					.woocommerce a.button.alt:hover,
 					.woocommerce button.button.alt:hover,
 					.woocommerce input.button.alt:hover {
-					background-color: #<?php echo $primary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-															?>;
+					background-color: var(--wp--preset--color--primary, #03c4eb);
 					}
 				<?php }
 			} // End $primary
@@ -709,7 +718,11 @@ if (! function_exists('onepress_custom_inline_style')) {
 			 */
 			$secondary_color = sanitize_hex_color_no_hash(get_theme_mod('onepress_secondary_color'));
 			if ('' != $secondary_color) {
-				echo ".feature-item:hover .icon-background-default{ color: #{$secondary_color}; }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// FA stack hover (color rule) + SVG hover (background-color via
+				// var) — the var() form covers both .feature-icon-svg-wrap and
+				// any future selector consuming --icon-hover-bg-color.
+				echo ".feature-item:hover .icon-background-default{ color: var(--wp--preset--color--secondary, #333333); }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo ".feature-item{ --icon-hover-bg-color: var(--wp--preset--color--secondary, #333333); }"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 			$menu_padding = get_theme_mod('onepress_menu_item_padding');
 			if ($menu_padding) {
@@ -1009,10 +1022,39 @@ if (! function_exists('onepress_custom_inline_style')) {
 											?>px;
 			}
 			<?php
-			$content_width = absint(get_theme_mod('single_layout_content_width'));
-			if ($content_width > 0) {
-				$value = $content_width . 'px';
-				echo '.single-post .site-main, .single-post .entry-content > * { max-width: ' . $value . '; }'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+			// Since 2.4.1: emit a `:root` override for `--wp--style--global--content-size`
+			// based on the resolved sidebar layout + post type. Sidebar layouts
+			// shrink the default cap from 1110 → 790 (theme.json `custom.sidebarContentSize`);
+			// single posts let `single_layout_content_width` override either base.
+			//
+			// Gated by `is_singular()` so 404 / search / archive / home keep
+			// the theme.json default — per spec, those contexts don't take
+			// a sidebar-aware override.
+			if ( is_singular() ) {
+				$post_id = (int) get_queried_object_id();
+				if ( $post_id > 0
+					&& function_exists( 'onepress_get_layout_for_post_id' )
+					&& function_exists( 'onepress_resolve_content_width_css' )
+					&& function_exists( 'onepress_get_no_sidebar_base_px' )
+				) {
+					$layout    = onepress_get_layout_for_post_id( $post_id );
+					$post_type = get_post_type( $post_id );
+					$value     = onepress_resolve_content_width_css( $layout, $post_type );
+					$default   = onepress_get_no_sidebar_base_px() . 'px';
+
+					// Skip when the resolved value matches the theme.json
+					// default — WP's auto-emitted `:root` already provides it.
+					// Note: `100vw` (stretched template) never matches the
+					// `<n>px` default so it always emits.
+					if ( $value !== '' && $value !== $default ) {
+						// Whitelist allowed unit suffixes (`px` and `vw`) for
+						// belt-and-braces output safety, even though the
+						// resolver only ever returns these values.
+						if ( preg_match( '/^\d+(?:px|vw)$/', $value ) ) {
+							echo ':root { --wp--style--global--content-size: ' . esc_attr( $value ) . '; }'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						}
+					}
+				}
 			}
 
 			$css = ob_get_clean();

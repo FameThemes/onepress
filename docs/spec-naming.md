@@ -398,6 +398,8 @@ These exist in the shipped codebase and **cannot be fixed** without violating [a
 | Theme mod ordering convention | `onepress_disable_g_font` (prefix-first) vs `onepress_animation_disable` (suffix-last) — both shipped | Don't normalize. |
 | Some abbreviations baked into keys | `onepress_btt_disable` ("back to top"), `onepress_hero_pdtop` / `onepress_hero_pdbotom` ("padding top/bottom", note `pdbotom` typo) | Don't rename, don't fix typos. |
 | Webpack output handle exception | `theme` entry's style handle is `onepress-style` (not `onepress-theme`) | Special-cased in [`onepress_load_build_script()`](../functions.php) — leave as-is. |
+| `theme.json` palette slug `secondary` is `#333333` (= heading color) | `theme.json` ships secondary=#333333; SCSS `$secondary`=`#00aeef`; theme mod `onepress_secondary_color` defaults to `#00aeef` | Don't change the theme.json value — user posts with `.has-secondary-background-color` render at `#333333` on existing sites. Treat as a frozen naming collision with the SCSS / theme-mod meaning of "secondary". See [spec-block-editor.md → Known inconsistencies](spec-block-editor.md#known-inconsistencies). |
+| `theme.json` palette slug `light` vs SCSS `$meta` | Same color `#f8f9f9`, two different names | Don't rename — both are public; treat as aliases. |
 
 When you find a new inconsistency in the codebase, **add it to this table** rather than fixing it.
 

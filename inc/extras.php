@@ -214,6 +214,163 @@ if ( ! function_exists( 'onepress_get_layout' ) ) {
 }
 
 
+if ( ! function_exists( 'onepress_get_layout_for_post_id' ) ) {
+	/**
+	 * Resolve effective sidebar layout for a given post ID — editor-safe.
+	 *
+	 * Mirrors the priority order applied at frontend render time, but is
+	 * callable in admin / REST contexts (no query loop required):
+	 *
+	 *   1. Page template (`_wp_page_template` meta, pages only):
+	 *        template-fullwidth.php          → no-sidebar
+	 *        template-fullwidth-stretched.php → no-sidebar
+	 *        template-left-sidebar.php       → left-sidebar
+	 *   2. Single Layout Sidebar (`single_layout` mod, post type `post`
+	 *      only), unless its value is empty or `'default'`.
+	 *   3. Site Layout (`onepress_layout` mod) — global default.
+	 *
+	 * Intentionally does NOT replicate `onepress_get_layout()`'s
+	 * WooCommerce sidebar-empty fallback: in the editor we cannot inspect
+	 * runtime widget state, and on the frontend that branch is already
+	 * handled by `onepress_get_layout()` itself.
+	 *
+	 * @since 2.4.1
+	 * @param int $post_id
+	 * @return string One of: `'no-sidebar' | 'left-sidebar' | 'right-sidebar'`.
+	 */
+	function onepress_get_layout_for_post_id( $post_id ) {
+		$post_id = absint( $post_id );
+		if ( $post_id <= 0 ) {
+			return get_theme_mod( 'onepress_layout', 'right-sidebar' );
+		}
+
+		$post_type = get_post_type( $post_id );
+
+		// 1) Page template — highest priority (pages only).
+		if ( $post_type === 'page' ) {
+			$template = (string) get_post_meta( $post_id, '_wp_page_template', true );
+			if ( $template === 'template-fullwidth-stretched.php' ) {
+				// Since 2.4.1: stretched is its own layout key so the
+				// content-size resolver can emit `100vw` instead of the
+				// sidebar/no-sidebar pixel bases. Existing template
+				// markup hardcodes `<div class="no-sidebar">` so other
+				// `.no-sidebar` CSS rules still apply at render time.
+				return 'stretched';
+			}
+			if ( $template === 'template-fullwidth.php' ) {
+				return 'no-sidebar';
+			}
+			if ( $template === 'template-left-sidebar.php' ) {
+				return 'left-sidebar';
+			}
+		}
+
+		// 2) Single Layout Sidebar — middle priority (posts only).
+		if ( $post_type === 'post' ) {
+			$single = get_theme_mod( 'single_layout', 'default' );
+			if ( $single !== '' && $single !== 'default' ) {
+				return $single;
+			}
+		}
+
+		// 3) Site Layout — global fallback.
+		return get_theme_mod( 'onepress_layout', 'right-sidebar' );
+	}
+}
+
+
+if ( ! function_exists( 'onepress_resolve_content_width_css' ) ) {
+	/**
+	 * Resolve the effective `--wp--style--global--content-size` CSS value
+	 * (string with unit) for a given layout + post type.
+	 *
+	 * Layout → value mapping:
+	 *   - `'stretched'`                            → `'100vw'`
+	 *   - `'no-sidebar'`                           → `<no-sidebar base>px`
+	 *   - `'left-sidebar'` / `'right-sidebar'`     → `<sidebar base>px`
+	 *
+	 * Base values live in `theme.json` (single source of truth):
+	 *   - No-sidebar base : `settings.layout.contentSize`        (default 1110px)
+	 *   - Sidebar base    : `settings.custom.sidebarContentSize` (default 790px,
+	 *                                                            derived from
+	 *                                                            grid math)
+	 *
+	 * Override layer:
+	 *   - Post type `post` with `single_layout_content_width` > 0 → user value
+	 *     wins, regardless of layout (matches the Customizer-as-explicit-override
+	 *     mental model). Posts cannot be on a stretched template so the user
+	 *     mod never clashes with the `100vw` branch.
+	 *
+	 * @since 2.4.1
+	 * @param string $layout    One of `'no-sidebar' | 'left-sidebar' | 'right-sidebar' | 'stretched'`.
+	 * @param string $post_type Post type slug.
+	 * @return string CSS value including unit (e.g. `'790px'`, `'1110px'`, `'100vw'`).
+	 *                Callers should compare against `onepress_get_no_sidebar_base_px() . 'px'`
+	 *                to decide whether to skip emit (theme.json default).
+	 */
+	function onepress_resolve_content_width_css( $layout, $post_type ) {
+		// Stretched template → bleed to viewport edge.
+		if ( $layout === 'stretched' ) {
+			return '100vw';
+		}
+
+		// User override (single posts only) — wins over base. Posts can't
+		// be on a stretched template, so this branch never collides with
+		// the `100vw` path above.
+		if ( $post_type === 'post' ) {
+			$user = absint( get_theme_mod( 'single_layout_content_width' ) );
+			if ( $user > 0 ) {
+				return $user . 'px';
+			}
+		}
+
+		// Pixel bases from theme.json.
+		$has_sidebar = ( $layout === 'left-sidebar' || $layout === 'right-sidebar' );
+		$base        = $has_sidebar
+			? onepress_get_sidebar_base_px()
+			: onepress_get_no_sidebar_base_px();
+
+		return $base . 'px';
+	}
+}
+
+
+if ( ! function_exists( 'onepress_get_no_sidebar_base_px' ) ) {
+	/**
+	 * Read the no-sidebar content-size base (theme.json `layout.contentSize`)
+	 * as an integer pixel value. Used by emit channels to decide whether
+	 * to skip the `:root` override (when the resolved value equals the
+	 * theme.json default, WP's auto-emitted rule already provides it).
+	 *
+	 * @since 2.4.1
+	 * @return int
+	 */
+	function onepress_get_no_sidebar_base_px() {
+		$settings = function_exists( 'wp_get_global_settings' ) ? wp_get_global_settings() : array();
+		return isset( $settings['layout']['contentSize'] )
+			? (int) $settings['layout']['contentSize']
+			: 1110;
+	}
+}
+
+
+if ( ! function_exists( 'onepress_get_sidebar_base_px' ) ) {
+	/**
+	 * Read the sidebar content-size base (theme.json
+	 * `settings.custom.sidebarContentSize`) as an integer pixel value.
+	 *
+	 * @since 2.4.1
+	 * @return int
+	 */
+	function onepress_get_sidebar_base_px() {
+		$settings = function_exists( 'wp_get_global_settings' ) ? wp_get_global_settings() : array();
+		return isset( $settings['custom']['sidebarContentSize'] )
+			? (int) $settings['custom']['sidebarContentSize']
+			: 790;
+	}
+}
+
+
 /**
  * Woocommerce Support
  */

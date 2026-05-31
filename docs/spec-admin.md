@@ -42,12 +42,18 @@ When adding template behavior that should respect "hide" toggles, read these met
 
 ## Block editor integration
 
-[`OnePress_Editor`](../inc/admin/class-editor.php) adds:
+[`OnePress_Editor`](../inc/admin/class-editor.php) is the entry point. Since 2.4.0, the editor canvas matches the rendered frontend for in-scope blocks (typography, blockquote, lists, code, image, gallery, button, columns, group, cover, table, separator, embed, etc.) and exposes a dynamic color palette + font sizes derived from theme mods.
 
-- An `editor.css` injected into the block editor via `block_editor_settings_all` (or `block_editor_settings` for WP < 5.8). Source: `src/frontend/styles/editor.scss`.
-- An admin-ajax action `onepress_load_editor_style` that returns the CSS file (used by the iframe-rendered post editor).
-- Typography (when `onepress_typography_render_style()` exists, provided by Plus) — registers the font stylesheet and inlines per-element CSS via `wp_add_inline_style( 'wp-edit-post', … )`.
+Full details: [spec-block-editor.md](spec-block-editor.md).
+
+Quick reference:
+
+- Editor stylesheet injected via `block_editor_settings_all` (WP ≥ 5.8) / `block_editor_settings` (older). Source: `src/frontend/styles/editor.scss` → `assets/admin/editor.css`.
+- AJAX endpoint `onepress_load_editor_style` returns the CSS dynamically.
+- Plus typography (when `onepress_typography_render_style()` exists) injected via `wp_add_inline_style( 'wp-edit-post', … )`.
 - Block-editor assets registered on `enqueue_block_editor_assets`.
+- Theme supports added in [functions.php](../functions.php) `onepress_setup()`: `editor-styles`, `align-wide`, `wp-block-styles`, `responsive-embeds`, `custom-line-height`, `custom-spacing`, `custom-units`.
+- Filters: `onepress_editor_color_palette`, `onepress_editor_font_sizes`.
 
 ## Hooks/options reference (admin side)
 

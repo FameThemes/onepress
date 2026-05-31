@@ -78,6 +78,8 @@ module.exports = (env, args) => {
     [`admin/customizer${suffix}`]: "./src/admin/customizer.js",
     [`admin/customizer-liveview${suffix}`]: "./src/admin/customizer-liveview.js",
     [`admin/admin${suffix}`]: "./src/admin/admin.js",
+    [`admin/editor-content-width${suffix}`]:
+      "./src/admin/editor-content-width.js",
     [`frontend/lightgallery${suffix}`]: "./src/frontend/lightgallery.js",
   };
 

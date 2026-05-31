@@ -31,10 +31,18 @@ This file is an **index**. Detailed specs live under [docs/](docs/) — open the
 | [spec-customizer.md](docs/spec-customizer.md) | Add a Customizer setting, pick the right custom control or sanitizer, wire selective refresh, register sidebars, theme supports, image sizes |
 | [spec-hooks.md](docs/spec-hooks.md) | Look up an action/filter, use loop props, copy a hook recipe |
 | [spec-admin.md](docs/spec-admin.md) | Touch the page meta box, the theme dashboard, recommended actions, or block-editor styles |
+| [spec-block-editor.md](docs/spec-block-editor.md) | Editor ↔ frontend parity architecture, color palette + font size filters, block-specific styling, theme supports |
 | [spec-naming.md](docs/spec-naming.md) | Pick the right name for a function, class, theme mod, hook, CSS class, image size, etc. — also lists known frozen inconsistencies |
 | [spec-conventions.md](docs/spec-conventions.md) | Check sanitize/escape rules, i18n, RTL, WC gating, Plus detection, public API stability, additive-only mandate |
 | [spec-line-endings.md](docs/spec-line-endings.md) | Audit / fix CRLF — LF-only policy and playbook |
 | [spec-commits.md](docs/spec-commits.md) | Commit rules — anatomy, scopes, BC footer, release checklist |
+
+## Active plans
+
+| Plan | Status |
+|---|---|
+| [plan-block-editor-parity.md](docs/plan-block-editor-parity.md) | ✅ Phases 0–4, 6 complete in working tree; pending review for `2.4.0` tag |
+| [plan-css-var-integration.md](docs/plan-css-var-integration.md) | 📋 Drafted — one-shot refactor: layout + colors (Customizer→theme.json bridge) + font sizes + font families + spacing; awaits review |
 
 ## First-time orientation (60 seconds)
 

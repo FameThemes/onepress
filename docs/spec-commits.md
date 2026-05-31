@@ -34,6 +34,22 @@ Refs: #123                           ← optional: issue/PR refs
 - ≤ 72 characters **including the prefix**.
 - One change per commit. If the subject needs `+` / `and` / `,` to glue unrelated changes, split into separate commits.
 
+### Body discipline
+
+Keep the body **short and factual**. The diff already shows the code; the body adds what the diff cannot.
+
+- **≤ 5 lines** of body (excluding subject, blank line, `BC:` footer, `Refs:`). If you need more, the commit is doing too much — split.
+- **Each line ≤ 72 chars.**
+- **State what changed**, not the journey to get there. Past tense or imperative — match the subject's mood.
+- **Bullet list preferred** for 2+ changes. Single sentence when one change is enough.
+- **Omit:** narrative explaining how you arrived at the fix, alternative approaches considered, debugging steps, restatement of the subject.
+- **Include only when it adds non-obvious value:**
+  - Why this approach over an alternative (1 short clause).
+  - Side effects on related code paths a reviewer would otherwise miss.
+  - References to issues, prior commits, or specs that constrain the change.
+
+If the body would just paraphrase the subject, **leave it empty** — go straight to the `BC:` footer.
+
 ### Type
 
 | Type | Use for |
@@ -84,47 +100,39 @@ OnePress-specific scopes — pick the **narrowest** one that fits:
 
 ### Examples
 
-**Additive feature** — the default, safest type of change:
+**Additive feature** — body lists what was added, defaults note:
 
 ```
-feat(hero): wire title color to Customizer color var + add per-slide override
+feat(hero): wire title color to Customizer color var
 
-Adds new theme mod `onepress_hero_title_color` (default null = inherit from
-global palette) and a per-slide override stored in the existing slides
-repeater under the `title_color` row key. Old slides without the key fall
-back to the global color, preserving current rendering.
+- New theme mod `onepress_hero_title_color`, default null (inherits palette).
+- Per-slide override via existing slides repeater `title_color` row key.
 
-BC: none — additive theme mod + additive repeater row key, defaults preserve old look
+BC: none — additive theme mod + additive row key, defaults preserve old look
 ```
 
-**Bug fix** with no public surface change:
+**Bug fix** — one-line body is enough:
 
 ```
 fix(hero): autoplay not triggering when slider has only one slide
 
-The early-return in section-parts/section-hero.php was bailing on
-count(images) === 1, suppressing autoplay even though owl.carousel handles
-single-slide loops fine. Removed the early-return; left the empty-images
-guard untouched.
+Removed the `count(images) === 1` early-return in section-hero.php.
 
-BC: none — fixes regression, no public surface changed
+BC: none — no public surface changed
 ```
 
-**Internal refactor** with a new helper alongside the old:
+**Internal refactor** — body lists the new symbol + the legacy fallback:
 
 ```
-refactor(sections): introduce onepress_get_section_data, delegate old helper
+refactor(sections): introduce onepress_get_section_data helper
 
-Adds onepress_get_section_data() with a cleaner signature. The old
-onepress_get_section_args() now delegates to the new helper with legacy
-arg shape — signature unchanged, behavior unchanged for callers.
+- Added `onepress_get_section_data()` with cleaner signature.
+- Old `onepress_get_section_args()` now delegates to it; signature unchanged.
 
-BC: deprecation — onepress_get_section_args() still works; marked
-@deprecated since 2.4, will continue to function indefinitely per
-additive-only mandate
+BC: deprecation — old helper still functional, marked @deprecated since 2.4
 ```
 
-**Chore** with no shipped-code impact:
+**Chore** — body empty, just the BC footer:
 
 ```
 chore(build): bump @wordpress/scripts to 30.20.1
@@ -132,7 +140,7 @@ chore(build): bump @wordpress/scripts to 30.20.1
 BC: none — patch bump, no API change
 ```
 
-**Docs-only**:
+**Docs-only** — body empty:
 
 ```
 docs: split AGENTS.md into spec-* files under docs/
@@ -145,12 +153,10 @@ BC: none — docs only
 ```
 feat(image-sizes)!: drop onepress-blog-small after 2-major deprecation
 
-Removes the onepress-blog-small (300×150) image size registered since 1.0.
-Marked deprecated since 2.4. Migration in inc/migrations/3-0-0.php
-regenerates thumbnails at onepress-small (480×300) for affected sites.
+- Removed `onepress-blog-small` (300×150) image size, deprecated since 2.4.
+- Migration in `inc/migrations/3-0-0.php` regenerates affected thumbnails.
 
-BC: breaking — removes deprecated image size; migration provided;
-changelog entry under "Breaking changes"
+BC: breaking — removes deprecated image size; migration provided
 Refs: #842
 ```
 
@@ -216,6 +222,7 @@ If you can't state BC impact, **do not commit** — go read [spec-conventions.md
 
 Before pressing commit:
 
+- [ ] **Commit body ≤ 5 lines** (excluding subject, blank line, `BC:` footer, `Refs:`); each line ≤ 72 chars; bullets preferred for 2+ changes; empty body OK when subject is self-explanatory (see [Body discipline](#body-discipline))
 - [ ] **BC impact analyzed and stated in the commit body** (see above)
 - [ ] **No deletion of any existing public PHP function, class, method, template file, hook, theme mod, option, post meta, image size, or CSS class** — old code stays as a fallback (see [spec-conventions.md → Additive-only mandate](spec-conventions.md#additive-only-mandate)); a removal, if truly necessary, requires the 5 conditions in "When you genuinely must remove"
 - [ ] No rename of public API names — additive only (rename = remove + add)
