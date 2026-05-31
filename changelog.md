@@ -13,6 +13,7 @@
 - IMPROVED: `template-fullwidth.php` content cap stays at theme default; `template-fullwidth-stretched.php` stretches edge-to-edge.
 - FIXED: HTML tags inside the hero rotating phrase block now render instead of being stripped to plain text.
 - FIXED: WP `[gallery]` shortcode now uses CSS grid layout, matching the gallery block.
+- FIXED: Section Order & Styling list shows every row regardless of section active state.
 
 # 2.3.17
 - NEW: Support grid blog layout for blog page, section news.
