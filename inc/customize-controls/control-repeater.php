@@ -131,18 +131,35 @@ class Onepress_Customize_Repeatable_Control extends WP_Customize_Control {
 		}
 
 		/**
+		 * Always surface every row in the Section Order & Styling control.
+		 *
+		 * Previously this loop set `__visibility = 'hidden'` on any row whose
+		 * `section_id` mapped to an inactive section in the theme's
+		 * `onepress_sections_settings` option. The RepeatableItem component
+		 * then promoted that to a `.visibility-hidden` CSS class which the
+		 * Customizer stylesheet collapses to `height: 0`. Net effect: a row
+		 * the user had previously disabled (via the Sections admin page)
+		 * disappeared completely from the Customizer, with no in-Customizer
+		 * way to re-enable, reorder, or edit it. The user had to bounce out
+		 * to the Sections admin to flip the switch, then come back —
+		 * trapping the only recovery path outside the Customizer.
+		 *
+		 * Inactive rows now stay visible. The per-row `show_section`
+		 * checkbox inside the item is the user-facing toggle for hiding a
+		 * section from the rendered page; the Customizer list itself stays
+		 * a complete inventory.
+		 *
+		 * `__visibility` is still emitted (empty string) so any downstream
+		 * code that reads the field doesn't see undefined.
+		 *
 		 * @since 2.1.1
+		 * @since 2.4.2 Always-visible — no more `is_section_active` gating.
 		 */
 		if ( $this->id_key == 'section_id' ) {
-		    foreach ( ( array ) $value as $k => $v ) {
-
-		        if ( ! Onepress_Config::is_section_active( $v['section_id'] ) ) {
-			        $value[ $k ]['__visibility'] = 'hidden';
-                } else {
-			        $value[ $k ]['__visibility'] = '';
-                }
-            }
-        }
+			foreach ( (array) $value as $k => $v ) {
+				$value[ $k ]['__visibility'] = '';
+			}
+		}
 
 		$this->json['live_title_id'] = $this->live_title_id;
 		$this->json['title_format']  = $this->title_format;
