@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# 2.4.1
+# 2.3.18
 - NEW: Block editor canvas matches the rendered frontend for in-scope blocks.
 - NEW: Theme color palette and font size scale exposed to the block editor via theme.json.
 - NEW: Block-width cap follows the sidebar layout (790px with sidebar, 1110px no-sidebar, 100vw stretched template).
