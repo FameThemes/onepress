@@ -90,9 +90,10 @@ module.exports = function (grunt) {
           "!webpack.config.js",
           "!.babelrc",
           // Since 2.3.18: dev-only documentation should not ship in the
-          // distributable zip. `docs/` holds spec / plan / agent guides,
-          // and `plan-*.md` anywhere is a development artifact.
+          // distributable zip. `docs/` and `plans/` hold spec / plan /
+          // agent guides; `plan-*.md` anywhere is a development artifact.
           "!docs/**",
+          "!plans/**",
           "!**/plan-*.md",
         ],
         dest: "onepress/",
