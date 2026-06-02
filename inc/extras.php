@@ -214,6 +214,163 @@ if ( ! function_exists( 'onepress_get_layout' ) ) {
 }
 
 
+if ( ! function_exists( 'onepress_get_layout_for_post_id' ) ) {
+	/**
+	 * Resolve effective sidebar layout for a given post ID — editor-safe.
+	 *
+	 * Mirrors the priority order applied at frontend render time, but is
+	 * callable in admin / REST contexts (no query loop required):
+	 *
+	 *   1. Page template (`_wp_page_template` meta, pages only):
+	 *        template-fullwidth.php          → no-sidebar
+	 *        template-fullwidth-stretched.php → no-sidebar
+	 *        template-left-sidebar.php       → left-sidebar
+	 *   2. Single Layout Sidebar (`single_layout` mod, post type `post`
+	 *      only), unless its value is empty or `'default'`.
+	 *   3. Site Layout (`onepress_layout` mod) — global default.
+	 *
+	 * Intentionally does NOT replicate `onepress_get_layout()`'s
+	 * WooCommerce sidebar-empty fallback: in the editor we cannot inspect
+	 * runtime widget state, and on the frontend that branch is already
+	 * handled by `onepress_get_layout()` itself.
+	 *
+	 * @since 2.4.1
+	 * @param int $post_id
+	 * @return string One of: `'no-sidebar' | 'left-sidebar' | 'right-sidebar'`.
+	 */
+	function onepress_get_layout_for_post_id( $post_id ) {
+		$post_id = absint( $post_id );
+		if ( $post_id <= 0 ) {
+			return get_theme_mod( 'onepress_layout', 'right-sidebar' );
+		}
+
+		$post_type = get_post_type( $post_id );
+
+		// 1) Page template — highest priority (pages only).
+		if ( $post_type === 'page' ) {
+			$template = (string) get_post_meta( $post_id, '_wp_page_template', true );
+			if ( $template === 'template-fullwidth-stretched.php' ) {
+				// Since 2.4.1: stretched is its own layout key so the
+				// content-size resolver can emit `100vw` instead of the
+				// sidebar/no-sidebar pixel bases. Existing template
+				// markup hardcodes `<div class="no-sidebar">` so other
+				// `.no-sidebar` CSS rules still apply at render time.
+				return 'stretched';
+			}
+			if ( $template === 'template-fullwidth.php' ) {
+				return 'no-sidebar';
+			}
+			if ( $template === 'template-left-sidebar.php' ) {
+				return 'left-sidebar';
+			}
+		}
+
+		// 2) Single Layout Sidebar — middle priority (posts only).
+		if ( $post_type === 'post' ) {
+			$single = get_theme_mod( 'single_layout', 'default' );
+			if ( $single !== '' && $single !== 'default' ) {
+				return $single;
+			}
+		}
+
+		// 3) Site Layout — global fallback.
+		return get_theme_mod( 'onepress_layout', 'right-sidebar' );
+	}
+}
+
+
+if ( ! function_exists( 'onepress_resolve_content_width_css' ) ) {
+	/**
+	 * Resolve the effective `--wp--style--global--content-size` CSS value
+	 * (string with unit) for a given layout + post type.
+	 *
+	 * Layout → value mapping:
+	 *   - `'stretched'`                            → `'100vw'`
+	 *   - `'no-sidebar'`                           → `<no-sidebar base>px`
+	 *   - `'left-sidebar'` / `'right-sidebar'`     → `<sidebar base>px`
+	 *
+	 * Base values live in `theme.json` (single source of truth):
+	 *   - No-sidebar base : `settings.layout.contentSize`        (default 1110px)
+	 *   - Sidebar base    : `settings.custom.sidebarContentSize` (default 790px,
+	 *                                                            derived from
+	 *                                                            grid math)
+	 *
+	 * Override layer:
+	 *   - Post type `post` with `single_layout_content_width` > 0 → user value
+	 *     wins, regardless of layout (matches the Customizer-as-explicit-override
+	 *     mental model). Posts cannot be on a stretched template so the user
+	 *     mod never clashes with the `100vw` branch.
+	 *
+	 * @since 2.4.1
+	 * @param string $layout    One of `'no-sidebar' | 'left-sidebar' | 'right-sidebar' | 'stretched'`.
+	 * @param string $post_type Post type slug.
+	 * @return string CSS value including unit (e.g. `'790px'`, `'1110px'`, `'100vw'`).
+	 *                Callers should compare against `onepress_get_no_sidebar_base_px() . 'px'`
+	 *                to decide whether to skip emit (theme.json default).
+	 */
+	function onepress_resolve_content_width_css( $layout, $post_type ) {
+		// Stretched template → bleed to viewport edge.
+		if ( $layout === 'stretched' ) {
+			return '100vw';
+		}
+
+		// User override (single posts only) — wins over base. Posts can't
+		// be on a stretched template, so this branch never collides with
+		// the `100vw` path above.
+		if ( $post_type === 'post' ) {
+			$user = absint( get_theme_mod( 'single_layout_content_width' ) );
+			if ( $user > 0 ) {
+				return $user . 'px';
+			}
+		}
+
+		// Pixel bases from theme.json.
+		$has_sidebar = ( $layout === 'left-sidebar' || $layout === 'right-sidebar' );
+		$base        = $has_sidebar
+			? onepress_get_sidebar_base_px()
+			: onepress_get_no_sidebar_base_px();
+
+		return $base . 'px';
+	}
+}
+
+
+if ( ! function_exists( 'onepress_get_no_sidebar_base_px' ) ) {
+	/**
+	 * Read the no-sidebar content-size base (theme.json `layout.contentSize`)
+	 * as an integer pixel value. Used by emit channels to decide whether
+	 * to skip the `:root` override (when the resolved value equals the
+	 * theme.json default, WP's auto-emitted rule already provides it).
+	 *
+	 * @since 2.4.1
+	 * @return int
+	 */
+	function onepress_get_no_sidebar_base_px() {
+		$settings = function_exists( 'wp_get_global_settings' ) ? wp_get_global_settings() : array();
+		return isset( $settings['layout']['contentSize'] )
+			? (int) $settings['layout']['contentSize']
+			: 1110;
+	}
+}
+
+
+if ( ! function_exists( 'onepress_get_sidebar_base_px' ) ) {
+	/**
+	 * Read the sidebar content-size base (theme.json
+	 * `settings.custom.sidebarContentSize`) as an integer pixel value.
+	 *
+	 * @since 2.4.1
+	 * @return int
+	 */
+	function onepress_get_sidebar_base_px() {
+		$settings = function_exists( 'wp_get_global_settings' ) ? wp_get_global_settings() : array();
+		return isset( $settings['custom']['sidebarContentSize'] )
+			? (int) $settings['custom']['sidebarContentSize']
+			: 790;
+	}
+}
+
+
 /**
  * Woocommerce Support
  */
@@ -245,6 +402,219 @@ if ( ! function_exists( 'onepress_get_video_lightbox_image' ) ) {
 	function onepress_get_video_lightbox_image() {
 		$image = get_theme_mod( 'onepress_videolightbox_image' );
 		return $image;
+	}
+}
+
+if ( ! function_exists( 'onepress_is_self_hosted_video_file_url' ) ) {
+	/**
+	 * True when URL points to a direct video file (not YouTube/Vimeo/etc. embed).
+	 *
+	 * @param string $url URL.
+	 * @return bool
+	 */
+	function onepress_is_self_hosted_video_file_url( $url ) {
+		if ( ! is_string( $url ) || $url === '' ) {
+			return false;
+		}
+		if ( preg_match( '#youtu(\.be|be\.com)|vimeo\.com|dai\.ly|dailymotion\.com/embed|vk\.com/video_ext#i', $url ) ) {
+			return false;
+		}
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+		$ext  = strtolower( pathinfo( (string) $path, PATHINFO_EXTENSION ) );
+
+		return in_array( $ext, array( 'mp4', 'webm', 'ogv', 'ogg', 'mov', 'm4v', 'avi', 'mkv' ), true );
+	}
+}
+
+if ( ! function_exists( 'onepress_videolightbox_mime_for_video_url' ) ) {
+	/**
+	 * @param string $url Video file URL.
+	 * @return string MIME type for HTML5 <source type="…">.
+	 */
+	function onepress_videolightbox_mime_for_video_url( $url ) {
+		$path = wp_parse_url( (string) $url, PHP_URL_PATH );
+		$ext  = strtolower( pathinfo( (string) $path, PATHINFO_EXTENSION ) );
+		$map  = array(
+			'mp4'  => 'video/mp4',
+			'webm' => 'video/webm',
+			'ogv'  => 'video/ogg',
+			'ogg'  => 'video/ogg',
+			'mov'  => 'video/quicktime',
+			'm4v'  => 'video/x-m4v',
+			'avi'  => 'video/x-msvideo',
+			'mkv'  => 'video/x-matroska',
+		);
+
+		return isset( $map[ $ext ] ) ? $map[ $ext ] : 'video/mp4';
+	}
+}
+
+if ( ! function_exists( 'onepress_videolightbox_lightgallery_data_html' ) ) {
+	/**
+	 * Markup for lightGallery 1.x HTML5 video (stored in data-html; requires lg-html5 class).
+	 *
+	 * @param string $src_url Absolute URL to video file.
+	 * @param string $mime    Optional MIME (from attachment); falls back from extension.
+	 * @return string Raw HTML (escape with esc_attr() when placing in data-html).
+	 */
+	function onepress_videolightbox_lightgallery_data_html( $src_url, $mime = '' ) {
+		$safe_url = esc_url( $src_url );
+		if ( $safe_url === '' ) {
+			return '';
+		}
+		$mime = is_string( $mime ) && $mime !== '' ? $mime : onepress_videolightbox_mime_for_video_url( $safe_url );
+
+		return '<video class="lg-video-object lg-html5 lg-object" controls preload="metadata"><source src="' . esc_url( $safe_url ) . '" type="' . esc_attr( $mime ) . '"></video>';
+	}
+}
+
+if ( ! function_exists( 'onepress_videolightbox_poster_url' ) ) {
+	/**
+	 * Optional poster for self-hosted lightbox (section background image mod).
+	 *
+	 * @return string URL or empty.
+	 */
+	function onepress_videolightbox_poster_url() {
+		$image_id = get_theme_mod( 'onepress_videolightbox_image' );
+		$image_id = absint( $image_id );
+		if ( ! $image_id ) {
+			return '';
+		}
+		$url = wp_get_attachment_image_url( $image_id, 'full' );
+
+		return $url ? esc_url( $url ) : '';
+	}
+}
+
+if ( ! function_exists( 'onepress_sanitize_news_layout' ) ) {
+	/**
+	 * @param string $value Raw value.
+	 * @return string 'list'|'grid'
+	 */
+	function onepress_sanitize_news_layout( $value ) {
+		$value = is_string( $value ) ? $value : 'list';
+
+		return in_array( $value, array( 'list', 'grid' ), true ) ? $value : 'list';
+	}
+}
+
+if ( ! function_exists( 'onepress_news_snap_columns_per_row' ) ) {
+	/**
+	 * Snap to a row count that divides the 12-column Bootstrap grid evenly.
+	 *
+	 * @param int $n Desired columns per row.
+	 * @return int One of 1, 2, 3, 4, 6, 12.
+	 */
+	function onepress_news_snap_columns_per_row( $n ) {
+		$allowed = array( 1, 2, 3, 4, 6, 12 );
+		$n       = absint( $n );
+		if ( $n < 1 ) {
+			$n = 1;
+		}
+		if ( in_array( $n, $allowed, true ) ) {
+			return $n;
+		}
+		$best = 1;
+		foreach ( $allowed as $a ) {
+			if ( abs( $a - $n ) < abs( $best - $n ) ) {
+				$best = $a;
+			}
+		}
+
+		return $best;
+	}
+}
+
+if ( ! function_exists( 'onepress_news_columns_per_row_to_span' ) ) {
+	/**
+	 * Bootstrap 3 column span (out of 12) for equal columns per row.
+	 *
+	 * @param int $cols_per_row Columns per row (1–12, snapped).
+	 * @return int Span 1–12.
+	 */
+	function onepress_news_columns_per_row_to_span( $cols_per_row ) {
+		$c   = onepress_news_snap_columns_per_row( $cols_per_row );
+		$map = array(
+			1  => 12,
+			2  => 6,
+			3  => 4,
+			4  => 3,
+			6  => 2,
+			12 => 1,
+		);
+
+		return isset( $map[ $c ] ) ? $map[ $c ] : 4;
+	}
+}
+
+if ( ! function_exists( 'onepress_sanitize_news_grid_columns' ) ) {
+	/**
+	 * Three integers "desktop tablet mobile" (space-separated), e.g. "3 2 1".
+	 *
+	 * @param string $input Raw.
+	 * @return string Normalized string.
+	 */
+	function onepress_sanitize_news_grid_columns( $input ) {
+		$input = trim( preg_replace( '/\s+/', ' ', (string) $input ) );
+		if ( $input === '' ) {
+			return '3 2 1';
+		}
+		$parts = explode( ' ', $input );
+		$parts = array_pad( $parts, 3, '1' );
+		$out   = array();
+		foreach ( array_slice( $parts, 0, 3 ) as $p ) {
+			$out[] = (string) onepress_news_snap_columns_per_row( absint( $p ) );
+		}
+
+		return implode( ' ', $out );
+	}
+}
+
+if ( ! function_exists( 'onepress_parse_news_grid_columns' ) ) {
+	/**
+	 * @param string $string Theme mod value.
+	 * @return array{ lg: int, md: int, xs: int } Bootstrap span integers for col-lg-*, col-md-*, col-xs-*.
+	 */
+	function onepress_parse_news_grid_columns( $string ) {
+		$string = trim( (string) $string );
+		if ( $string === '' ) {
+			$string = '3 2 1';
+		}
+		$parts = preg_split( '/\s+/', $string );
+		$parts = array_pad( $parts, 3, '1' );
+
+		return array(
+			'lg' => onepress_news_columns_per_row_to_span( $parts[0] ),
+			'md' => onepress_news_columns_per_row_to_span( $parts[1] ),
+			'xs' => onepress_news_columns_per_row_to_span( $parts[2] ),
+		);
+	}
+}
+
+if ( ! function_exists( 'onepress_get_blog_posts_loop_layout_config' ) ) {
+	/**
+	 * Blog / archive listing layout (Customizer: Blog Posts).
+	 *
+	 * @return array{ layout: string, is_grid: bool, grid_col_class: string }
+	 */
+	function onepress_get_blog_posts_loop_layout_config() {
+		$layout = onepress_sanitize_news_layout( get_theme_mod( 'onepress_blog_posts_layout', 'list' ) );
+		$grid_col_class = '';
+		if ( $layout === 'grid' ) {
+			$spans = onepress_parse_news_grid_columns( get_theme_mod( 'onepress_blog_posts_grid_columns', '2 2 1' ) );
+			$grid_col_class = sprintf(
+				'col-lg-%d col-md-%d col-xs-%d blog-posts-loop__col',
+				(int) $spans['lg'],
+				(int) $spans['md'],
+				(int) $spans['xs']
+			);
+		}
+
+		return array(
+			'layout'         => $layout,
+			'is_grid'        => ( $layout === 'grid' ),
+			'grid_col_class' => $grid_col_class,
+		);
 	}
 }
 

@@ -84,6 +84,27 @@ $wp_customize->add_control( 'onepress_videolightbox_url',
 	)
 );
 
+// Media Library: stores id + url (JSON). Parsed on the front end for the popup link (URL).
+$wp_customize->add_setting(
+	'onepress_videolightbox_media_url',
+	array(
+		'sanitize_callback' => 'onepress_sanitize_media_control_mixed',
+		'default'           => '',
+	)
+);
+$wp_customize->add_control(
+	new OnePress_Media_Control(
+		$wp_customize,
+		'onepress_videolightbox_media_url',
+		array(
+			'label'       => esc_html__( 'Video / image from Media Library', 'onepress' ),
+			'section'     => 'onepress_videolightbox_settings',
+			'storage'     => 'mixed',
+			'description' => esc_html__( 'Select an image or video file. Both attachment ID and file URL are saved. If a URL is available, it is used instead of the YouTube/Vimeo field above.', 'onepress' ),
+		)
+	)
+);
+
 // Parallax image
 $wp_customize->add_setting( 'onepress_videolightbox_image',
 	array(

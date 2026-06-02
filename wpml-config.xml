@@ -45,6 +45,7 @@
             <key name='onepress_videolightbox_id' />
             <key name='onepress_videolightbox_title' />
             <key name='onepress_videolightbox_url' />
+            <key name='onepress_videolightbox_media_url' />
             <key name='onepress_about_id' />
             <key name='onepress_about_title' />
             <key name='onepress_about_subtitle' />

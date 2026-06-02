@@ -18,6 +18,12 @@ $wp_customize->add_setting(
 		'sanitize_callback'    => 'sanitize_hex_color_no_hash',
 		'sanitize_js_callback' => 'maybe_hash_hex_color',
 		'default'              => '#03c4eb',
+		// Since 2.4.1: live preview via `customizer-liveview.js`. The
+		// handler updates `--wp--preset--color--primary` on the iframe
+		// `:root` — every SCSS consumer (`variables.$primary`) and every
+		// inline rule emitted by `template-tags.php` reads through that
+		// var, so a single style.setProperty propagates instantly.
+		'transport'            => 'postMessage',
 	)
 );
 $wp_customize->add_control(
@@ -44,6 +50,8 @@ $wp_customize->add_setting(
 		'sanitize_callback'    => 'sanitize_hex_color_no_hash',
 		'sanitize_js_callback' => 'maybe_hash_hex_color',
 		'default'              => '#333333',
+		// Since 2.4.1: live preview — see note on `onepress_primary_color`.
+		'transport'            => 'postMessage',
 	)
 );
 $wp_customize->add_control(

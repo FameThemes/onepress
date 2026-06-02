@@ -1,5 +1,36 @@
 # CHANGELOG
 
+# 2.3.18
+- NEW: Block editor canvas matches the rendered frontend for in-scope blocks.
+- NEW: Theme color palette and font size scale exposed to the block editor via theme.json.
+- NEW: Block-width cap follows the sidebar layout (790px with sidebar, 1110px no-sidebar, 100vw stretched template).
+- NEW: Switching the Page Template in the editor sidebar updates the block-width cap live.
+- NEW: Customizer Site Colors (Primary / Secondary) update the editor and frontend preview live, no reload.
+- IMPROVED: `alignleft` / `alignright` blocks float inside the editor canvas and bleed to viewport edge on frontend.
+- IMPROVED: `alignwide` widens to 1230px; `alignfull` reaches viewport edges.
+- IMPROVED: Primary / Secondary colors propagate to block-library blocks using those palette slugs.
+- IMPROVED: Semantic font-family aliases `--wp--preset--font-family--body` and `--…--heading` exposed for child themes and OnePress Plus to override.
+- IMPROVED: `template-fullwidth.php` content cap stays at theme default; `template-fullwidth-stretched.php` stretches edge-to-edge.
+- FIXED: HTML tags inside the hero rotating phrase block now render instead of being stripped to plain text.
+- FIXED: WP `[gallery]` shortcode now uses CSS grid layout, matching the gallery block.
+- FIXED: Section Order & Styling list shows every row regardless of section active state.
+
+# 2.3.17
+- NEW: Support grid blog layout for blog page, section news.
+- IMPROVED: Add altt text to hero image slider.
+- IMPROVED: Support self-hosted video lightbox & media control.
+- IMPROVED: Improve customizer controls, support svg icon.
+- IMPROVED: Reorder sanitization and adjust escaping.
+
+# 2.3.16
+- FIXED: Fix security issues.
+- FIXED: Alert copy text.
+
+# 2.3.15
+
+- FIXED: Fix security issues.
+- UPDATED: Update style files.
+
 # 2.3.12
 
 - FIXED: fix security issues.

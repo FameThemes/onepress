@@ -48,8 +48,8 @@ class OnePress_Section_Plus extends WP_Customize_Section {
 	public function json() {
 		$json = parent::json();
 		$json['plus_text'] = $this->plus_text;
-		$json['plus_url']  = $this->plus_url;
-		$json['id'] = $this->id;
+		$json['plus_url']  = esc_url($this->plus_url);
+		$json['id'] = sanitize_text_field($this->id);
 		return $json;
 	}
 	/**
@@ -63,7 +63,7 @@ class OnePress_Section_Plus extends WP_Customize_Section {
 
 		<li id="accordion-section-{{ data.id }}" class="accordion-section control-section control-section-{{ data.type }} cannot-expand">
 
-			<h3><a href="{{ data.plus_url }}" target="_blank">{{{ data.plus_text }}}</a></h3>
+			<h3><a href="{{ data.plus_url }}" target="_blank" rel="noopener noreferrer">{{ data.plus_text }}</a></h3>
 		</li>
 	<?php }
 }

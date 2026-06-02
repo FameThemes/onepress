@@ -5,6 +5,11 @@
  * Licensed under MIT http://www.opensource.org/licenses/mit-license.php/
  */
 (function ($, window, document, undefined) {
+
+	if (typeof Onepress_Bully === 'undefined') {
+		return;
+	}
+	
 	var $window = $(window),
 		windowHeight = $window.height(),
 		elements = [],

@@ -178,10 +178,20 @@ if (!function_exists('onepress_setup')) :
 
 		add_theme_support('wp-block-styles');
 
+		/**
+		 * Block editor UX additions (since 2.4.0). All additive — no existing
+		 * theme support is removed. Each surfaces a control in the editor
+		 * sidebar; none changes how saved posts render unless the user opts in.
+		 */
+		add_theme_support('responsive-embeds');
+		add_theme_support('custom-line-height');
+		add_theme_support('custom-spacing');
+		add_theme_support('custom-units');
+
 		/*
 		 * This theme styles the visual editor to resemble the theme style.
 		 */
-		add_editor_style(array('assets/build/admin/editor.css', onepress_fonts_url()));
+		add_editor_style(array('assets/admin/editor.css', onepress_fonts_url()));
 
 		if (get_theme_mod('onepress_gallery_disable')) {
 			/**
@@ -271,8 +281,8 @@ add_action('widgets_init', 'onepress_widgets_init');
 function onepress_load_build_script($key, $deps = [], $is_admin = false)
 {
 	$min_ext  = defined('WP_DEBUG') && WP_DEBUG ? '' : '.minified';
-	$dir =  get_template_directory() . '/assets/build/';
-	$dir_url =  get_template_directory_uri() . '/assets/build/';
+	$dir =  get_template_directory() . '/assets/';
+	$dir_url =  get_template_directory_uri() . '/assets/';
 	if (!$is_admin) {
 		$dir .= 'frontend/';
 		$dir_url .= 'frontend/';
@@ -281,27 +291,46 @@ function onepress_load_build_script($key, $deps = [], $is_admin = false)
 		$dir_url .= 'admin/';
 	}
 
-	$f = $dir . $key . '.asset.php';
+	// Webpack emits BOTH `{key}.asset.php` (dev build) and
+	// `{key}.minified.asset.php` (prod build) — pick the one that matches
+	// the current `$min_ext` so prod-only entries don't silently fall
+	// through the existence check.
+	$f = $dir . $key . $min_ext . '.asset.php';
 	if (!file_exists($f)) {
-		return;
+		// Back-compat: fall back to the non-suffixed file when the
+		// suffixed variant is missing.
+		$f = $dir . $key . '.asset.php';
+		if (!file_exists($f)) {
+			return;
+		}
 	}
 
 	$asset = include $f;
 	$asset['dependencies'] = array_merge($asset['dependencies'], $deps);
-	$url =  $dir_url . $key . $min_ext . '.js';
+	$js_file =  $key . $min_ext . '.js';
+	$url_js  = false;
+	if (file_exists($dir . $js_file)) {
+		$url_js = $dir_url . $js_file;
+	}
 	$handle = 'onepress-' . $key;
 	$handle_css = 'onepress-' . $key;
 	$url_css = false;
 	if ($key === 'theme') {
 		$handle_css = 'onepress-style';
-		if (file_exists($dir . $key . '.css')) {
-			$url_css =  $dir_url . $key . '.css';
-		}
 	}
 
-	wp_register_script($handle, $url, $asset['dependencies'], $asset['version'], true);
+	if (file_exists($dir . $key . '.css')) {
+		$url_css =  $dir_url . $key . '.css';
+	}
+
+	if ($url_js) {
+		wp_register_script($handle, $url_js, $asset['dependencies'], $asset['version'], true);
+		wp_enqueue_script($handle);
+	}
+
 	if ($url_css) {
 		wp_register_style($handle_css, $url_css, [], $asset['version']);
+		wp_enqueue_style($handle_css);
 	}
 	return $handle;
 }
@@ -318,15 +347,11 @@ function onepress_scripts()
 
 	if (!get_theme_mod('onepress_disable_g_font')) {
 		$google_font_url = onepress_fonts_url();
-		// var_dump($google_font_url); die();
 		if ($google_font_url) {
 			wp_enqueue_style('onepress-fonts', onepress_fonts_url(), array(), $version);
 		}
 	}
 
-	wp_enqueue_style('onepress-animate', get_template_directory_uri() . '/assets/css/animate.min.css', array(), $version);
-	wp_enqueue_style('onepress-fa', get_template_directory_uri() . '/assets/fontawesome-v6/css/all.min.css', array(), '6.5.1');
-	wp_enqueue_style('onepress-fa-shims', get_template_directory_uri() . '/assets/fontawesome-v6/css/v4-shims.min.css', array(), '6.5.1');
 
 	$deps = array('jquery');
 	// Animation from settings.
@@ -383,15 +408,16 @@ function onepress_scripts()
 				$deps[] = onepress_load_build_script('gallery-carousel');
 			}
 		}
-		wp_enqueue_style('onepress-gallery-lightgallery', get_template_directory_uri() . '/assets/css/lightgallery.css');
+		onepress_load_build_script('lightgallery', ['jquery']);
+		// wp_enqueue_style('onepress-gallery-lightgallery', get_template_directory_uri() . '/assets/css/lightgallery.css');
 	}
 
 	if (defined('ONEPRESS_PLUS_PATH')) {
 		$deps[] = onepress_load_build_script('gallery-carousel');
 	}
 
-	$handle = onepress_load_build_script('theme', $deps);
-	wp_enqueue_script($handle);
+	onepress_load_build_script('theme', $deps);
+
 
 	$custom_css = onepress_custom_inline_style();
 	wp_add_inline_style('onepress-style', $custom_css);
@@ -689,3 +715,10 @@ require get_template_directory() . '/inc/admin/dashboard.php';
  * @since 2.2.1
  */
 require get_template_directory() . '/inc/admin/class-editor.php';
+
+/**
+ * theme.json palette bridge (Customizer → CSS vars).
+ *
+ * @since 2.4.1
+ */
+require get_template_directory() . '/inc/theme-json-bridge.php';

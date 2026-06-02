@@ -14,8 +14,15 @@ if ( get_theme_mod( 'onepress_hide_thumnail_if_not_exists', false ) ) {
 	}
 }
 
+$post_classes = array( 'list-article', 'clearfix' );
+if ( onepress_loop_get_prop( 'news_layout' ) === 'grid' ) {
+	$post_classes[] = 'list-article--news-grid';
+}
+if ( onepress_loop_get_prop( 'blog_posts_layout' ) === 'grid' ) {
+	$post_classes[] = 'list-article--posts-grid';
+}
 ?>
-<article id="post-<?php the_ID(); ?>" <?php post_class( array( 'list-article', 'clearfix' ) ); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( $post_classes ); ?>>
 	<?php if ( $show_thumbnail ) { ?>
 	<div class="list-article-thumb">
 		<a href="<?php echo esc_url( get_permalink() ); ?>">

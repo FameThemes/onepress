@@ -165,8 +165,9 @@ require get_template_directory() . '/inc/customizer-selective-refresh.php';
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
 function onepress_customize_preview_js()
-{
-	wp_enqueue_script('onepress_customizer_liveview', get_template_directory_uri() . '/assets/js/customizer-liveview.js', array('customize-preview', 'customize-selective-refresh'), false, true);
+{	
+	$handle = onepress_load_build_script('customizer-liveview', ['customize-preview', 'customize-selective-refresh'], true);
+	wp_enqueue_script($handle);
 }
 add_action('customize_preview_init', 'onepress_customize_preview_js', 65);
 
@@ -203,6 +204,9 @@ function onepress_customize_controls_enqueue_scripts()
 			'c_icon_picker_js_setup',
 			array(
 				'search'    => esc_html__('Search', 'onepress'),
+				'svg_code'    => esc_html__('Svg Code', 'onepress'),
+				'apply_svg'   => esc_html__( 'Apply', 'onepress' ),
+				'svg_placeholder' => esc_html__( 'Paste SVG markup here…', 'onepress' ),
 				'fonts' => array(
 					'font-awesome' => array(
 						// Name of icon

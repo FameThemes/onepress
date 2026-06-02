@@ -21,7 +21,7 @@ if ( !$disable && !empty( $data ) ) {
             <?php if ($subtitle != '') echo '<h5 class="section-subtitle">' . esc_html($subtitle) . '</h5>'; ?>
             <?php if ($title != '') echo '<h2 class="section-title">' . esc_html($title) . '</h2>'; ?>
             <?php if ( $desc ) {
-                echo '<div class="section-desc">' . wp_kses_post(apply_filters( 'onepress_the_content', $desc  ) ). '</div>';
+                echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc  ) ). '</div>';
             } ?>
         </div>
         <?php } ?>
@@ -47,18 +47,25 @@ if ( !$disable && !empty( $data ) ) {
                     }
                 } else if ( $f['icon'] ) {
                     $f['icon'] = trim( $f['icon'] );
-                    $media = '<span class="fa-stack fa-5x"><i class="fa fa-circle fa-stack-2x icon-background-default"></i> <i class="feature-icon fa '.esc_attr( $f['icon'] ).' fa-stack-1x"></i></span>';
+                    if ( onepress_is_svg_icon_markup( $f['icon'] ) ) {
+                        $media = '<span class="feature-icon-svg-wrap transiton fa-5x ">' . onepress_sanitize_inline_svg_markup( $f['icon'] ) . '</span>';
+                    } else {
+                        $media = '<span class="fa-stack fa-5x"><i class="fa fa-circle fa-stack-2x icon-background-default transiton"></i> <i class="feature-icon fa '.esc_attr( $f['icon'] ).' fa-stack-1x"></i></span>';
+                    }
                 }
 
                 ?>
                 <div class="feature-item col-lg-<?php echo esc_attr( $layout ); ?> col-sm-6 wow slideInUp">
                     <div class="feature-media">
                         <?php if ( $f['link'] ) { ?><a title="<?php echo esc_attr( $f['title'] ) ?>" href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?>
-                        <?php echo wp_kses_post($media); ?>
+                        <?php
+                        // $media may contain inline SVG (sanitized via onepress_sanitize_inline_svg_markup); wp_kses_post() strips <svg>.
+                        echo $media; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        ?>
                         <?php if ( $f['link'] )  { ?></a><?php } ?>
                     </div>
                     <h4><?php if ( $f['link'] ) { ?><a title="<?php echo esc_attr( $f['title'] ) ?>" href="<?php echo esc_url( $f['link']  ); ?>"><?php } ?><?php echo esc_html( $f['title'] ); ?><?php if ( $f['link'] )  { ?></a><?php } ?></h4>
-                    <div class="feature-item-content"><?php echo wp_kses_post(apply_filters( 'the_content', $f['desc'] )); ?></div>
+                    <div class="feature-item-content"><?php echo apply_filters( 'the_content', wp_kses_post( $f['desc'] )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div> 
                 </div>
             <?php
             }// end loop featues

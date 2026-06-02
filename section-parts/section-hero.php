@@ -75,12 +75,12 @@ do_action( 'onepress_before_section_part', 'hero', $hook_args );
 					<div class="row hero__content hero-content-style<?php echo esc_attr( $layout ); ?>">
 						<div class="col-md-12 col-lg-6">
 							<?php if ( $hcl2_content ) {
-								echo '<div class="hcl2-content">' . wp_kses_post(apply_filters( 'the_content', do_shortcode( $hcl2_content ) ) ) . '</div>';
+								echo '<div class="hcl2-content">' . apply_filters( 'the_content', do_shortcode( wp_kses_post( $hcl2_content ) ) ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }; ?>
 						</div>
 						<div class="col-md-12 col-lg-6">
 							<?php if ( $hcl2_image ) {
-								echo '<img class="hcl2-image" src="' . esc_url( $hcl2_image ) . '" alt="">';
+								echo '<img class="hcl2-image" src="' . esc_url( $hcl2_image ) . '" alt="'.esc_attr( get_bloginfo( 'name' ) ).'">';
 }; ?>
 						</div>
 					</div>

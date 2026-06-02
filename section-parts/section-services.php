@@ -26,7 +26,7 @@ if ( onepress_is_selective_refresh() ) {
 					<?php if ( $title != '' ) {
 						echo '<h2 class="section-title">' . esc_html( $title ) . '</h2>';} ?>
 					<?php if ( $desc ) {
-						echo '<div class="section-desc">' .wp_kses_post( apply_filters( 'onepress_the_content',  $desc ) ) . '</div>';
+						echo '<div class="section-desc">' . apply_filters( 'onepress_the_content', wp_kses_post( $desc ) ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } ?>
 				</div>
 				<?php } ?>
@@ -69,11 +69,15 @@ if ( onepress_is_selective_refresh() ) {
 								}
 							} elseif ( $settings['icon'] ) {
 								$settings['icon'] = trim( $settings['icon'] );
-								// Get/Set social icons
-								if ( $settings['icon'] != '' && strpos( $settings['icon'], 'fa' ) !== 0 ) {
-									$settings['icon'] = 'fa-' . $settings['icon'];
+								if ( onepress_is_svg_icon_markup( $settings['icon'] ) ) {
+									$media = '<div class="service-image service-image--svg"><span class="service-icon-svg">' . onepress_sanitize_inline_svg_markup( $settings['icon'] ) . '</span></div>';
+								} else {
+									$icon_class = $settings['icon'];
+									if ( $icon_class != '' && strpos( $icon_class, 'fa' ) !== 0 ) {
+										$icon_class = 'fa-' . $icon_class;
+									}
+									$media = '<div class="service-image"><i class="fa ' . esc_attr( $icon_class ) . ' fa-' . esc_attr( $size ) . '"></i></div>';
 								}
-								$media = '<div class="service-image"><i class="fa ' . esc_attr( $settings['icon'] ) . ' fa-' . esc_attr( $size ) . '"></i></div>';
 							}
 							if ( $layout == 12 ) {
 								$classes = 'col-sm-12 col-lg-' . $layout;
