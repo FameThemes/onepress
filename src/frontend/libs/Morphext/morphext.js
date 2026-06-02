@@ -40,7 +40,13 @@
 
           this.element.addClass("morphext");
 
-          $.each(this.element.text().split(this.settings.separator), function (key, value) {
+          // OnePress 2.4.1: read via `.html()` instead of `.text()` so HTML
+          // tags inside the rotating block (e.g. `<strong>`, `<em>`, `<a>`)
+          // are preserved as phrase content. The animate() step below already
+          // writes back via `innerHTML`, so the markup round-trips cleanly.
+          // Sanitisation is the caller's responsibility — for OnePress the
+          // hero text field runs through `wp_kses_post` server-side.
+          $.each(this.element.html().split(this.settings.separator), function (key, value) {
               $that.phrases.push($.trim(value));
           });
 

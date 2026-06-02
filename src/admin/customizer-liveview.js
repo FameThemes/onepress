@@ -104,5 +104,39 @@
     } );
 
 
+    /**
+     * Live preview for Site Colors (Primary / Secondary).
+     *
+     * Since 2.4.1: both mods use `transport: 'postMessage'`. Updating the
+     * `--wp--preset--color--{slug}` CSS variable on `:root` propagates to:
+     *   - Every SCSS rule that references `variables.$primary` / `variables.$secondary`
+     *     (they compile to `var(...)` consumers).
+     *   - Every inline rule emitted by `template-tags.php` (refactored to
+     *     reference the same var, no more hard-coded hex per request).
+     *
+     * The Customizer feeds either `#xxxxxx` or `xxxxxx` depending on the
+     * sanitize callbacks — normalise to a single leading `#` to keep CSS
+     * parsing happy.
+     */
+    function onepressBindColorToCssVar( settingId, cssVarName ) {
+        wp.customize( settingId, function ( value ) {
+            value.bind( function ( to ) {
+                var hex = String( to || '' ).trim();
+                if ( hex === '' ) {
+                    document.documentElement.style.removeProperty( cssVarName );
+                    return;
+                }
+                if ( hex.charAt( 0 ) !== '#' ) {
+                    hex = '#' + hex;
+                }
+                document.documentElement.style.setProperty( cssVarName, hex );
+            } );
+        } );
+    }
+
+    onepressBindColorToCssVar( 'onepress_primary_color',   '--wp--preset--color--primary' );
+    onepressBindColorToCssVar( 'onepress_secondary_color', '--wp--preset--color--secondary' );
+
+
 } )( jQuery , wp.customize );
 

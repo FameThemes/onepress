@@ -178,6 +178,16 @@ if (!function_exists('onepress_setup')) :
 
 		add_theme_support('wp-block-styles');
 
+		/**
+		 * Block editor UX additions (since 2.4.0). All additive — no existing
+		 * theme support is removed. Each surfaces a control in the editor
+		 * sidebar; none changes how saved posts render unless the user opts in.
+		 */
+		add_theme_support('responsive-embeds');
+		add_theme_support('custom-line-height');
+		add_theme_support('custom-spacing');
+		add_theme_support('custom-units');
+
 		/*
 		 * This theme styles the visual editor to resemble the theme style.
 		 */
@@ -281,9 +291,18 @@ function onepress_load_build_script($key, $deps = [], $is_admin = false)
 		$dir_url .= 'admin/';
 	}
 
-	$f = $dir . $key . '.asset.php';
+	// Webpack emits BOTH `{key}.asset.php` (dev build) and
+	// `{key}.minified.asset.php` (prod build) — pick the one that matches
+	// the current `$min_ext` so prod-only entries don't silently fall
+	// through the existence check.
+	$f = $dir . $key . $min_ext . '.asset.php';
 	if (!file_exists($f)) {
-		return;
+		// Back-compat: fall back to the non-suffixed file when the
+		// suffixed variant is missing.
+		$f = $dir . $key . '.asset.php';
+		if (!file_exists($f)) {
+			return;
+		}
 	}
 
 	$asset = include $f;
@@ -696,3 +715,10 @@ require get_template_directory() . '/inc/admin/dashboard.php';
  * @since 2.2.1
  */
 require get_template_directory() . '/inc/admin/class-editor.php';
+
+/**
+ * theme.json palette bridge (Customizer → CSS vars).
+ *
+ * @since 2.4.1
+ */
+require get_template_directory() . '/inc/theme-json-bridge.php';

@@ -1,6 +1,48 @@
+@use "variables";
+
+/*--------------------------------------------------------------
+  # File ownership: block editor ↔ frontend parity
+  --------------------------------------------------------------
+  This file is the single source of truth for "rules that must look
+  the same in both the rendered frontend and the block editor canvas."
+
+  The frontend wraps post content in `.entry-content`. The editor canvas
+  body is `.editor-styles-wrapper` (no `.entry-content` class). Because
+  WP injects this stylesheet into the editor iframe, but does not
+  inject a wrapping `.entry-content` class, any rule scoped to
+  `.entry-content X` from `_contents.scss` would NOT apply inside
+  the editor.
+
+  Pattern for new shared rules (preferred — group selectors):
+
+      .entry-content,
+      .editor-styles-wrapper {
+          figure { … }
+      }
+
+  Pattern for editor-only adjustments (max-width override, etc.):
+
+      .editor-styles-wrapper {
+          .wp-block[data-align="full"] { max-width: none; }
+      }
+
+  Block-specific visual rules (`.wp-block-*`) can use the bare class
+  because the class is specific enough to scope itself; both contexts
+  match without prefix gymnastics.
+
+  Iframe body class injection (e.g. setting
+  `editor_settings['body_class'] = 'entry-content'`) is intentionally
+  NOT used — the API has shifted across WP 5.x/6.x and is brittle.
+  Selector grouping is the stable approach.
+
+  Per the additive-only mandate: never delete a mirror rule here even
+  if the source `.entry-content X` rule in `_contents.scss` is changed
+  — child themes may already target the `.editor-styles-wrapper` form.
+  --------------------------------------------------------------*/
+
 .single-post .content-inner {
 	margin-left: auto;
-	margin-right: auto; 
+	margin-right: auto;
 }
 
 // .entry-content > * {
@@ -49,6 +91,18 @@
 .entry-content ol {
 	margin: 1.5em auto;
 	list-style-position: outside;
+}
+ 
+.wp-block-list li {
+	margin-left: 1em;
+	margin-bottom: 6px;
+	li {
+		margin-left: 2.5em;
+	}
+	ol, ul {
+		margin-top: 0px;
+		margin-left: 0px;
+	}
 }
 
 // Video block
@@ -257,4 +311,543 @@
 
 .has-very-dark-gray-background-color {
 	background-color: #444;
+}
+
+/*--------------------------------------------------------------
+  # Phase 1: Editor wrapper parity
+  --------------------------------------------------------------
+  The editor canvas (`.editor-styles-wrapper`) does not get the
+  `.entry-content` wrapper class that frontend templates use, so
+  any rule scoped to `.entry-content` will not apply in the editor.
+  Mirror those rules below with `.editor-styles-wrapper` so the
+  editor inherits the same typography baseline as the frontend.
+
+  Global rules from `_document.scss` (body font, h1-h6, links) already
+  apply inside the editor iframe because they target bare HTML tags;
+  this section only mirrors the wrapper-scoped rules from `_contents.scss`.
+
+  Selector discipline: every rule below stays under either
+  `.editor-styles-wrapper` (editor-only) or `.entry-content`
+  (already shipped). Nothing leaks to bare element selectors.
+  --------------------------------------------------------------*/
+
+.editor-styles-wrapper {
+
+	// Mirror: .entry-content blockquote
+	blockquote {
+		padding: 30px;
+		position: relative;
+		background: variables.$meta;
+		// Since 2.4.1: consume theme.json palette var.
+		border-left: 3px solid variables.$primary;
+		font-style: italic;
+
+		p {
+			margin: 0;
+		}
+	}
+
+	// Mirror: .entry-content ul / ol
+	ul,
+	ol {
+		margin: 1.5em auto;
+		list-style-position: outside;
+	}
+
+	li {
+		margin-left: 2.5em;
+		margin-bottom: 6px;
+	}
+
+	ul ul,
+	ol ol,
+	ul ol,
+	ol ul {
+		margin: 0 auto;
+	}
+
+	ul ul li,
+	ol ol li,
+	ul ol li,
+	ol ul li {
+		margin-left: 0;
+	}
+
+	// Inline code + preformatted: match $monaco stack used elsewhere in the theme.
+	code,
+	pre {
+		font-family: variables.$monaco;
+		font-size: 0.9em;
+	}
+
+	code {
+		background: variables.$meta;
+		padding: 0.1em 0.4em;
+		border-radius: 2px;
+	}
+
+	pre {
+		background: variables.$meta;
+		padding: 1em;
+		border-radius: 2px;
+		overflow-x: auto;
+		line-height: 1.5;
+	}
+
+	// Links: heading-color text + primary on hover, to match frontend `a` behaviour
+	// inside content (defined globally in `_document.scss`).
+	a {
+		// Since 2.4.1: consume theme.json palette var.
+		color: variables.$primary;
+
+		&:hover {
+			color: variables.$text;
+		}
+	}
+}
+
+/*--------------------------------------------------------------
+  # Phase 2: Block-specific rules (.wp-block-*)
+  --------------------------------------------------------------
+  Selectors `.wp-block-*` are block-specific enough to apply in both
+  the editor canvas (.editor-styles-wrapper) and the rendered frontend
+  (.entry-content) without leaking to non-block content. Each rule
+  below targets a specific block class so child themes can override
+  individually.
+
+  Alignment overrides (.alignwide / .alignfull) that only matter in
+  the editor canvas (which is iframe-constrained) are scoped inside
+  `.editor-styles-wrapper` to avoid changing frontend layout.
+  --------------------------------------------------------------*/
+
+// Image block — display + caption + alignment safety.
+.wp-block-image {
+	margin: 1.5em auto;
+
+	img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+	}
+
+	figcaption {
+		font-style: italic;
+		font-size: 13px;
+		line-height: 1.35;
+		text-align: center;
+		margin: 10px 0;
+		color: variables.$text;
+	}
+
+	&.alignleft {
+		float: left;
+		margin: 0 1.5em 1em 0;
+	}
+
+	&.alignright {
+		float: right;
+		margin: 0 0 1em 1.5em;
+	}
+
+	&.aligncenter {
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+// Gallery block — extend existing `.is-layout-flex` rule in `_contents.scss`
+// without duplicating it.
+.wp-block-gallery {
+	margin: 1.5em auto;
+
+	.wp-block-image figcaption {
+		font-size: 12px;
+	}
+}
+
+// Button block — primary variant uses theme primary color; outline variant
+// (`.is-style-outline`) inverts. Hover darkens via the existing `$text` token.
+.wp-block-button {
+	margin-bottom: 1em;
+
+	.wp-block-button__link {
+		// Since 2.4.1: consume theme.json palette var.
+		background-color: variables.$primary;
+		color: #ffffff;
+		padding: 12px 24px;
+		font-weight: 600;
+		font-size: 13px;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+		border-radius: 2px;
+		text-decoration: none;
+		display: inline-block;
+		transition: background-color 0.2s ease;
+
+		&:hover,
+		&:focus {
+			// NOTE: $secondary stays as the SCSS literal (#00aeef) — the
+			// theme.json `secondary` slug is frozen at #333333 due to a
+			// pre-existing inconsistency that cannot be safely changed on
+			// 60k installs. See docs/spec-block-editor.md → Known inconsistencies.
+			background-color: variables.$secondary;
+			color: #ffffff;
+			text-decoration: none;
+		}
+	}
+
+	&.is-style-outline .wp-block-button__link {
+		background-color: transparent;
+		// Since 2.4.1: consume theme.json palette var.
+		color: variables.$primary;
+		border: 2px solid variables.$primary;
+
+		&:hover,
+		&:focus {
+			background-color: variables.$primary;
+			color: #ffffff;
+		}
+	}
+}
+
+// Pullquote — large, centered, top/bottom borders.
+.wp-block-pullquote {
+	border-top: 4px solid currentColor;
+	border-bottom: 4px solid currentColor;
+	margin: 1.5em 0;
+	padding: 3em 0;
+	text-align: center;
+	font-style: italic;
+
+	blockquote {
+		// Override the Phase 1 mirror so pullquote doesn't carry the
+		// blockquote left border + meta background.
+		background: transparent;
+		border-left: 0;
+		padding: 0;
+	}
+
+	cite {
+		font-size: 13px;
+		font-style: normal;
+		text-transform: uppercase;
+		letter-spacing: 1.5px;
+		display: block;
+		margin-top: 1em;
+	}
+
+	&.is-style-solid-color {
+		border-top: 0;
+		border-bottom: 0;
+		padding: 3em 1.5em;
+	}
+}
+
+// Cover block — ensure full-bleed at alignfull and readable text overlay.
+.wp-block-cover {
+	margin: 1.5em auto;
+	min-height: 300px;
+
+	.wp-block-cover__inner-container,
+	.wp-block-cover-text {
+		color: #ffffff;
+		padding: 1.5em;
+	}
+
+	.wp-block-cover-text {
+		font-size: 1.5em;
+	}
+}
+
+// Columns + Column — Gutenberg flex defaults are fine; just ensure responsive
+// stacking on small screens uses the theme's medium breakpoint.
+.wp-block-columns {
+	margin: 1.5em 0;
+	gap: variables.$gutter2;
+
+	@include variables.media-breakpoint-down(md) {
+		flex-wrap: wrap;
+	}
+}
+
+.wp-block-column {
+	margin-bottom: variables.$gutter2;
+}
+
+// Group block — neutral container; add breathing room when it has a background.
+.wp-block-group {
+	margin: 1.5em 0;
+
+	&.has-background {
+		padding: 1.5em;
+	}
+}
+
+// Table block — borders, padding, alternating rows.
+.wp-block-table {
+	margin: 1.5em auto;
+
+	table {
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+	td,
+	th {
+		padding: 0.6em 0.8em;
+		border: 1px solid variables.$border;
+	}
+
+	th {
+		background: variables.$meta;
+		font-weight: 600;
+	}
+
+	&.is-style-stripes tbody tr:nth-child(odd) {
+		background: variables.$meta;
+	}
+}
+
+// Separator — short centered by default; wide / dots variants follow WP norms.
+.wp-block-separator {
+	margin: 3em auto;
+	border: none;
+	border-bottom: 2px solid currentColor;
+	max-width: 100px;
+
+	&.is-style-wide {
+		max-width: 100%;
+	}
+
+	&.is-style-dots {
+		border-bottom: none;
+		text-align: center;
+		max-width: none;
+
+		&::before {
+			padding-left: 0;
+			font-size: 30px;
+			letter-spacing: 1em;
+		}
+	}
+}
+
+// Embed block — responsive iframe with 16:9 ratio.
+.wp-block-embed {
+	margin: 1.5em auto;
+
+	&.is-type-video {
+		.wp-block-embed__wrapper {
+			position: relative;
+			padding-top: 56.25%; // 16:9
+			height: 0;
+			overflow: hidden;
+
+			iframe,
+			object,
+			embed {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+}
+
+// Code + Preformatted — explicit block-class selectors so they win against
+// Gutenberg's own resets in the editor (the bare `code` / `pre` mirrors in
+// Phase 1 cover the rendered frontend).
+.wp-block-code,
+.wp-block-preformatted {
+	font-family: variables.$monaco;
+	font-size: 0.9em;
+	background: variables.$meta;
+	padding: 1em;
+	border-radius: 2px;
+	overflow-x: auto;
+	line-height: 1.5;
+	margin: 1.5em 0;
+}
+
+// Spacer — no visual styling needed; just respect the inline height attribute.
+.wp-block-spacer {
+	display: block;
+	clear: both;
+}
+
+/*--------------------------------------------------------------
+  # Content size + alignment — frontend rules (theme.json driven)
+  --------------------------------------------------------------
+  Width tokens are consumed from theme.json's CSS variables (emitted
+  by WP on `:root`) so updates to theme.json `layout.contentSize` /
+  `layout.wideSize` propagate automatically. The Customizer mod
+  `single_layout_content_width` overrides `--wp--style--global--content-size`
+  at runtime via inline CSS from `onepress_custom_inline_style()`.
+
+  SCSS literal fallbacks (`800px` / `1230px`) cover sites that strip
+  theme.json (child themes, future cleanups). Defaults match theme.json's
+  declared values.
+
+  Scoped strictly to `.entry-content > X` so wide/full classes used
+  inside front-page sections / widgets / etc. are untouched.
+
+  Width targets:
+    - regular content → `--wp--style--global--content-size` (default 1110px)
+    - alignwide       → `--wp--style--global--wide-size`    (default 1230px)
+    - alignfull       → 100vw, edge-to-edge via negative-viewport margins
+
+  Per the 2.4.1 release: alignwide widens from 1110 → 1230 to match
+  theme.json's `wideSize` declaration. Regular content gains an explicit
+  cap at content-size — invisible on default sites (container is already
+  ~1110px) but narrows hand-coded oversized content on fullwidth templates.
+  --------------------------------------------------------------*/
+
+.entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright) {
+	max-width: var(--wp--style--global--content-size, 1110px);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+// Since 2.4.1: full-width page templates opt out of the content-size cap
+// entirely. `.page-template-template-fullwidth-stretched` is WP's body
+// class for `template-fullwidth-stretched.php`; `.page-template-template-fullwidth`
+// is its sibling for `template-fullwidth.php`. Specificity (body + class)
+// beats the generic `.entry-content > *` rule above without `!important`.
+.page-template-template-fullwidth-stretched .entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright),
+.page-template-template-fullwidth .entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright) {
+	max-width: none;
+}
+
+.entry-content > .alignwide,
+.entry-content > .wp-block.alignwide {
+	// Break past the parent's content-size cap to reach theme.json's wideSize.
+	// `width: auto` + symmetric negative margins lets the element fill from
+	// margin-left to margin-right, computing to (parent_width - 2*margin).
+	// `max()` picks whichever margin is LESS negative — viewport edge cap or
+	// wideSize-based cap — so the element widens up to wideSize without
+	// overflowing the viewport on narrow screens.
+	width: auto;
+	max-width: 100vw;
+	margin-left: max(calc(50% - 50vw), calc(50% - var(--wp--style--global--wide-size, 1230px) / 2));
+	margin-right: max(calc(50% - 50vw), calc(50% - var(--wp--style--global--wide-size, 1230px) / 2));
+	clear: both;
+}
+
+.entry-content > .alignfull,
+.entry-content > .wp-block.alignfull {
+	width: auto;
+	max-width: 100vw;
+	margin-left: calc(50% - 50vw);
+	margin-right: calc(50% - 50vw);
+	clear: both;
+}
+
+// Since 2.4.1: alignleft / alignright bleed to the viewport edge.
+// The floated block extends past the content-size container on its
+// aligned side so the visible media reaches the viewport edge while
+// the surrounding paragraph text continues to wrap inside the content
+// container. Mirrors the alignfull negative-margin technique but only
+// on one side; the other side keeps its standard float gutter (1.5em).
+//
+// Sibling text behavior: floated, viewport-bleeding blocks still
+// participate in the float context, so paragraphs that follow wrap
+// next to the image — exactly the editorial layout the negative margin
+// is meant to enable.
+.entry-content > .alignleft,
+.entry-content > .wp-block.alignleft {
+	margin-left: calc(50% - 50vw);
+}
+
+.entry-content > .alignright,
+.entry-content > .wp-block.alignright {
+	margin-right: calc(50% - 50vw);
+}
+
+// Image / cover / video blocks: ensure the inner media element fills
+// the aligned container instead of staying at its intrinsic width.
+.entry-content > .wp-block-image.alignfull img,
+.entry-content > .alignfull img,
+.entry-content > .wp-block-cover.alignfull,
+.entry-content > .wp-block-cover.alignfull .wp-block-cover__inner-container {
+	width: 100%;
+	max-width: 100%;
+}
+
+/*--------------------------------------------------------------
+  # Editor-only overrides
+  --------------------------------------------------------------
+  Mirror the frontend alignment on the editor canvas. The editor is
+  iframe-constrained — alignfull can't truly hit 100vw inside the
+  iframe — but blocks must visually expand past the
+  `.editor-styles-wrapper` max-width so authors can see the alignment.
+
+  Specificity: `.editor-styles-wrapper` + a wp-block class is enough
+  to beat Gutenberg's stock alignment CSS without `!important`.
+  --------------------------------------------------------------*/
+
+.editor-styles-wrapper {
+
+	// Content-size mirror: constrain non-aligned blocks to the theme.json
+	// content size. Mirrors the frontend `.entry-content > *:not(...)` rule
+	// from Phase A. Specificity (.editor-styles-wrapper .wp-block + :not chain)
+	// wins against Gutenberg's stock alignment rules.
+	.wp-block:not([data-align="wide"]):not([data-align="full"]):not([data-align="left"]):not([data-align="right"]):not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright) {
+		max-width: var(--wp--style--global--content-size, 1110px);
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.wp-block[data-align="wide"],
+	.wp-block.alignwide {
+		max-width: var(--wp--style--global--wide-size, 1230px);
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.wp-block[data-align="full"],
+	.wp-block.alignfull {
+		max-width: none;
+		margin-left: 0;
+		margin-right: 0;
+		width: 100%;
+	}
+
+	// Ensure children of alignfull/alignwide expand too.
+	.wp-block[data-align="full"] > *,
+	.wp-block.alignfull > * {
+		max-width: none;
+	}
+
+	// Since 2.4.1: mirror frontend float behavior for alignleft / alignright
+	// inside the editor canvas. Without this, the editor renders left/right
+	// aligned blocks as centered max-width because Gutenberg only ships the
+	// frontend `.alignleft`/`.alignright` floats — themes are expected to
+	// re-declare them inside `.editor-styles-wrapper`. Frontend equivalents:
+	// `_document.scss` generic floats + `_gutenberg.scss` `.wp-block-image`
+	// floats.
+	.wp-block[data-align="left"],
+	.wp-block.alignleft {
+		float: left;
+		margin: 0 1.5em 1em 0;
+		max-width: 50%;
+	}
+
+	.wp-block[data-align="right"],
+	.wp-block.alignright {
+		float: right;
+		margin: 0 0 1em 1.5em;
+		max-width: 50%;
+	}
+
+	// Gutenberg's default editor stylesheet adds a 1px border around
+	// `.wp-block-code` and `.wp-block-preformatted` that the frontend does
+	// not have. Override here so the editor matches the rendered post.
+	// Higher specificity (.editor-styles-wrapper .wp-block-X) wins against
+	// Gutenberg's stock rule without needing !important.
+	.wp-block-code,
+	.wp-block-preformatted {
+		border: 0;
+	}
 }
