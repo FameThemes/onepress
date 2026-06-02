@@ -89,6 +89,11 @@ module.exports = function (grunt) {
           "!phpcs.xml.dist",
           "!webpack.config.js",
           "!.babelrc",
+          // Since 2.3.18: dev-only documentation should not ship in the
+          // distributable zip. `docs/` holds spec / plan / agent guides,
+          // and `plan-*.md` anywhere is a development artifact.
+          "!docs/**",
+          "!**/plan-*.md",
         ],
         dest: "onepress/",
       },
