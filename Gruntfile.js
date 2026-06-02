@@ -207,14 +207,176 @@ module.exports = function (grunt) {
     "compress:main",
     "clean:main",
   ]);
+
+  /**
+   * Create or update the `v<version>` GitHub release for this theme.
+   *
+   * Behaviour:
+   *   - If `v<version>` already exists on GitHub, the task refreshes the
+   *     release notes (re-extracted from changelog.md) and replaces the
+   *     attached zip via `--clobber`.
+   *   - If `v<version>` doesn't exist, the task creates the release and
+   *     tags HEAD of the current branch.
+   *
+   * Notes:
+   *   - Release notes come from the matching `# <version>` block in
+   *     changelog.md; falls back to "Release <version>" if not found.
+   *   - Requires `gh` CLI authenticated (`gh auth login`). The task
+   *     fails fast with a clear message if `gh` is missing or unauth'd.
+   *   - Push local commits first — the tag will reference HEAD; an
+   *     unpushed HEAD makes the release point at a commit origin
+   *     hasn't seen.
+   */
+  grunt.registerTask(
+    "gh_release",
+    "Create/update GitHub release for current version",
+    function () {
+      const done = this.async();
+      const os = require("os");
+      const { execSync } = require("child_process");
+
+      const version = pkgInfo.version;
+      const tag = "v" + version;
+      // Theme zip drops the `v` prefix that the plugin uses
+      // (see compress:main config above — `onepress-<version>.zip`).
+      const zip = "onepress-" + version + ".zip";
+
+      if (!fs.existsSync(zip)) {
+        grunt.fail.fatal(
+          "Release zip not found: " + zip + " — run `zipfile` first."
+        );
+        return done(false);
+      }
+
+      try {
+        execSync("gh --version", { stdio: ["ignore", "ignore", "ignore"] });
+      } catch (e) {
+        grunt.fail.fatal(
+          "`gh` CLI not found. Install from https://cli.github.com and run `gh auth login`."
+        );
+        return done(false);
+      }
+
+      try {
+        execSync("gh auth status", { stdio: ["ignore", "ignore", "ignore"] });
+      } catch (e) {
+        grunt.fail.fatal(
+          "`gh` CLI is not authenticated — run `gh auth login`."
+        );
+        return done(false);
+      }
+
+      // Pull the matching changelog block from changelog.md.
+      //   Match `# 2.3.18` heading up to next `# <next-version>` or EOF.
+      //   No /m flag — `$` must mean end-of-string here so the lookahead
+      //   only terminates at the next version header or true EOF.
+      //   `(?:^|\n)` handles the heading anywhere in the file.
+      let notes = "";
+      try {
+        const changelog = fs.readFileSync("changelog.md", "utf8");
+        const versionEsc = version.replace(/\./g, "\\.");
+        const re = new RegExp(
+          "(?:^|\\n)#\\s*" +
+            versionEsc +
+            "\\s*\\n([\\s\\S]*?)(?=\\n#\\s+[\\w\\.]|$)"
+        );
+        const m = changelog.match(re);
+        if (m) {
+          notes = m[1].replace(/\r/g, "").trim();
+        }
+      } catch (e) {
+        // best-effort; fall through to default notes below
+      }
+      if (!notes) {
+        notes = "Release " + version;
+      }
+
+      const notesPath = path.join(
+        os.tmpdir(),
+        "onepress-gh-release-notes-" + Date.now() + ".md"
+      );
+      fs.writeFileSync(notesPath, notes);
+
+      function shellEscape(s) {
+        return "'" + String(s).replace(/'/g, "'\\''") + "'";
+      }
+
+      function runVisible(cmd) {
+        grunt.log.writeln("$ " + cmd);
+        execSync(cmd, { stdio: ["inherit", "inherit", "inherit"] });
+      }
+
+      // Probe for existing release. Non-zero exit = doesn't exist.
+      let exists = false;
+      try {
+        execSync(
+          "gh release view " + shellEscape(tag) + " --json tagName -q .tagName",
+          { stdio: ["ignore", "pipe", "ignore"] }
+        );
+        exists = true;
+      } catch (e) {
+        exists = false;
+      }
+
+      try {
+        if (exists) {
+          grunt.log.writeln(
+            "Release " + tag + " exists — updating notes + replacing zip."
+          );
+          runVisible(
+            "gh release edit " +
+              shellEscape(tag) +
+              " --notes-file " +
+              shellEscape(notesPath)
+          );
+          runVisible(
+            "gh release upload " +
+              shellEscape(tag) +
+              " " +
+              shellEscape(zip) +
+              " --clobber"
+          );
+        } else {
+          grunt.log.writeln(
+            "Release " + tag + " does not exist — creating."
+          );
+          runVisible(
+            "gh release create " +
+              shellEscape(tag) +
+              " " +
+              shellEscape(zip) +
+              " --title " +
+              shellEscape(tag) +
+              " --notes-file " +
+              shellEscape(notesPath)
+          );
+        }
+        grunt.log.ok(
+          "GitHub release " + tag + " synced (asset: " + zip + ")."
+        );
+        done();
+      } catch (e) {
+        grunt.log.error(String((e && e.message) || e));
+        grunt.fail.fatal("`gh` command failed — see output above.");
+        done(false);
+      } finally {
+        try {
+          fs.unlinkSync(notesPath);
+        } catch (_) {
+          /* ignore */
+        }
+      }
+    }
+  );
+
   grunt.registerTask("release", function (ver) {
     let newVersion = pkgInfo.version;
     grunt.task.run("shell:build");
     grunt.task.run("bumpup:" + newVersion);
     grunt.task.run("replace");
     grunt.task.run("zipfile");
-    
-    
+    grunt.task.run("gh_release");
+
     // i18n
     // grunt.task.run(['addtextdomain', 'makepot']);
     // re create css file and min
