@@ -18,7 +18,7 @@
 				{ "name": "Primary",    "slug": "primary",    "color": "#03c4eb" },
 				{ "name": "Secondary",  "slug": "secondary",  "color": "#333333" },
 				{ "name": "Heading",    "slug": "heading",    "color": "#333333" },
-				{ "name": "Text",       "slug": "text",       "color": "#777777" },
+				{ "name": "Text",       "slug": "body-text",  "color": "#777777" },
 				{ "name": "Border",     "slug": "border",     "color": "#e9e9e9" },
 				{ "name": "Light",      "slug": "light",      "color": "#f8f9f9" },
 				{ "name": "White",      "slug": "white",      "color": "#ffffff" },
@@ -100,7 +100,7 @@
 	"styles": {
 		"color": {
 			"background": "var(--wp--preset--color--white)",
-			"text": "var(--wp--preset--color--text)"
+			"text": "var(--wp--preset--color--body-text)"
 		},
 		"typography": {
 			"fontFamily": "var(--wp--preset--font-family--body)",
@@ -111,7 +111,7 @@
 			"link": {
 				"color": { "text": "var(--wp--preset--color--primary)" },
 				":hover": {
-					"color": { "text": "var(--wp--preset--color--text)" },
+					"color": { "text": "var(--wp--preset--color--body-text)" },
 					"typography": { "textDecoration": "underline" }
 				}
 			},
