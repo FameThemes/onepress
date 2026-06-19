@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 2.3.19
+- FIXED: Custom text colors set on blocks (paragraph, heading, etc.) were being overridden by the theme's default gray. Renamed the "Text" palette slug to avoid clashing with WordPress core's `.has-text-color` class.
+
 # 2.3.18
 - NEW: Block editor canvas matches the rendered frontend for in-scope blocks.
 - NEW: Theme color palette and font size scale exposed to the block editor via theme.json.
