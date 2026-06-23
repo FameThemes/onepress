@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 2.3.20
+- FIXED: Bootstrap JS components (dropdown, collapse, modal, carousel, tooltip, popover) broken since 2.3.17 — bootstrap.min.js.
+
 # 2.3.19
 - FIXED: Custom text colors set on blocks (paragraph, heading, etc.) were being overridden by the theme's default gray. Renamed the "Text" palette slug to avoid clashing with WordPress core's `.has-text-color` class.
 
