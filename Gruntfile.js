@@ -95,6 +95,11 @@ module.exports = function (grunt) {
           "!docs/**",
           "!plans/**",
           "!**/plan-*.md",
+          // Since 2.3.19: local-only test files. Gitignored too — see
+          // `.gitignore`. Belt-and-braces in case a developer's local
+          // tree has them when building the release zip.
+          "!tests/**",
+          "!jest.config.js",
         ],
         dest: "onepress/",
       },

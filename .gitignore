@@ -19,3 +19,8 @@ npm-debug.log
 # Release artifacts
 /releases/
 *.zip
+
+# Local-only test infrastructure (not shipped, not tracked).
+# Run via: npx jest --config jest.config.js
+/tests/
+/jest.config.js
