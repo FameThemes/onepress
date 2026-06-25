@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 2.3.21
+- FIXED: Bootstrap "tooltips require Tether" error at page load — Tether is now exposed globally before bootstrap evaluates.
+
 # 2.3.20
 - FIXED: Bootstrap JS components (dropdown, collapse, modal, carousel, tooltip, popover) broken since 2.3.17 — bootstrap.min.js.
 
