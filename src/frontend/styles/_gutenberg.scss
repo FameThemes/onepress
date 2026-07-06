@@ -755,12 +755,10 @@
 // participate in the float context, so paragraphs that follow wrap
 // next to the image — exactly the editorial layout the negative margin
 // is meant to enable.
-.entry-content > .alignleft,
 .entry-content > .wp-block.alignleft {
 	margin-left: calc(50% - 50vw);
 }
 
-.entry-content > .alignright,
 .entry-content > .wp-block.alignright {
 	margin-right: calc(50% - 50vw);
 }
