@@ -102,13 +102,16 @@ theme.json `settings`:
 
 | Key | Value | Notes |
 |---|---|---|
-| `appearanceTools` | `true` | Enables border/spacing/typography UI; subsumes `custom-line-height`, `custom-spacing`, parts of `custom-units` |
+| `appearanceTools` | `true` | Enables border/spacing/typography UI; `spacing.blockGap: null` explicitly opts out of Core block-gap UI/CSS |
 | `useRootPaddingAwareAlignments` | `true` | Modern WP layout setting (mostly inert on classic themes) |
 | `layout.contentSize` | `1110px` | Matches SCSS `$grid` |
 | `layout.wideSize` | `1230px` | Matches SCSS `$width` |
 | `color.defaultPalette` | `false` | Drop WP defaults |
 | `color.defaultGradients` | `false` | Drop WP gradient defaults |
 | `color.palette` | 8 colors (see below) | Frozen public slugs |
+| `spacing.blockGap` | `null` | Preserve OnePress's pre-2.3.18 vertical rhythm; Core emits no global block-gap CSS |
+| `spacing.margin` | `true` | Explicitly expose supported per-block margin controls |
+| `spacing.padding` | `true` | Explicitly expose supported per-block padding controls |
 | `spacing.units` | `px, em, rem, %, vw, vh` | |
 | `spacing.spacingScale.steps` | `7` | |
 | `typography.fluid` | `true` | Fluid type scaling |
@@ -118,6 +121,29 @@ theme.json `settings`:
 | `typography.fontSizes` | 6 sizes | Slugs `small` … `xx-large` |
 
 theme.json `styles` defines body color/font, link/button/heading typography and per-h1–h6 sizes. These map to WP's CSS variables (`var(--wp--preset--color--primary)` etc.) so user content can reference them consistently.
+
+### Block-gap compatibility
+
+OnePress intentionally sets `settings.spacing.blockGap` to `null`, even though
+`appearanceTools` is enabled. WordPress otherwise promotes the Core default
+`styles.spacing.blockGap` value into layout CSS (currently `24px`), which
+changes the spacing of existing content created before OnePress shipped
+theme.json in 2.3.18. The `null` override restores the classic theme's own
+element margins by disabling both the Core Block spacing control and Core's
+generated block-gap CSS. Plugin-owned spacing controls, including Blocksify's,
+are independent of this Core setting.
+
+Do not replace `null` with `false`: WordPress hides the editor control for both
+values, but `false` still allows block-gap styles stored in theme.json to render.
+Core blocks that already contain an explicit `style.spacing.blockGap` value will
+therefore not apply that value while OnePress keeps this compatibility mode.
+
+Margin and padding remain enabled. Core serializes authored values on the block
+wrapper, so they override the low-specificity legacy fallbacks in
+`_gutenberg.scss`. The fallback spacing remains necessary for old content and
+for child themes that do not load theme.json. This is intentionally the same
+compatibility split used by Astra and Kadence: editor controls own authored
+spacing, while theme CSS preserves the default rhythm of unset blocks.
 
 ## Color palette
 
@@ -215,13 +241,13 @@ These do not change how saved posts render unless the user opts in via the edito
 
 ## Block-specific styling
 
-Block visual rules live in `src/frontend/styles/_gutenberg.scss` under the Phase 2 section. Coverage:
+Block visual rules live in `src/frontend/styles/_gutenberg.scss` under the Phase 2 section. Common block margins are grouped as a legacy fallback; authored margin/padding values override them through Core's inline block styles. Coverage:
 
 | Block | Section |
 |---|---|
 | Paragraph, Heading | Inherited from global `_document.scss` h1–h6, p, body |
 | Quote | Mirrored via `.editor-styles-wrapper blockquote` (Phase 1) — same padding / italic / left border / meta background as `.entry-content blockquote` |
-| List | Mirrored via `.editor-styles-wrapper ul/ol/li` (Phase 1) |
+| List | Mirrored via `.editor-styles-wrapper ul/ol/li` (Phase 1); marker indentation comes from the list container padding, not a second `li` margin |
 | Image | `.wp-block-image` — display block, max-width 100%, italic captions, alignleft/right/center |
 | Gallery | `.wp-block-gallery` — extends existing `is-layout-flex` rule in `_contents.scss` |
 | Button | `.wp-block-button` — primary color background, `is-style-outline` variant |
@@ -235,14 +261,17 @@ Block visual rules live in `src/frontend/styles/_gutenberg.scss` under the Phase
 | Code / Preformatted | `.wp-block-code`, `.wp-block-preformatted` — `$monaco` font, `$meta` background |
 | Spacer | `.wp-block-spacer` — display block, clear both |
 
-## Alignwide / Alignfull
+## Block alignment
 
-Both classes work on the rendered frontend and the editor canvas as of 2.4.0.
+Wide/full alignment works on the rendered frontend and editor canvas as of
+2.4.0; left/right alignment also preserves float-based text wrapping.
 
 | Class | Frontend behavior | Editor behavior |
 |---|---|---|
 | `.alignwide` | Breaks past the parent's content-size constraint to reach `var(--wp--style--global--wide-size)` (default 1230px) using `max(calc(50% - 50vw), calc(50% - wideSize/2))` symmetric negative margins. Widens up to wideSize without overflowing the viewport. Since 2.4.1. | Expands to wideSize inside `.editor-styles-wrapper` via `max-width: var(--wp--style--global--wide-size)` |
 | `.alignfull` | Edge-to-edge (`100vw`) via negative-viewport margins (`calc(50% - 50vw)`) | `max-width: none`, fills the editor canvas (which is iframe-constrained, so it won't truly hit 100vw — visually expands past the content-width constraint) |
+| `.alignleft` | Floats at the left edge of `.entry-content`; following text wraps with a `1.5em` gutter | Keeps the float and text wrapping. A root-level block receives a theme.json `contentSize`-based left offset so it aligns with the centered content column instead of the iframe edge; nested blocks keep their local containing block. |
+| `.alignright` | Floats at the right edge of `.entry-content`; following text wraps with a `1.5em` gutter | Mirrors `.alignleft` with a right-side `contentSize` offset. |
 
 Frontend rules are scoped to `.entry-content > .alignwide` / `.entry-content > .alignfull` (direct descendant only) so the classes don't leak into widgets or section parts that may reuse them. Editor rules use `.editor-styles-wrapper .wp-block[data-align="wide"|"full"]` + `.wp-block.alignwide|alignfull` selectors with enough specificity to win against Gutenberg's stock alignment CSS without `!important`.
 
