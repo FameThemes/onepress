@@ -127,8 +127,12 @@
 
 // Shared list baseline. Grouping the wrappers keeps the compiled selectors
 // available to child themes while preventing editor/frontend drift.
+// The wrapper rules intentionally follow the legacy `.wp-block-list` selectors
+// so the editor and entry-content baseline wins at equal specificity.
+/* stylelint-disable no-descending-specificity */
 .entry-content,
 .editor-styles-wrapper {
+
 	ul,
 	ol {
 		margin: 1.5em auto;
@@ -157,6 +161,7 @@
 		margin-left: 0;
 	}
 }
+/* stylelint-enable no-descending-specificity */
 
 .editor-styles-wrapper {
 
@@ -195,8 +200,8 @@
 		line-height: 1.5;
 	}
 
-	// Links: heading-color text + primary on hover, to match frontend `a` behaviour
-	// inside content (defined globally in `_document.scss`).
+	// Links: heading-color text + primary on hover, matching the frontend
+	// behaviour defined globally in `_document.scss`.
 	a {
 		// Since 2.4.1: consume theme.json palette var.
 		color: variables.$primary;
@@ -265,6 +270,7 @@
 
 // Image block — display + caption + alignment safety.
 .wp-block-image {
+
 	img {
 		display: block;
 		max-width: 100%;
@@ -299,6 +305,7 @@
 // Gallery block — extend existing `.is-layout-flex` rule in `_contents.scss`
 // without duplicating it.
 .wp-block-gallery {
+
 	.wp-block-image figcaption {
 		font-size: 12px;
 	}
@@ -312,7 +319,7 @@
 	.wp-block-button__link {
 		// Since 2.4.1: consume theme.json palette var.
 		background-color: variables.$primary;
-		color: #ffffff;
+		color: #fff;
 		padding: 12px 24px;
 		font-weight: 600;
 		font-size: 13px;
@@ -330,7 +337,7 @@
 			// pre-existing inconsistency that cannot be safely changed on
 			// 60k installs. See docs/spec-block-editor.md → Known inconsistencies.
 			background-color: variables.$secondary;
-			color: #ffffff;
+			color: #fff;
 			text-decoration: none;
 		}
 	}
@@ -344,15 +351,15 @@
 		&:hover,
 		&:focus {
 			background-color: variables.$primary;
-			color: #ffffff;
+			color: #fff;
 		}
 	}
 }
 
 // Pullquote — large, centered, top/bottom borders.
 .wp-block-pullquote {
-	border-top: 4px solid currentColor;
-	border-bottom: 4px solid currentColor;
+	border-top: 4px solid currentcolor;
+	border-bottom: 4px solid currentcolor;
 	padding: 3em 0;
 	text-align: center;
 	font-style: italic;
@@ -387,7 +394,7 @@
 
 	.wp-block-cover__inner-container,
 	.wp-block-cover-text {
-		color: #ffffff;
+		color: #fff;
 		padding: 1.5em;
 	}
 
@@ -414,6 +421,7 @@
 
 // Group block — neutral container; add breathing room when it has a background.
 .wp-block-group {
+
 	&.has-background {
 		// Authored padding is serialized inline and overrides this fallback.
 		padding: 1.5em;
@@ -422,6 +430,7 @@
 
 // Table block — borders, padding, alternating rows.
 .wp-block-table {
+
 	table {
 		border-collapse: collapse;
 		width: 100%;
@@ -447,7 +456,7 @@
 .wp-block-separator {
 	margin: 3em auto;
 	border: none;
-	border-bottom: 2px solid currentColor;
+	border-bottom: 2px solid currentcolor;
 	max-width: 100px;
 
 	&.is-style-wide {
@@ -469,7 +478,9 @@
 
 // Embed block — responsive iframe with 16:9 ratio.
 .wp-block-embed {
+
 	&.is-type-video {
+
 		.wp-block-embed__wrapper {
 			position: relative;
 			padding-top: 56.25%; // 16:9
@@ -536,6 +547,7 @@
   ~1110px) but narrows hand-coded oversized content on fullwidth templates.
   --------------------------------------------------------------*/
 
+/* stylelint-disable-next-line @stylistic/max-line-length */
 .entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright) {
 	max-width: var(--wp--style--global--content-size, 1110px);
 	margin-left: auto;
@@ -544,7 +556,8 @@
 
 // Since 2.4.1: full-width page templates opt out of the content-size cap
 // entirely. `.page-template-template-fullwidth-stretched` is WP's body
-// class for `template-fullwidth-stretched.php`; `.page-template-template-fullwidth`
+// class for `template-fullwidth-stretched.php`;
+// `.page-template-template-fullwidth`
 // is its sibling for `template-fullwidth.php`. Specificity (body + class)
 // beats the generic `.entry-content > *` rule above without `!important`.
 .page-template-template-fullwidth-stretched .entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright),
@@ -582,7 +595,6 @@
 // the surrounding paragraph text continues to wrap inside the content
 // container. Mirrors the alignfull negative-margin technique but only
 // on one side; the other side keeps its standard float gutter (1.5em).
-//
 // Sibling text behavior: floated, viewport-bleeding blocks still
 // participate in the float context, so paragraphs that follow wrap
 // next to the image — exactly the editorial layout the negative margin
@@ -597,8 +609,8 @@
 
 // Image / cover / video blocks: ensure the inner media element fills
 // the aligned container instead of staying at its intrinsic width.
-.entry-content > .wp-block-image.alignfull img,
 .entry-content > .alignfull img,
+.entry-content > .wp-block-image.alignfull img,
 .entry-content > .wp-block-cover.alignfull,
 .entry-content > .wp-block-cover.alignfull .wp-block-cover__inner-container {
 	width: 100%;
@@ -617,6 +629,9 @@
   to beat Gutenberg's stock alignment CSS without `!important`.
   --------------------------------------------------------------*/
 
+// Phase 1 and editor alignment intentionally use separate wrapper blocks so
+// their ownership remains clear.
+/* stylelint-disable no-duplicate-selectors, no-descending-specificity */
 .editor-styles-wrapper {
 
 	// Content-size mirror: constrain non-aligned blocks to the theme.json
@@ -697,3 +712,4 @@
 		border: 0;
 	}
 }
+/* stylelint-enable no-duplicate-selectors, no-descending-specificity */
