@@ -26,6 +26,9 @@
 			]
 		},
 		"spacing": {
+			"blockGap": false,
+			"margin": true,
+			"padding": true,
 			"units": ["px", "em", "rem", "%", "vw", "vh"],
 			"spacingScale": {
 				"steps": 7
