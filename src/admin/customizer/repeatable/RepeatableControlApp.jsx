@@ -26,8 +26,8 @@ import {
  * Core Value#set no-ops when _.isEqual(from, to) — e.g. object vs same JSON string
  * — leaving _dirty false so refresh preview / changeset never see the edit.
  *
- * @param {jQuery} $ jQuery
- * @param {object} control wp.customize.Control instance
+ * @param {jQuery} $       jQuery
+ * @param {Object} control wp.customize.Control instance
  * @param {string} payload JSON string for the setting
  */
 function pushRepeatablePayloadToCustomizer($, control, payload) {
@@ -69,6 +69,21 @@ export function RepeatableControlApp({ control, $, api }) {
 	const idKey = control.params.id_key || '';
 
 	const dragFrom = useRef(null);
+	const rowKeys = useRef(new WeakMap());
+	const nextRowKey = useRef(0);
+
+	// Storage ids can be editable fields (for example, Plus custom-section
+	// `section_id`). Keep React identity separate so typing into an id field
+	// does not remount the row, collapse it, and move focus to the document.
+	const getRowKey = useCallback((row) => {
+		let key = rowKeys.current.get(row);
+		if (!key) {
+			nextRowKey.current += 1;
+			key = `row-${nextRowKey.current}`;
+			rowKeys.current.set(row, key);
+		}
+		return key;
+	}, []);
 
 	// Sync hidden input + setting only if payload differs from WP (avoids false “dirty” on load).
 	// Note: wp.customize.Value#set ignores a second-arg “silent”; every set marks the setting dirty.
@@ -99,13 +114,14 @@ export function RepeatableControlApp({ control, $, api }) {
 			setItems((prev) => {
 				const prevRow = prev[index];
 				const nextRow = typeof updater === 'function' ? updater(prevRow) : updater;
+				rowKeys.current.set(nextRow, getRowKey(prevRow));
 				const next = prev.slice();
 				next[index] = nextRow;
 				commit(next);
 				return next;
 			});
 		},
-		[commit]
+		[commit, getRowKey]
 	);
 
 	const onRemove = useCallback(
@@ -207,17 +223,19 @@ export function RepeatableControlApp({ control, $, api }) {
 	return (
 		<>
 			{items.map((row, index) => {
+				const rowKey = getRowKey(row);
 				const itemKey =
 					idKey && row[idKey] ? String(row[idKey]) : `idx-${index}`;
 				return (
 					<RepeatableItem
-						key={itemKey}
+						key={rowKey}
 						$={$}
 						control={control}
 						fieldIds={fieldIds}
 						fields={fields}
 						index={index}
 						itemKey={itemKey}
+						rowKey={rowKey}
 						row={row}
 						setRow={setRow}
 						onRemove={onRemove}

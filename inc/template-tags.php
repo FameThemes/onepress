@@ -159,10 +159,10 @@ if (! function_exists('onepress_is_transparent_header')) {
 			}
 		} elseif (is_page() && has_post_thumbnail()) {
 			if (! get_post_meta(get_the_ID(), '_cover', true)) {
-				return false;
+				return (bool) apply_filters('onepress_is_transparent_header', false);
 			}
 			if (get_theme_mod('onepress_page_title_bar_disable') == 1) {
-				return false;
+				return (bool) apply_filters('onepress_is_transparent_header', false);
 			}
 			if (has_post_thumbnail()) {
 				if (get_theme_mod('onepress_header_transparent')) {
@@ -171,12 +171,12 @@ if (! function_exists('onepress_is_transparent_header')) {
 			}
 		} elseif (is_home()) {
 			if (get_theme_mod('onepress_page_title_bar_disable') == 1) {
-				return false;
+				return (bool) apply_filters('onepress_is_transparent_header', false);
 			}
 
 			$new_page = get_option('page_for_posts');
 			if (! get_post_meta($new_page, '_cover', true)) {
-				return false;
+				return (bool) apply_filters('onepress_is_transparent_header', false);
 			}
 
 			if (has_post_thumbnail($new_page)) {
@@ -186,7 +186,7 @@ if (! function_exists('onepress_is_transparent_header')) {
 			}
 		}
 
-		return $check;
+		return (bool) apply_filters('onepress_is_transparent_header', $check);
 	}
 }
 
@@ -296,6 +296,7 @@ if (! function_exists('onepress_header')) {
 		if ($page_id) {
 			$hide_header = get_post_meta($page_id, '_hide_header', true);
 		}
+		$hide_header = apply_filters('onepress_hide_header', $hide_header, $page_id);
 
 		if (! $hide_header) {
 			/**
@@ -1695,15 +1696,18 @@ if (! function_exists('onepress_custom_inline_style')) {
 	function onepress_breadcrumb($post_id = null)
 	{
 		// Test your schema at: https://search.google.com/test/rich-results.
+		$hide_breadcrumb = false;
 		if (! $post_id) {
 			if (is_page()) {
 				$post_id = get_the_ID();
 			}
 		}
 		if ($post_id) {
-			if (get_post_meta($post_id, '_hide_breadcrumb', true)) {
-				return;
-			}
+			$hide_breadcrumb = get_post_meta($post_id, '_hide_breadcrumb', true);
+		}
+		$hide_breadcrumb = apply_filters('onepress_hide_breadcrumb', $hide_breadcrumb, $post_id);
+		if ($hide_breadcrumb) {
+			return;
 		}
 		if (function_exists('bcn_display')) {
 		?>

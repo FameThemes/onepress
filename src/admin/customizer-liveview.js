@@ -77,16 +77,45 @@
         } );
     } );
 
-    function update_css( ){
-         var css_code = $( '#onepress-style-inline-css' ).html();
-        // Fix Chrome Lost CSS When resize ??
-        $( '#onepress-style-inline-css' ).replaceWith( '<style class="replaced-style" id="onepress-style-inline-css">'+css_code+'</style>' );
+    /**
+     * Keep the dynamic stylesheet active in the Customizer preview.
+     *
+     * Selective Refresh adds its tooltip as a title attribute to every
+     * partial container. A title on a style element makes the browser treat
+     * it as a named stylesheet set, so the rules may stop participating in
+     * the cascade. The tooltip is not useful on a non-visible style element.
+     */
+    var css_observer;
 
+    function update_css( ){
+        $( '#onepress-style-inline-css' ).removeAttr( 'title' );
     }
+
+    function observe_css_title( ) {
+        var inline_css = document.getElementById( 'onepress-style-inline-css' );
+
+        update_css();
+
+        if ( ! inline_css || ! window.MutationObserver ) {
+            return;
+        }
+
+        if ( css_observer ) {
+            css_observer.disconnect();
+        }
+
+        css_observer = new window.MutationObserver( update_css );
+        css_observer.observe( inline_css, {
+            attributes: true,
+            attributeFilter: [ 'title' ]
+        } );
+    }
+
+    observe_css_title();
 
     // When preview ready
     wp.customize.bind( 'preview-ready', function() {
-        update_css();
+        observe_css_title();
     });
 
     $( window ).resize( function(){
@@ -95,6 +124,10 @@
 
 
     wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {
+
+        if ( settings.partial.id === 'onepress-style-live-css' ) {
+            observe_css_title();
+        }
 
         if (  settings.partial.id  == 'onepress-header-section' ) {
             $( document ) .trigger( 'header_view_changed',[ settings.partial.id ] );
@@ -139,4 +172,3 @@
 
 
 } )( jQuery , wp.customize );
-
