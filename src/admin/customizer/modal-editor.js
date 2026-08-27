@@ -84,6 +84,18 @@ export function initModalEditors(api, $) {
                                     $(window).resize();
                                 }, 600);
                             });
+
+                            // The initial click can request a resize before
+                            // TinyMCE has measured its toolbar and status bar.
+                            // Recalculate once its UI is mounted and laid out.
+                            var resize_editor = function () {
+                                control._resize();
+                            };
+                            if (window.requestAnimationFrame) {
+                                window.requestAnimationFrame(resize_editor);
+                            } else {
+                                window.setTimeout(resize_editor, 0);
+                            }
                         }
                     });
 
@@ -119,16 +131,25 @@ export function initModalEditors(api, $) {
             _resize: function () {
                 var control = this;
                 var w = $('#wp-' + control.editor_id + '-wrap');
-                var height = w.innerHeight();
-                var tb_h = w.find('.mce-toolbar-grp').eq(0).height();
-                tb_h += w.find('.wp-editor-tools').eq(0).height();
-                tb_h += 50;
-                //var width = $( window ).width();
                 var editor = tinymce.get(control.editor_id);
                 if (editor) {
+                    var wrap_height = w.get(0).getBoundingClientRect().height;
+                    var tools = w.find('.wp-editor-tools').eq(0).get(0);
+                    var tools_height = tools ? tools.getBoundingClientRect().height : 0;
+                    var container_height = Math.max(100, wrap_height - tools_height);
+                    var editor_container = w.find('.wp-editor-container').eq(0).get(0);
+                    var edit_area = w.find('.mce-edit-area').eq(0).get(0);
+                    var chrome_height = editor_container && edit_area
+                        ? Math.max(0, editor_container.getBoundingClientRect().height - edit_area.getBoundingClientRect().height)
+                        : 0;
+                    var visual_height = Math.max(100, container_height - chrome_height);
+
                     control.editing_editor.width('');
-                    editor.theme.resizeTo('100%', height - tb_h);
-                    w.find('textarea.wp-editor-area').height(height - tb_h);
+                    // resizeTo() sets the iframe height, not the complete
+                    // TinyMCE container. Reserve its toolbar/status chrome plus
+                    // the WordPress editor tabs so both modes fit the panel.
+                    editor.theme.resizeTo('100%', visual_height);
+                    w.find('textarea.wp-editor-area').height(container_height);
                 }
 
             }
