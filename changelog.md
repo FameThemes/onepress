@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# 2.3.22
+- NEW: Added visibility filters for third-party integrations to control singular headers, page titles, breadcrumbs, and footers.
+- FIXED: Customizer preview styles, repeater focus, and modal editor sizing.
+- FIXED: Classic aligned images no longer inherit block full-bleed spacing.
+- FIXED: Core block spacing and alignments now match between the editor and frontend.
+
 # 2.3.21
 - FIXED: Bootstrap "tooltips require Tether" error at page load — Tether is now exposed globally before bootstrap evaluates.
 
