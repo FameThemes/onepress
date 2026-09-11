@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 2.3.23
+- SECURITY: Fixed a security issue.
+
 # 2.3.22
 - NEW: Added visibility filters for third-party integrations to control singular headers, page titles, breadcrumbs, and footers.
 - FIXED: Customizer preview styles, repeater focus, and modal editor sizing.
