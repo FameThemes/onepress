@@ -1532,7 +1532,10 @@ if (! function_exists('onepress_custom_inline_style')) {
 			$title = wp_strip_all_tags($photo['title']);
 			$alt = '';
 			if (isset($photo['alt'])) {
-				$alt = $photo['alt'];
+				// Strip tags so the alt value cannot re-form HTML after
+				// esc_attr → jQuery .attr() decode → lightGallery .html() sink.
+				// See CVE-2025-5092.
+				$alt = wp_strip_all_tags($photo['alt']);
 			}
 			if (! $alt) {
 				$alt = $title;
