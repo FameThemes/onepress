@@ -12,6 +12,7 @@ export function RepeatableItem({
 	fields,
 	index,
 	itemKey,
+	rowKey,
 	row,
 	setRow,
 	onRemove,
@@ -93,7 +94,7 @@ export function RepeatableItem({
 		return () => {
 			$('body').trigger('repeat-control-remove-item', [$ctx]);
 		};
-	}, [$, itemKey]);
+	}, [$, rowKey]);
 
 	const toggle = useCallback((e) => {
 		e.preventDefault();

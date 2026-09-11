@@ -1,5 +1,23 @@
 # CHANGELOG
 
+# 2.3.23
+- SECURITY: Fixed a security issue.
+
+# 2.3.22
+- NEW: Added visibility filters for third-party integrations to control singular headers, page titles, breadcrumbs, and footers.
+- FIXED: Customizer preview styles, repeater focus, and modal editor sizing.
+- FIXED: Classic aligned images no longer inherit block full-bleed spacing.
+- FIXED: Core block spacing and alignments now match between the editor and frontend.
+
+# 2.3.21
+- FIXED: Bootstrap "tooltips require Tether" error at page load — Tether is now exposed globally before bootstrap evaluates.
+
+# 2.3.20
+- FIXED: Bootstrap JS components (dropdown, collapse, modal, carousel, tooltip, popover) broken since 2.3.17 — bootstrap.min.js.
+
+# 2.3.19
+- FIXED: Custom text colors set on blocks (paragraph, heading, etc.) were being overridden by the theme's default gray. Renamed the "Text" palette slug to avoid clashing with WordPress core's `.has-text-color` class.
+
 # 2.3.18
 - NEW: Block editor canvas matches the rendered frontend for in-scope blocks.
 - NEW: Theme color palette and font size scale exposed to the block editor via theme.json.

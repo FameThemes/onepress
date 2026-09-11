@@ -23,6 +23,8 @@ if ( onepress_is_wc_active() ) {
 	}
 }
 
+$hide_footer = apply_filters( 'onepress_hide_footer', $hide_footer, $page_id );
+
 if ( ! $hide_footer ) {
 	?>
 	<footer id="colophon" class="site-footer" role="contentinfo">

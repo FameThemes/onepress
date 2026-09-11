@@ -30,6 +30,10 @@ Use this as the canonical hook reference for child themes and integrations.
 | `onepress_js_settings` | Extend the localized `onepress_js_settings` object |
 | `onepress_loop_get_prop` | Intercept loop-scoped properties (excerpt type/length, etc.) |
 | `onepress_get_layout` | Override page/WC layout (`right-sidebar`, `left-sidebar`, `no-sidebar`, `fullwidth`) |
+| `onepress_is_transparent_header` | Override whether the current request uses the transparent site header |
+| `onepress_hide_header` | Override header visibility for the current singular object |
+| `onepress_hide_breadcrumb` | Override breadcrumb visibility for the supplied post ID |
+| `onepress_hide_footer` | Override footer visibility for the current request |
 | `c_icon_picker_js_setup` | Customize icon-picker fonts/icons |
 | `onepress_add_upsell_for_section` | Suppress Plus upsell rows per section |
 

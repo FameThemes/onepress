@@ -714,6 +714,11 @@ jQuery(function ($) {
   if ($.fn.lightGallery) {
     $(".videolightbox-popup").lightGallery({
       selector: "a",
+      // Do not read caption from `title`/`alt` attributes; those values
+      // survive esc_attr() → .attr() decode and would be injected via
+      // .html() (see CVE-2025-5092). Captions must come from an
+      // explicit, server-sanitized `data-sub-html` attribute only.
+      getCaptionFromTitleOrAlt: false,
     });
   }
 
@@ -990,6 +995,8 @@ jQuery(function ($) {
         mode: "lg-fade",
         selector: tag_selector,
         //cssEasing : 'cubic-bezier(0.25, 0, 0.25, 1)'
+        // See videolightbox init above and CVE-2025-5092.
+        getCaptionFromTitleOrAlt: false,
       });
     }
   }
