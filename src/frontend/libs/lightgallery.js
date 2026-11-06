@@ -478,6 +478,9 @@
       var subHtml = null;
       var subHtmlUrl;
       var $currentEle;
+      // True when subHtml came from a plain-text attribute (`title`/`alt`)
+      // and must be rendered as text, never parsed as HTML or as a selector.
+      var subHtmlIsText = false;
       if (this.s.dynamic) {
         if (this.s.dynamicEl[index].subHtmlUrl) {
           subHtmlUrl = this.s.dynamicEl[index].subHtmlUrl;
@@ -491,13 +494,25 @@
         } else {
           subHtml = $currentEle.attr('data-sub-html');
           if (this.s.getCaptionFromTitleOrAlt && !subHtml) {
+            // CVE-2025-5092: `title`/`alt` are attribute-escaped server side,
+            // but jQuery `.attr()` decodes them back to raw text, which then
+            // reaches the `.html()`/`.append()` sink below. These attributes
+            // are plain text by definition and are writable by low-privileged
+            // users (attachment alt meta), so the value is marked as text and
+            // rendered with .text() rather than parsed as HTML or as a
+            // selector. Captions that intentionally carry markup must use
+            // `data-sub-html`, whose handling is unchanged.
+            subHtmlIsText = true;
             subHtml = $currentEle.attr('title') || $currentEle.find('img').first().attr('alt');
           }
         }
       }
 
       if (!subHtmlUrl) {
-        if (typeof subHtml !== 'undefined' && subHtml !== null) {
+        // A text caption is never resolved as a selector: an `alt` of
+        // `.some-class` would otherwise pull that element's markup into the
+        // caption, leaking arbitrary page HTML (CVE-2025-5092).
+        if (!subHtmlIsText && typeof subHtml !== 'undefined' && subHtml !== null) {
 
           // get first letter of subhtml
           // if first letter starts with . or # get the html form the jQuery object
@@ -509,7 +524,7 @@
               subHtml = $(subHtml).html();
             }
           }
-        } else {
+        } else if (typeof subHtml === 'undefined' || subHtml === null) {
           subHtml = '';
         }
       }
@@ -518,6 +533,9 @@
 
         if (subHtmlUrl) {
           this.$outer.find(this.s.appendSubHtmlTo).load(subHtmlUrl);
+        } else if (subHtmlIsText) {
+          // .text() escapes on insertion, so the value cannot become markup.
+          this.$outer.find(this.s.appendSubHtmlTo).text(subHtml);
         } else {
           this.$outer.find(this.s.appendSubHtmlTo).html(subHtml);
         }
@@ -526,6 +544,8 @@
 
         if (subHtmlUrl) {
           this.$slide.eq(index).load(subHtmlUrl);
+        } else if (subHtmlIsText) {
+          this.$slide.eq(index).append(document.createTextNode(subHtml));
         } else {
           this.$slide.eq(index).append(subHtml);
         }

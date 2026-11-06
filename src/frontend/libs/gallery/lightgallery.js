@@ -478,6 +478,8 @@
             var subHtml = null;
             var subHtmlUrl;
             var $currentEle;
+            // See src/frontend/libs/lightgallery.js (CVE-2025-5092).
+            var subHtmlIsText = false;
             if (this.s.dynamic) {
                 if (this.s.dynamicEl[index].subHtmlUrl) {
                     subHtmlUrl = this.s.dynamicEl[index].subHtmlUrl;
@@ -491,13 +493,17 @@
                 } else {
                     subHtml = $currentEle.attr('data-sub-html');
                     if (this.s.getCaptionFromTitleOrAlt && !subHtml) {
+                        // CVE-2025-5092 — see src/frontend/libs/lightgallery.js.
+                        subHtmlIsText = true;
                         subHtml = $currentEle.attr('title') || $currentEle.find('img').first().attr('alt');
                     }
                 }
             }
 
             if (!subHtmlUrl) {
-                if (typeof subHtml !== 'undefined' && subHtml !== null) {
+                // A text caption is never resolved as a selector — see
+                // src/frontend/libs/lightgallery.js (CVE-2025-5092).
+                if (!subHtmlIsText && typeof subHtml !== 'undefined' && subHtml !== null) {
 
                     // get first letter of subhtml
                     // if first letter starts with . or # get the html form the jQuery object
@@ -509,7 +515,7 @@
                             subHtml = $(subHtml).html();
                         }
                     }
-                } else {
+                } else if (typeof subHtml === 'undefined' || subHtml === null) {
                     subHtml = '';
                 }
             }
@@ -518,6 +524,8 @@
 
                 if (subHtmlUrl) {
                     this.$outer.find(this.s.appendSubHtmlTo).load(subHtmlUrl);
+                } else if (subHtmlIsText) {
+                    this.$outer.find(this.s.appendSubHtmlTo).text(subHtml);
                 } else {
                     this.$outer.find(this.s.appendSubHtmlTo).html(subHtml);
                 }
@@ -526,6 +534,8 @@
 
                 if (subHtmlUrl) {
                     this.$slide.eq(index).load(subHtmlUrl);
+                } else if (subHtmlIsText) {
+                    this.$slide.eq(index).append(document.createTextNode(subHtml));
                 } else {
                     this.$slide.eq(index).append(subHtml);
                 }
