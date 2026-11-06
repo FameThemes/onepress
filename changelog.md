@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 2.3.24
+- SECURITY: Additional hardening for a security issue.
+
 # 2.3.23
 - SECURITY: Fixed a security issue.
 
